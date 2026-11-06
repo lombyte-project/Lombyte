@@ -1,5 +1,6 @@
 /* Level 10 moby class blarg_ship: rises, follows its path, hovers and fires at its target. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/game/item_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
@@ -40,15 +41,15 @@ enum {
 typedef struct Moby Moby;
 extern float        D_0015ED6C;
 extern float        D_0015ED6C, D_0015ED70;
-extern void         trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void         trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void         start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void         update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void         FUN_L00_0024f7c8(void *, int, void *);
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
 
 extern float FUN_L04_001f1978(float);
 extern int   resolve_moby_hit_response() __asm__("FUN_00213928");
 extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
-extern void trooper_anim_update(void *m, void *p) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *m, void *p) __asm__("FUN_L00_0025d458");
 
 extern char D_L10_00167240[];
 
@@ -103,10 +104,10 @@ typedef struct Ship_5E48 {
 
 typedef struct ShipD_5E48 {
     char          p0[0x20];
-    float         f20;
-    short         s24;
+    float         health;
+    short         max_health;
     char          p26[2];
-    unsigned char b28;
+    unsigned char hit_response_class;
     unsigned char b29;
     char          p2A[0x16];
     char          a40[0xB0];
@@ -218,9 +219,9 @@ void blarg_ship_update(Ship_5E48 *ship) {
     switch (ship->state) {
     case BLARG_SHIP_STATE_INITIALIZE:
         ship->s34 |= 0x1000;
-        d->f20 = 9.0f;
-        d->s24 = truncate_float_to_s32(9.0f);
-        d->b28 = 3;
+        d->health = 9.0f;
+        d->max_health = truncate_float_to_s32(9.0f);
+        d->hit_response_class = 3;
         d->b29 = 0;
         d->pitch_turn_velocity = 0.0f;
         ship->s32 = 0x7F;
@@ -509,21 +510,18 @@ extern int  follow_5968(float, void *, void *, int, int, void *, int) __asm__("F
 void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) __asm__("FUN_L10_002e5968");
 
 typedef struct BlargShipVars {
-    u8  pad_0[0x20];
-    f32 unk20;
-    u8  pad_24[0x2];
-    s16 unk26;
-    u8  pad_28[0x98];
-    u8  anim_state;
-    u8  pad_C1[0x6];
-    u8  unkC7;
-    u8  pad_C8[0x8];
-    u8  unkD0;
-    u8  pad_D1[0x3F];
-    s32 unk110;
-    s32 unk114;
-    u8  pad_118[0x78];
-    s32 path_190;
+    u8                   pad_0[0x20];
+    f32                  health;
+    u8                   pad_24[0x2];
+    s16                  stun_timer;
+    u8                   pad_28[0x98];
+    struct HitColorFlash hit_flash;
+    u8                   path_search_point;
+    u8                   pad_D1[0x3F];
+    s32                  target;
+    s32                  target_selection_status;
+    u8                   pad_118[0x78];
+    s32                  path_190;
 } BlargShipVars;
 
 void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
@@ -541,10 +539,10 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
     int            hit_response_code;
     dmg = 0.0f;
     hit_response_code = resolve_moby_hit_response(
-        moby, ship_hit_record, &pvars->unk20, 5, &ship_hit_processing_status, &dmg, 0, 4);
+        moby, ship_hit_record, &pvars->health, 5, &ship_hit_processing_status, &dmg, 0, 4);
     if (ship_hit_record != 0 && ship_hit_processing_status != HIT_STATUS_SKIP_DAMAGE_AND_REACTION &&
         moby->state != BLARG_SHIP_STATE_EXPLODE) {
-        if ((pvars->unk20 -= dmg) <= 0.0f) {
+        if ((pvars->health -= dmg) <= 0.0f) {
             hit_response_code = 1;
         }
         if (*(int *)(ship_hit_record + 0x24) & 0x40000) {
@@ -554,20 +552,20 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
         case COLOR_UPDATE_ONLY_HIT_RESPONSE:
         case COLOR_UPDATE_WITHOUT_STATE_CHANGE_HIT_RESPONSE:
         case COLOR_EFFECT_ONLY_HIT_RESPONSE:
-            pvars->unkC7 = 0xFA;
-            trooper_anim_update(moby, &pvars->anim_state);
+            pvars->hit_flash.flash_red = 0xFA;
+            start_hit_color_flash(moby, &pvars->hit_flash);
             break;
         case LETHAL_HIT_RESPONSE:
-            pvars->unkC7 = 0xFA;
-            trooper_anim_update(moby, &pvars->anim_state);
+            pvars->hit_flash.flash_red = 0xFA;
+            start_hit_color_flash(moby, &pvars->hit_flash);
             moby->state = BLARG_SHIP_STATE_EXPLODE;
             break;
         case NO_REACTION_HIT_RESPONSE:
             break;
         default:
-            pvars->unkC7 = 0xFA;
-            pvars->unk26 = scale_game_frames(0x3C);
-            trooper_anim_update(moby, &pvars->anim_state);
+            pvars->hit_flash.flash_red = 0xFA;
+            pvars->stun_timer = scale_game_frames(0x3C);
+            start_hit_color_flash(moby, &pvars->hit_flash);
             blend_moby_animation(moby, 4, 0, scale_game_frames(6));
             moby->command = moby->state;
             moby->state = BLARG_SHIP_STATE_HIT_REACTION;
@@ -575,29 +573,30 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
         }
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, &pvars->anim_state);
+    update_hit_color_flash(moby, &pvars->hit_flash);
     if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
-        select_hero_or_gadgebot_target(101.0f, moby, &pvars->unk110);
-        if (*(char **)&pvars->unk110 == 0) {
-            pvars->unk114 = 2;
+        select_hero_or_gadgebot_target(101.0f, moby, &pvars->target);
+        if (*(char **)&pvars->target == 0) {
+            pvars->target_selection_status = 2;
         } else {
             char *path = ((char *)l10_paths[pvars->path_190]);
-            if (point_in_path_xy(*(char **)&pvars->unk110 + 0x10, path + 0x10, *(int *)path) == 0) {
-                pvars->unk110 = 0;
-                pvars->unk114 = 2;
+            if (point_in_path_xy(*(char **)&pvars->target + 0x10, path + 0x10, *(int *)path) == 0) {
+                pvars->target = 0;
+                pvars->target_selection_status = 2;
             } else {
-                pvars->unk114 = 0;
+                pvars->target_selection_status = 0;
             }
         }
     } else {
         char *path = ((char *)l10_paths[pvars->path_190]);
-        if (follow_5968(101.0f, moby, &pvars->unkD0, 0, 0, path + 0x10, *(int *)path) != 2 &&
+        if (follow_5968(101.0f, moby, &pvars->path_search_point, 0, 0, path + 0x10, *(int *)path) !=
+                2 &&
             moby->visible == 0) {
-            pvars->unk114 = 2;
+            pvars->target_selection_status = 2;
         }
     }
-    if (pvars->unk110 == 0) {
-        pvars->unk110 = (int)hero.moby;
+    if (pvars->target == 0) {
+        pvars->target = (int)hero.moby;
     }
 }
 

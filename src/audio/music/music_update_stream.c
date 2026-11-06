@@ -8,11 +8,11 @@ extern void snd_continue_vag_stream(void *) __asm__("func_0012ECA0");
 typedef struct {
     unsigned int handle; /* 0x00: 0 none, 0xFFFFFFFF starting/released */
     short        id;     /* 0x04 */
-    short        unk06;
-    short        unk08;
-    short        state; /* 0x0A: low bits the state, 0x8000 paused */
-    short        fade;  /* 0x0C: 0x8000 fading */
-    short        fadeT; /* 0x0E */
+    short        volume;
+    short        flags;
+    short        state;       /* 0x0A: low bits the state, 0x8000 paused */
+    short        pause_flags; /* 0x0C: MusicStreamChannel.pause_flags */
+    short        pause_timer; /* 0x0E: MusicStreamChannel.pause_timer */
 } MusicPlaying;
 
 extern void snd_stop_sound(int) __asm__("func_0012E368");
@@ -61,13 +61,13 @@ void music_update_stream(MusicPlaying *music_stream) {
         if (music_stream->handle == 0) {
             return;
         }
-        if (music_stream->fade & 0x8000) {
+        if (music_stream->pause_flags & 0x8000) {
             if (!(music_stream->state & 0x8000)) {
                 snd_pause_vag_stream(music_stream->handle);
                 music_stream->state |= 0x8000;
             }
-            if (fast_dec_timer_s16(&music_stream->fadeT) == 2) {
-                music_stream->fade = 4;
+            if (fast_dec_timer_s16(&music_stream->pause_timer) == 2) {
+                music_stream->pause_flags = 4;
             }
         } else if (music_stream->state & 0x8000) {
             snd_continue_vag_stream((void *)music_stream->handle);

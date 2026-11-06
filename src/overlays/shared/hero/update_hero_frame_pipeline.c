@@ -32,8 +32,8 @@ void update_hero_frame_pipeline(void) {
         q[0x20B1] = 1;
         return;
     }
-    hero_state->unk1EB2 = 0;
-    hero_state->unk1EB0 = 0;
+    hero_state->glow_draw_queued = 0;
+    hero_state->glow_point_count = 0;
     if (hero_state->vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT) {
         hero_frame_update();
         return;

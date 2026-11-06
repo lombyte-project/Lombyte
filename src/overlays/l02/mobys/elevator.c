@@ -260,20 +260,20 @@ extern void draw_geometry_quad(void *, void *, int);
 
 typedef struct ElevatorVars {
     u8  pad_0[0xA0];
-    s32 unkA0;
+    s32 shaft_cuboid_index;
     u8  pad_A4[0xC];
-    f32 unkB0;
+    f32 vertical_speed;
     u8  pad_B4[0x4];
-    f32 unkB8;
+    f32 height_offset;
 } ElevatorVars;
 
 void draw_elevator_rotating_rings(struct Moby *moby) {
     L16RingPacket packet;
     L16RingMatrix matrix;
     ElevatorVars *moby_vars = (ElevatorVars *)moby->pvars;
-    int           bound_index = (moby_vars->unkA0) << 7;
+    int           bound_index = (moby_vars->shaft_cuboid_index) << 7;
     char *elevator_transform_entry = (char *)(bound_index + (int)level02_elevator_transform_table);
-    float translation = (moby_vars->unkB8);
+    float translation = (moby_vars->height_offset);
     float lower = (*(float *)((char *)elevator_transform_entry + 0x38));
     float half = (*(float *)((char *)elevator_transform_entry + 0x28));
     float upper = lower + half + translation;
@@ -288,7 +288,7 @@ void draw_elevator_rotating_rings(struct Moby *moby) {
     lower += translation;
     color = fast_tween_color(level02_elevator_ring_zero_speed_color,
                              level02_elevator_ring_max_speed_color,
-                             absolute_float((moby_vars->unkB0)) /
+                             absolute_float((moby_vars->vertical_speed)) /
                                  (level02_elevator_max_vertical_speed_gp * D_0015ED6C));
     copy_matrix_rotation(&matrix, &moby->rot_row0);
     qcopy(matrix.position, &moby->pos);

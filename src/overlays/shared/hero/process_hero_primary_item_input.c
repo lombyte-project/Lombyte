@@ -103,9 +103,9 @@ int hero_anim_tilt_lookup(int id, float *out_tilt_radians) {
 /* Applies the wrench/item selection for slot i: resolves pending, queued and requested items and refreshes the slot when it changes. */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210558), where it is exact; names translated to the US level program. */
 
-/* L05 adds to hero_switch_item the state.control_mode / unk8CE test that guards the second
-   unk20A6 set, and a new unguarded statement (the prologue's i!=0 branch lands
-   on it, so it runs for every slot) that sets unk20A6 for items[0].item_id == 0x24 with
+/* L05 adds to hero_switch_item the state.control_mode / race_ammo test that guards the second
+   force_slot0_item8 set, and a new unguarded statement (the prologue's i!=0 branch lands
+   on it, so it runs for every slot) that sets force_slot0_item8 for items[0].item_id == 0x24 with
    state.control_mode != 0x16. The second condition is negated: retail's `beq` skips the
    store when state.control_mode == 0x16, which is what makes this spelling the only one
    that lands `beq` there. */
@@ -699,7 +699,7 @@ int process_hero_primary_item_input(void) {
     if ((*(Hero *)((char *)&hero)).item_use_locked != 0 &&
         (*(Hero *)((char *)&hero)).items[0].item_id != 0x24 &&
         ((*(Hero *)((char *)&hero)).items[0].item_id != 8 ||
-         (*(Hero *)((char *)&hero)).unk308 != 1)) {
+         (*(Hero *)((char *)&hero)).magnetic_floor != 1)) {
         return 0;
     }
     if ((*(Hero *)((char *)&hero)).vehicle_mode != 0) {
@@ -749,7 +749,7 @@ int process_hero_primary_item_input(void) {
                 hero_set_state(0x15, 1);
                 break;
             }
-            if ((*(Hero *)((char *)&hero)).unk308 == 1) {
+            if ((*(Hero *)((char *)&hero)).magnetic_floor == 1) {
                 hero_set_state(0x70, 1);
             } else {
                 hero_set_state(0x13, 1);
@@ -763,10 +763,10 @@ int process_hero_primary_item_input(void) {
             ((*(Hero *)((char *)&hero)).state.current == 0xE &&
              (*(Hero *)((char *)&hero)).anim_frame > 32.0f) ||
             ((*(Hero *)((char *)&hero)).state.current == 0xB &&
-             (*(Hero *)((char *)&hero)).unk450 != 3 &&
+             (*(Hero *)((char *)&hero)).jump_stick_direction != 3 &&
              (*(Hero *)((char *)&hero)).anim_frame > 18.0f) ||
             ((*(Hero *)((char *)&hero)).state.current == 0xB &&
-             (*(Hero *)((char *)&hero)).unk450 == 3 &&
+             (*(Hero *)((char *)&hero)).jump_stick_direction == 3 &&
              (*(Hero *)((char *)&hero)).anim_frame > 20.0f) ||
             (*(Hero *)((char *)&hero)).state.current == 0x2D ||
             (*(Hero *)((char *)&hero)).state.current == 0x11) {
@@ -841,7 +841,7 @@ int process_hero_primary_item_input(void) {
                 hero_set_state(0x15, 1);
                 break;
             }
-            if ((*(Hero *)((char *)&hero)).unk308 == 1) {
+            if ((*(Hero *)((char *)&hero)).magnetic_floor == 1) {
                 hero_set_state(0x70, 1);
             } else {
                 hero_set_state(0x13, 1);
@@ -869,7 +869,7 @@ int process_hero_primary_item_input(void) {
                 if ((*(Hero *)((char *)&hero)).swing_target_in_sight != 0) {
                     if ((*(Hero *)((char *)&hero)).grapple_target_in_sight != 0) {
                         if ((*(Hero *)((char *)&hero)).swing_target_dist <
-                            (*(Hero *)((char *)&hero)).unk984) {
+                            (*(Hero *)((char *)&hero)).swing_max_range) {
                             (*(Hero *)((char *)&hero)).grapple_target_in_sight = 0;
                         } else {
                             (*(Hero *)((char *)&hero)).swing_target_in_sight = 0;
@@ -910,7 +910,7 @@ int process_hero_primary_item_input(void) {
         }
         allocate_hero_voice_for_entry(0x18, 0);
         (*(Hero *)((char *)&hero)).vehicle_toggle_timer = 0x12;
-        (*(Hero *)((char *)&hero)).unk22DC = 1;
+        (*(Hero *)((char *)&hero)).scale_pulse_step = 1;
         break;
     case ITEM_AMMO_MENU_DEVICE:
         if ((*(Hero *)((char *)&hero)).state.control_mode < 3U ||
@@ -968,7 +968,7 @@ int process_hero_primary_item_input(void) {
             (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_LAND ||
             (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_GRIND ||
             ((*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_JUMP &&
-             (*(Hero *)((char *)&hero)).unk4AC != 0) ||
+             (*(Hero *)((char *)&hero)).can_use_item_in_jump != 0) ||
             ((*(Hero *)((char *)&hero)).state.current == 0x23 &&
              (*(Hero *)((char *)&hero)).anim_frame > 25.0f)) {
             int window;
@@ -1126,7 +1126,7 @@ int process_hero_primary_item_input(void) {
     }
     if ((*(Hero *)((char *)&hero)).state_timer == start_timer) {
         if (FUN_L00_0020d498(3) == 3 && (*(Hero *)((char *)&hero)).state.current != 0x81 &&
-            ((*(Hero *)((char *)&hero)).unk308 == 0 || D_0013D5C8_2523C8[0] == 0) &&
+            ((*(Hero *)((char *)&hero)).magnetic_floor == 0 || D_0013D5C8_2523C8[0] == 0) &&
             (*(Hero *)((char *)&hero)).pack_disabled == 0) {
             fast_dec_timer(&hero_item_input_r1_double_press_timer_gp);
             if (hero_item_input_r1_double_press_timer_gp != 0) {
@@ -1148,7 +1148,7 @@ int process_hero_primary_item_input(void) {
                    (*(Hero *)((char *)&hero)).state.current != 0x81 &&
                    (*(Hero *)((char *)&hero)).state.current != 0x15 &&
                    (*(Hero *)((char *)&hero)).state.current != 0x16) {
-            (*(Hero *)((char *)&hero)).unk22CA = 0;
+            (*(Hero *)((char *)&hero)).hover_latch = 0;
         }
     }
     return (*(Hero *)((char *)&hero)).state_timer < start_timer;
@@ -1196,7 +1196,7 @@ void update_hero_hoverboard_trick_animations(void) {
                     l05_hoverboard_trick_animation_frame_bounds[h->air_pose_index].seq);
             } else if ((float)h->anim_loop_frame - 2.0f < h->anim_frame) {
                 h->tricks_landed[h->air_pose_index] = 1;
-                h->unk6F8 += 1;
+                h->tricks_landed_count += 1;
             }
         }
     }
@@ -1527,8 +1527,8 @@ typedef struct {
 
 typedef struct {
     char pad0[0x20];
-    int  unk20;
-    int  unk24;
+    int  path_index; /* l05_paths entry of the race course, -1: none */
+    int  pad24;
     int  f28;
     int  f2C[5];
     int  f40;
@@ -1580,10 +1580,10 @@ void update_hero_hoverboard_race_progress(void) {
         return;
     }
     race_pvars = (Data *)((struct Moby *)hero.hoverboard_moby)->pvars;
-    if (race_pvars->unk20 == -1) {
+    if (race_pvars->path_index == -1) {
         return;
     }
-    path = ((Path **)((char **)l05_paths))[race_pvars->unk20];
+    path = ((Path **)((char **)l05_paths))[race_pvars->path_index];
     hero.race_path = (void *)path;
     if (D_0015ED84_lui == 0x10) {
         *(u128_254608 *)world_position_scratch = 0;
@@ -1756,7 +1756,7 @@ void update_hero_hoverboard_race_progress(void) {
         if (*(alternate_item_available_lui) == 0 && hero.race_position == 1) {
             D_L05_0015FFD8_macro[race_pvars->f28].command = 1;
         } else {
-            hero.unk890 = (u8 *)(&D_L05_0015FFD8_macro[race_pvars->f28]);
+            hero.race_moby = (u8 *)(&D_L05_0015FFD8_macro[race_pvars->f28]);
             mode_freeze_init(0, 0);
         }
         if (freeze_stats_time_ref_macro[0] == 0) {
@@ -1783,7 +1783,7 @@ void update_hero_hoverboard_race_progress(void) {
         if (D_0013D4DF_lui == 0 && hero.race_position == 1) {
             D_L05_0015FFD8_macro[race_pvars->f28].command = 1;
         } else {
-            hero.unk890 = (u8 *)(&D_L05_0015FFD8_macro[race_pvars->f28]);
+            hero.race_moby = (u8 *)(&D_L05_0015FFD8_macro[race_pvars->f28]);
             mode_freeze_init(0, 0);
         }
         if (freeze_stats_time_ref_macro[1] == 0) {
@@ -1856,14 +1856,14 @@ int hero_pick_help_mode(void) {
         velocity[2] = 0.0f;
         fast_vec_add(end, start, velocity);
         if (collision_line(start, end, 2, 0, 0) && D_L05_00174240.moby == 0 &&
-            D_L05_00174240.unk1C != 0) {
+            D_L05_00174240.surface_type != 0) {
             CollisionHit *wall = &D_L05_00174240;
             if (1.2217305f < fast_arc_tan(wall->normal_z, vector_length_xy(&wall->normal_x))) {
-                player->unk8A4 =
+                player->wall_face_yaw =
                     fast_add_rotations(fast_arc_tan(wall->normal_x, wall->normal_y), 3.1415927f);
                 if (fast_difference_between_rotations(
                         fast_arc_tan(player->motion.velocity.f[0], player->motion.velocity.f[1]),
-                        player->unk8A4) < 0.7853982f) {
+                        player->wall_face_yaw) < 0.7853982f) {
                     state = HERO_STATE_HOVERBOARD_RESPAWN_ANIMATION_WAIT;
                     if (!(player->ground_distance < 1.0f))
                         state = HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT;
@@ -1968,7 +1968,7 @@ change_state:
 continue_fall:
     if (alternate_item_available_lui[0]) {
         if (current_level_index == LEVEL_RILGAR && (&hero)->tricks_landed[4] == 4 &&
-            (&hero)->unk70C > 3 && item_unlocked_lui[7] == 0) {
+            (&hero)->trick_combo_count > 3 && item_unlocked_lui[7] == 0) {
             item_unlocked_lui[7] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
             queue_dialogue_message(0x53D6, -1);
@@ -2006,12 +2006,12 @@ void hero_update_linked_target(void) {
     struct Hero *hero_base = (struct Hero *)((char *)((unsigned char *)&D_0013E533) + 0xE1D);
     int          path_owner_moby = *(int *)&hero_base->hoverboard_moby;
 
-    *(int *)&hero_base->unk2278 = 0;
-    hero_base->unk227C = 0;
+    *(int *)&hero_base->anim_link_moby = 0;
+    hero_base->anim_link_table = 0;
     if (path_owner_moby != 0) {
         if ((unsigned)(hero_base->state.control_mode - 0x15) < 2) {
-            *(int *)&hero_base->unk2278 = path_owner_moby;
-            hero_base->unk227C = (int)hero_hoverboard_animation_link_table;
+            *(int *)&hero_base->anim_link_moby = path_owner_moby;
+            hero_base->anim_link_table = (int)hero_hoverboard_animation_link_table;
         }
     }
 }

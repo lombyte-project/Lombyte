@@ -11,7 +11,7 @@ int update_menu_confirm_page(void) {
     int confirm_input_flags = *(int *)(D_0013A4E0 + 0x2604);
     if (confirm_input_flags & 0x20) {
         struct MenuPage *page;
-        menu_system.unkD4 = 0;
+        menu_system.save_prompt_variant = 0;
         page = menu_system.current;
         menu_system.next = page->back;
         page->confirmed = 1;

@@ -62,8 +62,8 @@ typedef struct {
 extern char D_L16_0015F580_macro[] __asm__("D_L16_0015F580") MACRO_ADDR;
 
 extern int          coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern void         trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void         trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void         start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void         update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void         spawn_explosion(void *,
                                     void *,
                                     void *,
@@ -128,7 +128,7 @@ void thrown_bomb_update(L16FallingMoby *moby) {
         } else if (bomb_data->timer < scale_game_frames(45) &&
                    bomb_data->timer % scale_game_frames(10) == 0) {
             bomb_data->reaction = 250;
-            trooper_anim_update(moby, (short *)bomb_data);
+            start_hit_color_flash(moby, (short *)bomb_data);
         }
         bomb_data->velocity[2] -= bomb_data->gravity;
         break;
@@ -138,7 +138,7 @@ void thrown_bomb_update(L16FallingMoby *moby) {
         } else if (bomb_data->timer < scale_game_frames(61) &&
                    bomb_data->timer % scale_game_frames(20) == 0) {
             bomb_data->reaction = 250;
-            trooper_anim_update(moby, (short *)bomb_data);
+            start_hit_color_flash(moby, (short *)bomb_data);
         }
         break;
     case BOMB_STATE_EXPLODE:
@@ -164,7 +164,7 @@ void thrown_bomb_update(L16FallingMoby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    trooper_anim_finish(moby, bomb_data);
+    update_hit_color_flash(moby, bomb_data);
 }
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002C75D0), where it is exact; names translated to the US level program. */
@@ -183,10 +183,10 @@ typedef struct ThrownBombVars {
     u8  pad_0[0xC];
     s16 unkC;
     s16 unkE;
-    f32 unk10[4];
-    s32 unk20;
-    f32 unk24;
-    s32 unk28;
+    f32 velocity[4];
+    s32 thrower;
+    f32 gravity;
+    s32 fuse_timer;
 } ThrownBombVars;
 
 unsigned char *spawn_thrown_bomb(
@@ -204,13 +204,13 @@ unsigned char *spawn_thrown_bomb(
         moby[0x31] = 1;
         moby[0x20] = 1;
         MOBY(moby)->draw_dist = 0xFF;
-        thrown_bomb_data->unk20 = thrower_moby;
-        thrown_bomb_data->unk24 = gravity;
-        thrown_bomb_data->unk28 = fuse_frames;
+        thrown_bomb_data->thrower = thrower_moby;
+        thrown_bomb_data->gravity = gravity;
+        thrown_bomb_data->fuse_timer = fuse_frames;
         thrown_bomb_data->unkC = scale_game_frames(5);
         thrown_bomb_data->unkE = scale_game_frames(0xF);
         qcopy(moby + 0x10, spawn_position);
-        qcopy(thrown_bomb_data->unk10, initial_velocity);
+        qcopy(thrown_bomb_data->velocity, initial_velocity);
         MOBY(moby)->rot.x = random_float_between(-180.0f, 180.0f) * DEG_TO_RAD;
         MOBY(moby)->rot.z = fast_arc_tan(initial_velocity[0], initial_velocity[1]) + 1.5707964f;
         update_entity(moby);

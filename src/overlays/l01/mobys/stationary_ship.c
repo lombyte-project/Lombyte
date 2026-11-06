@@ -74,7 +74,7 @@ typedef struct {
     Vec4f pos;   /* 0x10 */
     u8    state; /* 0x20 */
     u8    pad21[0xF];
-    u8    unk30; /* 0x30 */
+    u8    update_dist; /* 0x30 */
     u8    pad31[3];
     u16   flags; /* 0x34 */
     u8    pad36[0xA];
@@ -87,9 +87,9 @@ typedef struct {
     u8    pad7C[0x2A];
     s16   oclass; /* 0xA6 */
     u8    padA8[0x14];
-    u8    unkBC; /* 0xBC */
+    u8    command; /* 0xBC */
     u8    padBD[3];
-    Vec4f unkC0; /* 0xC0 */
+    Vec4f rot_row0; /* 0xC0 */
     u8    padD0[0x30];
 } CarrierMoby;
 
@@ -137,7 +137,7 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
         v->state = CARRIER_STATE_WAIT_FOR_TRIGGER;
         v->arrived = 0;
         v->keep = 0;
-        carrier_moby->unk30 = 0xFF;
+        carrier_moby->update_dist = 0xFF;
         carrier_moby->flags |= 0x41;
         return;
     case CARRIER_STATE_WAIT_FOR_TRIGGER:
@@ -147,7 +147,7 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
             if (v->camera != -1) {
                 cv = (CarrierCamVars *)((CarrierMoby *)ents)[v->camera].pvars;
                 cv->frames = scale_game_frames(truncate_float_to_s32(v->seconds * 60.0f));
-                ((CarrierMoby *)ents)[v->camera].unkBC = 1;
+                ((CarrierMoby *)ents)[v->camera].command = 1;
             }
             if (v->path != -1) {
                 carrier_path = l01_paths[v->path];
@@ -208,7 +208,7 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
                 if (v->state != CARRIER_STATE_WAIT_FOR_TRIGGER) {
                     ((CarrierMoby *)ents)[v->riders[i]].flags &= ~0x41;
                 }
-                transform_vector_by_basis(&offs.v[i], &offs.v[i], &carrier_moby->unkC0);
+                transform_vector_by_basis(&offs.v[i], &offs.v[i], &carrier_moby->rot_row0);
                 fast_vec_add(
                     &((CarrierMoby *)ents)[v->riders[i]].pos, &carrier_moby->pos, &offs.v[i]);
                 qcopy_nc(&((CarrierMoby *)ents)[v->riders[i]].rot, &carrier_moby->rot);

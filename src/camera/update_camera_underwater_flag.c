@@ -19,7 +19,7 @@ void update_camera_underwater_flag(void) {
     float              probe_end[4];
     int                i;
 
-    if (camera->current_camera->unk86 == 6 || game_mode_macro != 0) {
+    if (camera->current_camera->camera_class == 6 || game_mode_macro != 0) {
         camera->underwater = 0;
         return;
     }

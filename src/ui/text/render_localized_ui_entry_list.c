@@ -13,14 +13,14 @@ extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 
 extern s32   get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern s32   measure_text_width(char *, s32, u8 *) __asm__("func_001F6200");
-extern void  font_print(s32, s32, long, char *, s32, s32, u8 *) __asm__("func_001F62B0");
+extern s32   measure_text_width(char *, s32, struct Glyph *) __asm__("func_001F6200");
+extern void  font_print(s32, s32, long, char *, s32, s32, struct Glyph *) __asm__("func_001F62B0");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 s32          render_localized_ui_entry_list(struct MenuScreen *menu) __asm__("FUN_0021b1c8");
 
 s32 render_localized_ui_entry_list(struct MenuScreen *menu) {
     s32                  focused;
-    u8                  *glyphs;
+    struct Glyph        *glyphs;
     s32                  font_texture_index;
     s32                  row_height;
     s32                  half_width;

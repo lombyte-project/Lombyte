@@ -59,7 +59,7 @@ int probe_hero_ledge_edge(Vec4 *ledge_probe_origin, f32 *facing_yaw) {
         inc, limit;
     int found, hit, i, j, material;
 
-    if (hero.unk308 == 2)
+    if (hero.magnetic_floor == 2)
         return 0;
 
     drop = -0.7f;
@@ -256,7 +256,7 @@ void find_grind_rail(void) {
     if (D_0013D4DD_lui == 0)
         return;
     hero.grind_rail = 0;
-    if (hero.unk1C8 != 0)
+    if (hero.grind_catch_lockout != 0)
         return;
     if (current_level_index == LEVEL_KALEBO3) {
         *(OvlQuad *)&proximity_or_rail_point = 0;
@@ -708,9 +708,9 @@ void update_hero_condition_animation(void) {
     anim = 0;
     spd = 1.0f;
     on = 0;
-    if (hero.unk2274) {
+    if (hero.look_target) {
         on = 1;
-        animation_selector_data = get_moby_target_info(hero.unk2274);
+        animation_selector_data = get_moby_target_info(hero.look_target);
         anim = 0x79;
         if (animation_selector_data && animation_selector_data[0x3C]) {
             anim = select_hero_condition_animation_id(animation_selector_data[0x3C]);
@@ -718,9 +718,9 @@ void update_hero_condition_animation(void) {
                 spd = 0.7f;
         }
     }
-    if (hero.unk1DC) {
+    if (hero.face_expression_timer) {
         on = 1;
-        anim = select_hero_condition_animation_id(hero.unk22CE);
+        anim = select_hero_condition_animation_id(hero.face_expression);
     }
     if (hero.health.hp == 1) {
         on = 1;
@@ -751,24 +751,24 @@ void update_hero_condition_animation(void) {
         }
     }
     if (on) {
-        if (!hero.unkD10) {
-            hero.unkD10 = (u8 *)allocate_moby_animation_slot((char *)hero.moby, 0x18);
-            *(int *)(hero.unkD10 + 8) = 0;
+        if (!hero.face_anim_layer) {
+            hero.face_anim_layer = (u8 *)allocate_moby_animation_slot((char *)hero.moby, 0x18);
+            *(int *)(hero.face_anim_layer + 8) = 0;
         }
     } else {
-        if (!hero.unkD10)
+        if (!hero.face_anim_layer)
             return;
-        if (FUN_00213ed8_20da68(hero.unkD10 + 8, 0.0f, frame_scale * 0.05f) == 0.0f) {
-            release_moby_animation_slot((char *)hero.moby, (char **)&hero.unkD10);
+        if (FUN_00213ed8_20da68(hero.face_anim_layer + 8, 0.0f, frame_scale * 0.05f) == 0.0f) {
+            release_moby_animation_slot((char *)hero.moby, (char **)&hero.face_anim_layer);
         }
     }
-    animation_object = hero.unkD10;
+    animation_object = hero.face_anim_layer;
     if (animation_object && on) {
         FUN_00213ed8_20da68(animation_object + 8, spd, frame_scale * 0.05f);
-        reloaded_animation_object = hero.unkD10;
+        reloaded_animation_object = hero.face_anim_layer;
         if ((unsigned char)reloaded_animation_object[0x23] != anim) {
             initialize_moby_animation_blend(
-                (char *)hero.moby, hero.unkD10, anim, 0, scale_game_frames(8), 1);
+                (char *)hero.moby, hero.face_anim_layer, anim, 0, scale_game_frames(8), 1);
         } else {
             FUN_L00_0024f190_20da68((char *)hero.moby, reloaded_animation_object);
         }
@@ -816,7 +816,7 @@ void update_hero_item_slot_blends(void) {
             }
             {
                 struct Hero *h = &hero;
-                if (h->unk20AF != 0) {
+                if (h->hand_item_hidden != 0) {
                     u8 *cancelled;
                     want = 0;
                     cancelled = hero.item_slot_blends[i];
@@ -856,7 +856,7 @@ void update_hero_item_slot_blends(void) {
             }
             hr = (u8 *)h->moby;
             hero_animation_ids_differ = hr[0x52] != hr[0x53];
-            if (h->held_item_anim_blend[0] != 0 && h->unkD14 == 0) {
+            if (h->held_item_anim_blend[0] != 0 && h->arm_layer_fade == 0) {
                 approach_value((f32 *)(item_slot_blend + 8), 0.0f, frame_scale * 0.1f);
             } else if (*(s32 *)(item_slot_blend + 0x34) == 0) {
                 approach_value((f32 *)(item_slot_blend + 8), 1.0f, frame_scale * 0.1f);
@@ -1001,7 +1001,7 @@ void create_missing_hero_item_slot_animations(s32 suppress_slot_animation_creati
         return;
     if (!hero.item_anim_active)
         return;
-    if (!hero.unk20AA)
+    if (!hero.weapon_up)
         return;
     if (suppress_slot_animation_creation)
         return;
@@ -1021,7 +1021,7 @@ void create_missing_hero_item_slot_animations(s32 suppress_slot_animation_creati
                 allocate_moby_animation_slot((u8 *)hero.moby, l00_hero_item_animation_slot_ids[i]);
             hero.held_item_anim_blend[i] = slot_animation_object;
             if (slot_animation_object) {
-                hero.unkD14 = 0;
+                hero.arm_layer_fade = 0;
                 *(s32 *)(slot_animation_object + 8) = 0;
                 initialize_moby_animation_blend((u8 *)hero.moby,
                                                 slot_animation_object,
@@ -1054,13 +1054,13 @@ void start_equipped_item_animation(void) {
         slot_animation_id = item_defs[item_id].animation_mode_12;
     P->item_anim_active = 1;
     {
-        s32 k = item_defs[item_id].unk30;
-        P->unk20AA = k;
+        s32 k = item_defs[item_id].weapon_up;
+        P->weapon_up = k;
     }
     animation_step_divisor = scale_game_frames(10);
     if (item_defs[item_id].slot_anim_count == 0)
         animation_step_divisor = scale_game_frames(11);
-    if (P->state.control_mode == HERO_MODE_IDLE && P->unk22C8 == 0) {
+    if (P->state.control_mode == HERO_MODE_IDLE && P->weapon_lowered == 0) {
         P->item_hold_anim = hero_animation_id;
         set_hero_animation(hero_animation_id, 0, (f32)animation_step_divisor);
         return;
@@ -1076,7 +1076,7 @@ void start_equipped_item_animation(void) {
         hero.held_item_anim_blend[i] = slot_animation_object;
         if (slot_animation_object != 0) {
             hero.item_hold_anim = slot_animation_id;
-            hero.unkD14 = 0;
+            hero.arm_layer_fade = 0;
             *(f32 *)(slot_animation_object + 8) = 1.0f;
             initialize_moby_animation_blend((u8 *)hero.moby,
                                             slot_animation_object,
@@ -1098,7 +1098,7 @@ void cancel_hero_item_animation(void) {
     struct Hero *hero_state = &hero;
     if (hero_state->item_anim_active != 0) {
         if (hero_state->held_item_anim_blend[0] != 0) {
-            hero_state->unkD14 = 1;
+            hero_state->arm_layer_fade = 1;
         } else if (hero_state->state.current == 0) {
             unsigned char *hero_moby = (unsigned char *)hero_state->moby;
             if (hero_moby[0x53] == hero_state->item_hold_anim) {
@@ -1107,7 +1107,7 @@ void cancel_hero_item_animation(void) {
             }
         }
         hero.item_anim_active = 0;
-        hero.unk20AA = 0;
+        hero.weapon_up = 0;
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020EDC0). */
@@ -1124,7 +1124,7 @@ void update_hero_held_items_and_orientation(void) {
     int          slot_index;
 
     if (hero_item_animation_state->item_anim_active != 0 &&
-        hero_item_animation_state->unk20AA != 0) {
+        hero_item_animation_state->weapon_up != 0) {
         if (get_ammo(-1) == 0) {
             cancel_hero_item_animation();
         }
@@ -1162,8 +1162,8 @@ void update_hero_held_items_and_orientation(void) {
             struct Hero *pose_owner = &hero;
             advance_moby_animation_blend(pose_owner->moby, *current);
 
-            if (pose_owner->unkD14 != 0) {
-                if (pose_owner->unkD14 == 2) {
+            if (pose_owner->arm_layer_fade != 0) {
+                if (pose_owner->arm_layer_fade == 2) {
                     approach_value((float *)(*current + 8), 0.0f, frame_scale * 0.25f);
                 } else {
                     approach_value((float *)(*current + 8), 0.0f, frame_scale * 0.07f);
@@ -1179,8 +1179,8 @@ void update_hero_held_items_and_orientation(void) {
                 if (((*current)[5] & 2) == 0) {
                     continue;
                 }
-                if (pose_owner->unk20AA == 0) {
-                    pose_owner->unkD14 = 1;
+                if (pose_owner->weapon_up == 0) {
+                    pose_owner->arm_layer_fade = 1;
                     *(int *)(*current + 0x28) = 0;
                     pose_owner->item_anim_active = 0;
                     return;
@@ -1281,7 +1281,7 @@ void spawn_hero_item_mobies(void) {
             created_moby->visible = 1;
             created_moby->spawn_frame = hero.moby->spawn_frame;
             if (((u8 *)created_moby->pclass)[6] != 0)
-                created_moby->unk73 = 0x18;
+                created_moby->metal_alpha = 0x18;
             slot_owner->items[0].moby = created_moby;
             slot_owner->items[0].state = 2;
             if (id == 8) {
@@ -1314,7 +1314,7 @@ void spawn_hero_item_mobies(void) {
             created_moby->visible = 1;
             created_moby->spawn_frame = hero.moby->spawn_frame;
             if (((u8 *)created_moby->pclass)[6] != 0)
-                created_moby->unk73 = 0x18;
+                created_moby->metal_alpha = 0x18;
             hero.items[3].state = 2;
             hero.items[3].moby = created_moby;
             if (hero.pack_disabled != 0)
@@ -1333,7 +1333,7 @@ void spawn_hero_item_mobies(void) {
             created_moby->visible = 1;
             created_moby->spawn_frame = hero.moby->spawn_frame;
             if (((u8 *)created_moby->pclass)[6] != 0)
-                created_moby->unk73 = 0x18;
+                created_moby->metal_alpha = 0x18;
             hero.items[3].state = 2;
             hero.items[3].moby2 = created_moby;
             if (hero.pack_disabled != 0)
@@ -1354,7 +1354,7 @@ void spawn_hero_item_mobies(void) {
             slot_two_moby->flags |= 2;
             slot_two_moby->update = 0;
             if (((u8 *)slot_two_moby->pclass)[6] != 0)
-                slot_two_moby->unk73 = 0x18;
+                slot_two_moby->metal_alpha = 0x18;
             slot_two_moby->flags |= 0x800;
             hero.items[2].moby = slot_two_moby;
             hero.items[2].state = 2;
@@ -1369,7 +1369,7 @@ void spawn_hero_item_mobies(void) {
             created_moby->visible = 1;
             created_moby->spawn_frame = hero.moby->spawn_frame;
             if (((u8 *)created_moby->pclass)[6] != 0)
-                created_moby->unk73 = 0x18;
+                created_moby->metal_alpha = 0x18;
             hero.items[1].moby = created_moby;
             hero.items[1].state = 2;
         }
@@ -1379,7 +1379,7 @@ void spawn_hero_item_mobies(void) {
             created_moby->visible = 1;
             created_moby->spawn_frame = hero.moby->spawn_frame;
             if (((u8 *)created_moby->pclass)[6] != 0)
-                created_moby->unk73 = 0x18;
+                created_moby->metal_alpha = 0x18;
             hero.items[1].moby2 = created_moby;
             hero.items[1].state = 2;
         }
@@ -1393,7 +1393,7 @@ void spawn_hero_item_mobies(void) {
             slot_four_moby->visible = 1;
             slot_four_moby->spawn_frame = hero.moby->spawn_frame;
             if (((u8 *)slot_four_moby->pclass)[6] != 0)
-                slot_four_moby->unk73 = 0x18;
+                slot_four_moby->metal_alpha = 0x18;
             hero.items[4].moby = slot_four_moby;
             hero.items[4].state = 2;
         }
@@ -1855,7 +1855,7 @@ void clear_hero_item_slot(int i, int respawn_threshold) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210418), where it is exact; names translated to the US level program. */
 
-/* For the listed ids sets hero.unk22CE to 3 and hero.unk1DC to scale_game_frames(0x46). */
+/* For the listed ids sets hero.face_expression to 3 and hero.face_expression_timer to scale_game_frames(0x46). */
 void set_hero_condition_animation_timer_for_item(int id) __asm__("FUN_L00_0020fd80");
 
 void set_hero_condition_animation_timer_for_item(int id) {
@@ -1868,15 +1868,15 @@ void set_hero_condition_animation_timer_for_item(int id) {
     case 16:
     case 23:
         hero_condition_animation_state = &hero;
-        hero_condition_animation_state->unk22CE = 3;
-        hero_condition_animation_state->unk1DC = scale_game_frames(0x46);
+        hero_condition_animation_state->face_expression = 3;
+        hero_condition_animation_state->face_expression_timer = scale_game_frames(0x46);
         break;
     }
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210478), where it is exact; names translated to the US level program. */
 
-/* Sets the short at hero.unk1DA to scale_game_frames(0x46) for the listed ids. */
+/* Sets the short at hero.item_swap_timer to scale_game_frames(0x46) for the listed ids. */
 void set_hero_item_switch_timer_for_item(int id) __asm__("FUN_L00_0020fde0");
 
 void set_hero_item_switch_timer_for_item(int id) {
@@ -1892,7 +1892,7 @@ void set_hero_item_switch_timer_for_item(int id) {
     case 22:
     case 23:
     case 26:
-        hero.unk1DA = scale_game_frames(0x46);
+        hero.item_swap_timer = scale_game_frames(0x46);
         break;
     }
 }
@@ -2125,7 +2125,7 @@ void hero_switch_item(int i) {
         struct Hero *g = &hero;
         int         *s;
         int         *sb;
-        if (g->unk1FF5 != 0) {
+        if (g->launch_drones != 0) {
             replenish_hero_drones();
             g->pending_item[i] = 0;
         }
@@ -2137,7 +2137,7 @@ void hero_switch_item(int i) {
                 if (g->vehicle_toggle_timer == 0) {
                     allocate_hero_voice_for_entry(0x18, 0);
                     g->vehicle_toggle_timer = 0x12;
-                    g->unk22DC = 1;
+                    g->scale_pulse_step = 1;
                 }
                 changed = 1;
                 g->selected_item[i] = *s;
@@ -2202,7 +2202,7 @@ void hero_switch_item(int i) {
         struct Hero *g = &hero;
         *(int *)((char *)g + i * 0x50 + 0x10B0) = 3;
         clear_hero_idle_rotation_targets();
-        g->unk1010 = random_int_between(scale_game_frames(0x32), scale_game_frames(0x5A));
+        g->head_look_timer = random_int_between(scale_game_frames(0x32), scale_game_frames(0x5A));
         set_hero_item_switch_timer_for_item(*(hero.selected_item + i));
         set_hero_condition_animation_timer_for_item(*(hero.selected_item + i));
         if (g->item_anim_active != 0) {
@@ -2308,7 +2308,7 @@ void update_hero_and_equipped_item_glows() __asm__("FUN_L00_002080b0");
 void update_hero_equipped_items(void) __asm__("FUN_L00_00210928");
 
 void update_hero_equipped_items(void) {
-    if (hero.unk308 == 1 || (u32)(hero.state.control_mode - 0x15) < 2 ||
+    if (hero.magnetic_floor == 1 || (u32)(hero.state.control_mode - 0x15) < 2 ||
         hero_is_in_special_state()) {
         hero.item_select_blocked = 1;
         hero.item_use_locked = 1;
@@ -2316,9 +2316,9 @@ void update_hero_equipped_items(void) {
     if (hero_is_in_special_state() || hero.state.control_mode == 0x15 ||
         hero.state.control_mode == 0x16 || hero.state.control_mode == HERO_MODE_LEDGE ||
         hero.state.current == 0x12) {
-        hero.unk20AE = 1;
+        hero.wrench_hidden_by_state = 1;
     } else {
-        hero.unk20AE = 0;
+        hero.wrench_hidden_by_state = 0;
     }
     spawn_hero_item_mobies();
     update_hero_item_mobys();
@@ -2344,14 +2344,14 @@ void enter_hero_vehicle_mode(int mode, int requested_state, char *vehicle_moby) 
     hero_state = &hero;
     hero_state->force_slot0_item8 = 1;
     hero_update_items();
-    hero_state->moby = (struct Moby *)hero_state->unkA88;
+    hero_state->moby = (struct Moby *)hero_state->base_moby;
     clear_moby_transform_history(&hero_state->trail);
     hero_state->moby->collision_disable = -1;
     set_hero_item_moby_flag_bit0();
     release_and_clear_hero_voice_slots();
     reset_hero_easing_records();
     hero_state->vehicle_mode = mode;
-    hero_state->unkA84 = (u8 *)vehicle_moby;
+    hero_state->replacement_moby = (u8 *)vehicle_moby;
     hero_state->moby = (struct Moby *)vehicle_moby;
     update_hero_collision_capsule_dimensions();
     hero_state->capsule_top = hero_state->capsule_top_target;
@@ -2362,10 +2362,10 @@ void enter_hero_vehicle_mode(int mode, int requested_state, char *vehicle_moby) 
     clear_hero_queued_animation();
     FUN_L00_00257024_210a08((char *)hero_state->moby);
     apply_hero_and_item_scale_sequence();
-    hero_state->unk22CC = requested_state;
+    hero_state->requested_state = requested_state;
     switch (mode) {
     case HERO_VEHICLE_MODE_CLANK:
-        hero_state->health.unk22B0 = *(unsigned short *)&hero_state->health.hp;
+        hero_state->health.saved_hp = *(unsigned short *)&hero_state->health.hp;
         hero_state->health.hp = hero_state->health.vehicle_mode_hp;
         break;
     case HERO_VEHICLE_MODE_GIANT_CLANK:
@@ -2385,40 +2385,40 @@ void exit_hero_vehicle_mode(void) {
     unsigned char *vehicle_moby;
     if (hero_state->vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         hero_state->health.vehicle_mode_hp = hero_state->health.hp;
-        hero_state->health.hp = hero_state->health.unk22B0;
-        if (hero_state->unk1620) {
-            mark_moby_for_removal(hero_state->unk1620);
-            hero_state->unk1620 = 0;
+        hero_state->health.hp = hero_state->health.saved_hp;
+        if (hero_state->clank_rotor_moby) {
+            mark_moby_for_removal(hero_state->clank_rotor_moby);
+            hero_state->clank_rotor_moby = 0;
         }
-        if (hero_state->unk1624) {
-            mark_moby_for_removal(hero_state->unk1624);
-            hero_state->unk1624 = 0;
+        if (hero_state->clank_antenna_glow_moby) {
+            mark_moby_for_removal(hero_state->clank_antenna_glow_moby);
+            hero_state->clank_antenna_glow_moby = 0;
         }
     }
     {
         struct Hero *vehicle_animation_owner = &hero;
         if (vehicle_animation_owner->vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK &&
-            vehicle_animation_owner->unk1634 != -1) {
-            set_animation_parameter(vehicle_animation_owner->unk1634, 0);
-            vehicle_animation_owner->unk1634 = -1;
+            vehicle_animation_owner->vehicle_anim_handle != -1) {
+            set_animation_parameter(vehicle_animation_owner->vehicle_anim_handle, 0);
+            vehicle_animation_owner->vehicle_anim_handle = -1;
         }
         reset_hero_easing_records();
     }
     {
         struct Hero *vehicle_exit_owner = &hero;
         vehicle_exit_owner->vehicle_mode = HERO_VEHICLE_MODE_ON_FOOT;
-        vehicle_moby = vehicle_exit_owner->unkA84;
+        vehicle_moby = vehicle_exit_owner->replacement_moby;
         if (vehicle_moby) {
             MOBY(vehicle_moby)->flags &= ~6;
         }
-        vehicle_exit_owner->unkA84 = 0;
+        vehicle_exit_owner->replacement_moby = 0;
         if (vehicle_exit_owner->vehicle_mode3_moby) {
             mark_moby_for_removal(vehicle_exit_owner->vehicle_mode3_moby);
             vehicle_exit_owner->vehicle_mode3_moby = 0;
         }
         release_and_clear_hero_voice_slots();
         {
-            unsigned char *restored_hero_moby = vehicle_exit_owner->unkA88;
+            unsigned char *restored_hero_moby = vehicle_exit_owner->base_moby;
             vehicle_exit_owner->moby = (struct Moby *)restored_hero_moby;
             qcopy(restored_hero_moby + 0x10, &vehicle_exit_owner->motion.pos);
             MOBY(restored_hero_moby)->collision_disable = 0;
@@ -2509,7 +2509,7 @@ s32 hero_check_damage(s32 apply_damage_response) {
     hero.damage_source_moby = (struct Moby *)hero_hit_entry->source_moby;
     D_0015EEA8++;
     if (hero.state.control_mode == HERO_MODE_GRIND) {
-        hero.unk5BE = 1;
+        hero.grind_hit = 1;
         return 0;
     }
     if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
@@ -2591,7 +2591,7 @@ s32 hero_check_damage(s32 apply_damage_response) {
         }
         hero_knockback(
             &knockback_vector, flag, horizontal_knockback_strength, vertical_knockback_strength);
-        if (flag != 0 && hero_hit_entry->unk28 == 4) {
+        if (flag != 0 && hero_hit_entry->attack_type == 4) {
             knockback_vector.f[2] += knockback_vector.f[2];
         }
         break;
@@ -2697,7 +2697,7 @@ void update_hero_collision_capsule_dimensions(void) {
     }
     if (hero.state.control_mode == HERO_MODE_JUMP) {
         if (hero.state_timer > hero.takeoff_frame && hero.past_jump_apex == 0)
-            hero.capsule_bottom_target = hero.unk434;
+            hero.capsule_bottom_target = hero.air_capsule_bottom;
     } else if (hero.state.current == HERO_STATE_FALL) {
         hero.capsule_bottom_target = 0.5f;
     } else if (hero.state.current == HERO_STATE_CROUCH) {
@@ -2741,7 +2741,7 @@ extern void matrix_from_basis_rows(void *, void *) __asm__("FUN_L00_001ffcf8");
 extern void update_hero_motion_and_collision_probes(void) __asm__("FUN_L00_00221310");
 extern void update_hero_timers_and_reach_state(void) __asm__("FUN_L00_002215c8");
 
-/* Per-frame hero input: stick (or d-pad) into unk1D20/24, the yaw and position
+/* Per-frame hero input: stick (or d-pad) into stick_x/stick_y, the yaw and position
    history rings, then the hero basis matrix and the movement updates. */
 void hero_update(void) __asm__("FUN_L00_00211670");
 
@@ -2758,7 +2758,7 @@ void hero_update(void) {
     hero_state = &hero;
     hero_state->gravity_mode = mode;
     hero_state->stick_magnitude = get_capped_hero_stick_magnitude();
-    hero_state->unk240 = 0;
+    hero_state->wall_moby = 0;
     source = (u8 *)&controller_state;
     hero_state->stick_x = *(f32 *)(source + 0x108);
     hero_state->stick_y = *(f32 *)(source + 0x10C);
@@ -2831,7 +2831,7 @@ int test_hero_animation_frame_window(float animation_frame_threshold) {
     return 0;
 }
 
-/* Clears hero.target_speed and unk194 as words. */
+/* Clears hero.target_speed and ground_speed as words. */
 void clear_hero_target_and_ground_speeds(void) __asm__("FUN_L00_002118b0");
 
 void clear_hero_target_and_ground_speeds(void) {
@@ -2925,7 +2925,7 @@ void stick_target(float scale, int mode) {
     hero.target_speed = scale * vector_length_xy(&stick_vector);
 }
 
-/* Hero speed clamp after a move update (twin of hero_speed_from_table): in state 0x3F it scales unk190 by 3.5 frame steps with a floor; otherwise it picks a table speed, and in state 0x73 it slows by 0.8 down to a floor. */
+/* Hero speed clamp after a move update (twin of hero_speed_from_table): in state 0x3F it scales target_speed by 3.5 frame steps with a floor; otherwise it picks a table speed, and in state 0x73 it slows by 0.8 down to a floor. */
 void update_hero_target_speed_from_stick(void) __asm__("FUN_L00_00211be8");
 
 void update_hero_target_speed_from_stick(void) {
@@ -2938,7 +2938,7 @@ void update_hero_target_speed_from_stick(void) {
         return;
     }
     if (0.0f < hero.target_speed) {
-        if (hero.target_speed < hero_speed_steps[0].unkC)
+        if (hero.target_speed < hero_speed_steps[0].step_up_speed)
             hero.target_speed = hero_speed_steps[0].target_speed * frame_time;
         else
             hero.target_speed = hero_speed_steps[1].target_speed * frame_time;
@@ -3063,7 +3063,7 @@ void turn_hero_toward_move_direction_with_stick_scale(void) {
     frame_scaled_turn_coefficient = frame_scale_sq * 0.019f * stick_turn_scale;
     frame_scaled_secondary_turn_coefficient = frame_scale_sq * 0.1f;
     scaled_turn_amount = D_0015ED6C_211f38 * 9.948377f * stick_turn_scale;
-    if (hero_state->unk3BE) {
+    if (hero_state->sharp_turn) {
         frame_scaled_turn_coefficient *= 1.1f;
         scaled_turn_amount *= 1.2f;
     }
@@ -3215,7 +3215,7 @@ void clip_hero_velocity_against_probed_surfaces(int force) {
         inward_velocity_component;
     int r;
 
-    if (hero.unk308 != 0)
+    if (hero.magnetic_floor != 0)
         return;
     if (gravity_length_xy(&hero.motion.velocity) < frame_time * 0.1f)
         return;
@@ -3267,7 +3267,7 @@ void clip_hero_velocity_against_probed_surfaces(int force) {
         X.i1C > 0)
         primary_hit_normal_angle = fast_arc_tan(X.v40.f[2], vector_length_xy(&X.v40));
     if (0.8726646304130554f <= primary_hit_normal_angle || r == 8 || r == 12) {
-        hero.unk240 = X.hit_moby;
+        hero.wall_moby = X.hit_moby;
         *(s32 *)&X.v40.f[2] = 0;
         FUN_00125180_212318(&X.v40, &X.v40);
         inward_velocity_component =
@@ -3425,7 +3425,7 @@ void update_hero_ground_contact_and_surface_slopes(void) {
             hero.on_flagged_ground_moby = 1;
         }
     }
-    if (HH.unk1C > 0) {
+    if (HH.surface_type > 0) {
         qcopy(&hero.ground_point, &HH.point);
         hero.ground_z.f = HH.point.f[2];
         hero.ground_distance = fast_vec_dist(&hero.motion.pos, &hero.ground_point);
@@ -3473,13 +3473,13 @@ d1:
         break;
     }
     hero.ground_pitch.i = 0;
-    hero.unk2E8.i = 0;
-    hero.unk2D0.i[0] = 0;
-    hero.unk2D0.i[1] = 0;
-    hero.unk2C8.i[0] = 0;
-    hero.unk2C8.i[1] = 0;
-    hero.unk2C0.i[0] = 0;
-    hero.unk2C0.i[1] = 0;
+    hero.ground_roll.i = 0;
+    hero.side_probe_roll.i[0] = 0;
+    hero.side_probe_roll.i[1] = 0;
+    hero.side_probe_pitch.i[0] = 0;
+    hero.side_probe_pitch.i[1] = 0;
+    hero.side_probe_drop.i[0] = 0;
+    hero.side_probe_drop.i[1] = 0;
     if (hero.state.control_mode == HERO_MODE_GRIND || hero.state.control_mode == 0x15 ||
         hero.state.control_mode == HERO_MODE_ATTACK || hero.state.control_mode == HERO_MODE_JUMP ||
         hero.state.control_mode == HERO_MODE_LAND || hero.state.control_mode == HERO_MODE_LEDGE) {
@@ -3493,7 +3493,7 @@ d1:
         hero.ground_pitch.f = ground_offset_or_angles.f[1];
     }
     if (-0.78539819f < ground_offset_or_angles.f[0] && ground_offset_or_angles.f[0] < 0.78539819f) {
-        hero.unk2E8.f = ground_offset_or_angles.f[0];
+        hero.ground_roll.f = ground_offset_or_angles.f[0];
     }
     for (i = 0; i < 2; i++) {
         side_probe_angle = 1.5707964f;
@@ -3505,22 +3505,22 @@ d1:
             &unused_side_probe_point, 0.2f, side_probe_angle, -0.45f);
         if (collision_line(&side_ray_start, &collision_ray_end, 0x22, hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
-            hero.unk2C0.f[i] = f;
+            hero.side_probe_drop.f[i] = f;
             if (0.4f < absolute_float(f)) {
-                hero.unk2C0.f[i] = 0.0f;
+                hero.side_probe_drop.f[i] = 0.0f;
             }
             sceVu0Normalize(&side_hit_normal, (u8 *)&HH.normal_x);
             compute_rotated_vector_angles(&side_hit_normal, &side_hit_angles);
             if (-0.78539819f < side_hit_angles.f[1] && side_hit_angles.f[1] < 0.78539819f) {
-                hero.unk2C8.f[i] = side_hit_angles.f[1];
+                hero.side_probe_pitch.f[i] = side_hit_angles.f[1];
             }
             if (-0.78539819f < side_hit_angles.f[0] && side_hit_angles.f[0] < 0.78539819f) {
-                hero.unk2D0.f[i] = side_hit_angles.f[0];
+                hero.side_probe_roll.f[i] = side_hit_angles.f[0];
             }
         } else {
-            hero.unk2C0.i[i] = 0;
-            hero.unk2C8.f[i] = hero.ground_pitch.f;
-            hero.unk2D0.f[i] = hero.unk2E8.f;
+            hero.side_probe_drop.i[i] = 0;
+            hero.side_probe_pitch.f[i] = hero.ground_pitch.f;
+            hero.side_probe_roll.f[i] = hero.ground_roll.f;
         }
     }
 }
@@ -3682,8 +3682,9 @@ s32 resolve_hero_current_position_collisions(s32 mode) {
         hero.path_constrain_pending = 0;
     }
     if (hero.state.control_mode != HERO_MODE_SWIM) {
-        if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN || hero.unk1F8 != 0) {
-            if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL || hero.unk1F8 != 0) {
+        if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN || hero.magnet_walk_timer != 0) {
+            if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
+                hero.magnet_walk_timer != 0) {
                 add_hero_up_offset(&collision_probe_offset, &collision_probe_offset, 0.6f);
             } else {
                 add_hero_gravity_offset(
@@ -3789,15 +3790,15 @@ void resolve_hero_collisions_with_history(void) {
 #include "rnc/sdk/eetypes.h"
 /*
  * Hero movement step (FUN_L01_00233de0 twin; control mode 0xF caps the horizontal speed, 0xD and 0xE skip the cap): clamps the velocity, moves the hero by it (plus the
- * one-frame impulse at unk920 and the push at unkF0), runs collision, then
+ * one-frame impulse move_impulse and the push platform_delta), runs collision, then
  * derives this frame's movement vectors and speeds:
- *   motion.unk100  position change this frame
- *   motion.unk110  movement direction scaled by the velocity along it
- *   motion.unk120  same, without the gravity-up component
- *   motion.unk130  same, gravity-up part only
- *   motion.unk140  displacement caused by the push
- *   motion.speed_xy  speed, unk164 horizontal speed, unk168 forward speed
- *   motion.unk16C  slope: vertical / horizontal change, clamped to +-0.5
+ *   motion.displacement  position change this frame
+ *   motion.resolved_velocity  movement direction scaled by the velocity along it
+ *   motion.resolved_velocity_z  same, without the gravity-up component
+ *   motion.resolved_velocity_xy  same, gravity-up part only
+ *   motion.platform_carry  displacement caused by the push
+ *   motion.speed_xy  speed, flat_speed horizontal speed, forward_speed forward speed
+ *   motion.move_slope  slope: vertical / horizontal change, clamped to +-0.5
  */
 
 /* The FUN_L00_00233xxx helpers work in the hero's gravity frame (hero byte
@@ -3935,7 +3936,7 @@ void apply_hero_motion_and_resolve_collisions(void) {
     }
     fast_vec_sub(&hero.motion.platform_carry, &hero.motion.pos, &movement_scratch_vector);
     {
-        /* push w moves to unk140.w; a block-local keeps retail's order */
+        /* push w moves to platform_carry.w; a block-local keeps retail's order */
         f32 push_w = hero.motion.platform_delta.f[3];
 
         hero.motion.platform_delta.f[3] = 0.0f;
@@ -4081,7 +4082,7 @@ void steer_hero_planar_velocity(f32 step) {
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: HeroAirAccel). */
 void air_accel(f32 step) __asm__("FUN_L01_00234358");
 
-/* Same steering as FUN_L00_00213e68, without the copy into motion.unk130. */
+/* Same steering as FUN_L00_00213e68, without the copy into motion.resolved_velocity_xy. */
 void air_accel(f32 step) {
     struct Hero *player = &hero;
     f32          delta[4];
@@ -4236,30 +4237,34 @@ void hero_integrate_velocity(void) {
         }
     } else {
         no_lift = 0;
-        if (hero.unk428 == 0.0f && hero.unk42C == 0.0f) {
+        if (hero.pending_jump_impulse == 0.0f && hero.jump_impulse_total == 0.0f) {
             no_lift = 1;
         }
         if ((pad_held_lui & 0x40) || no_lift || hero.state.current == 0x12) {
-            if (hero.unk430 < hero.unk48C && !(scale_game_frames(15) < hero.state_timer)) {
-                hero.unk430 += (hero.unk48C - hero.jump_height_start) / hero.unk498;
-                if (hero.unk48C < hero.unk430) {
-                    hero.unk430 = hero.unk48C;
+            if (hero.jump_height < hero.jump_height_target &&
+                !(scale_game_frames(15) < hero.state_timer)) {
+                hero.jump_height +=
+                    (hero.jump_height_target - hero.jump_height_start) / hero.jump_ramp_frames;
+                if (hero.jump_height_target < hero.jump_height) {
+                    hero.jump_height = hero.jump_height_target;
                 }
-                hero.unk428 += square_root((hero.unk430 + hero.unk430) * hero.jump_gravity) -
-                               hero.unk42C - hero.unk428;
+                hero.pending_jump_impulse +=
+                    square_root((hero.jump_height + hero.jump_height) * hero.jump_gravity) -
+                    hero.jump_impulse_total - hero.pending_jump_impulse;
             }
         }
-        if (!(hero.state_timer < hero.takeoff_frame) && 0.0f < hero.unk428) {
-            add_hero_up_offset(&hero.motion.velocity, &hero.motion.velocity, hero.unk428);
-            hero.unk42C += hero.unk428;
-            hero.unk428 = 0.0f;
+        if (!(hero.state_timer < hero.takeoff_frame) && 0.0f < hero.pending_jump_impulse) {
+            add_hero_up_offset(
+                &hero.motion.velocity, &hero.motion.velocity, hero.pending_jump_impulse);
+            hero.jump_impulse_total += hero.pending_jump_impulse;
+            hero.pending_jump_impulse = 0.0f;
         }
         if (hero.velocity_keys_active != 0) {
-            if (hero.state_timer < hero.unk3D0) {
+            if (hero.state_timer < hero.velocity_keys_start_frame) {
                 goto tail;
             }
             if (hero.state_timer < hero.velocity_keys_end_frame) {
-                velocity_curve = (struct Curve *)&hero.unk3D0;
+                velocity_curve = (struct Curve *)&hero.velocity_keys_start_frame;
                 velocity_curve->frames++;
                 while (velocity_curve->key == -1 ||
                        !(velocity_curve->frames <
@@ -4301,7 +4306,7 @@ tail:
         if (z < floor) {
             z = floor;
         }
-        /* Fakematch: unk20AD is a u8, so this test never fires. It only
+        /* Fakematch: tilt_disabled is a u8, so this test never fires. It only
            keeps g alive past the subtraction, which gives retail's
            mov.s $f2,$f0; every clean spelling (MIN/MAX, helpers, ternary,
            a constant in a variable) folds g into the sub.s instead. */

@@ -13,13 +13,13 @@
 typedef struct Moby Moby;
 
 typedef struct {
-    float pos[4];   /* 0x00 */
-    float unk10;    /* 0x10 */
-    float unk14;    /* 0x14 */
-    int   unk18;    /* 0x18 */
-    int   idx;      /* 0x1C */
-    float unk20;    /* 0x20 */
-    Moby *slots[7]; /* 0x24 */
+    float pos[4];         /* 0x00 */
+    float base_rot_x;     /* 0x10 */
+    float rotation;       /* 0x14 */
+    int   unk18;          /* 0x18 */
+    int   idx;            /* 0x1C */
+    float rotation_speed; /* 0x20 */
+    Moby *slots[7];       /* 0x24 */
 } Vars;
 
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
@@ -67,7 +67,7 @@ void moby_rotation_group_update(Moby *moby) {
 
     switch (moby->state) {
     case SPAWN_CHILD_MOBYS:
-        moby_vars->unk10 = (*(float(*)[4]) & moby->rot)[0];
+        moby_vars->base_rot_x = (*(float(*)[4]) & moby->rot)[0];
         qcopy(moby_vars->pos, (*(float(*)[4]) & moby->pos));
         moby->state = WAIT_FOR_TRIGGER_AND_CHILDREN;
         for (i = 0; i < 7; i++) {
@@ -88,7 +88,7 @@ void moby_rotation_group_update(Moby *moby) {
         }
         break;
     case INITIALIZE_BASE_TRANSFORM:
-        moby_vars->unk10 = (*(float(*)[4]) & moby->rot)[0];
+        moby_vars->base_rot_x = (*(float(*)[4]) & moby->rot)[0];
         qcopy(moby_vars->pos, (*(float(*)[4]) & moby->pos));
         moby->state = UPDATE_POSITION_FROM_BASE;
         fast_vec_normalize(position_offset,
@@ -127,7 +127,7 @@ void moby_rotation_group_update(Moby *moby) {
                     allocate_voice_for_target_entry(0, 0, moby);
                     moby->state = ROTATE_AND_HIDE_AFTER_TRIGGER_AND_CHILDREN;
                     moby_vars->unk18 = 0;
-                    moby_vars->unk14 = 0.0f;
+                    moby_vars->rotation = 0.0f;
                     for (k = 0; k < 7; k++) {
                         moby_vars->slots[k]->state = 5;
                     }
@@ -142,16 +142,16 @@ void moby_rotation_group_update(Moby *moby) {
         break;
     case ROTATE_AND_HIDE_AFTER_TRIGGER_AND_CHILDREN:
     case ROTATE_AND_HIDE:
-        approach_angle(&moby_vars->unk14,
-                       &moby_vars->unk20,
+        approach_angle(&moby_vars->rotation,
+                       &moby_vars->rotation_speed,
                        1.0471976f,
                        rotation_group_angular_velocity_adjustment_degrees_gp * 0.017453292f *
                            D_0015ED70,
                        rotation_group_angular_deceleration_degrees_gp * 0.017453292f * D_0015ED70,
                        rotation_group_max_angular_speed_degrees_gp * 0.017453292f * D_0015ED6C);
         (*(float(*)[4]) & moby->rot)[0] =
-            fast_subtract_rotations(moby_vars->unk10, moby_vars->unk14);
-        if (moby_vars->unk14 >= 1.0471976f) {
+            fast_subtract_rotations(moby_vars->base_rot_x, moby_vars->rotation);
+        if (moby_vars->rotation >= 1.0471976f) {
             moby->flags |= 1;
             (*(char *)&moby->visible) = 0;
             if (moby->state == ROTATE_AND_HIDE_AFTER_TRIGGER_AND_CHILDREN) {
@@ -163,16 +163,16 @@ void moby_rotation_group_update(Moby *moby) {
         break;
     case RESTORE_ROTATION_THEN_WAIT_FOR_TRIGGER_AND_CHILDREN:
     case RESTORE_ROTATION_THEN_UPDATE_POSITION_FROM_BASE:
-        approach_angle(&moby_vars->unk14,
-                       &moby_vars->unk20,
+        approach_angle(&moby_vars->rotation,
+                       &moby_vars->rotation_speed,
                        0.0f,
                        rotation_group_angular_velocity_adjustment_degrees_gp * 0.017453292f *
                            D_0015ED70,
                        rotation_group_angular_deceleration_degrees_gp * 0.017453292f * D_0015ED70,
                        rotation_group_max_angular_speed_degrees_gp * 0.017453292f * D_0015ED6C);
         (*(float(*)[4]) & moby->rot)[0] =
-            fast_subtract_rotations(moby_vars->unk10, moby_vars->unk14);
-        if (moby_vars->unk14 <= 0.0f) {
+            fast_subtract_rotations(moby_vars->base_rot_x, moby_vars->rotation);
+        if (moby_vars->rotation <= 0.0f) {
             if (moby->state == RESTORE_ROTATION_THEN_WAIT_FOR_TRIGGER_AND_CHILDREN) {
                 moby->state = WAIT_FOR_TRIGGER_AND_CHILDREN;
             } else {

@@ -12,9 +12,9 @@
    derives the projection matrices, scales and fog packet words. */
 struct View {
     s32  fog_color;
-    s32  unk4;
-    s32  unk8;
-    s32  unkC;
+    s32  gif_tag_hi;      /* 0x04: 0x103E4000, GIFtag bits 32..63 (NREG 1, PRE, PRIM) */
+    s32  gif_tag_regs;    /* 0x08: 0xE, register descriptor A+D */
+    s32  gif_tag_regs_hi; /* 0x0C */
     Vec4 regs[5];
     Vec4 gif[4];
     f32  near_clip;

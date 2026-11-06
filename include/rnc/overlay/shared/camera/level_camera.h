@@ -11,12 +11,13 @@ struct UpdateCam;
    position, pitch and yaw. A shot sets the two amount/frames pairs (0.03 for
    a few frames), a hard landing sets the first one (0.2 for 40 frames). */
 typedef struct LevelCamera {
-    f32               unk0[12]; /* 0x000: a 3x4 basis; shots copy it as their launch rotation */
+    f32 view_matrix
+        [12]; /* 0x000: GameCamera.view_matrices, a 3x4 basis; shots copy it as their launch rotation */
     u8                pad30[0x110];
-    Vec4              pos; /* 0x140 */
-    f32               unk150;
-    f32               pitch; /* 0x154 */
-    f32               yaw;   /* 0x158 */
+    Vec4              pos;        /* 0x140 */
+    f32               rotation_x; /* 0x150: GameCamera.rotation x; pitch and yaw are its y and z */
+    f32               pitch;      /* 0x154 */
+    f32               yaw;        /* 0x158 */
     u8                pad15C[0x4];
     f32               shake_amount;      /* 0x160: the same two channels as GameCamera.shake */
     f32               shake_offset;      /* 0x164 */
@@ -29,24 +30,26 @@ typedef struct LevelCamera {
     struct UpdateCam *current_camera;    /* 0x180: the record the view follows */
     struct UpdateCam *previous_camera;   /* 0x184 */
     u8                pad188[0x8];
-    u8                unk190[0x30];
-    f32               unk1C0[4]; /* 0x1C0 */
-    u8                unk1D0[0x84];
-    s32               unk254; /* 0x254 */
-    u8                pad258[0x4];
+    u8                smoothed_hero
+        [0x30]; /* 0x190: hero position with its z springed, +0x10 the spring step, +0x20 the smoothed up */
+    f32 gravity_up[4]; /* 0x1C0: minus the hero's gravity direction */
+    u8  tracking
+        [0x84]; /* 0x1D0: previous gravity_up, +0x10 up spring steps, +0x20 previous hero position */
+    s32 camera_moby; /* 0x254: moby handle_camera_collision_with_hero spawns while the follow camera is current */
+    u8 pad258[0x4];
     struct Moby *
         focus_moby; /* 0x25C: a moby that takes the camera's attention (blarg helicopter); 0: none */
     s32 focus_time; /* 0x260: reset to 0 when focus_moby is set */
     u8  pad264[0xc];
     s16 transition_mode; /* 0x270: GameCamera.transition_mode */
     u8  pad272[0x1];
-    u8  unk273; /* 0x273 */
+    u8 transition_requested_kind; /* 0x273: CameraTransition.requested_kind (CAMERA_TRANSITION_KIND_*) */
     u8  pad274[0x14];
-    f32 unk288; /* 0x288 */
+    f32 transition_rotation_rate; /* 0x288: CameraBlend.configured_rotation_rate */
     u8  pad28C[0x8];
-    f32 unk294; /* 0x294 */
+    f32 transition_position_rate; /* 0x294: CameraBlend.configured_position_rate */
     u8  pad298[0x5c];
-    s32 unk2F4;
+    s32 transition_orbit_frames; /* 0x2F4: CameraOrbit.duration_frames; start_camera_blend adds one */
     u8  pad2F8[0x58];
     f32 rows[12]; /* 0x350: forward, right and up; the hero's input direction is turned by them */
     u8  pad380[0x10];

@@ -31,7 +31,7 @@ typedef struct {
     u8    pad0[0x180];
     char *current_follow_cam; /* 0x180: struct UpdateCam * */
     u8    pad184[0x270 - 0x184];
-    s16   s270;
+    s16   transition_mode;
 } G680;
 
 typedef struct {
@@ -82,13 +82,13 @@ typedef struct {
     unsigned char pad0[0x1C0];
     float         v1C0[4];
     unsigned char pad1D0[0x270 - 0x1D0];
-    short         s270;
+    short         transition_mode;
     unsigned char pad272;
-    unsigned char b273;
+    unsigned char transition_requested_kind;
     unsigned char pad274[0x288 - 0x274];
-    float         f288;
+    float         transition_rotation_rate;
     unsigned char pad28C[0x294 - 0x28C];
-    float         f294;
+    float         transition_position_rate;
 } Q_2ea810;
 
 typedef struct {
@@ -312,8 +312,8 @@ void update_hero_aligned_camera_from_input(u8 *camera_object) {
     camera_rotation_state = *(S_9f38 **)(camera_object + 0x70);
     update_hero_aligned_camera_position(camera_object);
     FUN_001f9bf8_c(&up, ((u8 *)hero.moby) + 0xE0, 1.0f);
-    if (l00_camera.transition_mode == 0 && hero.unk20A5 == 0)
-        hero.unk20A5 = 1;
+    if (l00_camera.transition_mode == 0 && hero.hidden == 0)
+        hero.hidden = 1;
     rotation_input_target = -controller_state.analog[2];
     if (rotation_input_target == 0.0f)
         rotation_input_target = -controller_state.analog[0];
@@ -335,7 +335,7 @@ void update_hero_aligned_camera_from_input(u8 *camera_object) {
                           &camera_rotation_state->va);
     if (rotation_input_scratch != 0.0f)
         build_look_at_matrix(camera_object, camera_object, &up, k * rotation_input_scratch);
-    if (hero.motion.platform_carry.f[3] != 0.0f && hero.unk308 == 0)
+    if (hero.motion.platform_carry.f[3] != 0.0f && hero.magnetic_floor == 0)
         build_look_at_matrix(camera_object, camera_object, &up, hero.motion.platform_carry.f[3]);
     rotation_input_target = -controller_state.analog[3];
     if (rotation_input_target == 0.0f)
@@ -528,12 +528,12 @@ void initialize_hero_aligned_camera_mode(void) {
     else
         shared_camera_globals->transition_mode = 2;
     camera_globals = &l00_camera;
-    camera_globals->unk273 = 0;
-    camera_globals->unk294 = 0.05f;
-    camera_globals->unk288 = 0.05f;
+    camera_globals->transition_requested_kind = 0;
+    camera_globals->transition_position_rate = 0.05f;
+    camera_globals->transition_rotation_rate = 0.05f;
     FUN_L00_002e9ef0_v();
-    if (camera_globals->unk254 != 0)
-        allocate_voice_for_target_entry(0, 0, camera_globals->unk254);
+    if (camera_globals->camera_moby != 0)
+        allocate_voice_for_target_entry(0, 0, camera_globals->camera_moby);
 }
 
 void select_camera_mode_by_hero_vector_alignment(A_2ea810 *camera_object) __asm__("FUN_L00_002ea810");
@@ -546,17 +546,17 @@ void select_camera_mode_by_hero_vector_alignment(A_2ea810 *camera_object) {
     float  residual_length_product;
     float  dot_product_or_asin_result;
 
-    if (hero.unk2284 == 0x51 || hero.unk2284 == 4) {
+    if (hero.camera_mode == 0x51 || hero.camera_mode == 4) {
         return;
     }
     if (Q.transition_mode == 0) {
-        Q.unk273 = 0;
+        Q.transition_requested_kind = 0;
         camera_object->selected_camera_mode = 2;
-        Q.unk294 = 0.018f;
-        Q.unk288 = 0.018f;
+        Q.transition_position_rate = 0.018f;
+        Q.transition_rotation_rate = 0.018f;
         return;
     }
-    comparison_axis = Q.unk1C0;
+    comparison_axis = Q.gravity_up;
     dot_product_or_asin_result = FUN_001f9ab0_2ea810(comparison_axis, camera_object);
     FUN_001f9a68_2ea810(scaled_axis_scratch, comparison_axis, dot_product_or_asin_result);
     FUN_001f9a28_2ea810(camera_vector_residual, camera_object, scaled_axis_scratch);
@@ -577,8 +577,8 @@ void select_camera_mode_by_hero_vector_alignment(A_2ea810 *camera_object) {
             }
         }
     }
-    Q.unk273 = 0;
+    Q.transition_requested_kind = 0;
     camera_object->selected_camera_mode = 2;
-    Q.unk294 = 0.018f;
-    Q.unk288 = 0.018f;
+    Q.transition_position_rate = 0.018f;
+    Q.transition_rotation_rate = 0.018f;
 }

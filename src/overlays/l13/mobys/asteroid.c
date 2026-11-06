@@ -51,14 +51,14 @@ char *spawn_asteroid_fragment(char *owner,
 
 typedef struct AsteroidVars {
     u8    pad_0[0x30];
-    f32   unk30;
-    f32   unk34;
-    f32   unk38;
+    f32   spin_x;
+    f32   spin_y;
+    f32   spin_z;
     u8    pad_3C[0x4];
-    s32   unk40;
+    s32   child;
     u8    pad_44[0x4];
-    char *unk48;
-    s16   unk4C;
+    char *owner;
+    s16   cooldown;
     s16   splits_remaining;
 } AsteroidVars;
 
@@ -82,33 +82,33 @@ char *spawn_asteroid_fragment(char *parent_asteroid,
         qcopy(moby + 0x10, spawn_position);
         qcopy(moby_data, initial_velocity);
         MOBY(moby)->scale = scale;
-        moby_data->unk48 = parent_asteroid;
-        moby_data->unk40 = 1;
-        moby_data->unk4C = scale_game_frames(0x1E);
+        moby_data->owner = parent_asteroid;
+        moby_data->child = 1;
+        moby_data->cooldown = scale_game_frames(0x1E);
         moby_data->splits_remaining = remaining_split_count;
         MOBY(moby)->collision = 0;
         spin_increment = random_float_between(-30.0f, 30.0f) * DEG_TO_RAD * frame_time;
         switch (RandomNext() % 3) {
         case SPIN_AXIS_X:
-            moby_data->unk30 = spin_increment;
+            moby_data->spin_x = spin_increment;
             break;
         case SPIN_AXIS_Y:
-            moby_data->unk34 = spin_increment;
+            moby_data->spin_y = spin_increment;
             break;
         case SPIN_AXIS_Z:
-            moby_data->unk38 = spin_increment;
+            moby_data->spin_z = spin_increment;
             break;
         }
         spin_increment = random_float_between(-180.0f, 180.0f) * DEG_TO_RAD * frame_time;
         switch (RandomNext() % 3) {
         case SPIN_AXIS_X:
-            moby_data->unk30 = spin_increment;
+            moby_data->spin_x = spin_increment;
             break;
         case SPIN_AXIS_Y:
-            moby_data->unk34 = spin_increment;
+            moby_data->spin_y = spin_increment;
             break;
         case SPIN_AXIS_Z:
-            moby_data->unk38 = spin_increment;
+            moby_data->spin_z = spin_increment;
             break;
         }
         MOBY(moby)->rot.x = random_angle_radians();
@@ -182,7 +182,7 @@ void process_asteroid_hit(struct Moby *moby, char *blob_data, float scale_ratio)
                             -1,
                             0);
     }
-    moby->unk72 = 0;
+    moby->lod_dist = 0;
     if (*(short *)(blob_data + 0x4E) > 0) {
         for (i = 0; i < random_int_between(1, 2); i++) {
             float part = moby->scale * random_float_between(0.25f, 0.75f);
@@ -260,7 +260,7 @@ void asteroid_update(struct Moby *moby) {
         asteroid_vars->start_scale = moby->scale;
         asteroid_vars->pieces = random_int_between(2, 3);
         if (moby->scale < moby->pclass->scale) {
-            moby->unk72 = 0;
+            moby->lod_dist = 0;
         }
         moby->state = ASTEROID_RESET_AT_HOME;
         break;
@@ -352,7 +352,7 @@ void asteroid_update(struct Moby *moby) {
         qzero(&asteroid_vars->vel);
         moby->scale = asteroid_vars->start_scale;
         if (moby->pclass->scale < moby->scale) {
-            moby->unk72 = 100;
+            moby->lod_dist = 100;
         }
         moby->state = ASTEROID_WAIT_TO_LAUNCH;
         break;

@@ -21,10 +21,10 @@ typedef struct ItemDef {
     s32 hero_animation;          /* 0x24: animation the hero plays while holding the item */
     s32 animation;               /* 0x28: animation of the item's slot moby */
     s32 animation_mode_12;       /* 0x2C: used instead while state.control_mode is 12 */
-    s32 unk30;                   /* 0x30: copied to hero.unk20AA */
+    s32 weapon_up;               /* 0x30: copied to hero.weapon_up when the item is drawn */
     s16 pickup_message_multiple; /* 0x34: dialogue message when more than one ammo is picked up */
     s16 pickup_message_single;   /* 0x36: dialogue message when one ammo is picked up */
-    u16 unk38;                   /* 0x38 */
+    u16 icon;                    /* 0x38: HUD icon sprite (the item selector slots) */
     s16 ammo_pickup_cls;         /* 0x3A: moby class spawned as the item's ammo pickup; <= 0 none */
     u8  pad_3C[0x2];
     union {

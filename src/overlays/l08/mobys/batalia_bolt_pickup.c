@@ -42,27 +42,29 @@ typedef int u128_4BE8_p __attribute__((mode(TI)));
 
 typedef struct {
     float anchor[4];              /* 0x00 */
-    float v10[4];                 /* 0x10 */
-    float v20[4];                 /* 0x20 */
-    float v30[4];                 /* 0x30 */
+    float surface_rotation[4];    /* 0x10: euler angles of the surface basis */
+    float pose_position[4];       /* 0x20: attachment-local pose, or the pose to fall back to */
+    float pose_rotation[4];       /* 0x30 */
     float velocity[4];            /* 0x40 */
     float spin_x, spin_y, spin_z; /* 0x50 */
     int   pad5C;
-    float f60, f64; /* 0x60 */
-    int   timer;    /* 0x68 */
-    short s6C, s6E; /* 0x6C */
+    float orbit_angle; /* 0x60: spin about the surface normal */
+    float roll_angle;  /* 0x64: roll on the surface; sideways swerve while flying to the hero */
+    int   timer;       /* 0x68 */
+    short quad_visible;
+    short s6E;
     union {
-        int   i;
-        float f;
+        int   quad_timer;   /* frames until the rotating quad shows or hides */
+        float launch_speed; /* speed along the launch velocity while flying to the hero */
     } u70;
-    float f74; /* 0x74 */
+    float quad_angle_or_homing_speed; /* 0x74: rotating quad angle; speed toward the hero */
     union {
-        int   i;
-        char *p;
+        int   quad_color;
+        char *target; /* the hero's moby */
     } u78;
     union {
-        int   i;
-        float f;
+        int   carrier;       /* moby the pickup rides on */
+        float target_height; /* offset along the target's up row */
     } u7C;
 } Vars_4BE8;
 
@@ -239,28 +241,36 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
             }
         }
         set_batalia_bolt_pickup_surface_rotation((char *)moby, direction);
-        vars->f60 = random_angle_radians();
-        vars->f64 = moby->rot.x;
+        vars->orbit_angle = random_angle_radians();
+        vars->roll_angle = moby->rot.x;
         FUN_L08_002e4e90_c((char *)moby, (float *)&moby->pos, (float *)&moby->rot);
         if (linked != 0 && FUN_L00_002603d0(linked) != 0) {
-            vars->u7C.i = linked;
-            convert_pose_to_reference_local(
-                moby, linked, vars->anchor, vars->v10, vars->v20, vars->v30);
+            vars->u7C.carrier = linked;
+            convert_pose_to_reference_local(moby,
+                                            linked,
+                                            vars->anchor,
+                                            vars->surface_rotation,
+                                            vars->pose_position,
+                                            vars->pose_rotation);
         }
         moby->state = BOLT_PICKUP_WAIT_FOR_HERO;
-        vars->s6C = 0;
-        vars->u70.i =
+        vars->quad_visible = 0;
+        vars->u70.quad_timer =
             truncate_float_to_s32(random_float_between(0.0f, (float)scale_game_frames(600)));
-        vars->u78.i = l08_bolt_pickup_initial_rotating_quad_color;
+        vars->u78.quad_color = l08_bolt_pickup_initial_rotating_quad_color;
         break;
     }
     case BOLT_PICKUP_WAIT_FOR_HERO: {
         Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
 
-        if (vars->u7C.i != 0) {
-            transform_attachment_pose(
-                moby, vars->u7C.i, vars->v20, vars->v30, vars->anchor, vars->v10);
-            if ((signed char)((struct Moby *)vars->u7C.i)->state < 0) {
+        if (vars->u7C.carrier != 0) {
+            transform_attachment_pose(moby,
+                                      vars->u7C.carrier,
+                                      vars->pose_position,
+                                      vars->pose_rotation,
+                                      vars->anchor,
+                                      vars->surface_rotation);
+            if ((signed char)((struct Moby *)vars->u7C.carrier)->state < 0) {
                 vars = (Vars_4BE8 *)moby->pvars;
                 clear_u64_value(vars->velocity);
                 build_axis_roll_matrix(vars,
@@ -286,55 +296,58 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
         }
         switch (moby->oclass) {
         case MOBY_CLASS_TEN_BOLT_PICKUP:
-            vars->f60 = fast_add_rotations(vars->f60,
-                                           l08_ten_bolt_pickup_surface_orbit_speed_degrees *
-                                               0.017453292f * frame_time);
-            vars->f64 = fast_add_rotations(
-                vars->f64, ten_bolt_pickup_surface_roll_speed_degrees * 0.017453292f * frame_time);
+            vars->orbit_angle = fast_add_rotations(vars->orbit_angle,
+                                                   l08_ten_bolt_pickup_surface_orbit_speed_degrees *
+                                                       0.017453292f * frame_time);
+            vars->roll_angle = fast_add_rotations(vars->roll_angle,
+                                                  ten_bolt_pickup_surface_roll_speed_degrees *
+                                                      0.017453292f * frame_time);
             break;
         case MOBY_CLASS_FIVE_BOLT_PICKUP:
-            vars->f60 = fast_add_rotations(vars->f60,
-                                           l08_five_bolt_pickup_surface_orbit_speed_degrees *
-                                               0.017453292f * frame_time);
-            vars->f64 = fast_add_rotations(
-                vars->f64, five_bolt_pickup_surface_roll_speed_degrees * 0.017453292f * frame_time);
+            vars->orbit_angle = fast_add_rotations(
+                vars->orbit_angle,
+                l08_five_bolt_pickup_surface_orbit_speed_degrees * 0.017453292f * frame_time);
+            vars->roll_angle = fast_add_rotations(vars->roll_angle,
+                                                  five_bolt_pickup_surface_roll_speed_degrees *
+                                                      0.017453292f * frame_time);
             break;
         default:
-            vars->f60 = fast_add_rotations(vars->f60,
-                                           bolt_pickup_default_surface_orbit_speed_degrees *
-                                               0.017453292f * frame_time);
-            vars->f64 = fast_add_rotations(vars->f64,
-                                           l08_bolt_pickup_default_surface_roll_speed_degrees *
-                                               0.017453292f * frame_time);
+            vars->orbit_angle = fast_add_rotations(vars->orbit_angle,
+                                                   bolt_pickup_default_surface_orbit_speed_degrees *
+                                                       0.017453292f * frame_time);
+            vars->roll_angle = fast_add_rotations(
+                vars->roll_angle,
+                l08_bolt_pickup_default_surface_roll_speed_degrees * 0.017453292f * frame_time);
             break;
         }
         FUN_L08_002e4e90_c((char *)moby, (float *)&moby->pos, (float *)&moby->rot);
-        if (vars->s6C != 0) {
-            vars->f74 = fast_add_rotations(vars->f74, frame_time * 5.2359877f);
-            if (vars->u70.i > 12) {
-                vars->u78.i += 0x5000000;
+        if (vars->quad_visible != 0) {
+            vars->quad_angle_or_homing_speed =
+                fast_add_rotations(vars->quad_angle_or_homing_speed, frame_time * 5.2359877f);
+            if (vars->u70.quad_timer > 12) {
+                vars->u78.quad_color += 0x5000000;
             } else {
-                vars->u78.i -= 0x5000000;
+                vars->u78.quad_color -= 0x5000000;
             }
-            if (fast_dec_timer(&vars->u70.i) != 0) {
-                vars->s6C = 0;
-                vars->u70.i = truncate_float_to_s32(random_float_between(
+            if (fast_dec_timer(&vars->u70.quad_timer) != 0) {
+                vars->quad_visible = 0;
+                vars->u70.quad_timer = truncate_float_to_s32(random_float_between(
                     (float)scale_game_frames(300), (float)scale_game_frames(600)));
             } else if (moby->visible != 0 && bolt_pickup_rotating_quad_enabled != 0) {
                 add_draw_callback(FUN_L08_002e5188_c, moby);
                 return;
             }
-        } else if (fast_dec_timer(&vars->u70.i) != 0) {
-            vars->u70.i = 24;
-            vars->f74 = random_angle_radians();
-            vars->s6C = 1;
+        } else if (fast_dec_timer(&vars->u70.quad_timer) != 0) {
+            vars->u70.quad_timer = 24;
+            vars->quad_angle_or_homing_speed = random_angle_radians();
+            vars->quad_visible = 1;
         }
         break;
     }
     case BOLT_PICKUP_TURN_TOWARD_HERO: {
         Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
 
-        euler_rotation_matrix(surface_basis_and_collection_vectors, vars->v10);
+        euler_rotation_matrix(surface_basis_and_collection_vectors, vars->surface_rotation);
         qcopy(direction, surface_basis_and_collection_vectors + 8);
         if (fast_dec_timer(&vars->timer) != 0) {
             Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
@@ -350,33 +363,34 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
                                        deg_to_rad * frame_time);
             moby->flags |= 0x100;
             fast_vec_normalize(vars->velocity, direction, frame_time * 8.0f);
-            vars->f74 = 0.0f;
-            vars->u70.f = frame_time * 8.0f;
-            vars->u78.p = *(char **)(hero_pos + 0x2000);
-            vars->u7C.f = 0.5f;
+            vars->quad_angle_or_homing_speed = 0.0f;
+            vars->u70.launch_speed = frame_time * 8.0f;
+            vars->u78.target = *(char **)(hero_pos + 0x2000);
+            vars->u7C.target_height = 0.5f;
             if (l08_bolt_pickup_last_collection_sound_frame + scale_game_frames(3) <
                 D_L08_0015F5CC) {
                 l08_bolt_pickup_last_collection_sound_frame = D_L08_0015F5CC;
                 allocate_voice_for_target_entry(0, 0x20, moby);
-                vars->f64 = 0.0f;
+                vars->roll_angle = 0.0f;
             } else {
-                vars->f64 = random_float_between(-30.0f, 30.0f) * deg_to_rad;
+                vars->roll_angle = random_float_between(-30.0f, 30.0f) * deg_to_rad;
             }
             moby->state = BOLT_PICKUP_FLY_TO_HERO_AND_CREDIT_BOLTS;
         } else {
             if (scale_game_frames(10) < vars->timer) {
                 float goal_yaw = fast_add_rotations(
-                    vars->f60, fast_sin((float)(vars->timer % 8 - 4) * 0.7854f) * 0.17453292f);
+                    vars->orbit_angle,
+                    fast_sin((float)(vars->timer % 8 - 4) * 0.7854f) * 0.17453292f);
 
-                step_angle_toward_target(&vars->f60, goal_yaw, 0.5235988f, 0);
+                step_angle_toward_target(&vars->orbit_angle, goal_yaw, 0.5235988f, 0);
             } else {
                 float goal_yaw =
                     fast_add_rotations(fast_arc_tan(hero.motion.pos.f[0] - moby->pos.x,
                                                     hero.motion.pos.f[1] - moby->pos.y),
                                        1.5707964f);
 
-                step_angle_toward_target(&vars->f60, goal_yaw, 0.08726646f, 0);
-                if (fast_difference_between_rotations(vars->f60, goal_yaw) < 0.08726646f) {
+                step_angle_toward_target(&vars->orbit_angle, goal_yaw, 0.08726646f, 0);
+                if (fast_difference_between_rotations(vars->orbit_angle, goal_yaw) < 0.08726646f) {
                     vars->timer = 0;
                 }
             }
@@ -389,38 +403,39 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
         float      collection_target_distance;
         float      fade_range;
 
-        if (vars->u78.p == 0) {
+        if (vars->u78.target == 0) {
             break;
         }
-        fast_vec_normalize(point, vars->u78.p + 0xE0, vars->u7C.f);
-        fast_vec_add(point, point, vars->u78.p + 0x10);
+        fast_vec_normalize(point, vars->u78.target + 0xE0, vars->u7C.target_height);
+        fast_vec_add(point, point, vars->u78.target + 0x10);
         fast_vec_sub(direction, point, &moby->pos);
-        if (vars->f64 != 0.0f) {
-            float sine = fast_sin(vars->f64);
-            float cosine = fast_cos(vars->f64);
+        if (vars->roll_angle != 0.0f) {
+            float sine = fast_sin(vars->roll_angle);
+            float cosine = fast_cos(vars->roll_angle);
 
             direction[0] = cosine * direction[0] + sine * direction[1];
             direction[1] = cosine * direction[1] - sine * direction[0];
         }
         collection_target_distance = fast_vec_dist(point, &moby->pos);
-        fast_vec_normalize(vars->velocity, vars->velocity, vars->u70.f);
+        fast_vec_normalize(vars->velocity, vars->velocity, vars->u70.launch_speed);
         fast_vec_add(&moby->pos, &moby->pos, vars->velocity);
-        fast_vec_normalize(direction, direction, vars->f74);
+        fast_vec_normalize(direction, direction, vars->quad_angle_or_homing_speed);
         fast_vec_add(&moby->pos, &moby->pos, direction);
         collection_motion_reference = D_0013F490;
         fast_vec_add(&moby->pos, &moby->pos, collection_motion_reference);
         fast_vec_sub(local, &moby->pos, collection_motion_reference + 0x160);
         transform_vector(local, local, collection_motion_reference - 0x100);
-        if (((struct Moby *)vars->u78.p)->oclass != 0 || local[2] > 0.0f) {
-            approach_value(
-                &vars->u70.f, 0.0f, l08_bolt_pickup_collection_acceleration * frame_time_sq);
-            approach_value(&vars->f74,
+        if (((struct Moby *)vars->u78.target)->oclass != 0 || local[2] > 0.0f) {
+            approach_value(&vars->u70.launch_speed,
+                           0.0f,
+                           l08_bolt_pickup_collection_acceleration * frame_time_sq);
+            approach_value(&vars->quad_angle_or_homing_speed,
                            l08_bolt_pickup_collection_target_speed * frame_time,
                            l08_bolt_pickup_collection_acceleration * frame_time_sq);
         } else {
             fast_vec_normalize(surface_basis_and_collection_vectors,
                                collection_motion_reference - 0x120,
-                               vars->u70.f);
+                               vars->u70.launch_speed);
             fast_vec_sub(surface_basis_and_collection_vectors + 4,
                          surface_basis_and_collection_vectors,
                          vars->velocity);
@@ -428,10 +443,10 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
                                l08_bolt_pickup_collection_acceleration * frame_time_sq);
             fast_vec_add(vars->velocity, vars->velocity, surface_basis_and_collection_vectors + 4);
         }
-        if (collection_target_distance < vars->f74) {
-            vars->f74 = collection_target_distance;
+        if (collection_target_distance < vars->quad_angle_or_homing_speed) {
+            vars->quad_angle_or_homing_speed = collection_target_distance;
         }
-        fade_range = vars->f74 * (float)scale_game_frames(20);
+        fade_range = vars->quad_angle_or_homing_speed * (float)scale_game_frames(20);
         if (collection_target_distance < fade_range) {
             if (fast_vec_dist(point, &moby->pos) > 0.52f) {
                 if (bolt_pickup_collection_alpha_fade_enabled != 0) {
@@ -572,10 +587,10 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        if (moby->pos.z < vars->f60 - 4.0f && moby->pos.z < hero.motion.pos.f[2] - 4.0f) {
+        if (moby->pos.z < vars->orbit_angle - 4.0f && moby->pos.z < hero.motion.pos.f[2] - 4.0f) {
             Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
 
-            *(u128_4BE8_p *)vars->v10 = *(u128_4BE8_p *)((char *)&hero + 0x90);
+            *(u128_4BE8_p *)vars->surface_rotation = *(u128_4BE8_p *)((char *)&hero + 0x90);
             vars->timer = scale_game_frames(1);
             moby->state = BOLT_PICKUP_TURN_TOWARD_HERO;
             break;
@@ -600,10 +615,10 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
                 matrix_to_euler(&moby->rot_row0, &moby->rot);
                 fast_vec_normalize(direction, coll->n, 1.0f);
                 set_batalia_bolt_pickup_surface_rotation((char *)moby, direction);
-                vars->f60 = random_angle_radians();
-                vars->f64 = random_angle_radians();
-                FUN_L08_002e4e90_c((char *)moby, vars->v20, vars->v30);
-                fast_vec_sub(vars->velocity, vars->v20, &moby->pos);
+                vars->orbit_angle = random_angle_radians();
+                vars->roll_angle = random_angle_radians();
+                FUN_L08_002e4e90_c((char *)moby, vars->pose_position, vars->pose_rotation);
+                fast_vec_sub(vars->velocity, vars->pose_position, &moby->pos);
                 fast_vec_scale(vars->velocity, vars->velocity, per_frame);
                 if (coll->moby != 0) {
                     unsigned char *carrier = FUN_L00_002603d0(coll->moby);
@@ -611,17 +626,20 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
                     if (carrier != 0) {
                         fast_vec_add(vars->velocity, vars->velocity, carrier + 0x10);
                         fast_vec_scale(point, carrier + 0x10, convert_integer_to_float(frames));
-                        fast_vec_add(vars->v20, vars->v20, point);
+                        fast_vec_add(vars->pose_position, vars->pose_position, point);
                         fast_vec_add(vars->anchor, vars->anchor, point);
                     }
                 }
                 vars->velocity[2] += frame_time_sq * 10.8f * (float)(frames >> 1);
-                vars->spin_x = fast_subtract_rotations(vars->v30[0], moby->rot.x) * per_frame;
-                vars->spin_y = fast_subtract_rotations(vars->v30[1], moby->rot.y) * per_frame;
-                vars->spin_z = fast_subtract_rotations(vars->v30[2], moby->rot.z) * per_frame;
+                vars->spin_x =
+                    fast_subtract_rotations(vars->pose_rotation[0], moby->rot.x) * per_frame;
+                vars->spin_y =
+                    fast_subtract_rotations(vars->pose_rotation[1], moby->rot.y) * per_frame;
+                vars->spin_z =
+                    fast_subtract_rotations(vars->pose_rotation[2], moby->rot.z) * per_frame;
                 moby->state = BOLT_PICKUP_RETURN_TO_SURFACE;
                 vars->timer = frames;
-                vars->u7C.i = D_L08_00174658_lui;
+                vars->u7C.carrier = D_L08_00174658_lui;
                 if (absolute_float(moby->pos.z - hero.motion.pos.f[2]) < hero.reach_distance &&
                     vector_distance_xy(&moby->pos, hero.motion.pos.f) < hero.reach_height) {
                     Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
@@ -653,33 +671,37 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
             }
             if (moby->command != 0) {
                 moby->state = BOLT_PICKUP_WAIT_FOR_HERO;
-                if (vars->u7C.i != 0) {
+                if (vars->u7C.carrier != 0) {
                     Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
 
-                    convert_pose_to_reference_local(
-                        moby, vars->u7C.i, vars->anchor, vars->v10, vars->v20, vars->v30);
+                    convert_pose_to_reference_local(moby,
+                                                    vars->u7C.carrier,
+                                                    vars->anchor,
+                                                    vars->surface_rotation,
+                                                    vars->pose_position,
+                                                    vars->pose_rotation);
                 } else {
-                    qcopy(&moby->pos, vars->v20);
-                    qcopy(&moby->rot, vars->v30);
+                    qcopy(&moby->pos, vars->pose_position);
+                    qcopy(&moby->rot, vars->pose_rotation);
                 }
                 break;
             }
             frames = truncate_float_to_s32((float)scale_game_frames(20));
             per_frame = 1.0f / convert_integer_to_float(frames);
             moby->command++;
-            vars->spin_x = fast_subtract_rotations(vars->v30[0], moby->rot.x) * per_frame;
-            vars->spin_y = fast_subtract_rotations(vars->v30[1], moby->rot.y) * per_frame;
-            vars->spin_z = fast_subtract_rotations(vars->v30[2], moby->rot.z) * per_frame;
-            fast_vec_sub(vars->velocity, vars->v20, &moby->pos);
+            vars->spin_x = fast_subtract_rotations(vars->pose_rotation[0], moby->rot.x) * per_frame;
+            vars->spin_y = fast_subtract_rotations(vars->pose_rotation[1], moby->rot.y) * per_frame;
+            vars->spin_z = fast_subtract_rotations(vars->pose_rotation[2], moby->rot.z) * per_frame;
+            fast_vec_sub(vars->velocity, vars->pose_position, &moby->pos);
             fast_vec_scale(vars->velocity, vars->velocity, per_frame);
             vars->timer = frames;
-            if (vars->u7C.i != 0) {
-                unsigned char *carrier = FUN_L00_002603d0(vars->u7C.i);
+            if (vars->u7C.carrier != 0) {
+                unsigned char *carrier = FUN_L00_002603d0(vars->u7C.carrier);
 
                 if (carrier != 0) {
                     fast_vec_add(vars->velocity, vars->velocity, carrier + 0x10);
                     fast_vec_scale(direction, carrier + 0x10, convert_integer_to_float(frames));
-                    fast_vec_add(vars->v20, vars->v20, direction);
+                    fast_vec_add(vars->pose_position, vars->pose_position, direction);
                     fast_vec_add(vars->anchor, vars->anchor, direction);
                 }
             }

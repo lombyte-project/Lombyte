@@ -52,7 +52,7 @@ void register_object_render_class(ObjectRenderClass               *render_class,
     object_render_class_slot_by_id[class_id] = registered_object_render_class_count;
     object_render_classes[registered_object_render_class_count] = render_class;
     render_class->class_slot = registered_object_render_class_count;
-    fixed_threshold = truncate_float_to_s32(render_class->scale * 1024.0f);
+    fixed_threshold = truncate_float_to_s32(render_class->mip_distance * 1024.0f);
     slot = registered_object_render_class_count;
     registered_object_render_class_count = slot + 1;
     object_render_class_fixed_thresholds[slot] = fixed_threshold;

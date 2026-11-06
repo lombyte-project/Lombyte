@@ -2,11 +2,12 @@
 #include "rnc/sdk/graph.h"
 #include "rnc/sdk/storage/memory_card.h"
 
+/* memory_card_state viewed from the sceMcSync outputs at +0xB8. */
 struct McDirBlk {
     u8  pad_0[0x4];
-    s32 unk4;
+    s32 slot; /* 0x04: memory_card_state.card[0].slot */
     u8  pad_8[0xB4];
-    s32 unkBC;
+    s32 sync_result; /* 0xBC: sceMcSync result of the sceMcGetInfo call */
 };
 
 #include "rnc/save/memory_card_state.h"
@@ -34,13 +35,13 @@ s32 check_memory_card(void) {
         sceGsSyncV(0);
     }
     card_state = (struct McDirBlk *)((u8 *)memory_card_info_sync_outputs - 0xB8);
-    if (card_state->unkBC == -5) {
+    if (card_state->sync_result == -5) {
         return 1;
     }
-    if (card_state->unkBC < -9) {
+    if (card_state->sync_result < -9) {
         return 1;
     }
-    if (card_state->unkBC == -2) {
+    if (card_state->sync_result == -2) {
         return 0;
     }
     if (card_type != MEMCARD_TYPE_SUPPORTED_FOR_STARTUP) {
@@ -50,7 +51,7 @@ s32 check_memory_card(void) {
         return 0;
     }
     card_command_result = sceMcGetDir(
-        memory_card_state.card[0].port, card_state->unk4, save_directory_path, 0, -1, 0);
+        memory_card_state.card[0].port, card_state->slot, save_directory_path, 0, -1, 0);
     while (sceMcSync(1, &cmd_code, &card_command_result) == 0) {
         sceGsSyncV(0);
     }

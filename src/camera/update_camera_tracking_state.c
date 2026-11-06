@@ -13,21 +13,21 @@ struct CamColl {
     f32          vel;
     u8           pad14[0xC];
     Vec4         dir;
-    Vec4         unk30;
-    Vec4         unk40;
+    Vec4         up;
+    Vec4         prev_up;
     f32          dir_vel[4];
-    Vec4         unk60;
-    Vec4         unk70;
-    Vec4         unk80;
-    Vec4         unk90;
-    f32          unkA0;
-    f32          unkA4;
-    f32          unkA8;
+    Vec4         prev_hero_pos;
+    Vec4         hero_move;
+    Vec4         hero_move_flat_dir;
+    Vec4         hero_move_up;
+    f32          hero_move_length;
+    f32          hero_move_flat_length;
+    f32          hero_move_along_up;
     f32          hist[5];
     u8           padC0[0x14];
-    struct Moby *unkD4;
-    f32          unkD8;
-    f32          unkDC;
+    struct Moby *ground_moby;
+    f32          ground_z;
+    f32          ground_dz;
 };
 
 extern struct CamColl cam_coll_state __asm__("D_001870D0");
@@ -47,8 +47,8 @@ void update_camera_tracking_state(void) {
 
     camera_tracking_state = &cam_coll_state;
     fast_vec_normalize(&dir, &hero.gravity_dir, -1.0f);
-    qcopy(&camera_tracking_state->unk40, &camera_tracking_state->unk30);
-    qcopy(&camera_tracking_state->unk30, &dir);
+    qcopy(&camera_tracking_state->prev_up, &camera_tracking_state->up);
+    qcopy(&camera_tracking_state->up, &dir);
     if (fast_vec_dot(&camera_tracking_state->dir, &dir) < -0.98f) {
         dir.f[0] += 0.2f;
         dir.f[1] += 0.2f;
@@ -74,20 +74,23 @@ void update_camera_tracking_state(void) {
                                                         0.0f);
     fast_vec_normalize(&camera_tracking_state->dir, &camera_tracking_state->dir, 1.0f);
 
-    fast_vec_sub(&camera_tracking_state->unk70, &hero.motion.pos, &camera_tracking_state->unk60);
-    camera_tracking_state->unkA0 = fast_vec_length(&camera_tracking_state->unk70);
-    displacement_dot_direction = fast_vec_dot(&camera_tracking_state->unk70, &dir);
-    camera_tracking_state->unkA8 = displacement_dot_direction;
+    fast_vec_sub(
+        &camera_tracking_state->hero_move, &hero.motion.pos, &camera_tracking_state->prev_hero_pos);
+    camera_tracking_state->hero_move_length = fast_vec_length(&camera_tracking_state->hero_move);
+    displacement_dot_direction = fast_vec_dot(&camera_tracking_state->hero_move, &dir);
+    camera_tracking_state->hero_move_along_up = displacement_dot_direction;
     fast_vec_normalize(&proj, &dir, displacement_dot_direction);
-    qcopy(&camera_tracking_state->unk90, &proj);
-    fast_vec_sub(&camera_tracking_state->unk80, &camera_tracking_state->unk70, &proj);
-    camera_tracking_state->unkA4 = fast_vec_length(&camera_tracking_state->unk80);
-    fast_vec_scale(&camera_tracking_state->unk80,
-                   &camera_tracking_state->unk80,
-                   1.0f / camera_tracking_state->unkA4);
-    qcopy(&camera_tracking_state->unk60, &hero.motion.pos);
+    qcopy(&camera_tracking_state->hero_move_up, &proj);
+    fast_vec_sub(
+        &camera_tracking_state->hero_move_flat_dir, &camera_tracking_state->hero_move, &proj);
+    camera_tracking_state->hero_move_flat_length =
+        fast_vec_length(&camera_tracking_state->hero_move_flat_dir);
+    fast_vec_scale(&camera_tracking_state->hero_move_flat_dir,
+                   &camera_tracking_state->hero_move_flat_dir,
+                   1.0f / camera_tracking_state->hero_move_flat_length);
+    qcopy(&camera_tracking_state->prev_hero_pos, &hero.motion.pos);
 
-    if (hero.unk2284 != 0x50 || hero.state.current == 0x11) {
+    if (hero.camera_mode != 0x50 || hero.state.current == 0x11) {
         camera_tracking_state->pos.f[0] = hero.motion.pos.f[0];
         camera_tracking_state->pos.f[1] = hero.motion.pos.f[1];
         camera_tracking_state->pos.f[2] = cam_interp_values(&camera_tracking_state->vel,
@@ -109,21 +112,21 @@ void update_camera_tracking_state(void) {
 
     ground_moby = hero.ground_moby;
     if (ground_moby != NULL && ground_moby->oclass != 0x4BA && ground_moby->oclass != 0x336) {
-        if (ground_moby == camera_tracking_state->unkD4) {
-            camera_tracking_state->unkDC = ground_moby->pos.z - camera_tracking_state->unkD8;
-            if (absolute_float(camera_tracking_state->unkDC) < 0.001f) {
-                camera_tracking_state->unkDC = 0.0f;
+        if (ground_moby == camera_tracking_state->ground_moby) {
+            camera_tracking_state->ground_dz = ground_moby->pos.z - camera_tracking_state->ground_z;
+            if (absolute_float(camera_tracking_state->ground_dz) < 0.001f) {
+                camera_tracking_state->ground_dz = 0.0f;
             }
-            camera_tracking_state->unkD8 = camera_tracking_state->unkD4->pos.z;
+            camera_tracking_state->ground_z = camera_tracking_state->ground_moby->pos.z;
         } else {
-            camera_tracking_state->unkD4 = ground_moby;
-            camera_tracking_state->unkDC = 0.0f;
-            camera_tracking_state->unkD8 = ground_moby->pos.z;
+            camera_tracking_state->ground_moby = ground_moby;
+            camera_tracking_state->ground_dz = 0.0f;
+            camera_tracking_state->ground_z = ground_moby->pos.z;
         }
     } else {
-        camera_tracking_state->unkDC = 0.0f;
-        camera_tracking_state->unkD4 = NULL;
-        camera_tracking_state->unkD8 = hero.motion.pos.f[2];
+        camera_tracking_state->ground_dz = 0.0f;
+        camera_tracking_state->ground_moby = NULL;
+        camera_tracking_state->ground_z = hero.motion.pos.f[2];
     }
 }
 

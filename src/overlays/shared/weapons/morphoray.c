@@ -119,7 +119,7 @@ typedef struct {
     OvlQuad corner[4];
     int     color[4];
     float   uv[8];
-    long    unk70, tex, unk80, unk88;
+    long    clamp, tex, tex1, alpha; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
 } Quad;
 
 typedef struct {
@@ -129,11 +129,11 @@ typedef struct {
 typedef struct {
     V_2be890 corner[4];
     int      color[4];
-    int      unk50, unk54, unk58;
-    float    unk5C, unk60;
-    int      corner_2_texture_v;
-    float    unk68, unk6C;
-    long     unk70, tex, unk80, unk88;
+    int      corner0_u, corner0_v, corner1_u; /* texture coordinates of the four corners */
+    float    corner1_v, corner2_u;
+    int      corner2_v;
+    float    corner3_u, corner3_v;
+    long     clamp, tex, tex1, alpha; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
 } Q_2be890;
 
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -1566,11 +1566,11 @@ void morphoray_update(Moby *moby) {
         *(u128_2BDAF0 *)&direction = 0;
         if (((Hero *)((char *)&hero))->state.current == 30 &&
             (*(unsigned short *)((char *)((Hero *)((char *)&hero))->moby + 0x34) & 1)) {
-            copy_matrix3x4(points, l00_camera.unk0);
+            copy_matrix3x4(points, l00_camera.view_matrix);
             func_001FA4A0_2BDAF0(matrix, points);
             direction.z = 1.0f;
             func_001F9EE8_2BDAF0(&direction, &direction, matrix);
-        } else if (((Hero *)((char *)&hero))->unk22C8 == 1) {
+        } else if (((Hero *)((char *)&hero))->weapon_lowered == 1) {
             func_001F9C30_2BDAF0(&direction, &moby->rot_row1, -1.0f);
         } else {
             direction.x = 1.0f;
@@ -2054,9 +2054,9 @@ void draw_beam_ring_and_rail_effects(void *moby) {
     k = D_0013E535;
     c = k ? D_L00_00161798 : beam_ring_default_vertex_color_gp;
     quad.tex = get_effect_texture(beam_ring_texture_index_gp);
-    quad.unk80 = 0xFF9000000260L;
-    quad.unk88 = 0x8000000048L;
-    quad.unk70 = 0;
+    quad.tex1 = 0xFF9000000260L;
+    quad.alpha = 0x8000000048L;
+    quad.clamp = 0;
     quad.color[3] = c;
     quad.color[2] = c;
     quad.color[1] = c;
@@ -2350,21 +2350,21 @@ void draw_beam_origin_camera_facing_quads(void *mv) {
     int      i, j;
     quad.tex = get_effect_texture(11);
     first_pass_vertex_color = beam_origin_quad_first_pass_vertex_color_gp;
-    quad.unk88 = 0x8000000048L;
-    quad.unk80 = 0xFF9000000260L;
-    quad.unk70 = 0;
-    quad.unk50 = 0;
-    quad.unk54 = 0;
+    quad.alpha = 0x8000000048L;
+    quad.tex1 = 0xFF9000000260L;
+    quad.clamp = 0;
+    quad.corner0_u = 0;
+    quad.corner0_v = 0;
     quad.color[3] = first_pass_vertex_color;
     quad.color[2] = first_pass_vertex_color;
     quad.color[1] = first_pass_vertex_color;
     quad.color[0] = first_pass_vertex_color;
-    quad.unk58 = 0;
-    quad.unk5C = 1.0f;
-    quad.unk60 = 1.0f;
-    quad.corner_2_texture_v = 0;
-    quad.unk68 = 1.0f;
-    quad.unk6C = 1.0f;
+    quad.corner1_u = 0;
+    quad.corner1_v = 1.0f;
+    quad.corner2_u = 1.0f;
+    quad.corner2_v = 0;
+    quad.corner3_u = 1.0f;
+    quad.corner3_v = 1.0f;
     FUN_001f9bf8_2be890(&offset_vector, moby_bytes + 0xD0, beam_origin_quad_basis_offset_length_gp);
     FUN_001f9a10_2be890(&camera_facing_transform[3], &beam_nodes[0], &offset_vector);
     FUN_001f9a28_2be890(

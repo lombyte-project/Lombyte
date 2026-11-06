@@ -29,7 +29,7 @@ typedef struct {
     struct Moby *owner; /* 0x10: class 0x75D spawner; its pvars hold the bubble list at 0xB0 */
     struct Moby *held;  /* 0x14: from FUN_L09_0030a778 when the bubble settles */
     s16          life;  /* 0x18 */
-    u8           unk1A;
+    u8           grow_held_moby;
     u8           sound_delay; /* 0x1B */
     u8           slot;        /* 0x1C: index in the owner's bubble list */
 } BubbleVars;
@@ -114,7 +114,7 @@ struct Moby *respawn_spawner_child(struct Moby *parent_spawner_moby, Vec4 *pos) 
             spawned_moby->flags |= 0x400;
         spawned_moby->occlusion = 0x7f80;
         spawned_moby->unk71 = 0xff;
-        spawned_moby->unk72 = 0xff;
+        spawned_moby->lod_dist = 0xff;
         spawned_moby->hit_slot = 0xff;
         if (owner_vars[0x93] != 0)
             spawned_moby->scale = spawned_moby->pclass->scale * 0.1f;
@@ -125,14 +125,14 @@ struct Moby *respawn_spawner_child(struct Moby *parent_spawner_moby, Vec4 *pos) 
             *(volatile s32 *)((u8 *)child_suck_cannon_record + 0x94) = 0;
             *(volatile s16 *)((u8 *)child_suck_cannon_record + 0x68) = 0;
         }
-        if (parent_spawner_moby->unkB4 < spawned_moby->unkB4)
-            spawned_moby->unkB4 = parent_spawner_moby->unkB4;
-        if (spawned_moby->unkB4 < 1)
-            spawned_moby->unkB4 = 1;
-        left = (u16)parent_spawner_moby->unkB4 - (u16)spawned_moby->unkB4;
-        parent_spawner_moby->unkB4 = left;
+        if (parent_spawner_moby->bolts < spawned_moby->bolts)
+            spawned_moby->bolts = parent_spawner_moby->bolts;
+        if (spawned_moby->bolts < 1)
+            spawned_moby->bolts = 1;
+        left = (u16)parent_spawner_moby->bolts - (u16)spawned_moby->bolts;
+        parent_spawner_moby->bolts = left;
         if ((s16)left < 0)
-            parent_spawner_moby->unkB4 = 1;
+            parent_spawner_moby->bolts = 1;
         {
             struct Moby *target = ((struct Moby *volatile *)&spawned_moby)[0];
             target->collision = target->pclass->collision;
@@ -284,7 +284,7 @@ void spawner_egg_update(struct Moby *moby) {
     case SPAWNER_EGG_STATE_SHRINKING:
         rate = frame_scale * 0.05f;
         moby->scale -= moby->scale * rate;
-        if (bubble_vars->held != NULL && bubble_vars->unk1A != 0) {
+        if (bubble_vars->held != NULL && bubble_vars->grow_held_moby != 0) {
             bubble_vars->held->scale +=
                 (bubble_vars->held->pclass->scale - bubble_vars->held->scale) * rate;
         }
@@ -292,7 +292,7 @@ void spawner_egg_update(struct Moby *moby) {
             moby->scale = 0.0001f;
             held = bubble_vars->held;
             if (held == NULL || held->state == 0xFE || held->state == 0xFD ||
-                bubble_vars->unk1A == 0 || held->pclass->scale - 0.01f <= held->scale) {
+                bubble_vars->grow_held_moby == 0 || held->pclass->scale - 0.01f <= held->scale) {
                 remove_spawner_egg(moby, (char *)bubble_vars);
             }
         }

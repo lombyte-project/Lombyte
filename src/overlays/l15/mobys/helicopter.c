@@ -313,17 +313,17 @@ float compute_helicopter_flocking_steering_point(struct Moby *moby,
 typedef struct {
     u8           pad0[0x20];
     f32          health;
-    s16          unk24;
+    s16          max_health;
     u8           pad26[2];
-    u8           unk28;
+    u8           hit_response_class;
     u8           pad29[5];
-    u8           unk2E;
+    u8           removal_status; /* 0x2E: anything but 1 removes it */
     u8           pad2F;
-    f32          unk30;
+    f32          aim_height; /* 0x30: enemy target info at pvars+0x20, see moby_target_info.h */
     u8           pad34[0x24];
-    u8           unk58;
-    u8           unk59;
-    u8           unk5A;
+    u8           look_range;
+    u8           look_priority;
+    u8           look_height;
     u8           pad5B[0x75];
     u8           turret_yaw_joint[0x40];
     u8           turret_pitch_joint[0x50];
@@ -345,7 +345,7 @@ typedef struct {
     f32          wake_range;
     f32          chase_range;
     f32          range;
-    s32          unk1A4;
+    s32          giant_clank_only; /* 0x1A4: nonzero parks it unless the hero is Giant Clank */
     f32          height;
     s32          entry_path;
     s32          trigger_volume;
@@ -430,11 +430,11 @@ void helicopter_update(struct Moby *moby) {
         helicopter_instance_vars->pilot = create_class_55b_moby_from_source(moby);
     }
     if (moby->state != HELICOPTER_INITIALIZE && moby->state != HELICOPTER_DEAD_WAIT_FOR_RESET &&
-        helicopter_instance_vars->unk1A4 != 0 &&
+        helicopter_instance_vars->giant_clank_only != 0 &&
         hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK) {
         moby->collision = 0;
         moby->flags = (moby->flags | 0x41) & 0xEFFF;
-        helicopter_instance_vars->unk58 = 0;
+        helicopter_instance_vars->look_range = 0;
         if (helicopter_instance_vars->pilot != 0)
             helicopter_instance_vars->pilot->flags |= 0x41;
         moby->state = HELICOPTER_WAIT_FOR_ACTIVATION;
@@ -462,7 +462,7 @@ void helicopter_update(struct Moby *moby) {
     if (goal.target == 0)
         goal.target = hero.moby;
     target = goal.target;
-    if (moby->state != HELICOPTER_INITIALIZE && helicopter_instance_vars->unk2E != 1) {
+    if (moby->state != HELICOPTER_INITIALIZE && helicopter_instance_vars->removal_status != 1) {
         if (helicopter_instance_vars->pilot != 0)
             mark_moby_for_removal(helicopter_instance_vars->pilot);
         mark_moby_for_removal(moby);
@@ -474,13 +474,13 @@ void helicopter_update(struct Moby *moby) {
         moby->shadow_range = 0x20;
         helicopter_instance_vars->height = moby->pos.z;
         helicopter_instance_vars->health = 3.0f;
-        helicopter_instance_vars->unk24 = truncate_float_to_s32(3.0f);
-        helicopter_instance_vars->unk28 = 2;
-        helicopter_instance_vars->unk58 = 0x19;
-        helicopter_instance_vars->unk30 = 1.0f;
-        helicopter_instance_vars->unk2E = 1;
-        helicopter_instance_vars->unk59 = 1;
-        helicopter_instance_vars->unk5A = 6;
+        helicopter_instance_vars->max_health = truncate_float_to_s32(3.0f);
+        helicopter_instance_vars->hit_response_class = 2;
+        helicopter_instance_vars->look_range = 0x19;
+        helicopter_instance_vars->aim_height = 1.0f;
+        helicopter_instance_vars->removal_status = 1;
+        helicopter_instance_vars->look_priority = 1;
+        helicopter_instance_vars->look_height = 6;
         moby->update_dist = 0xFF;
         moby->draw_dist = 0x80;
         if (helicopter_instance_vars->entry_path != -1) {
@@ -508,16 +508,16 @@ void helicopter_update(struct Moby *moby) {
         }
         moby->collision = 0;
         moby->flags = (moby->flags | 0x41) & 0xEFFF;
-        helicopter_instance_vars->unk58 = 0;
+        helicopter_instance_vars->look_range = 0;
         if (helicopter_instance_vars->pilot != 0)
             helicopter_instance_vars->pilot->flags |= 0x41;
         break;
     case HELICOPTER_WAIT_FOR_ACTIVATION:
-        if (helicopter_instance_vars->unk1A4 != 0 &&
+        if (helicopter_instance_vars->giant_clank_only != 0 &&
             hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK) {
             moby->collision = 0;
             moby->flags = (moby->flags | 0x41) & 0xEFFF;
-            helicopter_instance_vars->unk58 = 0;
+            helicopter_instance_vars->look_range = 0;
             if (helicopter_instance_vars->pilot != 0)
                 helicopter_instance_vars->pilot->flags |= 0x41;
             return;
@@ -531,7 +531,7 @@ void helicopter_update(struct Moby *moby) {
                 break;
             moby->collision = moby->pclass->collision;
             moby->flags = (moby->flags & 0xFFBE) | 0x1000;
-            helicopter_instance_vars->unk58 = 0x19;
+            helicopter_instance_vars->look_range = 0x19;
             if (helicopter_instance_vars->entry_path != -1)
                 moby->state = HELICOPTER_FOLLOW_ENTRY_PATH;
             else
@@ -543,7 +543,7 @@ void helicopter_update(struct Moby *moby) {
                 break;
             moby->collision = moby->pclass->collision;
             moby->flags = (moby->flags & 0xFFBE) | 0x1000;
-            helicopter_instance_vars->unk58 = 0x19;
+            helicopter_instance_vars->look_range = 0x19;
             if (helicopter_instance_vars->entry_path != -1)
                 moby->state = HELICOPTER_FOLLOW_ENTRY_PATH;
             else
@@ -779,7 +779,7 @@ void helicopter_update(struct Moby *moby) {
     case HELICOPTER_DEAD_WAIT_FOR_RESET:
         moby->collision = 0;
         moby->flags = (moby->flags | 0x41) & 0xEFFF;
-        helicopter_instance_vars->unk58 = 0;
+        helicopter_instance_vars->look_range = 0;
         if (helicopter_instance_vars->pilot != 0)
             helicopter_instance_vars->pilot->flags |= 0x41;
         D_L15_001BABD0.cleared[(short)moby->save_id] = 0;
@@ -888,9 +888,9 @@ void helicopter_update(struct Moby *moby) {
 extern int
 hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");
 
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
 
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 void process_helicopter_hits(struct Moby *moby) {
     enum {
@@ -915,7 +915,7 @@ void process_helicopter_hits(struct Moby *moby) {
             moby->state = HELICOPTER_DEATH_EFFECTS;
         } else if (hit_reaction_code != 0xB) {
             *(unsigned char *)(helicopter_vars + 0x67) = 0xB4;
-            trooper_anim_update(moby, (short *)(helicopter_vars + 0x60));
+            start_hit_color_flash(moby, (short *)(helicopter_vars + 0x60));
             if (*(float *)(hit_record + 0x1C) == 5627.925f && moby->state != HELICOPTER_RECOIL) {
                 hit_away_heading = fast_arc_tan(moby->pos.x - *(float *)(hit_record + 0),
                                                 moby->pos.y - *(float *)(hit_record + 4));
@@ -938,7 +938,7 @@ void process_helicopter_hits(struct Moby *moby) {
         }
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, helicopter_vars + 0x60);
+    update_hit_color_flash(moby, helicopter_vars + 0x60);
 }
 
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");

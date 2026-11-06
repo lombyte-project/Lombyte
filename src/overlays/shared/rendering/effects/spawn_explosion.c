@@ -1,5 +1,6 @@
 /* Explosions and level path helpers: spawn_explosion and its variants, moby class tests, angle wrapping and moby index lists. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "qcopy.h"
@@ -46,108 +47,99 @@ void clip_negative_segment_endpoint_xyz(V0025d238 *segment_start, V0025d238 *ino
     }
 }
 
-typedef struct {
-    short         cur;
-    short         flag;
-    unsigned char r, g, b;
-    char          pad;
-    char          pad2[4];
-    short         lo;
-    short         hi;
-} S;
-
 void get_moby_color(void *, int *, int *, int *) __asm__("FUN_L00_00250320");
-void trooper_anim_update(void *a, S *s) __asm__("FUN_L00_0025d458");
+void start_hit_color_flash(void *a, struct HitColorFlash *s) __asm__("FUN_L00_0025d458");
 
-void trooper_anim_update(void *moby, S *animation_state) {
-    int previous_timer_frames = animation_state->cur;
-    if (previous_timer_frames == 0 || animation_state->flag != 0) {
-        animation_state->cur = scale_game_frames(animation_state->lo);
-        animation_state->flag = 0;
+void start_hit_color_flash(void *moby, struct HitColorFlash *animation_state) {
+    int previous_timer_frames = animation_state->timer;
+    if (previous_timer_frames == 0 || animation_state->phase != 0) {
+        animation_state->timer = scale_game_frames(animation_state->flash_frames);
+        animation_state->phase = 0;
         if (previous_timer_frames != 0) {
-            int scaled_duration_frames = scale_game_frames(animation_state->lo);
-            animation_state->cur = truncate_float_to_s32(
+            int scaled_duration_frames = scale_game_frames(animation_state->flash_frames);
+            animation_state->timer = truncate_float_to_s32(
                 scaled_duration_frames *
                 (previous_timer_frames /
-                 convert_integer_to_float(scale_game_frames(animation_state->hi))));
-            if (animation_state->cur <= 0)
-                animation_state->cur = 1;
+                 convert_integer_to_float(scale_game_frames(animation_state->return_frames))));
+            if (animation_state->timer <= 0)
+                animation_state->timer = 1;
         } else {
             int x, y, z;
             get_moby_color(moby, &x, &y, &z);
-            animation_state->r = x;
-            animation_state->g = y;
-            animation_state->b = z;
+            animation_state->original_red = x;
+            animation_state->original_green = y;
+            animation_state->original_blue = z;
         }
     }
 }
 
-typedef struct {
-    s16 t;
-    s16 phase;
-    u8  r0, g0, b0;
-    u8  r1, g1, b1;
-    u8  pad[2];
-    s16 d0;
-    s16 d1;
-} S_25d538;
-
 void set_moby_color(s32, s32, s32, s32) __asm__("FUN_L00_002502f0");
-void trooper_anim_finish(s32 id, S_25d538 *s) __asm__("FUN_L00_0025d538");
+void update_hit_color_flash(s32 id, struct HitColorFlash *s) __asm__("FUN_L00_0025d538");
 
-void trooper_anim_finish(s32 id, S_25d538 *animation_state) {
+void update_hit_color_flash(s32 id, struct HitColorFlash *animation_state) {
     enum {
         MOBY_COLOR_PHASE_TO_SECONDARY_COLOR = 0,
         MOBY_COLOR_PHASE_TO_ORIGINAL_COLOR = 1
     };
     f32 phase_duration_frames, phase_progress;
     s32 r, g, b;
-    if (animation_state->t == 0)
+    if (animation_state->timer == 0)
         return;
     if (fast_dec_timer_s16(animation_state)) {
         if (animation_state->phase != MOBY_COLOR_PHASE_TO_SECONDARY_COLOR) {
-            set_moby_color(id, animation_state->r0, animation_state->g0, animation_state->b0);
+            set_moby_color(id,
+                           animation_state->original_red,
+                           animation_state->original_green,
+                           animation_state->original_blue);
             return;
         }
         animation_state->phase = MOBY_COLOR_PHASE_TO_ORIGINAL_COLOR;
-        animation_state->t = scale_game_frames(animation_state->d1);
+        animation_state->timer = scale_game_frames(animation_state->return_frames);
     }
     if (animation_state->phase == MOBY_COLOR_PHASE_TO_SECONDARY_COLOR) {
-        phase_duration_frames = convert_integer_to_float(scale_game_frames(animation_state->d0));
-        phase_progress = (phase_duration_frames - animation_state->t) / phase_duration_frames;
-        if (animation_state->r1 != 0)
-            r = truncate_float_to_s32(animation_state->r0 +
-                                      (animation_state->r1 - animation_state->r0) * phase_progress);
+        phase_duration_frames =
+            convert_integer_to_float(scale_game_frames(animation_state->flash_frames));
+        phase_progress = (phase_duration_frames - animation_state->timer) / phase_duration_frames;
+        if (animation_state->flash_red != 0)
+            r = truncate_float_to_s32(animation_state->original_red +
+                                      (animation_state->flash_red - animation_state->original_red) *
+                                          phase_progress);
         else
-            r = animation_state->r0;
-        if (animation_state->g1 != 0)
-            g = truncate_float_to_s32(animation_state->g0 +
-                                      (animation_state->g1 - animation_state->g0) * phase_progress);
+            r = animation_state->original_red;
+        if (animation_state->flash_green != 0)
+            g = truncate_float_to_s32(
+                animation_state->original_green +
+                (animation_state->flash_green - animation_state->original_green) * phase_progress);
         else
-            g = animation_state->g0;
-        if (animation_state->b1 != 0)
-            b = truncate_float_to_s32(animation_state->b0 +
-                                      (animation_state->b1 - animation_state->b0) * phase_progress);
+            g = animation_state->original_green;
+        if (animation_state->flash_blue != 0)
+            b = truncate_float_to_s32(
+                animation_state->original_blue +
+                (animation_state->flash_blue - animation_state->original_blue) * phase_progress);
         else
-            b = animation_state->b0;
+            b = animation_state->original_blue;
     } else {
-        phase_duration_frames = convert_integer_to_float(scale_game_frames(animation_state->d1));
-        phase_progress = (phase_duration_frames - animation_state->t) / phase_duration_frames;
-        if (animation_state->r1 != 0)
-            r = truncate_float_to_s32(animation_state->r1 +
-                                      (animation_state->r0 - animation_state->r1) * phase_progress);
+        phase_duration_frames =
+            convert_integer_to_float(scale_game_frames(animation_state->return_frames));
+        phase_progress = (phase_duration_frames - animation_state->timer) / phase_duration_frames;
+        if (animation_state->flash_red != 0)
+            r = truncate_float_to_s32(animation_state->flash_red +
+                                      (animation_state->original_red - animation_state->flash_red) *
+                                          phase_progress);
         else
-            r = animation_state->r0;
-        if (animation_state->g1 != 0)
-            g = truncate_float_to_s32(animation_state->g1 +
-                                      (animation_state->g0 - animation_state->g1) * phase_progress);
+            r = animation_state->original_red;
+        if (animation_state->flash_green != 0)
+            g = truncate_float_to_s32(
+                animation_state->flash_green +
+                (animation_state->original_green - animation_state->flash_green) * phase_progress);
         else
-            g = animation_state->g0;
-        if (animation_state->b1 != 0)
-            b = truncate_float_to_s32(animation_state->b1 +
-                                      (animation_state->b0 - animation_state->b1) * phase_progress);
+            g = animation_state->original_green;
+        if (animation_state->flash_blue != 0)
+            b = truncate_float_to_s32(
+                animation_state->flash_blue +
+                (animation_state->original_blue - animation_state->flash_blue) * phase_progress);
         else
-            b = animation_state->b0;
+            b = animation_state->original_blue;
     }
     set_moby_color(id, r, g, b);
 }

@@ -17,27 +17,27 @@
 
 /* pvars of the projectile moby FUN_L09_00307ba8 spawns */
 typedef struct {
-    OvlVec4 vel;      /* 0x00 */
-    f32     spin;     /* 0x10 */
-    s32     unk14;    /* 0x14 */
-    void   *owner;    /* 0x18 */
-    s16     life;     /* 0x1C */
-    s16     life_max; /* 0x1E */
-    f32     dist;     /* 0x20: distance from the hero at spawn */
-    s32     unk24;    /* 0x24 */
-    s32     unk28;    /* 0x28 */
+    OvlVec4 vel;          /* 0x00 */
+    f32     spin;         /* 0x10 */
+    s32     unk14;        /* 0x14 */
+    void   *owner;        /* 0x18 */
+    s16     life;         /* 0x1C */
+    s16     life_max;     /* 0x1E */
+    f32     dist;         /* 0x20: distance from the hero at spawn */
+    s32     approached;   /* 0x24: set once the shot got closer to the hero */
+    s32     sound_played; /* 0x28 */
 } ShotVars;
 
 /* Optional query block for collision_line: a swept probe along dir. */
 typedef struct {
-    OvlVec4      dir;  /* 0x00: unit direction; z/w overwritten with 1 and a range */
-    struct Moby *self; /* 0x10: moby to ignore */
-    s32          mask; /* 0x14: collision classes */
-    u8           unk18;
-    u8           unk19;
-    s16          oclass; /* 0x1A */
-    f32          radius; /* 0x1C */
-    s32          unk20;
+    OvlVec4      dir;            /* 0x00: unit direction; z/w overwritten with 1 and a range */
+    struct Moby *self;           /* 0x10: moby to ignore */
+    s32          mask;           /* 0x14: collision classes */
+    u8           attack_type;    /* 0x18: MobyHit.attack_type */
+    u8           attack_subtype; /* 0x19: MobyHit.attack_subtype */
+    s16          oclass;         /* 0x1A */
+    f32          radius;         /* 0x1C */
+    s32          has_direction;  /* 0x20: MobyHit.has_direction */
 } CollisionProbe;
 
 extern u8 *spawn_source_attached_fading_effect_particle(f32, struct Moby *, u32, s32, s32) __asm__("FUN_L00_0026daa0");
@@ -102,8 +102,8 @@ struct Moby *spawn_turret_shot(void *owner, OvlVec4 *pos, OvlVec4 *vel, s32 life
         projectile_vars->life = life;
         projectile_vars->life_max = life;
         projectile_vars->dist = fast_vec_dist((OvlVec4 *)&spawned_moby->pos, &D_0013F3D0_307ba8);
-        projectile_vars->unk24 = 0;
-        projectile_vars->unk28 = 0;
+        projectile_vars->approached = 0;
+        projectile_vars->sound_played = 0;
         trail = life * 5 / 4;
         spawned_moby->flags |= 0x200;
         spawned_moby->alpha = 0x40;
@@ -139,13 +139,13 @@ void turret_shot_update(struct Moby *projectile_moby) {
     distance_to_hero = fast_vec_dist(&projectile_moby->pos, &D_0013F3D0_307d68);
     qcopy(&previous_projectile_position, &projectile_moby->pos);
     fast_vec_add(&projectile_moby->pos, &projectile_moby->pos, &projectile_vars->vel);
-    if (projectile_vars->unk28 == 0 && projectile_vars->unk24 != 0 &&
+    if (projectile_vars->sound_played == 0 && projectile_vars->approached != 0 &&
         projectile_vars->dist < distance_to_hero && distance_to_hero < 3.0f) {
         allocate_voice_for_target_entry(0, 0, projectile_moby);
-        projectile_vars->unk28 = 1;
+        projectile_vars->sound_played = 1;
     }
     if (distance_to_hero < projectile_vars->dist)
-        projectile_vars->unk24 = 1;
+        projectile_vars->approached = 1;
     projectile_vars->dist = distance_to_hero;
     if (projectile_moby->pos.x < 2.0f || 1021.0f < projectile_moby->pos.x ||
         projectile_moby->pos.y < 2.0f || 1021.0f < projectile_moby->pos.y ||
@@ -160,15 +160,15 @@ void turret_shot_update(struct Moby *projectile_moby) {
         pr.mask = 0x70001;
         pr.radius = 3.0f;
         pr.self = projectile_moby;
-        pr.unk20 = 1;
+        pr.has_direction = 1;
         qcopy(&pr.dir, &projectile_vars->vel);
         fast_vec_sub(&pr.dir, &projectile_moby->pos, &D_0013F3D0_307d68);
         set_vector_length_xy(&pr.dir, &pr.dir, 1.0f);
         probe = &pr;
         pr.dir.f[2] = 1.0f;
         pr.dir.f[3] = 5627.9248f;
-        pr.unk18 = 1;
-        pr.unk19 = 3;
+        pr.attack_type = 1;
+        pr.attack_subtype = 3;
         pr.oclass = projectile_moby->oclass;
     }
     if (fast_dec_timer_s16(&projectile_vars->life) && projectile_moby->command == 0) {

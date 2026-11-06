@@ -22,6 +22,7 @@
 #include "rnc/ui/help/get_help_message_text.h"
 #include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
 #include "rnc/sdk/libc/stdio.h"
+#include "rnc/overlay/shared/enemies/gadgebot.h"
 
 extern unsigned char D_0013E529[];
 void                 hud_update_counter(char *) __asm__("FUN_L00_00235ea0");
@@ -45,24 +46,24 @@ void update_hud_counter_cap_and_visibility(char *hud_element) {
 
 typedef struct {
     char          pad0[0x8];
-    int           unk08;
-    int          *unk0C;
+    int           max_value;
+    int          *value_source;
     char          pad10[0x38];
-    short         unk48;
-    short         unk4A;
+    short         offset_x;
+    short         offset_y;
     char          pad4C[0x4];
-    int           unk50;
-    int           unk54;
+    int           x;
+    int           y;
     int           w;
     int           h;
     int           flags;
     char          pad64[0x8];
-    int           unk6C;
+    int           slide;
     unsigned char cnt[4];
-    int           unk74;
-    int           unk78;
-    int           unk7C;
-    void         *unk80;
+    int           shown_value;
+    int           target_value;
+    int           visible_timer;
+    void         *animation_counters;
 } HudElem_237840;
 
 extern int  D_L00_0015F760 __attribute__((sda));
@@ -76,8 +77,8 @@ int hud_draw_gauge_frame(HudElem_237840 *gauge_element) {
     int left, top, right, bottom, w, h, bh, step, i;
     {
         int ww = D_L00_0015F760;
-        screen_position[0] = gauge_element->unk50;
-        screen_position[1] = gauge_element->unk54;
+        screen_position[0] = gauge_element->x;
+        screen_position[1] = gauge_element->y;
         gauge_element->w = ww;
         {
             int *vertical_scale_source = (int *)&(*(short *)&D_L00_0015F764);
@@ -87,13 +88,13 @@ int hud_draw_gauge_frame(HudElem_237840 *gauge_element) {
     }
     hud_screen_position(gauge_element, &screen_position[0], &screen_position[1]);
     apply_hud_slide_offset(
-        gauge_element, &screen_position[0], &screen_position[1], gauge_element->unk6C, 0);
+        gauge_element, &screen_position[0], &screen_position[1], gauge_element->slide, 0);
     w = D_L00_0015F760 * 0xD0;
     h = D_L00_0015F764 * 0xA0;
     bh = D_L00_0015F760 * 0x260;
     bottom = D_L00_0015F764 * 0xEA0;
-    left = (screen_position[0] + gauge_element->unk48) << 4;
-    top = (screen_position[1] + gauge_element->unk4A) << 4;
+    left = (screen_position[0] + gauge_element->offset_x) << 4;
+    top = (screen_position[1] + gauge_element->offset_y) << 4;
     left += w / 64;
     top += h / 256;
     right = left + bh / 64;
@@ -102,28 +103,29 @@ int hud_draw_gauge_frame(HudElem_237840 *gauge_element) {
     {
         int gauge_height_numerator = D_L00_0015F764 * 0xEA0;
         h = D_L00_0015F764;
-        top = (screen_position[1] + gauge_element->unk4A) << 4;
+        top = (screen_position[1] + gauge_element->offset_y) << 4;
         top += (h * 0xF40) / 256;
-        bh = (gauge_element->unk74 * gauge_height_numerator) / (gauge_element->unk08 << 8);
+        bh =
+            (gauge_element->shown_value * gauge_height_numerator) / (gauge_element->max_value << 8);
         append_screen_rect_packet(left, top, right, top - bh, 0x80829E00, 1);
     }
     i = 1;
-    if (i < gauge_element->unk74)
+    if (i < gauge_element->shown_value)
         do {
             int hh = D_L00_0015F764;
-            top = (screen_position[1] + gauge_element->unk4A) << 4;
+            top = (screen_position[1] + gauge_element->offset_y) << 4;
             top += (hh * 0xF40) / 256;
             step = D_L00_0015F764 * 0xEA0;
-            step = i * step / (gauge_element->unk08 << 8);
+            step = i * step / (gauge_element->max_value << 8);
             i++;
             top -= step;
             top -= 16;
             append_screen_rect_packet(left, top, right, top + 32, 0x80000000, 1);
-        } while (i < gauge_element->unk74);
+        } while (i < gauge_element->shown_value);
     w = get_icon_frame(*(int *)gauge_element, 0);
     draw_rotated_hud_sprite(w,
-                            screen_position[0] + gauge_element->unk48,
-                            screen_position[1] + gauge_element->unk4A,
+                            screen_position[0] + gauge_element->offset_x,
+                            screen_position[1] + gauge_element->offset_y,
                             D_L00_0015F760,
                             D_L00_0015F764,
                             0x80);
@@ -143,32 +145,39 @@ typedef struct {
     s32 x78;
 } O00237ae8;
 
-typedef struct {
-    s32 x0;
-    u8  p[0x14];
-    s32 x18;
-} D00237ae8;
+/* One slot of a HUD selector ring: its icon, the slot each pad direction moves to, and what
+   choosing it does. */
+typedef struct HudSelectorSlot {
+    int icon;
+    int icon_frame;
+    int left_slot;
+    int right_slot;
+    int up_slot;
+    int down_slot;
+    int command; /* item id (eight slots) or gadgebot command (four slots) */
+} HudSelectorSlot;
 
 extern s32   D_L00_0015FA90;
 extern void *D_L00_0015FAC0;
 
 #include "rnc/overlay/shared/ui/hud/draw_hud_item_selector_panel_globals.h"
 
-extern s32 eight_slot_hud_selector_table_pointer_gp __asm__("D_L00_0015F738") __attribute__((sda));
-extern s32 D_L00_0015F718_gp __asm__("D_L00_0015F718") __attribute__((sda));
-extern s32 D_L00_0015F71C_gp __asm__("D_L00_0015F71C") __attribute__((sda));
-extern s32 D_L00_0015F72C __attribute__((sda));
-extern D00237ae8 l00_eight_slot_hud_selector_entries[] __asm__("D_L00_0017DAC0");
+extern HudSelectorSlot *eight_slot_hud_selector_table_pointer_gp __asm__("D_L00_0015F738")
+    __attribute__((sda));
+extern s32             D_L00_0015F718_gp __asm__("D_L00_0015F718") __attribute__((sda));
+extern s32             D_L00_0015F71C_gp __asm__("D_L00_0015F71C") __attribute__((sda));
+extern s32             D_L00_0015F72C __attribute__((sda));
+extern HudSelectorSlot eight_slot_hud_selector_slots[8] __asm__("D_L00_0017DAC0");
 
 #include "rnc/overlay/shared/hero/item_defs.h"
 
 void initialize_eight_slot_hud_selector(O00237ae8 *hud_element) __asm__("FUN_L00_00237ae8");
 
 void initialize_eight_slot_hud_selector(O00237ae8 *hud_element) {
-    s32        i;
-    D00237ae8 *slot_entry;
-    s32       *item_id_cursor;
-    ItemDef   *tab;
+    s32              i;
+    HudSelectorSlot *slot_entry;
+    s32             *item_id_cursor;
+    ItemDef         *tab;
     D_L00_0015FA90 = 8;
     D_L00_0015FAC0 = &eight_slot_hud_selector_table_pointer_gp;
     hud_element->x48 = 0;
@@ -179,20 +188,16 @@ void initialize_eight_slot_hud_selector(O00237ae8 *hud_element) {
     hud_element->x78 = scale_game_frames(0x1E);
     hud_element->x70 = 0;
     D_L00_0015F72C = 0;
-    slot_entry = l00_eight_slot_hud_selector_entries;
+    slot_entry = eight_slot_hud_selector_slots;
     tab = item_defs;
     item_id_cursor = pause_iop_sprite_lists;
     for (i = 7; i >= 0; i--) {
-        slot_entry->x18 = *item_id_cursor;
-        slot_entry->x0 = tab[*item_id_cursor].unk38;
+        slot_entry->command = *item_id_cursor;
+        slot_entry->icon = tab[*item_id_cursor].icon;
         item_id_cursor++;
         slot_entry++;
     }
 }
-
-typedef struct {
-    int unk0, unk4, unk8, unkC, unk10, unk14, unk18;
-} Ent;
 
 typedef struct {
     u8  p0[0x64];
@@ -209,9 +214,9 @@ typedef struct {
 
 extern int D_L00_0017E504 NOT_SDA;
 extern int                D_L00_0015FA90;
-extern int   l00_hud_selector_fade_counter_limit_gp __asm__("D_L00_0015F780") __attribute__((sda));
-extern int   saved_hud_selector_slot_index_gp __asm__("D_L00_0015FA9C") __attribute__((sda));
-extern Ent **D_L00_0015FAC0_c __asm__("D_L00_0015FAC0");
+extern int l00_hud_selector_fade_counter_limit_gp __asm__("D_L00_0015F780") __attribute__((sda));
+extern int saved_hud_selector_slot_index_gp __asm__("D_L00_0015FA9C") __attribute__((sda));
+extern HudSelectorSlot  **D_L00_0015FAC0_c __asm__("D_L00_0015FAC0");
 extern int D_L00_0017DC38 NOT_SDA;
 extern int D_L00_0017DC3C NOT_SDA;
 extern int D_L00_0017DC40 NOT_SDA;
@@ -307,7 +312,7 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
                 if (pad_slot_index == -1)
                     slot_lookup = D_L00_0017DC20;
                 else
-                    slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unk10;
+                    slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].up_slot;
                 pad_slot_index = slot_lookup;
             }
             if (((s32)controller_state.pressed_unmasked) & 0x4000) {
@@ -315,7 +320,7 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
                 if (pad_slot_index == -1)
                     slot_lookup = D_L00_0017DC24;
                 else
-                    slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unk14;
+                    slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].down_slot;
                 pad_slot_index = slot_lookup;
             }
             if (((s32)controller_state.pressed_unmasked) & 0x8000) {
@@ -323,7 +328,7 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
                 if (pad_slot_index == -1)
                     slot_lookup = D_L00_0017DC18;
                 else
-                    slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unk8;
+                    slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].left_slot;
                 pad_slot_index = slot_lookup;
             }
             if (((s32)controller_state.pressed_unmasked) & 0x2000) {
@@ -331,17 +336,17 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
                 if (pad_slot_index == -1)
                     slot_lookup = D_L00_0017DC1C;
                 else
-                    slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unkC;
+                    slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].right_slot;
                 pad_slot_index = slot_lookup;
             }
             hud_element->w74 = pad_slot_index;
         }
         {
-            Ent *slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C];
-            int  selected_slot_index = hud_element->w74;
-            if (slot_lookup[selected_slot_index].unk0 == 0 && slot_step != 0) {
+            HudSelectorSlot *slot_lookup = D_L00_0015FAC0_c[D_L00_0015F72C];
+            int              selected_slot_index = hud_element->w74;
+            if (slot_lookup[selected_slot_index].icon == 0 && slot_step != 0) {
                 k = (selected_slot_index + slot_step) % D_L00_0015FA90;
-                if (slot_lookup[k].unk0 != 0)
+                if (slot_lookup[k].icon != 0)
                     hud_element->w74 = k;
             }
         }
@@ -352,7 +357,7 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
         counters[1]++;
     if (!(((s32)controller_state.held_unmasked) & 0x10)) {
         int sel = hud_element->w74;
-        if (sel >= 0 && (id = D_L00_0015FAC0_c[D_L00_0015F72C][sel].unk18) != 0) {
+        if (sel >= 0 && (id = D_L00_0015FAC0_c[D_L00_0015F72C][sel].command) != 0) {
             VendorItemInfo *rr;
             int             ri = id;
             if (hero_lui.items[0].item_id != id) {
@@ -364,7 +369,7 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
             usage_stats.stat[20].level_mask =
                 usage_stats.stat[20].level_mask | (1 << current_level_index) | 0x80000000;
             if (id == 0x18)
-                hero_lui.unk1FF5 = 1;
+                hero_lui.launch_drones = 1;
             else
                 hero_lui.pending_item[0] = id;
             rr = &D_L00_001C40B0[ri];
@@ -464,8 +469,8 @@ int draw_hud_item_selector_panel(HudElem *selector_element) {
         angle += 0.875f;
         marker_alpha = truncate_float_to_s32(radius * angle);
     }
-    x = selector_element->unk50;
-    y = selector_element->unk54;
+    x = selector_element->x;
+    y = selector_element->y;
     hud_screen_position(selector_element, &x, &y);
     half_w = D_L00_0015F718_gp / 2;
     half_h = D_L00_0015F71C_gp / 2;
@@ -484,13 +489,13 @@ int draw_hud_item_selector_panel(HudElem *selector_element) {
         icon_x =
             x + D_L00_0015F720_gp + (int)(D_L00_0015F78C_gp * fast_cos(angle) * D_L00_0015F7C4_gp);
         icon_y = y + D_L00_0015F724_gp + (int)(D_L00_0015F78C_gp * fast_sin(angle));
-        if (selector_element->unk74 == i &&
+        if (selector_element->shown_value == i &&
             ((E_238C30 **)D_L00_0015FAC0)[D_L00_0015F72C_gp][i].id != 0)
             draw_hud_sprite(
                 get_icon_frame(0xe99c, 0), icon_x - 0x13, icon_y - 0x13, 0x26, 0x26, marker_alpha);
         if (((E_238C30 **)D_L00_0015FAC0)[D_L00_0015F72C_gp][i].id != 0) {
             int icon_alpha;
-            if (i != selector_element->unk74)
+            if (i != selector_element->shown_value)
                 icon_alpha = truncate_float_to_s32((float)alpha * D_L00_0015F7C0);
             else
                 icon_alpha = alpha;
@@ -507,7 +512,7 @@ int draw_hud_item_selector_panel(HudElem *selector_element) {
                 icon_alpha);
         }
     }
-    selected = selector_element->unk74;
+    selected = selector_element->shown_value;
     if (selected >= 0 &&
         *(int *)(((char **)D_L00_0015FAC0)[D_L00_0015F72C_gp] + selected * 0x1C) != 0) {
         color = fast_tween_color(l00_hud_item_selector_text_shadow_color_from,
@@ -604,9 +609,10 @@ int draw_hud_item_selector_panel(HudElem *selector_element) {
     return selector_element->w;
 }
 
-extern int D_L00_0015F72C __attribute__((sda));
-extern int four_slot_hud_selector_table_pointer_gp __asm__("D_L00_0015F740") __attribute__((sda));
-void       initialize_four_slot_hud_selector(char *hud_element) __asm__("FUN_L00_00238b18");
+extern int              D_L00_0015F72C __attribute__((sda));
+extern HudSelectorSlot *four_slot_hud_selector_table_pointer_gp __asm__("D_L00_0015F740")
+    __attribute__((sda));
+void initialize_four_slot_hud_selector(char *hud_element) __asm__("FUN_L00_00238b18");
 
 void initialize_four_slot_hud_selector(char *hud_element) {
     int element_width, element_height;
@@ -663,28 +669,28 @@ void update_hud_radial_selector_selection_and_visibility(Obj *hud_element) {
                 if (pad_slot_index == -1)
                     next_slot_index = D_L00_0017DC40;
                 else
-                    next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unk10;
+                    next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].up_slot;
                 pad_slot_index = next_slot_index;
             }
             if (((s32)controller_state.pressed_unmasked) & 0x4000) {
                 if (pad_slot_index == -1)
                     next_slot_index = D_L00_0017DC44;
                 else
-                    next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unk14;
+                    next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].down_slot;
                 pad_slot_index = next_slot_index;
             }
             if (((s32)controller_state.pressed_unmasked) & 0x8000) {
                 if (pad_slot_index == -1)
                     next_slot_index = D_L00_0017DC38;
                 else
-                    next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unk8;
+                    next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].left_slot;
                 pad_slot_index = next_slot_index;
             }
             if (((s32)controller_state.pressed_unmasked) & 0x2000) {
                 if (pad_slot_index == -1)
                     next_slot_index = D_L00_0017DC3C;
                 else
-                    next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].unkC;
+                    next_slot_index = D_L00_0015FAC0_c[D_L00_0015F72C][pad_slot_index].right_slot;
                 pad_slot_index = next_slot_index;
             }
             hud_element->w74 = pad_slot_index;
@@ -699,7 +705,7 @@ void update_hud_radial_selector_selection_and_visibility(Obj *hud_element) {
         if (hud_element->w74 == -1)
             D_00141610[0] = 0;
         else
-            D_00141610[0] = D_L00_0015FAC0_c[D_L00_0015F72C][hud_element->w74].unk18;
+            D_00141610[0] = D_L00_0015FAC0_c[D_L00_0015F72C][hud_element->w74].command;
         if (counters[0] != 0)
             counters[0]--;
     } else if (counters[0] < l00_hud_selector_fade_counter_limit_gp) {
@@ -721,28 +727,28 @@ void update_hud_radial_selector_selection_and_visibility(Obj *hud_element) {
 
 typedef struct {
     char          pad0[0x8];
-    int           unk08;
-    int          *unk0C;
+    int           max_value;
+    int          *value_source;
     char          pad10[0x38];
-    short         unk48;
-    short         unk4A;
+    short         offset_x;
+    short         offset_y;
     char          pad4C[0x4];
-    int           unk50;
-    int           unk54;
+    int           x;
+    int           y;
     int           w;
     int           h;
     int           flags;
     char          pad64[0x8];
-    int           unk6C;
+    int           slide;
     unsigned char cnt[4];
-    int           unk74;
-    int           unk78;
-    int           unk7C;
-    void         *unk80;
+    int           shown_value;
+    int           target_value;
+    int           visible_timer;
+    void         *animation_counters;
 } HudElem_238f88;
 
 typedef struct {
-    int unk0, unk4, unk8, unkC, unk10, unk14, unk18;
+    int icon, icon_frame, left_slot, right_slot, up_slot, down_slot, command;
 } Ent_239918;
 
 typedef struct {
@@ -848,11 +854,11 @@ int draw_hud_radial_selector_panel(Elem *element) {
             (float)i * 2.0f * 3.1415927f / (float)D_L00_0015FA90 - 3.1415927f, 1.5707964f);
         icon_x = x + D_L00_0015F720 + (int)(D_L00_0015F78C * fast_cos(angle) * D_L00_0015F7C4);
         icon_y = y + D_L00_0015F724 + (int)(D_L00_0015F78C * fast_sin(angle));
-        if (element->sel == i && D_L00_0015FAC0_c2[D_L00_0015F72C][i].unk0 != 0) {
+        if (element->sel == i && D_L00_0015FAC0_c2[D_L00_0015F72C][i].icon != 0) {
             draw_hud_sprite(
                 get_icon_frame(0xE99C, 0), icon_x - 0x13, icon_y - 0x13, 0x26, 0x26, pulse_alpha);
         }
-        if (D_L00_0015FAC0_c2[D_L00_0015F72C][i].unk0 != 0) {
+        if (D_L00_0015FAC0_c2[D_L00_0015F72C][i].icon != 0) {
             if (i != element->sel) {
                 alpha = truncate_float_to_s32((float)frame_alpha * D_L00_0015F7C0);
             } else {
@@ -860,16 +866,16 @@ int draw_hud_radial_selector_panel(Elem *element) {
             }
             if (((Arena *)D_L00_0017E5D8_239918)->unk2C != 0) {
                 hud_frame(element,
-                          get_icon_frame(D_L00_0015FAC0_c2[D_L00_0015F72C][i].unk0,
-                                         D_L00_0015FAC0_c2[D_L00_0015F72C][i].unk4),
+                          get_icon_frame(D_L00_0015FAC0_c2[D_L00_0015F72C][i].icon,
+                                         D_L00_0015FAC0_c2[D_L00_0015F72C][i].icon_frame),
                           icon_x,
                           icon_y,
                           1,
                           alpha);
             } else {
                 hud_frame(element,
-                          get_icon_frame(D_L00_0015FAC0_c2[D_L00_0015F72C][i].unk0,
-                                         D_L00_0015FAC0_c2[D_L00_0015F72C][i].unk4 + 4),
+                          get_icon_frame(D_L00_0015FAC0_c2[D_L00_0015F72C][i].icon,
+                                         D_L00_0015FAC0_c2[D_L00_0015F72C][i].icon_frame + 4),
                           icon_x,
                           icon_y,
                           1,
@@ -878,9 +884,9 @@ int draw_hud_radial_selector_panel(Elem *element) {
         }
     }
     selected = element->sel;
-    if (selected >= 0 && D_L00_0015FAC0_c2[D_L00_0015F72C][selected].unk0 != 0) {
+    if (selected >= 0 && D_L00_0015FAC0_c2[D_L00_0015F72C][selected].icon != 0) {
         text_ids = D_L00_0015F8C0_239918;
-        if (D_L00_0015FAC0_c2[D_L00_0015F72C][selected].unk0 != 0) {
+        if (D_L00_0015FAC0_c2[D_L00_0015F72C][selected].icon != 0) {
             text = get_help_message_text(text_ids.v[selected]);
             if (text != 0 && strlen_alt(text) != 0) {
                 float fade = text_fade * open_fade;
@@ -922,11 +928,12 @@ void initialize_hud_element_with_counters(char *hud_element) {
 /* Updates the health HUD element: advances the wobble counters in its HudCounter (+0x80), clamps the target (+0x78) to +0x08, and steps the two digits (+0x70, +0x71) up or down. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00239FC0), where it is exact; names translated to the US level program. */
 
+/* Wobble of a HUD icon: phase swings 0..0xFFF, its velocity accelerates toward the middle. */
 typedef struct {
-    short unk0;
-    short unk2;
-    short unk4;
-    short unk6;
+    short frame;        /* counts 0..59 */
+    short phase;        /* 0..0xFFF */
+    short velocity;     /* added to phase, clamped to +-60 */
+    short acceleration; /* +1 or -1, flips at the middle of the swing */
 } HudCounter;
 
 extern s32 l00_hud_panel_visibility_counter_limit_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
@@ -940,57 +947,57 @@ void update_health_hud_animation_and_visibility(HudElem *hud_element) {
     int            unclamped_target_value;
     int            max;
 
-    if (hud_element->unk0C != 0) {
-        unclamped_target_value = *hud_element->unk0C;
-        hud_element->unk78 = unclamped_target_value > -1 ? unclamped_target_value : 0;
-        animation_counters = hud_element->unk80;
-        animation_counters->unk0 = (animation_counters->unk0 + 1) % 60;
-        animation_counters->unk2 += animation_counters->unk4;
-        animation_counters->unk4 += animation_counters->unk6;
-        if (animation_counters->unk4 > 60) {
-            animation_counters->unk4 = 60;
-        } else if (animation_counters->unk4 < -60) {
-            animation_counters->unk4 = -60;
+    if (hud_element->value_source != 0) {
+        unclamped_target_value = *hud_element->value_source;
+        hud_element->target_value = unclamped_target_value > -1 ? unclamped_target_value : 0;
+        animation_counters = hud_element->animation_counters;
+        animation_counters->frame = (animation_counters->frame + 1) % 60;
+        animation_counters->phase += animation_counters->velocity;
+        animation_counters->velocity += animation_counters->acceleration;
+        if (animation_counters->velocity > 60) {
+            animation_counters->velocity = 60;
+        } else if (animation_counters->velocity < -60) {
+            animation_counters->velocity = -60;
         }
-        if (animation_counters->unk2 >= 0x800) {
-            if (animation_counters->unk4 > 0) {
-                animation_counters->unk6 = -1;
+        if (animation_counters->phase >= 0x800) {
+            if (animation_counters->velocity > 0) {
+                animation_counters->acceleration = -1;
             }
         }
-        if (animation_counters->unk2 >= 0x1000) {
-            animation_counters->unk2 = 0xFFF;
+        if (animation_counters->phase >= 0x1000) {
+            animation_counters->phase = 0xFFF;
         }
         health_icon_animation_counters = animation_counters;
-        if (health_icon_animation_counters->unk2 < 0x7FF) {
-            if (health_icon_animation_counters->unk4 < 0) {
-                health_icon_animation_counters->unk6 = 1;
+        if (health_icon_animation_counters->phase < 0x7FF) {
+            if (health_icon_animation_counters->velocity < 0) {
+                health_icon_animation_counters->acceleration = 1;
             }
         }
-        if (health_icon_animation_counters->unk2 < 0) {
-            health_icon_animation_counters->unk2 = 0;
+        if (health_icon_animation_counters->phase < 0) {
+            health_icon_animation_counters->phase = 0;
         }
-        if (hud_element->unk78 > hud_element->unk08) {
-            hud_element->unk78 = hud_element->unk08;
+        if (hud_element->target_value > hud_element->max_value) {
+            hud_element->target_value = hud_element->max_value;
         }
     }
-    if (hud_element->unk74 != hud_element->unk78 || hud_element->unk74 == 1) {
-        hud_element->unk7C = scale_game_frames(0x78);
-        hud_element->unk74 = hud_element->unk78;
+    if (hud_element->shown_value != hud_element->target_value || hud_element->shown_value == 1) {
+        hud_element->visible_timer = scale_game_frames(0x78);
+        hud_element->shown_value = hud_element->target_value;
     }
-    if (hud_element->unk7C >= scale_game_frames(5)) {
+    if (hud_element->visible_timer >= scale_game_frames(5)) {
         if (*(int *)&l00_hud_panel_visibility_counter_limit_gp > visibility_counters[0]) {
             visibility_counters[0]++;
         } else if (visibility_counters[1] < *(int *)&l00_hud_panel_visibility_counter_limit_gp) {
             visibility_counters[1]++;
         }
     } else {
-        hud_element->unk6C = 1;
+        hud_element->slide = 1;
         if (visibility_counters[1] != 0) {
             visibility_counters[1]--;
         } else if (visibility_counters[0] != 0) {
             visibility_counters[0]--;
         } else {
-            hud_element->unk6C = -6;
+            hud_element->slide = -6;
         }
     }
     update_hud_animation_frame((char *)hud_element + 0x40);
@@ -1171,13 +1178,13 @@ out:
 extern HudCounter l00_bolt_hud_icon_animation_counters __asm__("D_L00_0015FAB8");
 extern void initialize_numeric_hud_timer_and_base_dimensions(HudElem *) __asm__("FUN_L00_0023a760");
 
-/* Runs FUN_L00_0023a760 on e, points its unk80 at D_L00_0015FAB8 and clears that entry. */
+/* Runs FUN_L00_0023a760 on e, points its animation_counters (+0x80) at D_L00_0015FAB8 and clears its frame. */
 void initialize_bolt_counter_hud(HudElem *hud_element) __asm__("FUN_L00_00239cc8");
 
 void initialize_bolt_counter_hud(HudElem *hud_element) {
     initialize_numeric_hud_timer_and_base_dimensions(hud_element);
-    hud_element->unk80 = &l00_bolt_hud_icon_animation_counters;
-    l00_bolt_hud_icon_animation_counters.unk0 = 0;
+    hud_element->animation_counters = &l00_bolt_hud_icon_animation_counters;
+    l00_bolt_hud_icon_animation_counters.frame = 0;
 }
 
 typedef struct T00239d00 {
@@ -1229,7 +1236,7 @@ void update_bolt_counter_hud_animation_and_visibility(T00239d00 *hud_element) {
 /*
  * Draw callback of the bolt counter HUD element (queued by update_npc_dialogue
  * with FUN_L00_00239cc8 / FUN_L00_00239d00): a panel that slides open by
- * cnt[0] / bolt_panel_open_steps_gp, the spinning bolt icon (frame from *unk80), the
+ * cnt[0] / bolt_panel_open_steps_gp, the spinning bolt icon (frame from *animation_counters), the
  * bolt count with a drop shadow, and a thousands separator every three
  * digits (an apostrophe, or a dot for languages 3 and 5). Returns the element width.
  */
@@ -1267,7 +1274,7 @@ int draw_bolt_counter_hud_panel(HudElem *hud_element) {
     int  y, x, digits, alpha, bolt_count_quotient, slide, color, shadow, sx, sy, i, dx, dy;
     f32  open, text;
 
-    frame = hud_element->unk80;
+    frame = hud_element->animation_counters;
     /* the byte offset kept in a local is load-bearing (retail tests m + off) */
     panel_open_counter_offset = 0x70;
     if (camera_secondary_mode_lui[0] == 50 || ((u8 *)hud_element)[panel_open_counter_offset] == 0)
@@ -1275,7 +1282,7 @@ int draw_bolt_counter_hud_panel(HudElem *hud_element) {
 
     fade = hud_element->cnt;
     y = *(volatile s32 *)&pal_mode ? 10 : 18;
-    x = hud_element->unk50;
+    x = hud_element->x;
 
     open = convert_integer_to_float(hud_element->cnt[0]) /
            convert_integer_to_float(bolt_panel_open_steps_gp);
@@ -1473,267 +1480,357 @@ int draw_hud_cropped_gauge_panel(char *cropped_gauge_element) {
    of 30 + func_001F9850(120). */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_0023B0F8), where it is exact; names translated to the US level program. */
 
-/* Sets unk7C to scale_game_frames(0x78) + 0x1E and w/h to 0x20, calls FUN_L00_00235c80. */
+/* Sets visible_timer to scale_game_frames(0x78) + 0x1E and w/h to 0x20, calls FUN_L00_00235c80. */
 void initialize_numeric_hud_timer_and_base_dimensions(HudElem *hud_element) {
-    hud_element->unk7C = scale_game_frames(0x78) + 0x1E;
+    hud_element->visible_timer = scale_game_frames(0x78) + 0x1E;
     hud_element->w = 0x20;
     hud_element->h = 0x20;
     initialize_numeric_hud_values_and_dimensions(hud_element);
 }
 
-s32 D_L01_0017E0A0[1] __attribute__((section(".data"))) = {0};
+/* Icon whose frames 0-3 show the four gadgebot commands. */
+#define GADGEBOT_COMMAND_ICON 0x7553
 
-s32 D_L02_0017E220[1] __attribute__((section(".data"))) = {0};
+/* Pad links of the eight-slot item ring; initialize_eight_slot_hud_selector fills in each
+   slot's item and its icon. */
+#define EIGHT_SLOT_HUD_SELECTOR_SLOTS                                        \
+    {                                                                        \
+        {.left_slot = 7, .right_slot = 1, .up_slot = 0, .down_slot = 4},     \
+            {.left_slot = 0, .right_slot = 2, .up_slot = 0, .down_slot = 2}, \
+            {.left_slot = 6, .right_slot = 2, .up_slot = 1, .down_slot = 3}, \
+            {.left_slot = 4, .right_slot = 2, .up_slot = 2, .down_slot = 4}, \
+            {.left_slot = 5, .right_slot = 3, .up_slot = 0, .down_slot = 4}, \
+            {.left_slot = 6, .right_slot = 4, .up_slot = 6, .down_slot = 4}, \
+            {.left_slot = 6, .right_slot = 2, .up_slot = 7, .down_slot = 5}, \
+            {.left_slot = 6, .right_slot = 0, .up_slot = 0, .down_slot = 6}, \
+    }
 
-s32 D_L03_0017DD20[1] __attribute__((section(".data"))) = {0};
+/* The gadgebot command ring of Clank's HUD selector. */
+#define FOUR_SLOT_HUD_SELECTOR_SLOTS                               \
+    {                                                              \
+        {.icon = GADGEBOT_COMMAND_ICON,                            \
+         .icon_frame = 3,                                          \
+         .left_slot = 3,                                           \
+         .right_slot = 1,                                          \
+         .up_slot = 0,                                             \
+         .down_slot = 2,                                           \
+         .command = GADGEBOT_COMMAND_STAND_AND_FACE_HERO},         \
+            {.icon = GADGEBOT_COMMAND_ICON,                        \
+             .icon_frame = 2,                                      \
+             .left_slot = 3,                                       \
+             .right_slot = 1,                                      \
+             .up_slot = 0,                                         \
+             .down_slot = 2,                                       \
+             .command = GADGEBOT_COMMAND_FOLLOW_HERO},             \
+            {.icon = GADGEBOT_COMMAND_ICON,                        \
+             .icon_frame = 0,                                      \
+             .left_slot = 3,                                       \
+             .right_slot = 1,                                      \
+             .up_slot = 0,                                         \
+             .down_slot = 2,                                       \
+             .command = GADGEBOT_COMMAND_SEEK_AND_ATTACK_TARGET},  \
+            {.icon = GADGEBOT_COMMAND_ICON,                        \
+             .icon_frame = 1,                                      \
+             .left_slot = 3,                                       \
+             .right_slot = 1,                                      \
+             .up_slot = 0,                                         \
+             .down_slot = 2,                                       \
+             .command = GADGEBOT_COMMAND_SEEK_INTERACTION_TARGET}, \
+    }
 
-s32 D_L04_0017DDA0[1] __attribute__((section(".data"))) = {0};
+/* Where each pad direction moves when no slot is selected yet. */
+#define EIGHT_SLOT_HUD_SELECTOR_UNSELECTED \
+    { .left_slot = 6, .right_slot = 2, .up_slot = 0, .down_slot = 4 }
+#define FOUR_SLOT_HUD_SELECTOR_UNSELECTED \
+    { .left_slot = 3, .right_slot = 1, .up_slot = 0, .down_slot = 2 }
 
-s32 D_L04_0017DDC0[1] __attribute__((section(".data"))) = {0};
+HudSelectorSlot
+    eight_slot_hud_selector_slots[8] __asm__("D_L00_0017DAC0") = EIGHT_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L00_0017DBA0[4] = FOUR_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L00_0017DC10 = EIGHT_SLOT_HUD_SELECTOR_UNSELECTED;
+HudSelectorSlot D_L00_0017DC30 = FOUR_SLOT_HUD_SELECTOR_UNSELECTED;
 
-s32 D_L05_0017E0A0[1] __attribute__((section(".data"))) = {0};
+HudSelectorSlot D_L01_0017DF40[8] = EIGHT_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L01_0017E020[4] = FOUR_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L01_0017E090 = EIGHT_SLOT_HUD_SELECTOR_UNSELECTED;
+HudSelectorSlot D_L01_0017E0B0 = FOUR_SLOT_HUD_SELECTOR_UNSELECTED;
 
-s32 D_L06_0017E3A0[1] __attribute__((section(".data"))) = {0};
+HudSelectorSlot D_L02_0017E0C0[8] = EIGHT_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L02_0017E1A0[4] = FOUR_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L02_0017E210 = EIGHT_SLOT_HUD_SELECTOR_UNSELECTED;
+HudSelectorSlot D_L02_0017E230 = FOUR_SLOT_HUD_SELECTOR_UNSELECTED;
 
-s32 D_L06_0017E3C0[1] __attribute__((section(".data"))) = {0};
+HudSelectorSlot D_L03_0017DBC0[8] = EIGHT_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L03_0017DCA0[4] = FOUR_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L03_0017DD10 = EIGHT_SLOT_HUD_SELECTOR_UNSELECTED;
+HudSelectorSlot D_L03_0017DD30 = FOUR_SLOT_HUD_SELECTOR_UNSELECTED;
 
-s32 D_L07_0017DCA0[1] __attribute__((section(".data"))) = {0};
+HudSelectorSlot D_L04_0017DC40[8] = EIGHT_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L04_0017DD20[4] = FOUR_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L04_0017DD90 = EIGHT_SLOT_HUD_SELECTOR_UNSELECTED;
+HudSelectorSlot D_L04_0017DDB0 = FOUR_SLOT_HUD_SELECTOR_UNSELECTED;
 
-s32 D_L07_0017DCC0[1] __attribute__((section(".data"))) = {0};
+HudSelectorSlot D_L05_0017DF40[8] = EIGHT_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L05_0017E020[4] = FOUR_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L05_0017E090 = EIGHT_SLOT_HUD_SELECTOR_UNSELECTED;
+HudSelectorSlot D_L05_0017E0B0 = FOUR_SLOT_HUD_SELECTOR_UNSELECTED;
 
-s32 D_L08_0017E420[1] __attribute__((section(".data"))) = {0};
+HudSelectorSlot D_L06_0017E240[8] = EIGHT_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L06_0017E320[4] = FOUR_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L06_0017E390 = EIGHT_SLOT_HUD_SELECTOR_UNSELECTED;
+HudSelectorSlot D_L06_0017E3B0 = FOUR_SLOT_HUD_SELECTOR_UNSELECTED;
 
-s32 D_L09_0017DDA0[1] __attribute__((section(".data"))) = {0};
+HudSelectorSlot D_L07_0017DB40[8] = EIGHT_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L07_0017DC20[4] = FOUR_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L07_0017DC90 = EIGHT_SLOT_HUD_SELECTOR_UNSELECTED;
+HudSelectorSlot D_L07_0017DCB0 = FOUR_SLOT_HUD_SELECTOR_UNSELECTED;
 
-s32 D_L09_0017DDC0[1] __attribute__((section(".data"))) = {0};
+HudSelectorSlot D_L08_0017E2C0[8] = EIGHT_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L08_0017E3A0[4] = FOUR_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L08_0017E410 = EIGHT_SLOT_HUD_SELECTOR_UNSELECTED;
+HudSelectorSlot D_L08_0017E430 = FOUR_SLOT_HUD_SELECTOR_UNSELECTED;
 
-s32 D_L10_0017E0A0[1] __attribute__((section(".data"))) = {0};
+HudSelectorSlot D_L09_0017DC40[8] = EIGHT_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L09_0017DD20[4] = FOUR_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L09_0017DD90 = EIGHT_SLOT_HUD_SELECTOR_UNSELECTED;
+HudSelectorSlot D_L09_0017DDB0 = FOUR_SLOT_HUD_SELECTOR_UNSELECTED;
 
-s32 D_L10_0017E0C0[1] __attribute__((section(".data"))) = {0};
+HudSelectorSlot D_L10_0017DF40[8] = EIGHT_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L10_0017E020[4] = FOUR_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L10_0017E090 = EIGHT_SLOT_HUD_SELECTOR_UNSELECTED;
+HudSelectorSlot D_L10_0017E0B0 = FOUR_SLOT_HUD_SELECTOR_UNSELECTED;
 
-s32 D_L11_0017E620[1] __attribute__((section(".data"))) = {0};
+HudSelectorSlot D_L11_0017E4C0[8] = EIGHT_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L11_0017E5A0[4] = FOUR_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L11_0017E610 = EIGHT_SLOT_HUD_SELECTOR_UNSELECTED;
+HudSelectorSlot D_L11_0017E630 = FOUR_SLOT_HUD_SELECTOR_UNSELECTED;
 
-s32 D_L12_0017E0A0[1] __attribute__((section(".data"))) = {0};
+HudSelectorSlot D_L12_0017DF40[8] = EIGHT_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L12_0017E020[4] = FOUR_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L12_0017E090 = EIGHT_SLOT_HUD_SELECTOR_UNSELECTED;
+HudSelectorSlot D_L12_0017E0B0 = FOUR_SLOT_HUD_SELECTOR_UNSELECTED;
 
-s32 D_L13_0017DF20[1] __attribute__((section(".data"))) = {0};
+HudSelectorSlot D_L13_0017DDC0[8] = EIGHT_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L13_0017DEA0[4] = FOUR_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L13_0017DF10 = EIGHT_SLOT_HUD_SELECTOR_UNSELECTED;
+HudSelectorSlot D_L13_0017DF30 = FOUR_SLOT_HUD_SELECTOR_UNSELECTED;
 
-s32 D_L13_0017DF40[1] __attribute__((section(".data"))) = {0};
+HudSelectorSlot D_L14_0017E1C0[8] = EIGHT_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L14_0017E2A0[4] = FOUR_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L14_0017E310 = EIGHT_SLOT_HUD_SELECTOR_UNSELECTED;
+HudSelectorSlot D_L14_0017E330 = FOUR_SLOT_HUD_SELECTOR_UNSELECTED;
 
-s32 D_L14_0017E320[1] __attribute__((section(".data"))) = {0};
+HudSelectorSlot D_L15_0017E0C0[8] = EIGHT_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L15_0017E1A0[4] = FOUR_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L15_0017E210 = EIGHT_SLOT_HUD_SELECTOR_UNSELECTED;
+HudSelectorSlot D_L15_0017E230 = FOUR_SLOT_HUD_SELECTOR_UNSELECTED;
 
-s32 D_L15_0017E220[1] __attribute__((section(".data"))) = {0};
+HudSelectorSlot D_L16_0017DF40[8] = EIGHT_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L16_0017E020[4] = FOUR_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L16_0017E090 = EIGHT_SLOT_HUD_SELECTOR_UNSELECTED;
+HudSelectorSlot D_L16_0017E0B0 = FOUR_SLOT_HUD_SELECTOR_UNSELECTED;
 
-s32 D_L16_0017E0A0[1] __attribute__((section(".data"))) = {0};
+HudSelectorSlot D_L17_0017E3C0[8] = EIGHT_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L17_0017E4A0[4] = FOUR_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L17_0017E510 = EIGHT_SLOT_HUD_SELECTOR_UNSELECTED;
+HudSelectorSlot D_L17_0017E530 = FOUR_SLOT_HUD_SELECTOR_UNSELECTED;
 
-s32 D_L17_0017E520[1] __attribute__((section(".data"))) = {0};
+HudSelectorSlot D_L18_0017E4C0[8] = EIGHT_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L18_0017E5A0[4] = FOUR_SLOT_HUD_SELECTOR_SLOTS;
+HudSelectorSlot D_L18_0017E610 = EIGHT_SLOT_HUD_SELECTOR_UNSELECTED;
+HudSelectorSlot D_L18_0017E630 = FOUR_SLOT_HUD_SELECTOR_UNSELECTED;
 
-s32 D_L17_0017E540[1] __attribute__((section(".data"))) = {0};
-
-s32 D_L18_0017E620[1] __attribute__((section(".data"))) = {0};
-
-s32                D_L01_0015FA90 = 0;
-void              *D_L01_0015FAC0 = 0;
-s32                D_L01_0015F738 = 0x17df40;
-s32                D_L01_0015F718 = 0xd2;
-s32                D_L01_0015F71C = 0xc8;
-s32                D_L01_0015F72C = 0;
-int                D_L01_0015F780 = 8;
-int                D_L01_0015FA9C = 0;
-int                D_L01_0015FA98 = 0;
-int                D_L01_0015FA94 = 0;
-float              D_L01_0015F788 = 0.2f;
-float              D_L01_0015F784 = 0;
-int D_L01_0017E098 NOT_SDA = 6;
-int D_L01_0017E09C NOT_SDA = 2;
-int D_L01_0017E0A4 NOT_SDA = 4;
-int                D_L01_0015F720 = 0x69;
-int                D_L01_0015F724 = 0x64;
-float              D_L01_0015F78C = 74.0f;
-int                D_L01_0015F790 = 0xff8080;
-int                D_L01_0015F794 = 0x80ff8080;
-int                D_L01_0015F798 = 0;
-int                D_L01_0015F7A0 = 0x4040ff;
-int                D_L01_0015F7A4 = 0x804040ff;
-int                D_L01_0015F7A8 = 0x40e020;
-int                D_L01_0015F7B0 = 0x1e;
-int                D_L01_0015F7BC = 0;
-float              D_L01_0015F7C0 = 0.5f;
-float              D_L01_0015F7C4 = 1.05f;
-Q2395b0            D_L01_0015FAB0 = {0};
+s32              D_L01_0015FA90 = 0;
+void            *D_L01_0015FAC0 = 0;
+HudSelectorSlot *D_L01_0015F738 = D_L01_0017DF40;
+HudSelectorSlot *D_L01_0015F740 = D_L01_0017E020;
+s32              D_L01_0015F718 = 0xd2;
+s32              D_L01_0015F71C = 0xc8;
+s32              D_L01_0015F72C = 0;
+int              D_L01_0015F780 = 8;
+int              D_L01_0015FA9C = 0;
+int              D_L01_0015FA98 = 0;
+int              D_L01_0015FA94 = 0;
+float            D_L01_0015F788 = 0.2f;
+float            D_L01_0015F784 = 0;
+int              D_L01_0015F720 = 0x69;
+int              D_L01_0015F724 = 0x64;
+float            D_L01_0015F78C = 74.0f;
+int              D_L01_0015F790 = 0xff8080;
+int              D_L01_0015F794 = 0x80ff8080;
+int              D_L01_0015F798 = 0;
+int              D_L01_0015F7A0 = 0x4040ff;
+int              D_L01_0015F7A4 = 0x804040ff;
+int              D_L01_0015F7A8 = 0x40e020;
+int              D_L01_0015F7B0 = 0x1e;
+int              D_L01_0015F7BC = 0;
+float            D_L01_0015F7C0 = 0.5f;
+float            D_L01_0015F7C4 = 1.05f;
+Q2395b0          D_L01_0015FAB0 = {0};
 
 s32 D_L01_0015F7F0 = 8;
 s32 D_L01_0015F7F8[1] = {0xffb0};
 
 HudCounter D_L01_0015FAB8 = {0};
 
-s32                D_L01_0015F824 = 8;
-s32                D_L01_0015F828 = 8;
-s32                D_L01_0015F82C = 0xe08060;
-s32                D_L01_0015F830 = 0x80e08060;
-s32                D_L01_0015F84C = 0xd;
-s32                D_L01_0015F834 = -32;
-s32                D_L01_0015F838 = 8;
-s32                D_L01_0015F83C = -30;
-s32                D_L01_0015F840 = 0x15;
-s32                D_L01_0015F844 = -29;
-s32                D_L01_0015F848 = 0xa;
-char               D_L01_0015F858 = 0x27;
-char               D_L01_0015F860 = 0x2e;
-s32                D_L01_0015F8F8 = 0x50;
-s32                D_L01_0015F8FC = 0x10;
-s32                D_L01_0015F900 = -28;
-s32                D_L01_0015F904 = -44;
-s32                D_L01_0015F908 = 6;
-s32                D_L01_0015F90C = 0xff;
-s32                D_L01_0015F910 = 0x800000ff;
-s32                D_L01_0015F914 = 0x2d;
-s32                D_L02_0015FA90 = 0;
-void              *D_L02_0015FAC0 = 0;
-s32                D_L02_0015F738 = 0x17e0c0;
-s32                D_L02_0015F718 = 0xd2;
-s32                D_L02_0015F71C = 0xc8;
-s32                D_L02_0015F72C = 0;
-int                D_L02_0015F780 = 8;
-int                D_L02_0015FA9C = 0;
-int                D_L02_0015FA98 = 0;
-int                D_L02_0015FA94 = 0;
-float              D_L02_0015F788 = 0.2f;
-float              D_L02_0015F784 = 0;
-int D_L02_0017E218 NOT_SDA = 6;
-int D_L02_0017E21C NOT_SDA = 2;
-int D_L02_0017E224 NOT_SDA = 4;
-int                D_L02_0015F720 = 0x69;
-int                D_L02_0015F724 = 0x64;
-float              D_L02_0015F78C = 74.0f;
-int                D_L02_0015F790 = 0xff8080;
-int                D_L02_0015F794 = 0x80ff8080;
-int                D_L02_0015F798 = 0;
-int                D_L02_0015F7A0 = 0x4040ff;
-int                D_L02_0015F7A4 = 0x804040ff;
-int                D_L02_0015F7A8 = 0x40e020;
-int                D_L02_0015F7B0 = 0x1e;
-int                D_L02_0015F7BC = 0;
-float              D_L02_0015F7C0 = 0.5f;
-float              D_L02_0015F7C4 = 1.05f;
-Q2395b0            D_L02_0015FAB0 = {0};
+s32              D_L01_0015F824 = 8;
+s32              D_L01_0015F828 = 8;
+s32              D_L01_0015F82C = 0xe08060;
+s32              D_L01_0015F830 = 0x80e08060;
+s32              D_L01_0015F84C = 0xd;
+s32              D_L01_0015F834 = -32;
+s32              D_L01_0015F838 = 8;
+s32              D_L01_0015F83C = -30;
+s32              D_L01_0015F840 = 0x15;
+s32              D_L01_0015F844 = -29;
+s32              D_L01_0015F848 = 0xa;
+char             D_L01_0015F858 = 0x27;
+char             D_L01_0015F860 = 0x2e;
+s32              D_L01_0015F8F8 = 0x50;
+s32              D_L01_0015F8FC = 0x10;
+s32              D_L01_0015F900 = -28;
+s32              D_L01_0015F904 = -44;
+s32              D_L01_0015F908 = 6;
+s32              D_L01_0015F90C = 0xff;
+s32              D_L01_0015F910 = 0x800000ff;
+s32              D_L01_0015F914 = 0x2d;
+s32              D_L02_0015FA90 = 0;
+void            *D_L02_0015FAC0 = 0;
+HudSelectorSlot *D_L02_0015F738 = D_L02_0017E0C0;
+HudSelectorSlot *D_L02_0015F740 = D_L02_0017E1A0;
+s32              D_L02_0015F718 = 0xd2;
+s32              D_L02_0015F71C = 0xc8;
+s32              D_L02_0015F72C = 0;
+int              D_L02_0015F780 = 8;
+int              D_L02_0015FA9C = 0;
+int              D_L02_0015FA98 = 0;
+int              D_L02_0015FA94 = 0;
+float            D_L02_0015F788 = 0.2f;
+float            D_L02_0015F784 = 0;
+int              D_L02_0015F720 = 0x69;
+int              D_L02_0015F724 = 0x64;
+float            D_L02_0015F78C = 74.0f;
+int              D_L02_0015F790 = 0xff8080;
+int              D_L02_0015F794 = 0x80ff8080;
+int              D_L02_0015F798 = 0;
+int              D_L02_0015F7A0 = 0x4040ff;
+int              D_L02_0015F7A4 = 0x804040ff;
+int              D_L02_0015F7A8 = 0x40e020;
+int              D_L02_0015F7B0 = 0x1e;
+int              D_L02_0015F7BC = 0;
+float            D_L02_0015F7C0 = 0.5f;
+float            D_L02_0015F7C4 = 1.05f;
+Q2395b0          D_L02_0015FAB0 = {0};
 
 s32 D_L02_0015F7F0 = 8;
 s32 D_L02_0015F7F8[1] = {0xffb0};
 
 HudCounter D_L02_0015FAB8 = {0};
 
-s32                D_L02_0015F824 = 8;
-s32                D_L02_0015F828 = 8;
-s32                D_L02_0015F82C = 0xe08060;
-s32                D_L02_0015F830 = 0x80e08060;
-s32                D_L02_0015F84C = 0xd;
-s32                D_L02_0015F834 = -32;
-s32                D_L02_0015F838 = 8;
-s32                D_L02_0015F83C = -30;
-s32                D_L02_0015F840 = 0x15;
-s32                D_L02_0015F844 = -29;
-s32                D_L02_0015F848 = 0xa;
-char               D_L02_0015F858 = 0x27;
-char               D_L02_0015F860 = 0x2e;
-s32                D_L02_0015F8F8 = 0x50;
-s32                D_L02_0015F8FC = 0x10;
-s32                D_L02_0015F900 = -28;
-s32                D_L02_0015F904 = -44;
-s32                D_L02_0015F908 = 6;
-s32                D_L02_0015F90C = 0xff;
-s32                D_L02_0015F910 = 0x800000ff;
-s32                D_L02_0015F914 = 0x2d;
-s32                D_L03_0015FA90 = 0;
-void              *D_L03_0015FAC0 = 0;
-s32                D_L03_0015F738 = 0x17dbc0;
-s32                D_L03_0015F718 = 0xd2;
-s32                D_L03_0015F71C = 0xc8;
-s32                D_L03_0015F72C = 0;
-int                D_L03_0015F780 = 8;
-int                D_L03_0015FA9C = 0;
-int                D_L03_0015FA98 = 0;
-int                D_L03_0015FA94 = 0;
-float              D_L03_0015F788 = 0.2f;
-float              D_L03_0015F784 = 0;
-int D_L03_0017DD18 NOT_SDA = 6;
-int D_L03_0017DD1C NOT_SDA = 2;
-int D_L03_0017DD24 NOT_SDA = 4;
-int                D_L03_0015F720 = 0x69;
-int                D_L03_0015F724 = 0x64;
-float              D_L03_0015F78C = 74.0f;
-int                D_L03_0015F790 = 0xff8080;
-int                D_L03_0015F794 = 0x80ff8080;
-int                D_L03_0015F798 = 0;
-int                D_L03_0015F7A0 = 0x4040ff;
-int                D_L03_0015F7A4 = 0x804040ff;
-int                D_L03_0015F7A8 = 0x40e020;
-int                D_L03_0015F7B0 = 0x1e;
-int                D_L03_0015F7BC = 0;
-float              D_L03_0015F7C0 = 0.5f;
-float              D_L03_0015F7C4 = 1.05f;
-Q2395b0            D_L03_0015FAB0 = {0};
+s32              D_L02_0015F824 = 8;
+s32              D_L02_0015F828 = 8;
+s32              D_L02_0015F82C = 0xe08060;
+s32              D_L02_0015F830 = 0x80e08060;
+s32              D_L02_0015F84C = 0xd;
+s32              D_L02_0015F834 = -32;
+s32              D_L02_0015F838 = 8;
+s32              D_L02_0015F83C = -30;
+s32              D_L02_0015F840 = 0x15;
+s32              D_L02_0015F844 = -29;
+s32              D_L02_0015F848 = 0xa;
+char             D_L02_0015F858 = 0x27;
+char             D_L02_0015F860 = 0x2e;
+s32              D_L02_0015F8F8 = 0x50;
+s32              D_L02_0015F8FC = 0x10;
+s32              D_L02_0015F900 = -28;
+s32              D_L02_0015F904 = -44;
+s32              D_L02_0015F908 = 6;
+s32              D_L02_0015F90C = 0xff;
+s32              D_L02_0015F910 = 0x800000ff;
+s32              D_L02_0015F914 = 0x2d;
+s32              D_L03_0015FA90 = 0;
+void            *D_L03_0015FAC0 = 0;
+HudSelectorSlot *D_L03_0015F738 = D_L03_0017DBC0;
+HudSelectorSlot *D_L03_0015F740 = D_L03_0017DCA0;
+s32              D_L03_0015F718 = 0xd2;
+s32              D_L03_0015F71C = 0xc8;
+s32              D_L03_0015F72C = 0;
+int              D_L03_0015F780 = 8;
+int              D_L03_0015FA9C = 0;
+int              D_L03_0015FA98 = 0;
+int              D_L03_0015FA94 = 0;
+float            D_L03_0015F788 = 0.2f;
+float            D_L03_0015F784 = 0;
+int              D_L03_0015F720 = 0x69;
+int              D_L03_0015F724 = 0x64;
+float            D_L03_0015F78C = 74.0f;
+int              D_L03_0015F790 = 0xff8080;
+int              D_L03_0015F794 = 0x80ff8080;
+int              D_L03_0015F798 = 0;
+int              D_L03_0015F7A0 = 0x4040ff;
+int              D_L03_0015F7A4 = 0x804040ff;
+int              D_L03_0015F7A8 = 0x40e020;
+int              D_L03_0015F7B0 = 0x1e;
+int              D_L03_0015F7BC = 0;
+float            D_L03_0015F7C0 = 0.5f;
+float            D_L03_0015F7C4 = 1.05f;
+Q2395b0          D_L03_0015FAB0 = {0};
 
 s32 D_L03_0015F7F0 = 8;
 s32 D_L03_0015F7F8[1] = {0xffb0};
 
 HudCounter D_L03_0015FAB8 = {0};
 
-s32                D_L03_0015F824 = 8;
-s32                D_L03_0015F828 = 8;
-s32                D_L03_0015F82C = 0xe08060;
-s32                D_L03_0015F830 = 0x80e08060;
-s32                D_L03_0015F84C = 0xd;
-s32                D_L03_0015F834 = -32;
-s32                D_L03_0015F838 = 8;
-s32                D_L03_0015F83C = -30;
-s32                D_L03_0015F840 = 0x15;
-s32                D_L03_0015F844 = -29;
-s32                D_L03_0015F848 = 0xa;
-char               D_L03_0015F858 = 0x27;
-char               D_L03_0015F860 = 0x2e;
-s32                D_L03_0015F8F8 = 0x50;
-s32                D_L03_0015F8FC = 0x10;
-s32                D_L03_0015F900 = -28;
-s32                D_L03_0015F904 = -44;
-s32                D_L03_0015F908 = 6;
-s32                D_L03_0015F90C = 0xff;
-s32                D_L03_0015F910 = 0x800000ff;
-s32                D_L03_0015F914 = 0x2d;
-s32                D_L04_0015FA90 = 0;
-void              *D_L04_0015FAC0 = 0;
-s32                D_L04_0015F738 = 0x17dc40;
-s32                D_L04_0015F718 = 0xd2;
-s32                D_L04_0015F71C = 0xc8;
-s32                D_L04_0015F72C = 0;
-int                D_L04_0015F780 = 8;
-int                D_L04_0015FA9C = 0;
-int D_L04_0017DDB8 NOT_SDA = 3;
-int D_L04_0017DDBC NOT_SDA = 1;
-int D_L04_0017DDC4 NOT_SDA = 2;
-int                D_L04_0015FA98 = 0;
-int                D_L04_0015FA94 = 0;
-float              D_L04_0015F788 = 0.2f;
-float              D_L04_0015F784 = 0;
-int D_L04_0017DD98 NOT_SDA = 6;
-int D_L04_0017DD9C NOT_SDA = 2;
-int D_L04_0017DDA4 NOT_SDA = 4;
-int                D_L04_0015F720 = 0x69;
-int                D_L04_0015F724 = 0x64;
-float              D_L04_0015F78C = 74.0f;
-int                D_L04_0015F790 = 0xff8080;
-int                D_L04_0015F794 = 0x80ff8080;
-int                D_L04_0015F798 = 0;
-int                D_L04_0015F7A0 = 0x4040ff;
-int                D_L04_0015F7A4 = 0x804040ff;
-int                D_L04_0015F7A8 = 0x40e020;
-int                D_L04_0015F7B0 = 0x1e;
-int                D_L04_0015F7BC = 0;
-float              D_L04_0015F7C0 = 0.5f;
-float              D_L04_0015F7C4 = 1.05f;
-int                D_L04_0015F740 = 0x17dd20;
-int                D_L04_0015F7D4 = 0xe0c0a0;
-int                D_L04_0015F7D8 = 0x80e0c0a0;
-int                D_L04_0015F7DC = -8;
+s32              D_L03_0015F824 = 8;
+s32              D_L03_0015F828 = 8;
+s32              D_L03_0015F82C = 0xe08060;
+s32              D_L03_0015F830 = 0x80e08060;
+s32              D_L03_0015F84C = 0xd;
+s32              D_L03_0015F834 = -32;
+s32              D_L03_0015F838 = 8;
+s32              D_L03_0015F83C = -30;
+s32              D_L03_0015F840 = 0x15;
+s32              D_L03_0015F844 = -29;
+s32              D_L03_0015F848 = 0xa;
+char             D_L03_0015F858 = 0x27;
+char             D_L03_0015F860 = 0x2e;
+s32              D_L03_0015F8F8 = 0x50;
+s32              D_L03_0015F8FC = 0x10;
+s32              D_L03_0015F900 = -28;
+s32              D_L03_0015F904 = -44;
+s32              D_L03_0015F908 = 6;
+s32              D_L03_0015F90C = 0xff;
+s32              D_L03_0015F910 = 0x800000ff;
+s32              D_L03_0015F914 = 0x2d;
+s32              D_L04_0015FA90 = 0;
+void            *D_L04_0015FAC0 = 0;
+HudSelectorSlot *D_L04_0015F738 = D_L04_0017DC40;
+s32              D_L04_0015F718 = 0xd2;
+s32              D_L04_0015F71C = 0xc8;
+s32              D_L04_0015F72C = 0;
+int              D_L04_0015F780 = 8;
+int              D_L04_0015FA9C = 0;
+int              D_L04_0015FA98 = 0;
+int              D_L04_0015FA94 = 0;
+float            D_L04_0015F788 = 0.2f;
+float            D_L04_0015F784 = 0;
+int              D_L04_0015F720 = 0x69;
+int              D_L04_0015F724 = 0x64;
+float            D_L04_0015F78C = 74.0f;
+int              D_L04_0015F790 = 0xff8080;
+int              D_L04_0015F794 = 0x80ff8080;
+int              D_L04_0015F798 = 0;
+int              D_L04_0015F7A0 = 0x4040ff;
+int              D_L04_0015F7A4 = 0x804040ff;
+int              D_L04_0015F7A8 = 0x40e020;
+int              D_L04_0015F7B0 = 0x1e;
+int              D_L04_0015F7BC = 0;
+float            D_L04_0015F7C0 = 0.5f;
+float            D_L04_0015F7C4 = 1.05f;
+HudSelectorSlot *D_L04_0015F740 = D_L04_0017DD20;
+int              D_L04_0015F7D4 = 0xe0c0a0;
+int              D_L04_0015F7D8 = 0x80e0c0a0;
+int              D_L04_0015F7DC = -8;
 
 Ids D_L04_0015F7E0 = {
     {0x521c, 0x521d, 0x521f, 0x521e}
@@ -1746,118 +1843,110 @@ s32 D_L04_0015F7F8[1] = {0xffb0};
 
 HudCounter D_L04_0015FAB8 = {0};
 
-s32                D_L04_0015F824 = 8;
-s32                D_L04_0015F828 = 8;
-s32                D_L04_0015F82C = 0xe08060;
-s32                D_L04_0015F830 = 0x80e08060;
-s32                D_L04_0015F84C = 0xd;
-s32                D_L04_0015F834 = -32;
-s32                D_L04_0015F838 = 8;
-s32                D_L04_0015F83C = -30;
-s32                D_L04_0015F840 = 0x15;
-s32                D_L04_0015F844 = -29;
-s32                D_L04_0015F848 = 0xa;
-char               D_L04_0015F858 = 0x27;
-char               D_L04_0015F860 = 0x2e;
-s32                D_L04_0015F8F8 = 0x50;
-s32                D_L04_0015F8FC = 0x10;
-s32                D_L04_0015F900 = -28;
-s32                D_L04_0015F904 = -44;
-s32                D_L04_0015F908 = 6;
-s32                D_L04_0015F90C = 0xff;
-s32                D_L04_0015F910 = 0x800000ff;
-s32                D_L04_0015F914 = 0x2d;
-s32                D_L05_0015FAA0 = 0;
-void              *D_L05_0015FAD0 = 0;
-s32                D_L05_0015F748 = 0x17df40;
-s32                D_L05_0015F728 = 0xd2;
-s32                D_L05_0015F72C = 0xc8;
-s32                D_L05_0015F73C = 0;
-int                D_L05_0015F790 = 8;
-int                D_L05_0015FAAC = 0;
-int                D_L05_0015FAA8 = 0;
-int                D_L05_0015FAA4 = 0;
-float              D_L05_0015F798 = 0.2f;
-float              D_L05_0015F794 = 0;
-int D_L05_0017E098 NOT_SDA = 6;
-int D_L05_0017E09C NOT_SDA = 2;
-int D_L05_0017E0A4 NOT_SDA = 4;
-int                D_L05_0015F730 = 0x69;
-int                D_L05_0015F734 = 0x64;
-float              D_L05_0015F79C = 74.0f;
-int                D_L05_0015F7A0 = 0xff8080;
-int                D_L05_0015F7A4 = 0x80ff8080;
-int                D_L05_0015F7A8 = 0;
-int                D_L05_0015F7B0 = 0x4040ff;
-int                D_L05_0015F7B4 = 0x804040ff;
-int                D_L05_0015F7B8 = 0x40e020;
-int                D_L05_0015F7C0 = 0x1e;
-int                D_L05_0015F7CC = 0;
-float              D_L05_0015F7D0 = 0.5f;
-float              D_L05_0015F7D4 = 1.05f;
-Q2395b0            D_L05_0015FAC0 = {0};
+s32              D_L04_0015F824 = 8;
+s32              D_L04_0015F828 = 8;
+s32              D_L04_0015F82C = 0xe08060;
+s32              D_L04_0015F830 = 0x80e08060;
+s32              D_L04_0015F84C = 0xd;
+s32              D_L04_0015F834 = -32;
+s32              D_L04_0015F838 = 8;
+s32              D_L04_0015F83C = -30;
+s32              D_L04_0015F840 = 0x15;
+s32              D_L04_0015F844 = -29;
+s32              D_L04_0015F848 = 0xa;
+char             D_L04_0015F858 = 0x27;
+char             D_L04_0015F860 = 0x2e;
+s32              D_L04_0015F8F8 = 0x50;
+s32              D_L04_0015F8FC = 0x10;
+s32              D_L04_0015F900 = -28;
+s32              D_L04_0015F904 = -44;
+s32              D_L04_0015F908 = 6;
+s32              D_L04_0015F90C = 0xff;
+s32              D_L04_0015F910 = 0x800000ff;
+s32              D_L04_0015F914 = 0x2d;
+s32              D_L05_0015FAA0 = 0;
+void            *D_L05_0015FAD0 = 0;
+HudSelectorSlot *D_L05_0015F748 = D_L05_0017DF40;
+HudSelectorSlot *D_L05_0015F750 = D_L05_0017E020;
+s32              D_L05_0015F728 = 0xd2;
+s32              D_L05_0015F72C = 0xc8;
+s32              D_L05_0015F73C = 0;
+int              D_L05_0015F790 = 8;
+int              D_L05_0015FAAC = 0;
+int              D_L05_0015FAA8 = 0;
+int              D_L05_0015FAA4 = 0;
+float            D_L05_0015F798 = 0.2f;
+float            D_L05_0015F794 = 0;
+int              D_L05_0015F730 = 0x69;
+int              D_L05_0015F734 = 0x64;
+float            D_L05_0015F79C = 74.0f;
+int              D_L05_0015F7A0 = 0xff8080;
+int              D_L05_0015F7A4 = 0x80ff8080;
+int              D_L05_0015F7A8 = 0;
+int              D_L05_0015F7B0 = 0x4040ff;
+int              D_L05_0015F7B4 = 0x804040ff;
+int              D_L05_0015F7B8 = 0x40e020;
+int              D_L05_0015F7C0 = 0x1e;
+int              D_L05_0015F7CC = 0;
+float            D_L05_0015F7D0 = 0.5f;
+float            D_L05_0015F7D4 = 1.05f;
+Q2395b0          D_L05_0015FAC0 = {0};
 
 s32 D_L05_0015F800 = 8;
 s32 D_L05_0015F808[1] = {0xffb0};
 
 HudCounter D_L05_0015FAC8 = {0};
 
-s32                D_L05_0015F834 = 8;
-s32                D_L05_0015F838 = 8;
-s32                D_L05_0015F83C = 0xe08060;
-s32                D_L05_0015F840 = 0x80e08060;
-s32                D_L05_0015F85C = 0xd;
-s32                D_L05_0015F844 = -32;
-s32                D_L05_0015F848 = 8;
-s32                D_L05_0015F84C = -30;
-s32                D_L05_0015F850 = 0x15;
-s32                D_L05_0015F854 = -29;
-s32                D_L05_0015F858 = 0xa;
-char               D_L05_0015F868 = 0x27;
-char               D_L05_0015F870 = 0x2e;
-s32                D_L05_0015F908 = 0x50;
-s32                D_L05_0015F90C = 0x10;
-s32                D_L05_0015F910 = -28;
-s32                D_L05_0015F914 = -44;
-s32                D_L05_0015F918 = 6;
-s32                D_L05_0015F91C = 0xff;
-s32                D_L05_0015F920 = 0x800000ff;
-s32                D_L05_0015F924 = 0x2d;
-s32                D_L06_0015FA90 = 0;
-void              *D_L06_0015FAC0 = 0;
-s32                D_L06_0015F738 = 0x17e240;
-s32                D_L06_0015F718 = 0xd2;
-s32                D_L06_0015F71C = 0xc8;
-s32                D_L06_0015F72C = 0;
-int                D_L06_0015F780 = 8;
-int                D_L06_0015FA9C = 0;
-int D_L06_0017E3B8 NOT_SDA = 3;
-int D_L06_0017E3BC NOT_SDA = 1;
-int D_L06_0017E3C4 NOT_SDA = 2;
-int                D_L06_0015FA98 = 0;
-int                D_L06_0015FA94 = 0;
-float              D_L06_0015F788 = 0.2f;
-float              D_L06_0015F784 = 0;
-int D_L06_0017E398 NOT_SDA = 6;
-int D_L06_0017E39C NOT_SDA = 2;
-int D_L06_0017E3A4 NOT_SDA = 4;
-int                D_L06_0015F720 = 0x69;
-int                D_L06_0015F724 = 0x64;
-float              D_L06_0015F78C = 74.0f;
-int                D_L06_0015F790 = 0xff8080;
-int                D_L06_0015F794 = 0x80ff8080;
-int                D_L06_0015F798 = 0;
-int                D_L06_0015F7A0 = 0x4040ff;
-int                D_L06_0015F7A4 = 0x804040ff;
-int                D_L06_0015F7A8 = 0x40e020;
-int                D_L06_0015F7B0 = 0x1e;
-int                D_L06_0015F7BC = 0;
-float              D_L06_0015F7C0 = 0.5f;
-float              D_L06_0015F7C4 = 1.05f;
-int                D_L06_0015F740 = 0x17e320;
-int                D_L06_0015F7D4 = 0xe0c0a0;
-int                D_L06_0015F7D8 = 0x80e0c0a0;
-int                D_L06_0015F7DC = -8;
+s32              D_L05_0015F834 = 8;
+s32              D_L05_0015F838 = 8;
+s32              D_L05_0015F83C = 0xe08060;
+s32              D_L05_0015F840 = 0x80e08060;
+s32              D_L05_0015F85C = 0xd;
+s32              D_L05_0015F844 = -32;
+s32              D_L05_0015F848 = 8;
+s32              D_L05_0015F84C = -30;
+s32              D_L05_0015F850 = 0x15;
+s32              D_L05_0015F854 = -29;
+s32              D_L05_0015F858 = 0xa;
+char             D_L05_0015F868 = 0x27;
+char             D_L05_0015F870 = 0x2e;
+s32              D_L05_0015F908 = 0x50;
+s32              D_L05_0015F90C = 0x10;
+s32              D_L05_0015F910 = -28;
+s32              D_L05_0015F914 = -44;
+s32              D_L05_0015F918 = 6;
+s32              D_L05_0015F91C = 0xff;
+s32              D_L05_0015F920 = 0x800000ff;
+s32              D_L05_0015F924 = 0x2d;
+s32              D_L06_0015FA90 = 0;
+void            *D_L06_0015FAC0 = 0;
+HudSelectorSlot *D_L06_0015F738 = D_L06_0017E240;
+s32              D_L06_0015F718 = 0xd2;
+s32              D_L06_0015F71C = 0xc8;
+s32              D_L06_0015F72C = 0;
+int              D_L06_0015F780 = 8;
+int              D_L06_0015FA9C = 0;
+int              D_L06_0015FA98 = 0;
+int              D_L06_0015FA94 = 0;
+float            D_L06_0015F788 = 0.2f;
+float            D_L06_0015F784 = 0;
+int              D_L06_0015F720 = 0x69;
+int              D_L06_0015F724 = 0x64;
+float            D_L06_0015F78C = 74.0f;
+int              D_L06_0015F790 = 0xff8080;
+int              D_L06_0015F794 = 0x80ff8080;
+int              D_L06_0015F798 = 0;
+int              D_L06_0015F7A0 = 0x4040ff;
+int              D_L06_0015F7A4 = 0x804040ff;
+int              D_L06_0015F7A8 = 0x40e020;
+int              D_L06_0015F7B0 = 0x1e;
+int              D_L06_0015F7BC = 0;
+float            D_L06_0015F7C0 = 0.5f;
+float            D_L06_0015F7C4 = 1.05f;
+HudSelectorSlot *D_L06_0015F740 = D_L06_0017E320;
+int              D_L06_0015F7D4 = 0xe0c0a0;
+int              D_L06_0015F7D8 = 0x80e0c0a0;
+int              D_L06_0015F7DC = -8;
 
 Ids D_L06_0015F7E0 = {
     {0x521c, 0x521d, 0x521f, 0x521e}
@@ -1870,62 +1959,56 @@ s32 D_L06_0015F7F8[1] = {0xffb0};
 
 HudCounter D_L06_0015FAB8 = {0};
 
-s32                D_L06_0015F824 = 8;
-s32                D_L06_0015F828 = 8;
-s32                D_L06_0015F82C = 0xe08060;
-s32                D_L06_0015F830 = 0x80e08060;
-s32                D_L06_0015F84C = 0xd;
-s32                D_L06_0015F834 = -32;
-s32                D_L06_0015F838 = 8;
-s32                D_L06_0015F83C = -30;
-s32                D_L06_0015F840 = 0x15;
-s32                D_L06_0015F844 = -29;
-s32                D_L06_0015F848 = 0xa;
-char               D_L06_0015F858 = 0x27;
-char               D_L06_0015F860 = 0x2e;
-s32                D_L06_0015F8F8 = 0x50;
-s32                D_L06_0015F8FC = 0x10;
-s32                D_L06_0015F900 = -28;
-s32                D_L06_0015F904 = -44;
-s32                D_L06_0015F908 = 6;
-s32                D_L06_0015F90C = 0xff;
-s32                D_L06_0015F910 = 0x800000ff;
-s32                D_L06_0015F914 = 0x2d;
-s32                D_L07_0015FA90 = 0;
-void              *D_L07_0015FAC0 = 0;
-s32                D_L07_0015F738 = 0x17db40;
-s32                D_L07_0015F718 = 0xd2;
-s32                D_L07_0015F71C = 0xc8;
-s32                D_L07_0015F72C = 0;
-int                D_L07_0015F780 = 8;
-int                D_L07_0015FA9C = 0;
-int D_L07_0017DCB8 NOT_SDA = 3;
-int D_L07_0017DCBC NOT_SDA = 1;
-int D_L07_0017DCC4 NOT_SDA = 2;
-int                D_L07_0015FA98 = 0;
-int                D_L07_0015FA94 = 0;
-float              D_L07_0015F788 = 0.2f;
-float              D_L07_0015F784 = 0;
-int D_L07_0017DC98 NOT_SDA = 6;
-int D_L07_0017DC9C NOT_SDA = 2;
-int D_L07_0017DCA4 NOT_SDA = 4;
-int                D_L07_0015F720 = 0x69;
-int                D_L07_0015F724 = 0x64;
-float              D_L07_0015F78C = 74.0f;
-int                D_L07_0015F790 = 0xff8080;
-int                D_L07_0015F794 = 0x80ff8080;
-int                D_L07_0015F798 = 0;
-int                D_L07_0015F7A0 = 0x4040ff;
-int                D_L07_0015F7A4 = 0x804040ff;
-int                D_L07_0015F7A8 = 0x40e020;
-int                D_L07_0015F7B0 = 0x1e;
-int                D_L07_0015F7BC = 0;
-float              D_L07_0015F7C0 = 0.5f;
-float              D_L07_0015F7C4 = 1.05f;
-int                D_L07_0015F740 = 0x17dc20;
-int                D_L07_0015F7D4 = 0xe0c0a0;
-int                D_L07_0015F7D8 = 0x80e0c0a0;
-int                D_L07_0015F7DC = -8;
+s32              D_L06_0015F824 = 8;
+s32              D_L06_0015F828 = 8;
+s32              D_L06_0015F82C = 0xe08060;
+s32              D_L06_0015F830 = 0x80e08060;
+s32              D_L06_0015F84C = 0xd;
+s32              D_L06_0015F834 = -32;
+s32              D_L06_0015F838 = 8;
+s32              D_L06_0015F83C = -30;
+s32              D_L06_0015F840 = 0x15;
+s32              D_L06_0015F844 = -29;
+s32              D_L06_0015F848 = 0xa;
+char             D_L06_0015F858 = 0x27;
+char             D_L06_0015F860 = 0x2e;
+s32              D_L06_0015F8F8 = 0x50;
+s32              D_L06_0015F8FC = 0x10;
+s32              D_L06_0015F900 = -28;
+s32              D_L06_0015F904 = -44;
+s32              D_L06_0015F908 = 6;
+s32              D_L06_0015F90C = 0xff;
+s32              D_L06_0015F910 = 0x800000ff;
+s32              D_L06_0015F914 = 0x2d;
+s32              D_L07_0015FA90 = 0;
+void            *D_L07_0015FAC0 = 0;
+HudSelectorSlot *D_L07_0015F738 = D_L07_0017DB40;
+s32              D_L07_0015F718 = 0xd2;
+s32              D_L07_0015F71C = 0xc8;
+s32              D_L07_0015F72C = 0;
+int              D_L07_0015F780 = 8;
+int              D_L07_0015FA9C = 0;
+int              D_L07_0015FA98 = 0;
+int              D_L07_0015FA94 = 0;
+float            D_L07_0015F788 = 0.2f;
+float            D_L07_0015F784 = 0;
+int              D_L07_0015F720 = 0x69;
+int              D_L07_0015F724 = 0x64;
+float            D_L07_0015F78C = 74.0f;
+int              D_L07_0015F790 = 0xff8080;
+int              D_L07_0015F794 = 0x80ff8080;
+int              D_L07_0015F798 = 0;
+int              D_L07_0015F7A0 = 0x4040ff;
+int              D_L07_0015F7A4 = 0x804040ff;
+int              D_L07_0015F7A8 = 0x40e020;
+int              D_L07_0015F7B0 = 0x1e;
+int              D_L07_0015F7BC = 0;
+float            D_L07_0015F7C0 = 0.5f;
+float            D_L07_0015F7C4 = 1.05f;
+HudSelectorSlot *D_L07_0015F740 = D_L07_0017DC20;
+int              D_L07_0015F7D4 = 0xe0c0a0;
+int              D_L07_0015F7D8 = 0x80e0c0a0;
+int              D_L07_0015F7DC = -8;
 
 Ids D_L07_0015F7E0 = {
     {0x521c, 0x521d, 0x521f, 0x521e}
@@ -1938,118 +2021,110 @@ s32 D_L07_0015F7F8[1] = {0xffb0};
 
 HudCounter D_L07_0015FAB8 = {0};
 
-s32                D_L07_0015F824 = 8;
-s32                D_L07_0015F828 = 8;
-s32                D_L07_0015F82C = 0xe08060;
-s32                D_L07_0015F830 = 0x80e08060;
-s32                D_L07_0015F84C = 0xd;
-s32                D_L07_0015F834 = -32;
-s32                D_L07_0015F838 = 8;
-s32                D_L07_0015F83C = -30;
-s32                D_L07_0015F840 = 0x15;
-s32                D_L07_0015F844 = -29;
-s32                D_L07_0015F848 = 0xa;
-char               D_L07_0015F858 = 0x27;
-char               D_L07_0015F860 = 0x2e;
-s32                D_L07_0015F8F8 = 0x50;
-s32                D_L07_0015F8FC = 0x10;
-s32                D_L07_0015F900 = -28;
-s32                D_L07_0015F904 = -44;
-s32                D_L07_0015F908 = 6;
-s32                D_L07_0015F90C = 0xff;
-s32                D_L07_0015F910 = 0x800000ff;
-s32                D_L07_0015F914 = 0x2d;
-s32                D_L08_0015FA90 = 0;
-void              *D_L08_0015FAC0 = 0;
-s32                D_L08_0015F738 = 0x17e2c0;
-s32                D_L08_0015F718 = 0xd2;
-s32                D_L08_0015F71C = 0xc8;
-s32                D_L08_0015F72C = 0;
-int                D_L08_0015F780 = 8;
-int                D_L08_0015FA9C = 0;
-int                D_L08_0015FA98 = 0;
-int                D_L08_0015FA94 = 0;
-float              D_L08_0015F788 = 0.2f;
-float              D_L08_0015F784 = 0;
-int D_L08_0017E418 NOT_SDA = 6;
-int D_L08_0017E41C NOT_SDA = 2;
-int D_L08_0017E424 NOT_SDA = 4;
-int                D_L08_0015F720 = 0x69;
-int                D_L08_0015F724 = 0x64;
-float              D_L08_0015F78C = 74.0f;
-int                D_L08_0015F790 = 0xff8080;
-int                D_L08_0015F794 = 0x80ff8080;
-int                D_L08_0015F798 = 0;
-int                D_L08_0015F7A0 = 0x4040ff;
-int                D_L08_0015F7A4 = 0x804040ff;
-int                D_L08_0015F7A8 = 0x40e020;
-int                D_L08_0015F7B0 = 0x1e;
-int                D_L08_0015F7BC = 0;
-float              D_L08_0015F7C0 = 0.5f;
-float              D_L08_0015F7C4 = 1.05f;
-Q2395b0            D_L08_0015FAB0 = {0};
+s32              D_L07_0015F824 = 8;
+s32              D_L07_0015F828 = 8;
+s32              D_L07_0015F82C = 0xe08060;
+s32              D_L07_0015F830 = 0x80e08060;
+s32              D_L07_0015F84C = 0xd;
+s32              D_L07_0015F834 = -32;
+s32              D_L07_0015F838 = 8;
+s32              D_L07_0015F83C = -30;
+s32              D_L07_0015F840 = 0x15;
+s32              D_L07_0015F844 = -29;
+s32              D_L07_0015F848 = 0xa;
+char             D_L07_0015F858 = 0x27;
+char             D_L07_0015F860 = 0x2e;
+s32              D_L07_0015F8F8 = 0x50;
+s32              D_L07_0015F8FC = 0x10;
+s32              D_L07_0015F900 = -28;
+s32              D_L07_0015F904 = -44;
+s32              D_L07_0015F908 = 6;
+s32              D_L07_0015F90C = 0xff;
+s32              D_L07_0015F910 = 0x800000ff;
+s32              D_L07_0015F914 = 0x2d;
+s32              D_L08_0015FA90 = 0;
+void            *D_L08_0015FAC0 = 0;
+HudSelectorSlot *D_L08_0015F738 = D_L08_0017E2C0;
+HudSelectorSlot *D_L08_0015F740 = D_L08_0017E3A0;
+s32              D_L08_0015F718 = 0xd2;
+s32              D_L08_0015F71C = 0xc8;
+s32              D_L08_0015F72C = 0;
+int              D_L08_0015F780 = 8;
+int              D_L08_0015FA9C = 0;
+int              D_L08_0015FA98 = 0;
+int              D_L08_0015FA94 = 0;
+float            D_L08_0015F788 = 0.2f;
+float            D_L08_0015F784 = 0;
+int              D_L08_0015F720 = 0x69;
+int              D_L08_0015F724 = 0x64;
+float            D_L08_0015F78C = 74.0f;
+int              D_L08_0015F790 = 0xff8080;
+int              D_L08_0015F794 = 0x80ff8080;
+int              D_L08_0015F798 = 0;
+int              D_L08_0015F7A0 = 0x4040ff;
+int              D_L08_0015F7A4 = 0x804040ff;
+int              D_L08_0015F7A8 = 0x40e020;
+int              D_L08_0015F7B0 = 0x1e;
+int              D_L08_0015F7BC = 0;
+float            D_L08_0015F7C0 = 0.5f;
+float            D_L08_0015F7C4 = 1.05f;
+Q2395b0          D_L08_0015FAB0 = {0};
 
 s32 D_L08_0015F7F0 = 8;
 s32 D_L08_0015F7F8[1] = {0xffb0};
 
 HudCounter D_L08_0015FAB8 = {0};
 
-s32                D_L08_0015F824 = 8;
-s32                D_L08_0015F828 = 8;
-s32                D_L08_0015F82C = 0xe08060;
-s32                D_L08_0015F830 = 0x80e08060;
-s32                D_L08_0015F84C = 0xd;
-s32                D_L08_0015F834 = -32;
-s32                D_L08_0015F838 = 8;
-s32                D_L08_0015F83C = -30;
-s32                D_L08_0015F840 = 0x15;
-s32                D_L08_0015F844 = -29;
-s32                D_L08_0015F848 = 0xa;
-char               D_L08_0015F858 = 0x27;
-char               D_L08_0015F860 = 0x2e;
-s32                D_L08_0015F8F8 = 0x50;
-s32                D_L08_0015F8FC = 0x10;
-s32                D_L08_0015F900 = -28;
-s32                D_L08_0015F904 = -44;
-s32                D_L08_0015F908 = 6;
-s32                D_L08_0015F90C = 0xff;
-s32                D_L08_0015F910 = 0x800000ff;
-s32                D_L08_0015F914 = 0x2d;
-s32                D_L09_0015FA90 = 0;
-void              *D_L09_0015FAC0 = 0;
-s32                D_L09_0015F738 = 0x17dc40;
-s32                D_L09_0015F718 = 0xd2;
-s32                D_L09_0015F71C = 0xc8;
-s32                D_L09_0015F72C = 0;
-int                D_L09_0015F780 = 8;
-int                D_L09_0015FA9C = 0;
-int D_L09_0017DDB8 NOT_SDA = 3;
-int D_L09_0017DDBC NOT_SDA = 1;
-int D_L09_0017DDC4 NOT_SDA = 2;
-int                D_L09_0015FA98 = 0;
-int                D_L09_0015FA94 = 0;
-float              D_L09_0015F788 = 0.2f;
-float              D_L09_0015F784 = 0;
-int D_L09_0017DD98 NOT_SDA = 6;
-int D_L09_0017DD9C NOT_SDA = 2;
-int D_L09_0017DDA4 NOT_SDA = 4;
-int                D_L09_0015F720 = 0x69;
-int                D_L09_0015F724 = 0x64;
-float              D_L09_0015F78C = 74.0f;
-int                D_L09_0015F790 = 0xff8080;
-int                D_L09_0015F794 = 0x80ff8080;
-int                D_L09_0015F798 = 0;
-int                D_L09_0015F7A0 = 0x4040ff;
-int                D_L09_0015F7A4 = 0x804040ff;
-int                D_L09_0015F7A8 = 0x40e020;
-int                D_L09_0015F7B0 = 0x1e;
-int                D_L09_0015F7BC = 0;
-float              D_L09_0015F7C0 = 0.5f;
-float              D_L09_0015F7C4 = 1.05f;
-int                D_L09_0015F740 = 0x17dd20;
-int                D_L09_0015F7D4 = 0xe0c0a0;
-int                D_L09_0015F7D8 = 0x80e0c0a0;
-int                D_L09_0015F7DC = -8;
+s32              D_L08_0015F824 = 8;
+s32              D_L08_0015F828 = 8;
+s32              D_L08_0015F82C = 0xe08060;
+s32              D_L08_0015F830 = 0x80e08060;
+s32              D_L08_0015F84C = 0xd;
+s32              D_L08_0015F834 = -32;
+s32              D_L08_0015F838 = 8;
+s32              D_L08_0015F83C = -30;
+s32              D_L08_0015F840 = 0x15;
+s32              D_L08_0015F844 = -29;
+s32              D_L08_0015F848 = 0xa;
+char             D_L08_0015F858 = 0x27;
+char             D_L08_0015F860 = 0x2e;
+s32              D_L08_0015F8F8 = 0x50;
+s32              D_L08_0015F8FC = 0x10;
+s32              D_L08_0015F900 = -28;
+s32              D_L08_0015F904 = -44;
+s32              D_L08_0015F908 = 6;
+s32              D_L08_0015F90C = 0xff;
+s32              D_L08_0015F910 = 0x800000ff;
+s32              D_L08_0015F914 = 0x2d;
+s32              D_L09_0015FA90 = 0;
+void            *D_L09_0015FAC0 = 0;
+HudSelectorSlot *D_L09_0015F738 = D_L09_0017DC40;
+s32              D_L09_0015F718 = 0xd2;
+s32              D_L09_0015F71C = 0xc8;
+s32              D_L09_0015F72C = 0;
+int              D_L09_0015F780 = 8;
+int              D_L09_0015FA9C = 0;
+int              D_L09_0015FA98 = 0;
+int              D_L09_0015FA94 = 0;
+float            D_L09_0015F788 = 0.2f;
+float            D_L09_0015F784 = 0;
+int              D_L09_0015F720 = 0x69;
+int              D_L09_0015F724 = 0x64;
+float            D_L09_0015F78C = 74.0f;
+int              D_L09_0015F790 = 0xff8080;
+int              D_L09_0015F794 = 0x80ff8080;
+int              D_L09_0015F798 = 0;
+int              D_L09_0015F7A0 = 0x4040ff;
+int              D_L09_0015F7A4 = 0x804040ff;
+int              D_L09_0015F7A8 = 0x40e020;
+int              D_L09_0015F7B0 = 0x1e;
+int              D_L09_0015F7BC = 0;
+float            D_L09_0015F7C0 = 0.5f;
+float            D_L09_0015F7C4 = 1.05f;
+HudSelectorSlot *D_L09_0015F740 = D_L09_0017DD20;
+int              D_L09_0015F7D4 = 0xe0c0a0;
+int              D_L09_0015F7D8 = 0x80e0c0a0;
+int              D_L09_0015F7DC = -8;
 
 Ids D_L09_0015F7E0 = {
     {0x521c, 0x521d, 0x521f, 0x521e}
@@ -2062,62 +2137,56 @@ s32 D_L09_0015F7F8[1] = {0xffb0};
 
 HudCounter D_L09_0015FAB8 = {0};
 
-s32                D_L09_0015F824 = 8;
-s32                D_L09_0015F828 = 8;
-s32                D_L09_0015F82C = 0xe08060;
-s32                D_L09_0015F830 = 0x80e08060;
-s32                D_L09_0015F84C = 0xd;
-s32                D_L09_0015F834 = -32;
-s32                D_L09_0015F838 = 8;
-s32                D_L09_0015F83C = -30;
-s32                D_L09_0015F840 = 0x15;
-s32                D_L09_0015F844 = -29;
-s32                D_L09_0015F848 = 0xa;
-char               D_L09_0015F858 = 0x27;
-char               D_L09_0015F860 = 0x2e;
-s32                D_L09_0015F8F8 = 0x50;
-s32                D_L09_0015F8FC = 0x10;
-s32                D_L09_0015F900 = -28;
-s32                D_L09_0015F904 = -44;
-s32                D_L09_0015F908 = 6;
-s32                D_L09_0015F90C = 0xff;
-s32                D_L09_0015F910 = 0x800000ff;
-s32                D_L09_0015F914 = 0x2d;
-s32                D_L10_0015FA90 = 0;
-void              *D_L10_0015FAC0 = 0;
-s32                D_L10_0015F738 = 0x17df40;
-s32                D_L10_0015F718 = 0xd2;
-s32                D_L10_0015F71C = 0xc8;
-s32                D_L10_0015F72C = 0;
-int                D_L10_0015F780 = 8;
-int                D_L10_0015FA9C = 0;
-int D_L10_0017E0B8 NOT_SDA = 3;
-int D_L10_0017E0BC NOT_SDA = 1;
-int D_L10_0017E0C4 NOT_SDA = 2;
-int                D_L10_0015FA98 = 0;
-int                D_L10_0015FA94 = 0;
-float              D_L10_0015F788 = 0.2f;
-float              D_L10_0015F784 = 0;
-int D_L10_0017E098 NOT_SDA = 6;
-int D_L10_0017E09C NOT_SDA = 2;
-int D_L10_0017E0A4 NOT_SDA = 4;
-int                D_L10_0015F720 = 0x69;
-int                D_L10_0015F724 = 0x64;
-float              D_L10_0015F78C = 74.0f;
-int                D_L10_0015F790 = 0xff8080;
-int                D_L10_0015F794 = 0x80ff8080;
-int                D_L10_0015F798 = 0;
-int                D_L10_0015F7A0 = 0x4040ff;
-int                D_L10_0015F7A4 = 0x804040ff;
-int                D_L10_0015F7A8 = 0x40e020;
-int                D_L10_0015F7B0 = 0x1e;
-int                D_L10_0015F7BC = 0;
-float              D_L10_0015F7C0 = 0.5f;
-float              D_L10_0015F7C4 = 1.05f;
-int                D_L10_0015F740 = 0x17e020;
-int                D_L10_0015F7D4 = 0xe0c0a0;
-int                D_L10_0015F7D8 = 0x80e0c0a0;
-int                D_L10_0015F7DC = -8;
+s32              D_L09_0015F824 = 8;
+s32              D_L09_0015F828 = 8;
+s32              D_L09_0015F82C = 0xe08060;
+s32              D_L09_0015F830 = 0x80e08060;
+s32              D_L09_0015F84C = 0xd;
+s32              D_L09_0015F834 = -32;
+s32              D_L09_0015F838 = 8;
+s32              D_L09_0015F83C = -30;
+s32              D_L09_0015F840 = 0x15;
+s32              D_L09_0015F844 = -29;
+s32              D_L09_0015F848 = 0xa;
+char             D_L09_0015F858 = 0x27;
+char             D_L09_0015F860 = 0x2e;
+s32              D_L09_0015F8F8 = 0x50;
+s32              D_L09_0015F8FC = 0x10;
+s32              D_L09_0015F900 = -28;
+s32              D_L09_0015F904 = -44;
+s32              D_L09_0015F908 = 6;
+s32              D_L09_0015F90C = 0xff;
+s32              D_L09_0015F910 = 0x800000ff;
+s32              D_L09_0015F914 = 0x2d;
+s32              D_L10_0015FA90 = 0;
+void            *D_L10_0015FAC0 = 0;
+HudSelectorSlot *D_L10_0015F738 = D_L10_0017DF40;
+s32              D_L10_0015F718 = 0xd2;
+s32              D_L10_0015F71C = 0xc8;
+s32              D_L10_0015F72C = 0;
+int              D_L10_0015F780 = 8;
+int              D_L10_0015FA9C = 0;
+int              D_L10_0015FA98 = 0;
+int              D_L10_0015FA94 = 0;
+float            D_L10_0015F788 = 0.2f;
+float            D_L10_0015F784 = 0;
+int              D_L10_0015F720 = 0x69;
+int              D_L10_0015F724 = 0x64;
+float            D_L10_0015F78C = 74.0f;
+int              D_L10_0015F790 = 0xff8080;
+int              D_L10_0015F794 = 0x80ff8080;
+int              D_L10_0015F798 = 0;
+int              D_L10_0015F7A0 = 0x4040ff;
+int              D_L10_0015F7A4 = 0x804040ff;
+int              D_L10_0015F7A8 = 0x40e020;
+int              D_L10_0015F7B0 = 0x1e;
+int              D_L10_0015F7BC = 0;
+float            D_L10_0015F7C0 = 0.5f;
+float            D_L10_0015F7C4 = 1.05f;
+HudSelectorSlot *D_L10_0015F740 = D_L10_0017E020;
+int              D_L10_0015F7D4 = 0xe0c0a0;
+int              D_L10_0015F7D8 = 0x80e0c0a0;
+int              D_L10_0015F7DC = -8;
 
 Ids D_L10_0015F7E0 = {
     {0x521c, 0x521d, 0x521f, 0x521e}
@@ -2130,174 +2199,164 @@ s32 D_L10_0015F7F8[1] = {0xffb0};
 
 HudCounter D_L10_0015FAB8 = {0};
 
-s32                D_L10_0015F824 = 8;
-s32                D_L10_0015F828 = 8;
-s32                D_L10_0015F82C = 0xe08060;
-s32                D_L10_0015F830 = 0x80e08060;
-s32                D_L10_0015F84C = 0xd;
-s32                D_L10_0015F834 = -32;
-s32                D_L10_0015F838 = 8;
-s32                D_L10_0015F83C = -30;
-s32                D_L10_0015F840 = 0x15;
-s32                D_L10_0015F844 = -29;
-s32                D_L10_0015F848 = 0xa;
-char               D_L10_0015F858 = 0x27;
-char               D_L10_0015F860 = 0x2e;
-s32                D_L10_0015F8F8 = 0x50;
-s32                D_L10_0015F8FC = 0x10;
-s32                D_L10_0015F900 = -28;
-s32                D_L10_0015F904 = -44;
-s32                D_L10_0015F908 = 6;
-s32                D_L10_0015F90C = 0xff;
-s32                D_L10_0015F910 = 0x800000ff;
-s32                D_L10_0015F914 = 0x2d;
-s32                D_L11_0015FA90 = 0;
-void              *D_L11_0015FAC0 = 0;
-s32                D_L11_0015F738 = 0x17e4c0;
-s32                D_L11_0015F718 = 0xd2;
-s32                D_L11_0015F71C = 0xc8;
-s32                D_L11_0015F72C = 0;
-int                D_L11_0015F780 = 8;
-int                D_L11_0015FA9C = 0;
-int                D_L11_0015FA98 = 0;
-int                D_L11_0015FA94 = 0;
-float              D_L11_0015F788 = 0.2f;
-float              D_L11_0015F784 = 0;
-int D_L11_0017E618 NOT_SDA = 6;
-int D_L11_0017E61C NOT_SDA = 2;
-int D_L11_0017E624 NOT_SDA = 4;
-int                D_L11_0015F720 = 0x69;
-int                D_L11_0015F724 = 0x64;
-float              D_L11_0015F78C = 74.0f;
-int                D_L11_0015F790 = 0xff8080;
-int                D_L11_0015F794 = 0x80ff8080;
-int                D_L11_0015F798 = 0;
-int                D_L11_0015F7A0 = 0x4040ff;
-int                D_L11_0015F7A4 = 0x804040ff;
-int                D_L11_0015F7A8 = 0x40e020;
-int                D_L11_0015F7B0 = 0x1e;
-int                D_L11_0015F7BC = 0;
-float              D_L11_0015F7C0 = 0.5f;
-float              D_L11_0015F7C4 = 1.05f;
-Q2395b0            D_L11_0015FAB0 = {0};
+s32              D_L10_0015F824 = 8;
+s32              D_L10_0015F828 = 8;
+s32              D_L10_0015F82C = 0xe08060;
+s32              D_L10_0015F830 = 0x80e08060;
+s32              D_L10_0015F84C = 0xd;
+s32              D_L10_0015F834 = -32;
+s32              D_L10_0015F838 = 8;
+s32              D_L10_0015F83C = -30;
+s32              D_L10_0015F840 = 0x15;
+s32              D_L10_0015F844 = -29;
+s32              D_L10_0015F848 = 0xa;
+char             D_L10_0015F858 = 0x27;
+char             D_L10_0015F860 = 0x2e;
+s32              D_L10_0015F8F8 = 0x50;
+s32              D_L10_0015F8FC = 0x10;
+s32              D_L10_0015F900 = -28;
+s32              D_L10_0015F904 = -44;
+s32              D_L10_0015F908 = 6;
+s32              D_L10_0015F90C = 0xff;
+s32              D_L10_0015F910 = 0x800000ff;
+s32              D_L10_0015F914 = 0x2d;
+s32              D_L11_0015FA90 = 0;
+void            *D_L11_0015FAC0 = 0;
+HudSelectorSlot *D_L11_0015F738 = D_L11_0017E4C0;
+HudSelectorSlot *D_L11_0015F740 = D_L11_0017E5A0;
+s32              D_L11_0015F718 = 0xd2;
+s32              D_L11_0015F71C = 0xc8;
+s32              D_L11_0015F72C = 0;
+int              D_L11_0015F780 = 8;
+int              D_L11_0015FA9C = 0;
+int              D_L11_0015FA98 = 0;
+int              D_L11_0015FA94 = 0;
+float            D_L11_0015F788 = 0.2f;
+float            D_L11_0015F784 = 0;
+int              D_L11_0015F720 = 0x69;
+int              D_L11_0015F724 = 0x64;
+float            D_L11_0015F78C = 74.0f;
+int              D_L11_0015F790 = 0xff8080;
+int              D_L11_0015F794 = 0x80ff8080;
+int              D_L11_0015F798 = 0;
+int              D_L11_0015F7A0 = 0x4040ff;
+int              D_L11_0015F7A4 = 0x804040ff;
+int              D_L11_0015F7A8 = 0x40e020;
+int              D_L11_0015F7B0 = 0x1e;
+int              D_L11_0015F7BC = 0;
+float            D_L11_0015F7C0 = 0.5f;
+float            D_L11_0015F7C4 = 1.05f;
+Q2395b0          D_L11_0015FAB0 = {0};
 
 s32 D_L11_0015F7F0 = 8;
 s32 D_L11_0015F7F8[1] = {0xffb0};
 
 HudCounter D_L11_0015FAB8 = {0};
 
-s32                D_L11_0015F824 = 8;
-s32                D_L11_0015F828 = 8;
-s32                D_L11_0015F82C = 0xe08060;
-s32                D_L11_0015F830 = 0x80e08060;
-s32                D_L11_0015F84C = 0xd;
-s32                D_L11_0015F834 = -32;
-s32                D_L11_0015F838 = 8;
-s32                D_L11_0015F83C = -30;
-s32                D_L11_0015F840 = 0x15;
-s32                D_L11_0015F844 = -29;
-s32                D_L11_0015F848 = 0xa;
-char               D_L11_0015F858 = 0x27;
-char               D_L11_0015F860 = 0x2e;
-s32                D_L11_0015F8F8 = 0x50;
-s32                D_L11_0015F8FC = 0x10;
-s32                D_L11_0015F900 = -28;
-s32                D_L11_0015F904 = -44;
-s32                D_L11_0015F908 = 6;
-s32                D_L11_0015F90C = 0xff;
-s32                D_L11_0015F910 = 0x800000ff;
-s32                D_L11_0015F914 = 0x2d;
-s32                D_L12_0015FA90 = 0;
-void              *D_L12_0015FAC0 = 0;
-s32                D_L12_0015F738 = 0x17df40;
-s32                D_L12_0015F718 = 0xd2;
-s32                D_L12_0015F71C = 0xc8;
-s32                D_L12_0015F72C = 0;
-int                D_L12_0015F780 = 8;
-int                D_L12_0015FA9C = 0;
-int                D_L12_0015FA98 = 0;
-int                D_L12_0015FA94 = 0;
-float              D_L12_0015F788 = 0.2f;
-float              D_L12_0015F784 = 0;
-int D_L12_0017E098 NOT_SDA = 6;
-int D_L12_0017E09C NOT_SDA = 2;
-int D_L12_0017E0A4 NOT_SDA = 4;
-int                D_L12_0015F720 = 0x69;
-int                D_L12_0015F724 = 0x64;
-float              D_L12_0015F78C = 74.0f;
-int                D_L12_0015F790 = 0xff8080;
-int                D_L12_0015F794 = 0x80ff8080;
-int                D_L12_0015F798 = 0;
-int                D_L12_0015F7A0 = 0x4040ff;
-int                D_L12_0015F7A4 = 0x804040ff;
-int                D_L12_0015F7A8 = 0x40e020;
-int                D_L12_0015F7B0 = 0x1e;
-int                D_L12_0015F7BC = 0;
-float              D_L12_0015F7C0 = 0.5f;
-float              D_L12_0015F7C4 = 1.05f;
-Q2395b0            D_L12_0015FAB0 = {0};
+s32              D_L11_0015F824 = 8;
+s32              D_L11_0015F828 = 8;
+s32              D_L11_0015F82C = 0xe08060;
+s32              D_L11_0015F830 = 0x80e08060;
+s32              D_L11_0015F84C = 0xd;
+s32              D_L11_0015F834 = -32;
+s32              D_L11_0015F838 = 8;
+s32              D_L11_0015F83C = -30;
+s32              D_L11_0015F840 = 0x15;
+s32              D_L11_0015F844 = -29;
+s32              D_L11_0015F848 = 0xa;
+char             D_L11_0015F858 = 0x27;
+char             D_L11_0015F860 = 0x2e;
+s32              D_L11_0015F8F8 = 0x50;
+s32              D_L11_0015F8FC = 0x10;
+s32              D_L11_0015F900 = -28;
+s32              D_L11_0015F904 = -44;
+s32              D_L11_0015F908 = 6;
+s32              D_L11_0015F90C = 0xff;
+s32              D_L11_0015F910 = 0x800000ff;
+s32              D_L11_0015F914 = 0x2d;
+s32              D_L12_0015FA90 = 0;
+void            *D_L12_0015FAC0 = 0;
+HudSelectorSlot *D_L12_0015F738 = D_L12_0017DF40;
+HudSelectorSlot *D_L12_0015F740 = D_L12_0017E020;
+s32              D_L12_0015F718 = 0xd2;
+s32              D_L12_0015F71C = 0xc8;
+s32              D_L12_0015F72C = 0;
+int              D_L12_0015F780 = 8;
+int              D_L12_0015FA9C = 0;
+int              D_L12_0015FA98 = 0;
+int              D_L12_0015FA94 = 0;
+float            D_L12_0015F788 = 0.2f;
+float            D_L12_0015F784 = 0;
+int              D_L12_0015F720 = 0x69;
+int              D_L12_0015F724 = 0x64;
+float            D_L12_0015F78C = 74.0f;
+int              D_L12_0015F790 = 0xff8080;
+int              D_L12_0015F794 = 0x80ff8080;
+int              D_L12_0015F798 = 0;
+int              D_L12_0015F7A0 = 0x4040ff;
+int              D_L12_0015F7A4 = 0x804040ff;
+int              D_L12_0015F7A8 = 0x40e020;
+int              D_L12_0015F7B0 = 0x1e;
+int              D_L12_0015F7BC = 0;
+float            D_L12_0015F7C0 = 0.5f;
+float            D_L12_0015F7C4 = 1.05f;
+Q2395b0          D_L12_0015FAB0 = {0};
 
 s32 D_L12_0015F7F0 = 8;
 s32 D_L12_0015F7F8[1] = {0xffb0};
 
 HudCounter D_L12_0015FAB8 = {0};
 
-s32                D_L12_0015F824 = 8;
-s32                D_L12_0015F828 = 8;
-s32                D_L12_0015F82C = 0xe08060;
-s32                D_L12_0015F830 = 0x80e08060;
-s32                D_L12_0015F84C = 0xd;
-s32                D_L12_0015F834 = -32;
-s32                D_L12_0015F838 = 8;
-s32                D_L12_0015F83C = -30;
-s32                D_L12_0015F840 = 0x15;
-s32                D_L12_0015F844 = -29;
-s32                D_L12_0015F848 = 0xa;
-char               D_L12_0015F858 = 0x27;
-char               D_L12_0015F860 = 0x2e;
-s32                D_L12_0015F8F8 = 0x50;
-s32                D_L12_0015F8FC = 0x10;
-s32                D_L12_0015F900 = -28;
-s32                D_L12_0015F904 = -44;
-s32                D_L12_0015F908 = 6;
-s32                D_L12_0015F90C = 0xff;
-s32                D_L12_0015F910 = 0x800000ff;
-s32                D_L12_0015F914 = 0x2d;
-s32                D_L13_0015FA90 = 0;
-void              *D_L13_0015FAC0 = 0;
-s32                D_L13_0015F738 = 0x17ddc0;
-s32                D_L13_0015F718 = 0xd2;
-s32                D_L13_0015F71C = 0xc8;
-s32                D_L13_0015F72C = 0;
-int                D_L13_0015F780 = 8;
-int                D_L13_0015FA9C = 0;
-int D_L13_0017DF38 NOT_SDA = 3;
-int D_L13_0017DF3C NOT_SDA = 1;
-int D_L13_0017DF44 NOT_SDA = 2;
-int                D_L13_0015FA98 = 0;
-int                D_L13_0015FA94 = 0;
-float              D_L13_0015F788 = 0.2f;
-float              D_L13_0015F784 = 0;
-int D_L13_0017DF18 NOT_SDA = 6;
-int D_L13_0017DF1C NOT_SDA = 2;
-int D_L13_0017DF24 NOT_SDA = 4;
-int                D_L13_0015F720 = 0x69;
-int                D_L13_0015F724 = 0x64;
-float              D_L13_0015F78C = 74.0f;
-int                D_L13_0015F790 = 0xff8080;
-int                D_L13_0015F794 = 0x80ff8080;
-int                D_L13_0015F798 = 0;
-int                D_L13_0015F7A0 = 0x4040ff;
-int                D_L13_0015F7A4 = 0x804040ff;
-int                D_L13_0015F7A8 = 0x40e020;
-int                D_L13_0015F7B0 = 0x1e;
-int                D_L13_0015F7BC = 0;
-float              D_L13_0015F7C0 = 0.5f;
-float              D_L13_0015F7C4 = 1.05f;
-int                D_L13_0015F740 = 0x17dea0;
-int                D_L13_0015F7D4 = 0xe0c0a0;
-int                D_L13_0015F7D8 = 0x80e0c0a0;
-int                D_L13_0015F7DC = -8;
+s32              D_L12_0015F824 = 8;
+s32              D_L12_0015F828 = 8;
+s32              D_L12_0015F82C = 0xe08060;
+s32              D_L12_0015F830 = 0x80e08060;
+s32              D_L12_0015F84C = 0xd;
+s32              D_L12_0015F834 = -32;
+s32              D_L12_0015F838 = 8;
+s32              D_L12_0015F83C = -30;
+s32              D_L12_0015F840 = 0x15;
+s32              D_L12_0015F844 = -29;
+s32              D_L12_0015F848 = 0xa;
+char             D_L12_0015F858 = 0x27;
+char             D_L12_0015F860 = 0x2e;
+s32              D_L12_0015F8F8 = 0x50;
+s32              D_L12_0015F8FC = 0x10;
+s32              D_L12_0015F900 = -28;
+s32              D_L12_0015F904 = -44;
+s32              D_L12_0015F908 = 6;
+s32              D_L12_0015F90C = 0xff;
+s32              D_L12_0015F910 = 0x800000ff;
+s32              D_L12_0015F914 = 0x2d;
+s32              D_L13_0015FA90 = 0;
+void            *D_L13_0015FAC0 = 0;
+HudSelectorSlot *D_L13_0015F738 = D_L13_0017DDC0;
+s32              D_L13_0015F718 = 0xd2;
+s32              D_L13_0015F71C = 0xc8;
+s32              D_L13_0015F72C = 0;
+int              D_L13_0015F780 = 8;
+int              D_L13_0015FA9C = 0;
+int              D_L13_0015FA98 = 0;
+int              D_L13_0015FA94 = 0;
+float            D_L13_0015F788 = 0.2f;
+float            D_L13_0015F784 = 0;
+int              D_L13_0015F720 = 0x69;
+int              D_L13_0015F724 = 0x64;
+float            D_L13_0015F78C = 74.0f;
+int              D_L13_0015F790 = 0xff8080;
+int              D_L13_0015F794 = 0x80ff8080;
+int              D_L13_0015F798 = 0;
+int              D_L13_0015F7A0 = 0x4040ff;
+int              D_L13_0015F7A4 = 0x804040ff;
+int              D_L13_0015F7A8 = 0x40e020;
+int              D_L13_0015F7B0 = 0x1e;
+int              D_L13_0015F7BC = 0;
+float            D_L13_0015F7C0 = 0.5f;
+float            D_L13_0015F7C4 = 1.05f;
+HudSelectorSlot *D_L13_0015F740 = D_L13_0017DEA0;
+int              D_L13_0015F7D4 = 0xe0c0a0;
+int              D_L13_0015F7D8 = 0x80e0c0a0;
+int              D_L13_0015F7DC = -8;
 
 Ids D_L13_0015F7E0 = {
     {0x521c, 0x521d, 0x521f, 0x521e}
@@ -2310,230 +2369,218 @@ s32 D_L13_0015F7F8[1] = {0xffb0};
 
 HudCounter D_L13_0015FAB8 = {0};
 
-s32                D_L13_0015F824 = 8;
-s32                D_L13_0015F828 = 8;
-s32                D_L13_0015F82C = 0xe08060;
-s32                D_L13_0015F830 = 0x80e08060;
-s32                D_L13_0015F84C = 0xd;
-s32                D_L13_0015F834 = -32;
-s32                D_L13_0015F838 = 8;
-s32                D_L13_0015F83C = -30;
-s32                D_L13_0015F840 = 0x15;
-s32                D_L13_0015F844 = -29;
-s32                D_L13_0015F848 = 0xa;
-char               D_L13_0015F858 = 0x27;
-char               D_L13_0015F860 = 0x2e;
-s32                D_L13_0015F8F8 = 0x50;
-s32                D_L13_0015F8FC = 0x10;
-s32                D_L13_0015F900 = -28;
-s32                D_L13_0015F904 = -44;
-s32                D_L13_0015F908 = 6;
-s32                D_L13_0015F90C = 0xff;
-s32                D_L13_0015F910 = 0x800000ff;
-s32                D_L13_0015F914 = 0x2d;
-s32                D_L14_0015FA90 = 0;
-void              *D_L14_0015FAC0 = 0;
-s32                D_L14_0015F738 = 0x17e1c0;
-s32                D_L14_0015F718 = 0xd2;
-s32                D_L14_0015F71C = 0xc8;
-s32                D_L14_0015F72C = 0;
-int                D_L14_0015F780 = 8;
-int                D_L14_0015FA9C = 0;
-int                D_L14_0015FA98 = 0;
-int                D_L14_0015FA94 = 0;
-float              D_L14_0015F788 = 0.2f;
-float              D_L14_0015F784 = 0;
-int D_L14_0017E318 NOT_SDA = 6;
-int D_L14_0017E31C NOT_SDA = 2;
-int D_L14_0017E324 NOT_SDA = 4;
-int                D_L14_0015F720 = 0x69;
-int                D_L14_0015F724 = 0x64;
-float              D_L14_0015F78C = 74.0f;
-int                D_L14_0015F790 = 0xff8080;
-int                D_L14_0015F794 = 0x80ff8080;
-int                D_L14_0015F798 = 0;
-int                D_L14_0015F7A0 = 0x4040ff;
-int                D_L14_0015F7A4 = 0x804040ff;
-int                D_L14_0015F7A8 = 0x40e020;
-int                D_L14_0015F7B0 = 0x1e;
-int                D_L14_0015F7BC = 0;
-float              D_L14_0015F7C0 = 0.5f;
-float              D_L14_0015F7C4 = 1.05f;
-Q2395b0            D_L14_0015FAB0 = {0};
+s32              D_L13_0015F824 = 8;
+s32              D_L13_0015F828 = 8;
+s32              D_L13_0015F82C = 0xe08060;
+s32              D_L13_0015F830 = 0x80e08060;
+s32              D_L13_0015F84C = 0xd;
+s32              D_L13_0015F834 = -32;
+s32              D_L13_0015F838 = 8;
+s32              D_L13_0015F83C = -30;
+s32              D_L13_0015F840 = 0x15;
+s32              D_L13_0015F844 = -29;
+s32              D_L13_0015F848 = 0xa;
+char             D_L13_0015F858 = 0x27;
+char             D_L13_0015F860 = 0x2e;
+s32              D_L13_0015F8F8 = 0x50;
+s32              D_L13_0015F8FC = 0x10;
+s32              D_L13_0015F900 = -28;
+s32              D_L13_0015F904 = -44;
+s32              D_L13_0015F908 = 6;
+s32              D_L13_0015F90C = 0xff;
+s32              D_L13_0015F910 = 0x800000ff;
+s32              D_L13_0015F914 = 0x2d;
+s32              D_L14_0015FA90 = 0;
+void            *D_L14_0015FAC0 = 0;
+HudSelectorSlot *D_L14_0015F738 = D_L14_0017E1C0;
+HudSelectorSlot *D_L14_0015F740 = D_L14_0017E2A0;
+s32              D_L14_0015F718 = 0xd2;
+s32              D_L14_0015F71C = 0xc8;
+s32              D_L14_0015F72C = 0;
+int              D_L14_0015F780 = 8;
+int              D_L14_0015FA9C = 0;
+int              D_L14_0015FA98 = 0;
+int              D_L14_0015FA94 = 0;
+float            D_L14_0015F788 = 0.2f;
+float            D_L14_0015F784 = 0;
+int              D_L14_0015F720 = 0x69;
+int              D_L14_0015F724 = 0x64;
+float            D_L14_0015F78C = 74.0f;
+int              D_L14_0015F790 = 0xff8080;
+int              D_L14_0015F794 = 0x80ff8080;
+int              D_L14_0015F798 = 0;
+int              D_L14_0015F7A0 = 0x4040ff;
+int              D_L14_0015F7A4 = 0x804040ff;
+int              D_L14_0015F7A8 = 0x40e020;
+int              D_L14_0015F7B0 = 0x1e;
+int              D_L14_0015F7BC = 0;
+float            D_L14_0015F7C0 = 0.5f;
+float            D_L14_0015F7C4 = 1.05f;
+Q2395b0          D_L14_0015FAB0 = {0};
 
 s32 D_L14_0015F7F0 = 8;
 s32 D_L14_0015F7F8[1] = {0xffb0};
 
 HudCounter D_L14_0015FAB8 = {0};
 
-s32                D_L14_0015F824 = 8;
-s32                D_L14_0015F828 = 8;
-s32                D_L14_0015F82C = 0xe08060;
-s32                D_L14_0015F830 = 0x80e08060;
-s32                D_L14_0015F84C = 0xd;
-s32                D_L14_0015F834 = -32;
-s32                D_L14_0015F838 = 8;
-s32                D_L14_0015F83C = -30;
-s32                D_L14_0015F840 = 0x15;
-s32                D_L14_0015F844 = -29;
-s32                D_L14_0015F848 = 0xa;
-char               D_L14_0015F858 = 0x27;
-char               D_L14_0015F860 = 0x2e;
-s32                D_L14_0015F8F8 = 0x50;
-s32                D_L14_0015F8FC = 0x10;
-s32                D_L14_0015F900 = -28;
-s32                D_L14_0015F904 = -44;
-s32                D_L14_0015F908 = 6;
-s32                D_L14_0015F90C = 0xff;
-s32                D_L14_0015F910 = 0x800000ff;
-s32                D_L14_0015F914 = 0x2d;
-s32                D_L15_0015FA90 = 0;
-void              *D_L15_0015FAC0 = 0;
-s32                D_L15_0015F738 = 0x17e0c0;
-s32                D_L15_0015F718 = 0xd2;
-s32                D_L15_0015F71C = 0xc8;
-s32                D_L15_0015F72C = 0;
-int                D_L15_0015F780 = 8;
-int                D_L15_0015FA9C = 0;
-int                D_L15_0015FA98 = 0;
-int                D_L15_0015FA94 = 0;
-float              D_L15_0015F788 = 0.2f;
-float              D_L15_0015F784 = 0;
-int D_L15_0017E218 NOT_SDA = 6;
-int D_L15_0017E21C NOT_SDA = 2;
-int D_L15_0017E224 NOT_SDA = 4;
-int                D_L15_0015F720 = 0x69;
-int                D_L15_0015F724 = 0x64;
-float              D_L15_0015F78C = 74.0f;
-int                D_L15_0015F790 = 0xff8080;
-int                D_L15_0015F794 = 0x80ff8080;
-int                D_L15_0015F798 = 0;
-int                D_L15_0015F7A0 = 0x4040ff;
-int                D_L15_0015F7A4 = 0x804040ff;
-int                D_L15_0015F7A8 = 0x40e020;
-int                D_L15_0015F7B0 = 0x1e;
-int                D_L15_0015F7BC = 0;
-float              D_L15_0015F7C0 = 0.5f;
-float              D_L15_0015F7C4 = 1.05f;
-Q2395b0            D_L15_0015FAB0 = {0};
+s32              D_L14_0015F824 = 8;
+s32              D_L14_0015F828 = 8;
+s32              D_L14_0015F82C = 0xe08060;
+s32              D_L14_0015F830 = 0x80e08060;
+s32              D_L14_0015F84C = 0xd;
+s32              D_L14_0015F834 = -32;
+s32              D_L14_0015F838 = 8;
+s32              D_L14_0015F83C = -30;
+s32              D_L14_0015F840 = 0x15;
+s32              D_L14_0015F844 = -29;
+s32              D_L14_0015F848 = 0xa;
+char             D_L14_0015F858 = 0x27;
+char             D_L14_0015F860 = 0x2e;
+s32              D_L14_0015F8F8 = 0x50;
+s32              D_L14_0015F8FC = 0x10;
+s32              D_L14_0015F900 = -28;
+s32              D_L14_0015F904 = -44;
+s32              D_L14_0015F908 = 6;
+s32              D_L14_0015F90C = 0xff;
+s32              D_L14_0015F910 = 0x800000ff;
+s32              D_L14_0015F914 = 0x2d;
+s32              D_L15_0015FA90 = 0;
+void            *D_L15_0015FAC0 = 0;
+HudSelectorSlot *D_L15_0015F738 = D_L15_0017E0C0;
+HudSelectorSlot *D_L15_0015F740 = D_L15_0017E1A0;
+s32              D_L15_0015F718 = 0xd2;
+s32              D_L15_0015F71C = 0xc8;
+s32              D_L15_0015F72C = 0;
+int              D_L15_0015F780 = 8;
+int              D_L15_0015FA9C = 0;
+int              D_L15_0015FA98 = 0;
+int              D_L15_0015FA94 = 0;
+float            D_L15_0015F788 = 0.2f;
+float            D_L15_0015F784 = 0;
+int              D_L15_0015F720 = 0x69;
+int              D_L15_0015F724 = 0x64;
+float            D_L15_0015F78C = 74.0f;
+int              D_L15_0015F790 = 0xff8080;
+int              D_L15_0015F794 = 0x80ff8080;
+int              D_L15_0015F798 = 0;
+int              D_L15_0015F7A0 = 0x4040ff;
+int              D_L15_0015F7A4 = 0x804040ff;
+int              D_L15_0015F7A8 = 0x40e020;
+int              D_L15_0015F7B0 = 0x1e;
+int              D_L15_0015F7BC = 0;
+float            D_L15_0015F7C0 = 0.5f;
+float            D_L15_0015F7C4 = 1.05f;
+Q2395b0          D_L15_0015FAB0 = {0};
 
 s32 D_L15_0015F7F0 = 8;
 s32 D_L15_0015F7F8[1] = {0xffb0};
 
 HudCounter D_L15_0015FAB8 = {0};
 
-s32                D_L15_0015F824 = 8;
-s32                D_L15_0015F828 = 8;
-s32                D_L15_0015F82C = 0xe08060;
-s32                D_L15_0015F830 = 0x80e08060;
-s32                D_L15_0015F84C = 0xd;
-s32                D_L15_0015F834 = -32;
-s32                D_L15_0015F838 = 8;
-s32                D_L15_0015F83C = -30;
-s32                D_L15_0015F840 = 0x15;
-s32                D_L15_0015F844 = -29;
-s32                D_L15_0015F848 = 0xa;
-char               D_L15_0015F858 = 0x27;
-char               D_L15_0015F860 = 0x2e;
-s32                D_L15_0015F8F8 = 0x50;
-s32                D_L15_0015F8FC = 0x10;
-s32                D_L15_0015F900 = -28;
-s32                D_L15_0015F904 = -44;
-s32                D_L15_0015F908 = 6;
-s32                D_L15_0015F90C = 0xff;
-s32                D_L15_0015F910 = 0x800000ff;
-s32                D_L15_0015F914 = 0x2d;
-s32                D_L16_0015FAA0 = 0;
-void              *D_L16_0015FAD0 = 0;
-s32                D_L16_0015F748 = 0x17df40;
-s32                D_L16_0015F728 = 0xd2;
-s32                D_L16_0015F72C = 0xc8;
-s32                D_L16_0015F73C = 0;
-int                D_L16_0015F790 = 8;
-int                D_L16_0015FAAC = 0;
-int                D_L16_0015FAA8 = 0;
-int                D_L16_0015FAA4 = 0;
-float              D_L16_0015F798 = 0.2f;
-float              D_L16_0015F794 = 0;
-int D_L16_0017E098 NOT_SDA = 6;
-int D_L16_0017E09C NOT_SDA = 2;
-int D_L16_0017E0A4 NOT_SDA = 4;
-int                D_L16_0015F730 = 0x69;
-int                D_L16_0015F734 = 0x64;
-float              D_L16_0015F79C = 74.0f;
-int                D_L16_0015F7A0 = 0xff8080;
-int                D_L16_0015F7A4 = 0x80ff8080;
-int                D_L16_0015F7A8 = 0;
-int                D_L16_0015F7B0 = 0x4040ff;
-int                D_L16_0015F7B4 = 0x804040ff;
-int                D_L16_0015F7B8 = 0x40e020;
-int                D_L16_0015F7C0 = 0x1e;
-int                D_L16_0015F7CC = 0;
-float              D_L16_0015F7D0 = 0.5f;
-float              D_L16_0015F7D4 = 1.05f;
-Q2395b0            D_L16_0015FAC0 = {0};
+s32              D_L15_0015F824 = 8;
+s32              D_L15_0015F828 = 8;
+s32              D_L15_0015F82C = 0xe08060;
+s32              D_L15_0015F830 = 0x80e08060;
+s32              D_L15_0015F84C = 0xd;
+s32              D_L15_0015F834 = -32;
+s32              D_L15_0015F838 = 8;
+s32              D_L15_0015F83C = -30;
+s32              D_L15_0015F840 = 0x15;
+s32              D_L15_0015F844 = -29;
+s32              D_L15_0015F848 = 0xa;
+char             D_L15_0015F858 = 0x27;
+char             D_L15_0015F860 = 0x2e;
+s32              D_L15_0015F8F8 = 0x50;
+s32              D_L15_0015F8FC = 0x10;
+s32              D_L15_0015F900 = -28;
+s32              D_L15_0015F904 = -44;
+s32              D_L15_0015F908 = 6;
+s32              D_L15_0015F90C = 0xff;
+s32              D_L15_0015F910 = 0x800000ff;
+s32              D_L15_0015F914 = 0x2d;
+s32              D_L16_0015FAA0 = 0;
+void            *D_L16_0015FAD0 = 0;
+HudSelectorSlot *D_L16_0015F748 = D_L16_0017DF40;
+HudSelectorSlot *D_L16_0015F750 = D_L16_0017E020;
+s32              D_L16_0015F728 = 0xd2;
+s32              D_L16_0015F72C = 0xc8;
+s32              D_L16_0015F73C = 0;
+int              D_L16_0015F790 = 8;
+int              D_L16_0015FAAC = 0;
+int              D_L16_0015FAA8 = 0;
+int              D_L16_0015FAA4 = 0;
+float            D_L16_0015F798 = 0.2f;
+float            D_L16_0015F794 = 0;
+int              D_L16_0015F730 = 0x69;
+int              D_L16_0015F734 = 0x64;
+float            D_L16_0015F79C = 74.0f;
+int              D_L16_0015F7A0 = 0xff8080;
+int              D_L16_0015F7A4 = 0x80ff8080;
+int              D_L16_0015F7A8 = 0;
+int              D_L16_0015F7B0 = 0x4040ff;
+int              D_L16_0015F7B4 = 0x804040ff;
+int              D_L16_0015F7B8 = 0x40e020;
+int              D_L16_0015F7C0 = 0x1e;
+int              D_L16_0015F7CC = 0;
+float            D_L16_0015F7D0 = 0.5f;
+float            D_L16_0015F7D4 = 1.05f;
+Q2395b0          D_L16_0015FAC0 = {0};
 
 s32 D_L16_0015F800 = 8;
 s32 D_L16_0015F808[1] = {0xffb0};
 
 HudCounter D_L16_0015FAC8 = {0};
 
-s32                D_L16_0015F834 = 8;
-s32                D_L16_0015F838 = 8;
-s32                D_L16_0015F83C = 0xe08060;
-s32                D_L16_0015F840 = 0x80e08060;
-s32                D_L16_0015F85C = 0xd;
-s32                D_L16_0015F844 = -32;
-s32                D_L16_0015F848 = 8;
-s32                D_L16_0015F84C = -30;
-s32                D_L16_0015F850 = 0x15;
-s32                D_L16_0015F854 = -29;
-s32                D_L16_0015F858 = 0xa;
-char               D_L16_0015F868 = 0x27;
-char               D_L16_0015F870 = 0x2e;
-s32                D_L16_0015F908 = 0x50;
-s32                D_L16_0015F90C = 0x10;
-s32                D_L16_0015F910 = -28;
-s32                D_L16_0015F914 = -44;
-s32                D_L16_0015F918 = 6;
-s32                D_L16_0015F91C = 0xff;
-s32                D_L16_0015F920 = 0x800000ff;
-s32                D_L16_0015F924 = 0x2d;
-s32                D_L17_0015FA90 = 0;
-void              *D_L17_0015FAC0 = 0;
-s32                D_L17_0015F738 = 0x17e3c0;
-s32                D_L17_0015F718 = 0xd2;
-s32                D_L17_0015F71C = 0xc8;
-s32                D_L17_0015F72C = 0;
-int                D_L17_0015F780 = 8;
-int                D_L17_0015FA9C = 0;
-int D_L17_0017E538 NOT_SDA = 3;
-int D_L17_0017E53C NOT_SDA = 1;
-int D_L17_0017E544 NOT_SDA = 2;
-int                D_L17_0015FA98 = 0;
-int                D_L17_0015FA94 = 0;
-float              D_L17_0015F788 = 0.2f;
-float              D_L17_0015F784 = 0;
-int D_L17_0017E518 NOT_SDA = 6;
-int D_L17_0017E51C NOT_SDA = 2;
-int D_L17_0017E524 NOT_SDA = 4;
-int                D_L17_0015F720 = 0x69;
-int                D_L17_0015F724 = 0x64;
-float              D_L17_0015F78C = 74.0f;
-int                D_L17_0015F790 = 0xff8080;
-int                D_L17_0015F794 = 0x80ff8080;
-int                D_L17_0015F798 = 0;
-int                D_L17_0015F7A0 = 0x4040ff;
-int                D_L17_0015F7A4 = 0x804040ff;
-int                D_L17_0015F7A8 = 0x40e020;
-int                D_L17_0015F7B0 = 0x1e;
-int                D_L17_0015F7BC = 0;
-float              D_L17_0015F7C0 = 0.5f;
-float              D_L17_0015F7C4 = 1.05f;
-int                D_L17_0015F740 = 0x17e4a0;
-int                D_L17_0015F7D4 = 0xe0c0a0;
-int                D_L17_0015F7D8 = 0x80e0c0a0;
-int                D_L17_0015F7DC = -8;
+s32              D_L16_0015F834 = 8;
+s32              D_L16_0015F838 = 8;
+s32              D_L16_0015F83C = 0xe08060;
+s32              D_L16_0015F840 = 0x80e08060;
+s32              D_L16_0015F85C = 0xd;
+s32              D_L16_0015F844 = -32;
+s32              D_L16_0015F848 = 8;
+s32              D_L16_0015F84C = -30;
+s32              D_L16_0015F850 = 0x15;
+s32              D_L16_0015F854 = -29;
+s32              D_L16_0015F858 = 0xa;
+char             D_L16_0015F868 = 0x27;
+char             D_L16_0015F870 = 0x2e;
+s32              D_L16_0015F908 = 0x50;
+s32              D_L16_0015F90C = 0x10;
+s32              D_L16_0015F910 = -28;
+s32              D_L16_0015F914 = -44;
+s32              D_L16_0015F918 = 6;
+s32              D_L16_0015F91C = 0xff;
+s32              D_L16_0015F920 = 0x800000ff;
+s32              D_L16_0015F924 = 0x2d;
+s32              D_L17_0015FA90 = 0;
+void            *D_L17_0015FAC0 = 0;
+HudSelectorSlot *D_L17_0015F738 = D_L17_0017E3C0;
+s32              D_L17_0015F718 = 0xd2;
+s32              D_L17_0015F71C = 0xc8;
+s32              D_L17_0015F72C = 0;
+int              D_L17_0015F780 = 8;
+int              D_L17_0015FA9C = 0;
+int              D_L17_0015FA98 = 0;
+int              D_L17_0015FA94 = 0;
+float            D_L17_0015F788 = 0.2f;
+float            D_L17_0015F784 = 0;
+int              D_L17_0015F720 = 0x69;
+int              D_L17_0015F724 = 0x64;
+float            D_L17_0015F78C = 74.0f;
+int              D_L17_0015F790 = 0xff8080;
+int              D_L17_0015F794 = 0x80ff8080;
+int              D_L17_0015F798 = 0;
+int              D_L17_0015F7A0 = 0x4040ff;
+int              D_L17_0015F7A4 = 0x804040ff;
+int              D_L17_0015F7A8 = 0x40e020;
+int              D_L17_0015F7B0 = 0x1e;
+int              D_L17_0015F7BC = 0;
+float            D_L17_0015F7C0 = 0.5f;
+float            D_L17_0015F7C4 = 1.05f;
+HudSelectorSlot *D_L17_0015F740 = D_L17_0017E4A0;
+int              D_L17_0015F7D4 = 0xe0c0a0;
+int              D_L17_0015F7D8 = 0x80e0c0a0;
+int              D_L17_0015F7DC = -8;
 
 Ids D_L17_0015F7E0 = {
     {0x521c, 0x521d, 0x521f, 0x521e}
@@ -2546,56 +2593,54 @@ s32 D_L17_0015F7F8[1] = {0xffb0};
 
 HudCounter D_L17_0015FAB8 = {0};
 
-s32                D_L17_0015F824 = 8;
-s32                D_L17_0015F828 = 8;
-s32                D_L17_0015F82C = 0xe08060;
-s32                D_L17_0015F830 = 0x80e08060;
-s32                D_L17_0015F84C = 0xd;
-s32                D_L17_0015F834 = -32;
-s32                D_L17_0015F838 = 8;
-s32                D_L17_0015F83C = -30;
-s32                D_L17_0015F840 = 0x15;
-s32                D_L17_0015F844 = -29;
-s32                D_L17_0015F848 = 0xa;
-char               D_L17_0015F858 = 0x27;
-char               D_L17_0015F860 = 0x2e;
-s32                D_L17_0015F8F8 = 0x50;
-s32                D_L17_0015F8FC = 0x10;
-s32                D_L17_0015F900 = -28;
-s32                D_L17_0015F904 = -44;
-s32                D_L17_0015F908 = 6;
-s32                D_L17_0015F90C = 0xff;
-s32                D_L17_0015F910 = 0x800000ff;
-s32                D_L17_0015F914 = 0x2d;
-s32                D_L18_0015FA90 = 0;
-void              *D_L18_0015FAC0 = 0;
-s32                D_L18_0015F738 = 0x17e4c0;
-s32                D_L18_0015F718 = 0xd2;
-s32                D_L18_0015F71C = 0xc8;
-s32                D_L18_0015F72C = 0;
-int                D_L18_0015F780 = 8;
-int                D_L18_0015FA9C = 0;
-int                D_L18_0015FA98 = 0;
-int                D_L18_0015FA94 = 0;
-float              D_L18_0015F788 = 0.2f;
-float              D_L18_0015F784 = 0;
-int D_L18_0017E618 NOT_SDA = 6;
-int D_L18_0017E61C NOT_SDA = 2;
-int D_L18_0017E624 NOT_SDA = 4;
-int                D_L18_0015F720 = 0x69;
-int                D_L18_0015F724 = 0x64;
-float              D_L18_0015F78C = 74.0f;
-int                D_L18_0015F790 = 0xff8080;
-int                D_L18_0015F794 = 0x80ff8080;
-int                D_L18_0015F798 = 0;
-int                D_L18_0015F7A0 = 0x4040ff;
-int                D_L18_0015F7A4 = 0x804040ff;
-int                D_L18_0015F7A8 = 0x40e020;
-int                D_L18_0015F7B0 = 0x1e;
-int                D_L18_0015F7BC = 0;
-float              D_L18_0015F7C0 = 0.5f;
-float              D_L18_0015F7C4 = 1.05f;
-Q2395b0            D_L18_0015FAB0 = {0};
+s32              D_L17_0015F824 = 8;
+s32              D_L17_0015F828 = 8;
+s32              D_L17_0015F82C = 0xe08060;
+s32              D_L17_0015F830 = 0x80e08060;
+s32              D_L17_0015F84C = 0xd;
+s32              D_L17_0015F834 = -32;
+s32              D_L17_0015F838 = 8;
+s32              D_L17_0015F83C = -30;
+s32              D_L17_0015F840 = 0x15;
+s32              D_L17_0015F844 = -29;
+s32              D_L17_0015F848 = 0xa;
+char             D_L17_0015F858 = 0x27;
+char             D_L17_0015F860 = 0x2e;
+s32              D_L17_0015F8F8 = 0x50;
+s32              D_L17_0015F8FC = 0x10;
+s32              D_L17_0015F900 = -28;
+s32              D_L17_0015F904 = -44;
+s32              D_L17_0015F908 = 6;
+s32              D_L17_0015F90C = 0xff;
+s32              D_L17_0015F910 = 0x800000ff;
+s32              D_L17_0015F914 = 0x2d;
+s32              D_L18_0015FA90 = 0;
+void            *D_L18_0015FAC0 = 0;
+HudSelectorSlot *D_L18_0015F738 = D_L18_0017E4C0;
+HudSelectorSlot *D_L18_0015F740 = D_L18_0017E5A0;
+s32              D_L18_0015F718 = 0xd2;
+s32              D_L18_0015F71C = 0xc8;
+s32              D_L18_0015F72C = 0;
+int              D_L18_0015F780 = 8;
+int              D_L18_0015FA9C = 0;
+int              D_L18_0015FA98 = 0;
+int              D_L18_0015FA94 = 0;
+float            D_L18_0015F788 = 0.2f;
+float            D_L18_0015F784 = 0;
+int              D_L18_0015F720 = 0x69;
+int              D_L18_0015F724 = 0x64;
+float            D_L18_0015F78C = 74.0f;
+int              D_L18_0015F790 = 0xff8080;
+int              D_L18_0015F794 = 0x80ff8080;
+int              D_L18_0015F798 = 0;
+int              D_L18_0015F7A0 = 0x4040ff;
+int              D_L18_0015F7A4 = 0x804040ff;
+int              D_L18_0015F7A8 = 0x40e020;
+int              D_L18_0015F7B0 = 0x1e;
+int              D_L18_0015F7BC = 0;
+float            D_L18_0015F7C0 = 0.5f;
+float            D_L18_0015F7C4 = 1.05f;
+Q2395b0          D_L18_0015FAB0 = {0};
 
 s32 D_L18_0015F7F0 = 8;
 s32 D_L18_0015F7F8[1] = {0xffb0};

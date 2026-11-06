@@ -1,13 +1,13 @@
 /* Level 05 moby class box. */
 #include "types.h"
+#include "rnc/overlay/l05.h"
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 
 extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-extern char *D_L05_0015FFD8_c __asm__("D_L05_0015FFD8");
-extern void  transform_attachment_pose(char *, char *, char *, char *, char *, char *) __asm__("FUN_L00_002604f0");
+extern void transform_attachment_pose(char *, char *, char *, char *, char *, char *) __asm__("FUN_L00_002604f0");
 extern void FUN_L00_00260738_c(char *, float *, float *, char *) __asm__("FUN_L00_00260738");
 
 void box_update(char *moby) __asm__("FUN_L05_0030bf98");
@@ -27,7 +27,8 @@ void box_update(char *moby) {
         *(int *)(moby_data + 0x5C) = 1;
         if (*(int *)(moby_data + 0x80) >= 0) {
             convert_pose_to_reference_local(moby,
-                                            D_L05_0015FFD8_c + (*(int *)(moby_data + 0x80) << 8),
+                                            (char *)l05_moby_array +
+                                                (*(int *)(moby_data + 0x80) << 8),
                                             moby + 0x10,
                                             moby + 0x40,
                                             moby_data + 0x60,
@@ -39,7 +40,7 @@ void box_update(char *moby) {
         qcopy(previous_position, moby + 0x10);
         qcopy(previous_rotation, moby + 0x40);
         transform_attachment_pose(moby,
-                                  D_L05_0015FFD8_c + (*(int *)(moby_data + 0x80) << 8),
+                                  (char *)l05_moby_array + (*(int *)(moby_data + 0x80) << 8),
                                   moby_data + 0x60,
                                   moby_data + 0x70,
                                   moby + 0x10,

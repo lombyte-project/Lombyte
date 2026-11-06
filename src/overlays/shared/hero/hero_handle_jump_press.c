@@ -285,7 +285,8 @@ s32  try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 s32 try_start_hero_item_idle_animation(void) {
     struct Hero *hero_ptr = &hero;
     s32          id, k;
-    if (hero_ptr->item_anim_active == 0 || hero_ptr->unk20AA == 0 || hero_ptr->unk22C8 != 0)
+    if (hero_ptr->item_anim_active == 0 || hero_ptr->weapon_up == 0 ||
+        hero_ptr->weapon_lowered != 0)
         return 0;
     id = hero_slot_item_id(0);
     if (id != hero_ptr->item_anim_item_id) {
@@ -297,7 +298,7 @@ s32 try_start_hero_item_idle_animation(void) {
         return 0;
     set_hero_animation(k, 0, (f32)scale_game_frames(0xB));
     if (((s32)hero_ptr->held_item_anim_blend[0]) != 0)
-        hero_ptr->unkD14 = 1;
+        hero_ptr->arm_layer_fade = 1;
     hero_ptr->item_hold_anim = k;
     return 1;
 }

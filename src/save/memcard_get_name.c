@@ -48,7 +48,7 @@ struct MemoryCardState memory_card_state = {
     .pending_state = -1,
     .pending_card = -1,
     .err_card = -1,
-    .unkF4 = 1,
+    .card_save_active = 1,
 };
 
 u8 alternate_item_available[128] = {0};

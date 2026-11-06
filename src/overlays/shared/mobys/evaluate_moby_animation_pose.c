@@ -121,11 +121,11 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_inde
     int            cnt;
     unsigned char *g;
 
-    amt = MOBY(moby)->unkB4;
+    amt = MOBY(moby)->bolts;
     debug_print(D_L00_001E8F00,
                 MOBY(moby)->oclass,
                 ((short)MOBY(moby)->save_id),
-                MOBY(moby)->unkB4,
+                MOBY(moby)->bolts,
                 *(short *)(moby + 0xB6));
     if (moby[0xB1] == 0xFE) {
         return;
@@ -164,7 +164,7 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_inde
     if (flags & 0x100) {
         call_flags = 5;
     }
-    if (hero_lui.unk20B2 || (flags & 0x200)) {
+    if (hero_lui.on_hoverboard || (flags & 0x200)) {
         call_flags |= 2;
     }
     if (hero_lui.state.current == 0x10 &&

@@ -540,7 +540,7 @@ void send_blast_hits(void *,
 
 typedef struct {
     int   particle_path_reference;
-    float unk4, unk8, fc;
+    float path_distance, path_speed, fc; /* distance along the path, added to it each frame */
     int   i10;
     void *blast_source_moby;
 } Q_272438;
@@ -555,12 +555,12 @@ void update_timed_sphere_probed_particle(struct EffectParticle *particle) {
     float                x, y;
     int                  sphere_probe_result;
     previous_particle_position = *particle_position;
-    particle_data->unk4 += particle_data->unk8;
+    particle_data->path_distance += particle_data->path_speed;
     path_sample_at_distance(particle_data->particle_path_reference,
                             &x,
                             &y,
                             particle_position,
-                            particle_data->unk4,
+                            particle_data->path_distance,
                             particle_data->fc);
     if (fast_dec_timer_s16(&particle->life)) {
         free_effect_particle(particle);
@@ -609,7 +609,7 @@ typedef struct {
     s32      particle_size_bits;
     u8       v10[16];
     u8       v20[12];
-    f32      unk2C;
+    f32      secondary_position_w; /* 0x2C: w of the second point */
     S_2725d8 s;
 } P_2725d8;
 
@@ -642,7 +642,7 @@ P_2725d8 *spawn_moby_point_attached_particle(u8 *owner_moby,
         particle->b2 = *D_L00_001B215C;
         moby_point_position(owner_moby, attachment_point_selector, particle->v10);
         qcopy(particle->v20, particle->v10);
-        particle->unk2C = secondary_position_w;
+        particle->secondary_position_w = secondary_position_w;
         *(f32 *)((u8 *)particle + 0x1C) = primary_position_w;
         s = &particle->s;
         particle->s.o = owner_moby;
@@ -666,7 +666,7 @@ typedef struct {
     u8          pad0[0x10];
     u128_2726d8 pos;
     u8          pad20[0xC];
-    f32         unk2C;
+    f32         secondary_position_w; /* 0x2C: w of the second point */
     Q_2726d8    q;
 } P_2726d8;
 
@@ -682,7 +682,7 @@ void update_moby_point_attached_particle(P_2726d8 *particle) {
         return;
     }
     sc = q->xC * random_float_between(0.5f, 1.0f);
-    save = particle->unk2C;
+    save = particle->secondary_position_w;
     qcopy(&position_delta, &particle->pos);
     moby_point_position(particle->q.owner, q->x4, &particle->pos);
     fast_vec_sub(&position_delta, &position_delta, &particle->pos);
@@ -695,7 +695,7 @@ void update_moby_point_attached_particle(P_2726d8 *particle) {
     fast_vec_normalize(&position_delta, &position_delta, target_length);
     fast_vec_add((u8 *)particle + 0x20, &particle->pos, &position_delta);
     *(f32 *)((u8 *)particle + 0x1C) = sc;
-    particle->unk2C = save;
+    particle->secondary_position_w = save;
 }
 
 void update_expanding_damped_rgb_fading_particle(struct EffectParticle *) __asm__("FUN_L00_00272838");
@@ -807,7 +807,7 @@ typedef float V_272bc0[4] __attribute__((aligned(16)));
 
 typedef struct {
     char  p0[0x88];
-    float unk88;
+    float pos_z; /* 0x88: hero.motion.pos.f[2] */
     char  p1[0x2080 - 0x8C];
     int   hit_recipient_moby;
 } P_272bc0;
@@ -881,7 +881,7 @@ void update_color_tween_emitter_particle(struct EffectParticle *particle) {
         reference_position = (unsigned char *)(*(V_272bc0 *)D_0013F3D0);
         if (vector_distance_xy(particle->pos.f, reference_position) < 0.3f) {
             reference_position_owner = (P_272bc0 *)(reference_position - 0x80);
-            if (reference_position_owner->unk88 < particle->pos.f[2] + 1.2f) {
+            if (reference_position_owner->pos_z < particle->pos.f[2] + 1.2f) {
                 fast_vec_sub(particle_vector_scratch, reference_position, particle->pos.f);
                 fast_vec_normalize(particle_vector_scratch, particle_vector_scratch, 1.0f);
                 particle_vector_scratch[2] = 1.0f;
@@ -1034,11 +1034,11 @@ unsigned char *spawn_moving_hero_relative_alpha_fade_particle(float   *pos,
 
 typedef struct {
     u8  p0[4];
-    u32 w4;
-    u8  b8;
+    u32 color;
+    u8  spin;
     u8  p9;
-    s16 hA;
-    f32 unkC;
+    s16 life;
+    f32 size;
     f32 x, y, z;
 } Part_273298;
 
@@ -1077,16 +1077,16 @@ void update_moving_hero_relative_alpha_fade_particle(Part_273298 *particle) {
     }
     if (particle->x < 2.0f || 1021.0f < particle->x || particle->y < 2.0f ||
         1021.0f < particle->y || particle->z < 2.0f || 1021.0f < particle->z ||
-        fast_dec_timer_s16(&particle->hA)) {
+        fast_dec_timer_s16(&particle->life)) {
         free_effect_particle(particle);
         return;
     }
-    color_without_alpha = particle->w4 & 0xFFFFFF;
-    remaining_frames_minus_one = convert_integer_to_float(particle->hA - 1);
-    particle->w4 =
+    color_without_alpha = particle->color & 0xFFFFFF;
+    remaining_frames_minus_one = convert_integer_to_float(particle->life - 1);
+    particle->color =
         FUN_001fa6e0_273298(color_without_alpha,
-                            particle->w4,
-                            remaining_frames_minus_one / convert_integer_to_float(particle->hA));
+                            particle->color,
+                            remaining_frames_minus_one / convert_integer_to_float(particle->life));
 }
 
 typedef struct {
@@ -1096,20 +1096,20 @@ typedef struct {
 
 typedef struct {
     T_273448 *m;
-    f32       unk4;
-    f32       unk8;
-    s16       hC;
-    s16       hE;
-    f32       unk10;
-    f32       unk14;
+    f32       alpha;         /* 0x04: 0..1, top byte of the colour */
+    f32       spin_phase;    /* 0x08: spin = spin_phase * 255 */
+    s16       texture_frame; /* 0x0C: index into D_L00_001B2174, wraps at 16 */
+    s16       moby_point;    /* 0x0E */
+    f32       alpha_step;    /* 0x10: negated at the top of the pulse */
+    f32       camera_offset; /* 0x14: distance toward the camera, eased to 1 */
 } E_273448;
 
 typedef struct {
-    u8       b0, b1, b2, b3;
-    u32      w4;
-    u8       b8, b9;
-    s16      hA;
-    f32      unkC;
+    u8       b0, b1, texture, blend;
+    u32      color;
+    u8       spin, b9;
+    s16      life;
+    f32      size;
     f32      pos[4] __attribute__((aligned(16)));
     E_273448 e;
 } P_273448;
@@ -1127,35 +1127,35 @@ void update_moby_point_attached_alpha_pulse_particle(P_273448 *particle) {
         return;
     }
     e = &particle->e;
-    if (fast_dec_timer_s16(&particle->hA) || e->m == 0 || e->m->attachment_owner_status < 0) {
+    if (fast_dec_timer_s16(&particle->life) || e->m == 0 || e->m->attachment_owner_status < 0) {
         goto kill;
     }
-    e->hC = (e->hC + 1) & 0xF;
-    if (particle->unkC < 159600.0f) {
-        particle->unkC += frame_scale * 3989.99976f;
-        if (159600.0f < particle->unkC) {
-            particle->unkC = 159600.0f;
+    e->texture_frame = (e->texture_frame + 1) & 0xF;
+    if (particle->size < 159600.0f) {
+        particle->size += frame_scale * 3989.99976f;
+        if (159600.0f < particle->size) {
+            particle->size = 159600.0f;
         }
-    } else if (159600.0f < particle->unkC) {
-        particle->unkC -= frame_scale * 15959.999f;
-        if (particle->unkC < 159600.0f) {
-            particle->unkC = 159600.0f;
+    } else if (159600.0f < particle->size) {
+        particle->size -= frame_scale * 15959.999f;
+        if (particle->size < 159600.0f) {
+            particle->size = 159600.0f;
         }
     }
-    e->unk8 += frame_scale * 0.001f;
-    particle->b8 = truncate_float_to_s32(e->unk8 * 255.0f);
-    particle->b2 = D_L00_001B2174_lui[e->hC];
-    if (particle->unkC <= 159600.0f || 0.0f < e->unk10) {
-        f32 *alpha_fraction_ptr = &e->unk4;
+    e->spin_phase += frame_scale * 0.001f;
+    particle->spin = truncate_float_to_s32(e->spin_phase * 255.0f);
+    particle->texture = D_L00_001B2174_lui[e->texture_frame];
+    if (particle->size <= 159600.0f || 0.0f < e->alpha_step) {
+        f32 *alpha_fraction_ptr = &e->alpha;
         *alpha_fraction_ptr += alpha_fraction_ptr[3];
     }
     {
         f32 x;
-        if (particle->unkC <= 159600.0f) {
-            x = e->unk4;
+        if (particle->size <= 159600.0f) {
+            x = e->alpha;
             alpha_reversal_threshold = 0.3f;
         } else {
-            x = e->unk4;
+            x = e->alpha;
             alpha_reversal_threshold = 0.15f;
         }
         if (!(alpha_reversal_threshold < x)) {
@@ -1165,15 +1165,16 @@ void update_moby_point_attached_alpha_pulse_particle(P_273448 *particle) {
                 return;
             }
         } else {
-            e->unk10 = -e->unk10;
-            e->unk4 = x + e->unk10;
+            e->alpha_step = -e->alpha_step;
+            e->alpha = x + e->alpha_step;
         }
     }
-    particle->w4 = (particle->w4 & 0xFFFFFF) + (truncate_float_to_s32(e->unk4 * 256.0f) << 24);
-    e->unk14 += (1.0f - e->unk14) * (frame_scale * 0.175f);
-    moby_point_position(e->m, e->hE, attachment_world_position);
+    particle->color =
+        (particle->color & 0xFFFFFF) + (truncate_float_to_s32(e->alpha * 256.0f) << 24);
+    e->camera_offset += (1.0f - e->camera_offset) * (frame_scale * 0.175f);
+    moby_point_position(e->m, e->moby_point, attachment_world_position);
     fast_vec_sub(camera_directed_offset, g_debug_camera, attachment_world_position);
-    fast_vec_normalize(camera_directed_offset, camera_directed_offset, e->unk14);
+    fast_vec_normalize(camera_directed_offset, camera_directed_offset, e->camera_offset);
     fast_vec_add(particle->pos, attachment_world_position, camera_directed_offset);
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002745A8), where it is exact; names translated to the US level program. */
@@ -1583,10 +1584,10 @@ typedef struct {
 } __attribute__((aligned(16))) V_274518;
 
 typedef struct {
-    f32 unk0, unk4, unk8;
-    u8 *iC;
-    f32 unk10;
-    f32 unk14;
+    f32 offset_x, offset_y, offset_z; /* 0x00: offset from the anchor moby */
+    u8 *iC;                           /* 0x0C: anchor moby */
+    f32 orbit_angle;                  /* 0x10: orbit about the anchor */
+    f32 wobble_angle;                 /* 0x14: small circle on the orbit */
     s16 position_offset_multiplier;
     s16 alpha_fade_decrement;
     s16 trail_particle_mode;
@@ -1623,9 +1624,9 @@ void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
             goto kill;
         if (r->iC == 0)
             return;
-        position_offset_scratch.x = particle->r.unk0;
-        position_offset_scratch.y = r->unk4;
-        position_offset_scratch.z = r->unk8;
+        position_offset_scratch.x = particle->r.offset_x;
+        position_offset_scratch.y = r->offset_y;
+        position_offset_scratch.z = r->offset_z;
         fast_vec_scale(&position_offset_scratch,
                        &position_offset_scratch,
                        convert_integer_to_float(r->position_offset_multiplier));
@@ -1646,9 +1647,9 @@ void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
         FUN_L00_002743a8_274518(
             0, particle->v10, scale_game_frames(10), z, z, 0, particle->particle_alpha, 0);
     } else {
-        position_offset_scratch.x = r->unk0;
-        position_offset_scratch.y = r->unk4;
-        position_offset_scratch.z = r->unk8;
+        position_offset_scratch.x = r->offset_x;
+        position_offset_scratch.y = r->offset_y;
+        position_offset_scratch.z = r->offset_z;
         z = 0.0f;
         spawned_particle = FUN_L00_002743a8_274518((s32)r->iC,
                                                    particle->v10,
@@ -1665,25 +1666,25 @@ void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
         return;
     qcopy(particle->v10, r->iC + 0x10);
     k1 = 2.25f;
-    position_offset_scratch.x = fast_cos(r->unk10) * k1;
+    position_offset_scratch.x = fast_cos(r->orbit_angle) * k1;
     k2 = 0.28f;
-    position_offset_scratch.y = fast_sin(r->unk10) * k1;
+    position_offset_scratch.y = fast_sin(r->orbit_angle) * k1;
     position_offset_scratch.z = position_offset_scratch.x;
     position_offset_scratch.x = 0.0f;
-    secondary_position_offset.x = fast_cos(r->unk14) * k2;
-    secondary_position_offset.y = fast_sin(r->unk14) * k2;
+    secondary_position_offset.x = fast_cos(r->wobble_angle) * k2;
+    secondary_position_offset.y = fast_sin(r->wobble_angle) * k2;
     secondary_position_offset.z = secondary_position_offset.x;
     secondary_position_offset.x = 0.0f;
     clear_u64_value(&rotation_angles);
-    rotation_angles.y = r->unk10;
+    rotation_angles.y = r->orbit_angle;
     euler_rotation_matrix(secondary_offset_rotation_matrix, &rotation_angles);
     transform_vector(
         &secondary_position_offset, &secondary_position_offset, secondary_offset_rotation_matrix);
     fast_vec_add(&position_offset_scratch, &position_offset_scratch, &secondary_position_offset);
     transform_vector_by_basis(&position_offset_scratch, &position_offset_scratch, r->iC + 0xC0);
     fast_vec_add(particle->v10, particle->v10, &position_offset_scratch);
-    r->unk10 = fast_add_rotations(r->unk10, frame_time * 0.9599310755729675f);
-    r->unk14 = fast_add_rotations(r->unk14, frame_time * 4.363323211669922f);
+    r->orbit_angle = fast_add_rotations(r->orbit_angle, frame_time * 0.9599310755729675f);
+    r->wobble_angle = fast_add_rotations(r->wobble_angle, frame_time * 4.363323211669922f);
 }
 
 typedef struct {
@@ -1691,8 +1692,8 @@ typedef struct {
     u8    b4;
     u8    offset_length_jitter_percent;
     s16   expected_owner_identity;
-    float unk8;
-    float unkC;
+    float max_position_w; /* 0x08: pos.w is a random 5..100% of it */
+    float offset_length;  /* 0x0C: second point distance along the bone */
 } S_274818;
 
 void update_randomized_moby_point_attached_particle(struct EffectParticle *) __asm__("FUN_L00_00274818");
@@ -1711,14 +1712,16 @@ void update_randomized_moby_point_attached_particle(struct EffectParticle *parti
     }
     attachment_position = particle->pos.f;
     one = 1.0f;
-    randomized_primary_position_w = attachment_data->unk8 * random_float_between(0.05f, one);
+    randomized_primary_position_w =
+        attachment_data->max_position_w * random_float_between(0.05f, one);
     save = *(float *)(particle->data + 0xC);
     moby_point_position(attachment_data->o, attachment_data->b4, attachment_position);
     build_moby_bone_transform(attachment_data->o, attachment_data->b4, attachment_vector_scratch);
     x = convert_integer_to_float(attachment_data->offset_length_jitter_percent);
     x = random_float_between(-x, x);
-    fast_vec_normalize(
-        &attachment_offset, attachment_vector_scratch, (x / 100.0f - one) * attachment_data->unkC);
+    fast_vec_normalize(&attachment_offset,
+                       attachment_vector_scratch,
+                       (x / 100.0f - one) * attachment_data->offset_length);
     fast_vec_add(particle->data, attachment_position, &attachment_offset);
     particle->pos.f[3] = randomized_primary_position_w;
     *(float *)(particle->data + 0xC) = save;
@@ -1949,7 +1952,7 @@ typedef struct {
     int   n;
     int   i14;
     int   i18;
-    float unk1C;
+    float unk1C; /* a tenth (a twentieth when n >= 0) of the starting size */
 } Q_275158;
 
 extern unsigned char *D_L00_001B21A0 NOT_SDA;
@@ -2382,14 +2385,14 @@ void update_moving_fading_particle(struct EffectParticle *particle) {
 
 typedef struct {
     u8  p0[4];
-    u32 w4;
-    u8  b8;
+    u32 color;
+    u8  spin;
     u8  p9;
-    s16 hA;
-    f32 unkC;
-    f32 unk10;
-    f32 unk14;
-    f32 unk18;
+    s16 life;
+    f32 size;
+    f32 x;
+    f32 y;
+    f32 z;
     u8  p1C[4];
     int w20;
 } Part;
@@ -2399,26 +2402,26 @@ void update_mode_controlled_shrinking_color_tween_particle(Part *particle) __asm
 
 void update_mode_controlled_shrinking_color_tween_particle(Part *particle) {
     float remaining_frames_minus_one;
-    if (particle->unk10 < 2.0f || 1021.0f < particle->unk10 || particle->unk14 < 2.0f ||
-        1021.0f < particle->unk14 || particle->unk18 < 2.0f || 1021.0f < particle->unk18 ||
-        fast_dec_timer_s16(&particle->hA)) {
+    if (particle->x < 2.0f || 1021.0f < particle->x || particle->y < 2.0f ||
+        1021.0f < particle->y || particle->z < 2.0f || 1021.0f < particle->z ||
+        fast_dec_timer_s16(&particle->life)) {
         free_effect_particle(particle);
         return;
     }
     if (particle->w20) {
-        particle->unkC *= 0.99f;
-        remaining_frames_minus_one = convert_integer_to_float(particle->hA - 1);
-        particle->w4 = FUN_001fa6e0_00275eb0(0x30FFFFFF,
-                                             particle->w4,
-                                             remaining_frames_minus_one /
-                                                 convert_integer_to_float(particle->hA));
+        particle->size *= 0.99f;
+        remaining_frames_minus_one = convert_integer_to_float(particle->life - 1);
+        particle->color = FUN_001fa6e0_00275eb0(0x30FFFFFF,
+                                                particle->color,
+                                                remaining_frames_minus_one /
+                                                    convert_integer_to_float(particle->life));
     } else {
-        particle->unkC *= 0.95f;
-        remaining_frames_minus_one = convert_integer_to_float(particle->hA - 1);
-        particle->w4 = FUN_001fa6e0_00275eb0(0x603F1008,
-                                             particle->w4,
-                                             remaining_frames_minus_one /
-                                                 convert_integer_to_float(particle->hA));
+        particle->size *= 0.95f;
+        remaining_frames_minus_one = convert_integer_to_float(particle->life - 1);
+        particle->color = FUN_001fa6e0_00275eb0(0x603F1008,
+                                                particle->color,
+                                                remaining_frames_minus_one /
+                                                    convert_integer_to_float(particle->life));
     }
 }
 

@@ -1,5 +1,6 @@
-/* Level 05 moby class that slides and lowers when triggered. */
+/* Level 05 moby class 843: placed out along its cuboid, it slides to its end point and lowers once its linked moby gets a command. */
 #include "types.h"
+#include "rnc/overlay/l05.h"
 #include "rnc/globals.h"
 #include "qcopy.h"
 #include "rnc/mobys/moby.h"
@@ -7,29 +8,28 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/world/cuboid.h"
 
-extern int   allocate_voice_for_target_entry() __asm__("FUN_0022da68");
-extern short D_L05_0015FFD8;
+extern int allocate_voice_for_target_entry() __asm__("FUN_0022da68");
 
 extern float
 advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
 
 /* Slides the moby out along its pose-table entry's direction: 0 places it,
-   1 waits for the trigger byte 0xBC of its D_L05_0015FFD8 record, 2 eases
+   1 waits for the trigger byte 0xBC (command) of its l05_moby_array record, 2 eases
    it toward the end point, 3 lowers it to 5.9 below the entry's height. */
-void triggered_slide_update(char *moby) __asm__("FUN_L05_0030e508");
+void moby_843_update(char *moby) __asm__("FUN_L05_0030e508");
 
-typedef struct TriggeredSlideVars {
+typedef struct Moby843Vars {
     u8  pad_0[0x8];
-    f32 unk8;
+    f32 lower_speed; /* z of the slide velocity (pvars 0x0), reused while lowering */
     u8  pad_C[0x4];
     s32 cuboid_10;
-    s32 unk14;
-    f32 unk18;
-    s32 unk1C;
-} TriggeredSlideVars;
+    s32 trigger_moby; /* moby index whose command byte triggers it */
+    f32 slide_distance;
+    s32 reversed; /* nonzero: offset and slide along -axes[1] */
+} Moby843Vars;
 
 /* Moby class 843 */
-void triggered_slide_update(char *moby) {
+void moby_843_update(char *moby) {
     enum {
         MOBY_PLACE_AT_POSE_OFFSET = 0,
         MOBY_WAIT_FOR_TRIGGER = 1,
@@ -39,13 +39,13 @@ void triggered_slide_update(char *moby) {
     enum {
         MOBY_LOWERING_COMPLETE = 4
     };
-    TriggeredSlideVars *slide_and_lowering_vars = (TriggeredSlideVars *)MOBY(moby)->pvars;
-    float               slide_motion_scratch[4];
-    float               slide_step_distance;
-    float               speed;
-    LevelCuboid        *pose_entry;
-    float               remaining_slide_distance;
-    float               reach;
+    Moby843Vars *slide_and_lowering_vars = (Moby843Vars *)MOBY(moby)->pvars;
+    float        slide_motion_scratch[4];
+    float        slide_step_distance;
+    float        speed;
+    LevelCuboid *pose_entry;
+    float        remaining_slide_distance;
+    float        reach;
 
     switch (MOBY(moby)->state) {
     case MOBY_PLACE_AT_POSE_OFFSET: {
@@ -54,9 +54,10 @@ void triggered_slide_update(char *moby) {
         initial_pose_entry = &l05_cuboids[slide_and_lowering_vars->cuboid_10];
         qcopy(moby + 0x10, &initial_pose_entry->pos);
         MOBY(moby)->rot.z = initial_pose_entry->rot.z;
-        fast_vec_normalize(
-            slide_motion_scratch, &initial_pose_entry->axes[1], slide_and_lowering_vars->unk18);
-        if (slide_and_lowering_vars->unk1C != 0) {
+        fast_vec_normalize(slide_motion_scratch,
+                           &initial_pose_entry->axes[1],
+                           slide_and_lowering_vars->slide_distance);
+        if (slide_and_lowering_vars->reversed != 0) {
             fast_vec_scale(slide_motion_scratch, slide_motion_scratch, -1.0f);
             MOBY(moby)->flags |= 0x8000;
         }
@@ -65,7 +66,7 @@ void triggered_slide_update(char *moby) {
         break;
     }
     case MOBY_WAIT_FOR_TRIGGER:
-        if ((*(unsigned char **)&D_L05_0015FFD8)[slide_and_lowering_vars->unk14 * 256 + 0xBC] !=
+        if (((unsigned char *)l05_moby_array)[slide_and_lowering_vars->trigger_moby * 256 + 0xBC] !=
             0) {
             allocate_voice_for_target_entry(0, 0, moby);
             MOBY(moby)->state = MOBY_SLIDE_TO_END_POINT;
@@ -74,10 +75,10 @@ void triggered_slide_update(char *moby) {
         break;
     case MOBY_SLIDE_TO_END_POINT:
         pose_entry = &l05_cuboids[slide_and_lowering_vars->cuboid_10];
-        reach = slide_and_lowering_vars->unk18 * 3.0f;
+        reach = slide_and_lowering_vars->slide_distance * 3.0f;
         slide_step_distance = 0.0f;
         fast_vec_normalize(slide_motion_scratch, &pose_entry->axes[1], reach);
-        if (slide_and_lowering_vars->unk1C != 0) {
+        if (slide_and_lowering_vars->reversed != 0) {
             fast_vec_scale(slide_motion_scratch, slide_motion_scratch, -1.0f);
         }
         fast_vec_add(slide_motion_scratch, &pose_entry->pos, slide_motion_scratch);
@@ -104,7 +105,7 @@ void triggered_slide_update(char *moby) {
                                    frame_time_sq * 40.0f,
                                    frame_time * 10.0f,
                                    (float *)&MOBY(moby)->pos.z,
-                                   &slide_and_lowering_vars->unk8);
+                                   &slide_and_lowering_vars->lower_speed);
         if (MOBY(moby)->pos.z < pose_entry->pos.z - 5.9f) {
             MOBY(moby)->state = MOBY_LOWERING_COMPLETE;
         }

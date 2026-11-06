@@ -238,17 +238,17 @@ void decompress_and_relocate_vendor_moby_assets(void) {
     int  *entry_offset_cursor;
     char *moby_asset_table_container;
     int   compressed_source_address;
-    compressed_source_address = vendor_menu_lui.unk18 + 0x80000;
+    compressed_source_address = vendor_menu_lui.animation_data + 0x80000;
     FlushCache(0);
-    fast_decompress(compressed_source_address, vendor_menu_lui.unk18);
+    fast_decompress(compressed_source_address, vendor_menu_lui.animation_data);
     FlushCache(0);
-    entry_offset_cursor = (int *)vendor_menu_lui.unk18;
+    entry_offset_cursor = (int *)vendor_menu_lui.animation_data;
     moby_asset_table_container = D_L00_00197300_lui[D_L00_00197BCC];
     for (i = 0; i < 16; i++) {
         int entry_offset = *entry_offset_cursor++;
         if (entry_offset) {
             *(int *)(moby_asset_table_container + 0x48 + i * 4) =
-                vendor_menu_lui.unk18 + entry_offset;
+                vendor_menu_lui.animation_data + entry_offset;
             relocate_asset_entry_pointers(moby_asset_table_container, i);
         }
     }
@@ -400,8 +400,8 @@ void open_vendor_menu(void *vendor_moby_arg) {
         vendor_moby->state = 3;
         vendor_menu.mode = VENDOR_MENU_MODE_SPAWNED_VENDOR;
     }
-    if ((vendor_menu.timer = game_language_macro - 1) < 0) {
-        vendor_menu.timer = 0;
+    if ((vendor_menu.language = game_language_macro - 1) < 0) {
+        vendor_menu.language = 0;
     }
     vendor_menu.unk44 = 0;
     vendor_menu.purchased_item = vendor_menu.title_text = vendor_menu.item_text = -1;
@@ -445,9 +445,9 @@ void open_vendor_menu(void *vendor_moby_arg) {
     }
     D_L00_0015F5D8 = 1;
     vendor_menu.state = VENDOR_MENU_OPENING;
-    vendor_menu.unk10 = D_L00_00173E00[2] + 0x60000;
-    vendor_menu.unk14 = (struct VendorMoby *)(D_L00_00173E00[1] + 0x60000);
-    vendor_menu.unk08 = 0;
+    vendor_menu.capture_buffer = D_L00_00173E00[2] + 0x60000;
+    vendor_menu.moby_buffer = (struct VendorMoby *)(D_L00_00173E00[1] + 0x60000);
+    vendor_menu.capture_state = 0;
     vendor_menu.vendor_moby = (struct VendorMoby *)vendor_moby;
     allocate_voice_for_target_entry(3, 0, vendor_moby);
     if (vendor_menu.mode == VENDOR_MENU_MODE_EXISTING_VENDOR) {
@@ -532,7 +532,7 @@ void close_vendor_menu(int exit_cutscene_completed) {
     D_L00_0015F5D8 = 1;
     D_L00_0015F5C4 = 0;
     hero_set_state(HERO_STATE_IDLE, 1);
-    hero.unk20A5 = 0;
+    hero.hidden = 0;
     update_hero_item_moby_flags();
     if (*(int *)(vendor_state_base + 0x40) == 0) {
         transform_vector_by_basis(&world_position,
@@ -563,7 +563,7 @@ void close_vendor_menu(int exit_cutscene_completed) {
     snd_flush_sound_commands();
 }
 
-extern s32 vendor_exit_cutscene_ids_by_item[] __asm__("D_L00_001CA020");
+extern s32 vendor_exit_cutscene_ids_by_item[37] __asm__("D_L00_001CA020");
 extern s32 vendor_exit_hero_local_offset_gp __asm__("D_L00_00161100") __attribute__((sda));
 extern s32 vendor_exit_cutscene_local_offset_gp __asm__("D_L00_001610F0") __attribute__((sda));
 
@@ -652,7 +652,7 @@ void restore_hero_after_vendor_exit_cutscene(void) {
     D_L00_0015F5D8 = 1;
     D_L00_0015F5C4 = 0;
     hero_set_state(HERO_STATE_IDLE, 1);
-    hero.unk20A5 = 0;
+    hero.hidden = 0;
     update_hero_item_moby_flags();
     vendor_state_base = (char *)&vendor_menu;
     transform_vector_by_basis(&world_position,
@@ -863,9 +863,9 @@ typedef struct {
     Vec4 v20;
 } VendorItemSlot30;
 
-extern VendorSound      vendor_sound[] __asm__("D_L00_001C2108");
+extern VendorSound      vendor_sound[37] __asm__("D_L00_001C2108");
 extern VendorItemSlot40 D_L00_001C8FF0[];
-extern VendorItemSlot30 l00_vendor_item_display_transform_parameters[] __asm__("D_L00_001C9930");
+extern VendorItemSlot30 l00_vendor_item_display_transform_parameters[37] __asm__("D_L00_001C9930");
 extern u8               vendor_moby_update_label[] __asm__("D_L00_00161128");
 extern u8               vendor_hero_update_label[] __asm__("D_L00_00161138");
 extern u8               vendor_part_update_label[] __asm__("D_L00_00161148");
@@ -1200,7 +1200,7 @@ void update_vendor_menu(void) {
             if (vendor_menu.frames >= scale_game_frames(40) ||
                 vendor_menu.mode != VENDOR_MENU_MODE_EXISTING_VENDOR) {
                 fade_level = 0.0f;
-                vendor_menu.unk0C = 1;
+                vendor_menu.capture_request = 1;
                 vendor_menu.state = VENDOR_MENU_OPEN;
                 vendor_menu.frames = 0;
                 FUN_00212f90(vendor_menu.vendor_moby, 3, 0, 8);
@@ -1253,12 +1253,12 @@ void update_vendor_menu(void) {
     case VENDOR_MENU_OPEN:
         if (D_L00_00161188 == 0 && cd_read_active[0] == 0 && D_L00_0016118C != 0) {
             decompress_and_relocate_vendor_moby_assets();
-            vendor_menu.unk24 = vendor_menu.unk14;
-            init_moby_instance(vendor_menu.unk24, 0xC);
-            vendor_menu.unk24->h32 = 0x40;
-            vendor_menu.unk24->rot.f[2] = vendor_menu.vendor_moby->rot.f[2];
-            update_entity(vendor_menu.unk24);
-            pack_render_command_fields(vendor_menu.unk24, 0x202020, 0xE, 0xE, 0);
+            vendor_menu.auxiliary_moby = vendor_menu.moby_buffer;
+            init_moby_instance(vendor_menu.auxiliary_moby, 0xC);
+            vendor_menu.auxiliary_moby->h32 = 0x40;
+            vendor_menu.auxiliary_moby->rot.f[2] = vendor_menu.vendor_moby->rot.f[2];
+            update_entity(vendor_menu.auxiliary_moby);
+            pack_render_command_fields(vendor_menu.auxiliary_moby, 0x202020, 0xE, 0xE, 0);
             D_L00_00161188 = 1;
             D_L00_0016118C = 0;
             handle_vendor_auxiliary_moby_event(1);
@@ -1266,14 +1266,15 @@ void update_vendor_menu(void) {
         advance_moby_animation(vendor_menu.vendor_moby);
         update_entity(vendor_menu.vendor_moby);
         if (D_L00_00161188 == 1) {
-            transform_vector_by_basis(&vendor_menu.unk24->pos,
+            transform_vector_by_basis(&vendor_menu.auxiliary_moby->pos,
                                       &vendor_auxiliary_moby_local_offset_gp,
                                       vendor_menu.vendor_moby->mtx);
-            fast_vec_add(
-                &vendor_menu.unk24->pos, &vendor_menu.unk24->pos, &vendor_menu.vendor_moby->pos);
-            advance_moby_animation(vendor_menu.unk24);
-            update_entity(vendor_menu.unk24);
-            update_resident_dialogue_animation_state(vendor_menu.unk24);
+            fast_vec_add(&vendor_menu.auxiliary_moby->pos,
+                         &vendor_menu.auxiliary_moby->pos,
+                         &vendor_menu.vendor_moby->pos);
+            advance_moby_animation(vendor_menu.auxiliary_moby);
+            update_entity(vendor_menu.auxiliary_moby);
+            update_resident_dialogue_animation_state(vendor_menu.auxiliary_moby);
         }
         k1 = -0.05f;
         k2 = -0.36f;
@@ -1506,7 +1507,7 @@ void update_vendor_menu(void) {
                 ((Vec4 *)g_debug_camera.basis)[1].q = D_L00_00165F80[1].q;
                 ((Vec4 *)g_debug_camera.basis)[2].q = D_L00_00165F80[2].q;
                 vendor_menu.state = VENDOR_MENU_CLOSING;
-                vendor_menu.unk08 = 0;
+                vendor_menu.capture_state = 0;
                 vendor_menu.frames = 0;
                 if (hero.items[0].moby != 0) {
                     select_world_object_resource_tables(((VendorMoby *)hero.items[0].moby)->oclass,
@@ -1555,7 +1556,7 @@ void update_vendor_menu(void) {
                     mark_moby_for_removal(cutscene_moby_to_remove);
                 }
             }
-            if (vendor_menu.unk28 != 0) {
+            if (vendor_menu.exit_anchor_moby != 0) {
                 restore_hero_after_vendor_exit_cutscene();
             } else {
                 close_vendor_menu(1);
@@ -1574,7 +1575,7 @@ void update_vendor_menu(void) {
         update_view_context();
         qcopy(l00_camera.pos.f, current_camera_key);
         transform_vector_by_basis(l00_camera.pos.f, l00_camera.pos.f, vendor_menu.basis);
-        fast_vec_add(l00_camera.pos.f, l00_camera.pos.f, &vendor_menu.unkC0);
+        fast_vec_add(l00_camera.pos.f, l00_camera.pos.f, &vendor_menu.cutscene_offset);
         camera_world_z_rotation = fast_add_rotations(rot[2], vendor_menu.basis[3].f[2]);
         sce_vu0_unit_matrix(camera_rotation_matrix);
         sce_vu0_rot_matrix_x(camera_rotation_matrix, camera_rotation_matrix, rot[0]);
@@ -1604,7 +1605,7 @@ void update_vendor_menu(void) {
             fast_vec_scale(&position_contribution_scratch, &keys[mb->next_frame], mb->blend);
             fast_vec_add(&mb->pos, &position_scratch, &position_contribution_scratch);
             transform_vector_by_basis(&mb->pos, &mb->pos, vendor_menu.basis);
-            fast_vec_add(&mb->pos, &mb->pos, &vendor_menu.unkC0);
+            fast_vec_add(&mb->pos, &mb->pos, &vendor_menu.cutscene_offset);
             mb->rot.f[2] = vendor_menu.basis[3].f[2];
             mb->b71 = 0xFF;
             update_entity(mb);
@@ -1621,3 +1622,3672 @@ void update_vendor_menu(void) {
     }
     FUN_0022ca50();
 }
+
+/* Per item: where the vendor shows it (offsets, rotation, a position
+   offset), then the cutscene its purchase plays on leaving (-1 none). */
+VendorItemSlot30 l00_vendor_item_display_transform_parameters[37] __asm__("D_L00_001C9930") = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, -0.04f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.15f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.25f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {-0.3f, 0.0f, 0.05f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 3.0f, 1.57f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 0.0f, 0.0f, {0}, {.f = {1.75f, 0.0f, 0.12f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+s32 vendor_exit_cutscene_ids_by_item[37] __asm__("D_L00_001CA020") = {
+    -1, /* item 0 */
+    -1, /* item 1 */
+    -1, /* item 2 */
+    -1, /* item 3 */
+    -1, /* item 4 */
+    -1, /* item 5 */
+    -1, /* item 6 */
+    -1, /* item 7 */
+    -1, /* item 8 */
+    7,  /* item 9 */
+    0,  /* item 10 */
+    10, /* item 11 */
+    -1, /* item 12 */
+    13, /* item 13 */
+    9,  /* item 14 */
+    8,  /* item 15 */
+    5,  /* item 16 */
+    1,  /* item 17 */
+    11, /* item 18 */
+    12, /* item 19 */
+    2,  /* item 20 */
+    6,  /* item 21 */
+    -1, /* item 22 */
+    -1, /* item 23 */
+    3,  /* item 24 */
+    4,  /* item 25 */
+    -1, /* item 26 */
+    -1, /* item 27 */
+    /* items 28..36: none */
+};
+
+VendorItemSlot30 D_L01_001C9DB0[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, -0.04f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.15f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.25f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {-0.3f, 0.0f, 0.05f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 3.0f, 1.57f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 0.0f, 0.0f, {0}, {.f = {1.75f, 0.0f, 0.12f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+s32 D_L01_001CA4A0[37] = {
+    -1, /* item 0 */
+    -1, /* item 1 */
+    -1, /* item 2 */
+    -1, /* item 3 */
+    -1, /* item 4 */
+    -1, /* item 5 */
+    -1, /* item 6 */
+    -1, /* item 7 */
+    -1, /* item 8 */
+    7,  /* item 9 */
+    0,  /* item 10 */
+    10, /* item 11 */
+    -1, /* item 12 */
+    13, /* item 13 */
+    9,  /* item 14 */
+    8,  /* item 15 */
+    5,  /* item 16 */
+    1,  /* item 17 */
+    11, /* item 18 */
+    12, /* item 19 */
+    2,  /* item 20 */
+    6,  /* item 21 */
+    -1, /* item 22 */
+    -1, /* item 23 */
+    3,  /* item 24 */
+    4,  /* item 25 */
+    -1, /* item 26 */
+    -1, /* item 27 */
+    /* items 28..36: none */
+};
+
+VendorItemSlot30 D_L02_001C9F30[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, -0.04f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.15f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.25f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {-0.3f, 0.0f, 0.05f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 3.0f, 1.57f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 0.0f, 0.0f, {0}, {.f = {1.75f, 0.0f, 0.12f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+s32 D_L02_001CA620[37] = {
+    -1, /* item 0 */
+    -1, /* item 1 */
+    -1, /* item 2 */
+    -1, /* item 3 */
+    -1, /* item 4 */
+    -1, /* item 5 */
+    -1, /* item 6 */
+    -1, /* item 7 */
+    -1, /* item 8 */
+    7,  /* item 9 */
+    0,  /* item 10 */
+    10, /* item 11 */
+    -1, /* item 12 */
+    13, /* item 13 */
+    9,  /* item 14 */
+    8,  /* item 15 */
+    5,  /* item 16 */
+    1,  /* item 17 */
+    11, /* item 18 */
+    12, /* item 19 */
+    2,  /* item 20 */
+    6,  /* item 21 */
+    -1, /* item 22 */
+    -1, /* item 23 */
+    3,  /* item 24 */
+    4,  /* item 25 */
+    -1, /* item 26 */
+    -1, /* item 27 */
+    /* items 28..36: none */
+};
+
+VendorItemSlot30 D_L03_001C9A30[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, -0.04f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.15f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.25f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {-0.3f, 0.0f, 0.05f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 3.0f, 1.57f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 0.0f, 0.0f, {0}, {.f = {1.75f, 0.0f, 0.12f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+s32 D_L03_001CA120[37] = {
+    -1, /* item 0 */
+    -1, /* item 1 */
+    -1, /* item 2 */
+    -1, /* item 3 */
+    -1, /* item 4 */
+    -1, /* item 5 */
+    -1, /* item 6 */
+    -1, /* item 7 */
+    -1, /* item 8 */
+    7,  /* item 9 */
+    0,  /* item 10 */
+    10, /* item 11 */
+    -1, /* item 12 */
+    13, /* item 13 */
+    9,  /* item 14 */
+    8,  /* item 15 */
+    5,  /* item 16 */
+    1,  /* item 17 */
+    11, /* item 18 */
+    12, /* item 19 */
+    2,  /* item 20 */
+    6,  /* item 21 */
+    -1, /* item 22 */
+    -1, /* item 23 */
+    3,  /* item 24 */
+    4,  /* item 25 */
+    -1, /* item 26 */
+    -1, /* item 27 */
+    /* items 28..36: none */
+};
+
+VendorItemSlot30 D_L04_001C9AB0[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, -0.04f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.15f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.25f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {-0.3f, 0.0f, 0.05f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 3.0f, 1.57f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 0.0f, 0.0f, {0}, {.f = {1.75f, 0.0f, 0.12f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+s32 D_L04_001CA1A0[37] = {
+    -1, /* item 0 */
+    -1, /* item 1 */
+    -1, /* item 2 */
+    -1, /* item 3 */
+    -1, /* item 4 */
+    -1, /* item 5 */
+    -1, /* item 6 */
+    -1, /* item 7 */
+    -1, /* item 8 */
+    7,  /* item 9 */
+    0,  /* item 10 */
+    10, /* item 11 */
+    -1, /* item 12 */
+    13, /* item 13 */
+    9,  /* item 14 */
+    8,  /* item 15 */
+    5,  /* item 16 */
+    1,  /* item 17 */
+    11, /* item 18 */
+    12, /* item 19 */
+    2,  /* item 20 */
+    6,  /* item 21 */
+    -1, /* item 22 */
+    -1, /* item 23 */
+    3,  /* item 24 */
+    4,  /* item 25 */
+    -1, /* item 26 */
+    -1, /* item 27 */
+    /* items 28..36: none */
+};
+
+VendorItemSlot30 D_L05_001C9DB0[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, -0.04f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.15f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.25f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {-0.3f, 0.0f, 0.05f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 3.0f, 1.57f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 0.0f, 0.0f, {0}, {.f = {1.75f, 0.0f, 0.12f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+s32 D_L05_001CA4A0[37] = {
+    -1, /* item 0 */
+    -1, /* item 1 */
+    -1, /* item 2 */
+    -1, /* item 3 */
+    -1, /* item 4 */
+    -1, /* item 5 */
+    -1, /* item 6 */
+    -1, /* item 7 */
+    -1, /* item 8 */
+    7,  /* item 9 */
+    0,  /* item 10 */
+    10, /* item 11 */
+    -1, /* item 12 */
+    13, /* item 13 */
+    9,  /* item 14 */
+    8,  /* item 15 */
+    5,  /* item 16 */
+    1,  /* item 17 */
+    11, /* item 18 */
+    12, /* item 19 */
+    2,  /* item 20 */
+    6,  /* item 21 */
+    -1, /* item 22 */
+    -1, /* item 23 */
+    3,  /* item 24 */
+    4,  /* item 25 */
+    -1, /* item 26 */
+    -1, /* item 27 */
+    /* items 28..36: none */
+};
+
+VendorItemSlot30 D_L06_001CA0B0[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, -0.04f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.15f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.25f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {-0.3f, 0.0f, 0.05f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 3.0f, 1.57f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 0.0f, 0.0f, {0}, {.f = {1.75f, 0.0f, 0.12f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+s32 D_L06_001CA7A0[37] = {
+    -1, /* item 0 */
+    -1, /* item 1 */
+    -1, /* item 2 */
+    -1, /* item 3 */
+    -1, /* item 4 */
+    -1, /* item 5 */
+    -1, /* item 6 */
+    -1, /* item 7 */
+    -1, /* item 8 */
+    7,  /* item 9 */
+    0,  /* item 10 */
+    10, /* item 11 */
+    -1, /* item 12 */
+    13, /* item 13 */
+    9,  /* item 14 */
+    8,  /* item 15 */
+    5,  /* item 16 */
+    1,  /* item 17 */
+    11, /* item 18 */
+    12, /* item 19 */
+    2,  /* item 20 */
+    6,  /* item 21 */
+    -1, /* item 22 */
+    -1, /* item 23 */
+    3,  /* item 24 */
+    4,  /* item 25 */
+    -1, /* item 26 */
+    -1, /* item 27 */
+    /* items 28..36: none */
+};
+
+VendorItemSlot30 D_L07_001C99B0[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, -0.04f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.15f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.25f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {-0.3f, 0.0f, 0.05f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 3.0f, 1.57f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 0.0f, 0.0f, {0}, {.f = {1.75f, 0.0f, 0.12f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+s32 D_L07_001CA0A0[37] = {
+    -1, /* item 0 */
+    -1, /* item 1 */
+    -1, /* item 2 */
+    -1, /* item 3 */
+    -1, /* item 4 */
+    -1, /* item 5 */
+    -1, /* item 6 */
+    -1, /* item 7 */
+    -1, /* item 8 */
+    7,  /* item 9 */
+    0,  /* item 10 */
+    10, /* item 11 */
+    -1, /* item 12 */
+    13, /* item 13 */
+    9,  /* item 14 */
+    8,  /* item 15 */
+    5,  /* item 16 */
+    1,  /* item 17 */
+    11, /* item 18 */
+    12, /* item 19 */
+    2,  /* item 20 */
+    6,  /* item 21 */
+    -1, /* item 22 */
+    -1, /* item 23 */
+    3,  /* item 24 */
+    4,  /* item 25 */
+    -1, /* item 26 */
+    -1, /* item 27 */
+    /* items 28..36: none */
+};
+
+VendorItemSlot30 D_L08_001CA130[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, -0.04f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.15f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.25f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {-0.3f, 0.0f, 0.05f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 3.0f, 1.57f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 0.0f, 0.0f, {0}, {.f = {1.75f, 0.0f, 0.12f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+s32 D_L08_001CA820[37] = {
+    -1, /* item 0 */
+    -1, /* item 1 */
+    -1, /* item 2 */
+    -1, /* item 3 */
+    -1, /* item 4 */
+    -1, /* item 5 */
+    -1, /* item 6 */
+    -1, /* item 7 */
+    -1, /* item 8 */
+    7,  /* item 9 */
+    0,  /* item 10 */
+    10, /* item 11 */
+    -1, /* item 12 */
+    13, /* item 13 */
+    9,  /* item 14 */
+    8,  /* item 15 */
+    5,  /* item 16 */
+    1,  /* item 17 */
+    11, /* item 18 */
+    12, /* item 19 */
+    2,  /* item 20 */
+    6,  /* item 21 */
+    -1, /* item 22 */
+    -1, /* item 23 */
+    3,  /* item 24 */
+    4,  /* item 25 */
+    -1, /* item 26 */
+    -1, /* item 27 */
+    /* items 28..36: none */
+};
+
+VendorItemSlot30 D_L09_001C9AB0[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, -0.04f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.15f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.25f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {-0.3f, 0.0f, 0.05f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 3.0f, 1.57f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 0.0f, 0.0f, {0}, {.f = {1.75f, 0.0f, 0.12f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+s32 D_L09_001CA1A0[37] = {
+    -1, /* item 0 */
+    -1, /* item 1 */
+    -1, /* item 2 */
+    -1, /* item 3 */
+    -1, /* item 4 */
+    -1, /* item 5 */
+    -1, /* item 6 */
+    -1, /* item 7 */
+    -1, /* item 8 */
+    7,  /* item 9 */
+    0,  /* item 10 */
+    10, /* item 11 */
+    -1, /* item 12 */
+    13, /* item 13 */
+    9,  /* item 14 */
+    8,  /* item 15 */
+    5,  /* item 16 */
+    1,  /* item 17 */
+    11, /* item 18 */
+    12, /* item 19 */
+    2,  /* item 20 */
+    6,  /* item 21 */
+    -1, /* item 22 */
+    -1, /* item 23 */
+    3,  /* item 24 */
+    4,  /* item 25 */
+    -1, /* item 26 */
+    -1, /* item 27 */
+    /* items 28..36: none */
+};
+
+VendorItemSlot30 D_L10_001C9DB0[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, -0.04f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.15f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.25f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {-0.3f, 0.0f, 0.05f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 3.0f, 1.57f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 0.0f, 0.0f, {0}, {.f = {1.75f, 0.0f, 0.12f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+s32 D_L10_001CA4A0[37] = {
+    -1, /* item 0 */
+    -1, /* item 1 */
+    -1, /* item 2 */
+    -1, /* item 3 */
+    -1, /* item 4 */
+    -1, /* item 5 */
+    -1, /* item 6 */
+    -1, /* item 7 */
+    -1, /* item 8 */
+    7,  /* item 9 */
+    0,  /* item 10 */
+    10, /* item 11 */
+    -1, /* item 12 */
+    13, /* item 13 */
+    9,  /* item 14 */
+    8,  /* item 15 */
+    5,  /* item 16 */
+    1,  /* item 17 */
+    11, /* item 18 */
+    12, /* item 19 */
+    2,  /* item 20 */
+    6,  /* item 21 */
+    -1, /* item 22 */
+    -1, /* item 23 */
+    3,  /* item 24 */
+    4,  /* item 25 */
+    -1, /* item 26 */
+    -1, /* item 27 */
+    /* items 28..36: none */
+};
+
+VendorItemSlot30 D_L11_001CA330[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, -0.04f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.15f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.25f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {-0.3f, 0.0f, 0.05f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 3.0f, 1.57f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 0.0f, 0.0f, {0}, {.f = {1.75f, 0.0f, 0.12f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+s32 D_L11_001CAA20[37] = {
+    -1, /* item 0 */
+    -1, /* item 1 */
+    -1, /* item 2 */
+    -1, /* item 3 */
+    -1, /* item 4 */
+    -1, /* item 5 */
+    -1, /* item 6 */
+    -1, /* item 7 */
+    -1, /* item 8 */
+    7,  /* item 9 */
+    0,  /* item 10 */
+    10, /* item 11 */
+    -1, /* item 12 */
+    13, /* item 13 */
+    9,  /* item 14 */
+    8,  /* item 15 */
+    5,  /* item 16 */
+    1,  /* item 17 */
+    11, /* item 18 */
+    12, /* item 19 */
+    2,  /* item 20 */
+    6,  /* item 21 */
+    -1, /* item 22 */
+    -1, /* item 23 */
+    3,  /* item 24 */
+    4,  /* item 25 */
+    -1, /* item 26 */
+    -1, /* item 27 */
+    /* items 28..36: none */
+};
+
+VendorItemSlot30 D_L12_001C9DB0[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, -0.04f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.15f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.25f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {-0.3f, 0.0f, 0.05f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 3.0f, 1.57f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 0.0f, 0.0f, {0}, {.f = {1.75f, 0.0f, 0.12f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+s32 D_L12_001CA4A0[37] = {
+    -1, /* item 0 */
+    -1, /* item 1 */
+    -1, /* item 2 */
+    -1, /* item 3 */
+    -1, /* item 4 */
+    -1, /* item 5 */
+    -1, /* item 6 */
+    -1, /* item 7 */
+    -1, /* item 8 */
+    7,  /* item 9 */
+    0,  /* item 10 */
+    10, /* item 11 */
+    -1, /* item 12 */
+    13, /* item 13 */
+    9,  /* item 14 */
+    8,  /* item 15 */
+    5,  /* item 16 */
+    1,  /* item 17 */
+    11, /* item 18 */
+    12, /* item 19 */
+    2,  /* item 20 */
+    6,  /* item 21 */
+    -1, /* item 22 */
+    -1, /* item 23 */
+    3,  /* item 24 */
+    4,  /* item 25 */
+    -1, /* item 26 */
+    -1, /* item 27 */
+    /* items 28..36: none */
+};
+
+VendorItemSlot30 D_L13_001C9C30[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, -0.04f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.15f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.25f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {-0.3f, 0.0f, 0.05f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 3.0f, 1.57f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 0.0f, 0.0f, {0}, {.f = {1.75f, 0.0f, 0.12f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+s32 D_L13_001CA320[37] = {
+    -1, /* item 0 */
+    -1, /* item 1 */
+    -1, /* item 2 */
+    -1, /* item 3 */
+    -1, /* item 4 */
+    -1, /* item 5 */
+    -1, /* item 6 */
+    -1, /* item 7 */
+    -1, /* item 8 */
+    7,  /* item 9 */
+    0,  /* item 10 */
+    10, /* item 11 */
+    -1, /* item 12 */
+    13, /* item 13 */
+    9,  /* item 14 */
+    8,  /* item 15 */
+    5,  /* item 16 */
+    1,  /* item 17 */
+    11, /* item 18 */
+    12, /* item 19 */
+    2,  /* item 20 */
+    6,  /* item 21 */
+    -1, /* item 22 */
+    -1, /* item 23 */
+    3,  /* item 24 */
+    4,  /* item 25 */
+    -1, /* item 26 */
+    -1, /* item 27 */
+    /* items 28..36: none */
+};
+
+VendorItemSlot30 D_L14_001CA030[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, -0.04f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.15f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.25f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {-0.3f, 0.0f, 0.05f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 3.0f, 1.57f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 0.0f, 0.0f, {0}, {.f = {1.75f, 0.0f, 0.12f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+s32 D_L14_001CA720[37] = {
+    -1, /* item 0 */
+    -1, /* item 1 */
+    -1, /* item 2 */
+    -1, /* item 3 */
+    -1, /* item 4 */
+    -1, /* item 5 */
+    -1, /* item 6 */
+    -1, /* item 7 */
+    -1, /* item 8 */
+    7,  /* item 9 */
+    0,  /* item 10 */
+    10, /* item 11 */
+    -1, /* item 12 */
+    13, /* item 13 */
+    9,  /* item 14 */
+    8,  /* item 15 */
+    5,  /* item 16 */
+    1,  /* item 17 */
+    11, /* item 18 */
+    12, /* item 19 */
+    2,  /* item 20 */
+    6,  /* item 21 */
+    -1, /* item 22 */
+    -1, /* item 23 */
+    3,  /* item 24 */
+    4,  /* item 25 */
+    -1, /* item 26 */
+    -1, /* item 27 */
+    /* items 28..36: none */
+};
+
+VendorItemSlot30 D_L15_001C9F30[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, -0.04f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.15f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.25f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {-0.3f, 0.0f, 0.05f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 3.0f, 1.57f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 0.0f, 0.0f, {0}, {.f = {1.75f, 0.0f, 0.12f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+s32 D_L15_001CA620[37] = {
+    -1, /* item 0 */
+    -1, /* item 1 */
+    -1, /* item 2 */
+    -1, /* item 3 */
+    -1, /* item 4 */
+    -1, /* item 5 */
+    -1, /* item 6 */
+    -1, /* item 7 */
+    -1, /* item 8 */
+    7,  /* item 9 */
+    0,  /* item 10 */
+    10, /* item 11 */
+    -1, /* item 12 */
+    13, /* item 13 */
+    9,  /* item 14 */
+    8,  /* item 15 */
+    5,  /* item 16 */
+    1,  /* item 17 */
+    11, /* item 18 */
+    12, /* item 19 */
+    2,  /* item 20 */
+    6,  /* item 21 */
+    -1, /* item 22 */
+    -1, /* item 23 */
+    3,  /* item 24 */
+    4,  /* item 25 */
+    -1, /* item 26 */
+    -1, /* item 27 */
+    /* items 28..36: none */
+};
+
+VendorItemSlot30 D_L16_001C9DB0[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, -0.04f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.15f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.25f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {-0.3f, 0.0f, 0.05f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 3.0f, 1.57f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 0.0f, 0.0f, {0}, {.f = {1.75f, 0.0f, 0.12f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+s32 D_L16_001CA4A0[37] = {
+    -1, /* item 0 */
+    -1, /* item 1 */
+    -1, /* item 2 */
+    -1, /* item 3 */
+    -1, /* item 4 */
+    -1, /* item 5 */
+    -1, /* item 6 */
+    -1, /* item 7 */
+    -1, /* item 8 */
+    7,  /* item 9 */
+    0,  /* item 10 */
+    10, /* item 11 */
+    -1, /* item 12 */
+    13, /* item 13 */
+    9,  /* item 14 */
+    8,  /* item 15 */
+    5,  /* item 16 */
+    1,  /* item 17 */
+    11, /* item 18 */
+    12, /* item 19 */
+    2,  /* item 20 */
+    6,  /* item 21 */
+    -1, /* item 22 */
+    -1, /* item 23 */
+    3,  /* item 24 */
+    4,  /* item 25 */
+    -1, /* item 26 */
+    -1, /* item 27 */
+    /* items 28..36: none */
+};
+
+VendorItemSlot30 D_L17_001CA230[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, -0.04f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.15f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.25f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {-0.3f, 0.0f, 0.05f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 3.0f, 1.57f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 0.0f, 0.0f, {0}, {.f = {1.75f, 0.0f, 0.12f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+s32 D_L17_001CA920[37] = {
+    -1, /* item 0 */
+    -1, /* item 1 */
+    -1, /* item 2 */
+    -1, /* item 3 */
+    -1, /* item 4 */
+    -1, /* item 5 */
+    -1, /* item 6 */
+    -1, /* item 7 */
+    -1, /* item 8 */
+    7,  /* item 9 */
+    0,  /* item 10 */
+    10, /* item 11 */
+    -1, /* item 12 */
+    13, /* item 13 */
+    9,  /* item 14 */
+    8,  /* item 15 */
+    5,  /* item 16 */
+    1,  /* item 17 */
+    11, /* item 18 */
+    12, /* item 19 */
+    2,  /* item 20 */
+    6,  /* item 21 */
+    -1, /* item 22 */
+    -1, /* item 23 */
+    3,  /* item 24 */
+    4,  /* item 25 */
+    -1, /* item 26 */
+    -1, /* item 27 */
+    /* items 28..36: none */
+};
+
+VendorItemSlot30 D_L18_001CA330[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, -0.04f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.15f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.25f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.5f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {-0.3f, 0.0f, 0.05f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 3.0f, 1.57f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.4f, 0.0f, {0}, 0.0f, -1.5707964f, {0}, {.f = {0.0f, 0.0f, 0.0f, 0.0f}}},
+    {0.0f, 0.1f, 0.0f, {0}, 0.0f, 0.0f, {0}, {.f = {1.75f, 0.0f, 0.12f, 0.0f}}},
+    {0.0f, 0.0f, 0.0f, {0}, 0.5235988f, 0.0f, {0}, {.f = {1.0f, -0.05f, 0.2f, 0.0f}}},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+s32 D_L18_001CAA20[37] = {
+    -1, /* item 0 */
+    -1, /* item 1 */
+    -1, /* item 2 */
+    -1, /* item 3 */
+    -1, /* item 4 */
+    -1, /* item 5 */
+    -1, /* item 6 */
+    -1, /* item 7 */
+    -1, /* item 8 */
+    7,  /* item 9 */
+    0,  /* item 10 */
+    10, /* item 11 */
+    -1, /* item 12 */
+    13, /* item 13 */
+    9,  /* item 14 */
+    8,  /* item 15 */
+    5,  /* item 16 */
+    1,  /* item 17 */
+    11, /* item 18 */
+    12, /* item 19 */
+    2,  /* item 20 */
+    6,  /* item 21 */
+    -1, /* item 22 */
+    -1, /* item 23 */
+    3,  /* item 24 */
+    4,  /* item 25 */
+    -1, /* item 26 */
+    -1, /* item 27 */
+    /* items 28..36: none */
+};
+
+/* Per item: the sound of its vendor row and the help message the vendor
+   shows for it. The same in every level. */
+VendorSound vendor_sound[37] __asm__("D_L00_001C2108") = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0xe2, {1.0f, 0.15f, -0.08f}, 0x525b},
+    {0xcc, {0.7f, -0.05f, -0.2f}, 0x525c},
+    {0},
+    {0xde, {0.8f, 0.0f, -0.15f}, 0x525d},
+    {0, {0.6f, 0.25f, -0.1f}, 0x525e},
+    {0x3ee, {0.75f, 0.25f, -0.18f}, 0x525f},
+    {0xd6, {0.52f, 0.1f, -0.12f}, 0x5260},
+    {0xe1, {1.0f, 0.15f, -0.08f}, 0x5261},
+    {0, {1.0f, 0.1f, -0.1f}, 0x5262},
+    {0xd5, {0.6f, 0.1f, -0.12f}, 0x5263},
+    {0xdf, {1.0f, 0.15f, -0.08f}, 0x5264},
+    {0},
+    {0},
+    {0x59e, {0.0f, 0.0f, 0.0f}, 0x5265},
+    {0x5a7, {1.0f, 0.15f, -0.08f}, 0x5266},
+    {0x5a9, {1.0f, 0.15f, -0.08f}, 0x5267},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+VendorSound D_L01_001C2588[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0xe2, {1.0f, 0.15f, -0.08f}, 0x525b},
+    {0xcc, {0.7f, -0.05f, -0.2f}, 0x525c},
+    {0},
+    {0xde, {0.8f, 0.0f, -0.15f}, 0x525d},
+    {0, {0.6f, 0.25f, -0.1f}, 0x525e},
+    {0x3ee, {0.75f, 0.25f, -0.18f}, 0x525f},
+    {0xd6, {0.52f, 0.1f, -0.12f}, 0x5260},
+    {0xe1, {1.0f, 0.15f, -0.08f}, 0x5261},
+    {0, {1.0f, 0.1f, -0.1f}, 0x5262},
+    {0xd5, {0.6f, 0.1f, -0.12f}, 0x5263},
+    {0xdf, {1.0f, 0.15f, -0.08f}, 0x5264},
+    {0},
+    {0},
+    {0x59e, {0.0f, 0.0f, 0.0f}, 0x5265},
+    {0x5a7, {1.0f, 0.15f, -0.08f}, 0x5266},
+    {0x5a9, {1.0f, 0.15f, -0.08f}, 0x5267},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+VendorSound D_L02_001C2708[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0xe2, {1.0f, 0.15f, -0.08f}, 0x525b},
+    {0xcc, {0.7f, -0.05f, -0.2f}, 0x525c},
+    {0},
+    {0xde, {0.8f, 0.0f, -0.15f}, 0x525d},
+    {0, {0.6f, 0.25f, -0.1f}, 0x525e},
+    {0x3ee, {0.75f, 0.25f, -0.18f}, 0x525f},
+    {0xd6, {0.52f, 0.1f, -0.12f}, 0x5260},
+    {0xe1, {1.0f, 0.15f, -0.08f}, 0x5261},
+    {0, {1.0f, 0.1f, -0.1f}, 0x5262},
+    {0xd5, {0.6f, 0.1f, -0.12f}, 0x5263},
+    {0xdf, {1.0f, 0.15f, -0.08f}, 0x5264},
+    {0},
+    {0},
+    {0x59e, {0.0f, 0.0f, 0.0f}, 0x5265},
+    {0x5a7, {1.0f, 0.15f, -0.08f}, 0x5266},
+    {0x5a9, {1.0f, 0.15f, -0.08f}, 0x5267},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+VendorSound D_L03_001C2208[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0xe2, {1.0f, 0.15f, -0.08f}, 0x525b},
+    {0xcc, {0.7f, -0.05f, -0.2f}, 0x525c},
+    {0},
+    {0xde, {0.8f, 0.0f, -0.15f}, 0x525d},
+    {0, {0.6f, 0.25f, -0.1f}, 0x525e},
+    {0x3ee, {0.75f, 0.25f, -0.18f}, 0x525f},
+    {0xd6, {0.52f, 0.1f, -0.12f}, 0x5260},
+    {0xe1, {1.0f, 0.15f, -0.08f}, 0x5261},
+    {0, {1.0f, 0.1f, -0.1f}, 0x5262},
+    {0xd5, {0.6f, 0.1f, -0.12f}, 0x5263},
+    {0xdf, {1.0f, 0.15f, -0.08f}, 0x5264},
+    {0},
+    {0},
+    {0x59e, {0.0f, 0.0f, 0.0f}, 0x5265},
+    {0x5a7, {1.0f, 0.15f, -0.08f}, 0x5266},
+    {0x5a9, {1.0f, 0.15f, -0.08f}, 0x5267},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+VendorSound D_L04_001C2288[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0xe2, {1.0f, 0.15f, -0.08f}, 0x525b},
+    {0xcc, {0.7f, -0.05f, -0.2f}, 0x525c},
+    {0},
+    {0xde, {0.8f, 0.0f, -0.15f}, 0x525d},
+    {0, {0.6f, 0.25f, -0.1f}, 0x525e},
+    {0x3ee, {0.75f, 0.25f, -0.18f}, 0x525f},
+    {0xd6, {0.52f, 0.1f, -0.12f}, 0x5260},
+    {0xe1, {1.0f, 0.15f, -0.08f}, 0x5261},
+    {0, {1.0f, 0.1f, -0.1f}, 0x5262},
+    {0xd5, {0.6f, 0.1f, -0.12f}, 0x5263},
+    {0xdf, {1.0f, 0.15f, -0.08f}, 0x5264},
+    {0},
+    {0},
+    {0x59e, {0.0f, 0.0f, 0.0f}, 0x5265},
+    {0x5a7, {1.0f, 0.15f, -0.08f}, 0x5266},
+    {0x5a9, {1.0f, 0.15f, -0.08f}, 0x5267},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+VendorSound D_L05_001C2588[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0xe2, {1.0f, 0.15f, -0.08f}, 0x525b},
+    {0xcc, {0.7f, -0.05f, -0.2f}, 0x525c},
+    {0},
+    {0xde, {0.8f, 0.0f, -0.15f}, 0x525d},
+    {0, {0.6f, 0.25f, -0.1f}, 0x525e},
+    {0x3ee, {0.75f, 0.25f, -0.18f}, 0x525f},
+    {0xd6, {0.52f, 0.1f, -0.12f}, 0x5260},
+    {0xe1, {1.0f, 0.15f, -0.08f}, 0x5261},
+    {0, {1.0f, 0.1f, -0.1f}, 0x5262},
+    {0xd5, {0.6f, 0.1f, -0.12f}, 0x5263},
+    {0xdf, {1.0f, 0.15f, -0.08f}, 0x5264},
+    {0},
+    {0},
+    {0x59e, {0.0f, 0.0f, 0.0f}, 0x5265},
+    {0x5a7, {1.0f, 0.15f, -0.08f}, 0x5266},
+    {0x5a9, {1.0f, 0.15f, -0.08f}, 0x5267},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+VendorSound D_L06_001C2888[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0xe2, {1.0f, 0.15f, -0.08f}, 0x525b},
+    {0xcc, {0.7f, -0.05f, -0.2f}, 0x525c},
+    {0},
+    {0xde, {0.8f, 0.0f, -0.15f}, 0x525d},
+    {0, {0.6f, 0.25f, -0.1f}, 0x525e},
+    {0x3ee, {0.75f, 0.25f, -0.18f}, 0x525f},
+    {0xd6, {0.52f, 0.1f, -0.12f}, 0x5260},
+    {0xe1, {1.0f, 0.15f, -0.08f}, 0x5261},
+    {0, {1.0f, 0.1f, -0.1f}, 0x5262},
+    {0xd5, {0.6f, 0.1f, -0.12f}, 0x5263},
+    {0xdf, {1.0f, 0.15f, -0.08f}, 0x5264},
+    {0},
+    {0},
+    {0x59e, {0.0f, 0.0f, 0.0f}, 0x5265},
+    {0x5a7, {1.0f, 0.15f, -0.08f}, 0x5266},
+    {0x5a9, {1.0f, 0.15f, -0.08f}, 0x5267},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+VendorSound D_L07_001C2188[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0xe2, {1.0f, 0.15f, -0.08f}, 0x525b},
+    {0xcc, {0.7f, -0.05f, -0.2f}, 0x525c},
+    {0},
+    {0xde, {0.8f, 0.0f, -0.15f}, 0x525d},
+    {0, {0.6f, 0.25f, -0.1f}, 0x525e},
+    {0x3ee, {0.75f, 0.25f, -0.18f}, 0x525f},
+    {0xd6, {0.52f, 0.1f, -0.12f}, 0x5260},
+    {0xe1, {1.0f, 0.15f, -0.08f}, 0x5261},
+    {0, {1.0f, 0.1f, -0.1f}, 0x5262},
+    {0xd5, {0.6f, 0.1f, -0.12f}, 0x5263},
+    {0xdf, {1.0f, 0.15f, -0.08f}, 0x5264},
+    {0},
+    {0},
+    {0x59e, {0.0f, 0.0f, 0.0f}, 0x5265},
+    {0x5a7, {1.0f, 0.15f, -0.08f}, 0x5266},
+    {0x5a9, {1.0f, 0.15f, -0.08f}, 0x5267},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+VendorSound D_L08_001C2908[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0xe2, {1.0f, 0.15f, -0.08f}, 0x525b},
+    {0xcc, {0.7f, -0.05f, -0.2f}, 0x525c},
+    {0},
+    {0xde, {0.8f, 0.0f, -0.15f}, 0x525d},
+    {0, {0.6f, 0.25f, -0.1f}, 0x525e},
+    {0x3ee, {0.75f, 0.25f, -0.18f}, 0x525f},
+    {0xd6, {0.52f, 0.1f, -0.12f}, 0x5260},
+    {0xe1, {1.0f, 0.15f, -0.08f}, 0x5261},
+    {0, {1.0f, 0.1f, -0.1f}, 0x5262},
+    {0xd5, {0.6f, 0.1f, -0.12f}, 0x5263},
+    {0xdf, {1.0f, 0.15f, -0.08f}, 0x5264},
+    {0},
+    {0},
+    {0x59e, {0.0f, 0.0f, 0.0f}, 0x5265},
+    {0x5a7, {1.0f, 0.15f, -0.08f}, 0x5266},
+    {0x5a9, {1.0f, 0.15f, -0.08f}, 0x5267},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+VendorSound D_L09_001C2288[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0xe2, {1.0f, 0.15f, -0.08f}, 0x525b},
+    {0xcc, {0.7f, -0.05f, -0.2f}, 0x525c},
+    {0},
+    {0xde, {0.8f, 0.0f, -0.15f}, 0x525d},
+    {0, {0.6f, 0.25f, -0.1f}, 0x525e},
+    {0x3ee, {0.75f, 0.25f, -0.18f}, 0x525f},
+    {0xd6, {0.52f, 0.1f, -0.12f}, 0x5260},
+    {0xe1, {1.0f, 0.15f, -0.08f}, 0x5261},
+    {0, {1.0f, 0.1f, -0.1f}, 0x5262},
+    {0xd5, {0.6f, 0.1f, -0.12f}, 0x5263},
+    {0xdf, {1.0f, 0.15f, -0.08f}, 0x5264},
+    {0},
+    {0},
+    {0x59e, {0.0f, 0.0f, 0.0f}, 0x5265},
+    {0x5a7, {1.0f, 0.15f, -0.08f}, 0x5266},
+    {0x5a9, {1.0f, 0.15f, -0.08f}, 0x5267},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+VendorSound D_L10_001C2588[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0xe2, {1.0f, 0.15f, -0.08f}, 0x525b},
+    {0xcc, {0.7f, -0.05f, -0.2f}, 0x525c},
+    {0},
+    {0xde, {0.8f, 0.0f, -0.15f}, 0x525d},
+    {0, {0.6f, 0.25f, -0.1f}, 0x525e},
+    {0x3ee, {0.75f, 0.25f, -0.18f}, 0x525f},
+    {0xd6, {0.52f, 0.1f, -0.12f}, 0x5260},
+    {0xe1, {1.0f, 0.15f, -0.08f}, 0x5261},
+    {0, {1.0f, 0.1f, -0.1f}, 0x5262},
+    {0xd5, {0.6f, 0.1f, -0.12f}, 0x5263},
+    {0xdf, {1.0f, 0.15f, -0.08f}, 0x5264},
+    {0},
+    {0},
+    {0x59e, {0.0f, 0.0f, 0.0f}, 0x5265},
+    {0x5a7, {1.0f, 0.15f, -0.08f}, 0x5266},
+    {0x5a9, {1.0f, 0.15f, -0.08f}, 0x5267},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+VendorSound D_L11_001C2B08[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0xe2, {1.0f, 0.15f, -0.08f}, 0x525b},
+    {0xcc, {0.7f, -0.05f, -0.2f}, 0x525c},
+    {0},
+    {0xde, {0.8f, 0.0f, -0.15f}, 0x525d},
+    {0, {0.6f, 0.25f, -0.1f}, 0x525e},
+    {0x3ee, {0.75f, 0.25f, -0.18f}, 0x525f},
+    {0xd6, {0.52f, 0.1f, -0.12f}, 0x5260},
+    {0xe1, {1.0f, 0.15f, -0.08f}, 0x5261},
+    {0, {1.0f, 0.1f, -0.1f}, 0x5262},
+    {0xd5, {0.6f, 0.1f, -0.12f}, 0x5263},
+    {0xdf, {1.0f, 0.15f, -0.08f}, 0x5264},
+    {0},
+    {0},
+    {0x59e, {0.0f, 0.0f, 0.0f}, 0x5265},
+    {0x5a7, {1.0f, 0.15f, -0.08f}, 0x5266},
+    {0x5a9, {1.0f, 0.15f, -0.08f}, 0x5267},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+VendorSound D_L12_001C2588[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0xe2, {1.0f, 0.15f, -0.08f}, 0x525b},
+    {0xcc, {0.7f, -0.05f, -0.2f}, 0x525c},
+    {0},
+    {0xde, {0.8f, 0.0f, -0.15f}, 0x525d},
+    {0, {0.6f, 0.25f, -0.1f}, 0x525e},
+    {0x3ee, {0.75f, 0.25f, -0.18f}, 0x525f},
+    {0xd6, {0.52f, 0.1f, -0.12f}, 0x5260},
+    {0xe1, {1.0f, 0.15f, -0.08f}, 0x5261},
+    {0, {1.0f, 0.1f, -0.1f}, 0x5262},
+    {0xd5, {0.6f, 0.1f, -0.12f}, 0x5263},
+    {0xdf, {1.0f, 0.15f, -0.08f}, 0x5264},
+    {0},
+    {0},
+    {0x59e, {0.0f, 0.0f, 0.0f}, 0x5265},
+    {0x5a7, {1.0f, 0.15f, -0.08f}, 0x5266},
+    {0x5a9, {1.0f, 0.15f, -0.08f}, 0x5267},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+VendorSound D_L13_001C2408[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0xe2, {1.0f, 0.15f, -0.08f}, 0x525b},
+    {0xcc, {0.7f, -0.05f, -0.2f}, 0x525c},
+    {0},
+    {0xde, {0.8f, 0.0f, -0.15f}, 0x525d},
+    {0, {0.6f, 0.25f, -0.1f}, 0x525e},
+    {0x3ee, {0.75f, 0.25f, -0.18f}, 0x525f},
+    {0xd6, {0.52f, 0.1f, -0.12f}, 0x5260},
+    {0xe1, {1.0f, 0.15f, -0.08f}, 0x5261},
+    {0, {1.0f, 0.1f, -0.1f}, 0x5262},
+    {0xd5, {0.6f, 0.1f, -0.12f}, 0x5263},
+    {0xdf, {1.0f, 0.15f, -0.08f}, 0x5264},
+    {0},
+    {0},
+    {0x59e, {0.0f, 0.0f, 0.0f}, 0x5265},
+    {0x5a7, {1.0f, 0.15f, -0.08f}, 0x5266},
+    {0x5a9, {1.0f, 0.15f, -0.08f}, 0x5267},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+VendorSound D_L14_001C2808[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0xe2, {1.0f, 0.15f, -0.08f}, 0x525b},
+    {0xcc, {0.7f, -0.05f, -0.2f}, 0x525c},
+    {0},
+    {0xde, {0.8f, 0.0f, -0.15f}, 0x525d},
+    {0, {0.6f, 0.25f, -0.1f}, 0x525e},
+    {0x3ee, {0.75f, 0.25f, -0.18f}, 0x525f},
+    {0xd6, {0.52f, 0.1f, -0.12f}, 0x5260},
+    {0xe1, {1.0f, 0.15f, -0.08f}, 0x5261},
+    {0, {1.0f, 0.1f, -0.1f}, 0x5262},
+    {0xd5, {0.6f, 0.1f, -0.12f}, 0x5263},
+    {0xdf, {1.0f, 0.15f, -0.08f}, 0x5264},
+    {0},
+    {0},
+    {0x59e, {0.0f, 0.0f, 0.0f}, 0x5265},
+    {0x5a7, {1.0f, 0.15f, -0.08f}, 0x5266},
+    {0x5a9, {1.0f, 0.15f, -0.08f}, 0x5267},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+VendorSound D_L15_001C2708[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0xe2, {1.0f, 0.15f, -0.08f}, 0x525b},
+    {0xcc, {0.7f, -0.05f, -0.2f}, 0x525c},
+    {0},
+    {0xde, {0.8f, 0.0f, -0.15f}, 0x525d},
+    {0, {0.6f, 0.25f, -0.1f}, 0x525e},
+    {0x3ee, {0.75f, 0.25f, -0.18f}, 0x525f},
+    {0xd6, {0.52f, 0.1f, -0.12f}, 0x5260},
+    {0xe1, {1.0f, 0.15f, -0.08f}, 0x5261},
+    {0, {1.0f, 0.1f, -0.1f}, 0x5262},
+    {0xd5, {0.6f, 0.1f, -0.12f}, 0x5263},
+    {0xdf, {1.0f, 0.15f, -0.08f}, 0x5264},
+    {0},
+    {0},
+    {0x59e, {0.0f, 0.0f, 0.0f}, 0x5265},
+    {0x5a7, {1.0f, 0.15f, -0.08f}, 0x5266},
+    {0x5a9, {1.0f, 0.15f, -0.08f}, 0x5267},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+VendorSound D_L16_001C2588[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0xe2, {1.0f, 0.15f, -0.08f}, 0x525b},
+    {0xcc, {0.7f, -0.05f, -0.2f}, 0x525c},
+    {0},
+    {0xde, {0.8f, 0.0f, -0.15f}, 0x525d},
+    {0, {0.6f, 0.25f, -0.1f}, 0x525e},
+    {0x3ee, {0.75f, 0.25f, -0.18f}, 0x525f},
+    {0xd6, {0.52f, 0.1f, -0.12f}, 0x5260},
+    {0xe1, {1.0f, 0.15f, -0.08f}, 0x5261},
+    {0, {1.0f, 0.1f, -0.1f}, 0x5262},
+    {0xd5, {0.6f, 0.1f, -0.12f}, 0x5263},
+    {0xdf, {1.0f, 0.15f, -0.08f}, 0x5264},
+    {0},
+    {0},
+    {0x59e, {0.0f, 0.0f, 0.0f}, 0x5265},
+    {0x5a7, {1.0f, 0.15f, -0.08f}, 0x5266},
+    {0x5a9, {1.0f, 0.15f, -0.08f}, 0x5267},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+VendorSound D_L17_001C2A08[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0xe2, {1.0f, 0.15f, -0.08f}, 0x525b},
+    {0xcc, {0.7f, -0.05f, -0.2f}, 0x525c},
+    {0},
+    {0xde, {0.8f, 0.0f, -0.15f}, 0x525d},
+    {0, {0.6f, 0.25f, -0.1f}, 0x525e},
+    {0x3ee, {0.75f, 0.25f, -0.18f}, 0x525f},
+    {0xd6, {0.52f, 0.1f, -0.12f}, 0x5260},
+    {0xe1, {1.0f, 0.15f, -0.08f}, 0x5261},
+    {0, {1.0f, 0.1f, -0.1f}, 0x5262},
+    {0xd5, {0.6f, 0.1f, -0.12f}, 0x5263},
+    {0xdf, {1.0f, 0.15f, -0.08f}, 0x5264},
+    {0},
+    {0},
+    {0x59e, {0.0f, 0.0f, 0.0f}, 0x5265},
+    {0x5a7, {1.0f, 0.15f, -0.08f}, 0x5266},
+    {0x5a9, {1.0f, 0.15f, -0.08f}, 0x5267},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+VendorSound D_L18_001C2B08[37] = {
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0xe2, {1.0f, 0.15f, -0.08f}, 0x525b},
+    {0xcc, {0.7f, -0.05f, -0.2f}, 0x525c},
+    {0},
+    {0xde, {0.8f, 0.0f, -0.15f}, 0x525d},
+    {0, {0.6f, 0.25f, -0.1f}, 0x525e},
+    {0x3ee, {0.75f, 0.25f, -0.18f}, 0x525f},
+    {0xd6, {0.52f, 0.1f, -0.12f}, 0x5260},
+    {0xe1, {1.0f, 0.15f, -0.08f}, 0x5261},
+    {0, {1.0f, 0.1f, -0.1f}, 0x5262},
+    {0xd5, {0.6f, 0.1f, -0.12f}, 0x5263},
+    {0xdf, {1.0f, 0.15f, -0.08f}, 0x5264},
+    {0},
+    {0},
+    {0x59e, {0.0f, 0.0f, 0.0f}, 0x5265},
+    {0x5a7, {1.0f, 0.15f, -0.08f}, 0x5266},
+    {0x5a9, {1.0f, 0.15f, -0.08f}, 0x5267},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+/* How the vendor shows the selected item, by item: the item moby's rotation
+   and its offset from the vendor (offset[3] is the extra height of a weapon,
+   added again with the discount), then the part moby shown with it. */
+typedef struct {
+    f32 unused[4];
+    f32 rotation[4];
+    f32 offset[4];
+} VendorItemPose;
+
+typedef struct {
+    f32 unused[4];
+    f32 rotation[4]; /* x and y are read */
+    f32 offset[4];   /* added to the item moby's position */
+    s32 class_id;    /* the part's moby class, 0 for none */
+    s32 pad34[3];
+} VendorItemPart;
+
+VendorItemPose vendor_item_poses[37] __asm__("D_L00_001C8900") = {
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.5f, -0.05f, -0.02f, 0.06f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.5f, -1.7f, -0.26f, 0.12f}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, 0.0f, 0.0f}, {-0.9f, -0.0f, -0.12f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -2.9f, 0.0f}, {-3.0f, -1.75f, -0.19f, 0.11f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.4f, -1.4f, -0.25f, 0.12f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.4f, -2.15f, -0.15f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.3f, -0.1f, -0.02f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 0.0f, 0.0f}, {-1.0f, -0.2f, -0.1f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.0f, -1.9f, -0.13f, 0.11f}},
+    {{0}, {0.0f, 0.0f, 3.0f, 0.0f}, {0.3f, -0.15f, -0.025f, 0.06f}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-4.1f, -2.2f, -0.35f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 0.1f, 0.0f}, {1.0f, 0.35f, -0.06f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 2.9f, 0.0f}, {0.3f, -0.1f, -0.04f, 0.05f}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPart vendor_item_parts[37] __asm__("D_L00_001C8FF0") = {
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe2},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xcc},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xde},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x3ee},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xd6},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe1},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, -0.2f, 0.0f}, 0xd5},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xdf},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x59e},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a7},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPose D_L01_001C8D80[37] = {
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.5f, -0.05f, -0.02f, 0.06f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.5f, -1.7f, -0.26f, 0.12f}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, 0.0f, 0.0f}, {-0.9f, -0.0f, -0.12f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -2.9f, 0.0f}, {-3.0f, -1.75f, -0.19f, 0.11f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.4f, -1.4f, -0.25f, 0.12f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.4f, -2.15f, -0.15f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.3f, -0.1f, -0.02f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 0.0f, 0.0f}, {-1.0f, -0.2f, -0.1f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.0f, -1.9f, -0.13f, 0.11f}},
+    {{0}, {0.0f, 0.0f, 3.0f, 0.0f}, {0.3f, -0.15f, -0.025f, 0.06f}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-4.1f, -2.2f, -0.35f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 0.1f, 0.0f}, {1.0f, 0.35f, -0.06f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 2.9f, 0.0f}, {0.3f, -0.1f, -0.04f, 0.05f}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPart D_L01_001C9470[37] = {
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe2},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xcc},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xde},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x3ee},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xd6},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe1},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, -0.2f, 0.0f}, 0xd5},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xdf},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x59e},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a7},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPose D_L02_001C8F00[37] = {
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.5f, -0.05f, -0.02f, 0.06f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.5f, -1.7f, -0.26f, 0.12f}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, 0.0f, 0.0f}, {-0.9f, -0.0f, -0.12f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -2.9f, 0.0f}, {-3.0f, -1.75f, -0.19f, 0.11f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.4f, -1.4f, -0.25f, 0.12f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.4f, -2.15f, -0.15f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.3f, -0.1f, -0.02f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 0.0f, 0.0f}, {-1.0f, -0.2f, -0.1f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.0f, -1.9f, -0.13f, 0.11f}},
+    {{0}, {0.0f, 0.0f, 3.0f, 0.0f}, {0.3f, -0.15f, -0.025f, 0.06f}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-4.1f, -2.2f, -0.35f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 0.1f, 0.0f}, {1.0f, 0.35f, -0.06f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 2.9f, 0.0f}, {0.3f, -0.1f, -0.04f, 0.05f}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPart D_L02_001C95F0[37] = {
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe2},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xcc},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xde},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x3ee},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xd6},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe1},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, -0.2f, 0.0f}, 0xd5},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xdf},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x59e},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a7},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPose D_L03_001C8A00[37] = {
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.5f, -0.05f, -0.02f, 0.06f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.5f, -1.7f, -0.26f, 0.12f}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, 0.0f, 0.0f}, {-0.9f, -0.0f, -0.12f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -2.9f, 0.0f}, {-3.0f, -1.75f, -0.19f, 0.11f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.4f, -1.4f, -0.25f, 0.12f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.4f, -2.15f, -0.15f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.3f, -0.1f, -0.02f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 0.0f, 0.0f}, {-1.0f, -0.2f, -0.1f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.0f, -1.9f, -0.13f, 0.11f}},
+    {{0}, {0.0f, 0.0f, 3.0f, 0.0f}, {0.3f, -0.15f, -0.025f, 0.06f}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-4.1f, -2.2f, -0.35f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 0.1f, 0.0f}, {1.0f, 0.35f, -0.06f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 2.9f, 0.0f}, {0.3f, -0.1f, -0.04f, 0.05f}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPart D_L03_001C90F0[37] = {
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe2},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xcc},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xde},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x3ee},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xd6},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe1},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, -0.2f, 0.0f}, 0xd5},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xdf},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x59e},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a7},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPose D_L04_001C8A80[37] = {
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.5f, -0.05f, -0.02f, 0.06f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.5f, -1.7f, -0.26f, 0.12f}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, 0.0f, 0.0f}, {-0.9f, -0.0f, -0.12f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -2.9f, 0.0f}, {-3.0f, -1.75f, -0.19f, 0.11f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.4f, -1.4f, -0.25f, 0.12f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.4f, -2.15f, -0.15f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.3f, -0.1f, -0.02f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 0.0f, 0.0f}, {-1.0f, -0.2f, -0.1f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.0f, -1.9f, -0.13f, 0.11f}},
+    {{0}, {0.0f, 0.0f, 3.0f, 0.0f}, {0.3f, -0.15f, -0.025f, 0.06f}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-4.1f, -2.2f, -0.35f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 0.1f, 0.0f}, {1.0f, 0.35f, -0.06f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 2.9f, 0.0f}, {0.3f, -0.1f, -0.04f, 0.05f}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPart D_L04_001C9170[37] = {
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe2},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xcc},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xde},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x3ee},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xd6},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe1},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, -0.2f, 0.0f}, 0xd5},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xdf},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x59e},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a7},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPose D_L05_001C8D80[37] = {
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.5f, -0.05f, -0.02f, 0.06f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.5f, -1.7f, -0.26f, 0.12f}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, 0.0f, 0.0f}, {-0.9f, -0.0f, -0.12f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -2.9f, 0.0f}, {-3.0f, -1.75f, -0.19f, 0.11f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.4f, -1.4f, -0.25f, 0.12f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.4f, -2.15f, -0.15f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.3f, -0.1f, -0.02f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 0.0f, 0.0f}, {-1.0f, -0.2f, -0.1f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.0f, -1.9f, -0.13f, 0.11f}},
+    {{0}, {0.0f, 0.0f, 3.0f, 0.0f}, {0.3f, -0.15f, -0.025f, 0.06f}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-4.1f, -2.2f, -0.35f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 0.1f, 0.0f}, {1.0f, 0.35f, -0.06f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 2.9f, 0.0f}, {0.3f, -0.1f, -0.04f, 0.05f}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPart D_L05_001C9470[37] = {
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe2},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xcc},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xde},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x3ee},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xd6},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe1},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, -0.2f, 0.0f}, 0xd5},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xdf},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x59e},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a7},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPose D_L06_001C9080[37] = {
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.5f, -0.05f, -0.02f, 0.06f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.5f, -1.7f, -0.26f, 0.12f}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, 0.0f, 0.0f}, {-0.9f, -0.0f, -0.12f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -2.9f, 0.0f}, {-3.0f, -1.75f, -0.19f, 0.11f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.4f, -1.4f, -0.25f, 0.12f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.4f, -2.15f, -0.15f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.3f, -0.1f, -0.02f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 0.0f, 0.0f}, {-1.0f, -0.2f, -0.1f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.0f, -1.9f, -0.13f, 0.11f}},
+    {{0}, {0.0f, 0.0f, 3.0f, 0.0f}, {0.3f, -0.15f, -0.025f, 0.06f}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-4.1f, -2.2f, -0.35f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 0.1f, 0.0f}, {1.0f, 0.35f, -0.06f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 2.9f, 0.0f}, {0.3f, -0.1f, -0.04f, 0.05f}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPart D_L06_001C9770[37] = {
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe2},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xcc},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xde},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x3ee},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xd6},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe1},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, -0.2f, 0.0f}, 0xd5},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xdf},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x59e},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a7},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPose D_L07_001C8980[37] = {
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.5f, -0.05f, -0.02f, 0.06f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.5f, -1.7f, -0.26f, 0.12f}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, 0.0f, 0.0f}, {-0.9f, -0.0f, -0.12f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -2.9f, 0.0f}, {-3.0f, -1.75f, -0.19f, 0.11f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.4f, -1.4f, -0.25f, 0.12f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.4f, -2.15f, -0.15f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.3f, -0.1f, -0.02f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 0.0f, 0.0f}, {-1.0f, -0.2f, -0.1f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.0f, -1.9f, -0.13f, 0.11f}},
+    {{0}, {0.0f, 0.0f, 3.0f, 0.0f}, {0.3f, -0.15f, -0.025f, 0.06f}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-4.1f, -2.2f, -0.35f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 0.1f, 0.0f}, {1.0f, 0.35f, -0.06f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 2.9f, 0.0f}, {0.3f, -0.1f, -0.04f, 0.05f}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPart D_L07_001C9070[37] = {
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe2},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xcc},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xde},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x3ee},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xd6},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe1},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, -0.2f, 0.0f}, 0xd5},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xdf},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x59e},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a7},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPose D_L08_001C9100[37] = {
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.5f, -0.05f, -0.02f, 0.06f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.5f, -1.7f, -0.26f, 0.12f}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, 0.0f, 0.0f}, {-0.9f, -0.0f, -0.12f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -2.9f, 0.0f}, {-3.0f, -1.75f, -0.19f, 0.11f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.4f, -1.4f, -0.25f, 0.12f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.4f, -2.15f, -0.15f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.3f, -0.1f, -0.02f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 0.0f, 0.0f}, {-1.0f, -0.2f, -0.1f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.0f, -1.9f, -0.13f, 0.11f}},
+    {{0}, {0.0f, 0.0f, 3.0f, 0.0f}, {0.3f, -0.15f, -0.025f, 0.06f}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-4.1f, -2.2f, -0.35f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 0.1f, 0.0f}, {1.0f, 0.35f, -0.06f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 2.9f, 0.0f}, {0.3f, -0.1f, -0.04f, 0.05f}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPart D_L08_001C97F0[37] = {
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe2},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xcc},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xde},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x3ee},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xd6},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe1},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, -0.2f, 0.0f}, 0xd5},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xdf},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x59e},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a7},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPose D_L09_001C8A80[37] = {
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.5f, -0.05f, -0.02f, 0.06f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.5f, -1.7f, -0.26f, 0.12f}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, 0.0f, 0.0f}, {-0.9f, -0.0f, -0.12f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -2.9f, 0.0f}, {-3.0f, -1.75f, -0.19f, 0.11f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.4f, -1.4f, -0.25f, 0.12f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.4f, -2.15f, -0.15f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.3f, -0.1f, -0.02f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 0.0f, 0.0f}, {-1.0f, -0.2f, -0.1f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.0f, -1.9f, -0.13f, 0.11f}},
+    {{0}, {0.0f, 0.0f, 3.0f, 0.0f}, {0.3f, -0.15f, -0.025f, 0.06f}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-4.1f, -2.2f, -0.35f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 0.1f, 0.0f}, {1.0f, 0.35f, -0.06f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 2.9f, 0.0f}, {0.3f, -0.1f, -0.04f, 0.05f}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPart D_L09_001C9170[37] = {
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe2},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xcc},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xde},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x3ee},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xd6},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe1},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, -0.2f, 0.0f}, 0xd5},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xdf},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x59e},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a7},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPose D_L10_001C8D80[37] = {
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.5f, -0.05f, -0.02f, 0.06f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.5f, -1.7f, -0.26f, 0.12f}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, 0.0f, 0.0f}, {-0.9f, -0.0f, -0.12f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -2.9f, 0.0f}, {-3.0f, -1.75f, -0.19f, 0.11f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.4f, -1.4f, -0.25f, 0.12f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.4f, -2.15f, -0.15f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.3f, -0.1f, -0.02f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 0.0f, 0.0f}, {-1.0f, -0.2f, -0.1f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.0f, -1.9f, -0.13f, 0.11f}},
+    {{0}, {0.0f, 0.0f, 3.0f, 0.0f}, {0.3f, -0.15f, -0.025f, 0.06f}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-4.1f, -2.2f, -0.35f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 0.1f, 0.0f}, {1.0f, 0.35f, -0.06f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 2.9f, 0.0f}, {0.3f, -0.1f, -0.04f, 0.05f}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPart D_L10_001C9470[37] = {
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe2},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xcc},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xde},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x3ee},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xd6},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe1},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, -0.2f, 0.0f}, 0xd5},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xdf},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x59e},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a7},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPose D_L11_001C9300[37] = {
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.5f, -0.05f, -0.02f, 0.06f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.5f, -1.7f, -0.26f, 0.12f}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, 0.0f, 0.0f}, {-0.9f, -0.0f, -0.12f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -2.9f, 0.0f}, {-3.0f, -1.75f, -0.19f, 0.11f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.4f, -1.4f, -0.25f, 0.12f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.4f, -2.15f, -0.15f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.3f, -0.1f, -0.02f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 0.0f, 0.0f}, {-1.0f, -0.2f, -0.1f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.0f, -1.9f, -0.13f, 0.11f}},
+    {{0}, {0.0f, 0.0f, 3.0f, 0.0f}, {0.3f, -0.15f, -0.025f, 0.06f}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-4.1f, -2.2f, -0.35f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 0.1f, 0.0f}, {1.0f, 0.35f, -0.06f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 2.9f, 0.0f}, {0.3f, -0.1f, -0.04f, 0.05f}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPart D_L11_001C99F0[37] = {
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe2},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xcc},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xde},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x3ee},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xd6},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe1},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, -0.2f, 0.0f}, 0xd5},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xdf},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x59e},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a7},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPose D_L12_001C8D80[37] = {
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.5f, -0.05f, -0.02f, 0.06f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.5f, -1.7f, -0.26f, 0.12f}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, 0.0f, 0.0f}, {-0.9f, -0.0f, -0.12f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -2.9f, 0.0f}, {-3.0f, -1.75f, -0.19f, 0.11f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.4f, -1.4f, -0.25f, 0.12f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.4f, -2.15f, -0.15f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.3f, -0.1f, -0.02f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 0.0f, 0.0f}, {-1.0f, -0.2f, -0.1f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.0f, -1.9f, -0.13f, 0.11f}},
+    {{0}, {0.0f, 0.0f, 3.0f, 0.0f}, {0.3f, -0.15f, -0.025f, 0.06f}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-4.1f, -2.2f, -0.35f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 0.1f, 0.0f}, {1.0f, 0.35f, -0.06f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 2.9f, 0.0f}, {0.3f, -0.1f, -0.04f, 0.05f}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPart D_L12_001C9470[37] = {
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe2},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xcc},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xde},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x3ee},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xd6},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe1},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, -0.2f, 0.0f}, 0xd5},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xdf},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x59e},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a7},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPose D_L13_001C8C00[37] = {
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.5f, -0.05f, -0.02f, 0.06f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.5f, -1.7f, -0.26f, 0.12f}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, 0.0f, 0.0f}, {-0.9f, -0.0f, -0.12f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -2.9f, 0.0f}, {-3.0f, -1.75f, -0.19f, 0.11f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.4f, -1.4f, -0.25f, 0.12f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.4f, -2.15f, -0.15f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.3f, -0.1f, -0.02f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 0.0f, 0.0f}, {-1.0f, -0.2f, -0.1f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.0f, -1.9f, -0.13f, 0.11f}},
+    {{0}, {0.0f, 0.0f, 3.0f, 0.0f}, {0.3f, -0.15f, -0.025f, 0.06f}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-4.1f, -2.2f, -0.35f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 0.1f, 0.0f}, {1.0f, 0.35f, -0.06f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 2.9f, 0.0f}, {0.3f, -0.1f, -0.04f, 0.05f}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPart D_L13_001C92F0[37] = {
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe2},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xcc},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xde},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x3ee},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xd6},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe1},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, -0.2f, 0.0f}, 0xd5},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xdf},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x59e},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a7},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPose D_L14_001C9000[37] = {
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.5f, -0.05f, -0.02f, 0.06f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.5f, -1.7f, -0.26f, 0.12f}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, 0.0f, 0.0f}, {-0.9f, -0.0f, -0.12f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -2.9f, 0.0f}, {-3.0f, -1.75f, -0.19f, 0.11f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.4f, -1.4f, -0.25f, 0.12f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.4f, -2.15f, -0.15f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.3f, -0.1f, -0.02f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 0.0f, 0.0f}, {-1.0f, -0.2f, -0.1f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.0f, -1.9f, -0.13f, 0.11f}},
+    {{0}, {0.0f, 0.0f, 3.0f, 0.0f}, {0.3f, -0.15f, -0.025f, 0.06f}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-4.1f, -2.2f, -0.35f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 0.1f, 0.0f}, {1.0f, 0.35f, -0.06f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 2.9f, 0.0f}, {0.3f, -0.1f, -0.04f, 0.05f}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPart D_L14_001C96F0[37] = {
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe2},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xcc},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xde},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x3ee},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xd6},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe1},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, -0.2f, 0.0f}, 0xd5},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xdf},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x59e},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a7},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPose D_L15_001C8F00[37] = {
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.5f, -0.05f, -0.02f, 0.06f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.5f, -1.7f, -0.26f, 0.12f}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, 0.0f, 0.0f}, {-0.9f, -0.0f, -0.12f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -2.9f, 0.0f}, {-3.0f, -1.75f, -0.19f, 0.11f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.4f, -1.4f, -0.25f, 0.12f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.4f, -2.15f, -0.15f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.3f, -0.1f, -0.02f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 0.0f, 0.0f}, {-1.0f, -0.2f, -0.1f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.0f, -1.9f, -0.13f, 0.11f}},
+    {{0}, {0.0f, 0.0f, 3.0f, 0.0f}, {0.3f, -0.15f, -0.025f, 0.06f}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-4.1f, -2.2f, -0.35f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 0.1f, 0.0f}, {1.0f, 0.35f, -0.06f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 2.9f, 0.0f}, {0.3f, -0.1f, -0.04f, 0.05f}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPart D_L15_001C95F0[37] = {
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe2},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xcc},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xde},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x3ee},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xd6},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe1},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, -0.2f, 0.0f}, 0xd5},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xdf},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x59e},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a7},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPose D_L16_001C8D80[37] = {
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.5f, -0.05f, -0.02f, 0.06f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.5f, -1.7f, -0.26f, 0.12f}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, 0.0f, 0.0f}, {-0.9f, -0.0f, -0.12f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -2.9f, 0.0f}, {-3.0f, -1.75f, -0.19f, 0.11f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.4f, -1.4f, -0.25f, 0.12f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.4f, -2.15f, -0.15f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.3f, -0.1f, -0.02f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 0.0f, 0.0f}, {-1.0f, -0.2f, -0.1f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.0f, -1.9f, -0.13f, 0.11f}},
+    {{0}, {0.0f, 0.0f, 3.0f, 0.0f}, {0.3f, -0.15f, -0.025f, 0.06f}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-4.1f, -2.2f, -0.35f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 0.1f, 0.0f}, {1.0f, 0.35f, -0.06f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 2.9f, 0.0f}, {0.3f, -0.1f, -0.04f, 0.05f}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPart D_L16_001C9470[37] = {
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe2},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xcc},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xde},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x3ee},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xd6},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe1},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, -0.2f, 0.0f}, 0xd5},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xdf},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x59e},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a7},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPose D_L17_001C9200[37] = {
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.5f, -0.05f, -0.02f, 0.06f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.5f, -1.7f, -0.26f, 0.12f}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, 0.0f, 0.0f}, {-0.9f, -0.0f, -0.12f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -2.9f, 0.0f}, {-3.0f, -1.75f, -0.19f, 0.11f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.4f, -1.4f, -0.25f, 0.12f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.4f, -2.15f, -0.15f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.3f, -0.1f, -0.02f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 0.0f, 0.0f}, {-1.0f, -0.2f, -0.1f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.0f, -1.9f, -0.13f, 0.11f}},
+    {{0}, {0.0f, 0.0f, 3.0f, 0.0f}, {0.3f, -0.15f, -0.025f, 0.06f}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-4.1f, -2.2f, -0.35f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 0.1f, 0.0f}, {1.0f, 0.35f, -0.06f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 2.9f, 0.0f}, {0.3f, -0.1f, -0.04f, 0.05f}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPart D_L17_001C98F0[37] = {
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe2},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xcc},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xde},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x3ee},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xd6},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe1},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, -0.2f, 0.0f}, 0xd5},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xdf},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x59e},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a7},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPose D_L18_001C9300[37] = {
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.5f, -0.05f, -0.02f, 0.06f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.5f, -1.7f, -0.26f, 0.12f}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, 0.0f, 0.0f}, {-0.9f, -0.0f, -0.12f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -2.9f, 0.0f}, {-3.0f, -1.75f, -0.19f, 0.11f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-2.4f, -1.4f, -0.25f, 0.12f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.4f, -2.15f, -0.15f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 2.8f, 0.0f}, {0.3f, -0.1f, -0.02f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 0.0f, 0.0f}, {-1.0f, -0.2f, -0.1f, 0.09f}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-3.0f, -1.9f, -0.13f, 0.11f}},
+    {{0}, {0.0f, 0.0f, 3.0f, 0.0f}, {0.3f, -0.15f, -0.025f, 0.06f}},
+    {{0}},
+    {{0}},
+    {{0}, {0.0f, -1.57f, -3.0f, 0.0f}, {-4.1f, -2.2f, -0.35f, 0.12f}},
+    {{0}, {0.0f, 0.0f, 0.1f, 0.0f}, {1.0f, 0.35f, -0.06f, 0.05f}},
+    {{0}, {0.0f, 0.0f, 2.9f, 0.0f}, {0.3f, -0.1f, -0.04f, 0.05f}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};
+
+VendorItemPart D_L18_001C99F0[37] = {
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe2},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xcc},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xde},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x3ee},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xd6},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xe1},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.3f, 0.0f, -0.2f, 0.0f}, 0xd5},
+    {{0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0xdf},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x59e},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a7},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x5a9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0.0f, 0.4f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -0.2f, 0.0f}, 0x1c9},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+    {{0}},
+};

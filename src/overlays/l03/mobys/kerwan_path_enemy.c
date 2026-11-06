@@ -180,10 +180,10 @@ typedef struct {
 
 typedef struct Data2C8398 {
     char          p00[0x20];
-    float         f20;
-    short         s24;
+    float         health;
+    short         max_health;
     char          p26[2];
-    unsigned char b28;
+    unsigned char hit_response_class;
     unsigned char b29;
     char          p2A[6];
     float         f30;
@@ -466,10 +466,10 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
         moby_data->mv.path_node_proximity_distance =
             moby_data->mv.f24 * truncate_float_to_s32_cf(15.0f);
         moby_data->mv.i38 = 9;
-        moby_data->f20 = 3.0f;
-        moby_data->s24 = truncate_float_to_s32(3.0f);
+        moby_data->health = 3.0f;
+        moby_data->max_health = truncate_float_to_s32(3.0f);
         moby_data->b29 = 1;
-        moby_data->b28 = 2;
+        moby_data->hit_response_class = 2;
         moby_data->f30 = 1.75f;
         moby_data->q.f28 = 0.7f;
         moby_data->q.collision_radius_fixed = truncate_float_to_s32(716.8f);
@@ -1302,7 +1302,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
         }
         m->i94 = *(int *)(m->p24 + 0x10);
         m->flags = (m->flags & 0xFFBE) | 0x1000;
-        moby_data->f20 = convert_integer_to_float(moby_data->s24);
+        moby_data->health = convert_integer_to_float(moby_data->max_health);
         qcopy(m->pos, moby_data->pf.path + 0x10);
         m->state = ENEMY_WAIT_FOR_ACTIVATION;
         break;
@@ -1465,11 +1465,11 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
     }
 }
 
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void
 trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *, short *) __asm__("FUN_L00_0025d458");
 
 extern float D_L03_001618E0 __attribute__((sda));
 
@@ -1523,7 +1523,7 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
     }
     hit = find_moby_hit(moby, 0x330000, 0);
     hit_response_code =
-        resolve_moby_hit_response(moby, hit, &moby_data->f20, 0, &kind, &damage, 0, 4);
+        resolve_moby_hit_response(moby, hit, &moby_data->health, 0, &kind, &damage, 0, 4);
     if (hit != 0 && kind != HIT_REACTION_SUPPRESSED && moby->state != ENEMY_DEATH_KNOCKBACK) {
         hit_record_source_moby = *(char **)(hit + 0x20);
         if (hit_record_source_moby != 0) {
@@ -1538,8 +1538,8 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
             angle = fast_arc_tan(moby->pos[0] - hero.motion.pos.f[0],
                                  moby->pos[1] - hero.motion.pos.f[1]);
         }
-        moby_data->f20 -= damage;
-        if (moby_data->f20 <= 0.0f) {
+        moby_data->health -= damage;
+        if (moby_data->health <= 0.0f) {
             hit_response_code = 1;
         }
         switch (hit_response_code) {
@@ -1648,10 +1648,10 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
             }
             break;
         }
-        trooper_anim_update(moby, (short *)((char *)moby_data + 0x60));
+        start_hit_color_flash(moby, (short *)((char *)moby_data + 0x60));
     }
     moby->bA4 = 0xFF;
-    trooper_anim_finish(moby, (char *)moby_data + 0x60);
+    update_hit_color_flash(moby, (char *)moby_data + 0x60);
 }
 
 extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);

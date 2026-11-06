@@ -34,22 +34,22 @@ enum {
 
 typedef struct ScoutbotVars {
     u8    pad0[0x20];
-    f32   unk20[4];
-    u8    pad30[0x10];
-    f32   unk40[4];
+    f32   health;
+    u8    pad24[0x1C];
+    f32   velocity[4];
     u8    pad50[0x78];
-    s16   unkC8;
+    s16   suck_state; /* suck cannon record (pvars + 0x60) + 0x68: its suck state */
     u8    padCA[0xa6];
     f32   tracked_target_position[4];
     u8    pad180[0x30];
-    s32   unk1B0;
+    s32   target;
     s32   target_selection_status;
     u8    pad1B8[0x8];
-    f32   unk1C0[4];
-    f32   unk1D0[4];
-    f32   unk1E0[4];
+    f32   home_position[4];
+    f32   beam_bend_point_1[4]; /* beam profile point; [3] is its fraction of the beam length */
+    f32   beam_bend_point_2[4]; /* second beam profile point, same layout */
     u8    pad1F0[0x10];
-    f32   unk200;
+    f32   hover_height_offset;
     f32   vertical_bob_phase;
     f32   vertical_bob_amplitude;
     f32   vertical_bob_phase_increment;
@@ -426,10 +426,10 @@ void update_scoutbot_health_and_target(struct Moby *moby) {
     int           hit_reaction_code;
     dmg = 0.0f;
     hit_reaction_code = hit_reaction(
-        moby, find_moby_hit(moby, 0x330000, 0), &scoutbot_pvars->unk20, 0, &hit, &dmg, 0, 4);
+        moby, find_moby_hit(moby, 0x330000, 0), &scoutbot_pvars->health, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && ((unsigned char *)moby)[0x20] != 0x63) {
-        scoutbot_pvars->unk20[0] -= dmg;
-        if (scoutbot_pvars->unk20[0] <= 0.0f)
+        scoutbot_pvars->health -= dmg;
+        if (scoutbot_pvars->health <= 0.0f)
             hit_reaction_code = 1;
         if (hit_reaction_code < 12) {
             if (hit_reaction_code >= 0) {
@@ -448,17 +448,17 @@ void update_scoutbot_health_and_target(struct Moby *moby) {
                                 0,
                                 path + 0x10,
                                 *(int *)path) != 2) {
-            if (14.0f < vector_distance_xy(&scoutbot_pvars->unk1C0,
+            if (14.0f < vector_distance_xy(&scoutbot_pvars->home_position,
                                            &scoutbot_pvars->tracked_target_position)) {
                 scoutbot_pvars->target_selection_status = SCOUTBOT_TARGET_SELECTION_UNAVAILABLE;
-            } else if (3.0f < absolute_float(scoutbot_pvars->unk1C0[2] -
+            } else if (3.0f < absolute_float(scoutbot_pvars->home_position[2] -
                                              scoutbot_pvars->tracked_target_position[2])) {
                 scoutbot_pvars->target_selection_status = SCOUTBOT_TARGET_SELECTION_UNAVAILABLE;
             }
         }
     }
-    if (scoutbot_pvars->unk1B0 == 0) {
-        scoutbot_pvars->unk1B0 = ((int)hero.moby);
+    if (scoutbot_pvars->target == 0) {
+        scoutbot_pvars->target = ((int)hero.moby);
     }
 }
 
@@ -507,15 +507,15 @@ void draw_target_beam(struct Moby *moby) {
     clear_u64_value(&pk.vertices[0]);
     pk.vertices[0].v[2] = D_L08_00161894_lui;
     pk.vertices[0].v[3] = 1.0f;
-    qcopy(&pk.vertices[1], &scoutbot_private_vars->unk1D0);
-    pk.vertices[1].v[0] = length * scoutbot_private_vars->unk1D0[3];
+    qcopy(&pk.vertices[1], &scoutbot_private_vars->beam_bend_point_1);
+    pk.vertices[1].v[0] = length * scoutbot_private_vars->beam_bend_point_1[3];
     pk.vertices[1].v[2] += -0.25f;
     pk.vertices[1].v[3] = 1.0f;
     clear_u64_value(&pk.vertices[2]);
     pk.vertices[2].v[2] = 0.0f;
     pk.vertices[2].v[3] = 1.0f;
-    qcopy(&pk.vertices[3], &scoutbot_private_vars->unk1D0);
-    pk.vertices[3].v[0] = length * scoutbot_private_vars->unk1D0[3];
+    qcopy(&pk.vertices[3], &scoutbot_private_vars->beam_bend_point_1);
+    pk.vertices[3].v[0] = length * scoutbot_private_vars->beam_bend_point_1[3];
     pk.vertices[3].v[2] += 0.25f;
     pk.vertices[3].v[3] = 1.0f;
     draw_geometry_quad(pk.vertices, matrix, 1);
@@ -532,20 +532,20 @@ void draw_target_beam(struct Moby *moby) {
     }
     draw_geometry_quad(pk.vertices, matrix, 1);
 
-    qcopy(&pk.vertices[0], &scoutbot_private_vars->unk1D0);
-    pk.vertices[0].v[0] = length * scoutbot_private_vars->unk1D0[3];
+    qcopy(&pk.vertices[0], &scoutbot_private_vars->beam_bend_point_1);
+    pk.vertices[0].v[0] = length * scoutbot_private_vars->beam_bend_point_1[3];
     pk.vertices[0].v[2] += -0.25f;
     pk.vertices[0].v[3] = 1.0f;
-    qcopy(&pk.vertices[1], &scoutbot_private_vars->unk1E0);
-    pk.vertices[1].v[0] = length * scoutbot_private_vars->unk1E0[3];
+    qcopy(&pk.vertices[1], &scoutbot_private_vars->beam_bend_point_2);
+    pk.vertices[1].v[0] = length * scoutbot_private_vars->beam_bend_point_2[3];
     pk.vertices[1].v[2] += -0.25f;
     pk.vertices[1].v[3] = 1.0f;
-    qcopy(&pk.vertices[2], &scoutbot_private_vars->unk1D0);
-    pk.vertices[2].v[0] = length * scoutbot_private_vars->unk1D0[3];
+    qcopy(&pk.vertices[2], &scoutbot_private_vars->beam_bend_point_1);
+    pk.vertices[2].v[0] = length * scoutbot_private_vars->beam_bend_point_1[3];
     pk.vertices[2].v[2] += 0.25f;
     pk.vertices[2].v[3] = 1.0f;
-    qcopy(&pk.vertices[3], &scoutbot_private_vars->unk1E0);
-    pk.vertices[3].v[0] = length * scoutbot_private_vars->unk1E0[3];
+    qcopy(&pk.vertices[3], &scoutbot_private_vars->beam_bend_point_2);
+    pk.vertices[3].v[0] = length * scoutbot_private_vars->beam_bend_point_2[3];
     pk.vertices[3].v[2] += 0.25f;
     pk.vertices[3].v[3] = 1.0f;
     draw_geometry_quad(pk.vertices, matrix, 1);
@@ -563,20 +563,20 @@ void draw_target_beam(struct Moby *moby) {
     }
     draw_geometry_quad(pk.vertices, matrix, 1);
 
-    qcopy(&pk.vertices[0], &scoutbot_private_vars->unk1E0);
-    pk.vertices[0].v[0] = length * scoutbot_private_vars->unk1E0[3];
+    qcopy(&pk.vertices[0], &scoutbot_private_vars->beam_bend_point_2);
+    pk.vertices[0].v[0] = length * scoutbot_private_vars->beam_bend_point_2[3];
     pk.vertices[0].v[2] += -0.25f;
     pk.vertices[0].v[3] = 1.0f;
     clear_u64_value(&pk.vertices[1]);
-    pk.vertices[1].v[0] = length * scoutbot_private_vars->unk1D0[3] * 3.0f;
+    pk.vertices[1].v[0] = length * scoutbot_private_vars->beam_bend_point_1[3] * 3.0f;
     pk.vertices[1].v[2] += D_L08_00161894_lui;
     pk.vertices[1].v[3] = 1.0f;
-    qcopy(&pk.vertices[2], &scoutbot_private_vars->unk1E0);
-    pk.vertices[2].v[0] = length * scoutbot_private_vars->unk1E0[3];
+    qcopy(&pk.vertices[2], &scoutbot_private_vars->beam_bend_point_2);
+    pk.vertices[2].v[0] = length * scoutbot_private_vars->beam_bend_point_2[3];
     pk.vertices[2].v[2] += 0.25f;
     pk.vertices[2].v[3] = 1.0f;
     clear_u64_value(&pk.vertices[3]);
-    pk.vertices[3].v[0] = length * scoutbot_private_vars->unk1D0[3] * 3.0f;
+    pk.vertices[3].v[0] = length * scoutbot_private_vars->beam_bend_point_1[3] * 3.0f;
     pk.vertices[3].v[2] = 0.0f;
     pk.vertices[3].v[3] = 1.0f;
     draw_geometry_quad(pk.vertices, matrix, 1);
@@ -601,7 +601,7 @@ void draw_target_beam(struct Moby *moby) {
 void update_scoutbot_movement(struct Moby *moby) {
     ScoutbotVars *scoutbot_instance_state = (ScoutbotVars *)moby->pvars;
     float         movement_length =
-        fast_vec_length((float *)(&scoutbot_instance_state->unk40)) - frame_time_sq * 6.0f;
+        fast_vec_length((float *)(&scoutbot_instance_state->velocity)) - frame_time_sq * 6.0f;
     float  movement_length_limit = frame_time * 3.0f;
     float  target_height;
     float  vertical_step;
@@ -612,17 +612,17 @@ void update_scoutbot_movement(struct Moby *moby) {
     } else if (movement_length < 0.0f) {
         movement_length = 0.0f;
     }
-    velocity_ptr = (float *)(&scoutbot_instance_state->unk40);
+    velocity_ptr = (float *)(&scoutbot_instance_state->velocity);
     fast_vec_normalize(velocity_ptr, velocity_ptr, movement_length);
     fast_vec_add((float *)&moby->pos, (float *)&moby->pos, velocity_ptr);
     scoutbot_instance_state->vertical_bob_phase =
         fast_add_rotations(scoutbot_instance_state->vertical_bob_phase,
                            scoutbot_instance_state->vertical_bob_phase_increment);
-    target_height = scoutbot_instance_state->unk1C0[2] +
+    target_height = scoutbot_instance_state->home_position[2] +
                     scoutbot_instance_state->vertical_bob_amplitude *
                         fast_sin(scoutbot_instance_state->vertical_bob_phase);
     if (scoutbot_instance_state->ground_hover_offset_enabled)
-        target_height += scoutbot_instance_state->unk200;
+        target_height += scoutbot_instance_state->hover_height_offset;
     vertical_step = target_height - moby->pos.z;
     {
         float vertical_step_limit = frame_time * 3.0f;
@@ -634,7 +634,7 @@ void update_scoutbot_movement(struct Moby *moby) {
                 vertical_step = vertical_step_limit;
         }
     }
-    scoutbot_instance_state->unk40[2] = vertical_step;
+    scoutbot_instance_state->velocity[2] = vertical_step;
     qcopy(probe_position_or_correction, (float *)&moby->pos);
     probe_position_or_correction[2] += 0.5f;
     if (FUN_L08_002025d0(probe_position_or_correction, 0x190, 0, moby, 0)) {
@@ -660,12 +660,12 @@ void *enter_scoutbot_return_home_state(struct Moby *moby) {
     void         *suction_cancel_status = cancel_suck_cannon_suction(moby);
     ScoutbotVars *scoutbot_data = (ScoutbotVars *)moby->pvars;
     moby->state = SCOUTBOT_STATE_RETURN_HOME;
-    scoutbot_data->unk200 = 4.0f;
+    scoutbot_data->hover_height_offset = 4.0f;
     scoutbot_data->vertical_bob_amplitude = 0.5f;
     if ((unsigned char)((char)moby->prev_seq) != 2) {
         blend_moby_animation(moby, 2, 0, 3);
     }
-    scoutbot_data->unkC8 = 0;
+    scoutbot_data->suck_state = 0;
     return suction_cancel_status;
 }
 

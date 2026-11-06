@@ -41,7 +41,7 @@ void music_update(void) {
     if (music_stream_state.updates_suspended != 0) {
         return;
     }
-    if (!(music_stream_state.primary.fade_flags & 0x8000) &&
+    if (!(music_stream_state.primary.pause_flags & 0x8000) &&
         !(music_stream_state.primary.state & 0x8000)) {
         if (music_stream_state.primary.handle == 0 && (music_stream_state.primary.flags & 1) &&
             music_stream_state.requested_track == -1) {
@@ -85,9 +85,9 @@ void music_update(void) {
         }
     }
     if (music_stream_state.primary.state != 9 && music_stream_state.primary.handle != 0xFFFFFFFF &&
-        !(music_stream_state.primary.fade_flags & 0x8000) &&
+        !(music_stream_state.primary.pause_flags & 0x8000) &&
         !(music_stream_state.primary.state & 0x8000) &&
-        !(music_stream_state.transition.fade_flags & 0x8000) &&
+        !(music_stream_state.transition.pause_flags & 0x8000) &&
         !(music_stream_state.transition.state & 0x8000)) {
         switch (music_stream_state.crossfade_state) {
         case CROSSFADE_FADE_OUT_PRIMARY:

@@ -118,7 +118,7 @@ void visibomb_update(O_b3058 *visibomb_moby) {
             fast_vec_normalize(u, &camera->rows[8], -0.35f);
             fast_vec_add(launch_position, launch_position, u);
             fast_vec_add(launch_position, launch_position, &camera->pos);
-        } else if (hero.unk22C8 == 1) {
+        } else if (hero.weapon_lowered == 1) {
             b = fast_arc_tan(vector_length_xy(visibomb_moby->launch_direction_xy),
                              visibomb_moby->launch_direction_z);
             build_spherical_offset(launch_position, 0.6f, launch_yaw, -b);

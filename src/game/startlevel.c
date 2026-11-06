@@ -31,15 +31,15 @@ typedef struct {
     s32        code;
 } LevelHeader;
 
-extern s32  boot_level_active __asm__("D_0015F5E8") MACRO_ADDR;
-extern u8   level_bss_start[] __asm__("D_00161280");
-extern s32  game_frame_counter_macro __asm__("D_0015F438") MACRO_ADDR;
-extern s32  boot_image_buffer __asm__("D_0015EF5C") MACRO_ADDR;
-extern s32  decode_mode_macro __asm__("D_0015EED8") MACRO_ADDR;
-extern u8   D_24135F[];
-extern s32  boot_intro_movie_ntsc[] __asm__("D_00139378");
-extern s32  boot_intro_movie_pal[] __asm__("D_00139380");
-extern char loading_boot_sound_bank_message[] __asm__("D_001E76C0");
+extern s32        boot_level_active __asm__("D_0015F5E8") MACRO_ADDR;
+extern u8         level_bss_start[] __asm__("D_00161280");
+extern s32        game_frame_counter_macro __asm__("D_0015F438") MACRO_ADDR;
+extern s32        boot_image_buffer __asm__("D_0015EF5C") MACRO_ADDR;
+extern s32        decode_mode_macro __asm__("D_0015EED8") MACRO_ADDR;
+extern u8         D_24135F[];
+extern s32        boot_intro_movie_ntsc[] __asm__("D_00139378");
+extern s32        boot_intro_movie_pal[] __asm__("D_00139380");
+extern const char loading_boot_sound_bank_message[] __asm__("D_001E76C0");
 extern volatile SoundDef *volatile level_sound_defs __asm__("D_0015F634");
 extern volatile s32 level_sound_def_count __asm__("D_0015F630");
 
@@ -204,7 +204,7 @@ void startlevel(void) {
         put_disp_buffer();
     }
     space_load = current_level_index_macro;
-    level_render_state.unk2A = 1;
+    level_render_state.story_trip = 1;
     current_level_index_macro = -1;
     do_space_transition();
 }
@@ -212,21 +212,23 @@ void startlevel(void) {
 extern __typeof__(startlevel) func_001E9658 __attribute__((alias("FUN_001e9658")));
 
 volatile SoundDef l00_primary_sound_defs[7] = {
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 0},
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 0},
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 8},
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 9},
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 2},
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 3},
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 4},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 0},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 0},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 8},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 9},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 2},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 3},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 4},
 };
 
 volatile SoundDef boot_sound_defs_b[5] = {
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 0},
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 1},
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 5},
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 6},
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 7},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 0},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 1},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 5},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 6},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 7},
 };
 
 s32 boot_image_buffer __asm__("D_0015EF5C") MACRO_ADDR = 0;
+
+const char loading_boot_sound_bank_message[] __asm__("D_001E76C0") = "loading sound bank...\n";

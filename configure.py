@@ -317,10 +317,10 @@ OVERLAY_SN_UNITS = {
     "l05/mobys/skid_mcmarx.c",
     "l05/mobys/taxi.c",
     "l05/mobys/television.c",
-    "l05/mobys/triggered_motion.c",
-    "l05/mobys/triggered_slide.c",
-    "l05/mobys/triggered_moby_yaw.c",
-    "l05/mobys/triggered_spray_emitter.c",
+    "l05/mobys/moby_893.c",
+    "l05/mobys/moby_843.c",
+    "l05/mobys/moby_895.c",
+    "l05/mobys/moby_855.c",
     "l05/mobys/water.c",
     "l06/hero/hero_set_state.c",
     "l06/hero/update_hero_state_machine.c",
@@ -379,7 +379,7 @@ OVERLAY_SN_UNITS = {
     "l08/mobys/blarg_bombthrower.c",
     "l08/mobys/bolt_pickup.c",
     "l08/mobys/bolt_thief.c",
-    "l08/mobys/bomb.c",
+    "l08/mobys/blarg_bombthrower_bomb.c",
     "l08/mobys/bomber_tank.c",
     "l08/mobys/bomber_tank_bomb.c",
     "l08/mobys/commando.c",
@@ -675,7 +675,7 @@ OVERLAY_SN_UNITS = {
     "l18/mobys/hidden_deplanetizer_gun.c",
     "l18/mobys/inert_moby.c",
     "l18/mobys/lift.c",
-    "l18/mobys/mine.c",
+    "l18/mobys/drek_boss_mine.c",
     "l18/mobys/rocket.c",
     "l18/mobys/rocket_tank.c",
     "l18/mobys/rocket_tank_rocket.c",
@@ -940,6 +940,15 @@ OVERLAY_SN_UNITS = {
 # link fails when the section is not SIZE bytes.  Both the assembly-backed and
 # the promoted (normalized) unit names resolve to the same retail bytes.
 RODATA_OVERLAYS = {
+    "game/startlevel": (0x1E76C0, 0xE8640, 23),
+    "rendering/frame/initialize_level_render_state": (0x1E76D8, 0xE8658, 80),
+    "rendering/lights/detach_point_light": (0x1E7B50, 0xE8AD0, 105),
+    "mobys/create_moby": (0x1E83C0, 0xE9340, 57),
+    "rendering/mobys/draw_mobys": (0x1E8400, 0xE9380, 35),
+    "rendering/texture/dma_shrub_textures": (0x1E88D0, 0xE9850, 24),
+    "rendering/texture/dma_tfrag_textures": (0x1E89B0, 0xE9930, 24),
+    "rendering/texture/dma_tie_textures": (0x1E8A50, 0xE99D0, 22),
+    "ui/text/copy_text_to_shared_buffer": (0x1E7AA8, 0xE8A28, 19),  # "(Message too long)"
     "_dtoa_r": (0x152310, 0x53290, 88),  # Infinity/NaN/0 strings, f64 literals, switch table
     # _getpic's switch emits a 5-entry jump table (0x14 bytes) that retail
     # stored at 0x153AA0 inside core_rdata; the expected object references it
@@ -973,7 +982,7 @@ RODATA_OVERLAYS = {
     "ui/help/draw_help": (0x1E7A70, 0xE89F0, 28),  # switch table (migrated)
     "ui/help/dismiss_help": (0x1E7A20, 0xE89A0, 32),  # switch table (migrated)
     "_sceFs_Rcv_Intr": (0x1528E0, 0x53860, 100),  # retail switch table (jtbl_001528E0)
-    "ui/menus/system/process_menu_entry": (0x1E86A0, 0xE9620, 24),  # retail switch table (jtbl_001E86A0)
+    "ui/menus/system/process_menu_entry": (0x1E8680, 0xE9600, 56),  # thousands separators, switch table (jtbl_001E86A0)
     "draw_sky_shells": (0x1E8910, 0xE9890, 24),  # switch table
     "ui/menus/system/update_timed_menu_sequence": (0x1E8810, 0xE9790, 80),  # switch table
     "mobys/animation/update_resident_dialogue_animation_state": (0x1E8A90, 0xE9A10, 52),  # switch table
@@ -1133,6 +1142,7 @@ SDATA_OVERLAYS = {
     "game/startlevel": (0x15EF5C, 0x5FEDC, 4),  # boot image buffer
     "mobys/update_visible_mobys": (0x15FF24, 0x60EA4, 4),  # visible moby list
     "world/select_world_object_resource_tables": (0x15FF44, 0x60EC4, 8),  # resource tag and count
+    "world/update_world_object_animation": (0x160488, 0x61408, 12),  # cutscene moby class per content variant
     "ui/hud/init_hud": (0x15F6D8, 0x60658, 8),  # allocation tag
     "ui/menus/widgets/format_scaled_display_value": (0x161078, 0x61FF8, 11),  # display value formats
 }
@@ -1140,6 +1150,7 @@ SDATA_OVERLAYS = {
 # The same for a unit's `.data`: data only that unit reads, defined in it.
 # `scripts/data-refs.py --emit` writes the definition and prints the entry.
 DATA_OVERLAYS = {
+    "ui/menus/system/setup_menu_display_text": (0x1E0888, 0xE1808, 76),  # gold bolts per level
     "sdk/kernel/supplement_crt0": (0x130320, 0x312A0, 8),
     "sdk/graph/sce_gs_get_gparam": (0x132D40, 0x33CC0, 16),
     "sdk/input/sce_pad2_init": (0x132DD0, 0x33D50, 4),  # pad2_initialized
@@ -1160,7 +1171,7 @@ DATA_OVERLAYS = {
     "rendering/effects/render_level_effects_and_screen_sprites": (0x1CE2C0, 0xCF240, 56),
     "weapons/load_hand_gadget": (0x1D52E8, 0xD6268, 1776),
     "ui/menus/item_preview/update_preview_animation_and_attachments": (0x1D6080, 0xD7000, 56),
-    "rendering/shrubs/register_shrub_render_class": (0x1D7F30, 0xD8EB0, 384),
+    "rendering/shrubs/register_shrub_render_class": (0x1D7F30, 0xD8EB0, 1408),
     "rendering/effects/build_variant_effect_quads": (0x1D9890, 0xDA810, 384),
     "rendering/effects/build_resident_indexed_texture_warp_meshes": (0x1D9A10, 0xDA990, 56),
     "rendering/effects/draw_light_flare": (0x1D97B0, 0xDA730, 224),
@@ -1176,6 +1187,7 @@ DATA_OVERLAYS = {
     "rendering/texture/initialize_alpha_lookup_table": (0x18E740, 0x8F6C0, 1024),
     "mobys/resolve_moby_hit_response": (0x1CC080, 0xCD000, 200),
     "ui/map/copy_level_object_positions": (0x1E03B8, 0xE1338, 80),
+    "ui/menus/item_preview/update_item_preview_binding": (0x1E0408, 0xE1388, 1152),
     "rendering/debug/print_debug_text_centered": (0x189DC0, 0x8AD40, 384),
     "rendering/effects/draw_light_quads": (0x18CAA0, 0x8DA20, 64),
     "runtime/callbacks/add_draw_callback": (0x18DB40, 0x8EAC0, 512),
@@ -1221,6 +1233,7 @@ DATA_OVERLAYS = {
     "ui/map/world_to_map_coords": (0x19E970, 0x9F8F0, 304),
     "ui/text/copy_text_to_shared_buffer": (0x19A440, 0x9B3C0, 80),
     "ui/menus/save_data/run_state_handler": (0x1A0438, 0xA13B8, 100),
+    "save/memcard_restore_game": (0x1A04C0, 0xA1440, 960),  # the save block lists mc_gamedata, mc_leveldata
     "mobys/find_or_allocate_moby_render_slot": (0x1B2BC0, 0xB3B40, 64),
     "mobys/stash_moby_class_dists": (0x1B2E80, 0xB3E00, 896),
     "ui/menus/pause/assign_heli_pack_label_text_table": (0x1D06D0, 0xD1650, 112),
@@ -1239,8 +1252,13 @@ DATA_OVERLAYS = {
     "rendering/vu1/vu1_gs_regs_alt": (0x1DE3F0, 0xDF370, 48),  # its GS register packet
     "rendering/vu1/vu1_tex_flush": (0x1DEE00, 0xDFD80, 48),  # its GS register packet
     "ui/map/draw_map_overlay": (0x1E8068, 0xE8FE8, 17),  # no map text
-    "ui/map/update_map_icons": (0x1A2BC0, 0xA3B40, 76),  # icon list of each level
+    "ui/map/update_map_icons": (0x1A08C0, 0xA1840, 9036),  # mission and map icon lists of each level
     "ui/menus/item_preview/draw_menu_preview_objects": (0x1D5020, 0xD5FA0, 96),  # slot draw flags
+    "ui/menus/item_preview/clear_preview_resource_bindings": (0x1D59D8, 0xD6958, 136),
+    "ui/menus/system/emit_selected_graphics_dma_packets": (0x1D7D90, 0xD8D10, 192),
+    "ui/text/font/font_print": (0x1DF050, 0xDFFD0, 2784),  # glyph records of the three fonts
+    "ui/vendor/render_vendor_buy_label_pass": (0x1DFFB0, 0xE0F30, 1032),  # vendor prices by item
+    "ui/map/draw_map_screen_layers": (0x1DDF68, 0xDEEE8, 76),  # map inset per level
 }
 
 # Uninitialised variables a unit defines.  `.sbss` (small ones) sits in the

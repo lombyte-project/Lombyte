@@ -38,14 +38,14 @@ typedef struct {
     s32 parts;       /* 0x24 */
     s32 pointCount;  /* 0x28 */
     s32 points;      /* 0x2C */
-    s32 unk30;
-    s32 unk34;
-    s32 unk38;
-    s32 unk3C;
-    s32 unk40;
-    s32 unk44;
+    s32 class_data;
+    s32 particle_data;
+    s32 texture_payload;
+    s32 particle_textures;
+    s32 special_texture_base;
+    s32 special_clut_base;
     s32 sky; /* 0x48 */
-    s32 unk4C;
+    s32 level_textures;
     s32 scenes[5]; /* 0x50 */
     s32 sound;     /* 0x64 */
 } LevelHeader;
@@ -71,17 +71,17 @@ typedef struct {
 
 typedef struct {
     u8  pad0[4];
-    s32 unk4;
-    s32 unk8;
+    s32 ring_start; /* 0x04: memory slot 1 (calculate_ring_buffer_bounds) */
+    s32 ring_end;   /* 0x08: memory slot 2 */
     u8  padC[8];
     u8 *buffer;
-    s32 unk18;
+    s32 free_start; /* 0x18: memory slot 6: first free byte past the loaded level archive */
 } MemInfo;
 
 typedef struct {
     u8  pad0[0x58];
-    s32 unk58;
-    s32 unk5C;
+    s32 source_begin; /* 0x58 */
+    s32 source_end;   /* 0x5C */
     s32 chunks[70];
 } SceneInfo;
 
@@ -191,8 +191,9 @@ void initialize_level_runtime(void) {
     init_view_context();
     update_view_context();
     vu1_init_chain();
-    submit_audio_stream_io_request(
-        D_001940C0.buffer + 0x400000, disc_table.unk13B8.sector, disc_table.unk13B8.size);
+    submit_audio_stream_io_request(D_001940C0.buffer + 0x400000,
+                                   disc_table.space_transition_archive.sector,
+                                   disc_table.space_transition_archive.size);
     fade_to_black(scale_game_frames(0xC));
     sceCdSync(0);
     FlushCache(0);
@@ -202,10 +203,11 @@ void initialize_level_runtime(void) {
     upload_texture_images(
         (s32)header + header->tex, header->texCount, (s32)header + header->texInfo);
     data_base = (s32)header + header->data_offset;
-    class_data_base = data_base + header->unk30;
+    class_data_base = data_base + header->class_data;
     special_material_template[0] =
-        (s32)((gs_texture_allocation_base + header->unk40) >> 8) | 0x1D308000 |
-        ((s64)0xB800 << 19) | ((s64)((gs_texture_allocation_base + header->unk44) >> 8) << 37) |
+        (s32)((gs_texture_allocation_base + header->special_texture_base) >> 8) | 0x1D308000 |
+        ((s64)0xB800 << 19) |
+        ((s64)((gs_texture_allocation_base + header->special_clut_base) >> 8) << 37) |
         0x8000000000000000LL;
     special_material_template[1] = 0x0000FFA0000000E0LL;
     special_material_template[2] = 0x0040000400004000LL;
@@ -226,16 +228,18 @@ void initialize_level_runtime(void) {
                             moby_entry->oclass);
         moby_entry++;
     }
-    level_texture_payload_address = data_base + header->unk38;
+    level_texture_payload_address = data_base + header->texture_payload;
     unpack_point_records((s32)header + header->points, header->pointCount);
     {
-        s32 particle_data_base = data_base + header->unk34;
+        s32 particle_data_base = data_base + header->particle_data;
         s32 particle_entries = (s32)header + header->parts;
 
-        parse_particle_textures(
-            (s32)header + header->unk3C, particle_data_base, particle_entries, header->partCount);
+        parse_particle_textures((s32)header + header->particle_textures,
+                                particle_data_base,
+                                particle_entries,
+                                header->partCount);
     }
-    texture_offsets = (s32 *)(data_base + header->unk4C);
+    texture_offsets = (s32 *)(data_base + header->level_textures);
     language_index = game_language - 1;
     if (language_index < 0) {
         language_index = 0;
@@ -249,7 +253,7 @@ void initialize_level_runtime(void) {
     texture_cursor = gs_texture_allocation_cursor + 0x2000;
     allocation_cursor = D_001940C0.buffer + archive_size;
     gs_texture_allocation_cursor = texture_cursor;
-    D_001940C0.unk18 = (s32)allocation_cursor;
+    D_001940C0.free_start = (s32)allocation_cursor;
     gs_texture_allocation_start = texture_cursor;
     D_00160588 = texture_packet[0];
     clear_blocks_16(point_lights, 0x100);
@@ -289,8 +293,8 @@ void initialize_level_runtime(void) {
     scene_offsets = header->scenes;
     workspace_offset = current_vu_chain - 0x60000;
     scene_offset = &scene_offsets[level_render_state.scene_mode];
-    render_sequence.unk58 = D_001940C0.unk4 + workspace_offset;
-    render_sequence.unk5C = D_001940C0.unk8 + workspace_offset;
+    render_sequence.source_begin = D_001940C0.ring_start + workspace_offset;
+    render_sequence.source_end = D_001940C0.ring_end + workspace_offset;
     current_vu_chain = workspace_offset;
     scene_chunk = (Chunk *)(data_base + scene_offsets[level_render_state.scene_mode]);
     /* The archive list is terminated by a zero size and the resident table holds 70 entries. */

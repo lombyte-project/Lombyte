@@ -18,8 +18,7 @@
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern s32  get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void
-font_print_window(struct TextRegion *, long, char *, s32, s32, u8 *) __asm__("FUN_001f7090");
+extern void font_print_window(struct TextRegion *, long, char *, s32, s32, struct Glyph *) __asm__("FUN_001f7090");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void  draw_menu_selection_marker(s32, s32, s32) __asm__("func_0021F8E8");
 extern void *memset(void *, int, unsigned int);
@@ -35,7 +34,7 @@ s32 draw_menu_text_list(struct MenuScreen *menu) {
     s32                  font_size;
     s32                  font_kind;
     s32                  focused;
-    u8                  *font;
+    struct Glyph        *font;
     s32                  item_count;
     struct MenuTextItem *item_count_cursor;
     s32                  row_height;

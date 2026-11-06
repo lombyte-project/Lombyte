@@ -34,7 +34,7 @@ typedef struct {
 
 typedef struct {
     u8  pad0[0x70];
-    u8  unk70[0x38];
+    u8  manipulator_rotation[0x38]; /* 0x70: rotation of the manipulator attached at 0x60 */
     f32 speed;
     s32 path;
     u8  padB0[8];
@@ -67,9 +67,9 @@ typedef struct {
 
 typedef struct {
     u8  pad0[0x70];
-    u8  unk70[0x38];
-    f32 speed; /* 0xA8 */
-    s32 path;  /* 0xAC: index into D_L09_001B0630 */
+    u8  manipulator_rotation[0x38]; /* 0x70: rotation of the manipulator attached at 0x60 */
+    f32 speed;                      /* 0xA8 */
+    s32 path;                       /* 0xAC: index into D_L09_001B0630 */
     u8  padB0[8];
     s16 dir;        /* 0xB8: > 0 runs the path forward, else backward */
     s16 node;       /* 0xBA: node being flown to */
@@ -308,7 +308,8 @@ int advance_shuttle_along_path(struct Moby *moby) {
         shuttle_path_state->yaw_offset = 0.0f;
     shuttle_path_state->spin =
         fast_add_rotations(shuttle_path_state->spin, shuttle_path_state->speed);
-    build_axis_rotation_quaternion(shuttle_path_state->unk70, 0, shuttle_path_state->spin);
+    build_axis_rotation_quaternion(
+        shuttle_path_state->manipulator_rotation, 0, shuttle_path_state->spin);
     if (vector_distance_xy(&moby->pos, &path->node[path->count - 1]) > 8.0f &&
         vector_distance_xy(&moby->pos, &path->node[0]) > 8.0f && !random_integer_below(7)) {
         qcopy(&puff, &moby->pos);

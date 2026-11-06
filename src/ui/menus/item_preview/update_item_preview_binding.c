@@ -137,11 +137,11 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
             if (hero.items[0].item_id != 0 && oclass != hero.items[0].item_id) {
                 noop_callback_q(0, 0);
             }
-            if (oclass != menu_system.unk11C) {
+            if (oclass != menu_system.preview_requested_class) {
                 select_world_object_resource_tables(oclass, menu_system.resource_table_toggle == 0);
                 menu_system.last_resource_table_toggle = active_decode_buffer;
-                menu_system.unk140 = oclass;
-                menu_system.unk120 = oclass;
+                menu_system.resource_table_class = oclass;
+                menu_system.preview_loaded_class = oclass;
                 ((struct PreviewClassResource *)
                      moby_class_resources[resident_class_slot_by_id[oclass]])
                     ->state_0d = 0;
@@ -213,3 +213,42 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
     }
     return 0;
 }
+
+struct ItemPreviewPlacement preview_placements[36] = {
+    {6.0f, 6.0f, 0.0f,   0.0f,        0.0f,        0.0f,   0.0f,  0.0f},
+    {3.0f, 5.0f, 0.0f,   0.0f,        0.0f,        0.2f,   0.2f,  0.0f},
+    {3.0f, 5.0f, 0.0f,   0.0f,        0.0f,        0.2f,   0.2f,  0.0f},
+    {3.0f, 5.0f, 0.0f,   0.0f,        0.0f,        0.2f,   0.2f,  0.0f},
+    {3.0f, 5.0f, 0.0f,   0.0f,        0.0f,        0.2f,   0.2f,  0.0f},
+    {2.0f, 3.0f, 0.0f,  -0.2f,        0.0f,        0.0f,   0.0f,  0.0f},
+    {2.0f, 3.0f, 0.0f,  -0.2f,        0.0f,        0.0f,   0.0f,  0.0f},
+    {2.0f, 3.0f, 0.0f,  -0.2f,        0.0f,        0.0f,   0.0f,  0.0f},
+    {6.0f, 6.0f, 0.0f,   0.0f,        0.0f,        0.0f,   0.0f,  0.0f},
+    {4.0f, 4.0f, 0.0f,   0.0f,        0.0f, -1.5707964f,   0.0f,  0.5f},
+    {2.5f, 2.5f, 0.0f,   0.0f,        0.0f,        0.0f,   0.0f,  0.2f},
+    {5.0f, 5.0f, 0.0f,  -0.2f,        0.0f, -1.5707964f,   0.0f,  0.4f},
+    {2.0f, 3.0f, 0.0f,  -0.1f,        0.0f,        0.0f,   0.0f,  0.1f},
+    {4.0f, 4.0f, 0.0f, -0.05f,        0.0f, -1.5707964f,   0.0f, 0.45f},
+    {6.0f, 6.0f, 0.0f, -0.15f,        0.0f, -1.5707964f,   0.0f,  0.3f},
+    {5.0f, 5.0f, 0.0f, -0.18f,        0.0f, -1.5707964f,   0.0f,  0.3f},
+    {6.0f, 6.0f, 0.0f,  -0.1f,        0.0f, -1.5707964f,   0.0f,  0.5f},
+    {2.5f, 2.5f, 0.0f,   0.0f,        0.0f,        0.0f,   0.0f,  0.2f},
+    {3.0f, 3.0f, 0.0f, -0.05f,        0.0f,        0.0f,   0.0f,  0.3f},
+    {5.0f, 5.0f, 0.0f,  -0.1f,        0.0f, -1.5707964f,   0.0f,  0.3f},
+    {2.5f, 2.5f, 0.0f,   0.0f,        0.0f,        0.0f,   0.0f,  0.2f},
+    {4.0f, 4.0f, 0.0f,  -0.1f,        0.0f, -1.5707964f,   0.0f,  0.3f},
+    {4.5f, 6.0f, 0.0f,   0.0f,        0.0f, -1.5707964f,   0.0f, 0.75f},
+    {7.0f, 7.0f, 0.0f,  -0.3f,        0.0f, -1.5707964f,   0.0f,  0.3f},
+    {2.0f, 2.0f, 0.0f,   0.0f,        0.0f,        0.0f,   0.0f,  0.0f},
+    {2.5f, 2.5f, 0.0f,   0.0f,        0.0f,        0.0f,   0.0f,  0.2f},
+    {3.0f, 6.0f, 0.0f, -0.52f, -1.5707964f,        0.0f,   0.0f,  0.0f},
+    {2.0f, 5.0f, 0.0f,  0.45f,  1.5707964f,        0.0f,   0.2f,  0.0f},
+    {2.0f, 3.0f, 0.0f,   0.2f,        0.0f,        0.5f,   0.0f,  0.0f},
+    {2.0f, 3.0f, 0.0f,   0.2f,        0.0f,        0.5f,   0.0f,  0.0f},
+    {6.0f, 6.0f, 0.0f,   0.0f,        0.0f,        0.0f,   0.0f,  0.0f},
+    {2.5f, 5.0f, 0.0f, -0.25f,        0.0f, -1.5707964f,   0.0f, 0.18f},
+    {1.2f, 2.4f, 0.0f,  -0.1f,        0.0f, -1.5707964f, -0.05f, 0.15f},
+    {6.0f, 6.0f, 0.0f,   0.0f,        0.0f,        0.0f,   0.0f,  0.0f},
+    {6.0f, 6.0f, 0.0f,   0.0f,        0.0f,        0.0f,   0.0f,  0.0f},
+    {6.0f, 6.0f, 0.0f,   0.0f,        0.0f,        0.0f,   0.0f,  0.0f},
+};

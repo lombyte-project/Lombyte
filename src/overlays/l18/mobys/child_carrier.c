@@ -16,12 +16,12 @@ void child_carrier_update(char *moby) __asm__("FUN_L18_002fa728");
 
 typedef struct ChildCarrierVars {
     u8    pad_0[0x20];
-    f32   unk20[4];
+    f32   entity_matrix[4];
     u8    pad_30[0x30];
-    f32   unk60[4];
-    u8    unk70;
+    f32   previous_position[4];
+    u8    previous_rotation;
     u8    pad_71[0xF];
-    s32   unk80;
+    s32   spawns_child; /* nonzero: creates the class 0x764 child to carry */
     char *carried_child_moby;
 } ChildCarrierVars;
 
@@ -39,14 +39,14 @@ void child_carrier_update(char *moby) {
         MOBY(moby)->state = UPDATE_TRANSFORM_FROM_HISTORY;
         break;
     case UPDATE_TRANSFORM_FROM_HISTORY:
-        fast_vec_sub(position_delta, moby + 0x10, transform_and_child_vars->unk60);
-        update_entity_matrix(transform_and_child_vars->unk20,
+        fast_vec_sub(position_delta, moby + 0x10, transform_and_child_vars->previous_position);
+        update_entity_matrix(transform_and_child_vars->entity_matrix,
                              position_delta,
-                             &transform_and_child_vars->unk70,
+                             &transform_and_child_vars->previous_rotation,
                              moby + 0x40);
         break;
     }
-    if (MOBY(moby)->command != 0 && transform_and_child_vars->unk80 != 0 &&
+    if (MOBY(moby)->command != 0 && transform_and_child_vars->spawns_child != 0 &&
         *(int *)&transform_and_child_vars->carried_child_moby == 0) {
         char *new_child = create_moby(0x764);
         transform_and_child_vars->carried_child_moby = new_child;
@@ -59,8 +59,8 @@ void child_carrier_update(char *moby) {
                 MOBY(moby)->scale / MOBY(moby)->pclass->scale;
         }
     }
-    qcopy(transform_and_child_vars->unk60, moby + 0x10);
-    qcopy(&transform_and_child_vars->unk70, moby + 0x40);
+    qcopy(transform_and_child_vars->previous_position, moby + 0x10);
+    qcopy(&transform_and_child_vars->previous_rotation, moby + 0x40);
     child = transform_and_child_vars->carried_child_moby;
     if (child != 0) {
         qcopy(child + 0x10, moby + 0x10);

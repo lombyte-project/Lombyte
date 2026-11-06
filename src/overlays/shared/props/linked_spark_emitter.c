@@ -20,9 +20,9 @@ typedef struct {
     float              v[4][4];
     int                col[4];
     float              uv[4][2];
-    long long          r70;
+    long long          clamp;
     long long          texture; /* get_effect_texture */
-    unsigned long long r80;
+    unsigned long long tex1;
     unsigned long long alpha; /* GS ALPHA register value (0x8000000044) */
 } EffectQuad;
 
@@ -195,8 +195,8 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
     qcopy(position, &MOBY(moby)->pos);
     position[3] = 1.0f;
     uniform_color_quad.texture = get_effect_texture(0x2c);
-    uniform_color_quad.r80 = 0xff9000000260ULL;
-    uniform_color_quad.r70 = 0;
+    uniform_color_quad.tex1 = 0xff9000000260ULL;
+    uniform_color_quad.clamp = 0;
     alternating_corner_color_quad.texture = get_effect_texture(0x2c);
     secondVertices = alternating_corner_color_quad.v;
     firstUv = uniform_color_quad.uv;
@@ -206,8 +206,8 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
     secondUv2 = alternating_corner_color_quad.uv[2];
     firstUv3 = uniform_color_quad.uv[3];
     secondUv3 = alternating_corner_color_quad.uv[3];
-    alternating_corner_color_quad.r70 = 0;
-    alternating_corner_color_quad.r80 = 0xff9000000260ULL;
+    alternating_corner_color_quad.clamp = 0;
+    alternating_corner_color_quad.tex1 = 0xff9000000260ULL;
     alternating_corner_color_quad.col[3] = 0;
     alternating_corner_color_quad.col[1] = 0;
     for (corner = 0; corner < 4; corner++) {

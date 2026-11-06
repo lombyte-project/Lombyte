@@ -47,7 +47,7 @@ s32 update_menu_option_list(struct MenuScreen *menu_screen) {
         menu_screen->data.options.selection = previous_selection - 1;
     }
     if ((controller_state.pressed_unmasked & PAD_DOWN) &&
-        menu_screen->data.options.list[menu_screen->data.options.selection + 1].unk0 != 0) {
+        menu_screen->data.options.list[menu_screen->data.options.selection + 1].label != 0) {
         menu_screen->data.options.selection = menu_screen->data.options.selection + 1;
     }
     if (controller_state.pressed_unmasked & PAD_CROSS) {

@@ -48,10 +48,10 @@ int select_hero_help_value(int allow_slot_item_help) {
         if (hero_for_help_checks->item_anim_active == 0) {
             return 0;
         }
-        if (hero_for_help_checks->unk20AA == 0) {
+        if (hero_for_help_checks->weapon_up == 0) {
             return 0;
         }
-        if (hero_for_help_checks->unk22C8 != 0) {
+        if (hero_for_help_checks->weapon_lowered != 0) {
             return 0;
         }
     }
@@ -109,14 +109,14 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
     if (hero_moby_entry->owner != hero_moby) {
         return 0;
     }
-    if ((hero_moby_entry->unk24 ^ 1) & 1) {
+    if ((hero_moby_entry->hit_flags ^ 1) & 1) {
         return 0;
     }
     D_0013DF88[current_level_index]++;
     G.damage_source_moby = (struct Moby *)hero_moby_entry->target;
     D_0015EEA8++;
     if (G.state.control_mode == HERO_MODE_GRIND) {
-        G.unk5BE = 1;
+        G.grind_hit = 1;
         return 0;
     }
     if (apply_state_and_motion_response == 0) {
@@ -191,7 +191,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
             z_response = frame_duration * 1.7f;
         }
         hero_knockback(&motion_delta, flag, xy_scale, z_response);
-        if (flag != 0 && hero_moby_entry->unk28 == 4) {
+        if (flag != 0 && hero_moby_entry->attack_type == 4) {
             motion_delta.f[2] += motion_delta.f[2];
         }
         break;
@@ -234,7 +234,7 @@ void update_hero_smoothing(void) {
     }
     if (hero.state.control_mode == HERO_MODE_JUMP) {
         if (hero.state_timer > hero.takeoff_frame && hero.past_jump_apex == 0)
-            hero.capsule_bottom_target = hero.unk434;
+            hero.capsule_bottom_target = hero.air_capsule_bottom;
     } else if (hero.state.current == HERO_STATE_FALL) {
         hero.capsule_bottom_target = 0.5f;
     } else if (hero.state.current == HERO_STATE_CROUCH) {

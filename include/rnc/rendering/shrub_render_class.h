@@ -60,19 +60,19 @@ typedef struct {
 struct ShrubInstance;
 
 typedef struct {
-    f32                       bounding_sphere[4]; /* 0x00: center xyz, radius */
-    f32                       scale;              /* 0x10 */
-    u8                        pad14[2];
-    u16                       instance_count; /* 0x16 */
-    struct ShrubInstance     *first_instance; /* 0x18 */
-    ShrubMipPacket           *mip_packet;     /* 0x1C */
-    f32                       unk20;          /* 0x20 */
-    u8                        pad24[2];
-    u16                       class_slot;
-    s16                       group_count;
-    u8                        pad2A[2];
-    s32                       packed_geometry;
-    u8                        pad30[0x10];
+    f32                   bounding_sphere[4]; /* 0x00: center xyz, radius */
+    f32                   mip_distance;       /* 0x10: texture paging distance (x 1024 per class) */
+    u8                    pad14[2];
+    u16                   instance_count; /* 0x16 */
+    struct ShrubInstance *first_instance; /* 0x18 */
+    ShrubMipPacket       *mip_packet;     /* 0x1C */
+    f32 position_scale; /* 0x20: vertex dequantisation scale, the instance matrix w */
+    u8  pad24[2];
+    u16 class_slot;
+    s16 group_count;
+    u8  pad2A[2];
+    s32 packed_geometry;
+    u8  pad30[0x10];
     ShrubRenderGroupReference groups[1];
 } ShrubRenderClass;
 

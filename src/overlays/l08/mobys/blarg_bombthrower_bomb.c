@@ -1,4 +1,4 @@
-/* Level 08 moby class 0xf8: bomb. */
+/* Level 08 moby class 0xf8: the bomb blarg_bombthrower throws. */
 #include "types.h"
 #include "asm.h"
 #include "rnc/mobys/moby.h"
@@ -56,8 +56,8 @@ extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__(
 float      bomb_downward_acceleration_gp __asm__("D_L08_00161860") = 15.0f;
 extern void  FUN_L00_001ff660_c(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void  jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
-extern void  trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  start_hit_color_flash(void *, short *) __asm__("FUN_L00_0025d458");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void  spawn_explosion(void *,
                              void *,
                              void *,
@@ -78,59 +78,60 @@ extern void  spawn_explosion(void *,
                              int) __asm__("FUN_L00_0025e450");
 extern void  spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern float D_L08_0015F580_macro[] __asm__("D_L08_0015F580") MACRO_ADDR;
-void         moby_248_update(char *moby) __asm__("FUN_L08_002d23f0");
+void         blarg_bombthrower_bomb_update(char *moby) __asm__("FUN_L08_002d23f0");
 extern float D_0015ED6C;
 
 blk16 l08_bomb_moving_particle_initial_colors __asm__("D_L08_00161868") = {
     {-1, -1, -1, 0x2f, -1, -1, 0, 0x2f, -1, 0x7f, 0, 0x2f, -1, 0x4f, 0, 0x2f}
 };
 
-typedef struct Moby248Vars {
+typedef struct BlargBombthrowerBombVars {
     u8  pad_0[0x7];
     u8  fuse_flash_target_red;
     u8  pad_8[0x8];
-    u8  unk10;
+    u8  velocity;
     u8  pad_11[0x7];
-    f32 unk18;
+    f32 velocity_z;
     u8  pad_1C[0x4];
     s32 timer_20;
-    s32 unk24;
-    f32 unk28;
+    s32 bounce_count;
+    f32 fuse_flash_step;
     u8  pad_2C[0x4];
-    s32 unk30;
-} Moby248Vars;
+    s32 thrower;
+} BlargBombthrowerBombVars;
 
 /* Moby class 248 */
-void moby_248_update(char *moby) {
+void blarg_bombthrower_bomb_update(char *moby) {
     enum {
         BOMB_STATE_MOVING = 1,
         BOMB_STATE_STATIONARY_FUSE = 2,
         BOMB_STATE_EXPLODE_AND_REMOVE = 0x62,
         BOMB_STATE_BURST_AND_REMOVE = 0x63
     };
-    union Coll_36F8 c;
-    blk16           table_or_bounce_scratch;
-    float           normalized_direction[4];
-    float           random_direction[4];
-    Moby248Vars    *bomb_vars;
-    int             st;
-    int             two;
-    float           collision_z_offset;
+    union Coll_36F8           c;
+    blk16                     table_or_bounce_scratch;
+    float                     normalized_direction[4];
+    float                     random_direction[4];
+    BlargBombthrowerBombVars *bomb_vars;
+    int                       st;
+    int                       two;
+    float                     collision_z_offset;
 
-    bomb_vars = (Moby248Vars *)MOBY(moby)->pvars;
+    bomb_vars = (BlargBombthrowerBombVars *)MOBY(moby)->pvars;
     if (MOBY(moby)->state != 0x37) {
         if (coll_sphere(0.5f, moby + 0x10, 0x11, moby)) {
             int sphere_hit_moby = D_L08_00174658_lui;
             if (sphere_hit_moby != 0 &&
-                (sphere_hit_moby != bomb_vars->unk30 || bomb_vars->unk24 != 0)) {
+                (sphere_hit_moby != bomb_vars->thrower || bomb_vars->bounce_count != 0)) {
                 if (!(MOBY(moby)->command & 2))
                     MOBY(moby)->state = BOMB_STATE_EXPLODE_AND_REMOVE;
                 else
                     MOBY(moby)->state = BOMB_STATE_BURST_AND_REMOVE;
                 qcopy((moby + 0x10), ((char *)D_L08_00174660));
                 FUN_L00_001ff660_c(
-                    &bomb_vars->unk10, &bomb_vars->unk10, ((char *)D_L08_00174660) + 0x20);
-                fast_vec_normalize(&bomb_vars->unk10, &bomb_vars->unk10, D_0015ED6C + D_0015ED6C);
+                    &bomb_vars->velocity, &bomb_vars->velocity, ((char *)D_L08_00174660) + 0x20);
+                fast_vec_normalize(
+                    &bomb_vars->velocity, &bomb_vars->velocity, D_0015ED6C + D_0015ED6C);
             }
         }
     }
@@ -140,9 +141,9 @@ void moby_248_update(char *moby) {
     switch (st) {
     case BOMB_STATE_MOVING: {
         float velocity_magnitude;
-        velocity_magnitude = fast_vec_length((&bomb_vars->unk10));
+        velocity_magnitude = fast_vec_length((&bomb_vars->velocity));
         MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, velocity_magnitude * 0.5f);
-        if (bomb_vars->unk24 == 0) {
+        if (bomb_vars->bounce_count == 0) {
             float lo = -1.0f;
             float hi = 1.0f;
             int  *selected_table_entry;
@@ -166,27 +167,27 @@ void moby_248_update(char *moby) {
         qcopy(c.r.start, moby + 0x10);
         collision_z_offset = 0.16f;
         c.r.start[2] -= collision_z_offset;
-        fast_vec_add((moby + 0x10), (moby + 0x10), (&bomb_vars->unk10));
-        bomb_vars->unk18 -= bomb_downward_acceleration_gp * D_0015ED70_gp;
+        fast_vec_add((moby + 0x10), (moby + 0x10), (&bomb_vars->velocity));
+        bomb_vars->velocity_z -= bomb_downward_acceleration_gp * D_0015ED70_gp;
         qcopy(c.r.end, moby + 0x10);
         c.r.end[2] -= collision_z_offset;
         c.r.x.moby = moby;
         c.r.x.flags = 0x810000;
         c.r.x.st = st;
         c.r.x.f = 1.0f;
-        qcopy(c.r.x.v, &bomb_vars->unk10);
+        qcopy(c.r.x.v, &bomb_vars->velocity);
         if (collision_line(c.r.start, c.r.end, 0, moby, 0)) {
             char *collision_result = (char *)&D_L08_00174640;
             int   v = *(int *)(collision_result + 0x18);
             if (v != 0) {
-                if (v != bomb_vars->unk30 || bomb_vars->unk24 != 0) {
+                if (v != bomb_vars->thrower || bomb_vars->bounce_count != 0) {
                     if (!(MOBY(moby)->command & 2))
                         MOBY(moby)->state = BOMB_STATE_EXPLODE_AND_REMOVE;
                     else
                         MOBY(moby)->state = BOMB_STATE_BURST_AND_REMOVE;
                     qcopy((moby + 0x10), ((char *)D_L08_00174660));
                     {
-                        char *v = &bomb_vars->unk10;
+                        char *v = &bomb_vars->velocity;
                         FUN_L00_001ff660_c(v, v, ((char *)D_L08_00174660) + 0x20);
                         fast_vec_normalize(v, v, D_0015ED6C + D_0015ED6C);
                     }
@@ -198,33 +199,33 @@ void moby_248_update(char *moby) {
                     qcopy((moby + 0x10), collision_result + 0x20);
                     MOBY(moby)->pos.z += collision_z_offset;
                     FUN_L00_001ff660_c(
-                        (&bomb_vars->unk10), (&bomb_vars->unk10), collision_result + 0x40);
+                        (&bomb_vars->velocity), (&bomb_vars->velocity), collision_result + 0x40);
                     fast_vec_cross(
-                        &table_or_bounce_scratch, (&bomb_vars->unk10), collision_result + 0x40);
+                        &table_or_bounce_scratch, (&bomb_vars->velocity), collision_result + 0x40);
                     k = D_0015ED6C * 1.5f;
                     fast_vec_normalize(&table_or_bounce_scratch,
                                        &table_or_bounce_scratch,
                                        random_float_between(-k, k));
                     fast_vec_add(
-                        (&bomb_vars->unk10), (&bomb_vars->unk10), &table_or_bounce_scratch);
-                    fast_vec_scale((&bomb_vars->unk10), (&bomb_vars->unk10), 0.4f);
-                    bomb_vars->unk24 += 1;
+                        (&bomb_vars->velocity), (&bomb_vars->velocity), &table_or_bounce_scratch);
+                    fast_vec_scale((&bomb_vars->velocity), (&bomb_vars->velocity), 0.4f);
+                    bomb_vars->bounce_count += 1;
                     bomb_vars->timer_20 = scale_game_frames(0xB4);
-                    if (fast_vec_length((&bomb_vars->unk10)) < D_0015ED6C) {
+                    if (fast_vec_length((&bomb_vars->velocity)) < D_0015ED6C) {
                         int r;
                         MOBY(moby)->state = two;
                         r = scale_game_frames(0x78);
                         bomb_vars->timer_20 = r;
-                        bomb_vars->unk28 = 254.0f / (float)r;
-                        clear_u64_value((&bomb_vars->unk10));
+                        bomb_vars->fuse_flash_step = 254.0f / (float)r;
+                        clear_u64_value((&bomb_vars->velocity));
                     }
                 } else {
                     MOBY(moby)->state = BOMB_STATE_EXPLODE_AND_REMOVE;
                     qcopy((moby + 0x10), collision_result + 0x20);
                     FUN_L00_001ff660_c(
-                        (&bomb_vars->unk10), (&bomb_vars->unk10), collision_result + 0x40);
+                        (&bomb_vars->velocity), (&bomb_vars->velocity), collision_result + 0x40);
                     fast_vec_normalize(
-                        (&bomb_vars->unk10), (&bomb_vars->unk10), D_0015ED6C + D_0015ED6C);
+                        (&bomb_vars->velocity), (&bomb_vars->velocity), D_0015ED6C + D_0015ED6C);
                 }
             }
         } else if (fast_dec_timer(&bomb_vars->timer_20)) {
@@ -243,9 +244,9 @@ void moby_248_update(char *moby) {
                    bomb_vars->timer_20 == scale_game_frames(0x28) ||
                    bomb_vars->timer_20 == scale_game_frames(0x14)) {
             bomb_vars->fuse_flash_target_red = 0xFA;
-            trooper_anim_update(moby, (short *)bomb_vars);
+            start_hit_color_flash(moby, (short *)bomb_vars);
         }
-        trooper_anim_finish(moby, bomb_vars);
+        update_hit_color_flash(moby, bomb_vars);
         break;
     case BOMB_STATE_EXPLODE_AND_REMOVE:
         allocate_voice_for_target_entry(0, 0, moby);

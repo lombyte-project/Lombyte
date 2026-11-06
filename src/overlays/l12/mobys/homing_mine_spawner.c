@@ -39,27 +39,26 @@ void spawn_next_linked_moby(struct Moby *m) __asm__("FUN_L12_003076e0");
 
 typedef struct HomingMineSpawnerVars {
     u8  pad_0[0x38];
-    s32 unk38;
+    s32 reset_alert; /* nonzero: restarts the 180-frame wider range */
     u8  pad_3C[0x34];
-    u8  unk70;
+    u8  target_position; /* target record of select_moby_combat_target; the hero by default */
     u8  pad_71[0x7];
-    f32 unk78;
+    f32 target_z;
     u8  pad_7C[0x34];
-    s32 unkB0;
-    s32 unkB4;
+    s32 target_moby;
+    s32 target_status;
     u8  pad_B8[0x8];
-    s32 unkC0;
-    u8  pad_C4[0x2C];
-    s32 unkF0;
-    f32 unkF4;
-    f32 unkF8;
+    s32 linked_mobys[12]; /* moby indices spawned in order, -1 ends the list */
+    s32 spawn_index;
+    f32 base_range;
+    f32 range; /* base_range, + 5 while timer_FE runs */
     s16 timer_FC;
     s16 timer_FE;
 } HomingMineSpawnerVars;
 
 void spawn_next_linked_moby(struct Moby *spawner) {
     HomingMineSpawnerVars *spawner_data = (HomingMineSpawnerVars *)spawner->pvars;
-    int         *indexed_spawner_data = (int *)((u8 *)spawner_data + (spawner_data->unkF0 << 2));
+    int *indexed_spawner_data = (int *)((u8 *)spawner_data + (spawner_data->spawn_index << 2));
     struct Moby *spawned_moby =
         (struct Moby *)((unsigned char *)D_L12_0015FFD8_p + (indexed_spawner_data[0x30] << 8));
     struct MobyClass *moby_class;
@@ -77,7 +76,7 @@ void spawn_next_linked_moby(struct Moby *spawner) {
     spawned_moby->occlusion = 0x7F80;
     spawned_moby->draw_dist = 0xFF;
     spawned_moby->unk71 = 0xFF;
-    spawned_moby->unk72 = 0xFF;
+    spawned_moby->lod_dist = 0xFF;
     spawned_moby->hit_slot = 0xFF;
     spawned_moby->collision = moby_class->collision;
     spawned_moby->spawn_frame = spawner->spawn_frame;
@@ -105,7 +104,7 @@ void homing_mine_spawner_update(struct Moby *spawner) {
     int                   *slots;
     int                    i;
     update_homing_mine_spawner_target(spawner);
-    slots = &spawner_data->unkC0;
+    slots = spawner_data->linked_mobys;
     switch (spawner->state) {
     case HOMING_MINE_SPAWNER_CLEAR_LINKED_MOBYS:
         for (i = 0; i < 12; i++) {
@@ -120,8 +119,9 @@ void homing_mine_spawner_update(struct Moby *spawner) {
         spawner->state = HOMING_MINE_SPAWNER_WAIT_FOR_PROXIMITY;
         break;
     case HOMING_MINE_SPAWNER_WAIT_FOR_PROXIMITY:
-        if (spawner_data->unkB4 != 2) {
-            if (vector_distance_xy(&spawner->pos, &spawner_data->unk70) < spawner_data->unkF8) {
+        if (spawner_data->target_status != 2) {
+            if (vector_distance_xy(&spawner->pos, &spawner_data->target_position) <
+                spawner_data->range) {
                 spawner->state = HOMING_MINE_SPAWNER_WAIT_FOR_PRESPAWN_ANIMATION;
             }
         }
@@ -139,14 +139,14 @@ void homing_mine_spawner_update(struct Moby *spawner) {
         break;
     case HOMING_MINE_SPAWNER_SPAWN_LINKED_MOBYS:
         if (fast_dec_timer_s16(&spawner_data->timer_FC)) {
-            if (slots[spawner_data->unkF0] != -1) {
+            if (slots[spawner_data->spawn_index] != -1) {
                 spawn_next_linked_moby(spawner);
                 spawner->command = spawner->command == 0;
                 spawner_data->timer_FC = scale_game_frames(0x28);
             }
-            spawner_data->unkF0 += 1;
+            spawner_data->spawn_index += 1;
         }
-        if (spawner_data->unkF0 == 12 || slots[spawner_data->unkF0] == -1) {
+        if (spawner_data->spawn_index == 12 || slots[spawner_data->spawn_index] == -1) {
             spawner->state = HOMING_MINE_SPAWNER_WAIT_FOR_POSTSPAWN_ANIMATION;
         }
         break;
@@ -177,24 +177,25 @@ void update_homing_mine_spawner_target(struct Moby *spawner) {
     HomingMineSpawnerVars *spawner_data = (HomingMineSpawnerVars *)spawner->pvars;
     char                  *pad;
     if (spawner->state != HOMING_MINE_SPAWNER_CLEAR_LINKED_MOBYS) {
-        if (spawner_data->unk38 != 0) {
+        if (spawner_data->reset_alert != 0) {
             spawner_data->timer_FE = scale_game_frames(0xB4);
         }
-        spawner_data->unk38 = 0;
+        spawner_data->reset_alert = 0;
         if (fast_dec_timer_s16(&spawner_data->timer_FE)) {
-            spawner_data->unkF8 = spawner_data->unkF4;
+            spawner_data->range = spawner_data->base_range;
         } else {
-            spawner_data->unkF8 = spawner_data->unkF4 + 5.0f;
+            spawner_data->range = spawner_data->base_range + 5.0f;
         }
-        if (select_moby_combat_target(spawner, &spawner_data->unk70, spawner_data->unkF8) != 2) {
-            if (absolute_float(spawner->pos.z - spawner_data->unk78) > 3.0f) {
-                spawner_data->unkB4 = 2;
+        if (select_moby_combat_target(
+                spawner, &spawner_data->target_position, spawner_data->range) != 2) {
+            if (absolute_float(spawner->pos.z - spawner_data->target_z) > 3.0f) {
+                spawner_data->target_status = 2;
             }
         }
-        if (spawner_data->unkB0 == 0) {
+        if (spawner_data->target_moby == 0) {
             pad = D_0013E533 + 0xE1D;
-            spawner_data->unkB0 = *(int *)(pad + 0x2080);
-            qcopy(&spawner_data->unk70, pad + 0x80);
+            spawner_data->target_moby = *(int *)(pad + 0x2080);
+            qcopy(&spawner_data->target_position, pad + 0x80);
         }
     }
 }

@@ -191,7 +191,7 @@ struct MemoryCardState {
     s32               err_card;      /* 0xE8 */
     void             *buf;           /* 0xEC: save data to write */
     s32               size;          /* 0xF0: bytes of the current read/write */
-    s32               unkF4;         /* 0xF4: set 1 by prepare_save_game and the load menu */
+    s32 card_save_active; /* 0xF4: 1 once a save is written (prepare_save_game) or loaded (loading_data_menu); 0 at init and after a card sync error; CS_GOOD_SAVE needs it */
 };
 
 extern struct MemoryCardState memory_card_state __asm__("D_0013D290");

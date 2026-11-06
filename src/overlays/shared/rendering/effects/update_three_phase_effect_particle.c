@@ -3317,7 +3317,7 @@ typedef struct {
     s32   f14;
     s32   f18;
     f32   f1C;
-    s32   unk20;
+    s32   has_direction; /* 0x20: hit descriptor flag (record_moby_hit), the probe direction is v */
     char  pad[0xC];
 } S_26ff10;
 
@@ -3408,7 +3408,7 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         collision_parameters.v_26ff10.q_26ff10 = *(U128 *)pv;
         if (fl & 0x40)
             clear_u64_value(&collision_parameters);
-        collision_parameters.unk20 = 1;
+        collision_parameters.has_direction = 1;
         col = pv->f1C;
         aux = &collision_parameters;
         pa = v1u.f;

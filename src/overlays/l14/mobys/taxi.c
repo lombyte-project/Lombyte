@@ -355,7 +355,7 @@ void taxi_update(struct Moby *moby) {
         struct Hero *g = &hero;
         if (g->ground_moby == moby && g->air_frames.s == 0) {
             g->jump_lock_timer = 2;
-            g->unk1F4 = 2;
+            g->edge_brake_lock_timer = 2;
             transform_moby_vector_table_to_world_space((char *)moby);
         }
         if (voice_is_playing(moby, taxi_vars->sound) == 0) {

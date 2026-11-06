@@ -37,7 +37,7 @@ int hero_get_gadget_anim_id(int allow_item_lookup) {
     if (((unsigned char *)animation_selection_state)[0x20AA] == 0) {
         return 0;
     }
-    if (animation_selection_state->unk22C8 != 0) {
+    if (animation_selection_state->weapon_lowered != 0) {
         return 0;
     }
     i = hero_slot_item_id(0) * 0x4C;
@@ -114,7 +114,7 @@ void hero_update_hop_movement(void) {
     } else if (state == HERO_STATE_HIGH_JUMP || state == HERO_STATE_STORED_HEADING_JUMP) {
         hero.motion.move_yaw = hero.takeoff_yaw;
         turn_to(0, ED64 * 0.04f, ED64 * 0.2f, ED6C * 6.981317f);
-        if (hero.unk450 != 3) {
+        if (hero.jump_stick_direction != 3) {
             hero.ground_speed = hero.air_target_speed;
         } else {
             hero.ground_speed = 0.0f;
@@ -136,13 +136,13 @@ void hero_update_hop_movement(void) {
         build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.momentum, &hero.move_impulse);
     } else if (state == HERO_STATE_REPEATABLE_JUMP) {
-        hero.motion.move_yaw = hero.unk470.f[3];
-        qcopy(&hero.motion.move_dir, &hero.unk470);
+        hero.motion.move_yaw = hero.wall_jump_normal.f[3];
+        qcopy(&hero.motion.move_dir, &hero.wall_jump_normal);
         if (scale_game_frames(9) < hero.state_timer) {
             turn_to(-1, ED64 * 0.042f, ED64 * 0.2f, ED6C * 11.868238f);
         }
         if (scale_game_frames(9) <= hero.state_timer) {
-            if (hero.unk308 == 0) {
+            if (hero.magnetic_floor == 0) {
                 hero.motion.velocity.f[0] = fast_cos(hero.motion.move_yaw) * (ED6C * 4.9f);
                 hero.motion.velocity.f[1] = fast_sin(hero.motion.move_yaw) * (ED6C * 4.9f);
             } else {
@@ -187,7 +187,7 @@ void hero_update_hop_movement(void) {
                 velocity_change_step = ED70 * 2.0f;
             }
         }
-        if (hero.unk4A8 && hero.on_ice_ground) {
+        if (hero.took_off_from_ice && hero.on_ice_ground) {
             velocity_change_step = ED70 * 0.17f;
             if (hero.state.current == 15) {
                 stick_target(0, ED6C * 2.5f);

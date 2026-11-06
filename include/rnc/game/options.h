@@ -13,6 +13,7 @@ extern s32           music_volume __asm__("D_0015EDEC");
 extern s32           sound_volume __asm__("D_0015EDF0");
 extern s32           alternate_animation_sequence __asm__("D_0015EE20");
 extern s32           selected_save_slot __asm__("D_0015EE34");
+extern u8            subtitles_enabled __asm__("D_0015EE40");
 extern s32           boot_level_active __asm__("D_0015F5E8");
 
 #endif /* LOMBYTE_RNC_GAME_OPTIONS_H */

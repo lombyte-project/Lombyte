@@ -41,20 +41,20 @@ trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0
 /* Pvars of a lobbed projectile, as set up at launch. */
 typedef struct {
     u8    pad0[0x20];
-    Vec4f arc;          /* 0x20: filled by trooper_start_knockback */
-    f32   rise;         /* 0x30: D_0015ED70 * 40 */
-    f32   fall;         /* 0x34: D_0015ED70 * 100 */
-    f32   launch_speed; /* 0x38 */
-    f32   unk3C;        /* 0x3C */
-    s32   timer;        /* 0x40 */
-    s32   unk44;        /* 0x44: set to 1 on launch */
-    f32   unk48;        /* 0x48: 0.7 on launch */
+    Vec4f arc;                /* 0x20: filled by trooper_start_knockback */
+    f32   rise;               /* 0x30: D_0015ED70 * 40 */
+    f32   fall;               /* 0x34: D_0015ED70 * 100 */
+    f32   launch_speed;       /* 0x38 */
+    f32   vertical_speed;     /* 0x3C */
+    s32   collision_radius;   /* 0x40: 1/1024 units (716.8 = 0.7) */
+    s32   motion_flags;       /* 0x44: set to 1 on launch */
+    f32   collision_z_offset; /* 0x48: 0.7 on launch */
     u8    pad4C[0x11];
-    u8    unk5D;
+    u8    unk5D; /* KnockbackMotion.unk3D */
     u8    pad5E[0xE];
-    f32   unk6C; /* 0x6C */
-    f32   unk70; /* 0x70: -1 on launch */
-    f32   unk74; /* 0x74: -1 on launch */
+    f32   target_speed;            /* 0x6C: KnockbackMotion.target_speed (motion at +0x20) */
+    f32   apex_animation_frame;    /* 0x70: -1 on launch */
+    f32   landing_animation_frame; /* 0x74: -1 on launch */
 } LobbedVars;
 
 void start_blarg_commander_knockback(void *unused, struct Moby *moby) __asm__("FUN_L12_00308708");
@@ -70,9 +70,9 @@ void start_blarg_commander_knockback(void *unused, struct Moby *moby) {
     if (random_integer_below(3) == 0) {
         allocate_voice_for_target_entry(1, 0x20, moby);
     }
-    lobbed_vars->unk48 = 0.7f;
-    lobbed_vars->timer = truncate_float_to_s32(716.8f);
-    lobbed_vars->unk6C = 0.0f;
+    lobbed_vars->collision_z_offset = 0.7f;
+    lobbed_vars->collision_radius = truncate_float_to_s32(716.8f);
+    lobbed_vars->target_speed = 0.0f;
     moby->update_dist = 0xFF;
     moby->flags &= ~6;
     knockback_heading = fast_add_rotations(moby->rot.z, 3.1415927f);
@@ -90,17 +90,17 @@ void start_blarg_commander_knockback(void *unused, struct Moby *moby) {
         3.0f / ((rise_sqrt_term + rise_sqrt_term) / frame_scaled_rise) +
         frame_time_sq * 100.0f * 0.5f *
             ((frame_rise_sqrt_term + frame_rise_sqrt_term) / frame_scaled_rise);
-    lobbed_vars->unk3C = square_root(frame_scaled_rise * 4.0f);
+    lobbed_vars->vertical_speed = square_root(frame_scaled_rise * 4.0f);
     lobbed_vars->unk5D = 0;
-    lobbed_vars->unk44 = 1;
+    lobbed_vars->motion_flags = 1;
     trooper_knockback_arc(knockback_input_vector,
                           &knockback_heading,
                           &lobbed_vars->launch_speed,
-                          &lobbed_vars->unk3C);
+                          &lobbed_vars->vertical_speed);
     trooper_start_knockback(knockback_heading, moby, &lobbed_vars->arc, 1, 5, 2);
-    lobbed_vars->unk6C = frame_time + frame_time;
-    lobbed_vars->unk70 = -1.0f;
-    lobbed_vars->unk74 = -1.0f;
+    lobbed_vars->target_speed = frame_time + frame_time;
+    lobbed_vars->apex_animation_frame = -1.0f;
+    lobbed_vars->landing_animation_frame = -1.0f;
     moby->flags &= ~0x1000;
     blend_moby_animation(moby, 1, 0, 0);
 }

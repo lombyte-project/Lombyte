@@ -1,5 +1,6 @@
 /* Level 06 moby class 0x418: alien snapper. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -82,11 +83,11 @@ extern char         D_0013F350[];
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F91A8), where it is exact; names translated to the US level program. */
 typedef struct {
     u8    pad0[0x20];
-    f32   f20; /* 0x20 */
-    s16   f24; /* 0x24 */
+    f32   health;     /* 0x20 */
+    s16   max_health; /* 0x24 */
     u8    pad26[2];
-    u8    f28; /* 0x28 */
-    u8    f29; /* 0x29 */
+    u8    hit_response_class; /* 0x28 */
+    u8    f29;                /* 0x29 */
     u8    pad2A[0x2E];
     u8    f58; /* 0x58 */
     u8    pad59;
@@ -135,7 +136,7 @@ typedef struct {
     f32   f1C8;                   /* 0x1C8 */
     s32   f1CC;                   /* 0x1CC */
     u8    pad1D0[0x10];
-    u8    f1E0[0x10]; /* 0x1E0 */
+    u8    big_head_manipulator[0x10]; /* 0x1E0 */
 } SnapperVars_91A8;
 
 typedef struct {
@@ -204,35 +205,33 @@ typedef struct {
 } Target;
 
 typedef struct BlargVars {
-    char          pad00[0x20];
-    float         health; /* 0x20 */
-    char          pad24[0x14];
-    int           targeting_boost_refresh_pending; /* 0x38 */
-    char          pad3C[0x24];
-    char          f60[0x7]; /* 0x60 */
-    unsigned char f67;      /* 0x67 */
-    char          pad68[0x8];
-    char          f70[0x18];               /* 0x70 */
-    float         horizontal_motion_speed; /* 0x88 */
-    float         f8C;                     /* 0x8C */
-    char          pad90[0x30];
-    float         motion_apex_animation_frame;    /* 0xC0 */
-    float         motion_landing_animation_frame; /* 0xC4 */
-    char          padC8[0x58];
-    char          selected_target_xy[0x8]; /* 0x120 */
-    float         selected_target_z;       /* 0x128 */
-    char          pad12C[0x34];
-    int           selected_target_moby; /* 0x160 */
-    int           f164;                 /* 0x164 */
-    char          pad168[0x8];
-    char          home_position[0x30]; /* 0x170 */
-    float         f1A0;                /* 0x1A0 */
-    char          pad1A4[0x8];
-    int           f1AC;                /* 0x1AC */
-    int           movement_path_index; /* 0x1B0 */
-    char          pad1B4[0x14];
-    float         f1C8; /* 0x1C8 */
-    int           f1CC; /* 0x1CC */
+    char                 pad00[0x20];
+    float                health; /* 0x20 */
+    char                 pad24[0x14];
+    int                  targeting_boost_refresh_pending; /* 0x38 */
+    char                 pad3C[0x24];
+    struct HitColorFlash hit_flash;
+    char                 f70[0x18];               /* 0x70 */
+    float                horizontal_motion_speed; /* 0x88 */
+    float                f8C;                     /* 0x8C */
+    char                 pad90[0x30];
+    float                motion_apex_animation_frame;    /* 0xC0 */
+    float                motion_landing_animation_frame; /* 0xC4 */
+    char                 padC8[0x58];
+    char                 selected_target_xy[0x8]; /* 0x120 */
+    float                selected_target_z;       /* 0x128 */
+    char                 pad12C[0x34];
+    int                  selected_target_moby; /* 0x160 */
+    int                  f164;                 /* 0x164 */
+    char                 pad168[0x8];
+    char                 home_position[0x30]; /* 0x170 */
+    float                f1A0;                /* 0x1A0 */
+    char                 pad1A4[0x8];
+    int                  f1AC;                /* 0x1AC */
+    int                  movement_path_index; /* 0x1B0 */
+    char                 pad1B4[0x14];
+    float                f1C8; /* 0x1C8 */
+    int                  f1CC; /* 0x1CC */
 } BlargVars;
 
 extern int level_frame_count __asm__("D_L06_0015F5CC");
@@ -247,7 +246,7 @@ int l06_alien_snapper_glow_gray_color __asm__("D_L06_00161EE8") = 0x80808080;
 int l06_alien_snapper_glow_tinted_color __asm__("D_L06_00161EEC") = 0x80604040;
 
 extern int     resolve_moby_hit_response() __asm__("FUN_00213928");
-void           trooper_anim_update(void *a, void *s) __asm__("FUN_L00_0025d458");
+void           start_hit_color_flash(void *a, void *s) __asm__("FUN_L00_0025d458");
 extern float   func_001F9878_2FA618(float) __asm__("FUN_001f96b0");
 extern Target *func_L00_0025B478_2FA618(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
@@ -255,8 +254,8 @@ extern void func_L06_002FAAC8_2FA618(void *) __asm__("FUN_L06_002f9698");
 extern void
 func_L00_0025D5B0_2FA618(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void func_L00_0025A8E8_2FA618(
     void *, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern int func_001FA8A8_2FA618(int, int, float) __asm__("FUN_001fa6e0");
@@ -293,7 +292,7 @@ void alien_snapper_update(Moby *moby) {
     float bite_query_position[4];
 
     update_alien_snapper_hit_response_and_targeting(moby);
-    func_L00_00264B40_91A8(2.3f, moby, 1, snapper_behavior->f1E0);
+    func_L00_00264B40_91A8(2.3f, moby, 1, snapper_behavior->big_head_manipulator);
     if (moby->visible != 0 && fast_vec_dist(&moby->pos, D_L06_00167540_macro) < 27.0f) {
         func_L00_0025B178_91A8(moby);
         moby->shadow_range = 0x15;
@@ -302,10 +301,10 @@ void alien_snapper_update(Moby *moby) {
     moby->scale = moby->pclass->scale * D_L06_00161EB0;
     switch (moby->state) {
     case ALIEN_SNAPPER_STATE_INITIALIZE:
-        snapper_behavior->f28 = 3;
+        snapper_behavior->hit_response_class = 3;
         snapper_behavior->f29 = 1;
-        snapper_behavior->f20 = 4.0f;
-        snapper_behavior->f24 = 4;
+        snapper_behavior->health = 4.0f;
+        snapper_behavior->max_health = 4;
         snapper_behavior->f58 = truncate_float_to_s32(10.0f);
         snapper_behavior->f5A = truncate_float_to_s32(14.0f);
         moby->flags |= 0x5000;
@@ -812,7 +811,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
             reaction = 1;
         } else if (snapper_vars->f1CC != 0) {
             reaction = 0xB;
-            snapper_vars->f67 = 0xFA;
+            snapper_vars->hit_flash.flash_red = 0xFA;
         }
 
         switch (reaction) {
@@ -833,7 +832,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
             snapper_vars->motion_landing_animation_frame = 8.5f;
             func_L00_0025D5B0_2FA618(
                 moby, snapper_vars->f70, 9, 1, 0, fast_arc_tan(target->x, target->y));
-            snapper_vars->f67 = 0xFA;
+            snapper_vars->hit_flash.flash_red = 0xFA;
             break;
         case REACTION_DEATH:
         case HIT_RESPONSE_DEATH_SEQUENCE:
@@ -845,17 +844,17 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
             snapper_vars->motion_landing_animation_frame = 14.5f;
             func_L00_0025D5B0_2FA618(
                 moby, snapper_vars->f70, 10, 1, 0, fast_arc_tan(target->x, target->y));
-            snapper_vars->f67 = 0xFA;
+            snapper_vars->hit_flash.flash_red = 0xFA;
             mark_moby_for_removal_cf(moby, 0, -1);
             break;
         case REACTION_NO_RESPONSE:
             break;
         }
-        trooper_anim_update(moby, snapper_vars->f60);
+        start_hit_color_flash(moby, &snapper_vars->hit_flash);
     }
 
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, snapper_vars->f60);
+    update_hit_color_flash(moby, &snapper_vars->hit_flash);
     switch (moby->state) {
     case SNAPPER_APPROACH_TARGET:
     case SNAPPER_REPOSITION_AROUND_TARGET:
@@ -875,7 +874,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
     if (snapper_vars->f1AC != 0) {
         snapper_vars->f1A0 = l06_alien_snapper_base_targeting_radius + 6.0f;
     } else if (moby->state == ALIEN_SNAPPER_STATE_WAIT_FOR_ACTIVATION) {
-        if (moby == ((Moby *)hero.unk240) || moby == ((Moby *)hero.coll_hit_moby)) {
+        if (moby == ((Moby *)hero.wall_moby) || moby == ((Moby *)hero.coll_hit_moby)) {
             snapper_vars->f1A0 = 6.0f;
         } else {
             snapper_vars->f1A0 = 0.0f;

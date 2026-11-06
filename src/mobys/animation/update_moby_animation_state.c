@@ -4,8 +4,8 @@
 
 struct AnimSeq {
     u8    pad0[0x11];
-    u8    unk11;
-    u8    unk12;
+    u8    sound;
+    u8    trigger_count;
     u8    pad13[9];
     void *frames[1];
 };
@@ -17,10 +17,10 @@ void update_moby_animation_state(struct Moby *m) __asm__("FUN_0020c880");
 void update_moby_animation_state(struct Moby *moby) {
     if (moby->seq != 0xFF) {
         moby->cur_frame_data = moby->pclass->seqs[moby->seq]->frames[moby->frame];
-        moby->anim_trigger_count = moby->pclass->seqs[moby->seq]->unk12;
-        moby->unk7C = moby->pclass->seqs[moby->seq]->unk11;
+        moby->anim_trigger_count = moby->pclass->seqs[moby->seq]->trigger_count;
+        moby->seq_sound = moby->pclass->seqs[moby->seq]->sound;
     } else {
-        moby->unk7C = 0xFF;
+        moby->seq_sound = 0xFF;
         moby->anim_trigger_count = 0;
         moby->cur_frame_data = debug_font_buffer + moby->frame * 0x800;
     }

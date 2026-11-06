@@ -22,8 +22,8 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int   fptodp(float) __asm__("FUN_00120478");
 extern void  print_fe50(char *, int, int) __asm__("FUN_001e93b0");
 extern int   resolve_moby_hit_response(void *, void *, float *, int, int *, int, int, int) __asm__("FUN_00213928");
-extern void sound_fe50(void *, void *) __asm__("FUN_L00_0025d458");
-extern void update_fe50(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 char        D_L11_0021B530[] = "Moby class %d Damage Received: %f\n";
 
 void handle_owner_linked_moby_hits(struct Moby   *moby,
@@ -71,7 +71,7 @@ void handle_owner_linked_moby_hits(struct Moby *moby, unsigned char *private_dat
                 *health = 0.0f;
                 moby->flags &= 0xEFFF;
                 private_data[0x67] = 0x78;
-                sound_fe50(moby, private_data + 0x60);
+                start_hit_color_flash(moby, private_data + 0x60);
                 if (moby->prev_seq != 2) {
                     blend_moby_animation(moby, 2, 0, 3);
                 }
@@ -84,7 +84,7 @@ void handle_owner_linked_moby_hits(struct Moby *moby, unsigned char *private_dat
                 *health -= *(float *)(hit_record + 0x2C);
                 private_data[0x67] = 0xFA;
                 *(short *)(private_data + 0x26) = scale_game_frames(0x3C);
-                sound_fe50(moby, private_data + 0x60);
+                start_hit_color_flash(moby, private_data + 0x60);
                 if (moby->prev_seq != 4) {
                     blend_moby_animation(moby, 4, 0, 3);
                 }
@@ -92,16 +92,16 @@ void handle_owner_linked_moby_hits(struct Moby *moby, unsigned char *private_dat
         }
         moby->hit_slot = 0xFF;
     }
-    update_fe50(moby, private_data + 0x60);
+    update_hit_color_flash(moby, private_data + 0x60);
 }
 
 void owner_linked_moby_update(struct Moby *moby) __asm__("FUN_L11_00310028");
 
 typedef struct OwnerLinkedMobyVars {
     u8  pad_0[0x20];
-    u8  unk20;
+    u8  health;
     u8  pad_21[0x4F];
-    u8 *unk70;
+    u8 *owner;
 } OwnerLinkedMobyVars;
 
 /* Moby class 1219 */
@@ -110,8 +110,8 @@ void owner_linked_moby_update(struct Moby *moby) {
         MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
     };
     OwnerLinkedMobyVars *owner_linked_moby_vars = (OwnerLinkedMobyVars *)moby->pvars;
-    char                *health_ptr = &owner_linked_moby_vars->unk20;
-    struct Moby         *owner_moby = owner_linked_moby_vars->unk70;
+    char                *health_ptr = &owner_linked_moby_vars->health;
+    struct Moby         *owner_moby = owner_linked_moby_vars->owner;
     if (owner_moby == 0 || owner_moby->state == MOBY_STATE_MARKED_FOR_REMOVAL ||
         owner_moby->state == 0xFD) {
         if (moby->state < LINKED_MOBY_STATE_FADE_OUT) {

@@ -23,8 +23,8 @@ typedef struct SifCmdHeader {
    first and fourth fields reorder the stores below, so they stay void *. */
 typedef struct SifCmdData {
     void               *packet_buffer;
-    void               *unk4;
-    s32                 unk8;
+    void               *send_buffer;
+    s32                 iop_buffer;
     void               *system_handlers;
     s32                 system_handler_count;
     SifCmdHandlerEntry *user_handlers;
@@ -60,7 +60,7 @@ extern void handle_sif_set_system_register(s32 *packet,
 
 void sceSifInitCmd(void) {
     int i;
-    u32 uncached_packet_buffer, uncached_unk4;
+    u32 uncached_packet_buffer, uncached_send_buffer;
     DIntr();
     if (D_0012FC04[0] != 0) {
         EnableInterrupts();
@@ -68,10 +68,10 @@ void sceSifInitCmd(void) {
     }
     D_0012FC04[0] = 1;
     uncached_packet_buffer = (u32)sif_cmd_packet_buffer | 0x20000000;
-    uncached_unk4 = (u32)sif_cmd_send_buffer | 0x20000000;
+    uncached_send_buffer = (u32)sif_cmd_send_buffer | 0x20000000;
     sif_cmd_data.packet_buffer = (void *)uncached_packet_buffer;
-    sif_cmd_data.unk4 = (void *)uncached_unk4;
-    sif_cmd_data.unk8 = 0;
+    sif_cmd_data.send_buffer = (void *)uncached_send_buffer;
+    sif_cmd_data.iop_buffer = 0;
     sif_cmd_data.system_handlers = sif_system_handlers;
     sif_cmd_data.system_handler_count = 0x20;
     sif_cmd_data.user_handlers = 0;
@@ -98,16 +98,16 @@ void sceSifInitCmd(void) {
     }
     D_00154E54[0] = AddDmacHandler(5, _sceSifCmdIntrHdlr, 0);
     enable_dmac(5);
-    sif_cmd_data.unk8 = sceSifGetReg(0x80000000);
-    if (sif_cmd_data.unk8 != 0) {
+    sif_cmd_data.iop_buffer = sceSifGetReg(0x80000000);
+    if (sif_cmd_data.iop_buffer != 0) {
         sif_init_packet.packet_buffer = sif_cmd_packet_buffer;
         sceSifSendCmd(0x80000000, &sif_init_packet, 0x14, 0, 0, 0);
         return;
     }
     do {
     } while (!(sceSifGetReg(4) & 0x20000));
-    sif_cmd_data.unk8 = sceSifGetReg(2);
-    sceSifSetReg(0x80000000, sif_cmd_data.unk8);
+    sif_cmd_data.iop_buffer = sceSifGetReg(2);
+    sceSifSetReg(0x80000000, sif_cmd_data.iop_buffer);
     sceSifSetReg(0x80000001, (u32)&sif_cmd_data);
     sif_init_packet.packet_buffer = sif_cmd_packet_buffer;
     sif_init_packet.header.option = 0;

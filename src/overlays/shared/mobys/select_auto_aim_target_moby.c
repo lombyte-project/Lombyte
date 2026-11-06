@@ -15,18 +15,11 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/mobys/get_moby_target_info.h"
+#include "rnc/overlay/shared/mobys/moby_target_info.h"
 #include "rnc/mobys/animation/build_moby_bone_transform.h"
 #include "rnc/overlay/shared/math/random/random_vector.h"
 #include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
-
-/* Record get_moby_target_info returns for a moby: collision size and aim height. */
-typedef struct MobyBound {
-    u8  pad0[0xA];
-    u8  size; /* 0x0A: radius in eighths */
-    u8  padb[5];
-    f32 height; /* 0x10: aim height above the moby position */
-} MobyBound;
 
 extern struct Moby *suck_moby_list __asm__("D_L00_0015FFE4");
 extern u8           D_L00_00166DC0[];
@@ -58,14 +51,14 @@ struct Moby *select_auto_aim_target_moby(
 
     for (candidate_moby = suck_moby_list; candidate_moby != 0;
          candidate_moby = candidate_moby->next) {
-        MobyBound *aim_bounds;
-        f32        t_yaw, t_pitch, target_distance, aim_angle_error;
+        MobyTargetInfo *aim_bounds;
+        f32             t_yaw, t_pitch, target_distance, aim_angle_error;
         if ((s8)candidate_moby->state < 0)
             continue;
         qcopy(&target, &candidate_moby->pos);
         aim_bounds = get_moby_target_info(candidate_moby);
         if (aim_bounds)
-            target.f[2] += aim_bounds->height;
+            target.f[2] += aim_bounds->aim_height;
         else
             target.f[2] += 0.5f;
         if (!(candidate_moby->flags & 0x1000) || !candidate_moby || !candidate_moby->pclass ||
@@ -103,7 +96,7 @@ struct Moby *select_auto_aim_target_moby(
             *pitch = -t_pitch;
             *yaw = t_yaw;
             if (aim_bounds)
-                *height = aim_bounds->height;
+                *height = aim_bounds->aim_height;
             else
                 *height = 0.5f;
         }
@@ -549,8 +542,8 @@ void spawn_moby_break_fragments(unsigned char *source_moby,
 
 typedef struct {
     char          _pad00[0x11];
-    unsigned char unk11; /* 0x11: copied to a moby's +0x7C */
-    unsigned char unk12; /* 0x12: copied to a moby's +0x7E */
+    unsigned char sound;         /* 0x11: looping sound, copied to a moby's seq_sound (+0x7C) */
+    unsigned char trigger_count; /* 0x12: copied to a moby's anim_trigger_count (+0x7E) */
     char          _pad13[0x1C - 0x13];
     int           frames[1]; /* 0x1C */
 } MobySeq;
@@ -566,7 +559,7 @@ typedef struct {
     char          _pad21[0x24 - 0x21];
     MobyClass    *pClass; /* 0x24 */
     char          _pad28[0x38 - 0x28];
-    unsigned long unk38; /* 0x38 */
+    unsigned long spawn_frame; /* 0x38 */
     char          _pad40[0x50 - 0x40];
     unsigned char frame;     /* 0x50 */
     unsigned char prevFrame; /* 0x51 */
@@ -576,10 +569,10 @@ typedef struct {
     int           frameData;     /* 0x68 */
     int           prevFrameData; /* 0x6C */
     char          _pad70[0x78 - 0x70];
-    char         *pvars; /* 0x78: this moby's 0x80 bytes at D_00160028 */
-    unsigned char unk7C; /* 0x7C: the sound it wants (func_0020D790) */
-    unsigned char unk7D; /* 0x7D: the handle of the one playing, or 0xFF */
-    unsigned char unk7E; /* 0x7E */
+    char         *pvars;              /* 0x78: this moby's 0x80 bytes at D_00160028 */
+    unsigned char seq_sound;          /* 0x7C: the sound it wants (func_0020D790) */
+    unsigned char sound_slot;         /* 0x7D: the handle of the one playing, or 0xFF */
+    unsigned char anim_trigger_count; /* 0x7E */
     char          _pad7F[0x100 - 0x7F];
 } Moby;
 

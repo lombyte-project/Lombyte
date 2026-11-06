@@ -47,19 +47,19 @@ typedef struct {
     float          v[4];
     struct Moby   *attacker;
     int            flags;
-    unsigned char  unk18;
-    unsigned char  unk19;
+    unsigned char  attack_type;    /* 0x18: MobyHit.attack_type */
+    unsigned char  attack_subtype; /* 0x19: MobyHit.attack_subtype */
     unsigned short attacker_class;
     float          damage;
     char           reserved[16];
 } HitRecord;
 
 typedef struct {
-    float unk0;
-    float unk4;
-    float unk8;
-    int   unkC;
-    Vec4  pos; /* w: radius */
+    float red; /* the colour, as PointLight.color */
+    float green;
+    float blue;
+    int   intensity; /* PointLight.intensity */
+    Vec4  pos;       /* w: radius */
 } Light29FF90;
 
 typedef struct {
@@ -293,11 +293,11 @@ void electric_water_update(struct Moby *moby) {
                     } else {
                         Light29FF90 *light = &D_L15_001808C0[electric_water_controller_vars->light];
                         qcopy(&light->pos, &electric_water_controller_vars->bolt_start);
-                        light->unk0 = 1.0f;
+                        light->red = 1.0f;
                         light->pos.f[3] = 8.0f;
-                        light->unk4 = 1.0f;
-                        light->unk8 = 0.5f;
-                        light->unkC = 0;
+                        light->green = 1.0f;
+                        light->blue = 0.5f;
+                        light->intensity = 0;
                     }
                     initialize_electric_water_bolt_effect((char *)moby);
                     update_electric_water_bolt_effect(moby);
@@ -372,11 +372,11 @@ void electric_water_update(struct Moby *moby) {
             hit.v[1] = fast_sin(moby->rot.z) * 0.2f;
             hit.v[2] = 0.0f;
             set_vector_length_xy(hit.v, hit.v, 1.0f);
-            hit.unk19 = 1;
+            hit.attack_subtype = 1;
             hit.attacker_class = moby->oclass;
             hit.v[2] = 1.0f;
             hit.v[3] = 5627.9248f;
-            hit.unk18 = 0;
+            hit.attack_type = 0;
             record_moby_hit(hero.moby, &hit);
             if (moby->state == ELECTRIC_WATER_OFF) {
                 D_L15_0015F448 = electric_water_controller_vars->saved_fog[0];
@@ -1114,7 +1114,7 @@ typedef struct {
     V2d8e48      corner[4];
     unsigned int color[4];
     UV2d8e48     uv[4];
-    long         unk70, tex, unk80, unk88;
+    long         clamp, tex, tex1, alpha; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
 } Q2d8e48;
 
 extern unsigned int l15_electric_water_bolt_start_first_quad_color __asm__("D_L15_00161CAC")
@@ -1145,9 +1145,9 @@ void draw_electric_water_bolt_start_quads(void *mv) {
     bolt_start_position = *(V2d8e48 **)((char *)mv + 0x78);
     quad.tex = get_effect_texture(0xB);
     bolt_start_position = (V2d8e48 *)((char *)bolt_start_position + 0xF0);
-    quad.unk88 = 0x8000000048L;
-    quad.unk80 = 0xFF9000000260L;
-    quad.unk70 = 0;
+    quad.alpha = 0x8000000048L;
+    quad.tex1 = 0xFF9000000260L;
+    quad.clamp = 0;
     fast_vec_sub(&quad_transform[3], &D_L15_001673C0, bolt_start_position);
     fast_vec_normalize(&quad_transform[3], &quad_transform[3], 0.3f);
     fast_vec_add(&quad_transform[3], &quad_transform[3], bolt_start_position);

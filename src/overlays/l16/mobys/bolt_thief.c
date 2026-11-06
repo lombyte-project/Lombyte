@@ -1,5 +1,6 @@
 /* Level 16 bolt_thief. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -53,32 +54,30 @@ extern int scale_game_frames(int);
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E4C08), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    char          pad00[0x60];
-    char          effect[7]; /* 0x60: record func_L00_0025E590 updates */
-    unsigned char ticks;     /* 0x67 */
-    char          pad68[8];
-    float         knock[4];      /* 0x70: record func_L00_0025D5B0 fills (velocity first) */
-    float         knock_drag;    /* 0x80 */
-    float         knock_gravity; /* 0x84 */
-    float         knock_speed;   /* 0x88 */
-    float         knock_rise;    /* 0x8C */
-    int           unknown90;
-    int           knock_flags; /* 0x94 */
-    char          pad98[0x15];
-    unsigned char knock_bAD; /* 0xAD */
-    char          padAE[0x22];
-    int           counter;    /* 0xD0 */
-    float         timer;      /* 0xD4 */
-    int           path;       /* 0xD8: index into D_L16_001B0C30 */
-    int           other_path; /* 0xDC */
-    int           trigger;    /* 0xE0 */
-    float         vx;         /* 0xE4 */
-    float         vy;         /* 0xE8 */
-    float         vz;         /* 0xEC */
-    float         turn;       /* 0xF0 */
-    char         *child;      /* 0xF4 */
-    int           unknownF8;
-    int           mode; /* 0xFC */
+    char                 pad00[0x60];
+    struct HitColorFlash hit_flash;
+    float                knock[4];      /* 0x70: record func_L00_0025D5B0 fills (velocity first) */
+    float                knock_drag;    /* 0x80 */
+    float                knock_gravity; /* 0x84 */
+    float                knock_speed;   /* 0x88 */
+    float                knock_rise;    /* 0x8C */
+    int                  unknown90;
+    int                  knock_flags; /* 0x94 */
+    char                 pad98[0x15];
+    unsigned char        knock_bAD; /* 0xAD */
+    char                 padAE[0x22];
+    int                  counter;    /* 0xD0 */
+    float                timer;      /* 0xD4 */
+    int                  path;       /* 0xD8: index into D_L16_001B0C30 */
+    int                  other_path; /* 0xDC */
+    int                  trigger;    /* 0xE0 */
+    float                vx;         /* 0xE4 */
+    float                vy;         /* 0xE8 */
+    float                vz;         /* 0xEC */
+    float                turn;       /* 0xF0 */
+    char                *child;      /* 0xF4 */
+    int                  unknownF8;
+    int                  mode; /* 0xFC */
 } L16CrateData;
 
 typedef struct {
@@ -135,7 +134,7 @@ extern f32  D_L16_00161D98_gp __asm__("D_L16_00161D98") __attribute__((sda));
 extern void FUN_L00_00257470(void *, int, int);
 extern void
 trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void set_moby_state_14(void *) __asm__("FUN_L03_002c6c90");
 extern void initialize_moby_path_state(void *) __asm__("FUN_L14_002fe900");
 extern void update_linked_moby_position(void *) __asm__("FUN_L14_002fec28");
@@ -178,7 +177,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
                                 0,
                                 fast_arc_tan(moby->position[0] - player->motion.pos.f[0],
                                              moby->position[1] - player->motion.pos.f[1]));
-        bolt_thief_data->ticks = 0x78;
+        bolt_thief_data->hit_flash.flash_red = 0x78;
         FUN_L00_00257470(moby, 0, -1);
         moby->state = BOLT_THIEF_KNOCKBACK;
     }
@@ -339,7 +338,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         }
         break;
     }
-    trooper_anim_finish(moby, bolt_thief_data->effect);
+    update_hit_color_flash(moby, &bolt_thief_data->hit_flash);
 }
 
 #include "rnc/overlay/l16/mobys/bolt_thief_globals.h"

@@ -195,10 +195,10 @@ typedef struct BossMoby {
 
 typedef struct BossData {
     char           p0[0x20];
-    float          f20;
-    short          f24;
+    float          health;
+    short          max_health;
     char           p26[2];
-    unsigned char  f28;
+    unsigned char  hit_response_class;
     char           p29[7];
     float          f30;
     char           p34[0x3C];
@@ -231,7 +231,7 @@ typedef struct BossData {
     char           p28C[8];
     int            scene_camera_node_index;
     int            paired_transition_node_index;
-    int            class_238_launch_group_index;
+    int            mine_launch_group_index;
     int            race_camera_node_index;
     char           p2A4[0xC];
     int            persistent_jet_slot_index;
@@ -299,7 +299,7 @@ extern char    *create_rocket_moby(float *pos,
                                    float  b,
                                    int    frames,
                                    int    kind) __asm__("FUN_L18_002d5348");
-extern char    *launch_class_238_moby_from_list(int    owner,
+extern char    *launch_drek_boss_mine_from_list(int    owner,
                                                 int    idx,
                                                 float *from,
                                                 float *to,
@@ -484,10 +484,10 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         moby->f32 = 0x200;
         moby->f34 |= 0x41;
         moby->collision_data = 0;
-        boss_data->f28 = 3;
-        boss_data->f20 = 500.0f;
+        boss_data->hit_response_class = 3;
+        boss_data->health = 500.0f;
         boss_data->f30 = 4.0f;
-        boss_data->f24 = 500;
+        boss_data->max_health = 500;
         boss_data->active_movement_path = D_L18_001B0EB0[boss_data->f260[3]];
         boss_data->platform_target_group_index = boss_data->f204[0];
         boss_data->path_point_index = 1;
@@ -1384,9 +1384,9 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                     (float)scale_game_frames(0x3C);
                 float w = random_float_between(18.0f, 20.0f);
 
-                launch_class_238_moby_from_list(
+                launch_drek_boss_mine_from_list(
                     (int)moby,
-                    boss_data->class_238_launch_group_index,
+                    boss_data->mine_launch_group_index,
                     position_displacement_direction_and_rotation_scratch,
                     position_direction_and_rotation_scratch,
                     speed,
@@ -1859,8 +1859,8 @@ typedef struct {
 } VendorNode_5e80;
 
 extern int resolve_moby_hit_response(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_00213928");
-extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern int   FUN_L00_0025ff38_5e80(float a, char *m, char *b, int c, int d, int *e, int f) __asm__("FUN_L00_0025ff38");
 extern int   poll_moby_state_and_rearm(char *) __asm__("FUN_L18_002d8050");
@@ -1951,7 +1951,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
                     *(float *)(boss_data + 0x38C) = health_floor_or_transition_offset;
                 }
                 *(unsigned char *)(boss_data + 0x67) = 0xF0;
-                trooper_anim_update(moby, (short *)(boss_data + 0x60));
+                start_hit_color_flash(moby, (short *)(boss_data + 0x60));
                 if (*(float *)(boss_data + 0x38C) == 0.0f) {
                     if (*(int *)(boss_data + 0x368) != -1) {
                         set_animation_parameter(*(int *)(boss_data + 0x368), 0);
@@ -1979,7 +1979,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
     }
     MOBY(moby)->hit_slot = 0xFF;
     *(int *)(boss_data + 0x36C) = truncate_float_to_s32(*(float *)(boss_data + 0x38C));
-    trooper_anim_finish(moby, boss_data + 0x60);
+    update_hit_color_flash(moby, boss_data + 0x60);
     if (*(int *)(boss_data + 0x3A0) == 0) {
         spawned_child_moby = (unsigned char *)create_moby(0x58F);
         *(unsigned char **)(boss_data + 0x3A0) = spawned_child_moby;

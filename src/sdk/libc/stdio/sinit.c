@@ -21,26 +21,27 @@
 #include "rnc/data_labels.h"
 #include "rnc/sdk/libc/stdio.h"
 
+/* newlib struct _reent */
 struct Reent {
     u8  pad_0[0x38];
-    s32 unk38;
-    s32 unk3C;
+    s32 __sdidinit;
+    s32 __cleanup;
     u8  pad_40[0x198];
-    s32 unk1D8;
-    s32 unk1DC;
-    s32 unk1E0;
+    s32 __sglue_next;
+    s32 __sglue_niobs;
+    s32 __sglue_iobs;
 };
 
 void __sinit(struct Reent *reent_context) {
     s32 *std_streams;
 
     std_streams = ((u8 *)reent_context + (0x1E4));
-    reent_context->unk3C = D_00113AC8;
-    reent_context->unk38 = 1;
+    reent_context->__cleanup = D_00113AC8;
+    reent_context->__sdidinit = 1;
     std(std_streams, 4, 0, reent_context);
     std(((u8 *)reent_context + (0x23C)), 9, 1, reent_context);
     std(((u8 *)reent_context + (0x294)), 0xA, 2, reent_context);
-    reent_context->unk1E0 = std_streams;
-    reent_context->unk1DC = 3;
-    reent_context->unk1D8 = 0;
+    reent_context->__sglue_iobs = std_streams;
+    reent_context->__sglue_niobs = 3;
+    reent_context->__sglue_next = 0;
 }

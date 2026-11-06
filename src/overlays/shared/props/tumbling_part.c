@@ -12,13 +12,13 @@
 
 typedef struct TumblingPartVars {
     u8  pad0[0x8];
-    f32 unk8;
+    f32 velocity_z;
     u8  padC[0x4];
-    u8  unk10[0x10];
-    f32 unk20[4];
-    s32 unk30;
-    s32 unk34;
-    f32 unk38;
+    u8  rotation_step[0x10];
+    f32 pivot_offset[4]; /* w: collision radius */
+    s32 timer;
+    s32 options;
+    f32 gravity;
 } TumblingPartVars;
 
 extern float scale_time(float) __asm__("FUN_001f96b0");
@@ -79,28 +79,29 @@ void tumbling_part_update(char *moby) {
         mark_moby_for_removal(moby);
         return;
     case TUMBLING_PART_WAIT_FOR_TIMER:
-        if (func_001F9908_r((int *)(&moby_data->unk30))) {
-            MOBY(moby)->state = (moby_data->unk34 & 1) ? 3 : 2;
-            moby_data->unk30 = truncate_float_to_s32(scale_time(10.0f));
+        if (func_001F9908_r((int *)(&moby_data->timer))) {
+            MOBY(moby)->state = (moby_data->options & 1) ? 3 : 2;
+            moby_data->timer = truncate_float_to_s32(scale_time(10.0f));
             return;
         }
         break;
     case TUMBLING_PART_SPAWN_EFFECT_AND_REMOVE:
-        transform_vector_by_basis(effect_offset_or_world_position, &moby_data->unk20, moby + 0xC0);
+        transform_vector_by_basis(
+            effect_offset_or_world_position, &moby_data->pivot_offset, moby + 0xC0);
         fast_vec_add(
             effect_offset_or_world_position, effect_offset_or_world_position, &MOBY(moby)->pos);
-        if (moby_data->unk34 & 2) {
+        if (moby_data->options & 2) {
             spawn_color_swapped_explosion_burst(
-                moby, effect_offset_or_world_position, -1, moby_data->unk20[3] * 0.5f, 0.0f);
+                moby, effect_offset_or_world_position, -1, moby_data->pivot_offset[3] * 0.5f, 0.0f);
         } else {
-            float half_collision_radius = moby_data->unk20[3] * 0.5f;
+            float half_collision_radius = moby_data->pivot_offset[3] * 0.5f;
             spawn_explosion(moby,
                             &zero_vector,
                             effect_offset_or_world_position,
                             0.0f,
                             0.0f,
                             5,
-                            moby_data->unk20[3],
+                            moby_data->pivot_offset[3],
                             3,
                             half_collision_radius,
                             9.0f,
@@ -116,25 +117,26 @@ void tumbling_part_update(char *moby) {
         mark_moby_for_removal(moby);
         return;
     case TUMBLING_PART_FADE_AND_REMOVE:
-        if (func_001F9908_r((int *)(&moby_data->unk30))) {
+        if (func_001F9908_r((int *)(&moby_data->timer))) {
             mark_moby_for_removal(moby);
             return;
         }
         MOBY(moby)->alpha =
-            truncate_float_to_s32((float)moby_data->unk30 / scale_time(10.0f) * 128.0f);
+            truncate_float_to_s32((float)moby_data->timer / scale_time(10.0f) * 128.0f);
         break;
     }
-    rotation_step_euler = &moby_data->unk10;
+    rotation_step_euler = &moby_data->rotation_step;
     euler_rotation_basis(rotation_step_basis, rotation_step_euler);
-    transform_vector_by_basis(effect_offset_or_world_position, &moby_data->unk20, moby + 0xC0);
+    transform_vector_by_basis(
+        effect_offset_or_world_position, &moby_data->pivot_offset, moby + 0xC0);
     multiply_matrix3x3(moby + 0xC0, rotation_step_basis, moby + 0xC0);
-    transform_vector_by_basis(offset_after_rotation, &moby_data->unk20, moby + 0xC0);
+    transform_vector_by_basis(offset_after_rotation, &moby_data->pivot_offset, moby + 0xC0);
     fast_vec_sub(rotation_offset_delta, offset_after_rotation, effect_offset_or_world_position);
     fast_vec_sub((float *)&MOBY(moby)->pos, (float *)&MOBY(moby)->pos, rotation_offset_delta);
     fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, moby_data);
-    collision_radius = moby_data->unk20[3];
-    moby_data->unk8 = moby_data->unk8 - moby_data->unk38;
-    transform_vector_by_basis(collision_probe_position, &moby_data->unk20, moby + 0xC0);
+    collision_radius = moby_data->pivot_offset[3];
+    moby_data->velocity_z = moby_data->velocity_z - moby_data->gravity;
+    transform_vector_by_basis(collision_probe_position, &moby_data->pivot_offset, moby + 0xC0);
     fast_vec_add(collision_probe_position, collision_probe_position, &MOBY(moby)->pos);
     if (func_L00_001F10E0_s(collision_probe_position, collision_radius, 0, moby)) {
         float speed, approach;

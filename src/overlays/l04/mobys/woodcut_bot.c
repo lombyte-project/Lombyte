@@ -17,6 +17,7 @@
 #include "rnc/overlay/shared/world/level_path.h"
 #include "sda.h"
 #include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/l04/leg_rig.h"
 
 extern void initialize_leg_rig_angle_defaults(void *, char *) __asm__("FUN_L04_00292370");
 extern void initialize_leg_rig(void *, char *) __asm__("FUN_L04_002923b8");
@@ -24,53 +25,13 @@ extern void initialize_leg_rig(void *, char *) __asm__("FUN_L04_002923b8");
 void initialize_woodcut_bot_movement_data(void *moby) __asm__("FUN_L04_002d1418");
 
 typedef struct WoodcutBotVars {
-    u8  pad_0[0x160];
-    u8  unk160;
-    u8  pad_161[0x6F];
-    s32 unk1D0;
-    s32 unk1D4;
-    s32 unk1D8;
-    s32 unk1DC;
-    s32 unk1E0;
-    s32 unk1E4;
-    s32 unk1E8;
-    s32 unk1EC;
-    s32 unk1F0;
-    s32 unk1F4;
-    s32 unk1F8;
-    s32 unk1FC;
-    s32 unk200;
-    u8  pad_204[0xC];
-    u8  unk210;
-    u8  unk211;
-    u8  unk212;
-    u8  unk213;
-    u8  auxiliary_joint_a;
-    u8  auxiliary_joint_b;
-    u8  pad_216[0xE];
-    f32 movement_acceleration_step_limit;
-    u8  pad_228[0x4];
-    f32 unk22C;
-    f32 unk230;
-    f32 unk234;
-    u8  pad_238[0x4];
-    f32 movement_gravity_step;
-    f32 unk240;
-    u8  pad_244[0xC];
-    u8  leg_a_joint;
-    u8  leg_a_secondary_joint;
-    u8  leg_a_manipulator_slot_a;
-    u8  leg_a_manipulator_slot_b;
-    u8  pad_254[0xAC];
-    u8  leg_b_joint;
-    u8  leg_b_secondary_joint;
-    u8  leg_b_manipulator_slot_a;
-    u8  leg_b_manipulator_slot_b;
+    u8     pad_0[0x160];
+    LegRig rig;
 } WoodcutBotVars;
 
 void initialize_woodcut_bot_movement_data(void *moby) {
     WoodcutBotVars *moby_vars = (WoodcutBotVars *)MOBY(moby)->pvars;
-    char           *movement_data = &moby_vars->unk160;
+    char           *movement_data = (char *)&moby_vars->rig;
     float           speed;
     float           angleHalf;
     float           angleFull;
@@ -78,19 +39,32 @@ void initialize_woodcut_bot_movement_data(void *moby) {
     float           amount;
     float           frameScale;
     float           otherScale;
-    moby_vars->unk1D0 = *(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
-    moby_vars->unk1D4 = *(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
-    moby_vars->unk1D8 = *(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
-    moby_vars->unk1DC = *(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
-    moby_vars->unk1E0 = *(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
-    moby_vars->unk1E4 = *(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
-    moby_vars->unk1E8 = *(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
-    moby_vars->unk1EC = *(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x54) + 0x14);
-    moby_vars->unk1F0 = *(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
-    moby_vars->unk1F4 = *(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
-    moby_vars->unk1F8 = *(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
-    moby_vars->unk1FC = *(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
-    moby_vars->unk200 = *(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
+    moby_vars->rig.anims[0] =
+        (LegRigAnim *)*(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
+    moby_vars->rig.anims[1] =
+        (LegRigAnim *)*(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
+    moby_vars->rig.anims[2] =
+        (LegRigAnim *)*(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
+    moby_vars->rig.anims[3] =
+        (LegRigAnim *)*(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
+    moby_vars->rig.anims[4] =
+        (LegRigAnim *)*(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
+    moby_vars->rig.anims[5] =
+        (LegRigAnim *)*(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
+    moby_vars->rig.anims[6] =
+        (LegRigAnim *)*(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
+    moby_vars->rig.anims[7] =
+        (LegRigAnim *)*(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x54) + 0x14);
+    moby_vars->rig.anims[8] =
+        (LegRigAnim *)*(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
+    moby_vars->rig.anims[9] =
+        (LegRigAnim *)*(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
+    moby_vars->rig.anims[10] =
+        (LegRigAnim *)*(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
+    moby_vars->rig.anims[11] =
+        (LegRigAnim *)*(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
+    moby_vars->rig.anims[12] =
+        (LegRigAnim *)*(int *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x70) + 0x14);
     initialize_leg_rig_angle_defaults(moby, movement_data);
     frameScale = frame_time_sq;
     otherScale = frame_time;
@@ -99,26 +73,26 @@ void initialize_woodcut_bot_movement_data(void *moby) {
     speed = frameScale * 9.8f;
     angleHalf = frameScale * 3.1415927f;
     amount = frameScale * 10.0f;
-    moby_vars->auxiliary_joint_a = 7;
-    moby_vars->unk210 = 0;
-    moby_vars->unk211 = 0;
-    moby_vars->movement_gravity_step = speed;
-    moby_vars->unk22C = angleHalf;
-    moby_vars->unk230 = angleFull;
-    moby_vars->unk234 = angleOther;
-    moby_vars->movement_acceleration_step_limit = amount;
-    moby_vars->unk212 = 0xff;
-    moby_vars->unk213 = 0x10;
-    moby_vars->auxiliary_joint_b = 7;
-    moby_vars->leg_a_joint = 10;
-    moby_vars->leg_a_secondary_joint = 8;
-    moby_vars->leg_a_manipulator_slot_b = 12;
-    moby_vars->leg_a_manipulator_slot_a = 14;
-    moby_vars->leg_b_joint = 11;
-    moby_vars->leg_b_secondary_joint = 9;
-    moby_vars->leg_b_manipulator_slot_b = 13;
-    moby_vars->leg_b_manipulator_slot_a = 15;
-    moby_vars->unk240 = 0.5f;
+    moby_vars->rig.jointB4 = 7;
+    moby_vars->rig.unkB0 = 0;
+    moby_vars->rig.unkB1 = 0;
+    moby_vars->rig.gravity_step = speed;
+    moby_vars->rig.turn_gain = angleHalf;
+    moby_vars->rig.turn_damping = angleFull;
+    moby_vars->rig.max_turn_step = angleOther;
+    moby_vars->rig.max_speed_step = amount;
+    moby_vars->rig.unkB2 = 0xff;
+    moby_vars->rig.unkB3 = 0x10;
+    moby_vars->rig.jointB5 = 7;
+    moby_vars->rig.legs[0].joint = 10;
+    moby_vars->rig.legs[0].joint2 = 8;
+    moby_vars->rig.legs[0].slot_b = 12;
+    moby_vars->rig.legs[0].slot_a = 14;
+    moby_vars->rig.legs[1].joint = 11;
+    moby_vars->rig.legs[1].joint2 = 9;
+    moby_vars->rig.legs[1].slot_b = 13;
+    moby_vars->rig.legs[1].slot_a = 15;
+    moby_vars->rig.probe_lift = 0.5f;
     initialize_leg_rig(moby, movement_data);
 }
 
@@ -305,8 +279,8 @@ extern void FUN_L00_0025a120(void *);
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void
 trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void select_moby_combat_target(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 extern void FUN_L00_00263ac8(float, void *, int, void *);
 extern void reset_walker_gait_helpers(void *) __asm__("FUN_L00_002a1538");
@@ -447,7 +421,7 @@ void woodcut_bot_update(WBMoby *m) {
                 m->state = WOODCUT_BOT_DEATH_KNOCKBACK;
                 FUN_L00_00257470(m, 0, -1);
                 d->fB7 = 0x78;
-                trooper_anim_update(m, d->fB0);
+                start_hit_color_flash(m, d->fB0);
                 d->recoil_horizontal_step = (2.0f / scale_time(15.0f)) * 2.0f;
                 break;
             case WOODCUT_BOT_REACTION_HIT_RECOVERY_AND_REPOSITION:
@@ -469,7 +443,7 @@ void woodcut_bot_update(WBMoby *m) {
                     *(OvlQuad *)v = *(OvlQuad *)(p + 0x10);
                     trooper_knockback_arc(v, &angle, &d->recoil_horizontal_step, &one);
                     d->fB7 = 0x78;
-                    trooper_anim_update(m, d->fB0);
+                    start_hit_color_flash(m, d->fB0);
                     d->t3C4 = scale_game_frames(0xF);
                     d->t3C6 = scale_game_frames(0xF0);
                 }
@@ -484,7 +458,7 @@ void woodcut_bot_update(WBMoby *m) {
                 trooper_knockback_arc(v, &angle, &d->recoil_horizontal_step, &one);
                 m->rot[2] = fast_add_rotations(3.1415927f, angle);
                 d->fB7 = 0x78;
-                trooper_anim_update(m, d->fB0);
+                start_hit_color_flash(m, d->fB0);
                 d->t3C4 = scale_game_frames(0x1E);
                 d->t3C2 = scale_game_frames(0xB4);
                 d->t3C6 = scale_game_frames(0xF0);
@@ -967,7 +941,7 @@ void woodcut_bot_update(WBMoby *m) {
     {
         float recoil_scratch[16];
 
-        trooper_anim_finish(m, d->fB0);
+        update_hit_color_flash(m, d->fB0);
         if (d->recoil_horizontal_step > 0.0f) {
             struct Hero *h = &hero;
 

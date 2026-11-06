@@ -207,8 +207,8 @@ void update_hero_bobbing_and_target_position(void) {
         update_moby_vertical_oscillation(1.1f,
                                          frame_time * 5.2359877f,
                                          ((char *)hero_instance->moby),
-                                         (float *)(&hero_instance->unk6A8),
-                                         (float *)(&hero_instance->unk6AC));
+                                         (float *)(&hero_instance->bob_phase),
+                                         (float *)(&hero_instance->bob_offset));
         position_target = ((char *)hero_instance->hoverboard_moby);
         if (position_target != 0) {
             char *hero_moby;
@@ -244,27 +244,27 @@ void restore_saved_hero_moby_and_clear_vehicle_mode(void) {
     void        *moby_to_remove;
     char        *restored_hero_moby;
     if (hero_state_for_vehicle_exit->vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
-        int animation_parameter_value = hero_state_for_vehicle_exit->unk1634;
+        int animation_parameter_value = hero_state_for_vehicle_exit->vehicle_anim_handle;
         if (animation_parameter_value != -1) {
             set_animation_parameter(animation_parameter_value, 0);
-            hero_state_for_vehicle_exit->unk1634 = -1;
+            hero_state_for_vehicle_exit->vehicle_anim_handle = -1;
         }
     }
     reset_hero_easing_records();
     hero_state_bytes = (struct Hero *)(((unsigned char *)&D_0013E533) + 0xE1D);
-    flag_clear_target = *(int *)&hero_state_bytes->unkA84;
+    flag_clear_target = *(int *)&hero_state_bytes->replacement_moby;
     hero_state_bytes->vehicle_mode = HERO_VEHICLE_MODE_ON_FOOT;
     if (flag_clear_target != 0) {
         *(unsigned short *)(flag_clear_target + 0x34) &= 0xFFF9;
     }
     moby_to_remove = hero_state_bytes->vehicle_mode3_moby;
-    *(int *)&hero_state_bytes->unkA84 = 0;
+    *(int *)&hero_state_bytes->replacement_moby = 0;
     if (moby_to_remove != 0) {
         mark_moby_for_removal(moby_to_remove);
         *(int *)&hero_state_bytes->vehicle_mode3_moby = 0;
     }
     release_and_clear_hero_voice_slots();
-    restored_hero_moby = ((char *)hero_state_bytes->unkA88);
+    restored_hero_moby = ((char *)hero_state_bytes->base_moby);
     hero_state_bytes->moby = restored_hero_moby;
     qcopy(&MOBY(restored_hero_moby)->pos, &hero_state_bytes->motion.pos);
     MOBY(restored_hero_moby)->collision_disable = 0;
@@ -299,7 +299,7 @@ void update_hero_smoothing_parameters(void) {
     }
     if (hero.state.control_mode == HERO_MODE_JUMP) {
         if (hero.state_timer > hero.takeoff_frame && hero.past_jump_apex == 0)
-            hero.capsule_bottom_target = hero.unk434;
+            hero.capsule_bottom_target = hero.air_capsule_bottom;
     } else if (hero.state.current == HERO_STATE_FALL) {
         hero.capsule_bottom_target = 0.5f;
     } else if (hero.state.current == HERO_STATE_CROUCH) {
@@ -475,30 +475,30 @@ void update_hero_timers_and_auxiliary_state(void) {
     hero.anim_seq_frames++;
     fast_dec_timer(&hero.move_lock_timer);
     fast_dec_timer(&hero.invulnerable_frames);
-    fast_dec_timer_s16(&hero.unk1B2);
+    fast_dec_timer_s16(&hero.item_select_override_timer);
     fast_dec_timer(&hero.long_jump_lockout);
     fast_dec_timer_s16(&hero.jump_lockout_timer);
-    fast_dec_timer_s16(&hero.unk1DE);
+    fast_dec_timer_s16(&hero.dive_lock);
     fast_dec_timer(&hero.wall_jump_window);
-    fast_dec_timer_s16(&hero.unk1F0);
+    fast_dec_timer_s16(&hero.ledge_ahead_timer);
     fast_dec_timer_s16(&hero.ledge_probe_cooldown);
-    fast_dec_timer_s16(&hero.unk1C8);
+    fast_dec_timer_s16(&hero.grind_catch_lockout);
     fast_dec_timer_s16(&hero.rail_catch_grace);
     fast_dec_timer_s16(&hero.rail_grab_cooldown);
     fast_dec_timer_s16(&hero.grapple_lockout_timer);
     fast_dec_timer(&hero.collision_off_frames);
-    fast_dec_timer(&hero.unk1D0);
+    fast_dec_timer(&hero.idle_return_delay);
     fast_dec_timer(&hero.jump_buffer_lockout);
     fast_dec_timer_s16(&hero.fidget_cooldown);
-    fast_dec_timer_s16(&hero.unk1E0);
-    fast_dec_timer_s16(&hero.unk1EE);
-    fast_dec_timer_s16(&hero.unk1EA);
-    fast_dec_timer_s16(&hero.unk1F4);
+    fast_dec_timer_s16(&hero.sinking_floor_hold);
+    fast_dec_timer_s16(&hero.hit_flash_timer);
+    fast_dec_timer_s16(&hero.wall_push_out_timer);
+    fast_dec_timer_s16(&hero.edge_brake_lock_timer);
     fast_dec_timer_s16(&hero.jump_lock_timer);
-    fast_dec_timer_s16(&hero.unk1DC);
-    fast_dec_timer_s16(&hero.unk1F6);
-    fast_dec_timer_s16(&hero.unk1DA);
-    fast_dec_timer_s16(&hero.unk1F8);
+    fast_dec_timer_s16(&hero.face_expression_timer);
+    fast_dec_timer_s16(&hero.pushed_timer);
+    fast_dec_timer_s16(&hero.item_swap_timer);
+    fast_dec_timer_s16(&hero.magnet_walk_timer);
     if (!(controller_state.held & 5)) {
         hero.unk1EC = 0;
     }

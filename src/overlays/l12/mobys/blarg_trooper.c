@@ -1,5 +1,7 @@
 /* Level 12 moby class blarg_trooper: path following, aiming, attack, damage and its attachment. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -513,42 +515,25 @@ finish:
 /* Variables of the Hoven blarg trooper (moby->pvars): the l00 ElectroidVars
    damage layout, with the alert and call-for-help state at 0x230.. */
 typedef struct {
-    u8  pad0[0x20];
-    f32 health; /* 0x20 */
-    u8  pad24[2];
-    s16 stun_timer; /* 0x26 */
-    u8  pad28[0x10];
-    s32 reset_alert; /* 0x38 */
-    u8  pad3C[0x24];
-    u8  anim[7]; /* 0x60: animation blend state */
-    u8  unk67;   /* 0x67 */
-    u8  pad68[8];
-    u8  fall[0x10]; /* 0x70 */
-    f32 unk80;      /* 0x80 */
-    u8  pad84[4];
-    f32 unk88; /* 0x88 */
-    f32 unk8C; /* 0x8C */
-    u8  pad90[4];
-    s32 unk94; /* 0x94 */
-    u8  pad98[8];
-    f32 unkA0; /* 0xA0 */
-    f32 unkA4; /* 0xA4 */
-    f32 unkA8; /* 0xA8 */
-    u8  padAC;
-    u8  unkAD; /* 0xAD */
-    u8  padAE[0x12];
-    f32 unkC0; /* 0xC0 */
-    f32 unkC4; /* 0xC4 */
-    u8  padC8[0x168];
-    f32 speed; /* 0x230 */
-    u8  pad234[0xC];
-    s16 alert_timer; /* 0x240 */
-    u8  pad242[0x32];
-    s32 call_enabled; /* 0x274 */
-    s32 groups[4];    /* 0x278: group ids counted before calling for help (-1: none) */
-    s32 call_timer;   /* 0x288 */
-    f32 alert_speed;  /* 0x28C */
-    s32 volume;       /* 0x290: clip volume that hands the trooper to FUN_L12_002e86d0 (-1: none) */
+    u8                     pad0[0x20];
+    f32                    health; /* 0x20 */
+    u8                     pad24[2];
+    s16                    stun_timer; /* 0x26 */
+    u8                     pad28[0x10];
+    s32                    reset_alert; /* 0x38 */
+    u8                     pad3C[0x24];
+    struct HitColorFlash   hit_flash;
+    struct KnockbackMotion knockback;
+    u8                     pad_60[0x160];
+    f32                    speed; /* 0x230 */
+    u8                     pad234[0xC];
+    s16                    alert_timer; /* 0x240 */
+    u8                     pad242[0x32];
+    s32                    call_enabled; /* 0x274 */
+    s32 groups[4];   /* 0x278: group ids counted before calling for help (-1: none) */
+    s32 call_timer;  /* 0x288 */
+    f32 alert_speed; /* 0x28C */
+    s32 volume;      /* 0x290: clip volume that hands the trooper to FUN_L12_002e86d0 (-1: none) */
 } BlargTrooperVars;
 
 extern void alert_group_e81e0(s32, s32) __asm__("FUN_L01_0026e090");
@@ -562,8 +547,8 @@ typedef struct {
 
 extern BlargTrooperHit *find_hit_e81e0(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void start_fall_e81e0(struct Moby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
-extern void anim_reset_e81e0(struct Moby *, void *) __asm__("FUN_L00_0025d458");
-extern void anim_update_e81e0(struct Moby *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(struct Moby *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(struct Moby *, void *) __asm__("FUN_L00_0025d538");
 
 /* Damage and alert step of the Hoven blarg trooper (cf. FUN_L12_002e3528): refreshes its
    speed while alerted, calls for help behind itself once its groups have 9 or
@@ -630,46 +615,46 @@ void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
             alert_group_e81e0(moby->group, 1);
         }
         trooper_damage_alert_vars->health -= dmg;
-        trooper_damage_alert_vars->unk80 = frame_time_sq * 30.0f;
-        trooper_damage_alert_vars->unkAD = 0;
-        trooper_damage_alert_vars->unk94 = 9;
-        trooper_damage_alert_vars->unkA0 = 1.0f;
-        trooper_damage_alert_vars->unkA4 = 1.0f;
-        trooper_damage_alert_vars->unkA8 = 1.0f;
+        trooper_damage_alert_vars->knockback.gravity = frame_time_sq * 30.0f;
+        trooper_damage_alert_vars->knockback.unk3D = 0;
+        trooper_damage_alert_vars->knockback.flags = 9;
+        trooper_damage_alert_vars->knockback.restitution = 1.0f;
+        trooper_damage_alert_vars->knockback.unk34 = 1.0f;
+        trooper_damage_alert_vars->knockback.unk38 = 1.0f;
         if (trooper_damage_alert_vars->health <= 0.0f) {
             moby->flags &= ~0x1000;
-            trooper_damage_alert_vars->unk88 = frame_time * 12.0f;
-            trooper_damage_alert_vars->unk8C = frame_time * 9.0f;
+            trooper_damage_alert_vars->knockback.speed = frame_time * 12.0f;
+            trooper_damage_alert_vars->knockback.vertical_speed = frame_time * 9.0f;
             help_direction_or_hit_position.q = coll->pos.q;
             trooper_knockback_arc(&help_direction_or_hit_position,
                                   &angle,
-                                  &trooper_damage_alert_vars->unk88,
-                                  &trooper_damage_alert_vars->unk8C);
-            start_fall_e81e0(moby, trooper_damage_alert_vars->fall, 9, 1, 0, angle);
-            trooper_damage_alert_vars->unkC0 = 10.0f;
-            trooper_damage_alert_vars->unkC4 = 19.0f;
+                                  &trooper_damage_alert_vars->knockback.speed,
+                                  &trooper_damage_alert_vars->knockback.vertical_speed);
+            start_fall_e81e0(moby, &trooper_damage_alert_vars->knockback, 9, 1, 0, angle);
+            trooper_damage_alert_vars->knockback.apex_animation_frame = 10.0f;
+            trooper_damage_alert_vars->knockback.landing_animation_frame = 19.0f;
             moby->state = BLARG_TROOPER_DEATH_FALL;
-            trooper_damage_alert_vars->unk67 = 0x78;
-            anim_reset_e81e0(moby, trooper_damage_alert_vars->anim);
+            trooper_damage_alert_vars->hit_flash.flash_red = 0x78;
+            start_hit_color_flash(moby, &trooper_damage_alert_vars->hit_flash);
         } else {
-            trooper_damage_alert_vars->unk88 = frame_time * 4.7f;
-            trooper_damage_alert_vars->unk8C = frame_time * 7.7f;
+            trooper_damage_alert_vars->knockback.speed = frame_time * 4.7f;
+            trooper_damage_alert_vars->knockback.vertical_speed = frame_time * 7.7f;
             help_direction_or_hit_position.q = coll->pos.q;
             trooper_knockback_arc(&help_direction_or_hit_position,
                                   &unused,
-                                  &trooper_damage_alert_vars->unk88,
-                                  &trooper_damage_alert_vars->unk8C);
-            start_fall_e81e0(moby, trooper_damage_alert_vars->fall, 6, 1, 0, unused);
-            trooper_damage_alert_vars->unkC0 = 4.0f;
-            trooper_damage_alert_vars->unkC4 = 8.0f;
+                                  &trooper_damage_alert_vars->knockback.speed,
+                                  &trooper_damage_alert_vars->knockback.vertical_speed);
+            start_fall_e81e0(moby, &trooper_damage_alert_vars->knockback, 6, 1, 0, unused);
+            trooper_damage_alert_vars->knockback.apex_animation_frame = 4.0f;
+            trooper_damage_alert_vars->knockback.landing_animation_frame = 8.0f;
             moby->state = BLARG_TROOPER_KNOCKBACK_RECOVERY;
-            trooper_damage_alert_vars->unk67 = 0xFA;
+            trooper_damage_alert_vars->hit_flash.flash_red = 0xFA;
             trooper_damage_alert_vars->stun_timer = scale_game_frames(0x3C);
-            anim_reset_e81e0(moby, trooper_damage_alert_vars->anim);
+            start_hit_color_flash(moby, &trooper_damage_alert_vars->hit_flash);
         }
     }
     moby->hit_slot = 0xFF;
-    anim_update_e81e0(moby, trooper_damage_alert_vars->anim);
+    update_hit_color_flash(moby, &trooper_damage_alert_vars->hit_flash);
 }
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9988), where it is exact; names translated to the US level program. */
 
@@ -695,7 +680,7 @@ typedef struct {
 } Level12VendorData;
 
 void remove_blarg_trooper_and_attachment(struct Moby *moby) {
-    moby->unkB4 = 0;
+    moby->bolts = 0;
     FUN_L00_00257470(moby, 0, -1);
     if (((Level12VendorData *)moby->pvars)->child != 0) {
         mark_moby_for_removal(((Level12VendorData *)moby->pvars)->child);

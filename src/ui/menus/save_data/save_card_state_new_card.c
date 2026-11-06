@@ -25,7 +25,7 @@ void save_card_state_new_card(void) {
         save_card_state = CS_NOCARD;
         return;
     }
-    if (card_state->unkF4 != 0)
+    if (card_state->card_save_active != 0)
         save_card_state = CS_GOOD_SAVE;
 }
 

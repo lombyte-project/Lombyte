@@ -50,13 +50,13 @@ void launch_attached_rocket(struct Moby *moby,
 
 typedef struct AttachedRocketVars {
     u8           pad_0[0x10];
-    u8           unk10;
+    u8           launch_position;
     u8           pad_11[0xF];
-    struct Moby *unk20;
-    s16          unk24;
+    struct Moby *source_moby;
+    s16          hits_level; /* 0: the hit line skips the level (collision_line flag 1) */
     s16          attachment_joint_index;
-    f32          unk28;
-    s32          unk2C;
+    f32          max_travel_distance;
+    s32          distance_reference_moby;
 } AttachedRocketVars;
 
 void launch_attached_rocket(struct Moby *moby,
@@ -68,18 +68,18 @@ void launch_attached_rocket(struct Moby *moby,
         ATTACHED_ROCKET_STATE_FLIGHT = 0
     };
     AttachedRocketVars *moby_vars = (AttachedRocketVars *)moby->pvars;
-    char               *source_moby = (char *)moby_vars->unk20;
+    char               *source_moby = (char *)moby_vars->source_moby;
     char               *mp;
-    moby_vars->unk28 = max_travel_distance;
+    moby_vars->max_travel_distance = max_travel_distance;
     qcopy(&moby->rot, source_moby + 0x40);
     mp = &moby->pos;
     *(OvlQuad *)&moby->rot_row0 = *(OvlQuad *)&MOBY(source_moby)->rot_row0;
     *(OvlQuad *)&moby->rot_row1 = *(OvlQuad *)&MOBY(source_moby)->rot_row1;
     *(OvlQuad *)&moby->rot_row2 = *(OvlQuad *)&MOBY(source_moby)->rot_row2;
-    moby_point_position((void *)moby_vars->unk20, moby_vars->attachment_joint_index, mp);
-    qcopy(&moby_vars->unk10, mp);
+    moby_point_position((void *)moby_vars->source_moby, moby_vars->attachment_joint_index, mp);
+    qcopy(&moby_vars->launch_position, mp);
     qcopy(moby_vars, pos);
-    moby_vars->unk2C = distance_reference_moby;
+    moby_vars->distance_reference_moby = distance_reference_moby;
     moby->state = ATTACHED_ROCKET_STATE_FLIGHT;
     moby->flags &= 0xFFFE;
     moby->collision = moby->pclass->collision;
@@ -134,14 +134,14 @@ void attached_rocket_update(struct Moby *moby) {
         L13Vector_5a58 random_direction;
     } work;
     int   i;
-    int   stationary;
+    int   skip_level;
     float length;
     float distance;
     float other_distance;
 
     qcopy(&work.old_pos, &moby->pos);
     if (moby->state == ATTACHED_ROCKET_STATE_ATTACHED) {
-        source = attached_rocket_vars->unk20;
+        source = attached_rocket_vars->source_moby;
         if (source == 0 || source->oclass != 0x65 ||
             source->state == MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END ||
             source->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END)
@@ -150,11 +150,12 @@ void attached_rocket_update(struct Moby *moby) {
         *(OvlQuad *)&moby->rot_row0 = *(OvlQuad *)&source->rot_row0;
         *(OvlQuad *)&moby->rot_row1 = *(OvlQuad *)&source->rot_row1;
         *(OvlQuad *)&moby->rot_row2 = *(OvlQuad *)&source->rot_row2;
-        moby_point_position(
-            attached_rocket_vars->unk20, attached_rocket_vars->attachment_joint_index, &moby->pos);
-        qcopy(&attached_rocket_vars->unk10, &moby->pos);
+        moby_point_position(attached_rocket_vars->source_moby,
+                            attached_rocket_vars->attachment_joint_index,
+                            &moby->pos);
+        qcopy(&attached_rocket_vars->launch_position, &moby->pos);
         {
-            struct Moby *source = attached_rocket_vars->unk20;
+            struct Moby *source = attached_rocket_vars->source_moby;
             if (source != 0 && source->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
                 source->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END && (source->flags & 1))
                 moby->flags |= 1;
@@ -194,11 +195,12 @@ void attached_rocket_update(struct Moby *moby) {
     set_vector_length_xy(&work.velocity, &work.velocity, 1.0f);
     work.velocity.z = 1.0f;
     make_hit_descriptor(work.hit, moby, 0x10001, 1.0f, &work.velocity);
-    stationary = attached_rocket_vars->unk24 == 0;
-    distance = vector_distance_xy(&moby->pos, &attached_rocket_vars->unk10);
-    other_distance = vector_distance_xy(*(char **)&attached_rocket_vars->unk2C + 0x10,
-                                        &attached_rocket_vars->unk10);
-    if (attached_rocket_vars->unk28 < distance || other_distance < distance) {
+    skip_level = attached_rocket_vars->hits_level == 0;
+    distance = vector_distance_xy(&moby->pos, &attached_rocket_vars->launch_position);
+    other_distance =
+        vector_distance_xy(*(char **)&attached_rocket_vars->distance_reference_moby + 0x10,
+                           &attached_rocket_vars->launch_position);
+    if (attached_rocket_vars->max_travel_distance < distance || other_distance < distance) {
         if (moby->visible != 0) {
             int i;
             for (i = 0; i < 3; i++) {
@@ -219,11 +221,11 @@ void attached_rocket_update(struct Moby *moby) {
         spawn_attached_rocket_explosion(moby);
         goto remove;
     }
-    if (collision_line(&work.old_pos, &moby->pos, stationary, moby, work.hit) == 0)
+    if (collision_line(&work.old_pos, &moby->pos, skip_level, moby, work.hit) == 0)
         goto bounds;
     {
         struct Moby *target = (struct Moby *)coll_hit_1638.moby;
-        if (target != 0 && target == attached_rocket_vars->unk20)
+        if (target != 0 && target == attached_rocket_vars->source_moby)
             goto bounds;
     }
     qcopy(&moby->pos, &coll_hit_1638.point);

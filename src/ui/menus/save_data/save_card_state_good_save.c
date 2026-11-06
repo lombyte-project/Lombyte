@@ -18,7 +18,7 @@ void save_card_state_good_save(void) {
     card_state = &memory_card_state;
     nf = mode_freeze_flags & ~2;
     mode_freeze_flags = nf;
-    if (card_state->unkF4 == 0) {
+    if (card_state->card_save_active == 0) {
         save_card_state = CS_NOCARD;
         return;
     }
@@ -33,7 +33,7 @@ void save_card_state_good_save(void) {
         return;
     }
     if (card_state->card[0].sync_result != 0) {
-        card_state->unkF4 = 0;
+        card_state->card_save_active = 0;
         mode_freeze_flags = nf | 1;
         save_card_state = CS_WARNING;
         return;

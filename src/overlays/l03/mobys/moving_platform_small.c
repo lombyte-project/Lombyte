@@ -22,21 +22,21 @@ typedef struct MovingPlatformSmallVars {
     u8    pad_0[0x60];
     f32   transform[16];
     f32   node_direction[4];
-    s32   unkB0;
+    s32   path_cursor;
     u8    pad_B4[0xC];
     char *path;
     u8    pad_C4[0x1C];
     s32   path_index;
-    f32   unkE4;
+    f32   speed;
     s32   wait_timer;
-    f32   unkEC;
+    f32   max_speed;
     s32   wait_frames;
-    f32   unkF4;
-    s32   unkF8;
-    f32   unkFC;
+    f32   slowdown_distance;
+    s32   reverse_direction;
+    f32   scale_factor;
     s32   timer_100;
     s32   voice;
-    s32   unk108;
+    s32   stop_at_every_node;
     s32   easing_frames;
     f32   path_endpoint_distance;
     f32   glide_speed;
@@ -87,9 +87,9 @@ void moving_platform_small_update(char *moby) {
     noop_main_callback(moby);
     switch (((unsigned char *)moby)[0x20]) {
     case PLATFORM_INITIALIZE_AND_WAIT:
-        pa = &platform_pvars->unkB0;
+        pa = &platform_pvars->path_cursor;
         platform_pvars->path = ((char *)l03_paths[platform_pvars->path_index]);
-        if (platform_pvars->unkF8 != 0) {
+        if (platform_pvars->reverse_direction != 0) {
             pa[4] = -1;
         } else {
             pa[4] = 1;
@@ -100,7 +100,7 @@ void moving_platform_small_update(char *moby) {
         }
         qcopy_nc(moby + 0x10, initial_path_position);
         *(int *)pa = pa[4] < 0 ? 0 : **(int **)(pa + 0x10) - 1;
-        MOBY(moby)->scale = MOBY(moby)->pclass->scale * platform_pvars->unkFC;
+        MOBY(moby)->scale = MOBY(moby)->pclass->scale * platform_pvars->scale_factor;
         platform_pvars->voice = -1;
         if (fast_dec_timer(&platform_pvars->timer_100)) {
             platform_pvars->path_endpoint_distance = fast_vec_dist(
@@ -114,7 +114,7 @@ void moving_platform_small_update(char *moby) {
         }
         break;
     case PLATFORM_EASED_ENDPOINT_TRAVEL:
-        pb = &platform_pvars->unkB0;
+        pb = &platform_pvars->path_cursor;
         speed = platform_pvars->glide_speed;
         eased_endpoint_distance = 0.0f;
         if ((MOBY(moby)->oclass == 0x389 || MOBY(moby)->oclass == 0x364) &&
@@ -161,43 +161,43 @@ void moving_platform_small_update(char *moby) {
         }
         break;
     case PLATFORM_FOLLOW_PATH_NODES:
-        pc = &platform_pvars->unkB0;
+        pc = &platform_pvars->path_cursor;
         path = *(int **)(pc + 0x10);
         path_node_step = pc[4];
         count = *path;
         end = path_node_step < 0 ? 0 : count - 1;
-        next_path_node_index = (platform_pvars->unkB0 + count + path_node_step) % count;
+        next_path_node_index = (platform_pvars->path_cursor + count + path_node_step) % count;
         node_off = next_path_node_index * 0x10;
         platform_position = moby + 0x10;
         fast_vec_sub(
             platform_pvars->node_direction, (char *)path + (node_off + 0x10), platform_position);
         next_path_node_byte_offset = node_off;
         target = *(char **)(pc + 0x10) + 0x10;
-        if (platform_pvars->unk108 != 0) {
+        if (platform_pvars->stop_at_every_node != 0) {
             target += next_path_node_byte_offset;
         } else {
             target += end * 0x10;
             node_off =
                 0; /* dead store: unused afterwards, but needed for the retail register allocation */
         }
-        if (fast_vec_dist(platform_position, target) < platform_pvars->unkF4) {
-            approach_value(&platform_pvars->unkE4,
+        if (fast_vec_dist(platform_position, target) < platform_pvars->slowdown_distance) {
+            approach_value(&platform_pvars->speed,
                            frame_time * 0.5f,
-                           platform_pvars->unkEC * platform_pvars->unkEC / platform_pvars->unkF4 *
-                               frame_time_sq * 0.5f);
+                           platform_pvars->max_speed * platform_pvars->max_speed /
+                               platform_pvars->slowdown_distance * frame_time_sq * 0.5f);
         } else {
-            approach_value(&platform_pvars->unkE4,
-                           platform_pvars->unkEC * frame_time,
-                           platform_pvars->unkEC * platform_pvars->unkEC / platform_pvars->unkF4 *
-                               frame_time_sq * 0.5f);
+            approach_value(&platform_pvars->speed,
+                           platform_pvars->max_speed * frame_time,
+                           platform_pvars->max_speed * platform_pvars->max_speed /
+                               platform_pvars->slowdown_distance * frame_time_sq * 0.5f);
         }
-        FUN_L00_0025f730(platform_pvars->node_direction, platform_pvars->unkE4);
+        FUN_L00_0025f730(platform_pvars->node_direction, platform_pvars->speed);
         fast_vec_add(moby + 0x10, moby + 0x10, platform_pvars->node_direction);
         if (fast_vec_dist(moby + 0x10,
                           *(char **)(pc + 0x10) + (next_path_node_byte_offset + 0x10)) <
-            platform_pvars->unkE4 * 2.0f) {
+            platform_pvars->speed * 2.0f) {
             *(int *)pc = next_path_node_index;
-            if ((next_path_node_index == end || platform_pvars->unk108 != 0) &&
+            if ((next_path_node_index == end || platform_pvars->stop_at_every_node != 0) &&
                 platform_pvars->wait_frames > 0) {
                 voice_slot_index = platform_pvars->voice;
                 if (voice_slot_index != -1) {

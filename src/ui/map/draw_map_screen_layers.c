@@ -4,8 +4,10 @@
 
 #include "rnc/game/game_globals.h"
 #include "rnc/rendering/packets.h"
+#include "rnc/world/level_id.h"
 
-extern s32  map_layer_screen_insets[] __asm__("D_001DDF68");
+extern s32 map_layer_screen_insets[LEVEL_COUNT] __asm__("D_001DDF68");
+
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 
 s32 draw_map_screen_layers(void) __asm__("FUN_00220850");
@@ -105,3 +107,15 @@ s32 draw_map_screen_layers(void) {
 }
 
 extern __typeof__(draw_map_screen_layers) func_00220850 __attribute__((alias("FUN_00220850")));
+
+/* How far (in 1/16 pixels) each level's map layers sit inside the screen edges; the three
+   levels without a map (space) have none. */
+s32 map_layer_screen_insets[LEVEL_COUNT] = {
+    [LEVEL_VELDIN1] = 1200, [LEVEL_NOVALIS] = 1000,    [LEVEL_ARIDIA] = 1300,
+    [LEVEL_KERWAN] = 400,   [LEVEL_EUDORA] = 1100,     [LEVEL_RILGAR] = 900,
+    [LEVEL_NEBULA_G34] = 0, [LEVEL_UMBRIS] = 1200,     [LEVEL_BATALIA] = 700,
+    [LEVEL_GASPAR] = 190,   [LEVEL_ORXON] = 800,       [LEVEL_POKITARU] = 1550,
+    [LEVEL_HOVEN] = 300,    [LEVEL_OLTANIS_ORBIT] = 0, [LEVEL_OLTANIS] = 600,
+    [LEVEL_QUARTU] = 900,   [LEVEL_KALEBO3] = 500,     [LEVEL_VELDIN_ORBIT] = 0,
+    [LEVEL_VELDIN2] = 1200,
+};

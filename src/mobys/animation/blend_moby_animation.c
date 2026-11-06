@@ -28,7 +28,7 @@ void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blen
     if (frame_index >= frame_count) {
         frame_index = frame_count - 1;
     }
-    if (moby->anim_time > 0.025f || moby->unk60 != 0 || moby->manips != 0) {
+    if (moby->anim_time > 0.025f || moby->pose_layers != 0 || moby->manips != 0) {
         slot = find_or_allocate_moby_render_slot((int)moby);
         if (slot >= 0) {
             FUN_0020ede8(moby, slot | 0x300);
@@ -47,9 +47,9 @@ void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blen
     moby->anim_speed = 1.0f;
     scale = 1.0f / convert_integer_to_float(blend_frames);
     moby->anim_time = 0.0f;
-    moby->unk70 = (unsigned char)(moby->unk70 & 0xFD);
-    moby->unk5C = scale;
-    moby->unk7C = moby->pClass->seqs[new_seq]->unk11;
+    moby->anim_flags = (unsigned char)(moby->anim_flags & 0xFD);
+    moby->anim_rate = scale;
+    moby->seq_sound = moby->pClass->seqs[new_seq]->sound;
 }
 
 extern __typeof__(blend_moby_animation) func_00212F90 __attribute__((alias("FUN_00212f90")));

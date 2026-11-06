@@ -1,5 +1,6 @@
 /* Level 05 moby class amoeboid. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/ground_move_control.h"
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -18,7 +19,6 @@ extern float
            approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern int move_moby_with_ground_and_collision_checks(
     void *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
-extern void FUN_L01_0026d930(char *p);
 extern void handle_amoeboid_hits(unsigned char *m) __asm__("FUN_L05_002daf58");
 extern void spawn_amoeboid_particles(unsigned char *moby) __asm__("FUN_L05_002db018");
 void        mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
@@ -27,20 +27,14 @@ void                amoeboid_update(struct Moby *m) __asm__("FUN_L05_002dac80");
 typedef struct Moby Moby;
 
 typedef struct AmoeboidVars {
-    u8  pad_0[0x40];
-    u8  unk40;
-    u8  pad_41[0x1F];
-    s32 unk60;
-    u8  pad_64[0x4];
-    f32 unk68;
-    f32 unk6C;
-    u8  pad_70[0x14];
-    f32 movement_speed_cap;
-    u8  pad_88[0x28];
-    s32 path_B0;
-    s32 unkB4;
-    s32 timer_B8;
-    f32 unkBC;
+    u8 pad_0[0x40];
+    u8 displacement; /* move output of move_moby_with_ground_and_collision_checks */
+    u8 pad_41[0x1F];
+    struct GroundMoveControl move;
+    s32                      path_B0;
+    s32                      path_point;
+    s32                      timer_B8;
+    f32                      turn_velocity;
 } AmoeboidVars;
 
 /* Moby class 133 */
@@ -63,22 +57,22 @@ void amoeboid_update(struct Moby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        FUN_L01_0026d930(&moby_data->unk60);
-        moby_data->unk6C = 1.0f;
-        moby_data->unk68 = 1.0f;
+        init_ground_move_control(&moby_data->move);
+        moby_data->move.max_climb = 1.0f;
+        moby_data->move.max_drop = 1.0f;
         {
             int   r = truncate_float_to_s32(409.6f);
             float movement_speed_limit = frame_time * 4.0f;
-            moby_data->unk60 = r;
-            moby_data->movement_speed_cap = movement_speed_limit;
+            moby_data->move.collision_radius_1024ths = r;
+            moby_data->move.max_speed = movement_speed_limit;
         }
         break;
     case AMOEBOID_FOLLOW_PATH: {
-        char *path_node_base = ((char *)l05_paths[moby_data->path_B0]) + moby_data->unkB4 * 16;
+        char *path_node_base = ((char *)l05_paths[moby_data->path_B0]) + moby_data->path_point * 16;
         float yaw = fast_arc_tan(*(float *)(path_node_base + 0x10) - moby->pos.x,
                                  *(float *)(path_node_base + 0x14) - moby->pos.y);
         approach_angle(&moby->rot.z,
-                       &moby_data->unkBC,
+                       &moby_data->turn_velocity,
                        yaw,
                        frame_time_sq * 1.0471976f,
                        frame_time_sq * 1.0471976f,
@@ -87,13 +81,14 @@ void amoeboid_update(struct Moby *moby) {
         facing_direction[1] = fast_sin(moby->rot.z);
         facing_direction[2] = 0.0f;
         move_moby_with_ground_and_collision_checks(
-            moby, &moby_data->unk60, facing_direction, &moby_data->unk40, 1.0f);
+            moby, &moby_data->move, facing_direction, &moby_data->displacement, 1.0f);
         if (fast_dec_timer(&moby_data->timer_B8) != 0 ||
             vector_distance_xy(&moby->pos,
                                ((char *)l05_paths[moby_data->path_B0]) +
-                                   (moby_data->unkB4 * 16 + 0x10)) < 1.0f) {
+                                   (moby_data->path_point * 16 + 0x10)) < 1.0f) {
             int r = random_integer_below(*(int *)l05_paths[moby_data->path_B0]);
-            moby_data->unkB4 = (moby_data->unkB4 + r) % *(int *)l05_paths[moby_data->path_B0];
+            moby_data->path_point =
+                (moby_data->path_point + r) % *(int *)l05_paths[moby_data->path_B0];
             moby_data->timer_B8 = scale_game_frames(600);
         }
         spawn_amoeboid_particles(moby);

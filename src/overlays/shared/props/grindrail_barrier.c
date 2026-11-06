@@ -13,11 +13,11 @@
 
 typedef struct GrindrailBarrierVars {
     u8  pad0[0x8];
-    f32 unk8;
-    f32 unkC;
-    u8  unk10[0x10];
-    s32 unk20;
-    s32 unk24;
+    f32 ring_rotation;
+    f32 ring_phase;
+    u8  accent_rotations[0x10];
+    s32 release_moby_list;
+    s32 voice;
 } GrindrailBarrierVars;
 
 typedef struct {
@@ -90,17 +90,18 @@ void grindrail_barrier_update(struct Moby *barrier_moby) {
         barrier_moby->update_dist = 0xFF;
         break;
     case GRINDRAIL_BARRIER_STATE_COLLISION_ENABLED:
-        cycle = barrier_data->unkC + *(float *)&grindrail_barrier_ring_phase_speed * frame_time;
-        barrier_data->unkC = cycle;
+        cycle =
+            barrier_data->ring_phase + *(float *)&grindrail_barrier_ring_phase_speed * frame_time;
+        barrier_data->ring_phase = cycle;
         if (cycle > 1.0f)
-            barrier_data->unkC = cycle - 1.0f;
-        if (voice_is_playing(barrier_moby, barrier_data->unk24) == 0) {
-            barrier_data->unk24 = allocate_voice_for_target_entry(0, 4, barrier_moby);
+            barrier_data->ring_phase = cycle - 1.0f;
+        if (voice_is_playing(barrier_moby, barrier_data->voice) == 0) {
+            barrier_data->voice = allocate_voice_for_target_entry(0, 4, barrier_moby);
         }
-        barrier_data->unk8 = fast_add_rotations(barrier_data->unk8,
-                                                *(float *)&grindrail_barrier_ring_rotation_speed *
-                                                    DEG_TO_RAD * frame_time);
-        cardinal_angles = (float *)(&barrier_data->unk10);
+        barrier_data->ring_rotation = fast_add_rotations(
+            barrier_data->ring_rotation,
+            *(float *)&grindrail_barrier_ring_rotation_speed * DEG_TO_RAD * frame_time);
+        cardinal_angles = (float *)(&barrier_data->accent_rotations);
         for (i = 0; i < 4; i++) {
             cardinal_angles[i] = fast_add_rotations(
                 cardinal_angles[i],
@@ -108,15 +109,15 @@ void grindrail_barrier_update(struct Moby *barrier_moby) {
         }
         if (barrier_moby->visible)
             add_draw_callback(FUN_L16_002e58d8_u, barrier_moby);
-        if (barrier_data->unk20 != -1 &&
-            check_grindrail_barrier_release_condition(barrier_data->unk20)) {
+        if (barrier_data->release_moby_list != -1 &&
+            check_grindrail_barrier_release_condition(barrier_data->release_moby_list)) {
             barrier_moby->collision = 0;
             barrier_moby->state = GRINDRAIL_BARRIER_STATE_COLLISION_DISABLED;
-            group_trigger_nearest(barrier_data->unk20);
+            group_trigger_nearest(barrier_data->release_moby_list);
         }
         break;
     case GRINDRAIL_BARRIER_STATE_COLLISION_DISABLED:
-        if (!check_grindrail_barrier_release_condition(barrier_data->unk20)) {
+        if (!check_grindrail_barrier_release_condition(barrier_data->release_moby_list)) {
             barrier_moby->state = GRINDRAIL_BARRIER_STATE_COLLISION_ENABLED;
             barrier_moby->collision = barrier_moby->pclass->collision;
         }

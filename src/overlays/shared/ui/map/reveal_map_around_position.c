@@ -148,7 +148,7 @@ void reveal_map_around_position(f32 *position) {
             *filter = 0;
             continue;
         }
-        if ((flags & 0x40) && !hero.unk308) {
+        if ((flags & 0x40) && !hero.magnetic_floor) {
             *filter = 0;
             continue;
         }

@@ -3,21 +3,9 @@
 
 struct AudioStream {
     u8  pad_0[0x44];
-    s32 unk44;
-    s32 unk48;
-    s32 unk4C;
-};
-
-struct AudioStreamTableA {
-    u8  pad_0[0x2C8];
-    s32 unk2C8;
-    s32 unk2CC;
-};
-
-struct AudioStreamTableB {
-    u8  pad_0[0x2F8];
-    s32 unk2F8;
-    s32 unk2FC;
+    s32 state;
+    s32 left_buffer;
+    s32 right_buffer;
 };
 
 #include "rnc/streaming/disc_table.h"
@@ -38,45 +26,45 @@ s32 advance_audio_stream_state(struct AudioStream *stream) {
         CD_READ_STATE_IDLE = 0
     };
 
-    switch (stream->unk44) {
+    switch (stream->state) {
     case AUDIO_STREAM_START_FIRST_READ:
-        if (stream->unk48 == 0 || music_stream_state.read_state != CD_READ_STATE_IDLE) {
+        if (stream->left_buffer == 0 || music_stream_state.read_state != CD_READ_STATE_IDLE) {
             break;
         }
-        if (disc_table.unk2C8[game_language].size == 0) {
+        if (disc_table.controls_help_left[game_language].size == 0) {
             break;
         }
-        if (start_audio_stream_read(stream->unk48,
-                                    disc_table.unk2C8[game_language].sector,
-                                    disc_table.unk2C8[game_language].size) != 0) {
-            stream->unk44 = stream->unk44 + 1;
+        if (start_audio_stream_read(stream->left_buffer,
+                                    disc_table.controls_help_left[game_language].sector,
+                                    disc_table.controls_help_left[game_language].size) != 0) {
+            stream->state = stream->state + 1;
         } else {
-            stream->unk44 = -1;
+            stream->state = -1;
         }
         break;
     case AUDIO_STREAM_WAIT_FIRST_READ:
         if (music_stream_state.read_state == CD_READ_STATE_IDLE) {
-            stream->unk44 = 2;
+            stream->state = 2;
         }
         break;
     case AUDIO_STREAM_START_SECOND_READ:
-        if (stream->unk4C == 0 || music_stream_state.read_state != CD_READ_STATE_IDLE) {
+        if (stream->right_buffer == 0 || music_stream_state.read_state != CD_READ_STATE_IDLE) {
             break;
         }
-        if (disc_table.unk2F8[game_language].size == 0) {
+        if (disc_table.controls_help_right[game_language].size == 0) {
             break;
         }
-        if (start_audio_stream_read(stream->unk4C,
-                                    disc_table.unk2F8[game_language].sector,
-                                    disc_table.unk2F8[game_language].size) != 0) {
-            stream->unk44 = stream->unk44 + 1;
+        if (start_audio_stream_read(stream->right_buffer,
+                                    disc_table.controls_help_right[game_language].sector,
+                                    disc_table.controls_help_right[game_language].size) != 0) {
+            stream->state = stream->state + 1;
         } else {
-            stream->unk44 = -1;
+            stream->state = -1;
         }
         break;
     case AUDIO_STREAM_WAIT_SECOND_READ:
         if (music_stream_state.read_state == CD_READ_STATE_IDLE) {
-            stream->unk44 = 4;
+            stream->state = 4;
         }
         break;
     }

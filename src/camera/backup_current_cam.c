@@ -3,7 +3,7 @@
 
 struct CameraBackupState {
     u8  pad_0[0x70];
-    s32 unk70;
+    s32 saved_state; /* 0x70: UpdateCam.saved_state */
 };
 
 extern u32                      cur_cam[] __asm__("D_001870C0");
@@ -14,7 +14,7 @@ void                            backup_current_cam(void) __asm__("FUN_001ebc90")
 void backup_current_cam(void) {
     fast_mem_copy(&backup_cam, cur_cam[0], 0xA0);
     fast_mem_copy(&camera_saved_states[2], &camera_saved_states[0], 0x280);
-    backup_cam.unk70 = (s32)&camera_saved_states[2];
+    backup_cam.saved_state = (s32)&camera_saved_states[2];
 }
 
 struct CameraSavedState camera_saved_states[3] = {0};

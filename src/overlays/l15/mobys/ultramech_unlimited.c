@@ -67,9 +67,9 @@ extern void FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float,
 
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
 
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 
@@ -146,9 +146,9 @@ struct UMoby {
     char           pad21[3];
     char          *cls;
     char           pad28[8];
-    unsigned char  b30;
+    unsigned char  update_dist;
     char           pad31;
-    unsigned short h32;
+    unsigned short draw_dist;
     unsigned short flags;
     char           pad36[0xA];
     Vec4           rot;
@@ -170,10 +170,10 @@ struct UMoby {
 
 struct UData {
     char           pad0[0x20];
-    float          f20;
-    short          h24;
+    float          health;
+    short          max_health;
     char           pad26[2];
-    unsigned char  b28;
+    unsigned char  hit_response_class;
     unsigned char  b29;
     char           pad2A[6];
     float          f30;
@@ -210,7 +210,7 @@ struct UData {
     int            activation_clip_volume;
     int            snd;
     char           pad1E4[0x1C];
-    unsigned char  v200[0x10];
+    unsigned char  big_head_manipulator[0x10];
 };
 
 typedef struct {
@@ -323,19 +323,19 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
         ultramech_moby->state = ULTRAMECH_WAIT_FOR_ACTIVATION;
         return;
     }
-    FUN_L00_00263ac8(2.5f, (int)ultramech_moby, 6, ultramech_vars->v200);
+    FUN_L00_00263ac8(2.5f, (int)ultramech_moby, 6, ultramech_vars->big_head_manipulator);
     switch (ultramech_moby->state) {
     case ULTRAMECH_INITIALIZE:
-        ultramech_vars->f20 = 12.0f;
-        ultramech_vars->h24 = 0xC;
-        ultramech_vars->b28 = 3;
+        ultramech_vars->health = 12.0f;
+        ultramech_vars->max_health = 0xC;
+        ultramech_vars->hit_response_class = 3;
         ultramech_vars->h3E |= 2;
         ultramech_vars->f30 = 6.0f;
         ultramech_vars->b29 = 0;
         {
             int ff = 0xFF;
-            ultramech_moby->h32 = ff;
-            ultramech_moby->b30 = ff;
+            ultramech_moby->draw_dist = ff;
+            ultramech_moby->update_dist = ff;
         }
         ultramech_vars->snd = -1;
         ultramech_vars->turnVel = 0.0f;
@@ -1035,17 +1035,17 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
             }
         }
     }
-    code = FUN_00249d60(ultramech_moby, slot, &ultramech_vars->f20, 0, &kind, &impact, 0, 4);
+    code = FUN_00249d60(ultramech_moby, slot, &ultramech_vars->health, 0, &kind, &impact, 0, 4);
     if (slot != 0) {
         if (kind != HIT_CLASSIFICATION_NO_DAMAGE && (state = ultramech_moby->state) != 10 &&
             state != ULTRAMECH_DEAD_WAIT_FOR_RESET &&
             *(short *)(*(char **)(slot + 0x20) + 0xA6) != 0x350) {
-            ultramech_vars->f20 -= impact;
+            ultramech_vars->health -= impact;
             if (*(unsigned short *)(slot + 0x2A) == 0x100)
                 code = 9;
             if (ultramech_moby->state == ULTRAMECH_FOLLOW_ENTRY_PATH)
                 code = 9;
-            if (ultramech_vars->f20 <= 0.0f)
+            if (ultramech_vars->health <= 0.0f)
                 code = 1;
             hit = truncate_float_to_s32(2560.0f);
             {
@@ -1126,13 +1126,13 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
                 mark_moby_for_removal_cf(ultramech_moby, 0x200, -1);
                 break;
             }
-            trooper_anim_update(ultramech_moby, (char *)ultramech_vars + 0x60);
+            start_hit_color_flash(ultramech_moby, (char *)ultramech_vars + 0x60);
         }
         if (slot != 0)
             *(int *)(slot + 0x34) = 0;
     }
     *(unsigned char *)((char *)ultramech_moby + 0xA4) = 0xFF;
-    trooper_anim_finish(ultramech_moby, (char *)ultramech_vars + 0x60);
+    update_hit_color_flash(ultramech_moby, (char *)ultramech_vars + 0x60);
     *(float *)((char *)ultramech_moby + 0x2C) =
         *(float *)(ultramech_moby->cls + 0x24) * ultramech_post_hit_scale_multiplier_gp;
     ultramech_vars->target_range_status = 0;

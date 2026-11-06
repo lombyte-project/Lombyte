@@ -3,14 +3,19 @@
 
 #include "types.h"
 
+/* Vendor prices by item id; the discounted columns apply while the vendor's
+   discount pricing is on (render_vendor_buy_label_pass). */
 struct VendorItemPricing {
     s32 purchase_price;
     s32 discounted_purchase_price;
     u16 ammo_price;
     u16 discounted_ammo_price;
-    u16 pad0C;
+    u16 pickup_ammo; /* 0x0C: ammo an ammo pickup of the item gives */
     u16 ammo_capacity;
-    u8  pad10[8];
+    u16 unk10;
+    u16 unk12;
+    u16 gold_weapon_price; /* bolts; a gold weapon also costs 4 gold bolts (process_menu_entry) */
+    u8  pad16[2];
 };
 
 struct CaptureBoundsAdjustment {

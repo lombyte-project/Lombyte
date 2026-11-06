@@ -11,11 +11,12 @@
    D_00187410[48]; D_001870C0[0] and [1] point at the current and previous
    one. Size 0xA0 (backup_current_cam copies 0xA0 bytes). */
 struct UpdateCam {
-    u128  m0;
-    u128  m1;
-    u128  m2;
+    u128  forward; /* 0x00: camera basis rows (grindrail camera) */
+    u128  right;   /* 0x10: cross(forward, the level up) */
+    u128  up;      /* 0x20: cross(right, forward) */
     Vec4f pos;
-    u8    pad40[0x24];
+    u128  prev_forward; /* 0x40: copy of forward the pitch rotation starts from */
+    u8    pad50[0x14];
     Vec3  prev_pos;
     void *saved_state;
     u8    state; /* activation rule, see camera_activation_check_priority */
@@ -26,11 +27,11 @@ struct UpdateCam {
     s16   transition_state;
     u8    pad80[4];
     s16   descriptor_index;
-    s16   unk86; /* 0 lets the hero collision moby spawn; 6 disables shake */
-    u8    pad88[4];
-    s16   type; /* index into camera_types (D_001E8C00) */
-    s16   activation_blocked;
-    u8    pad90[0x10];
+    s16 camera_class; /* 0x86: 0 the follow camera (lets the hero collision moby spawn), 6 disables shake, 7 Swingshot */
+    u8  pad88[4];
+    s16 type; /* index into camera_types (D_001E8C00) */
+    s16 activation_blocked;
+    u8  pad90[0x10];
 };
 
 /* Per camera type callbacks, indexed by UpdateCam.type. */

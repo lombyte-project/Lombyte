@@ -37,7 +37,7 @@ typedef int w128 __attribute__((mode(TI)));
 /* Vars of the homing shot FUN_L00_002caf70 spawns. */
 typedef struct {
     f32   target_x, target_y, target_z;
-    f32   unk0C;
+    f32   target_w; /* the target position is copied as one quadword */
     f32   yaw_rate;
     f32   pitch_rate;
     f32   rest_yaw;

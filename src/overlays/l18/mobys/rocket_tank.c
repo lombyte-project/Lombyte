@@ -225,8 +225,8 @@ extern void  func_L00_0025F4A8_alt(void *,
                                    int,
                                    int,
                                    int) __asm__("FUN_L00_0025e450");
-extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F8F38.c: func_L18_002F94B0), where it is exact; names translated to the US level program. */
 
@@ -246,7 +246,7 @@ extern void *FUN_L00_00257470_cf(char  *src,
                                  float *v11,
                                  float *v12) __asm__("FUN_L00_00263fd8");
 extern void  build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
-extern void  trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
+extern void  start_hit_color_flash(void *, short *) __asm__("FUN_L00_0025d458");
 extern void  mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
 extern void  func_L00_0025F4A8_alt(void *,
                                    void *,
@@ -334,7 +334,7 @@ void update_rocket_tank_damage_and_aim(void *mv) {
             }
             return;
         }
-        trooper_anim_update(moby_bytes, (short *)(tank_data + 0x60));
+        start_hit_color_flash(moby_bytes, (short *)(tank_data + 0x60));
     }
     moby_bytes[0xA4] = 0xFF;
     if (select_moby_combat_target(moby_bytes, tank_data + 0x70, 30.0f) != 2) {
@@ -401,7 +401,7 @@ void update_rocket_tank_damage_and_aim(void *mv) {
         2,
         fast_subtract_rotations(*(float *)(tank_data + 0x110), *(float *)(moby_bytes + 0x48)));
     multiply_quaternions(tank_data + 0xD0, explosion_and_aim_scratch, tank_data + 0xD0);
-    trooper_anim_finish(moby_bytes, tank_data + 0x60);
+    update_hit_color_flash(moby_bytes, tank_data + 0x60);
 }
 
 extern int *D_L18_001B0EB0[];
@@ -416,15 +416,15 @@ void update_rocket_tank_path_movement(struct Moby *moby) __asm__("FUN_L18_002f86
 
 typedef struct RocketTankVars {
     u8    pad_0[0x100];
-    s32   unk100;
+    s32   path;
     u8    pad_104[0x1C];
-    s32   unk120;
+    s32   path_node;
     u8    pad_124[0x4];
-    f32   unk128;
+    f32   yaw_velocity;
     f32   path_movement_step_length;
     u8    pad_130[0x8];
-    char *unk138;
-    char *unk13C;
+    char *attached_moby_0;
+    char *attached_moby_1;
 } RocketTankVars;
 
 void update_rocket_tank_path_movement(struct Moby *moby) {
@@ -434,11 +434,11 @@ void update_rocket_tank_path_movement(struct Moby *moby) {
     float           path_target_yaw, target_movement_step, z, sc;
     char           *attached_moby;
     qcopy(path_target_position,
-          (char *)D_L18_001B0EB0[moby_vars->unk100] + moby_vars->unk120 * 16 + 0x10);
+          (char *)D_L18_001B0EB0[moby_vars->path] + moby_vars->path_node * 16 + 0x10);
     path_target_yaw =
         fast_arc_tan(path_target_position[0] - moby->pos.x, path_target_position[1] - moby->pos.y);
     approach_angle(&moby->rot.z,
-                   &moby_vars->unk128,
+                   &moby_vars->yaw_velocity,
                    path_target_yaw,
                    frame_time_sq * 3.1415927f,
                    frame_time_sq * 3.1415927f,
@@ -452,8 +452,8 @@ void update_rocket_tank_path_movement(struct Moby *moby) {
     fast_vec_normalize(movement_step, &moby->rot_row0, moby_vars->path_movement_step_length);
     FUN_L00_00258830((int)moby, (int)movement_step, 0.5f, 0.5f, z, 0);
     if (fast_vec_dist(&moby->pos, path_target_position) < 1.0f) {
-        int k = random_integer_below(*D_L18_001B0EB0[moby_vars->unk100] - 1) + 1;
-        moby_vars->unk120 = (moby_vars->unk120 + k) % *D_L18_001B0EB0[moby_vars->unk100];
+        int k = random_integer_below(*D_L18_001B0EB0[moby_vars->path] - 1) + 1;
+        moby_vars->path_node = (moby_vars->path_node + k) % *D_L18_001B0EB0[moby_vars->path];
     }
     sc = moby_vars->path_movement_step_length /
          (*(float *)&rocket_tank_attached_moby_speed_reference_gp * frame_time);
@@ -461,19 +461,19 @@ void update_rocket_tank_path_movement(struct Moby *moby) {
         sc = 2.0f;
     else if (sc < z)
         sc = z;
-    attached_moby = moby_vars->unk138;
+    attached_moby = moby_vars->attached_moby_0;
     if (attached_moby) {
         char *q;
         MOBY(attached_moby)->anim_speed = sc;
-        q = moby_vars->unk138;
+        q = moby_vars->attached_moby_0;
         qcopy(q + 0x40, &moby->rot);
         qcopy(q + 0x10, &moby->pos);
     }
-    attached_moby = moby_vars->unk13C;
+    attached_moby = moby_vars->attached_moby_1;
     if (attached_moby) {
         char *q;
         MOBY(attached_moby)->anim_speed = sc;
-        q = moby_vars->unk13C;
+        q = moby_vars->attached_moby_1;
         qcopy(q + 0x40, &moby->rot);
         qcopy(q + 0x10, &moby->pos);
     }

@@ -1,6 +1,7 @@
 /* Shared moby class blarg_elite_commando. */
 
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
@@ -41,81 +42,78 @@ enum {
 };
 
 typedef struct L16DamageData {
-    u8            pad0[0x20];
-    float         health;
-    s16           unk24;
-    u8            pad26[0x2];
-    s8            unk28;
-    s8            unk29;
-    u8            pad2A[0x6];
-    f32           unk30;
-    u8            pad34[0x4];
-    int           reset_timer;
-    u8            pad3C[0x24];
-    short         damage[3];
-    u8            pad66[0x1];
-    unsigned char animation;
-    u8            pad68[0x8];
-    float         knockback[4];
-    float         impulse_time;
-    float         vertical_impulse;
-    float         forward_impulse;
-    float         lateral_impulse;
-    int           sound_timer;
-    int           active;
-    float         damping;
-    u8            pad9C[0x11];
-    unsigned char pending;
-    u8            padAE[0x12];
-    float         blend_start;
-    float         blend_end;
-    u8            padC8[0x8];
-    float         target[4];
-    u8            padE0[0x30];
-    int           owner;
-    int           pursuit_mode;
-    u8            pad118[0x8];
-    s32           unk120;
-    float         pursuit_range;
-    s32           unk128;
-    int           path_index;
-    u8            unk130[0x64];
-    f32           joint_1_target_pitch;
-    f32           joint_1_target_yaw;
-    u8            pad19C[0x14];
-    u8            unk1B0[0x64];
-    f32           joint_2_target_pitch;
-    f32           joint_2_target_yaw;
-    u8            pad21C[0x14];
-    u8            unk230[0x64];
-    f32           unk294;
-    f32           joint_3_target_yaw;
-    u8            pad29C[0x14];
-    f32           initial_position_x;
-    f32           initial_position_y;
-    u8            pad2B8[0x4];
-    f32           cached_position_z;
-    f32           unk2C0;
-    f32           base_position_y;
-    f32           unk2C8;
-    f32           parent_heading_offset;
-    char         *unk2D0;
-    f32           movement_step_length;
-    u8            heading_angular_step[0x4];
-    s16           state_countdown_ticks;
-    u16           rocket_fire_cycle_count;
-    int           pursuit_timer;
-    f32           bobbing_z_phase_step;
-    f32           unk2E8;
-    f32           bobbing_amplitude;
-    f32           bobbing_x_phase_step;
-    f32           unk2F4;
-    f32           unk2F8;
-    f32           bobbing_y_phase;
-    s16           selected_path_node_index;
-    s16           patrol_countdown_ticks;
-    s32           voice_playback_handle;
-    int           reward_hits;
+    u8    pad0[0x20];
+    float health;
+    s16   max_health;
+    u8    pad26[0x2];
+    s8    hit_response_class;
+    s8    wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8    pad2A[0x6];
+    f32   aim_height;
+    u8    pad34[0x4];
+    int   reset_timer;
+    u8    pad3C[0x24];
+    struct HitColorFlash hit_flash;
+    float                knockback[4];
+    float                impulse_time;
+    float                vertical_impulse;
+    float                forward_impulse;
+    float                lateral_impulse;
+    int                  sound_timer;
+    int                  active;
+    float                damping;
+    u8                   pad9C[0x11];
+    unsigned char        pending;
+    u8                   padAE[0x12];
+    float                blend_start;
+    float                blend_end;
+    u8                   padC8[0x8];
+    float                target[4];
+    u8                   padE0[0x30];
+    int                  owner;
+    int                  pursuit_mode;
+    u8                   pad118[0x8];
+    s32                  spawn_path_index;
+    float                pursuit_range;
+    s32                  starts_on_parent;
+    int                  path_index;
+    u8                   joint_1_animation[0x64];
+    f32                  joint_1_target_pitch;
+    f32                  joint_1_target_yaw;
+    u8                   pad19C[0x14];
+    u8                   joint_2_animation[0x64];
+    f32                  joint_2_target_pitch;
+    f32                  joint_2_target_yaw;
+    u8                   pad21C[0x14];
+    u8                   joint_3_animation[0x64];
+    f32                  joint_3_target_pitch;
+    f32                  joint_3_target_yaw;
+    u8                   pad29C[0x14];
+    f32                  initial_position_x;
+    f32                  initial_position_y;
+    u8                   pad2B8[0x4];
+    f32                  cached_position_z;
+    f32                  base_position_x;
+    f32                  base_position_y;
+    f32                  base_position_z;
+    f32                  parent_heading_offset;
+    char                *parent_moby;
+    f32                  movement_step_length;
+    u8                   heading_angular_step[0x4];
+    s16                  state_countdown_ticks;
+    u16                  rocket_fire_cycle_count;
+    int                  pursuit_timer;
+    f32                  bobbing_z_phase_step;
+    f32                  bobbing_z_phase;
+    f32                  bobbing_amplitude;
+    f32                  bobbing_x_phase_step;
+    f32                  bobbing_x_phase;
+    f32                  bobbing_y_phase_step;
+    f32                  bobbing_y_phase;
+    s16                  selected_path_node_index;
+    s16                  patrol_countdown_ticks;
+    s32                  voice_playback_handle;
+    int                  reward_hits;
 } L16DamageData;
 
 typedef struct {
@@ -188,8 +186,8 @@ extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void
 trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void
 randomize_blarg_elite_commando_group_pursuit_timers(void *, int, int) __asm__("FUN_L16_002d3f78");
 extern float func_001F9878_timer(float) __asm__("FUN_001f96b0");
@@ -240,21 +238,22 @@ void blarg_elite_commando_update(char *commando_moby) {
         qcopy(target, &MOBY(aim_target_moby)->pos);
     }
     if ((&big_head_cheat_enabled)[7])
-        manipulator_set_scale(&commando_data->unk130, 2.5f);
+        manipulator_set_scale(&commando_data->joint_1_animation, 2.5f);
     switch (((unsigned char *)commando_moby)[0x20]) {
     case COMMANDO_STATE_INITIALIZE:
         *(int *)&commando_data->bobbing_amplitude = 0;
-        commando_data->unk29 = 1;
-        commando_data->unk24 = 3;
-        commando_data->unk28 = 2;
-        commando_data->unk30 = 1.5f;
+        commando_data->wrench_hit_sound = 1;
+        commando_data->max_health = 3;
+        commando_data->hit_response_class = 2;
+        commando_data->aim_height = 1.5f;
         commando_data->health = 3.0f;
-        commando_data->unk2F4 = random_angle_radians();
+        commando_data->bobbing_x_phase = random_angle_radians();
         commando_data->bobbing_y_phase = random_angle_radians();
-        commando_data->unk2E8 = random_angle_radians();
+        commando_data->bobbing_z_phase = random_angle_radians();
         commando_data->bobbing_x_phase_step =
             random_float_between(90.0f, 180.0f) * DEG_TO_RAD * frame_time;
-        commando_data->unk2F8 = random_float_between(90.0f, 180.0f) * DEG_TO_RAD * frame_time;
+        commando_data->bobbing_y_phase_step =
+            random_float_between(90.0f, 180.0f) * DEG_TO_RAD * frame_time;
         commando_data->bobbing_z_phase_step =
             random_float_between(90.0f, 180.0f) * DEG_TO_RAD * frame_time;
         commando_data->patrol_countdown_ticks =
@@ -265,17 +264,18 @@ void blarg_elite_commando_update(char *commando_moby) {
             MOBY(commando_moby)->flags &= 0x7FFF;
         {
             char *position = &MOBY(commando_moby)->pos;
-            if (commando_data->unk120 >= 0) {
+            if (commando_data->spawn_path_index >= 0) {
                 int node = truncate_float_to_s32(random_float_between(
-                    0.0f, (float)(*(int *)D_L16_001B0930[commando_data->unk120] - 1)));
+                    0.0f, (float)(*(int *)D_L16_001B0930[commando_data->spawn_path_index] - 1)));
                 commando_data->selected_path_node_index = node;
-                qcopy(position, D_L16_001B0930[commando_data->unk120] + (short)node * 16 + 0x10);
+                qcopy(position,
+                      D_L16_001B0930[commando_data->spawn_path_index] + (short)node * 16 + 0x10);
             }
             commando_data->reward_hits = 1;
-            qcopy(&commando_data->unk2C0, position);
+            qcopy(&commando_data->base_position_x, position);
             qcopy(&commando_data->initial_position_x, position);
         }
-        if (commando_data->unk128) {
+        if (commando_data->starts_on_parent) {
             MOBY(commando_moby)->state = COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM;
             MOBY(commando_moby)->visible = 0;
             MOBY(commando_moby)->flags = (MOBY(commando_moby)->flags | 1) & 0xEFFF;
@@ -287,15 +287,16 @@ void blarg_elite_commando_update(char *commando_moby) {
             goto idle;
         break;
     case COMMANDO_STATE_FOLLOW_PARENT_TRANSFORM:
-        if (commando_data->unk2D0) {
+        if (commando_data->parent_moby) {
             MOBY(commando_moby)->visible = 1;
             MOBY(commando_moby)->flags &= 0xFFFE;
             movement = scratch_vector;
             transform_vector_by_basis(
-                movement, &commando_data->unk2C0, commando_data->unk2D0 + 0xC0);
-            fast_vec_add(&MOBY(commando_moby)->pos, movement, commando_data->unk2D0 + 0x10);
-            MOBY(commando_moby)->rot.z = fast_add_rotations(
-                *(float *)(commando_data->unk2D0 + 0x48), commando_data->parent_heading_offset);
+                movement, &commando_data->base_position_x, commando_data->parent_moby + 0xC0);
+            fast_vec_add(&MOBY(commando_moby)->pos, movement, commando_data->parent_moby + 0x10);
+            MOBY(commando_moby)->rot.z =
+                fast_add_rotations(*(float *)(commando_data->parent_moby + 0x48),
+                                   commando_data->parent_heading_offset);
         }
         break;
     case COMMANDO_STATE_RETURN_TO_INITIAL_POSITION:
@@ -326,7 +327,7 @@ void blarg_elite_commando_update(char *commando_moby) {
         fast_dec_timer_s16(&commando_data->state_countdown_ticks);
         if (commando_data->pursuit_mode != COMMANDO_PURSUIT_MODE_DISABLED) {
             if (commando_data->state_countdown_ticks == 0) {
-                if (commando_data->unk120 >= 0) {
+                if (commando_data->spawn_path_index >= 0) {
                     MOBY(commando_moby)->state = COMMANDO_STATE_MOVE_TO_ATTACK_NODE;
                     commando_data->state_countdown_ticks =
                         truncate_float_to_s32(scale_time(random_float_between(30.0f, 90.0f)));
@@ -341,7 +342,7 @@ void blarg_elite_commando_update(char *commando_moby) {
                 }
             }
         } else if (fast_dec_timer_s16(&commando_data->patrol_countdown_ticks)) {
-            if (commando_data->unk120 >= 0) {
+            if (commando_data->spawn_path_index >= 0) {
                 commando_data->selected_path_node_index =
                     (commando_data->selected_path_node_index + 1) % 2;
                 MOBY(commando_moby)->state = COMMANDO_STATE_MOVE_TO_PATROL_NODE;
@@ -353,7 +354,7 @@ void blarg_elite_commando_update(char *commando_moby) {
     case COMMANDO_STATE_MOVE_TO_PATROL_NODE: {
         float path_distance =
             func_L16_002D5280_update(commando_moby,
-                                     D_L16_001B0930[commando_data->unk120] +
+                                     D_L16_001B0930[commando_data->spawn_path_index] +
                                          (commando_data->selected_path_node_index * 16 + 0x10),
                                      1);
         if (path_distance < 0.01f) {
@@ -426,7 +427,7 @@ void blarg_elite_commando_update(char *commando_moby) {
     case COMMANDO_STATE_MOVE_TO_ATTACK_NODE:
         distance =
             func_L16_002D5280_update(commando_moby,
-                                     D_L16_001B0930[commando_data->unk120] +
+                                     D_L16_001B0930[commando_data->spawn_path_index] +
                                          (commando_data->selected_path_node_index * 16 + 0x10),
                                      1);
         fast_dec_timer_s16(&commando_data->state_countdown_ticks);
@@ -467,7 +468,7 @@ void blarg_elite_commando_update(char *commando_moby) {
             return;
         }
         fast_vec_sub(movement, position, movement);
-        fast_vec_add(&commando_data->unk2C0, &commando_data->unk2C0, movement);
+        fast_vec_add(&commando_data->base_position_x, &commando_data->base_position_x, movement);
     } break;
     case 6:
     default:
@@ -478,21 +479,21 @@ void blarg_elite_commando_update(char *commando_moby) {
         if (((unsigned char *)commando_moby)[0x20] != 0 &&
             ((unsigned char *)commando_moby)[0x20] != 10) {
             approach_value((float *)(&commando_data->bobbing_amplitude), 0.25f, frame_time * 0.25f);
-            commando_data->unk2F4 =
-                fast_add_rotations(commando_data->unk2F4, commando_data->bobbing_x_phase_step);
-            commando_data->bobbing_y_phase =
-                fast_add_rotations(commando_data->bobbing_y_phase, commando_data->unk2F8);
-            commando_data->unk2E8 =
-                fast_add_rotations(commando_data->unk2E8, commando_data->bobbing_z_phase_step);
+            commando_data->bobbing_x_phase = fast_add_rotations(
+                commando_data->bobbing_x_phase, commando_data->bobbing_x_phase_step);
+            commando_data->bobbing_y_phase = fast_add_rotations(
+                commando_data->bobbing_y_phase, commando_data->bobbing_y_phase_step);
+            commando_data->bobbing_z_phase = fast_add_rotations(
+                commando_data->bobbing_z_phase, commando_data->bobbing_z_phase_step);
             MOBY(commando_moby)->pos.x =
-                commando_data->unk2C0 +
-                commando_data->bobbing_amplitude * fast_sin(commando_data->unk2F4);
+                commando_data->base_position_x +
+                commando_data->bobbing_amplitude * fast_sin(commando_data->bobbing_x_phase);
             MOBY(commando_moby)->pos.y =
                 commando_data->base_position_y +
                 commando_data->bobbing_amplitude * fast_sin(commando_data->bobbing_y_phase);
             MOBY(commando_moby)->pos.z =
-                commando_data->unk2C8 +
-                commando_data->bobbing_amplitude * fast_sin(commando_data->unk2E8);
+                commando_data->base_position_z +
+                commando_data->bobbing_amplitude * fast_sin(commando_data->bobbing_z_phase);
         }
         if (fast_vec_dist(&MOBY(commando_moby)->pos, D_L16_001671C0) < 32.0f &&
             !voice_is_playing(commando_moby, commando_data->voice_playback_handle))
@@ -564,7 +565,7 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
         switch (response) {
         case HIT_RESPONSE_ANIMATION_ONLY:
         case HIT_RESPONSE_DAMAGE_ANIMATION_ONLY:
-            commando_data->animation = 0xFA;
+            commando_data->hit_flash.flash_red = 0xFA;
             break;
         case HIT_RESPONSE_KNOCKBACK_RECOVERY:
         case HIT_RESPONSE_RECOVERABLE_KNOCKBACK:
@@ -592,7 +593,7 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
             trooper_start_knockback(
                 damage_reaction.angle, commando_moby, commando_data->knockback, 6, 1, 0);
             commando_moby->state = 8;
-            commando_data->animation = 0x78;
+            commando_data->hit_flash.flash_red = 0x78;
             break;
         }
         case HIT_RESPONSE_FATAL:
@@ -637,7 +638,7 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
             trooper_start_knockback(
                 damage_reaction.fatal_angle, commando_moby, commando_data->knockback, 7, 1, 0);
             commando_moby->state = 9;
-            commando_data->animation = 0xF0;
+            commando_data->hit_flash.flash_red = 0xF0;
             FUN_L00_00257470(commando_moby, 0, -1);
             break;
         }
@@ -646,10 +647,10 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
         default:
             break;
         }
-        trooper_anim_update(commando_moby, commando_data->damage);
+        start_hit_color_flash(commando_moby, &commando_data->hit_flash);
     }
     commando_moby->hit_slot = 0xFF;
-    trooper_anim_finish(commando_moby, commando_data->damage);
+    update_hit_color_flash(commando_moby, &commando_data->hit_flash);
     fast_dec_timer(&commando_data->pursuit_timer);
     if (commando_data->reset_timer) {
         commando_data->pursuit_timer =
@@ -686,8 +687,8 @@ void set_blarg_elite_commando_parent_transform(char *moby,
 
                                                char *vector) {
     L16DamageData *commando_data = (L16DamageData *)MOBY(moby)->pvars;
-    commando_data->unk2D0 = parent_moby;
-    qcopy(&commando_data->unk2C0, position);
+    commando_data->parent_moby = parent_moby;
+    qcopy(&commando_data->base_position_x, position);
     commando_data->parent_heading_offset = *(float *)(vector + 8);
 }
 
@@ -710,7 +711,7 @@ void start_blarg_elite_commando_return_to_initial_position(struct Moby *moby,
         moby->flags |= 0x1000;
         commando_data->state_countdown_ticks = return_countdown_ticks;
         commando_data->cached_position_z = moby->pos.z;
-        qcopy(&commando_data->unk2C0, &moby->pos);
+        qcopy(&commando_data->base_position_x, &moby->pos);
         commando_data->movement_step_length = frame_time * 5.0f;
     }
 }
@@ -722,7 +723,7 @@ float advance_blarg_elite_commando_base_position(char  *moby,
 
 float advance_blarg_elite_commando_base_position(char *moby, float *target) {
     L16DamageData *commando_motion_data = (L16DamageData *)MOBY(moby)->pvars;
-    char          *base_position = &commando_motion_data->unk2C0;
+    char          *base_position = &commando_motion_data->base_position_x;
     float          distance = fast_vec_dist(base_position, target);
     float          acceleration_braking_step = frame_time_sq * 4.0f;
     int            zero[1];
@@ -772,7 +773,7 @@ void randomize_blarg_elite_commando_group_pursuit_timers(void *group_source_moby
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5438), where it is exact; names translated to the US level program. */
 void select_blarg_elite_commando_movement_animation(char *moby) {
     L16DamageData *commando_path_state = (L16DamageData *)MOBY(moby)->pvars;
-    char          *target = D_L16_001B0930[commando_path_state->unk120] +
+    char          *target = D_L16_001B0930[commando_path_state->spawn_path_index] +
                    (commando_path_state->selected_path_node_index << 4);
     float angle = fast_arc_tan(*(float *)(target + 0x10) - MOBY(moby)->pos.x,
                                *(float *)(target + 0x14) - MOBY(moby)->pos.y);
@@ -917,16 +918,25 @@ void update_blarg_elite_commando_joint_aim(char *commando_moby) {
                 yaw2 = 0.34906584f;
             else if (yaw2 < -0.34906584f)
                 yaw2 = -0.34906584f;
-            commando_data->unk294 = pitch2;
+            commando_data->joint_3_target_pitch = pitch2;
             commando_data->joint_3_target_yaw = yaw2;
         }
     }
-    update_joint_animation(
-        commando_moby, &commando_data->unk130, 1, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
-    update_joint_animation(
-        commando_moby, &commando_data->unk1B0, 2, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
-    update_joint_animation(
-        commando_moby, &commando_data->unk230, 3, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
+    update_joint_animation(commando_moby,
+                           &commando_data->joint_1_animation,
+                           1,
+                           frame_scale_sq * 0.03f,
+                           frame_scale_sq * 0.3f);
+    update_joint_animation(commando_moby,
+                           &commando_data->joint_2_animation,
+                           2,
+                           frame_scale_sq * 0.03f,
+                           frame_scale_sq * 0.3f);
+    update_joint_animation(commando_moby,
+                           &commando_data->joint_3_animation,
+                           3,
+                           frame_scale_sq * 0.03f,
+                           frame_scale_sq * 0.3f);
 }
 
 /* Emit randomized joint particles while the moby is active. */

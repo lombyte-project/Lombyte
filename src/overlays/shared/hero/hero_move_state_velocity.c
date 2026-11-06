@@ -106,7 +106,7 @@ void hero_move_state_velocity(void) {
     } else if (state == HERO_STATE_HIGH_JUMP || state == HERO_STATE_STORED_HEADING_JUMP) {
         hero.motion.move_yaw = hero.takeoff_yaw;
         turn_to(0, ED64 * 0.04f, ED64 * 0.2f, ED6C * 6.981317f);
-        if (hero.unk450 != 3) {
+        if (hero.jump_stick_direction != 3) {
             hero.ground_speed = hero.air_target_speed;
         } else {
             hero.ground_speed = 0.0f;
@@ -132,13 +132,13 @@ void hero_move_state_velocity(void) {
         build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.momentum, &hero.move_impulse);
     } else if (state == HERO_STATE_REPEATABLE_JUMP) {
-        hero.motion.move_yaw = hero.unk470.f[3];
-        qcopy(&hero.motion.move_dir, &hero.unk470);
+        hero.motion.move_yaw = hero.wall_jump_normal.f[3];
+        qcopy(&hero.motion.move_dir, &hero.wall_jump_normal);
         if (FUN_001f96f8_214658(9) < hero.state_timer) {
             turn_to(-1, ED64 * 0.042f, ED64 * 0.2f, ED6C * 11.868238f);
         }
         if (FUN_001f96f8_214658(9) <= hero.state_timer) {
-            if (hero.unk308 == 0) {
+            if (hero.magnetic_floor == 0) {
                 hero.motion.velocity.f[0] =
                     FUN_001f9dc8_214658(hero.motion.move_yaw) * (ED6C * 4.9f);
                 hero.motion.velocity.f[1] =
@@ -187,7 +187,7 @@ void hero_move_state_velocity(void) {
                 base_planar_velocity_step = ED70 * 2.0f;
             }
         }
-        if (hero.unk4A8 && hero.on_ice_ground) {
+        if (hero.took_off_from_ice && hero.on_ice_ground) {
             base_planar_velocity_step = ED70 * 0.17f;
             if (hero.state.current == 15) {
                 stick_target(0, ED6C * 2.5f);
@@ -257,7 +257,7 @@ void update_hero_transformed_negative_z_angle_parameters(void) {
     f32         *vector_components = transformed_negative_z_vector.f;
     f32          limit, x, y, pitch, z, lean;
     struct Hero *state = &hero;
-    if (state->unk308 == 0)
+    if (state->magnetic_floor == 0)
         return;
     transformed_negative_z_vector.q = 0;
     vector_components[2] = -1.0f;
@@ -402,7 +402,7 @@ extern f32 D_0015EE18;
    symbol (D_0015EDB0[3]) changes the code */
 #define BYTE_0015EDB3 (*(u8 *)0x15EDB3)
 
-/* In hero state 2, sets the lean values from motion.unk188 (clamped to
+/* In hero state 2, sets the lean values from motion.yaw_error (clamped to
    +-1.4); needs the moby in item slot 3. */
 void update_hero_lean_and_sway_parameters(void) __asm__("FUN_L00_00215ef8");
 
@@ -652,7 +652,7 @@ void update_hero_tilt(void) {
     float        tilt_targets[2];
     int          effective_tilt_mode, current_hero_state, k;
     effective_tilt_mode = hero_state->gravity_mode;
-    if (hero_state->unk1F8) {
+    if (hero_state->magnet_walk_timer) {
         effective_tilt_mode = HERO_TILT_APPLY_REFERENCE_ORIENTATION;
     }
     switch (effective_tilt_mode) {
@@ -772,7 +772,7 @@ void update_hero_planar_movement_velocity(void) {
     target_velocity.f[1] = target_speed_y * turn_factor_or_speed_scale_or_opposition_or_slope_speed;
     qcopy(&target_velocity_before_impulse, &target_velocity);
     zero_or_planar_step_limit_or_slope_heading = target_velocity.f[2];
-    if (zero_or_planar_step_limit_or_slope_heading < hero.unk930) {
+    if (zero_or_planar_step_limit_or_slope_heading < hero.push_length) {
         build_scaled_hero_move_impulse(0.7f,
                                        frame_duration * zero_or_planar_step_limit_or_slope_heading);
         qcopy(&saved_move_impulse, &hero.move_impulse);
@@ -813,7 +813,7 @@ void update_hero_planar_movement_velocity(void) {
     if (frame_time * 5.9f < hero.motion.speed_xy) {
         zero_or_planar_step_limit_or_slope_heading = frame_time_sq * 13.0f;
     }
-    impulse_gate_or_target_length = hero.unk930;
+    impulse_gate_or_target_length = hero.push_length;
     zero_or_slope_step_limit = 0.0f;
     if (zero_or_slope_step_limit < impulse_gate_or_target_length) {
         turn_factor_or_speed_scale_or_opposition_or_slope_speed =
@@ -877,17 +877,18 @@ void update_hero_planar_movement_velocity(void) {
     qcopy(&xy_velocity_scratch, &hero.motion.velocity);
     xy_velocity_scratch.f[2] = 0.0f;
     hero_state = &hero;
-    hero_state->unk3B0 = fast_vec_dot(&xy_velocity_scratch, &target_velocity);
+    hero_state->run_speed_ratio = fast_vec_dot(&xy_velocity_scratch, &target_velocity);
     k = fast_vec_length(&target_velocity);
     if (0.0f < k) {
-        hero_state->unk3B0 = hero_state->unk3B0 / (k * (frame_time * 5.9f));
+        hero_state->run_speed_ratio = hero_state->run_speed_ratio / (k * (frame_time * 5.9f));
     }
     clip_hero_velocity_against_probed_surfaces(0);
-    if (hero_state->unk3B4.f < DEG_TO_RAD && 0.0872664601f < hero_state->ground_pitch.f) {
+    if (hero_state->prev_ground_pitch.f < DEG_TO_RAD &&
+        0.0872664601f < hero_state->ground_pitch.f) {
         fast_vec_scale(
             &hero.motion.velocity, &hero.motion.velocity, fast_cos(hero_state->ground_pitch.f));
     }
-    hero.unk3B4.f = hero.ground_pitch.f;
+    hero.prev_ground_pitch.f = hero.ground_pitch.f;
     if (absolute_float(hero.motion.pos.f[2] - hero.ground_z.f) < 0.15f) {
         hero.motion.pos.f[2] = hero.ground_z.f;
     }
@@ -905,7 +906,7 @@ int allocate_hero_voice_for_entry(int entry_index, int voice_allocation_flags) {
     struct Hero *hero_base = (struct Hero *)(D_0013E533 + 0xE1D);
     int          voice_target;
     if (hero_base->vehicle_mode == 3) {
-        voice_target = *(int *)&hero_base->unkA88;
+        voice_target = *(int *)&hero_base->base_moby;
         if (voice_target != 0) {
             qcopy((char *)voice_target + 0x10, &hero_base->motion.pos);
             return allocate_voice_for_target_entry(
@@ -947,7 +948,7 @@ void help_queue_add(s32 voice_entry_index, s32 voice_delay_timer, s32 voice_allo
     s16         *current_slot;
     s32          slots_examined = 0;
     hero_state = &hero;
-    current_slot = (s16 *)(&hero_state->unk21D8[0]);
+    current_slot = (s16 *)(&hero_state->delayed_voices[0]);
     do {
         slots_examined = slots_examined + 1;
         if (current_slot[0] == 0) {
@@ -970,8 +971,8 @@ extern int allocate_hero_voice_for_entry();
 void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
 
 void update_hero_delayed_voice_requests(void) {
-    char  *slot_timer_base = (char *)&hero.unk21D8[0][2];
-    short *slot_voice_argument_base = (short *)(&hero.unk21D8[0][3]);
+    char  *slot_timer_base = (char *)&hero.delayed_voices[0][2];
+    short *slot_voice_argument_base = (short *)(&hero.delayed_voices[0][3]);
     int    i;
 
     for (i = 0; i < 8; i++) {
@@ -1137,9 +1138,9 @@ void emit_filtered_entry_sparkles(int voice_target, int entry_count) {
     if (entry_count != 0) {
         struct Hero *hero_base = (struct Hero *)(D_0013E533 + 0xE1D);
         int          i;
-        if (hero_base->unkA64 == 0) {
+        if (hero_base->melee_hit == 0) {
             allocate_voice_for_target_entry(1, 0, voice_target);
-            hero_base->unkA64 = 1;
+            hero_base->melee_hit = 1;
         }
         for (i = 0; i < entry_count; i++) {
             int *entry_type_lookup_pointer = D_L00_00177F00[i];
@@ -1219,10 +1220,10 @@ void spawn_hero_radial_particle_burst(void) {
 
 typedef struct {
     u8  pad00[0x40];
-    f32 unk40[4]; /* 0x40: launch direction */
-    f32 unk50[4]; /* 0x50 */
-    f32 unk60;    /* 0x60: speed */
-    s32 unk64;
+    f32 direction[4]; /* 0x40: launch direction (WrenchVars in shared/weapons/wrench.c) */
+    f32 target[4];    /* 0x50: aim target position */
+    f32 speed;        /* 0x60 */
+    s32 acceleration; /* 0x64: f32, cleared as an int */
     u8  pad68[0xE];
     s16 near_wall_launch_flag;
     u8  pad78[6];
@@ -1275,7 +1276,7 @@ void launch_hero_wrench(void) {
             if (tpv->has_aim_target_position) {
                 has_target = 1;
                 transform_hero_local_offset_to_world(aim_origin_or_euler_angles, 0.5f, 0.0f, 0.5f);
-                fast_vec_sub(delta, tpv->unk50, aim_origin_or_euler_angles);
+                fast_vec_sub(delta, tpv->target, aim_origin_or_euler_angles);
                 hero.aim_yaw = FUN_001f9e90_c2(delta[0], delta[1]);
                 hero.aim_pitch = FUN_001f9e90_c2(vector_length_xy(delta), delta[2]);
             }
@@ -1299,16 +1300,16 @@ void launch_hero_wrench(void) {
         !hero.wall_probe_moby_in_class_range) {
         launched_item_vars->near_wall_launch_flag = 1;
     }
-    clear_u64_value(launched_item_vars->unk40);
+    clear_u64_value(launched_item_vars->direction);
     if (!aimed) {
-        add_hero_forward_offset(launched_item_vars->unk40, launched_item_vars->unk40, 1.0f);
+        add_hero_forward_offset(launched_item_vars->direction, launched_item_vars->direction, 1.0f);
     } else {
-        build_spherical_offset(launched_item_vars->unk40, 1.0f, hero.aim_yaw, hero.aim_pitch);
+        build_spherical_offset(launched_item_vars->direction, 1.0f, hero.aim_yaw, hero.aim_pitch);
     }
     clear_u64_value(aim_origin_or_euler_angles);
     euler_rotation_basis(item_rotation_matrix, aim_origin_or_euler_angles);
     if (aimed) {
-        aim_origin_or_euler_angles[0] = l00_camera.unk150;
+        aim_origin_or_euler_angles[0] = l00_camera.rotation_x;
         aim_origin_or_euler_angles[1] = l00_camera.pitch;
         aim_origin_or_euler_angles[2] = l00_camera.yaw;
         euler_rotation_basis(cam_mat, aim_origin_or_euler_angles);
@@ -1318,11 +1319,11 @@ void launch_hero_wrench(void) {
     }
     copy_matrix_rotation(out_mat, item_rotation_matrix);
     matrix_to_euler(out_mat, &equipped_wrench_moby->rot);
-    launched_item_vars->unk64 = 0;
-    launched_item_vars->unk60 = frame_time * 23.0f;
-    initialize_moby_transform_history(equipped_wrench_moby, hero.unk17B0);
-    create_moby_transform_history_entry(hero.unk17B0, 0x30, 3);
-    create_moby_transform_history_entry(hero.unk17B0, 0x17, 5);
+    launched_item_vars->acceleration = 0;
+    launched_item_vars->speed = frame_time * 23.0f;
+    initialize_moby_transform_history(equipped_wrench_moby, hero.wrench_trail);
+    create_moby_transform_history_entry(hero.wrench_trail, 0x30, 3);
+    create_moby_transform_history_entry(hero.wrench_trail, 0x17, 5);
     blend_moby_animation(equipped_wrench_moby, 6, 0, scale_game_frames(5));
 }
 

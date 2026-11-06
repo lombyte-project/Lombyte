@@ -18,7 +18,7 @@ void start_memory_card_save(s32 save_data, s32 slot) {
     memory_card_state.active_card = 0;
     memory_card_state.card[0].save_index = slot;
     *(s32 *)((u8 *)&memory_card_state + slot * 0x1C + 0x20) = 0;
-    memory_card_state.unkF4 = 1;
+    memory_card_state.card_save_active = 1;
     memory_card_state.buf = save_data;
     if (memory_card_state.pending_state < MEMCARD_QUERY_INFO) {
         memory_card_state.pending_card = 0;

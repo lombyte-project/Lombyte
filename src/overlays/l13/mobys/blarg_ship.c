@@ -33,9 +33,9 @@ extern void spawn_explosion(void *,
 
 extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 
-extern void trooper_anim_update(struct Moby *, void *) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(struct Moby *, void *) __asm__("FUN_L00_0025d458");
 
-extern void trooper_anim_finish(struct Moby *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(struct Moby *, void *) __asm__("FUN_L00_0025d538");
 
 extern void FUN_0020c828(void *);
 
@@ -83,11 +83,11 @@ void blarg_ship_update(struct Moby *moby) {
             } else {
                 ((unsigned char *)blarg_ship_vars)[0x67] = 0xfa;
                 *(float *)(blarg_ship_vars + 0x20) -= cost;
-                trooper_anim_update(moby, blarg_ship_vars + 0x60);
+                start_hit_color_flash(moby, blarg_ship_vars + 0x60);
             }
             moby->hit_slot = 0xff;
         }
-        trooper_anim_finish(moby, blarg_ship_vars + 0x60);
+        update_hit_color_flash(moby, blarg_ship_vars + 0x60);
         break;
     case BLARG_SHIP_EXPLODE: {
         void *pos;

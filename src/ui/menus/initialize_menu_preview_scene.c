@@ -73,13 +73,13 @@ void initialize_menu_preview_scene(void) {
     graphics_workspace_base = D_001940C0[2] + 0xA0000;
     help_text_buffer_start = preview_workspace_start + 0x3C000;
     graphics_buffer_start = graphics_workspace_base + 0xE0000;
-    menu_system.unkFC = help_text_buffer_start + 0xC1000;
-    menu_system.unk100 = graphics_buffer_start + 0x11800;
+    menu_system.first_base = help_text_buffer_start + 0xC1000;
+    menu_system.second_base = graphics_buffer_start + 0x11800;
     current_vu_chain = 0xA0000;
-    menu_system.unk104 = preview_workspace_start;
-    menu_system.unk10 = graphics_workspace_base;
+    menu_system.preview_workspace = preview_workspace_start;
+    menu_system.graphics_workspace = graphics_workspace_base;
     menu_system.help_text_buffer = help_text_buffer_start;
-    menu_system.unk10C = graphics_buffer_start;
+    menu_system.stream_buffer_base = graphics_buffer_start;
     initialize_menu_stream_buffers(1);
     vu1_init_chain();
     menu_system.saved_texture_start = gs_texture_allocation_start;
@@ -739,7 +739,7 @@ struct MenuLevelMapScreen planet_select_galaxy_map = {
 
 struct MenuMapScreen planet_select_map_screen = {
     {draw_map_screen, 0, 0, leave_map_screen},
-    {{0}, 0xC0},
+    {{0}, MENU_MAP_NO_INPUT | MENU_MAP_NO_TEXTURE_REGISTER},
 };
 
 struct MenuPage planet_confirm_page = {
@@ -766,7 +766,7 @@ struct MenuScreen planet_confirm_missions_screen = {
 
 struct MenuMapScreen planet_confirm_map_screen = {
     {draw_map_screen, draw_map_screen_layers, reset_pause_memory_card_state, leave_map_screen},
-    {{0}, 0x40}
+    {{0}, MENU_MAP_NO_INPUT}
 };
 
 struct MenuItemPreviewScreen planet_confirm_gold_bolt_screen = {
@@ -1309,7 +1309,7 @@ struct MenuLabelScreen in_level_movies_title_label = {
 };
 
 /* The In-Level Movies lists, one per level (in_level_movie_lists). param.half:
-   {lo: menu_system.unkE4, hi: menu_action_messages index, 0 = none}. */
+   {lo: menu_system.travel_level, hi: menu_action_messages index, 0 = none}. */
 struct MenuTextItem in_level_movies_veldin[4] = {
     {0x5022, MENU_ACTION_REQUEST_CLOSE_WITH_OPTIONAL_MESSAGE, {.half = {1, 0}}},
     {0x5023, MENU_ACTION_REQUEST_CLOSE_WITH_OPTIONAL_MESSAGE, {.half = {2, 0}}},

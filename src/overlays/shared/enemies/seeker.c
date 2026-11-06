@@ -1,5 +1,7 @@
 /* Shared moby class seeker: its update and its damage and target handling. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/mobys/moby_state.h"
 #include "rnc/globals.h"
 #include "qzero.h"
@@ -16,6 +18,7 @@
 #include "rnc/overlay/shared/mobys/step_moby_motion.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/mobys/resolve_moby_hit_response.h"
+#include "rnc/overlay/shared/mobys/ground_move_control.h"
 
 /* Per-instance variables of the oClass 52 moby (moby->pvars). */
 enum {
@@ -30,37 +33,32 @@ enum {
 };
 
 typedef struct {
-    u8           pad0[0x20];
-    f32          unk20;
-    s16          unk24;
-    u8           pad26[2];
-    u8           unk28;
-    u8           pad29[0x2F];
-    u8           unk58;
-    u8           pad59;
-    u8           unk5A;
-    u8           pad5B[0x15];
-    Vec4         vel;
-    u8           pad80[0x50];
-    s32          unkD0;
-    u8           padD4[4];
-    f32          unkD8;
-    f32          unkDC;
-    u8           padE0[0x14];
-    f32          speed;
-    u8           padF8[0x68];
-    struct Moby *target;
-    s32          unk164;
-    u8           pad168[0x18];
-    s32          unk180;
-    s32          timer;
-    u8           pad188[4];
-    f32          heading_speed;
-    u8           pad190[4];
-    s32          voice;
-    s32          moving;
-    u8           pad19C[0xE4];
-    u8           unk280[1];
+    u8   pad0[0x20];
+    f32  health;
+    s16  max_health;
+    u8   pad26[2];
+    u8   hit_response_class;
+    u8   pad29[0x2F];
+    u8   look_range; /* 0x58: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8   pad59;
+    u8   look_height;
+    u8   pad5B[0x15];
+    Vec4 vel;
+    u8   pad80[0x50];
+    struct GroundMoveControl move_control; /* 0xD0 */
+    u8                       pad120[0x40];
+    struct Moby             *target;
+    s32                      target_selection_status;
+    u8                       pad168[0x18];
+    s32                      bound_path;
+    s32                      timer;
+    u8                       pad188[4];
+    f32                      heading_speed;
+    u8                       pad190[4];
+    s32                      voice;
+    s32                      moving;
+    u8                       pad19C[0xE4];
+    u8                       big_head_manipulator[1];
 } Moby52Vars;
 
 #include "rnc/overlay/shared/enemies/seeker_globals.h"
@@ -96,7 +94,6 @@ extern void spawn_explosion(struct Moby *,
                             s32,
                             s32) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_00263ac8(struct Moby *, s32, void *, f32);
-extern void FUN_L01_0026d930(void *);
 extern void FUN_L01_0026e090(s32, s32);
 extern void update_seeker_damage_and_target(struct Moby *) __asm__("FUN_L09_002c6230");
 
@@ -121,7 +118,7 @@ void seeker_update(struct Moby *moby) {
 
     update_seeker_damage_and_target(moby);
     target = seeker_instance_vars->target;
-    FUN_L00_00263ac8(moby, 0, seeker_instance_vars->unk280, 2.7f);
+    FUN_L00_00263ac8(moby, 0, seeker_instance_vars->big_head_manipulator, 2.7f);
     if (moby->visible != 0 && fast_vec_dist(&moby->pos, &D_L09_00166F40) < 29.0f) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 0x17;
@@ -132,21 +129,21 @@ void seeker_update(struct Moby *moby) {
     }
     switch (moby->state) {
     case SEEKER_STATE_INITIALIZE:
-        seeker_instance_vars->unk20 = 3.0f;
-        seeker_instance_vars->unk24 = 3;
-        seeker_instance_vars->unk28 = 2;
-        seeker_instance_vars->unk5A = 6;
-        seeker_instance_vars->unk58 = 8;
-        if (seeker_instance_vars->unk180 == -1) {
+        seeker_instance_vars->health = 3.0f;
+        seeker_instance_vars->max_health = 3;
+        seeker_instance_vars->hit_response_class = 2;
+        seeker_instance_vars->look_height = 6;
+        seeker_instance_vars->look_range = 8;
+        if (seeker_instance_vars->bound_path == -1) {
             debug_print(seeker_invalid_bound_path_format, moby->save_id);
             mark_moby_for_removal(moby);
             break;
         }
-        FUN_L01_0026d930(&seeker_instance_vars->unkD0);
-        seeker_instance_vars->unkDC = 0.5f;
-        seeker_instance_vars->unkD8 = 0.5f;
-        seeker_instance_vars->unkD0 = truncate_float_to_s32(512.0f);
-        seeker_instance_vars->speed = frame_time * 7.75f;
+        init_ground_move_control(&seeker_instance_vars->move_control);
+        seeker_instance_vars->move_control.max_climb = 0.5f;
+        seeker_instance_vars->move_control.max_drop = 0.5f;
+        seeker_instance_vars->move_control.collision_radius_1024ths = truncate_float_to_s32(512.0f);
+        seeker_instance_vars->move_control.max_speed = frame_time * 7.75f;
         moby->state = SEEKER_STATE_IDLE_HOVER;
         if (moby->prev_seq != 1) {
             blend_moby_animation(moby, 1, 0, scale_game_frames(10));
@@ -171,7 +168,7 @@ void seeker_update(struct Moby *moby) {
             }
             moby->anim_speed = random_float_between(0.95f, 1.05f);
         }
-        if (seeker_instance_vars->unk164 != 2) {
+        if (seeker_instance_vars->target_selection_status != 2) {
             if (moby->group != 0xFF) {
                 FUN_L01_0026e090(moby->group, 1);
             }
@@ -217,8 +214,8 @@ void seeker_update(struct Moby *moby) {
             seeker_instance_vars->moving = 0;
         }
         if (seeker_instance_vars->moving != 0) {
-            vel.f[0] = fast_cos(moby->rot.z) * seeker_instance_vars->speed;
-            vel.f[1] = fast_sin(moby->rot.z) * seeker_instance_vars->speed;
+            vel.f[0] = fast_cos(moby->rot.z) * seeker_instance_vars->move_control.max_speed;
+            vel.f[1] = fast_sin(moby->rot.z) * seeker_instance_vars->move_control.max_speed;
             vel.f[2] = 0.0f;
             vertical_follow_adjustment = hero.motion.pos.f[2] + 0.8f - z;
             if (moby->pos.z < hero.motion.pos.f[2] + 0.8f) {
@@ -346,38 +343,24 @@ typedef struct {
 } Cls;
 
 typedef struct Data {
-    char          p0[0x20];
-    float         health;
-    char          p24[0x14];
-    int           f38;
-    char          p3C[0x24];
-    char          react[7];
-    unsigned char reactTime;
-    char          p68[8];
-    float         f70[4];
-    float         f80;
-    float         f84;
-    float         f88;
-    float         f8C;
-    int           f90;
-    int           f94;
-    float         f98;
-    char          p9C[0x11];
-    unsigned char bAD;
-    char          pAE[0x12];
-    float         fC0;
-    float         fC4;
-    char          pC8[0x58];
-    float         target[4];
-    char          p130[0x30];
-    Moby         *f160;
-    int           f164;
-    char          p168[0x18];
-    int           path;
-    int           timer;
-    float         reach;
-    char          p18C[4];
-    int           retreat;
+    char                   p0[0x20];
+    float                  health;
+    char                   p24[0x14];
+    int                    f38;
+    char                   p3C[0x24];
+    struct HitColorFlash   hit_flash;
+    struct KnockbackMotion knockback;
+    char                   pad_60[0x50];
+    float                  target[4];
+    char                   p130[0x30];
+    Moby                  *f160;
+    int                    f164;
+    char                   p168[0x18];
+    int                    path;
+    int                    timer;
+    float                  reach;
+    char                   p18C[4];
+    int                    retreat;
 } Data;
 
 typedef struct {
@@ -403,8 +386,8 @@ extern float D_0015ED70;
 extern float D_L09_0016140C __attribute__((sda));
 extern int   scale_time() __asm__("FUN_001f96b0");
 extern void  FUN_L00_00257470_c(void *, int, int) __asm__("FUN_L00_00257470");
-extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  start_hit_color_flash(void *m, void *p) __asm__("FUN_L00_0025d458");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 int          FUN_L00_0025ff38(float best,
                               char *a,
                               char *o,
@@ -416,7 +399,7 @@ int  select_moby_record_by_xy_distance(char *a, char *o, float best) __asm__("FU
 void trooper_knockback_arc(void *v, float *ang, float *s1, float *s2) __asm__("FUN_L00_0025ab48");
 void trooper_start_knockback(u8 *a, void *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
 void        FUN_L01_0026e090_c(int i, int v) __asm__("FUN_L01_0026e090");
-extern void func_L00_0025E4B0_2C73D0(void *, void *) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
 extern void func_L00_0025BBA0_2C73D0(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void
 func_L00_0025D5B0_2C73D0(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
@@ -469,8 +452,8 @@ void update_seeker_damage_and_target(Moby *moby) {
         seeker_vars->timer == scale_game_frames(0x3C) ||
         seeker_vars->timer == scale_game_frames(0x78) ||
         seeker_vars->timer == scale_game_frames(0xB3)) {
-        seeker_vars->reactTime = 0xF0;
-        func_L00_0025E4B0_2C73D0(moby, seeker_vars->react);
+        seeker_vars->hit_flash.flash_red = 0xF0;
+        start_hit_color_flash(moby, &seeker_vars->hit_flash);
     }
     damage = 0.0f;
     source = find_moby_hit(moby, 0x330000, 0);
@@ -481,18 +464,18 @@ void update_seeker_damage_and_target(Moby *moby) {
         if (seeker_vars->health <= 0.0f) {
             response = 1;
         }
-        seeker_vars->f90 = truncate_float_to_s32(512.0f);
-        seeker_vars->f80 = seeker_knockback_gravity_scale * D_0015ED70;
-        seeker_vars->f84 = D_0015ED70 * 30.0f;
-        seeker_vars->f98 = 0.0f;
-        seeker_vars->f94 = 1;
-        seeker_vars->bAD = 0;
+        seeker_vars->knockback.collision_radius_1024ths = truncate_float_to_s32(512.0f);
+        seeker_vars->knockback.gravity = seeker_knockback_gravity_scale * D_0015ED70;
+        seeker_vars->knockback.speed_approach_step = D_0015ED70 * 30.0f;
+        seeker_vars->knockback.collision_z_offset = 0.0f;
+        seeker_vars->knockback.flags = 1;
+        seeker_vars->knockback.unk3D = 0;
         allocate_voice_for_target_entry(8, 0, moby);
 
         switch (response) {
         case RESPONSE_REACTION_ONLY:
         case 10:
-            seeker_vars->reactTime = 0xFA;
+            seeker_vars->hit_flash.flash_red = 0xFA;
             break;
         case RESPONSE_HURT_KNOCKBACK:
         case 4:
@@ -500,48 +483,53 @@ void update_seeker_damage_and_target(Moby *moby) {
         case 6:
         case 7:
         case 8:
-            seeker_vars->fC0 = 3.0f;
-            seeker_vars->fC4 = 6.0f;
-            seeker_vars->f88 = seeker_hurt_knockback_xy_scale * D_0015ED6C;
-            seeker_vars->f8C = 0.0f;
+            seeker_vars->knockback.apex_animation_frame = 3.0f;
+            seeker_vars->knockback.landing_animation_frame = 6.0f;
+            seeker_vars->knockback.speed = seeker_hurt_knockback_xy_scale * D_0015ED6C;
+            seeker_vars->knockback.vertical_speed = 0.0f;
             knock_angle = fast_arc_tan(moby->pos.x - source->owner->pos.x,
                                        moby->pos.y - source->owner->pos.y);
             *(Q_2C73D0 *)hit_pos = source->pos;
-            func_L00_0025BBA0_2C73D0(hit_pos, &knock_angle, &seeker_vars->f88, &seeker_vars->f8C);
-            func_L00_0025D5B0_2C73D0(moby, seeker_vars->f70, knock_angle, 4, 1, 0);
+            func_L00_0025BBA0_2C73D0(hit_pos,
+                                     &knock_angle,
+                                     &seeker_vars->knockback.speed,
+                                     &seeker_vars->knockback.vertical_speed);
+            func_L00_0025D5B0_2C73D0(moby, &seeker_vars->knockback, knock_angle, 4, 1, 0);
             moby->state = SEEKER_STATE_HURT_KNOCKBACK;
             if (moby->group != 0xFF) {
                 func_L01_0026F040_2C73D0(moby->group, 1);
             }
-            seeker_vars->reactTime = 0x78;
+            seeker_vars->hit_flash.flash_red = 0x78;
             break;
         case RESPONSE_FATAL_KNOCKBACK:
         case 2:
             moby->flags &= 0xEFFF;
-            seeker_vars->f80 = seeker_knockback_gravity_scale * D_0015ED70;
-            seeker_vars->f88 = seeker_fatal_knockback_xy_scale * D_0015ED6C;
-            seeker_vars->f8C = seeker_fatal_knockback_z_scale * D_0015ED6C;
-            seeker_vars->fC0 = 14.0f;
-            seeker_vars->fC4 = 28.0f;
+            seeker_vars->knockback.gravity = seeker_knockback_gravity_scale * D_0015ED70;
+            seeker_vars->knockback.speed = seeker_fatal_knockback_xy_scale * D_0015ED6C;
+            seeker_vars->knockback.vertical_speed = seeker_fatal_knockback_z_scale * D_0015ED6C;
+            seeker_vars->knockback.apex_animation_frame = 14.0f;
+            seeker_vars->knockback.landing_animation_frame = 28.0f;
             knock_angle_fatal = fast_arc_tan(moby->pos.x - source->owner->pos.x,
                                              moby->pos.y - source->owner->pos.y);
             *(Q_2C73D0 *)hit_pos = source->pos;
-            func_L00_0025BBA0_2C73D0(
-                hit_pos, &knock_angle_fatal, &seeker_vars->f88, &seeker_vars->f8C);
-            func_L00_0025D5B0_2C73D0(moby, seeker_vars->f70, knock_angle_fatal, 4, 1, 0);
+            func_L00_0025BBA0_2C73D0(hit_pos,
+                                     &knock_angle_fatal,
+                                     &seeker_vars->knockback.speed,
+                                     &seeker_vars->knockback.vertical_speed);
+            func_L00_0025D5B0_2C73D0(moby, &seeker_vars->knockback, knock_angle_fatal, 4, 1, 0);
             mark_moby_for_removal_cf(moby, 0, -1);
             moby->state = SEEKER_STATE_FATAL_KNOCKBACK;
-            seeker_vars->reactTime = 0xF0;
+            seeker_vars->hit_flash.flash_red = 0xF0;
             break;
         case RESPONSE_NONE:
         case RESPONSE_NO_REACTION:
         default:
             break;
         }
-        func_L00_0025E4B0_2C73D0(moby, seeker_vars->react);
+        start_hit_color_flash(moby, &seeker_vars->hit_flash);
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, seeker_vars->react);
+    update_hit_color_flash(moby, &seeker_vars->hit_flash);
     if (seeker_vars->f38 != 0 || moby->command == 1) {
         seeker_vars->retreat =
             truncate_float_to_s32(func_001F9878_2C73D0(random_float_between(180.0f, 240.0f)));

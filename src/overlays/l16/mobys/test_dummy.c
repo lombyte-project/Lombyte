@@ -61,10 +61,10 @@ extern char *D_L16_001B0930[];
 
 typedef struct {
     char          pad00[0x20];
-    float         f20;
-    short         h24;
+    float         health;
+    short         max_health;
     char          pad26[2];
-    unsigned char b28;
+    unsigned char hit_response_class;
     char          pad29[5];
     unsigned char respawn_request_state;
     char          pad2F[0x41];
@@ -165,7 +165,7 @@ void test_dummy_update(unsigned char *moby) {
     case TEST_DUMMY_STATE_INITIALIZE: /* set up: lives, home position, the held child for the variant */
         dummy_data->respawn_request_state = 1;
         if (dummy_data->lives > 0) {
-            MOBY(moby)->unkB4 /= dummy_data->lives;
+            MOBY(moby)->bolts /= dummy_data->lives;
         }
         moby[0x20] = 1;
         moby[0x31] = 0;
@@ -173,9 +173,9 @@ void test_dummy_update(unsigned char *moby) {
         if (random_integer_below(2)) {
             MOBY(moby)->flags |= 0x8000;
         }
-        dummy_data->b28 = 1;
-        dummy_data->h24 = 2;
-        dummy_data->f20 = 2.0f;
+        dummy_data->hit_response_class = 1;
+        dummy_data->max_health = 2;
+        dummy_data->health = 2.0f;
         dummy_data->glow_pulse_phase = random_angle_radians();
         dummy_data->route = find_nearest_test_dummy_door(dummy_data->iCC, moby + 0x10);
         qcopy(dummy_data->spawn, moby + 0x10);
@@ -413,7 +413,7 @@ void test_dummy_update(unsigned char *moby) {
         char *position = (char *)moby + 16;
         char *moby_rotation = (char *)moby + 0x40;
         float burst;
-        dummy_data->f20 = 2.0f;
+        dummy_data->health = 2.0f;
         dummy_data->timer = scale_game_frames(60);
         burst = frame_time_sq * 12.0f;
         FUN_L00_00263fd8(moby,
@@ -471,7 +471,7 @@ void test_dummy_update(unsigned char *moby) {
             if (moby[0x53] != 9) {
                 blend_moby_animation(moby, 9, 0, scale_game_frames(10));
             }
-            dummy_data->f20 = 2.0f;
+            dummy_data->health = 2.0f;
             MOBY(moby)->flags |= 0x1000;
         }
         MOBY(moby)->pos.z = dummy_data->spawn[2] + D_0015ED6C * 3.0f * (float)dummy_data->timer;
@@ -482,8 +482,8 @@ void test_dummy_update(unsigned char *moby) {
 extern int D_L16_0015F5CC;
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 typedef struct {
     char               pad00[0x20];
@@ -602,11 +602,11 @@ void update_test_dummy_damage_and_respawn(void *moby) {
                 dummy_hit_record = 0;
             }
             hit_data->reaction_time = 120;
-            trooper_anim_update(hit_moby, hit_data->reaction);
+            start_hit_color_flash(hit_moby, hit_data->reaction);
         }
     }
     hit_moby->opacity = 255;
-    trooper_anim_finish(hit_moby, hit_data->reaction);
+    update_hit_color_flash(hit_moby, hit_data->reaction);
     if (hit_data->child) {
         moby_point_position(hit_moby, D_L16_001619C8_gp, hit_data->child->position);
         build_moby_bone_transform((char *)hit_moby, D_L16_001619C8_gp, (char *)matrix);
@@ -616,7 +616,7 @@ void update_test_dummy_damage_and_respawn(void *moby) {
         fast_vec_normalize(hit_data->child->matrix[2], hit_data->child->matrix[2], 1.0f);
         update_entity(hit_data->child);
     }
-    trooper_anim_finish(hit_moby, hit_data->reaction);
+    update_hit_color_flash(hit_moby, hit_data->reaction);
 }
 
 extern int D_L16_001ABCC0_u[] __asm__("D_L16_001ABCC0");

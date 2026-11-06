@@ -1,25 +1,26 @@
 #include "types.h"
 
+/* The animation fields of struct Moby (0x50..0x6F). */
 struct InterpolatedStateEntry {
     u8                      pad_0[0x50];
-    u8                      unk50;
-    u8                      unk51;
-    u8                      unk52;
-    u8                      unk53;
-    f32                     unk54;
+    u8                      frame;
+    u8                      prev_frame;
+    u8                      seq;
+    u8                      prev_seq;
+    f32                     anim_time;
     u8                      pad_58[0x10];
-    struct InterpKeyframeA *unk68;
-    struct InterpKeyframeB *unk6C;
+    struct InterpKeyframeA *cur_frame_data;
+    struct InterpKeyframeB *prev_frame_data;
 };
 
 struct InterpKeyframeB {
     u8  pad_0[0x4];
-    s16 unk4;
+    s16 time; /* key time in 1/16 of a 30 Hz frame (ReRAC moby_animation.md frame header +0x4) */
 };
 
 struct InterpKeyframeA {
     u8  pad_0[0x4];
-    s16 unk4;
+    s16 time; /* key time in 1/16 of a 30 Hz frame (ReRAC moby_animation.md frame header +0x4) */
 };
 
 extern float convert_integer_to_float() __asm__("func_001FA6C0");
@@ -31,28 +32,28 @@ f32 compute_interpolated_record_value(struct InterpolatedStateEntry *anim) {
     f32                     weighted_current_record_value;
     u8                      primary_binding_index, secondary_binding_index;
 
-    if (anim->unk52 != 0xFF) {
-        cur_record = anim->unk68;
+    if (anim->seq != 0xFF) {
+        cur_record = anim->cur_frame_data;
     } else {
-        cur_record = anim->unk6C;
+        cur_record = anim->prev_frame_data;
     }
-    if (anim->unk54 == 0.0f) {
-        return convert_integer_to_float(cur_record->unk4) * 0.0625f;
+    if (anim->anim_time == 0.0f) {
+        return convert_integer_to_float(cur_record->time) * 0.0625f;
     }
-    if (anim->unk52 != anim->unk53) {
-        return (convert_integer_to_float(cur_record->unk4) * 0.0625f) + anim->unk54;
+    if (anim->seq != anim->prev_seq) {
+        return (convert_integer_to_float(cur_record->time) * 0.0625f) + anim->anim_time;
     }
-    primary_binding_index = anim->unk50;
-    secondary_binding_index = anim->unk51;
+    primary_binding_index = anim->frame;
+    secondary_binding_index = anim->prev_frame;
     if ((u8)secondary_binding_index >= (u8)primary_binding_index) {
-        next_record = anim->unk6C;
+        next_record = anim->prev_frame_data;
         weighted_current_record_value =
-            convert_integer_to_float(cur_record->unk4) * (1.0f - anim->unk54);
+            convert_integer_to_float(cur_record->time) * (1.0f - anim->anim_time);
         return (weighted_current_record_value +
-                (convert_integer_to_float(next_record->unk4) * anim->unk54)) *
+                (convert_integer_to_float(next_record->time) * anim->anim_time)) *
                0.0625f;
     }
-    return (convert_integer_to_float(cur_record->unk4) * 0.0625f) + anim->unk54;
+    return (convert_integer_to_float(cur_record->time) * 0.0625f) + anim->anim_time;
 }
 
 extern f32 func_0020C9E0(struct InterpolatedStateEntry *) __attribute__((alias("FUN_0020c9e0")));

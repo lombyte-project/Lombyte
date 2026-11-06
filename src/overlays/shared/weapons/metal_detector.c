@@ -70,7 +70,7 @@ typedef struct Vars2d2ee8 {
     s32  unk24; /* 0x24 */
     s32  unk28; /* 0x28 */
     u8   pad2C[4];
-    Vec4 unk30; /* 0x30 */
+    Vec4 bone3_position; /* 0x30: build_moby_bone_transform(moby, 3) */
 } Vars2d2ee8;
 
 typedef struct TargetVars2d2ee8 {
@@ -340,10 +340,10 @@ void metal_detector_update(struct Moby *moby) {
             *(u128 *)scratch_vector = 0;
             build_quaternion_from_axis_rotations(u, scratch_vector);
         }
-        qcopy(&metal_detector_vars->unk30, v);
+        qcopy(&metal_detector_vars->bone3_position, v);
         quaternion_nlerp(D_L00_001E1170, D_L00_001E1170, u, 0.1f);
         build_moby_bone_transform(moby, 3, scratch_vector);
-        qcopy(&metal_detector_vars->unk30, scratch_vector);
+        qcopy(&metal_detector_vars->bone3_position, scratch_vector);
         if (controller_state_lui.pressed & 0x20) {
             metal_detector_vars->unk24 = 0;
             metal_detector_vars->unk28 = 0;

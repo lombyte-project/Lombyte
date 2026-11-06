@@ -6,7 +6,7 @@
 /* Class data block of a moby class in the level file (not a Moby instance). */
 typedef struct MobyClassData {
     u8  pad[0x2C];
-    s32 unk2C;
+    s32 callbacks; /* MobyClass.callbacks */
 } MobyClassData;
 
 extern void
@@ -27,7 +27,7 @@ void register_moby_class(MobyClassData *moby, s32 indexed_textures, s32 material
         assign_moby_class_data(oclass);
         D_0015FF00++;
     } else {
-        D_001B6180[class_slot] = moby->unk2C;
+        D_001B6180[class_slot] = moby->callbacks;
         assign_moby_class_data(oclass);
         D_0015FF00++;
         prepare_resident_class_render_data(moby, indexed_textures, material_map, oclass);

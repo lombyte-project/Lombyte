@@ -16,19 +16,19 @@
 
 struct Ent3 {
     u8 pad0[0x10];
-    u8 unk10;
+    u8 frame_count; /* 0x10: AnimSeq frame count */
 };
 
 struct Ent2 {
     u8           pad0[0x48];
-    struct Ent3 *unk48[1];
+    struct Ent3 *seqs[1]; /* 0x48: MobyClass.seqs */
 };
 
 struct Ent {
     u8           pad0[0x24];
-    struct Ent2 *unk24;
+    struct Ent2 *pclass; /* 0x24: Moby.pclass */
     u8           pad28[0x30];
-    f32          unk58;
+    f32          anim_speed; /* 0x58: Moby.anim_speed */
 };
 
 extern void reset_active_camera_position_and_basis(void) __asm__("func_00218D10");
@@ -69,9 +69,9 @@ void update_menu_system(void) {
         update_fog();
         space_load_in_progress = 1;
         menu_system.help_text_buffer = 0;
-        menu_system.unk10C = 0;
-        menu_system.unk104 = 0;
-        menu_system.unk10 = 0;
+        menu_system.stream_buffer_base = 0;
+        menu_system.preview_workspace = 0;
+        menu_system.graphics_workspace = 0;
         game_mode = 0;
         return;
     }
@@ -118,15 +118,16 @@ void update_menu_system(void) {
             }
             if (flag) {
                 s32 current_animation_index = menu_system.current->moby_anims[j];
-                set_moby_animation(
-                    panel_slots[j],
-                    current_animation_index,
-                    ((struct Ent *)panel_slots[j])->unk24->unk48[current_animation_index]->unk10 -
-                        1);
-                ((struct Ent *)panel_slots[j])->unk58 = -1.0f;
+                set_moby_animation(panel_slots[j],
+                                   current_animation_index,
+                                   ((struct Ent *)panel_slots[j])
+                                           ->pclass->seqs[current_animation_index]
+                                           ->frame_count -
+                                       1);
+                ((struct Ent *)panel_slots[j])->anim_speed = -1.0f;
             } else {
                 set_moby_animation(panel_slots[j], menu_system.next->moby_anims[j], 0);
-                ((struct Ent *)panel_slots[j])->unk58 = 1.0f;
+                ((struct Ent *)panel_slots[j])->anim_speed = 1.0f;
             }
         }
         menu_system.state = MENU_SYSTEM_STATE_PAGE_TRANSITION_PENDING;

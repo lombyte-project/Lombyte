@@ -6,7 +6,7 @@
 
 struct HudSlot {
     u8  pad_0[0x18];
-    s32 unk18;
+    s32 update; /* 0x18: called with the slot each frame when set */
 };
 
 extern s32 hud_msg_count __asm__("D_0015F680");
@@ -28,17 +28,17 @@ void update_hud(void) {
     s32   raised_alpha;
     s32   lowered_alpha;
     s32   remaining;
-    if (hud_state.unk30 == 0) {
+    if (hud_state.skip_update == 0) {
         goto block_2;
     }
-    hud_state.unk30 = 0;
+    hud_state.skip_update = 0;
     return;
 block_2:
     if (occl_chain_active == 0) {
         goto block_5;
     }
 
-    hud_state.unk30 = 0;
+    hud_state.skip_update = 0;
     return;
 block_5:
     slot = hud_chan_slots;
@@ -46,7 +46,7 @@ block_5:
     hud_state.z = 0xFFFFF0;
     remaining = 0xC;
 loop_6:
-    update_fn = ((struct HudSlot *)slot)->unk18;
+    update_fn = ((struct HudSlot *)slot)->update;
 
     if (update_fn == 0) {
         goto block_8;

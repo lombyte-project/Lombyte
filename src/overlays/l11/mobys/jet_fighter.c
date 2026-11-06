@@ -1452,7 +1452,7 @@ void jet_fighter_update(struct Moby *moby) {
                 ship_vars->fB8 = 0.0f;
                 g->moby->collision_disable = -1;
                 moby->scale = moby->pclass->scale * D_L11_0016208C;
-                g->unk20A5 = 1;
+                g->hidden = 1;
             }
             break;
         case JET_FIGHTER_STATE_FLIGHT:
@@ -1482,11 +1482,11 @@ void jet_fighter_update(struct Moby *moby) {
         case JET_FIGHTER_STATE_DISMOUNT: {
             char        *p;
             struct Hero *g = &hero;
-            g->unk20A5 = 0;
+            g->hidden = 0;
             g->moby->collision_disable = 0;
             FUN_L11_0024db50(0, 1);
             jet_end_mount(0);
-            set_animation_parameter(g->unk160C, 0);
+            set_animation_parameter(g->ship_hud_handle, 0);
             request_music_track(0, 8);
             qcopy_nc(&moby->pos, ship_vars->home_pos);
             qcopy_nc(&moby->rot, ship_vars->home_rot);
@@ -1532,7 +1532,7 @@ void jet_fighter_update(struct Moby *moby) {
                 if (ship_vars->fade >= 1.0f) {
                     char        *p;
                     struct Hero *g = &hero;
-                    g->unk20A5 = 0;
+                    g->hidden = 0;
                     g->moby->collision_disable = 0;
                     FUN_L11_0024db50(0, 1);
                     jet_end_mount(0);

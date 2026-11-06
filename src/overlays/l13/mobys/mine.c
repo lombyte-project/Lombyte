@@ -109,15 +109,15 @@ void level_13_mine_update(ProjectileMoby *moby) {
     short           cls_id;
 
     moby->scale += ((moby->cls->scale + moby->cls->scale) - moby->scale) * (D_0015ED60 * 0.1f);
-    if ((moby->pad50[0x20] & 2) != 0 && (unsigned char)moby->pad50[2] != 2 &&
-        (unsigned char)moby->pad50[3] != 2) {
+    if ((moby->anim_flags & 2) != 0 && (unsigned char)moby->seq != 2 &&
+        (unsigned char)moby->prev_seq != 2) {
         blend_moby_animation(moby, 2, 0, 10);
     }
     pos = &moby->pos;
     velocity = (ProjectileVec4 *)(moby_data + 0x60);
     hero_state = (ProjectileHero *)D_0013F350;
     if (hero_state->veh != 0 && (distance = fast_vec_dist(pos, &hero_state->veh->pos)) < 60.0f &&
-        moby->b31 != 0) {
+        moby->visible != 0) {
         factor = 1.0f - distance / 60.0f;
         if (factor > 1.0f)
             factor = 1.0f;
@@ -171,7 +171,7 @@ void level_13_mine_update(ProjectileMoby *moby) {
                 flags = 0;
         }
         if (flags != 0) {
-            if (moby->b31 != 0) {
+            if (moby->visible != 0) {
                 if ((flags & 0x2000) != 0) {
                     func_L00_0025F4A8_alt(moby,
                                           velocity,
@@ -216,7 +216,7 @@ void level_13_mine_update(ProjectileMoby *moby) {
             return;
         }
     }
-    if (fast_dec_timer(moby_data + 0x70) != 0 && moby->b31 == 0) {
+    if (fast_dec_timer(moby_data + 0x70) != 0 && moby->visible == 0) {
         mark_moby_for_removal(moby);
     }
 }

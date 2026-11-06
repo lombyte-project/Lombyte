@@ -1,9 +1,9 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L05_MOBYS_TRIGGERED_PARTICLE_SPRAY_EMITTER_DATA_UPDATE_TRIGGERED_PARTICLE_SPRAY_EMITTER_H
-#define LOMBYTE_RNC_OVERLAY_L05_MOBYS_TRIGGERED_PARTICLE_SPRAY_EMITTER_DATA_UPDATE_TRIGGERED_PARTICLE_SPRAY_EMITTER_H
+#ifndef LOMBYTE_RNC_OVERLAY_L05_MOBYS_MOBY_855_DATA_MOBY_855_UPDATE_H
+#define LOMBYTE_RNC_OVERLAY_L05_MOBYS_MOBY_855_DATA_MOBY_855_UPDATE_H
 
 #include "types.h"
 
-/* Scalar data for src/overlays/l05/mobys/triggered_particle_spray_emitter.c.
+/* Scalar data for src/overlays/l05/mobys/moby_855.c.
  * Keep its include at this declaration block: SN small-data ordering matters. */
 extern int   spray_big_particle_kind_gp __asm__("D_L05_00161E98") __attribute__((sda));
 extern int   spray_small_particle_kind_gp __asm__("D_L05_00161E9C") __attribute__((sda));
@@ -20,4 +20,4 @@ extern float spray_particle_count_limit_per_update_gp __asm__("D_L05_00161EB8")
 extern float spray_big_particle_selection_threshold_percent_gp __asm__("D_L05_00161EBC")
     __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L05_MOBYS_TRIGGERED_PARTICLE_SPRAY_EMITTER_DATA_UPDATE_TRIGGERED_PARTICLE_SPRAY_EMITTER_H */
+#endif /* LOMBYTE_RNC_OVERLAY_L05_MOBYS_MOBY_855_DATA_MOBY_855_UPDATE_H */

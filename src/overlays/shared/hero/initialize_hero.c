@@ -15,7 +15,8 @@
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 
-extern Vec4           D_0013E090[2] NOT_SDA; /* camera start: position, rotation */
+extern Vec4 D_0013E090
+    [2] NOT_SDA; /* LevelRenderState.hero_start_pos and hero_start_rot: where the landing scene places the hero */
 extern s32 D_00141660 NOT_SDA;
 
 #include "rnc/overlay/shared/world/level_labels.h"
@@ -52,7 +53,7 @@ void initialize_hero(void) {
             if (z > 0.0f)
                 hero.moby->pos.z = z;
             hero.moby->flags |= 2;
-            hero.unkA88 = (u8 *)hero.moby;
+            hero.base_moby = (u8 *)hero.moby;
             hero.motion.rot.f[2] = hero.moby->rot.z;
             qcopy(&hero.motion.pos, &hero.moby->pos);
             update_hero_ground_contact_and_surface_slopes();
@@ -76,7 +77,7 @@ void initialize_hero(void) {
         clear_u64_value(&hero_eases_lui[i].pos);
         clear_u64_value(&hero_eases_lui[i].pos_vel);
     }
-    /* the eight voice slots unk2218..unk2234 as one array, indexed from the hero base */
+    /* the eight voice slots grind_voice..0x2234 as one array, indexed from the hero base */
     for (i = 0; i < 8; i++)
         ((struct {
             u8  pad[0x2218];
@@ -87,9 +88,9 @@ void initialize_hero(void) {
     hero.reach_distance = 2.125f;
     hero.reach_height = 1.25f;
     hero.health.vehicle_mode_hp = 4;
-    hero.health.unk22B0 = hero.health.hp;
-    hero.unk1010 = random_int_between(scale_game_frames(0xB4), scale_game_frames(0x12C));
+    hero.health.saved_hp = hero.health.hp;
+    hero.head_look_timer = random_int_between(scale_game_frames(0xB4), scale_game_frames(0x12C));
     hero.idle_look_ease_rate = 0.007f;
-    hero.unk1018 = 0.3f;
-    hero.unkD20 = 0.97f;
+    hero.idle_look_damping = 0.3f;
+    hero.shadow_pitch = 0.97f;
 }

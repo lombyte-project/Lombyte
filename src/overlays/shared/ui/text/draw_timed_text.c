@@ -1,5 +1,6 @@
 /* Text: draws timed text lines. */
 #include "types.h"
+#include "rnc/overlay/shared/ui/text.h"
 #include "asm.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/ui/help/get_help_message_text.h"
@@ -45,16 +46,6 @@ void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char
     enable_font_color_codes();
 }
 /* Ported from rac1-decomp (src/overlays/shared/draw_001F3A78.c: func_L00_001FCC50), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    s32 text_id;
-    s16 x;
-    s16 y;
-    s16 start;
-    s16 duration;
-    s16 mode;
-    s16 separator_mode;
-} LevelTextEntry;
 
 void draw_timed_text(LevelTextEntry *entry, s32 frame) __asm__("FUN_L00_001fcca0");
 

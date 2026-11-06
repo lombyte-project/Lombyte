@@ -327,7 +327,7 @@ void devastator_update(struct Moby *devastator_moby) {
         devastator_vars->light = -1;
         devastator_vars->glow = 0;
     }
-    copy_matrix3x4(&rotation, l00_camera.unk0);
+    copy_matrix3x4(&rotation, l00_camera.view_matrix);
     transpose_rotation_matrix(&inverse, &rotation);
     fast_dec_timer(&devastator_vars->cooldown);
     if (fast_dec_timer(&devastator_vars->target_timer) ||
@@ -505,7 +505,7 @@ void devastator_update(struct Moby *devastator_moby) {
             if (scale_game_frames(D_0015EEA4) / 600 > stats->longest)
                 stats->longest = scale_game_frames(D_0015EEA4) / 600;
             stats->levels = (stats->levels | (1 << current_level_index)) | 0x80000000;
-            if (hero.unk22C8 == 1 && hero.state.current != 30) {
+            if (hero.weapon_lowered == 1 && hero.state.current != 30) {
                 pitch = D_L00_0017ACF4_lui;
                 yaw = devastator_moby->rot.z;
                 aim_info = get_moby_target_info(devastator_vars->target);

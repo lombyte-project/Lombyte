@@ -16,12 +16,12 @@
 
 typedef struct {
     u8  pad0[0x20];
-    s32 unk20;
-    s16 unk24;
+    s32 health;
+    s16 max_health;
     u8  pad26[2];
-    u8  unk28;
+    u8  hit_weight; /* 0x28: enemy target info at pvars+0x20, see moby_target_info.h */
     u8  pad29[0x15];
-    s16 unk3E;
+    s16 target_flags; /* 0x3E: MobyTargetInfo.flags; target info at pvars+0x20 */
     u8  pad40[0x20];
     u8  carry[0x40]; /* 0x60: carried-object state for update_entity_matrix */
     u8  start_end;   /* 0xA0: 0 starts at the far end */
@@ -36,7 +36,7 @@ typedef struct {
     f32 rise;         /* 0xBC: height gained this frame */
     s32 trigger;      /* 0xC0: clip volume that activates it, -1 once active */
     s32 voice;        /* 0xC4 */
-    s32 silent;       /* 0xC8 */
+    s32 free_ride;    /* 0xC8: nonzero: the hero is not locked while riding */
     s32 show_volume;  /* 0xCC: clip volume that makes it visible, -1 once shown */
     f32 ease[3];      /* 0xD0: per-axis easing state for vendor_spring */
 } PathMoverVars;
@@ -120,10 +120,10 @@ void path_mover_update(struct Moby *moby) {
         f32   t;
         Vec4 *points;
 
-        path_mover_vars->unk28 = 4;
-        path_mover_vars->unk3E = 5;
-        path_mover_vars->unk20 = 0;
-        path_mover_vars->unk24 = 0;
+        path_mover_vars->hit_weight = 4;
+        path_mover_vars->target_flags = 5;
+        path_mover_vars->health = 0;
+        path_mover_vars->max_health = 0;
         t = 0.0f;
         if ((moby->command = path_mover_vars->start_end) == 0) {
             t = 1.0f;
@@ -170,9 +170,9 @@ void path_mover_update(struct Moby *moby) {
         }
         break;
     case PATH_MOVER_COMMAND_TRAVERSE_PATH:
-        if (path_mover_vars->silent == 0 && is_hero_on_moby(moby)) {
+        if (path_mover_vars->free_ride == 0 && is_hero_on_moby(moby)) {
             hero.jump_lock_timer = 4;
-            hero.unk1F4 = 4;
+            hero.edge_brake_lock_timer = 4;
         }
         if (path_mover_vars->wait != 0 ||
             (path_mover_vars->rise < 0.0f &&

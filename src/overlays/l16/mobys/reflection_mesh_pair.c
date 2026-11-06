@@ -62,11 +62,13 @@ extern float
     reflection_mesh_pair_positions_0[330] __asm__("D_L16_001DE150"); /* 110 points x 3 floats */
 extern float
     reflection_mesh_pair_positions_1[39] __asm__("D_L16_001DE678"); /* 13 points x 3 floats */
-extern float D_L16_001DE720[];
-extern float D_L16_001DEA90[];
+extern float
+    reflection_mesh_pair_unused_pairs_0[220] __asm__("D_L16_001DE720"); /* 110 points x 2 floats */
+extern float
+    reflection_mesh_pair_unused_pairs_1[26] __asm__("D_L16_001DEA90"); /* 13 points x 2 floats */
 
-float *reflection_mesh_pair_unused_pair_tables[2] __asm__("D_L16_00161FA0") = {D_L16_001DE720,
-                                                                               D_L16_001DEA90};
+float *reflection_mesh_pair_unused_pair_tables[2] __asm__("D_L16_00161FA0") = {
+    reflection_mesh_pair_unused_pairs_0, reflection_mesh_pair_unused_pairs_1};
 
 extern float
     reflection_mesh_pair_directions_0[330] __asm__("D_L16_001DEAF8"); /* 110 points x 3 floats */
@@ -212,11 +214,18 @@ float *reflection_mesh_batch_position_tables[4] __asm__("D_L16_00161FC8")
                                           reflection_mesh_batch_positions_2,
                                           0};
 
-extern float D_L16_001E0810[];
-extern float D_L16_001E0CB0[];
-extern float D_L16_001E1150[];
-float       *reflection_mesh_batch_unused_pair_tables[4] __asm__("D_L16_00161FD8")
-    __attribute__((section(".sdata"))) = {D_L16_001E0810, D_L16_001E0CB0, D_L16_001E1150, 0};
+extern float
+    reflection_mesh_batch_unused_pairs_0[296] __asm__("D_L16_001E0810"); /* 148 points x 2 floats */
+extern float
+    reflection_mesh_batch_unused_pairs_1[296] __asm__("D_L16_001E0CB0"); /* 148 points x 2 floats */
+extern float
+    reflection_mesh_batch_unused_pairs_2[106] __asm__("D_L16_001E1150"); /* 53 points x 2 floats */
+float *reflection_mesh_batch_unused_pair_tables[4] __asm__("D_L16_00161FD8")
+
+    __attribute__((section(".sdata"))) = {reflection_mesh_batch_unused_pairs_0,
+                                          reflection_mesh_batch_unused_pairs_1,
+                                          reflection_mesh_batch_unused_pairs_2,
+                                          0};
 
 extern float
     reflection_mesh_batch_directions_0[444] __asm__("D_L16_001E12F8"); /* 148 points x 3 floats */
@@ -737,3 +746,90 @@ u32 reflection_mesh_batch_colours_2[53] __asm__("D_L16_001E27F8") = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f};
+
+float reflection_mesh_pair_unused_pairs_0[220] __asm__("D_L16_001DE720") = {
+    1.0f, -1.0f, 0.5f, -1.0f, 1.0f, -0.5f, 0.5f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,
+    0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f, 0.0f, -0.5f, 0.5f, -1.0f, 0.0f, -0.5f, 0.0f, -1.0f,
+    1.0f, -0.5f, 0.5f, -1.0f, 1.0f, -0.5f, 0.5f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,
+    0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f, 0.0f, -0.5f, 0.5f, -1.0f, 0.0f, -0.5f, 0.0f, -1.0f,
+    1.0f, -0.5f, 0.5f, -1.0f, 1.0f, -0.5f, 0.5f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,
+    0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f, 0.0f, -0.5f, 0.5f, -1.0f, 0.0f, -0.5f, 0.0f, -1.0f,
+    1.0f, -0.5f, 0.5f, -1.0f, 1.0f, -0.5f, 0.5f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,
+    0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f, 0.0f, -0.5f, 0.5f, -1.0f, 0.0f, -0.5f, 0.0f, -1.0f,
+    1.0f, -0.5f, 0.5f, -1.0f, 1.0f, -0.5f, 0.5f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,
+    0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f, 0.0f, -0.5f, 0.5f, -1.0f, 0.0f, -0.5f, 0.0f, -1.0f,
+    1.0f, -0.5f, 0.5f, -1.0f, 1.0f, -0.5f, 0.5f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,
+    0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f, 0.0f, -0.5f, 0.5f, -1.0f, 0.0f, -0.5f, 0.0f, -1.0f,
+    1.0f, -0.5f, 0.5f, -1.0f, 1.0f, -0.5f, 0.5f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,
+    0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f, 0.0f, -0.5f, 0.5f, -1.0f, 0.0f, -0.5f, 0.0f, -1.0f,
+    0.5f, -0.5f, 0.5f, -1.0f, 0.5f, -0.5f, 0.0f, -1.0f, 0.5f, -0.5f, 0.0f, -0.5f, 0.5f, -0.5f,
+    0.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,  1.0f, -0.5f, 1.0f, 0.0f,
+};
+
+float reflection_mesh_pair_unused_pairs_1[26] __asm__("D_L16_001DEA90") = {
+    1.0f, -1.0f, 0.5f,  -1.0f, 1.0f, -0.5f, 0.5f,  -0.5f, 1.0f,  0.0f, 0.5f,  -0.5f, 0.5f,
+    0.0f, 0.5f,  -0.5f, 0.0f,  0.0f, 0.5f,  -0.5f, 0.0f,  -0.5f, 0.5f, -1.0f, 0.0f,  -1.0f,
+};
+
+float reflection_mesh_batch_unused_pairs_0[296] __asm__("D_L16_001E0810") = {
+    1.0f,  0.0f,  1.0f,  -1.0f, 0.75f, 0.0f,  0.75f, -1.0f, 0.5f,  0.0f,  0.5f,  -1.0f, 0.25f,
+    0.0f,  0.25f, -1.0f, 0.0f,  0.0f,  0.0f,  -1.0f, 0.75f, 0.0f,  0.75f, -1.0f, 0.5f,  0.0f,
+    0.5f,  -1.0f, 0.25f, 0.0f,  0.25f, -1.0f, 0.0f,  0.0f,  0.0f,  -1.0f, 0.75f, 0.0f,  0.75f,
+    -1.0f, 0.5f,  0.0f,  0.5f,  -1.0f, 0.25f, 0.0f,  0.25f, -1.0f, 0.0f,  0.0f,  0.0f,  -1.0f,
+    0.75f, 0.0f,  0.75f, -1.0f, 0.5f,  0.0f,  0.5f,  -1.0f, 0.25f, 0.0f,  0.25f, -1.0f, 0.0f,
+    0.0f,  0.0f,  -1.0f, 0.75f, 0.0f,  0.75f, -1.0f, 0.5f,  0.0f,  0.5f,  -1.0f, 0.25f, 0.0f,
+    0.25f, -1.0f, 0.25f, 0.0f,  0.0f,  -1.0f, 0.25f, 0.0f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
+    1.0f,  0.25f, 0.0f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.25f, 0.0f,  0.0f,  0.0f,
+    1.0f,  1.0f,  0.0f,  1.0f,  0.25f, -1.0f, 0.0f,  0.0f,  0.25f, -1.0f, 0.25f, 0.0f,  0.5f,
+    -1.0f, 0.5f,  0.0f,  0.75f, -1.0f, 0.75f, 0.0f,  1.0f,  -1.0f, 1.0f,  0.0f,  0.25f, -1.0f,
+    0.25f, 0.0f,  0.5f,  -1.0f, 0.5f,  0.0f,  0.75f, -1.0f, 0.75f, 0.0f,  1.0f,  -1.0f, 1.0f,
+    0.0f,  0.25f, -1.0f, 0.25f, 0.0f,  0.5f,  -1.0f, 0.5f,  0.0f,  0.75f, -1.0f, 0.75f, 0.0f,
+    1.0f,  -1.0f, 1.0f,  0.0f,  0.25f, -1.0f, 0.25f, 0.0f,  0.5f,  -1.0f, 0.5f,  0.0f,  0.75f,
+    -1.0f, 0.75f, 0.0f,  1.0f,  -1.0f, 1.0f,  0.0f,  0.25f, -1.0f, 0.25f, 0.0f,  0.5f,  -1.0f,
+    0.5f,  0.0f,  0.75f, -1.0f, 0.75f, 0.0f,  0.75f, -1.0f, 1.0f,  0.0f,  0.75f, -1.0f, 1.0f,
+    -1.0f, 0.0f,  0.0f,  1.0f,  0.0f,  0.75f, -1.0f, 1.0f,  -1.0f, 0.0f,  0.0f,  1.0f,  0.0f,
+    0.75f, -1.0f, 1.0f,  -1.0f, 0.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+    1.0f,  0.0f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+    0.0f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+    0.0f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+    0.0f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+    1.0f,  0.0f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+    0.0f,  0.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,  1.0f,
+};
+
+float reflection_mesh_batch_unused_pairs_1[296] __asm__("D_L16_001E0CB0") = {
+    1.0f,  1.0f,  0.0f,  1.0f,  0.5f,  0.0f,  0.25f, 0.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.5f,
+    0.0f,  0.25f, 0.0f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,  1.0f,  1.0f,  1.0f,  0.0f,
+    1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  1.0f,  1.0f,  0.0f,  1.0f,
+    1.0f,  1.0f,  0.0f,  1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+    1.0f,  0.0f,  1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+    0.0f,  1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  1.0f,  1.0f,  0.0f,
+    1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+    1.0f,  0.0f,  0.0f,  1.0f,  0.0f,  0.5f,  -1.0f, 0.75f, -1.0f, 0.0f,  0.0f,  1.0f,  0.0f,
+    0.5f,  0.0f,  0.75f, -1.0f, 0.5f,  0.0f,  0.5f,  -1.0f, 0.25f, 0.0f,  0.25f, -1.0f, 0.0f,
+    0.0f,  0.0f,  -1.0f, 0.75f, 0.0f,  0.75f, -1.0f, 0.5f,  0.0f,  0.5f,  -1.0f, 0.25f, 0.0f,
+    0.25f, -1.0f, 0.0f,  0.0f,  0.0f,  -1.0f, 0.75f, 0.0f,  0.75f, -1.0f, 0.5f,  0.0f,  0.5f,
+    -1.0f, 0.25f, 0.0f,  0.25f, -1.0f, 0.0f,  0.0f,  0.0f,  -1.0f, 0.75f, 0.0f,  0.75f, -1.0f,
+    0.5f,  0.0f,  0.5f,  -1.0f, 0.25f, 0.0f,  0.25f, -1.0f, 0.0f,  0.0f,  0.0f,  -1.0f, 0.75f,
+    0.0f,  0.75f, -1.0f, 0.75f, 0.0f,  0.5f,  -1.0f, 0.75f, 0.0f,  0.5f,  0.0f,  1.0f,  1.0f,
+    0.0f,  1.0f,  0.75f, -1.0f, 0.5f,  0.0f,  0.75f, -1.0f, 0.75f, 0.0f,  0.75f, -1.0f, 1.0f,
+    0.0f,  0.75f, -1.0f, 1.0f,  -1.0f, 0.0f,  0.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+    1.0f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  0.25f, -1.0f, 0.25f, 0.0f,  0.25f,
+    -1.0f, 0.5f,  0.0f,  0.25f, -1.0f, 0.5f,  -1.0f, 0.0f,  0.0f,  1.0f,  1.0f,  1.0f,  0.0f,
+    0.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,  0.5f,  0.0f,  0.75f, -1.0f, 0.75f,
+    0.0f,  0.75f, -1.0f, 1.0f,  0.0f,  0.75f, -1.0f, 1.0f,  -1.0f, 0.0f,  0.0f,  1.0f,  1.0f,
+    1.0f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  0.25f,
+    -1.0f, 0.25f, 0.0f,  0.25f, -1.0f, 0.5f,  0.0f,  0.25f, -1.0f, 0.5f,  -1.0f, 0.0f,  0.0f,
+    1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+};
+
+float reflection_mesh_batch_unused_pairs_2[106] __asm__("D_L16_001E1150") = {
+    1.0f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,  0.5f, 0.0f, 0.75f, -1.0f, 0.75f, 0.0f,  0.75f, -1.0f,
+    1.0f,  0.0f,  0.75f, -1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+    1.0f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,  0.0f, 0.0f, 0.25f, -1.0f, 0.25f, 0.0f,  0.25f, -1.0f,
+    0.5f,  0.0f,  0.25f, -1.0f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+    1.0f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,  0.5f, 0.0f, 0.75f, -1.0f, 0.75f, 0.0f,  0.75f, -1.0f,
+    1.0f,  0.0f,  0.75f, -1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+    1.0f,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,  0.0f, 1.0f, 1.0f,  1.0f,  0.25f, -1.0f, 0.5f,  0.0f,
+    0.25f, -1.0f, 0.25f, 0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
+};

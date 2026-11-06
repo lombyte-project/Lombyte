@@ -29,8 +29,7 @@ extern char fallback_label_text[] __asm__("D_00160288");
 extern void setup_gif_paging(int) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern long get_effect_texture(int) __asm__("func_001F44B8");
-extern void
-font_print_window(struct TextRegion *, long, char *, int, long, u8 *) __asm__("func_001F7090");
+extern void font_print_window(struct TextRegion *, long, char *, int, long, struct Glyph *) __asm__("func_001F7090");
 extern int   scale_game_frames(int) __asm__("func_001F96F8");
 extern s32   fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
 extern char *get_help_message_text(int) __asm__("func_001FDD10");
@@ -42,7 +41,7 @@ int render_configured_text_label(struct MenuScreen *label) __asm__("FUN_0021a328
 
 int render_configured_text_label(struct MenuScreen *label) {
     char                 formatted_text[64];
-    u8                  *font;
+    struct Glyph        *font;
     int                  font_texture_index;
     char                *text;
     int                  value_variant;

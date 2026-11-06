@@ -123,7 +123,7 @@ extern u8                 point_lights[] __asm__("D_0019C1C0");
 extern u8                 D_001AAA40[];
 extern u8                 D_001CD780[];
 extern u8                 object_render_class_slot_by_id[] __asm__("D_001E1A00");
-extern char               too_many_directional_lights_message[] __asm__("D_001E76D8");
+extern const char         too_many_directional_lights_message[] __asm__("D_001E76D8");
 
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern void update_fog(void) __asm__("func_001F2588");
@@ -291,7 +291,7 @@ u8 *initialize_level_render_state(LevelHeader *header) {
         qcopy(&tie_data->m[3], tie_record + 0x40);
         tie->x18 = tie_unk18;
         tie_record += 0x50;
-        tie_data->m[3].w = object_render_classes[tie->cls]->unk40;
+        tie_data->m[3].w = object_render_classes[tie->cls]->position_scale;
         transform_vector_by_basis(tie, object_render_classes[tie->cls]->bounding_sphere, tie_data);
         max_axis_length = fast_vec_length(&tie_data->m[0]);
         max_axis_length = max_float(max_axis_length, fast_vec_length(&tie_data->m[1]));
@@ -375,7 +375,8 @@ u8 *initialize_level_render_state(LevelHeader *header) {
         qcopy(&shrub_data->m[2], shrub_record + 0x30);
         qcopy(&shrub_data->translation_and_position_scale, shrub_record + 0x40);
         shrub_record += 0x50;
-        shrub_data->translation_and_position_scale.w = shrub_render_classes[shrub_class]->unk20;
+        shrub_data->translation_and_position_scale.w =
+            shrub_render_classes[shrub_class]->position_scale;
         horizontal_scale =
             (fast_vec_length(&shrub_data->m[0]) + fast_vec_length(&shrub_data->m[1])) * 0.5f;
         vertical_scale = fast_vec_length(&shrub_data->m[2]);
@@ -479,3 +480,6 @@ MobyGrids moby_grids = {0};
 u32 moby_grid_block_bitmap[24] = {0};
 
 ShrubInstance *shrubs = 0;
+
+const char too_many_directional_lights_message[] __asm__("D_001E76D8") =
+    "!!!! Too many directional lights !!!! - Lighting will look bogus as a penalty.\n";

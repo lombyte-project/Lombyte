@@ -1,5 +1,6 @@
 /* Level 13 Blarg space commando moby class: damage, targeting, ground motion and its trail (points, quads and sparks). */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
@@ -22,6 +23,7 @@
 #include "rnc/rendering/effects/spawn_spark.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/rendering/effect_texture.h"
+#include "rnc/overlay/shared/mobys/ground_move_control.h"
 
 enum {
     BLARG_SPACE_COMMANDO_INITIALIZE = 0,
@@ -74,9 +76,9 @@ extern char D_L13_001670C0[];
 
 extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 
-extern void trooper_anim_update(struct Moby *, void *) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(struct Moby *, void *) __asm__("FUN_L00_0025d458");
 
-extern void trooper_anim_finish(struct Moby *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(struct Moby *, void *) __asm__("FUN_L00_0025d538");
 
 typedef struct {
     u8  pad0[0x18];
@@ -87,48 +89,38 @@ typedef struct {
 } Shot;
 
 typedef struct {
-    s32 unk0;
-    f32 unk4;
-    f32 unk8;
-    f32 unkC;
-    u8  pad10[0x14];
-    f32 unk24;
-    u8  pad28[0x18];
-} Ctl;
-
-typedef struct {
-    u8           pad0[0x20];
-    f32          unk20;
-    s16          unk24;
-    u8           pad26[2];
-    u8           unk28;
-    u8           pad29[7];
-    f32          unk30;
-    u8           pad34[0x24];
-    u8           unk58;
-    u8           pad59;
-    u8           unk5A;
-    u8           pad5B[5];
-    Vec4         vel; /* 0x60 */
-    u8           pad70[0x50];
-    Ctl          ctl; /* 0xC0 */
-    u8           pad100[0x60];
-    struct Moby *target; /* 0x160 */
-    s32          unk164;
-    u8           pad168[8];
-    Vec4         home; /* 0x170 */
-    u8           pad180[4];
-    s32          unk184;
-    f32          turn; /* 0x188 */
-    u8           pad18C[8];
-    s32          timer; /* 0x194 */
-    s32          path;  /* 0x198 */
-    u8           pad19C[0xC];
-    f32          approach_heading_offset;
-    u8           pad1AC[0x34];
-    Vec4         unk1E0;
-    u8           pad1F0[0x210];
-    u8           unk400[1];
+    u8   pad0[0x20];
+    f32  health;
+    s16  max_health;
+    u8   pad26[2];
+    u8   hit_response_class;
+    u8   pad29[7];
+    f32  aim_height; /* 0x30: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8   pad34[0x24];
+    u8   look_range;
+    u8   pad59;
+    u8   look_height;
+    u8   pad5B[5];
+    Vec4 vel; /* 0x60 */
+    u8   pad70[0x50];
+    struct GroundMoveControl ctl; /* 0xC0 */
+    u8                       pad110[0x50];
+    struct Moby             *target; /* 0x160 */
+    s32                      target_selection_status;
+    u8                       pad168[8];
+    Vec4                     home; /* 0x170 */
+    u8                       pad180[4];
+    s32                      pursuit_timer;
+    f32                      turn; /* 0x188 */
+    u8                       pad18C[8];
+    s32                      timer; /* 0x194 */
+    s32                      path;  /* 0x198 */
+    u8                       pad19C[0xC];
+    f32                      approach_heading_offset;
+    u8                       pad1AC[0x34];
+    Vec4                     muzzle_position;
+    u8                       pad1F0[0x210];
+    u8                       big_head_manipulator[1];
 } Vars_309330;
 
 extern int move_moby_with_ground_and_collision_checks(
@@ -169,8 +161,6 @@ resolve_point_path_segment_xy_clearance(int, void *, void *, float) __asm__("FUN
 
 extern void FUN_L00_00263ac8(float, struct Moby *, int, void *);
 
-extern void FUN_L01_0026d930(void *);
-
 extern void FUN_L13_00308d10_c(struct Moby *) __asm__("FUN_L13_00308d10");
 
 extern void FUN_L13_00309370_c(char *m) __asm__("FUN_L13_00309370");
@@ -204,29 +194,30 @@ void blarg_space_commando_update(struct Moby *moby) {
 
     FUN_L13_00308d10_c(moby);
     target = blarg_space_commando_vars->target;
-    FUN_L00_00263ac8(2.5f, moby, 1, blarg_space_commando_vars->unk400);
+    FUN_L00_00263ac8(2.5f, moby, 1, blarg_space_commando_vars->big_head_manipulator);
     if (moby->visible != 0 && fast_vec_dist(&moby->pos, D_L13_001670C0) < 28.0f) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 0x16;
     }
     switch (moby->state) {
     case BLARG_SPACE_COMMANDO_INITIALIZE:
-        blarg_space_commando_vars->unk20 = 2.0f;
-        blarg_space_commando_vars->unk28 = 1;
-        blarg_space_commando_vars->unk58 = 12;
-        blarg_space_commando_vars->unk5A = 8;
-        blarg_space_commando_vars->unk24 = 2;
-        blarg_space_commando_vars->unk30 = 1.5f;
-        FUN_L01_0026d930(&blarg_space_commando_vars->ctl);
-        blarg_space_commando_vars->ctl.unk8 = 2.0f;
-        blarg_space_commando_vars->ctl.unkC = 0.5f;
-        blarg_space_commando_vars->ctl.unk0 = truncate_float_to_s32(D_L13_00161E58_gp * 716.8f);
-        blarg_space_commando_vars->ctl.unk4 = D_L13_00161E58_gp * 0.7f;
-        blarg_space_commando_vars->ctl.unk24 =
+        blarg_space_commando_vars->health = 2.0f;
+        blarg_space_commando_vars->hit_response_class = 1;
+        blarg_space_commando_vars->look_range = 12;
+        blarg_space_commando_vars->look_height = 8;
+        blarg_space_commando_vars->max_health = 2;
+        blarg_space_commando_vars->aim_height = 1.5f;
+        init_ground_move_control(&blarg_space_commando_vars->ctl);
+        blarg_space_commando_vars->ctl.max_drop = 2.0f;
+        blarg_space_commando_vars->ctl.max_climb = 0.5f;
+        blarg_space_commando_vars->ctl.collision_radius_1024ths =
+            truncate_float_to_s32(D_L13_00161E58_gp * 716.8f);
+        blarg_space_commando_vars->ctl.step_height = D_L13_00161E58_gp * 0.7f;
+        blarg_space_commando_vars->ctl.max_speed =
             l13_blarg_space_commando_horizontal_speed_limit_base * frame_time *
             random_float_between(0.95f, 1.05f);
         qcopy(&blarg_space_commando_vars->home, &moby->pos);
-        moby_point_position(moby, 0, &blarg_space_commando_vars->unk1E0);
+        moby_point_position(moby, 0, &blarg_space_commando_vars->muzzle_position);
         moby->state = BLARG_SPACE_COMMANDO_FACE_TARGET_AND_SELECT_ACTION;
         break;
     case BLARG_SPACE_COMMANDO_FACE_TARGET_AND_SELECT_ACTION:
@@ -236,7 +227,7 @@ void blarg_space_commando_update(struct Moby *moby) {
                        frame_time_sq * 6.2831855f,
                        frame_time_sq * 6.2831855f,
                        frame_time * 3.1415927f);
-        if (blarg_space_commando_vars->unk164 != 2) {
+        if (blarg_space_commando_vars->target_selection_status != 2) {
             f32 dist = vector_distance_xy(&moby->pos, &target->pos);
             if (l13_blarg_space_commando_probe_trigger_distance_xy < dist) {
                 if (fast_difference_between_rotations(
@@ -259,7 +250,7 @@ void blarg_space_commando_update(struct Moby *moby) {
                     blend_moby_animation(moby, 6, 0, scale_game_frames(10));
                 }
             }
-        } else if (blarg_space_commando_vars->unk184 != 0) {
+        } else if (blarg_space_commando_vars->pursuit_timer != 0) {
             moby->state = BLARG_SPACE_COMMANDO_APPROACH_TARGET_UNTIL_BLOCKED_OR_NEAR;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(20));
@@ -278,7 +269,7 @@ void blarg_space_commando_update(struct Moby *moby) {
     case BLARG_SPACE_COMMANDO_SELECT_ACTION_AFTER_ANIMATION:
         if (moby->anim_flags & 2) {
             f32 dist = vector_distance_xy(&moby->pos, &target->pos);
-            if (blarg_space_commando_vars->unk164 != 2 && dist < 15.0f) {
+            if (blarg_space_commando_vars->target_selection_status != 2 && dist < 15.0f) {
                 moby->state = BLARG_SPACE_COMMANDO_FACE_TARGET_AND_WAIT_FOR_TIMER;
                 if (moby->prev_seq != 4) {
                     blend_moby_animation(moby, 4, 0, scale_game_frames(20));
@@ -308,12 +299,12 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         } else if (vector_distance_xy(&moby->pos, &target->pos) <
                    l13_blarg_space_commando_probe_trigger_distance_xy) {
-            moby_point_position(moby, 0, &blarg_space_commando_vars->unk1E0);
+            moby_point_position(moby, 0, &blarg_space_commando_vars->muzzle_position);
             moby->state = BLARG_SPACE_COMMANDO_FACE_TARGET_AND_PROBE_DURING_ANIMATION;
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             }
-        } else if (blarg_space_commando_vars->unk184 != 0) {
+        } else if (blarg_space_commando_vars->pursuit_timer != 0) {
             moby->state = BLARG_SPACE_COMMANDO_APPROACH_TARGET_UNTIL_BLOCKED_OR_NEAR;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(20));
@@ -341,11 +332,16 @@ void blarg_space_commando_update(struct Moby *moby) {
                 shot.active = 0;
                 shot.valid = 1;
                 shot.oclass = moby->oclass;
-                sweep_hit_segment(
-                    &point, &origin, &blarg_space_commando_vars->unk1E0, &origin, moby, &shot, 5);
+                sweep_hit_segment(&point,
+                                  &origin,
+                                  &blarg_space_commando_vars->muzzle_position,
+                                  &origin,
+                                  moby,
+                                  &shot,
+                                  5);
             }
         }
-        qcopy(&blarg_space_commando_vars->unk1E0, &point);
+        qcopy(&blarg_space_commando_vars->muzzle_position, &point);
         if (moby->anim_flags & 2) {
             moby->state = BLARG_SPACE_COMMANDO_RESUME_SAVED_STATE_AFTER_ANIMATION;
             moby->command = 1;
@@ -431,7 +427,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             fast_vec_dist(&moby->pos, &direction) < 0.8f) {
             blocked = 1;
         }
-        if (blarg_space_commando_vars->unk184 == 0) {
+        if (blarg_space_commando_vars->pursuit_timer == 0) {
             moby->state = BLARG_SPACE_COMMANDO_RETURN_HOME;
         } else if (blocked != 0) {
             moby->state = BLARG_SPACE_COMMANDO_PROBE_DURING_ANIMATION_THEN_RESUME_APPROACH;
@@ -440,7 +436,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             }
         } else if (vector_distance_xy(&moby->pos, &target->pos) <
                    l13_blarg_space_commando_probe_trigger_distance_xy) {
-            moby_point_position(moby, 0, &blarg_space_commando_vars->unk1E0);
+            moby_point_position(moby, 0, &blarg_space_commando_vars->muzzle_position);
             moby->state = BLARG_SPACE_COMMANDO_PROBE_DURING_ANIMATION_THEN_RESUME_APPROACH;
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
@@ -462,11 +458,16 @@ void blarg_space_commando_update(struct Moby *moby) {
                 shot.active = 0;
                 shot.valid = 1;
                 shot.oclass = moby->oclass;
-                sweep_hit_segment(
-                    &point, &origin, &blarg_space_commando_vars->unk1E0, &origin, moby, &shot, 5);
+                sweep_hit_segment(&point,
+                                  &origin,
+                                  &blarg_space_commando_vars->muzzle_position,
+                                  &origin,
+                                  moby,
+                                  &shot,
+                                  5);
             }
         }
-        qcopy(&blarg_space_commando_vars->unk1E0, &point);
+        qcopy(&blarg_space_commando_vars->muzzle_position, &point);
         if (moby->anim_flags & 2) {
             moby->state = BLARG_SPACE_COMMANDO_APPROACH_TARGET_UNTIL_BLOCKED_OR_NEAR;
             if (moby->prev_seq != 1) {
@@ -540,42 +541,40 @@ void blarg_space_commando_update(struct Moby *moby) {
 }
 
 struct WalkerVars_8d10 {
-    u8    pad0[0x20];
-    f32   health; /* 0x20 */
-    u8    pad24[2];
-    s16   stun_timer; /* 0x26 */
-    u8    pad28[0x10];
-    s32   init; /* 0x38: nonzero until the idle timer is first drawn */
-    u8    pad3C[0x24];
-    u8    anim[8];    /* 0x60 */
-    f32   fall_speed; /* 0x68 */
-    u8    pad6C[0xC];
-    f32   knock_up;   /* 0x78 */
-    f32   knock_back; /* 0x7C */
-    s32   hit_sound;  /* 0x80 */
-    u8    pad84[4];
-    f32   hit_scale; /* 0x88 */
-    u8    pad8C[0x24];
-    f32   knock_min; /* 0xB0 */
-    f32   knock_max; /* 0xB4 */
-    u8    padB8[0x58];
-    u8    flash[7];   /* 0x110 */
-    u8    flash_time; /* 0x117 */
-    u8    pad118[8];
-    Vec4f target; /* 0x120 */
-    u8    pad130[0x30];
-    s32   start_frame; /* 0x160 */
-    s32   mode;        /* 0x164 */
-    u8    pad168[8];
-    Vec4f home;       /* 0x170 */
-    s32   path;       /* 0x180 */
-    s32   idle_timer; /* 0x184 */
-    u8    pad188[8];
-    f32   range; /* 0x190 */
-    u8    pad194[8];
-    f32   near_range;  /* 0x19C */
-    f32   far_range;   /* 0x1A0 */
-    s32   target_moby; /* 0x1A4: -1: none */
+    u8                   pad0[0x20];
+    f32                  health; /* 0x20 */
+    u8                   pad24[2];
+    s16                  stun_timer; /* 0x26 */
+    u8                   pad28[0x10];
+    s32                  init; /* 0x38: nonzero until the idle timer is first drawn */
+    u8                   pad3C[0x24];
+    u8                   anim[8];    /* 0x60 */
+    f32                  fall_speed; /* 0x68 */
+    u8                   pad6C[0xC];
+    f32                  knock_up;   /* 0x78 */
+    f32                  knock_back; /* 0x7C */
+    s32                  hit_sound;  /* 0x80 */
+    u8                   pad84[4];
+    f32                  hit_scale; /* 0x88 */
+    u8                   pad8C[0x24];
+    f32                  knock_min; /* 0xB0 */
+    f32                  knock_max; /* 0xB4 */
+    u8                   padB8[0x58];
+    struct HitColorFlash hit_flash;
+    Vec4f                target; /* 0x120 */
+    u8                   pad130[0x30];
+    s32                  start_frame; /* 0x160 */
+    s32                  mode;        /* 0x164 */
+    u8                   pad168[8];
+    Vec4f                home;          /* 0x170 */
+    s32                  path;          /* 0x180 */
+    s32                  pursuit_timer; /* 0x184 */
+    u8                   pad188[8];
+    f32                  range; /* 0x190 */
+    u8                   pad194[8];
+    f32                  near_range;  /* 0x19C */
+    f32                  far_range;   /* 0x1A0 */
+    s32                  target_moby; /* 0x1A4: -1: none */
 };
 
 extern f32 D_L13_00161E58 __attribute__((sda));
@@ -635,11 +634,11 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
     moby->scale = moby->pclass->scale * D_L13_00161E58;
     update_gemlik_trail(moby);
     if (blarg_space_commando_private_data->init != 0) {
-        blarg_space_commando_private_data->idle_timer =
+        blarg_space_commando_private_data->pursuit_timer =
             truncate_float_to_s32(FUN_001f96b0_8d10(random_float_between(180.0f, 240.0f)));
         blarg_space_commando_private_data->init = 0;
     }
-    fast_dec_timer(&blarg_space_commando_private_data->idle_timer);
+    fast_dec_timer(&blarg_space_commando_private_data->pursuit_timer);
     damage = 0.0f;
     hit = find_moby_hit(moby, 0x330000, 0);
     code = resolve_moby_hit_response(
@@ -681,7 +680,7 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
                                     1,
                                     0,
                                     fast_arc_tan(*(f32 *)(hit + 0x10), *(f32 *)(hit + 0x14)));
-            blarg_space_commando_private_data->flash_time = 0xFA;
+            blarg_space_commando_private_data->hit_flash.flash_red = 0xFA;
             break;
         case HIT_RESULT_DEATH:
         case HIT_RESULT_DYING_KNOCKBACK:
@@ -699,15 +698,15 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
                                     1,
                                     0,
                                     fast_arc_tan(*(f32 *)(hit + 0x10), *(f32 *)(hit + 0x14)));
-            blarg_space_commando_private_data->flash_time = 0xFA;
+            blarg_space_commando_private_data->hit_flash.flash_red = 0xFA;
             stop_moby_sound_8d10(moby, 0, -1);
             break;
         }
-        trooper_anim_update(moby, blarg_space_commando_private_data->flash);
+        start_hit_color_flash(moby, &blarg_space_commando_private_data->hit_flash);
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, blarg_space_commando_private_data->flash);
-    if (blarg_space_commando_private_data->idle_timer != 0) {
+    update_hit_color_flash(moby, &blarg_space_commando_private_data->hit_flash);
+    if (blarg_space_commando_private_data->pursuit_timer != 0) {
         blarg_space_commando_private_data->range = blarg_space_commando_private_data->far_range;
     } else {
         blarg_space_commando_private_data->range = blarg_space_commando_private_data->near_range;

@@ -233,7 +233,7 @@ void run_level_main_loop(void) {
         run_state_handler();
         if (memory_card_state.state >= MEMCARD_REQUEST_FORMAT ||
             memory_card_state.pending_state >= MEMCARD_QUERY_INFO) {
-            if (D_L00_001B9CF0.unk13C == 0) {
+            if (D_L00_001B9CF0.card_icon_hidden == 0) {
                 int   rotation_period_frames = 55;
                 float size;
                 float sprite_rotation_radians;
@@ -257,7 +257,7 @@ void run_level_main_loop(void) {
                 do_gif_paging();
             }
         }
-        D_L00_001B9CF0.unk13C = 0;
+        D_L00_001B9CF0.card_icon_hidden = 0;
         flush_debug_text_queue();
         noop_main_callback(level_frame_callback_args, 0x10);
         noop_main_callback(level_frame_callback_args, 0x10);
@@ -326,10 +326,10 @@ void run_level_main_loop(void) {
 #include "rnc/streaming/disc_table.h"
 
 typedef struct {
-    s32 unk0;
+    s32 cell; /* MapState.highlighted_cells[].cell: grid cell, <0 unused */
     s32 unk4;
     s32 buffer;
-    s32 unkC;
+    s32 padC;
 } MapChunkSlot;
 
 typedef struct {
@@ -338,16 +338,16 @@ typedef struct {
     s32          scratch_data;
     s32          mask_data;
     s32          initialized;
-    s32          second_raw;
+    s32          coverage_runs; /* 0x14: MapState.coverage_runs */
     u8           pad18[0xc];
-    s32          active;
-    s32          unk28;
+    s32          map_ready;        /* 0x24: MapState.map_ready */
+    s32          coverage_enabled; /* 0x28: set while the level has a map archive */
     u8           pad2c[4];
     MapChunkSlot slots[8];
     u8           padB0[4];
-    f32          unkB4[20];
-    s32          unk104[20];
-    s32          map_parameter_pair_second_values[20];
+    f32          zoom[20];  /* 0xB4: per map, the level copy of struct MapState */
+    s32          pan_x[20]; /* 0x104 */
+    s32          pan_y[20]; /* 0x154 */
     u8           pad1a4[0x80];
     s32          archive_index;
     s32          load_state;
@@ -408,10 +408,9 @@ void initialize_level_map_archive(void) {
     {
         int i;
         for (i = 0; i < 20; i++) {
-            D_L00_001841F0.unk104[i] = map_parameter_pair_defaults[i * 2];
-            D_L00_001841F0.unkB4[i] = 0.65f;
-            D_L00_001841F0.map_parameter_pair_second_values[i] =
-                map_parameter_pair_defaults[i * 2 + 1];
+            D_L00_001841F0.pan_x[i] = map_parameter_pair_defaults[i * 2];
+            D_L00_001841F0.zoom[i] = 0.65f;
+            D_L00_001841F0.pan_y[i] = map_parameter_pair_defaults[i * 2 + 1];
         }
     }
     level = current_level_index;
@@ -442,7 +441,7 @@ void initialize_level_map_archive(void) {
     }
     if (file->size != 0) {
         state = &D_L00_001841F0;
-        state->unk28 = 1;
+        state->coverage_enabled = 1;
         heap_tag = (int)render_archive_source_file;
         archive_base = ((int **)&D_L00_00173E08)[0];
         archive = (int *)((int)archive_base + 0x9A800);
@@ -459,11 +458,11 @@ void initialize_level_map_archive(void) {
         state->first_data += 8;
         state->second_data = state->first_data;
         second_size = archive[2] - archive[1];
-        state->second_raw = hud_heap_alloc(second_size, 0, (char *)heap_tag, 0x2EC);
-        fast_mem_copy((void *)state->second_raw, (char *)archive + archive[1], second_size);
+        state->coverage_runs = hud_heap_alloc(second_size, 0, (char *)heap_tag, 0x2EC);
+        fast_mem_copy((void *)state->coverage_runs, (char *)archive + archive[1], second_size);
         state->scratch_data = hud_heap_alloc(0x1000, 0, (char *)heap_tag, 0x2F3);
         for (i = 0; i < 8; i++) {
-            D_L00_001841F0.slots[i].unk0 = -1;
+            D_L00_001841F0.slots[i].cell = -1;
             D_L00_001841F0.slots[i].unk4 = -1;
             D_L00_001841F0.slots[i].buffer = D_L00_001841F0.scratch_data + i * 0x200;
         }
@@ -471,7 +470,8 @@ void initialize_level_map_archive(void) {
         level_data = ((char *)map_coverage_pages) + D_L00_001841F0.archive_index * 0x800;
         D_L00_001841F0.mask_data = mask_buffer;
         if (level_data[0] != 0) {
-            load_map_chunk((void *)D_L00_001841F0.mask_data, level_data, D_L00_001841F0.second_raw);
+            load_map_chunk(
+                (void *)D_L00_001841F0.mask_data, level_data, D_L00_001841F0.coverage_runs);
         } else {
             decode_map_mask((int *)D_L00_001841F0.mask_data,
                             (unsigned char *)D_L00_001841F0.first_data,
@@ -492,7 +492,7 @@ void initialize_level_map_archive(void) {
         D_L00_001841F0.scratch_data = 0;
         D_L00_001841F0.mask_data = 0;
         D_L00_001841F0.second_data = 0;
-        D_L00_001841F0.unk28 = 0;
+        D_L00_001841F0.coverage_enabled = 0;
     }
 }
 
@@ -546,7 +546,7 @@ void initialize_render_archive_transfer(void) {
             send_dma_to_stash_slot(state->buffer, state->file_handle, 0, bytes);
             state->level_slot = current_level_index + 0x100;
             state->last_transfer_bytes = bytes;
-            state->active = 1;
+            state->map_ready = 1;
             state->load_state = -2;
             return;
         }
@@ -559,12 +559,12 @@ void initialize_render_archive_transfer(void) {
                                0);
             D_L00_001841F0.level_slot =
                 D_0013D4E1 != 0 ? current_level_index + 0x100 : current_level_index;
-            D_L00_001841F0.active = 1;
+            D_L00_001841F0.map_ready = 1;
             D_L00_001841F0.load_state = -2;
             return;
         }
     }
-    D_L00_001841F0.active = 0;
+    D_L00_001841F0.map_ready = 0;
 }
 
 s32 D_L00_00184420[1] __attribute__((section(".data"))) = {0};

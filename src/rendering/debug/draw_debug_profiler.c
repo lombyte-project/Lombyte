@@ -16,7 +16,7 @@
 
 typedef struct {
     u8  pad_0[4];
-    s16 unk4;
+    s16 clear_screen; /* 0x04: sky header frame-clear gate */
 } SpriteFile;
 
 extern u8             D_00100AE0[];
@@ -118,8 +118,8 @@ void draw_debug_profiler(void) {
     f32 rcnt1_count_float;
     f32 div;
 
-    if (level_sky_effect_data == NULL || level_sky_effect_data->unk4 != 0 ||
-        ((draw_enable_mask ^ 1) & 1) || draw_config.unk8 == 0 || D_0018C34C[0] != 0) {
+    if (level_sky_effect_data == NULL || level_sky_effect_data->clear_screen != 0 ||
+        ((draw_enable_mask ^ 1) & 1) || draw_config.sky == 0 || D_0018C34C[0] != 0) {
         append_gif_transfer_packet();
     }
     update_camera_view_matrices();
@@ -130,7 +130,7 @@ void draw_debug_profiler(void) {
     noop_core_callback(render_setup_label, 0xF);
     noop_core_callback_secondary(render_setup_label, 0xF);
     if (level_sky_effect_data != NULL && (draw_enable_mask & 1)) {
-        if (draw_config.unk8 != 0) {
+        if (draw_config.sky != 0) {
             transition_draw_sky();
         }
         noop_core_callback_secondary(sky_draw_label, 0xE);
@@ -148,7 +148,7 @@ void draw_debug_profiler(void) {
         }
     }
     append_dma_tag(0x02020000);
-    if (draw_config.unk34 != 0 && draw_callback3_count != 0) {
+    if (draw_config.effects != 0 && draw_callback3_count != 0) {
         vu1_gs_regs_alt();
         setup_gif_paging(1);
         dispatch_callback_list_2();
@@ -161,7 +161,7 @@ void draw_debug_profiler(void) {
         draw_shrubs();
     }
     append_dma_tag(0x02040000);
-    if (draw_config.unk44 != 0 && occl_debug_overlay_enabled[0] != 0) {
+    if (draw_config.screen_overlays != 0 && occl_debug_overlay_enabled[0] != 0) {
         draw_fogged_fullscreen_sprite(occl_debug_overlay_enabled);
     }
     if (draw_enable_mask & 0x20) {
@@ -169,7 +169,7 @@ void draw_debug_profiler(void) {
         draw_debug_font();
         do_gif_paging();
     }
-    if (draw_config.unk34 != 0 && draw_callback4_count != 0) {
+    if (draw_config.effects != 0 && draw_callback4_count != 0) {
         vu1_gs_regs_alt();
         setup_gif_paging(1);
         dispatch_callback_list_3();
@@ -181,7 +181,7 @@ void draw_debug_profiler(void) {
     }
     append_dma_tag(0x02080000);
     setup_gif_paging(0);
-    if ((draw_enable_mask & 0x20) && draw_config.unk30 != 0 &&
+    if ((draw_enable_mask & 0x20) && draw_config.effects_program != 0 &&
         font_state != FONT_STATE_EFFECTS_DATA) {
         vu1_add_data_ref(D_0010FAA0, D_0010FA90[0]);
         font_state = FONT_STATE_EFFECTS_DATA;
@@ -190,7 +190,7 @@ void draw_debug_profiler(void) {
     noop_core_callback(vu_effects_label, 4);
     if (draw_enable_mask & 0x20) {
         vu1_gs_regs_alt();
-        if (draw_config.unk34 != 0) {
+        if (draw_config.effects != 0) {
             if (draw_callback_count != 0) {
                 dispatch_callback_list_1();
             }
@@ -201,7 +201,7 @@ void draw_debug_profiler(void) {
         }
         noop_core_callback(moby_effects_label, 6);
         noop_core_callback_secondary(moby_effects_label, 6);
-        if (draw_config.unk38 != 0) {
+        if (draw_config.particles != 0) {
             vu1_add_g_sregister(8, 5);
             vu1_gs_regs_alt();
             FlushCache(0);
@@ -210,7 +210,7 @@ void draw_debug_profiler(void) {
         }
         noop_core_callback(part_draw_label, 8);
         noop_core_callback_secondary(part_draw_label, 8);
-        if (draw_config.unk3C != 0) {
+        if (draw_config.sprites != 0) {
             if (draw_callback2_count != 0) {
                 vu1_gs_regs_alt();
                 dispatch_callback_list_4();
@@ -224,7 +224,7 @@ void draw_debug_profiler(void) {
         noop_core_callback(post_effects_label, 6);
         noop_core_callback_secondary(post_effects_label, 6);
     }
-    if (draw_config.unk48 != 0) {
+    if (draw_config.aa_blur != 0) {
         aa_blur_pass();
     }
     noop_core_callback_secondary(aa_blur_label, 0xF);
@@ -232,7 +232,7 @@ void draw_debug_profiler(void) {
     if (draw_enable_mask & 0x10000) {
         noop_graphics_callback();
     }
-    if ((draw_enable_mask & 0x80) && draw_config.unk40 != 0) {
+    if ((draw_enable_mask & 0x80) && draw_config.hud != 0) {
         update_hud();
         draw_help();
         draw_letterbox_bars();
@@ -244,7 +244,7 @@ void draw_debug_profiler(void) {
     noop_core_callback(hud_label, 0xE);
     do_gif_paging();
     if (draw_enable_mask & 0x40) {
-        if (draw_config.unk44 != 0) {
+        if (draw_config.screen_overlays != 0) {
             vu1_add_g_sregister(0x42, 0x8000000044);
             if (use_alt_fog[0] != 0) {
                 emit_rgba_draw_packet(D_001610C0, D_001610C1, D_001610C2, D_001610C3);

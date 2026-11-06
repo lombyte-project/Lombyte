@@ -19,14 +19,14 @@ extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 
 typedef struct CyclingPlatformVars {
     u8  pad_0[0x20];
-    s32 unk20;
-    s16 unk24;
+    s32 health;
+    s16 max_health;
     u8  pad_26[0x2];
-    s8  unk28;
+    s8  hit_weight;
     u8  pad_29[0x15];
-    s16 unk3E;
+    s16 target_flags; /* 0x3E: MobyTargetInfo.flags; target info at pvars+0x20 */
     u8  pad_40[0x60];
-    f32 unkA0[4];
+    f32 home_position[4];
     s32 timer_B0;
 } CyclingPlatformVars;
 
@@ -49,17 +49,17 @@ void cycling_platform_update(char *platform_moby) {
     }
     switch (MOBY(platform_moby)->state) {
     case PLATFORM_STATE_INITIALIZE:
-        platform_vars->unk28 = 4;
-        platform_vars->unk3E = 5;
-        platform_vars->unk20 = 0;
-        platform_vars->unk24 = 0;
-        *(OvlQuad *)&platform_vars->unkA0[0] = *(OvlQuad *)&MOBY(platform_moby)->pos;
+        platform_vars->hit_weight = 4;
+        platform_vars->target_flags = 5;
+        platform_vars->health = 0;
+        platform_vars->max_health = 0;
+        *(OvlQuad *)&platform_vars->home_position[0] = *(OvlQuad *)&MOBY(platform_moby)->pos;
         platform_moby[0x20] = 1;
         break;
     case PLATFORM_STATE_RISING: {
         float lim;
         MOBY(platform_moby)->pos.z = MOBY(platform_moby)->pos.z + 1.5f / scale_time(45.0f);
-        lim = platform_vars->unkA0[2] + 1.5f;
+        lim = platform_vars->home_position[2] + 1.5f;
         if (lim <= MOBY(platform_moby)->pos.z) {
             MOBY(platform_moby)->pos.z = lim;
             platform_moby[0x20] = 2;
@@ -76,7 +76,7 @@ void cycling_platform_update(char *platform_moby) {
     case PLATFORM_STATE_DESCENDING: {
         float lim;
         MOBY(platform_moby)->pos.z = MOBY(platform_moby)->pos.z - 1.5f / scale_time(45.0f);
-        lim = platform_vars->unkA0[2];
+        lim = platform_vars->home_position[2];
         if (MOBY(platform_moby)->pos.z <= lim) {
             MOBY(platform_moby)->pos.z = lim;
             platform_moby[0x20] = 4;

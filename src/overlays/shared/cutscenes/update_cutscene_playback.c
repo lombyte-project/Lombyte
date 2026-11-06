@@ -435,12 +435,12 @@ void start_scene(int scene_id) {
     D_L00_0015F5C0_macro[1] = 2;
     D_L00_0015F400 = 0;
     hero_set_state(100, 2);
-    hero.unk20A5 = 1;
+    hero.hidden = 1;
     set_hero_item_moby_flag_bit0();
     if (active_scene_trigger.moby)
         active_scene_trigger.moby->flags |= 1;
-    if (D_L00_001B9CF0.unkEC)
-        ((struct Moby *)D_L00_001B9CF0.unkEC)->flags |= 1;
+    if (D_L00_001B9CF0.action_message)
+        ((struct Moby *)D_L00_001B9CF0.action_message)->flags |= 1;
     start_cutscene_chunk_read(0);
     fade_to_black(scale_game_frames(6));
     update_audio_stream_until_idle(1);
@@ -536,7 +536,7 @@ void finish_cutscene(void) {
     hero_candidate_z = probe_ground_height(&hero.motion.pos, 0, 0.5f);
     if (2.0f < hero_candidate_z && absolute_float(hero.motion.pos.f[2] - hero_candidate_z) < 4.5f)
         hero.motion.pos.f[2] = hero_candidate_z;
-    hero.unk20A5 = 0;
+    hero.hidden = 0;
     update_hero_item_moby_flags();
     if (D_L00_0016C860_298b18.x46) {
         f = probe_ground_height(D_L00_0016C860_298b18.v, 0, 0.5f);
@@ -546,9 +546,9 @@ void finish_cutscene(void) {
     }
     if (active_scene_trigger.moby)
         active_scene_trigger.moby->flags &= ~1;
-    if (D_L00_001B9CF0.unkEC) {
-        ((struct Moby *)D_L00_001B9CF0.unkEC)->flags &= ~1;
-        D_L00_001B9CF0.unkEC = 0;
+    if (D_L00_001B9CF0.action_message) {
+        ((struct Moby *)D_L00_001B9CF0.action_message)->flags &= ~1;
+        D_L00_001B9CF0.action_message = 0;
     }
     if (active_scene_trigger.moby) {
         F_298b18 *scene_trigger_moby = active_scene_trigger.moby;
@@ -831,11 +831,11 @@ void queue_scene_movie_with_game_language(s32 i) {
     if (i < 0)
         return;
     if (D_0015ED80) {
-        scene_movie_sector = disc_table.unk18A0[i].sector;
-        scene_movie_size = disc_table.unk18A0[i].size;
+        scene_movie_sector = disc_table.scene_movies_alt[i].sector;
+        scene_movie_size = disc_table.scene_movies_alt[i].size;
     } else {
-        scene_movie_sector = disc_table.unk1808[i].sector;
-        scene_movie_size = disc_table.unk1808[i].size;
+        scene_movie_sector = disc_table.scene_movies[i].sector;
+        scene_movie_size = disc_table.scene_movies[i].size;
     }
     hero_ptr = &hero;
     if (hero_ptr->health.hp == 0) {
@@ -853,11 +853,11 @@ void queue_language_zero_movie(s32 i) {
     if (i < 0)
         return;
     if (D_0015ED80) {
-        queued_movie_sector = disc_table.unk1A50[i].sector;
-        queued_movie_size = disc_table.unk1A50[i].size;
+        queued_movie_sector = disc_table.queued_movies_alt[i].sector;
+        queued_movie_size = disc_table.queued_movies_alt[i].size;
     } else {
-        queued_movie_sector = disc_table.unk1A28[i].sector;
-        queued_movie_size = disc_table.unk1A28[i].size;
+        queued_movie_sector = disc_table.queued_movies[i].sector;
+        queued_movie_size = disc_table.queued_movies[i].size;
     }
     prepare_movie_playback(queued_movie_sector, queued_movie_size, 0);
 }
@@ -1484,9 +1484,7 @@ int D_L01_00161194 = 0;
 int D_L01_001622B8 __attribute__((section(".bss")));
 
 float D_L01_001C8DA0 NOT_SDA = 0;
-float D_L01_001C8D80 NOT_SDA = 0;
 int                  D_L01_00161090 = 0;
-VendorSound          D_L01_001C2588 = {0};
 
 Vec4 D_L01_00166400[3] __attribute__((section(".bss")));
 
@@ -1561,9 +1559,7 @@ int D_L02_00161194 = 0;
 int D_L02_00162438 __attribute__((section(".bss")));
 
 float D_L02_001C8F20 NOT_SDA = 0;
-float D_L02_001C8F00 NOT_SDA = 0;
 int                  D_L02_00161090 = 0;
-VendorSound          D_L02_001C2708 = {0};
 
 Vec4 D_L02_00166580[3] __attribute__((section(".bss")));
 
@@ -1639,9 +1635,7 @@ int D_L03_00161194 = 0;
 int D_L03_00161F38 __attribute__((section(".bss")));
 
 float D_L03_001C8A20 NOT_SDA = 0;
-float D_L03_001C8A00 NOT_SDA = 0;
 int                  D_L03_00161090 = 0;
-VendorSound          D_L03_001C2208 = {0};
 
 Vec4 D_L03_00166080[3] __attribute__((section(".bss")));
 
@@ -1720,9 +1714,7 @@ int D_L04_00161194 = 0;
 int D_L04_00161FB8 __attribute__((section(".bss")));
 
 float D_L04_001C8AA0 NOT_SDA = 0;
-float D_L04_001C8A80 NOT_SDA = 0;
 int                  D_L04_00161090 = 0;
-VendorSound          D_L04_001C2288 = {0};
 
 Vec4 D_L04_00166100[3] __attribute__((section(".bss")));
 
@@ -1796,9 +1788,7 @@ int D_L05_00161194 = 0;
 int D_L05_00162238 __attribute__((section(".bss")));
 
 float D_L05_001C8DA0 NOT_SDA = 0;
-float D_L05_001C8D80 NOT_SDA = 0;
 int                  D_L05_00161090 = 0;
-VendorSound          D_L05_001C2588 = {0};
 
 Vec4 D_L05_00166380[3] __attribute__((section(".bss")));
 
@@ -1871,9 +1861,7 @@ int D_L06_00161194 = 0;
 int D_L06_001625B8 __attribute__((section(".bss")));
 
 float D_L06_001C90A0 NOT_SDA = 0;
-float D_L06_001C9080 NOT_SDA = 0;
 int                  D_L06_00161090 = 0;
-VendorSound          D_L06_001C2888 = {0};
 
 Vec4 D_L06_00166700[3] __attribute__((section(".bss")));
 
@@ -1946,9 +1934,7 @@ int D_L07_00161194 = 0;
 int D_L07_00161EB8 __attribute__((section(".bss")));
 
 float D_L07_001C89A0 NOT_SDA = 0;
-float D_L07_001C8980 NOT_SDA = 0;
 int                  D_L07_00161090 = 0;
-VendorSound          D_L07_001C2188 = {0};
 
 Vec4 D_L07_00166000[3] __attribute__((section(".bss")));
 
@@ -2019,9 +2005,7 @@ int D_L08_00161194 = 0;
 int D_L08_00162638 __attribute__((section(".bss")));
 
 float D_L08_001C9120 NOT_SDA = 0;
-float D_L08_001C9100 NOT_SDA = 0;
 int                  D_L08_00161090 = 0;
-VendorSound          D_L08_001C2908 = {0};
 
 Vec4 D_L08_00166780[3] __attribute__((section(".bss")));
 
@@ -2102,9 +2086,7 @@ int D_L09_00161194 = 0;
 int D_L09_00161FB8 __attribute__((section(".bss")));
 
 float D_L09_001C8AA0 NOT_SDA = 0;
-float D_L09_001C8A80 NOT_SDA = 0;
 int                  D_L09_00161090 = 0;
-VendorSound          D_L09_001C2288 = {0};
 
 Vec4 D_L09_00166100[3] __attribute__((section(".bss")));
 
@@ -2181,9 +2163,7 @@ int D_L10_00161194 = 0;
 int D_L10_001622B8 __attribute__((section(".bss")));
 
 float D_L10_001C8DA0 NOT_SDA = 0;
-float D_L10_001C8D80 NOT_SDA = 0;
 int                  D_L10_00161090 = 0;
-VendorSound          D_L10_001C2588 = {0};
 
 Vec4 D_L10_00166400[3] __attribute__((section(".bss")));
 
@@ -2260,9 +2240,7 @@ int D_L11_00161194 = 0;
 int D_L11_00162838 __attribute__((section(".bss")));
 
 float D_L11_001C9320 NOT_SDA = 0;
-float D_L11_001C9300 NOT_SDA = 0;
 int                  D_L11_00161090 = 0;
-VendorSound          D_L11_001C2B08 = {0};
 
 Vec4 D_L11_001669C0[3] __attribute__((section(".bss")));
 
@@ -2338,9 +2316,7 @@ int D_L12_00161194 = 0;
 int D_L12_001622B8 __attribute__((section(".bss")));
 
 float D_L12_001C8DA0 NOT_SDA = 0;
-float D_L12_001C8D80 NOT_SDA = 0;
 int                  D_L12_00161090 = 0;
-VendorSound          D_L12_001C2588 = {0};
 
 Vec4 D_L12_00166400[3] __attribute__((section(".bss")));
 
@@ -2417,9 +2393,7 @@ int D_L13_00161194 = 0;
 int D_L13_00162138 __attribute__((section(".bss")));
 
 float D_L13_001C8C20 NOT_SDA = 0;
-float D_L13_001C8C00 NOT_SDA = 0;
 int                  D_L13_00161090 = 0;
-VendorSound          D_L13_001C2408 = {0};
 
 Vec4 D_L13_00166280[3] __attribute__((section(".bss")));
 
@@ -2496,9 +2470,7 @@ int D_L14_00161194 = 0;
 int D_L14_00162538 __attribute__((section(".bss")));
 
 float D_L14_001C9020 NOT_SDA = 0;
-float D_L14_001C9000 NOT_SDA = 0;
 int                  D_L14_00161090 = 0;
-VendorSound          D_L14_001C2808 = {0};
 
 Vec4 D_L14_00166680[3] __attribute__((section(".bss")));
 
@@ -2574,9 +2546,7 @@ int D_L15_00161194 = 0;
 int D_L15_00162438 __attribute__((section(".bss")));
 
 float D_L15_001C8F20 NOT_SDA = 0;
-float D_L15_001C8F00 NOT_SDA = 0;
 int                  D_L15_00161090 = 0;
-VendorSound          D_L15_001C2708 = {0};
 
 Vec4 D_L15_00166580[3] __attribute__((section(".bss")));
 
@@ -2654,9 +2624,7 @@ int D_L16_00161194 = 0;
 int D_L16_00162238 __attribute__((section(".bss")));
 
 float D_L16_001C8DA0 NOT_SDA = 0;
-float D_L16_001C8D80 NOT_SDA = 0;
 int                  D_L16_00161090 = 0;
-VendorSound          D_L16_001C2588 = {0};
 
 Vec4 D_L16_001663C0[3] __attribute__((section(".bss")));
 
@@ -2732,9 +2700,7 @@ int D_L17_00161194 = 0;
 int D_L17_00162738 __attribute__((section(".bss")));
 
 float D_L17_001C9220 NOT_SDA = 0;
-float D_L17_001C9200 NOT_SDA = 0;
 int                  D_L17_00161090 = 0;
-VendorSound          D_L17_001C2A08 = {0};
 
 Vec4 D_L17_00166880[3] __attribute__((section(".bss")));
 
@@ -2807,9 +2773,7 @@ int D_L18_00161194 = 0;
 int D_L18_00162838 __attribute__((section(".bss")));
 
 float D_L18_001C9320 NOT_SDA = 0;
-float D_L18_001C9300 NOT_SDA = 0;
 int                  D_L18_00161090 = 0;
-VendorSound          D_L18_001C2B08 = {0};
 
 Vec4 D_L18_00166980[3] __attribute__((section(".bss")));
 

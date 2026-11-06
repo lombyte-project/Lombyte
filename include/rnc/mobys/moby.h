@@ -11,20 +11,25 @@ struct AnimSeq;
 /* A moby class header, pointed to by Moby.pclass. Size unknown;
    only fields some matched function reads are named. */
 struct MobyClass {
-    u8    pad_0[0xC];
+    u8    pad_0[0x6];
+    u8    metal_count; /* metal (shine) packets */
+    u8    pad_7[0x5];
     u8    seq_count; /* number of entries in seqs[] (menu previews clamp the sequence to it) */
-    u8    pad_D[3];
-    u32   collision; /* collision data; copied into Moby.collision when a moby is (re)classed */
+    u8    pad_D;
+    u8    lod_trans;    /* LOD switch distance, copied into Moby.lod_dist */
+    u8    shadow_count; /* 16-byte shadow entries; nonzero gives the moby a shadow */
+    u32   collision;    /* collision data; copied into Moby.collision when a moby is (re)classed */
     u8    pad_14[0x8];
     void *retarget_table;        /* retarget table: word table, indexed id * 4 + 4 (0024eec0) */
     struct GifEntry *gifs;       /* patched by patch_moby_gifs */
     f32              scale;      /* default draw scale: copied into Moby.scale, divides it */
     s32              sound_defs; /* sound definitions, 0x20 bytes each */
     void           **callbacks;  /* function-pointer table, called with the moby */
-    u8               pad_30[0x14];
-    u16              flags;   /* initial Moby.flags */
-    s16              type;    /* class type; 5 (a creature) is tested by targeting code */
-    struct AnimSeq  *seqs[1]; /* animation sequences, indexed by Moby.seq */
+    u8               pad_30[0x10];
+    s32              glow_rgba; /* nonzero: copied into Moby.glow_color */
+    u16              flags;     /* initial Moby.flags */
+    s16              type;      /* class type; 5 (a creature) is tested by targeting code */
+    struct AnimSeq  *seqs[1];   /* animation sequences, indexed by Moby.seq */
 };
 
 /* A moby instance (MobyInstance in the recovered symbols), 0x100 bytes.
@@ -52,23 +57,22 @@ struct Moby {
     u8    prev_seq;
     f32   anim_time;
     f32   anim_speed;
-    u8    pad5C[8];
+    f32   anim_rate;   /* frame rate of the current frame (AnimSeq rate or the frame's own) */
+    void *pose_layers; /* pose-layer list; a moby with layers always blends */
     struct Manip *manips;
     void         *cur_frame_data;
     void         *prev_frame_data;
     u8            anim_flags;
-    u8            unk71; /* set to 0xFF when a moby changes class */
-    u8            unk72;
-    u8            unk73;
+    u8            unk71;       /* set to 0xFF when a moby changes class */
+    u8            lod_dist;    /* low LOD beyond lod_dist * 1024 (class lod_trans) */
+    u8            metal_alpha; /* 0x18 when the class has metal packets */
     void (*update)(struct Moby *moby);
     u8 *pvars;
-    u8  unk7C;
+    u8  seq_sound; /* 0x7C: looping sound of the sequence (AnimSeq + 0x11), 0xFF: none */
     u8 sound_slot; /* 0x7D: D_0013E550 slot of its looping sound, 0xFF: none (advance_hero_animation) */
     u8 anim_trigger_count;
     u8 shadow_range; /* shadow range in units of 1024; 0x17 from seeker_update near D_L09_00166F40 */
-    u8  pad80[6];
-    s16 unk86;
-    u8  pad88[8];
+    u8  pad80[0x10];
     s32 glow_color; /* glow colour (class header + 0x40) */
     u32 collision;  /* collision data, from the class header (MobyClass.collision) */
     s32 collision_disable; /* per-primitive collision disable bits; 1 while a carrier holds the moby (glove_of_doom_update) */
@@ -76,16 +80,18 @@ struct Moby {
     u8  hit_slot; /* hit-message slot (0xFF: none) */
     u8  padA5;
     s16 oclass;
-    u8  padA8[8];
-    u8  mission; /* 0xB0: index into the level's D_0014C050 row (0xFF: not spawned) */
+    s32 change_counter; /* bumped by the moby update; key of the collision pose cache */
+    s32 grid_index;     /* moby collision grid cell index */
+    u8  mission;        /* 0xB0: index into the level's D_0014C050 row (0xFF: not spawned) */
     u8  padB1;
     u16 save_id; /* index into the level collected[]/killed[] tables and save bits D_0014C190[level][id >> 5] */
-    s16 unkB4;
+    s16 bolts; /* bolts it drops; spawners split theirs across the mobys they spawn */
     u8  padB6[2];
     void *
         parent; /* 0xB8: spawner (bolt source record); its byte 0xB1 is a per-level id (FUN_L00_002a6b70) */
-    u8    command; /* external command byte */
-    u8    padBD[3];
+    u8    command;    /* external command byte */
+    u8    shadow_dir; /* entry of the shadow direction table D_001AF000 */
+    u8    padBE[2];
     Vec4f rot_row0; /* 0xC0: rows of the matrix built from rot (euler_rotation_basis) */
     Vec4f rot_row1;
     Vec4f rot_row2;

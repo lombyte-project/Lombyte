@@ -14,12 +14,12 @@ void save_map_coverage(s32 map_coverage_buffer) {
     s32 coverage_save_result;
 
     noop_memory_callback();
-    if (level_map_selection.unk28 == 0) {
+    if (level_map_selection.coverage_enabled == 0) {
         fill_transfer_words(map_coverage_buffer, 0, 0x800);
         return;
     }
     coverage_save_result = func_001FA860(
-        map_coverage_buffer, 0x800, level_map_selection.unk14, level_map_selection.mask);
+        map_coverage_buffer, 0x800, level_map_selection.coverage_runs, level_map_selection.mask);
     if (coverage_save_result == -1) {
         downsample_map_coverage(map_coverage_buffer);
     }

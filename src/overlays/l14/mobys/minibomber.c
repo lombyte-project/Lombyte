@@ -46,7 +46,7 @@ extern char D_L14_001674C0[];
 
 extern void FUN_L00_00257470(void *, int, int);
 
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 
@@ -637,7 +637,7 @@ extern int FUN_L00_0025a478_c(void *, void *, void *, int, int *, float *, int, 
 
 extern void FUN_00212f90(void *, int, int, int);
 
-extern void FUN_L00_0025d458_c(void *, void *) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
 
 void process_minibomber_hit_reactions(struct Moby *hit_owner_moby) __asm__("FUN_L14_002b5290");
 
@@ -706,10 +706,10 @@ void process_minibomber_hit_reactions(struct Moby *hit_owner_moby) {
             FUN_L00_00257470(hit_owner_moby, 0, -1);
             break;
         }
-        FUN_L00_0025d458_c(hit_owner_moby, moby_vars + 0x60);
+        start_hit_color_flash(hit_owner_moby, moby_vars + 0x60);
     }
     hit_owner_moby->hit_slot = 0xFF;
-    trooper_anim_finish(hit_owner_moby, moby_vars + 0x60);
+    update_hit_color_flash(hit_owner_moby, moby_vars + 0x60);
 }
 
 extern f32 D_L14_00161540_gp __asm__("D_L14_00161540") __attribute__((sda));

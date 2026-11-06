@@ -40,8 +40,8 @@ void group_clear_trigger_update(struct Moby *moby) __asm__("FUN_L13_0030af50");
 
 typedef struct GroupClearTriggerVars {
     u8  pad_0[0x20];
-    s32 unk20;
-    s32 unk24;
+    s32 clear_state;
+    s32 clear_command;
     s32 clip_volume_28;
 } GroupClearTriggerVars;
 
@@ -66,9 +66,9 @@ void group_clear_trigger_update(struct Moby *moby) {
         is_point_inside_clip_volume(clip_volume_subject_base + 0x80, moby_vars->clip_volume_28) ==
             0)
         return;
-    if (moby_vars->unk20 != -1)
+    if (moby_vars->clear_state != -1)
         moby->state = ((char *)moby_vars)[0x20];
-    if (moby_vars->unk24 == -1)
+    if (moby_vars->clear_command == -1)
         return;
     moby->command = ((char *)moby_vars)[0x24];
 }

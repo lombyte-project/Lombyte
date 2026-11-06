@@ -2,10 +2,10 @@
 
 struct Item {
     u16 icon;
-    s16 unk2;
-    s16 unk4;
+    s16 frame; /* 0x2: MenuGridCell.frame */
+    s16 kind;  /* 0x4: MenuGridCell.kind, 0 = item */
     s16 id;
-    s16 index;
+    s16 index; /* 0x8 */
 };
 
 #include "rnc/game/item_state.h"
@@ -35,12 +35,12 @@ s32 build_filtered_menu_item_list(void) {
         }
         if (item_available[id] != 0) {
             item_info = &menu_item_info[id];
-            filtered_menu_item_records[filtered_item_count].icon = item_info->unk38;
-            filtered_menu_item_records[filtered_item_count].unk2 = 0;
-            filtered_menu_item_records[filtered_item_count].unk4 = 0;
+            filtered_menu_item_records[filtered_item_count].icon = item_info->icon;
+            filtered_menu_item_records[filtered_item_count].frame = 0;
+            filtered_menu_item_records[filtered_item_count].kind = 0;
             filtered_menu_item_records[filtered_item_count].id = id;
-            gadget_help_name_text_ids[filtered_item_count] = item_info->unk40;
-            gadget_help_text_ids[filtered_item_count] = item_info->unk44;
+            gadget_help_name_text_ids[filtered_item_count] = item_info->name_text;
+            gadget_help_text_ids[filtered_item_count] = item_info->description_text;
             filtered_menu_item_records[filtered_item_count].index = i;
             filtered_item_count++;
         }
@@ -55,7 +55,7 @@ extern __typeof__(build_filtered_menu_item_list) func_002216C0
 /* Written by build_filtered_menu_item_list: at most one entry per candidate (14). */
 struct Item filtered_menu_item_records[14] = {0};
 
-/* Text ids of each entry's item (menu_item_info unk40 / unk44), the tables of
+/* Text ids of each entry's item (menu_item_info name_text / description_text), the tables of
    the Help / Gadgets name and text labels. */
 s32 gadget_help_name_text_ids[14] = {0};
 

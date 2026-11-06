@@ -20,21 +20,21 @@ void hud_update_counter(HudElem *hud_element) {
     int            x;
     unsigned char  easing_accumulator_value;
 
-    if (hud_element->unk0C != 0) {
-        counter_value = *hud_element->unk0C;
-        cap = hud_element->unk08;
+    if (hud_element->value_source != 0) {
+        counter_value = *hud_element->value_source;
+        cap = hud_element->max_value;
         if (counter_value < 0) {
             counter_value = 0;
         }
-        hud_element->unk78 = counter_value;
+        hud_element->target_value = counter_value;
         if (cap < counter_value) {
-            hud_element->unk78 = cap;
+            hud_element->target_value = cap;
         }
     }
-    if (hud_element->unk74 != hud_element->unk78) {
-        hud_element->unk7C = scale_game_frames(0xB4);
-        if (hud_element->unk6C >= 0x18) {
-            x = hud_element->unk74 - hud_element->unk78;
+    if (hud_element->shown_value != hud_element->target_value) {
+        hud_element->visible_timer = scale_game_frames(0xB4);
+        if (hud_element->slide >= 0x18) {
+            x = hud_element->shown_value - hud_element->target_value;
             value_distance = x;
             value_distance = value_distance < 0 ? -value_distance : value_distance;
             if (value_distance != 0) {
@@ -53,17 +53,17 @@ void hud_update_counter(HudElem *hud_element) {
                 easing_accumulator_value = counter_state_bytes[3];
                 if (scale_game_frames(2) < easing_accumulator_value) {
                     easing_step = counter_state_bytes[3] / scale_game_frames(2);
-                    if (hud_element->unk78 < hud_element->unk74) {
-                        hud_element->unk74 = hud_element->unk74 - easing_step;
+                    if (hud_element->target_value < hud_element->shown_value) {
+                        hud_element->shown_value = hud_element->shown_value - easing_step;
                     } else {
-                        hud_element->unk74 = hud_element->unk74 + easing_step;
+                        hud_element->shown_value = hud_element->shown_value + easing_step;
                     }
                     counter_state_bytes[3] -= easing_step * scale_game_frames(2);
                 }
             }
         }
     }
-    if (hud_element->unk7C >= scale_game_frames(5)) {
+    if (hud_element->visible_timer >= scale_game_frames(5)) {
         if (counter_state_bytes[0] < scale_game_frames(8)) {
             counter_state_bytes[0]++;
         } else if (counter_state_bytes[1] < scale_game_frames(8)) {
@@ -71,7 +71,7 @@ void hud_update_counter(HudElem *hud_element) {
         }
     } else {
         if (counter_state_bytes[1] != 0 || counter_state_bytes[0] != 0) {
-            hud_element->unk6C = 1;
+            hud_element->slide = 1;
         }
         if (counter_state_bytes[1] != 0) {
             counter_state_bytes[1]--;

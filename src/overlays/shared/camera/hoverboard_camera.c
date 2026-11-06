@@ -143,7 +143,7 @@ typedef struct {
     u8   pad10[0x20];
     Vec4 side;      /* 0x30 */
     s32  state;     /* 0x40: 5 after a preset reset */
-    s32  unk44;     /* 0x44 */
+    s32  hero_moby; /* 0x44: D_001413D0[0]; no hoverboard camera code reads it */
     f32  max_angle; /* 0x48 */
     f32  dist;      /* 0x4C */
     u8   pad50[8];
@@ -170,38 +170,38 @@ typedef struct {
     u8   pad14[0xC];
     Vec4 accel; /* 0x20 */
     u8   pad30[4];
-    f32  unk34; /* 0x34 */
-    f32  unk38; /* 0x38 */
-    s32  unk3C; /* 0x3C */
-    s32  unk40; /* 0x40 */
+    f32  swing_stiffness; /* 0x34: cam_interp_values spring of swing */
+    f32  swing_damping;   /* 0x38 */
+    s32  swing_max_step;  /* 0x3C */
+    s32  swing; /* 0x40: sideways offset of the look target, eased with the board's facing */
     u8   pad44[0xC];
 } CameraTrack;
 
 /* Orbit state the camera keeps while it circles the hero. */
 typedef struct {
-    Vec4         axis;  /* 0x00 */
-    f32          unk10; /* 0x10: 0.01 unless the preset gives one (FUN_L05_003294c0) */
-    f32          unk14; /* 0x14: 0.2 unless the preset gives one */
-    s32          unk18; /* 0x18 */
-    s16          mode;  /* 0x1C: 0 waiting, 1 orbiting */
+    Vec4 axis;     /* 0x00 */
+    f32 stiffness; /* 0x10: cam_interp_values spring of the position; 0.01 unless the preset gives one (FUN_L05_003294c0) */
+    f32          damping;  /* 0x14: 0.2 unless the preset gives one */
+    s32          max_step; /* 0x18 */
+    s16          mode;     /* 0x1C: 0 waiting, 1 orbiting */
     u8           pad1E[0x12];
-    CameraView   view;          /* 0x30 */
-    CameraFocus  focus;         /* 0x80 */
-    CameraSpring spring;        /* 0xE0 */
-    CameraTrack  track;         /* 0x100 */
-    f32          goal[3];       /* 0x150: yaw, pitch, distance */
-    f32          vel[3];        /* 0x15C */
-    f32          accel[3];      /* 0x168 */
-    f32          damp[3];       /* 0x174 */
-    f32          dist;          /* 0x180 */
-    f32          spring_dist;   /* 0x184 */
-    f32          spring_height; /* 0x188 */
-    f32          unk18C;        /* 0x18C */
-    f32          unk190;        /* 0x190 */
-    f32          unk194;        /* 0x194 */
+    CameraView   view;                   /* 0x30 */
+    CameraFocus  focus;                  /* 0x80 */
+    CameraSpring spring;                 /* 0xE0 */
+    CameraTrack  track;                  /* 0x100 */
+    f32          goal[3];                /* 0x150: yaw, pitch, distance */
+    f32          vel[3];                 /* 0x15C */
+    f32          accel[3];               /* 0x168 */
+    f32          damp[3];                /* 0x174 */
+    f32          dist;                   /* 0x180 */
+    f32          spring_dist;            /* 0x184 */
+    f32          spring_height;          /* 0x188 */
+    f32          airborne_focus_dist;    /* 0x18C: focus.dist while the hero is high in the air */
+    f32          airborne_spring_dist;   /* 0x190 */
+    f32          airborne_spring_height; /* 0x194 */
     u8           pad198[0x18];
-    Vec4         unk1B0; /* 0x1B0 */
-    Vec4         unk1C0; /* 0x1C0 */
+    Vec4         bias;     /* 0x1B0: offset added to the camera goal, eased to 0 */
+    Vec4         bias_vel; /* 0x1C0 */
 } CameraOrbit;
 
 typedef struct {
@@ -214,26 +214,26 @@ typedef struct {
     u8           pad5C[0x14];
     CameraOrbit *orbit; /* 0x70 */
     u8           pad74[0xA];
-    s16          unk7E; /* 0x7E: cleared after a preset reset */
-    u8           pad80[4];
-    s16          preset; /* 0x84: row of D_L05_0015EF50 */
+    s16 transition_state; /* 0x7E: UpdateCam.transition_state, cleared after a preset reset */
+    u8  pad80[4];
+    s16 preset; /* 0x84: row of D_L05_0015EF50 */
 } Camera;
 
 /* Camera preset: distances, angle limits and damping. */
 typedef struct {
     f32 unk0; /* 0x00 */
     u8  pad4[0x1C];
-    f32 unk20;         /* 0x20 */
-    f32 unk24;         /* 0x24 */
-    f32 spring_dist;   /* 0x28 */
-    f32 spring_height; /* 0x2C */
-    f32 dist;          /* 0x30 */
-    f32 unk34;         /* 0x34 */
-    f32 unk38;         /* 0x38 */
-    f32 unk3C;         /* 0x3C */
-    f32 unk40;         /* 0x40 */
-    f32 unk44;         /* 0x44 */
-    f32 height_vel;    /* 0x48: spring velocity of the camera height */
+    f32 swing_stiffness;        /* 0x20: CameraTrack.swing_stiffness */
+    f32 swing_damping;          /* 0x24 */
+    f32 spring_dist;            /* 0x28 */
+    f32 spring_height;          /* 0x2C */
+    f32 dist;                   /* 0x30 */
+    f32 airborne_spring_dist;   /* 0x34 */
+    f32 airborne_spring_height; /* 0x38 */
+    f32 airborne_focus_dist;    /* 0x3C */
+    f32 position_stiffness;     /* 0x40: CameraOrbit.stiffness (< 0: 0.01) */
+    f32 position_damping;       /* 0x44: CameraOrbit.damping (< 0: 0.2) */
+    f32 height_vel;             /* 0x48: spring velocity of the camera height */
 } CameraPreset;
 
 typedef struct {
@@ -261,14 +261,14 @@ void reset_hero_follow_camera_from_preset(Camera *camera_to_reset) {
     orbit_state->spring_dist = preset->spring_dist;
     orbit_state->spring_height = preset->spring_height;
     orbit_state->dist = preset->dist;
-    orbit_state->unk190 = preset->unk34;
-    orbit_state->unk194 = preset->unk38;
-    orbit_state->unk18C = preset->unk3C;
-    clear_u64_value(&orbit_state->unk1B0);
-    clear_u64_value(&orbit_state->unk1C0);
+    orbit_state->airborne_spring_dist = preset->airborne_spring_dist;
+    orbit_state->airborne_spring_height = preset->airborne_spring_height;
+    orbit_state->airborne_focus_dist = preset->airborne_focus_dist;
+    clear_u64_value(&orbit_state->bias);
+    clear_u64_value(&orbit_state->bias_vel);
     focus = &camera_to_reset->orbit->focus;
     focus->state = 5;
-    focus->unk44 = D_001413D0[0];
+    focus->hero_moby = D_001413D0[0];
     focus->dist = orbit_state->dist;
     focus->max_angle = 0.209439516f;
     focus->unk58 = 0.00174532924f;
@@ -278,19 +278,19 @@ void reset_hero_follow_camera_from_preset(Camera *camera_to_reset) {
     spring->unk4 = 0.5f;
     spring->height = orbit_state->spring_height;
     orbit = camera_to_reset->orbit;
-    orbit->unk10 = 0.01f;
-    orbit->unk14 = 0.2f;
-    orbit->unk18 = 0;
+    orbit->stiffness = 0.01f;
+    orbit->damping = 0.2f;
+    orbit->max_step = 0;
     orbit->mode = CAMERA_ORBIT_MODE_FOLLOW;
     clear_u64_value(orbit);
     track = &camera_to_reset->orbit->track;
     clear_u64_value(track);
     clear_u64_value(&track->accel);
-    track->unk40 = 0;
+    track->swing = 0;
     track->unk10 = preset->unk0;
-    track->unk34 = preset->unk20;
-    track->unk38 = preset->unk24;
-    track->unk3C = 0;
+    track->swing_stiffness = preset->swing_stiffness;
+    track->swing_damping = preset->swing_damping;
+    track->swing_max_step = 0;
     view = &camera_to_reset->orbit->view;
     view->unk20 = 0.8f;
     view->unk24 = 0.3f;
@@ -301,13 +301,13 @@ void reset_hero_follow_camera_from_preset(Camera *camera_to_reset) {
     set_camera_follow_parameters(preset->spring_dist,
                                  preset->spring_height,
                                  preset->dist,
-                                 preset->unk34,
-                                 preset->unk38,
-                                 preset->unk3C,
-                                 preset->unk40,
-                                 preset->unk44);
+                                 preset->airborne_spring_dist,
+                                 preset->airborne_spring_height,
+                                 preset->airborne_focus_dist,
+                                 preset->position_stiffness,
+                                 preset->position_damping);
     build_hero_follow_camera_transform((char *)camera_to_reset);
-    camera_to_reset->unk7E = 0;
+    camera_to_reset->transition_state = 0;
 }
 
 extern float FUN_001ebd78(void *, float, float, float, float, float);
@@ -430,13 +430,13 @@ typedef struct {
     char     pad10[0x10];
     float    state[4];
     char     pad30[4];
-    float    k34, k38, k3C;
-    float    blend;
+    float    swing_stiffness, swing_damping, swing_max_step;
+    float    swing;
 } Track;
 
 typedef struct {
     float    vel[4];
-    float    k10, k14, k18;
+    float    stiffness, damping, max_step;
     short    mode;
     char     pad1E[0x62];
     Focus    focus;
@@ -521,12 +521,24 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
         fast_vec_normalize(&offset, &focus_state->axis, spring->height);
         fast_vec_add(&goal, &camera_position_before_height, &offset);
         fast_vec_add(&goal, &goal, &orbit->bias);
-        camera->pos.x = cam_interp_values(
-            camera->pos.x, goal.x, &orbit->vel[0], orbit->k10, orbit->k14, orbit->k18);
-        camera->pos.y = cam_interp_values(
-            camera->pos.y, goal.y, &orbit->vel[1], orbit->k10, orbit->k14, orbit->k18);
-        camera->pos.z = cam_interp_values(
-            camera->pos.z, goal.z, &orbit->vel[2], orbit->k10, orbit->k14, orbit->k18);
+        camera->pos.x = cam_interp_values(camera->pos.x,
+                                          goal.x,
+                                          &orbit->vel[0],
+                                          orbit->stiffness,
+                                          orbit->damping,
+                                          orbit->max_step);
+        camera->pos.y = cam_interp_values(camera->pos.y,
+                                          goal.y,
+                                          &orbit->vel[1],
+                                          orbit->stiffness,
+                                          orbit->damping,
+                                          orbit->max_step);
+        camera->pos.z = cam_interp_values(camera->pos.z,
+                                          goal.z,
+                                          &orbit->vel[2],
+                                          orbit->stiffness,
+                                          orbit->damping,
+                                          orbit->max_step);
         vel = camera->vel;
         probe.x = vel[0];
         probe.y = vel[1];
@@ -634,8 +646,12 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
     fast_vec_cross(&camera->side, &camera->up, &rel);
     if (orbiting == 0 || absolute_float(along) < 0.5f ||
         (vel = (float *)(D_0013E633_32B1F8 - 0x290), ((Hero *)vel)->trick_input != 0)) {
-        track->blend =
-            cam_interp_values(track->blend, 0.0f, track->state, track->k34, track->k38, track->k3C);
+        track->swing = cam_interp_values(track->swing,
+                                         0.0f,
+                                         track->state,
+                                         track->swing_stiffness,
+                                         track->swing_damping,
+                                         track->swing_max_step);
     } else {
         float tilt;
         fast_vec_normalize(&probe, ((char *)((Hero *)vel)->moby) + 0xC0, 1.0f);
@@ -643,15 +659,15 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
         fast_vec_normalize(&step, &camera->side, tilt);
         fast_vec_sub(&probe, &probe, &step);
         tilt = fast_vec_dot(&probe, &camera->up);
-        track->blend = cam_interp_values(track->blend,
+        track->swing = cam_interp_values(track->swing,
                                          tilt * D_L05_001621A8_gp,
                                          track->state,
-                                         track->k34,
-                                         track->k38,
-                                         track->k3C);
+                                         track->swing_stiffness,
+                                         track->swing_damping,
+                                         track->swing_max_step);
     }
-    if (0.00001f < absolute_float(track->blend)) {
-        fast_vec_normalize(&probe, &camera->up, track->blend);
+    if (0.00001f < absolute_float(track->swing)) {
+        fast_vec_normalize(&probe, &camera->up, track->swing);
         fast_vec_add(&goal, &goal, &probe);
     }
     fast_vec_sub(&rel, &goal, &camera->pos);

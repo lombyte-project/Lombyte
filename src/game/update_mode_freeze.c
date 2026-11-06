@@ -64,14 +64,14 @@ void update_mode_freeze(void) {
     switch (freeze.state) {
     case FREEZE_MODE_DELAYED_CONTINUE: {
         FreezeModeState *state = &freeze;
-        state->unk20++;
-        if (scale_game_frames(0x5A) < state->unk20) {
-            if (state->unk24 != 0) {
-                state->unk24--;
+        state->box_timer++;
+        if (scale_game_frames(0x5A) < state->box_timer) {
+            if (state->fade_step != 0) {
+                state->fade_step--;
             }
         }
         state = &freeze;
-        if (scale_game_frames(0x78) < state->unk20) {
+        if (scale_game_frames(0x78) < state->box_timer) {
             if (controller_state.pressed & PAD_CROSS) {
                 game_mode = GAME_MODE_CONTINUE;
                 if (current_level_index == LEVEL_NOVALIS) {
@@ -115,12 +115,12 @@ void update_mode_freeze(void) {
                 fade_to_black(4);
                 requested_video_mode = VIDEO_MODE_REQUEST_PAL_DISABLED;
                 freeze.choice = 2;
-                freeze.unk20 = scale_game_frames(0x258);
+                freeze.box_timer = scale_game_frames(0x258);
             }
             break;
 
         case VIDEO_MODE_TEST_PREVIEW_ACTIVE:
-            if ((freeze.unk20 == 0) || ((--freeze.unk20) == 0)) {
+            if ((freeze.box_timer == 0) || ((--freeze.box_timer) == 0)) {
                 requested_video_mode = VIDEO_MODE_REQUEST_PAL_ENABLED;
                 freeze.choice = 3;
             } else if (controller_state.pressed & PAD_TRIANGLE) {
@@ -166,10 +166,10 @@ void update_mode_freeze(void) {
     case FREEZE_MODE_CONFIRM_CANCEL_CHOICE:
         switch (freeze.choice) {
         case FREEZE_CHOICE_PREPARE_INPUT:
-            if (freeze.unk20 < 8) {
-                freeze.unk20++;
-            } else if (freeze.unk24 < 8) {
-                freeze.unk24++;
+            if (freeze.box_timer < 8) {
+                freeze.box_timer++;
+            } else if (freeze.fade_step < 8) {
+                freeze.fade_step++;
             } else {
                 freeze.choice = 1;
             }
@@ -188,10 +188,10 @@ void update_mode_freeze(void) {
 
         case FREEZE_CHOICE_CONFIRM_EXIT:
         case FREEZE_CHOICE_CANCEL_EXIT:
-            if (freeze.unk24 != 0) {
-                freeze.unk24--;
-            } else if (freeze.unk20 != 0) {
-                freeze.unk20--;
+            if (freeze.fade_step != 0) {
+                freeze.fade_step--;
+            } else if (freeze.box_timer != 0) {
+                freeze.box_timer--;
             } else {
                 step = freeze.choice;
                 /* Fakematch: a never-true test that combine folds away; it makes step
@@ -218,7 +218,7 @@ void update_mode_freeze(void) {
                     game_mode = GAME_MODE_CONTINUE;
                     if (hero.race_lap >= 3) {
                         hero.race_lap = (s16)(((u16)hero.race_lap) - 1);
-                        hero.unk890[0xBC] = 3;
+                        hero.race_moby[0xBC] = 3;
                     }
                 }
             }
@@ -227,10 +227,10 @@ void update_mode_freeze(void) {
         break;
 
     case FREEZE_MODE_STATE_DISPATCH:
-        freeze.unk20++;
-        if (scale_game_frames(0x1E) < freeze.unk20) {
-            if (freeze.unk24 != 0) {
-                freeze.unk24--;
+        freeze.box_timer++;
+        if (scale_game_frames(0x1E) < freeze.box_timer) {
+            if (freeze.fade_step != 0) {
+                freeze.fade_step--;
             }
         }
         switch (save_card_state) {

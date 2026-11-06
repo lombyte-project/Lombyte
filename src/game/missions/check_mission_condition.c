@@ -3,22 +3,11 @@
 #include "rnc/data_labels.h"
 #include "rnc/game/level_state.h"
 #include "rnc/game/item_state.h"
+#include "rnc/game/missions/mission_item.h"
 
 s32 check_mission_condition(s16 kind, s32 value) __asm__("FUN_0020baf0");
 
 s32 check_mission_condition(s16 kind, s32 condition_operand) {
-    enum {
-        MISSION_CONDITION_ALWAYS_TRUE = 0,
-        MISSION_CONDITION_LEVEL_AVAILABLE = 1,
-        MISSION_CONDITION_ITEM_AVAILABLE = 2,
-        MISSION_CONDITION_ITEM_ACQUIRED = 3,
-        MISSION_CONDITION_UPGRADE_LEVEL_NONZERO = 4,
-        MISSION_CONDITION_UPGRADE_LEVEL_AT_LEAST_TWO = 5,
-        MISSION_CONDITION_ALTERNATE_ITEM_AVAILABLE = 6,
-        MISSION_CONDITION_CALLBACK_NONZERO = 7,
-        MISSION_CONDITION_GOLD_BOLT_COLLECTED = 8,
-        MISSION_CONDITION_ALWAYS_FALSE = 9
-    };
     switch (kind) {
     case MISSION_CONDITION_ALWAYS_TRUE:
         return 1;

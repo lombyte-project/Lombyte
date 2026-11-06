@@ -27,12 +27,12 @@ enum {
 typedef struct {
     u8  pad0[0xF];
     u8  always_draw; /* 0x0F */
-    s32 unk10;       /* 0x10 */
+    s32 collision;   /* 0x10 */
     u8  pad14[0x10];
     f32 scale; /* 0x24 */
     u8  pad28[0x18];
-    s32 unk40; /* 0x40 */
-    u16 flags; /* 0x44 */
+    s32 glow_rgba; /* 0x40 */
+    u16 flags;     /* 0x44 */
 } SpawnClass;
 
 /* Spawner pvars. */
@@ -45,22 +45,24 @@ typedef struct {
     s32 slots[18]; /* 0xE8: moby indices of the pooled children, -1 = empty */
 } Spawner;
 
+/* MobyTargetInfo (get_moby_target_info) as this unit reads it. */
 typedef struct {
-    f32 timer;    /* 0x00 */
-    s16 duration; /* 0x04 */
+    f32 health;     /* 0x00 */
+    s16 max_health; /* 0x04 */
     u8  pad6[0x2A];
     s32 unk30;
     s32 unk34;
-} SpawnSound;
+} SpawnTargetInfo;
 
+/* Suck cannon record (get_moby_suck_cannon_record). */
 typedef struct {
     u8  pad0[0x68];
-    s16 unk68;
+    s16 state; /* 0x68 */
     u8  pad6A[2];
-    s32 unk6C;
+    s32 progress; /* 0x6C: f32, cleared as an int */
     u8  pad70[0x24];
-    s32 unk94;
-} SpawnTarget;
+    s32 flight_timer; /* 0x94 */
+} SuckRecord;
 
 extern struct Moby *D_L03_0015FFD8_gp __asm__("D_L03_0015FFD8") __attribute__((sda));
 extern struct Moby *D_L03_0015FFE4;
@@ -85,18 +87,18 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
     enum {
         SPAWNER_CHILD_STATE_INITIAL = 0
     };
-    Vec4         pos;
-    Vec4        *spawn_position_source;
-    Spawner     *spawner_data;
-    struct Moby *current_moby;
-    struct Moby *spawned;
-    SpawnClass  *spawned_moby_class;
-    SpawnTarget *target;
-    SpawnSound  *sound;
-    s32          found;
-    s32          i;
-    s32          pooled_child_moby_index;
-    u16          flags;
+    Vec4             pos;
+    Vec4            *spawn_position_source;
+    Spawner         *spawner_data;
+    struct Moby     *current_moby;
+    struct Moby     *spawned;
+    SpawnClass      *spawned_moby_class;
+    SuckRecord      *suck_record;
+    SpawnTargetInfo *target_info;
+    s32              found;
+    s32              i;
+    s32              pooled_child_moby_index;
+    u16              flags;
 
     spawn_position_source = &pos;
     pos.q = at->q;
@@ -137,7 +139,7 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
         current_moby->update_dist = spawner_moby->update_dist;
         current_moby->draw_dist = spawner_moby->draw_dist;
         current_moby->visible = found;
-        if (spawned_moby_class->unk40 != 0) {
+        if (spawned_moby_class->glow_rgba != 0) {
             current_moby->flags = flags | 0x10;
         }
         if (((SpawnClass *)current_moby->pclass)->always_draw != 0) {
@@ -145,37 +147,37 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
         }
         current_moby->unk71 = 0xFF;
         current_moby->occlusion = 0x7F80;
-        current_moby->unk72 = 0xFF;
+        current_moby->lod_dist = 0xFF;
         current_moby->hit_slot = 0xFF;
         if (spawner_data->options & 2) {
             current_moby->scale = ((SpawnClass *)current_moby->pclass)->scale * 0.1f;
         }
         set_moby_animation(current_moby, 0, 0);
-        target = get_moby_suck_cannon_record(current_moby);
-        if (target != NULL) {
-            target->unk94 = 0;
-            target->unk68 = 0;
-            target->unk6C = 0;
+        suck_record = get_moby_suck_cannon_record(current_moby);
+        if (suck_record != NULL) {
+            suck_record->flight_timer = 0;
+            suck_record->state = 0;
+            suck_record->progress = 0;
         }
-        if (spawner_moby->unkB4 < current_moby->unkB4) {
-            current_moby->unkB4 = spawner_moby->unkB4;
+        if (spawner_moby->bolts < current_moby->bolts) {
+            current_moby->bolts = spawner_moby->bolts;
         }
-        if (current_moby->unkB4 <= 0) {
-            current_moby->unkB4 = 1;
+        if (current_moby->bolts <= 0) {
+            current_moby->bolts = 1;
         }
-        spawner_moby->unkB4 -= current_moby->unkB4;
-        if (spawner_moby->unkB4 < 0) {
-            spawner_moby->unkB4 = 1;
+        spawner_moby->bolts -= current_moby->bolts;
+        if (spawner_moby->bolts < 0) {
+            spawner_moby->bolts = 1;
         }
-        current_moby->collision = ((SpawnClass *)current_moby->pclass)->unk10;
+        current_moby->collision = ((SpawnClass *)current_moby->pclass)->collision;
         copy_hero_moby_field_38(current_moby);
         update_entity(current_moby);
         spawned = current_moby;
-        sound = get_moby_target_info(spawned);
-        if (sound != NULL) {
-            sound->unk34 = 0;
-            sound->unk30 = 0;
-            sound->timer = sound->duration;
+        target_info = get_moby_target_info(spawned);
+        if (target_info != NULL) {
+            target_info->unk34 = 0;
+            target_info->unk30 = 0;
+            target_info->health = target_info->max_health;
         }
     }
     for (current_moby = D_L03_0015FFE4; current_moby != NULL; current_moby = current_moby->next) {

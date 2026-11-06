@@ -11,7 +11,7 @@ typedef struct Moby Moby;
 extern s32 current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
 
 /*
- * Rises once its moby (unkB2) is collected: waits in state 0 (keeping the
+ * Rises once its moby (save_id) is collected: waits in state 0 (keeping the
  * target point at its position), then climbs D_0015ED6C per frame until 4
  * above the target, and stays there.
  */

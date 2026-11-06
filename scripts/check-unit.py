@@ -75,6 +75,21 @@ def normalize_unit(value: str) -> str | None:
     return "/".join(parts)
 
 
+def sync_headers(workspace: Path) -> bool:
+    """Copy the checkout's headers that differ into the workspace, so a unit
+    staged after a header edit compiles against the edited header. The
+    workspace build has no header dependencies: True means rebuild."""
+    changed = False
+    for header in (ROOT / "include").rglob("*.h"):
+        target = workspace / "include" / header.relative_to(ROOT / "include")
+        data = header.read_bytes()
+        if not target.is_file() or target.read_bytes() != data:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(data)
+            changed = True
+    return changed
+
+
 def find_ninja() -> str | None:
     venv_ninja = ROOT / ".venv" / "bin" / "ninja"
     if venv_ninja.is_file():
@@ -403,7 +418,8 @@ def main(argv=None) -> int:
     if ninja is None:
         return error("ninja was not found; install the requirements into .venv")
 
-    if workspace_source.read_text() != staged:
+    headers_changed = sync_headers(workspace)
+    if headers_changed or workspace_source.read_text() != staged:
         workspace_source.write_text(staged)
     object_target = f"build/src/{unit}.c.o"
     # The workspace was configured with the oracle present. Staging its C

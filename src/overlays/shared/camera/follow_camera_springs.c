@@ -1442,8 +1442,8 @@ void follow_camera_springs(void *camera_moby) {
         scale_vector_xyz(look, view + 0x20, 0.5f);
     }
     fast_vec_add(blended_focus_or_collision_origin, hero_pos, look);
-    scale_vector_xyz(look, view + 0x20, camera_tail->distance);
-    fast_vec_add(follow_block->eye, look, follow_block);
+    scale_vector_xyz(look, view + 0x20, camera_tail->pivot_height);
+    fast_vec_add(follow_block->pivot, look, follow_block);
     up_projection_or_collision_clearance =
         follow_cam_min_distance_gp + FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom_range *
                                          FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom_scale *
@@ -1467,18 +1467,18 @@ void follow_camera_springs(void *camera_moby) {
         up_projection_or_collision_clearance + up_projection_or_collision_clearance) {
         fast_vec_add(mid, left, probe);
         scale_vector_xyz(mid, mid, 0.5f);
-        qcopy(follow_block->eye, mid);
+        qcopy(follow_block->pivot, mid);
         fast_vec_sub(collision_resolution_delta, mid, follow_block);
         follow_camera_set_height(fast_vec_dot(collision_resolution_delta, view + 0x20), 0.003f);
     } else {
         f32 reach;
         fast_vec_sub(collision_resolution_delta, left, follow_block);
         back = fast_vec_length(collision_resolution_delta);
-        reach = camera_tail->distance;
+        reach = camera_tail->pivot_height;
         if (back <= reach + up_projection_or_collision_clearance) {
             scale_vector_xyz(mid, view + 0x20, up_projection_or_collision_clearance);
             fast_vec_sub(mid, left, mid);
-            qcopy(follow_block->eye, mid);
+            qcopy(follow_block->pivot, mid);
             fast_vec_sub(collision_resolution_delta, mid, follow_block);
             follow_camera_set_height(fast_vec_dot(collision_resolution_delta, view + 0x20), 0.003f);
         } else {
@@ -1487,7 +1487,7 @@ void follow_camera_springs(void *camera_moby) {
                 qcopy(probe, follow_block);
             }
             scale_vector_xyz(look, view + 0x20, reach);
-            fast_vec_add(follow_block->eye, look, probe);
+            fast_vec_add(follow_block->pivot, look, probe);
         }
     }
 }

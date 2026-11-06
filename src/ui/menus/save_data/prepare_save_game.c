@@ -25,7 +25,7 @@ void prepare_save_game(int save_data, int slot) {
     copy_level_object_positions();
     save_map_coverage(map_coverage_pages + (current_level_index << 11));
     memcard_make_whole_save((char *)save_data);
-    card_state->unkF4 = saving;
+    card_state->card_save_active = saving;
     card_state->buf = (void *)save_data;
     card_state->card[0].save_index = slot;
     card_state->active_card = 0;

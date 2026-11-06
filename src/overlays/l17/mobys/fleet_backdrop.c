@@ -28,7 +28,9 @@ typedef struct {
 extern char  D_L17_001676C0[];
 extern float frame_delta_time __asm__("D_0015ED7C");
 extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-float        D_L17_001623C0[4] __attribute__((section(".sdata"))) = {-0.5f, -1.0f, 1.0f, 1.0f};
+/* How fast each scrolling quad's texture moves along u, per frame time. */
+float backdrop_scrolling_quad_u_speeds[4] __asm__("D_L17_001623C0")
+    __attribute__((section(".sdata"))) = {-0.5f, -1.0f, 1.0f, 1.0f};
 
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 
@@ -43,9 +45,16 @@ float backdrop_quad_side_lengths[5] __asm__("D_L17_001DDFF8") = {
 float backdrop_quad_color_blend_factors[5] __asm__("D_L17_001DE040") = {
     0.0f, 1.0f, 0.33f, 0.55f, 0.22f};
 
-extern float D_L17_001DE0A0[];
-extern float backdrop_scrolling_quad_start_half_widths[] __asm__("D_L17_001DE0B8");
-float        backdrop_quad_uv_rotation_angles[5] __asm__("D_L17_001DE0D0") = {0};
+/* The scrolling quads: draw_fleet_backdrop_quads draws only the first two, but each table
+   holds five entries like the per-quad tables above. */
+/* How far each scrolling quad's texture has moved along u, kept in 0..1. */
+float backdrop_scrolling_quad_u_offsets[5] __asm__("D_L17_001DE0A0") = {
+    0.0f, 0.1f, 0.2f, 0.3f, 0.5f};
+
+float backdrop_scrolling_quad_start_half_widths[5] __asm__("D_L17_001DE0B8") = {
+    20.0f, 10.0f, 20.0f, 20.0f, 20.0f};
+
+float backdrop_quad_uv_rotation_angles[5] __asm__("D_L17_001DE0D0") = {0};
 
 float backdrop_scrolling_quad_base_uv_coordinates[8] __asm__("D_L17_001E6FA0") = {
     -8.0f, 0.0f, -8.0f, 1.0f, 8.0f, 0.0f, 8.0f, 1.0f};
@@ -57,19 +66,21 @@ int backdrop_quad_color_blend_source_colors[5] __asm__("D_L17_001DE010") = {
 int backdrop_quad_color_blend_target_colors[5] __asm__("D_L17_001DE028") = {
     0x80101030, 0x80301010, 0x80101015, 0x80151010, 0x80151015};
 
-extern int backdrop_scrolling_quad_texture_indices[] __asm__("D_L17_001DE088");
+int backdrop_scrolling_quad_texture_indices[5] __asm__("D_L17_001DE088") = {
+    0x0E, 0x0E, 0x31, 0x31, 0x31};
+
 int  backdrop_scrolling_quad_color __asm__("D_L17_001623B8") = 0x807e4931; /* RGBA, 0xAABBGGRR */
 void draw_fleet_backdrop_quads(struct Moby *moby) __asm__("FUN_L17_002f32f0");
 
 typedef struct FleetBackdropAnimationVars {
     u8  pad_0[0x10];
-    f32 unk10;
-    f32 unk14;
-    f32 unk18;
+    f32 endpoint_x;
+    f32 endpoint_y;
+    f32 endpoint_z;
     u8  pad_1C[0xC];
-    f32 unk28;
+    f32 end_half_width; /* half width of the quad at the endpoint */
     u8  pad_2C[0x18];
-    f32 unk44;
+    f32 endpoint_yaw; /* placed angle of the endpoint offset */
     u8  pad_48[0x4];
     s32 clip_volume_4C;
 } FleetBackdropAnimationVars;
@@ -87,11 +98,11 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
     float                      *quad_vertex_v_coordinates;
     vu1_add_g_sregister(0x47, 0x513F1);
     vb = &vv[2];
-    backdrop_endpoint_position = &backdrop_pvars->unk10;
+    backdrop_endpoint_position = &backdrop_pvars->endpoint_x;
     pu = &pkt.uv[0];
     quad_vertex_v_coordinates = &pkt.uv[1];
     D_L17_0016D3E4 = 8192000.0f;
-    backdrop_pvars->unk14 = -8000.0f;
+    backdrop_pvars->endpoint_y = -8000.0f;
     for (i = 0; i < 2; i++) {
         fast_vec_sub(vb, backdrop_pvars, backdrop_endpoint_position);
         fast_vec_sub(&vv[0], backdrop_pvars, D_L17_001676C0);
@@ -99,7 +110,7 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
         fast_vec_cross(&vv[0], &vv[0], vb);
         fast_vec_normalize(&vv[0], &vv[0], backdrop_scrolling_quad_start_half_widths[i]);
         fast_vec_cross(&vv[1], &vv[1], vb);
-        fast_vec_normalize(&vv[1], &vv[1], backdrop_pvars->unk28);
+        fast_vec_normalize(&vv[1], &vv[1], backdrop_pvars->end_half_width);
         *(long *)&pkt.q[4] = 0x0000FF9000000260LL;
         *(long *)&pkt.q[6] = 0x0000008000000048LL;
         *(long *)&pkt.q[0] = 0;
@@ -126,22 +137,24 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
         pkt.m[3] = vv[3];
         *(long *)&pkt.q[2] = get_effect_texture(backdrop_scrolling_quad_texture_indices[i]);
         for (j = 0; j < 4; j++) {
-            pu[j * 2] = backdrop_scrolling_quad_base_uv_coordinates[j * 2] + D_L17_001DE0A0[i];
+            pu[j * 2] = backdrop_scrolling_quad_base_uv_coordinates[j * 2] +
+                        backdrop_scrolling_quad_u_offsets[i];
             quad_vertex_v_coordinates[j * 2] =
                 backdrop_scrolling_quad_base_uv_coordinates[j * 2 + 1];
         }
-        D_L17_001DE0A0[i] += D_L17_001623C0[i] * frame_delta_time;
+        backdrop_scrolling_quad_u_offsets[i] +=
+            backdrop_scrolling_quad_u_speeds[i] * frame_delta_time;
         draw_geometry_quad(&pkt, 0, 0);
     }
     *(long *)&pkt.q[2] = get_effect_texture(0x2F);
     for (k = 0; k < 5; k++) {
         float quad_side_length = backdrop_quad_side_lengths[k];
         float uv_rotation_angle = backdrop_quad_uv_rotation_angles[k];
-        float x = backdrop_pvars->unk10 - quad_side_length * 0.5f;
+        float x = backdrop_pvars->endpoint_x - quad_side_length * 0.5f;
         float z;
         ((float *)&pkt)[0] = x;
-        ((float *)&pkt)[1] = backdrop_pvars->unk14 + 1000.0f;
-        z = backdrop_pvars->unk18 + quad_side_length * 0.5f;
+        ((float *)&pkt)[1] = backdrop_pvars->endpoint_y + 1000.0f;
+        z = backdrop_pvars->endpoint_z + quad_side_length * 0.5f;
         ((float *)&pkt)[3] = 1.0f;
         ((float *)&pkt)[2] = z;
         pkt.m[3] = pkt.m[0];
@@ -234,14 +247,14 @@ done:
         build_spherical_offset(pvar_angle_offset,
                                backdrop_shared_radius_numerator_gp /
                                    backdrop_offset_radius_divisor_gp,
-                               moby_pvars->unk44,
+                               moby_pvars->endpoint_yaw,
                                0.0f);
         fast_vec_add(vector_sum, offset_accumulator, pvar_angle_offset);
         *(OvlQuad *)offset_accumulator = *(OvlQuad *)vector_sum;
         fast_vec_add(vector_sum, moby_pvars, offset_accumulator);
-        *(OvlQuad *)&moby_pvars->unk10 = *(OvlQuad *)vector_sum;
+        *(OvlQuad *)&moby_pvars->endpoint_x = *(OvlQuad *)vector_sum;
         moby->update_dist = 0xFF;
-        moby_pvars->unk10 -= 300.0f;
+        moby_pvars->endpoint_x -= 300.0f;
     } else {
         for (i = 0; i < 5; i++) {
             backdrop_quad_color_blend_factors[i] +=
@@ -262,12 +275,13 @@ done:
                 backdrop_quad_uv_rotation_rate_factors[i] * 0.1f * frame_delta_time);
         }
         for (i = 0; i < 2; i++) {
-            D_L17_001DE0A0[i] += D_L17_001623C0[i] * frame_delta_time;
-            if (1.0f <= D_L17_001DE0A0[i]) {
-                D_L17_001DE0A0[i] -= 1.0f;
+            backdrop_scrolling_quad_u_offsets[i] +=
+                backdrop_scrolling_quad_u_speeds[i] * frame_delta_time;
+            if (1.0f <= backdrop_scrolling_quad_u_offsets[i]) {
+                backdrop_scrolling_quad_u_offsets[i] -= 1.0f;
             }
-            if (D_L17_001DE0A0[i] < 0.0f) {
-                D_L17_001DE0A0[i] += 1.0f;
+            if (backdrop_scrolling_quad_u_offsets[i] < 0.0f) {
+                backdrop_scrolling_quad_u_offsets[i] += 1.0f;
             }
         }
         add_draw_callback(draw_fleet_backdrop_quads, moby);

@@ -32,10 +32,10 @@ void hud_release_held_element(void) {
 
 typedef struct {
     u8  pad[0x48];
-    s16 unk48;
-    s16 unk4A;
+    s16 offset_x;
+    s16 offset_y;
     u8  pad2[0x7C - 0x4C];
-    s32 unk7C;
+    s32 visible_timer;
 } HudElemX;
 
 extern void initialize_numeric_hud_values_and_dimensions(void *) __asm__("FUN_L00_00235c80");
@@ -46,9 +46,9 @@ void initialize_trick_combo_hud(HudElemX *hud_element) __asm__("FUN_L05_00262ae8
 void initialize_trick_combo_hud(HudElemX *hud_element) {
     s32  i;
     s32 *reset_slot;
-    hud_element->unk7C = scale_game_frames(0xB4) + 0x1E;
-    hud_element->unk48 = 0;
-    hud_element->unk4A = 0;
+    hud_element->visible_timer = scale_game_frames(0xB4) + 0x1E;
+    hud_element->offset_x = 0;
+    hud_element->offset_y = 0;
     i = 3;
     reset_slot = &D_L05_0015FAFC;
     for (; i >= 0; i--) {
@@ -107,7 +107,7 @@ void update_trick_combo_hud(HudCounter *element) {
         if (player->air_frames.s < 6) {
             return;
         }
-        combo = player->unk70C;
+        combo = player->trick_combo_count;
         if (!((f32)combo >= 1.0f)) {
             return;
         }
@@ -142,8 +142,8 @@ void update_trick_combo_hud(HudCounter *element) {
             }
         }
         player = &hero;
-        if (D_L05_0015FAD4 < player->unk70C) {
-            D_L05_0015FAD4 = player->unk70C;
+        if (D_L05_0015FAD4 < player->trick_combo_count) {
+            D_L05_0015FAD4 = player->trick_combo_count;
             state_bytes[1] = trick_combo_hud_delay_reload_gp;
         }
         if (player->grounded_frames == 0) {
@@ -152,7 +152,7 @@ void update_trick_combo_hud(HudCounter *element) {
             }
         }
         D_L05_0015FB00 = 0;
-        player->unk70C = 0;
+        player->trick_combo_count = 0;
         player->tricks_landed[4] = 0;
         {
             int  k;
@@ -164,7 +164,7 @@ void update_trick_combo_hud(HudCounter *element) {
         {
             int k;
             for (k = 2; k >= 0; k--) {
-                hero.unk700[k] = 0;
+                hero.flips_per_axis[k] = 0;
             }
         }
         if (hero.state.current == 0x6B) {

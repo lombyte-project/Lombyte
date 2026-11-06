@@ -251,7 +251,7 @@ void helga_update(struct Moby *helga_moby) {
                 mark_moby_for_removal(helga_moby);
                 return;
             }
-        } else if (helga_vars->talk.unk36 == 2 && helga_vars->link != -1) {
+        } else if (helga_vars->talk.entry == 2 && helga_vars->link != -1) {
             helper_moby = (struct Moby *)((helga_vars->link << 8) + (s32)D_L03_0015FFD8);
             if (helper_moby->oclass == 0x3F4) {
                 u8 *tv = helper_moby->pvars;

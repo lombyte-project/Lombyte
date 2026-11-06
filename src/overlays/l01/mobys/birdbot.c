@@ -1,7 +1,9 @@
 /* Level 01 moby class birdbot. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
@@ -296,83 +298,68 @@ typedef struct {
 } PeCursor;
 
 typedef struct {
-    char           pad0[0x20];
-    float          f20;
-    short          initial_health;
-    short          hit_reaction_cooldown;
-    unsigned char  hit_response_profile_index;
-    unsigned char  b29;
-    char           pad2A[0xE];
-    int            w38;
-    char           pad3C[4];
-    Vec4           v40;
-    char           pad50[8];
-    unsigned char  b58;
-    char           pad59;
-    unsigned char  b5A;
-    char           pad5B[5];
-    char           x60[7];
-    unsigned char  b67;
-    char           pad68[8];
-    char           x70[0x10];
-    float          knockback_gravity_step;
-    float          f84;
-    float          knockback_horizontal_launch_step;
-    float          knockback_vertical_launch_step;
-    int            w90;
-    int            w94;
-    float          knockback_collision_height_offset;
-    char           pad9C[0x11];
-    unsigned char  bAD;
-    char           padAE[0x12];
-    float          knockback_animation_target_frame;
-    float          knockback_animation_stop_frame;
-    char           padC8[8];
-    char           xD0[8];
-    float          fD8;
-    float          fDC;
-    char           padE0[8];
-    float          fall_motion_step;
-    float          fEC;
-    char           padF0[4];
-    float          fF4;
-    char           padF8[0x14];
-    float          f10C;
-    float          f110;
-    float          f114;
-    char           pad118[8];
-    PeCursor       side;
-    char           pad138[0x18];
-    PeCursor       main;
-    char           pad168[0x18];
-    Vec4           projectile_aim_point;
-    int            firing_retry_timer;
-    float          yaw_turn_step;
-    float          projectile_aim_distance;
-    char           pad19C[4];
-    float          combat_target_radius;
-    short          burst_shots_fired;
-    short          steering_path_node_index;
-    float          deployment_trigger_radius;
-    short          ordered_path_traversal;
-    short          path_has_stop_nodes;
-    char           pad1B0[4];
-    int            skip_initial_height_lift;
-    float          path_movement_step_length;
-    float          pitch_turn_step;
-    int            deployment_trigger_volume_index;
-    int            deployment_mount_cuboid_index;
-    int            mount_release_timer;
-    float          previous_animation_frame;
-    Vec4           deployment_motion_delta;
-    unsigned short h1E0;
-    short          h1E2;
-    int            deployment_destination_cuboid_index;
-    int            deployment_trigger_override;
-    short          deployment_vertical_steering_timer;
-    short          skip_path_braking;
-    char           pad1F0[0x10];
-    unsigned char  x200[1];
+    char                   pad0[0x20];
+    float                  health;
+    short                  initial_health;
+    short                  hit_reaction_cooldown;
+    unsigned char          hit_response_profile_index;
+    unsigned char          b29;
+    char                   pad2A[0xE];
+    int                    w38;
+    char                   pad3C[4];
+    Vec4                   v40;
+    char                   pad50[8];
+    unsigned char          b58;
+    char                   pad59;
+    unsigned char          b5A;
+    char                   pad5B[5];
+    struct HitColorFlash   hit_flash;
+    struct KnockbackMotion knockback; /* 0x70 */
+    char                   xD0[8];
+    float                  fD8;
+    float                  fDC;
+    char                   padE0[8];
+    float                  fall_motion_step;
+    float                  fEC;
+    char                   padF0[4];
+    float                  fF4;
+    char                   padF8[0x14];
+    float                  f10C;
+    float                  f110;
+    float                  f114;
+    char                   pad118[8];
+    PeCursor               side;
+    char                   pad138[0x18];
+    PeCursor               main;
+    char                   pad168[0x18];
+    Vec4                   projectile_aim_point;
+    int                    firing_retry_timer;
+    float                  yaw_turn_step;
+    float                  projectile_aim_distance;
+    char                   pad19C[4];
+    float                  combat_target_radius;
+    short                  burst_shots_fired;
+    short                  steering_path_node_index;
+    float                  deployment_trigger_radius;
+    short                  ordered_path_traversal;
+    short                  path_has_stop_nodes;
+    char                   pad1B0[4];
+    int                    skip_initial_height_lift;
+    float                  path_movement_step_length;
+    float                  pitch_turn_step;
+    int                    deployment_trigger_volume_index;
+    int                    deployment_mount_cuboid_index;
+    int                    mount_release_timer;
+    float                  previous_animation_frame;
+    Vec4                   deployment_motion_delta;
+    unsigned short         h1E0;
+    short                  h1E2;
+    int                    deployment_destination_cuboid_index;
+    int                    deployment_trigger_override;
+    short                  deployment_vertical_steering_timer;
+    short                  skip_path_braking;
+    char                   pad1F0[0x10];
+    unsigned char          x200[1];
 } PeVars;
 
 typedef struct PeMoby {
@@ -457,8 +444,8 @@ extern void  FUN_L00_00258278_cf(
      char *moby, float *vel, float target, float k, float d, float max) __asm__("FUN_L00_00258278");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void FUN_L00_0025c558_u(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void spawn_explosion(void *,
                             void *,
                             void *,
@@ -553,7 +540,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         flag ? birdbot_vars->combat_target_radius * 2.0f : birdbot_vars->combat_target_radius;
     select_moby_combat_target(birdbot_moby, &selected_combat_target, target_search_radius);
     hit = find_moby_hit(birdbot_moby, 0x210000, 0);
-    kind = FUN_L00_0025a478_u(birdbot_moby, hit, &birdbot_vars->f20, 0, &hits, &dmg, 0, 4);
+    kind = FUN_L00_0025a478_u(birdbot_moby, hit, &birdbot_vars->health, 0, &hits, &dmg, 0, 4);
     fast_dec_timer_s16(&birdbot_vars->hit_reaction_cooldown);
     if (hit != 0 && birdbot_vars->hit_reaction_cooldown == 0) {
         if (hit->src != 0) {
@@ -573,8 +560,8 @@ void birdbot_update(PeMoby *birdbot_moby) {
                                              birdbot_moby->pos.f[1] - player->motion.pos.f[1]);
         }
         birdbot_vars->h1E2 = scale_game_frames(0x258);
-        birdbot_vars->f20 -= dmg;
-        if (birdbot_vars->f20 <= 0.0f) {
+        birdbot_vars->health -= dmg;
+        if (birdbot_vars->health <= 0.0f) {
             kind = BIRDBOT_HIT_REACTION_FATAL_KNOCKBACK;
         }
         switch (kind) {
@@ -587,74 +574,80 @@ void birdbot_update(PeMoby *birdbot_moby) {
             break;
         case BIRDBOT_HIT_REACTION_FATAL_KNOCKBACK:
         case BIRDBOT_HIT_REACTION_FORCE_FATAL_KNOCKBACK:
-            birdbot_vars->knockback_collision_height_offset = 0.3f;
-            birdbot_vars->f84 = frame_time_sq * 10.0f;
-            birdbot_vars->knockback_gravity_step = frame_time_sq * 40.0f;
-            birdbot_vars->knockback_horizontal_launch_step =
-                square_root(birdbot_vars->f84 * 2.0f * 10.0f);
-            birdbot_vars->knockback_vertical_launch_step = frame_time * 15.0f;
-            birdbot_vars->knockback_animation_target_frame = 5.0f;
-            birdbot_vars->knockback_animation_stop_frame = 10.0f;
-            birdbot_vars->w94 = 1;
-            birdbot_vars->bAD = 0;
+            birdbot_vars->knockback.collision_z_offset = 0.3f;
+            birdbot_vars->knockback.speed_approach_step = frame_time_sq * 10.0f;
+            birdbot_vars->knockback.gravity = frame_time_sq * 40.0f;
+            birdbot_vars->knockback.speed =
+                square_root(birdbot_vars->knockback.speed_approach_step * 2.0f * 10.0f);
+            birdbot_vars->knockback.vertical_speed = frame_time * 15.0f;
+            birdbot_vars->knockback.apex_animation_frame = 5.0f;
+            birdbot_vars->knockback.landing_animation_frame = 10.0f;
+            birdbot_vars->knockback.flags = 1;
+            birdbot_vars->knockback.unk3D = 0;
             *(u128 *)&va = *(u128 *)&hit->pos;
             trooper_knockback_arc(&va,
                                   &knockback_heading,
-                                  &birdbot_vars->knockback_horizontal_launch_step,
-                                  &birdbot_vars->knockback_vertical_launch_step);
-            FUN_L00_0025c558_u(
-                knockback_heading, birdbot_moby, birdbot_vars->x70, 9, scale_game_frames(2), 0);
-            birdbot_vars->b67 = 0xB4;
+                                  &birdbot_vars->knockback.speed,
+                                  &birdbot_vars->knockback.vertical_speed);
+            FUN_L00_0025c558_u(knockback_heading,
+                               birdbot_moby,
+                               &birdbot_vars->knockback,
+                               9,
+                               scale_game_frames(2),
+                               0);
+            birdbot_vars->hit_flash.flash_red = 0xB4;
             birdbot_moby->state = BIRDBOT_STATE_FATAL_KNOCKBACK;
             birdbot_moby->h34 &= 0xEFFF;
-            trooper_anim_update(birdbot_moby, (short *)birdbot_vars->x60);
+            start_hit_color_flash(birdbot_moby, &birdbot_vars->hit_flash);
             birdbot_vars->hit_reaction_cooldown = scale_game_frames(0x3C);
             break;
         case BIRDBOT_HIT_REACTION_NONFATAL_KNOCKBACK:
         case BIRDBOT_HIT_REACTION_ANIMATED_NONFATAL_KNOCKBACK:
-            birdbot_vars->w90 = 0x200;
-            birdbot_vars->b67 = 0x78;
-            birdbot_vars->knockback_collision_height_offset = 0.5f;
-            birdbot_vars->knockback_gravity_step = 0.008f;
-            birdbot_vars->knockback_horizontal_launch_step =
-                square_root(birdbot_vars->f84 * 2.0f * 1.5f);
-            birdbot_vars->w94 = 1;
-            birdbot_vars->knockback_animation_target_frame = 5.0f;
-            birdbot_vars->knockback_vertical_launch_step = frame_time * 8.5f;
-            birdbot_vars->knockback_animation_stop_frame = 10.0f;
-            birdbot_vars->bAD = 0;
+            birdbot_vars->knockback.collision_radius_1024ths = 0x200;
+            birdbot_vars->hit_flash.flash_red = 0x78;
+            birdbot_vars->knockback.collision_z_offset = 0.5f;
+            birdbot_vars->knockback.gravity = 0.008f;
+            birdbot_vars->knockback.speed =
+                square_root(birdbot_vars->knockback.speed_approach_step * 2.0f * 1.5f);
+            birdbot_vars->knockback.flags = 1;
+            birdbot_vars->knockback.apex_animation_frame = 5.0f;
+            birdbot_vars->knockback.vertical_speed = frame_time * 8.5f;
+            birdbot_vars->knockback.landing_animation_frame = 10.0f;
+            birdbot_vars->knockback.unk3D = 0;
             *(u128 *)&va = *(u128 *)&hit->pos;
             trooper_knockback_arc(&va,
                                   &knockback_heading,
-                                  &birdbot_vars->knockback_horizontal_launch_step,
-                                  &birdbot_vars->knockback_vertical_launch_step);
-            FUN_L00_0025c558_u(knockback_heading, birdbot_moby, birdbot_vars->x70, 0xC, 6, 0);
+                                  &birdbot_vars->knockback.speed,
+                                  &birdbot_vars->knockback.vertical_speed);
+            FUN_L00_0025c558_u(
+                knockback_heading, birdbot_moby, &birdbot_vars->knockback, 0xC, 6, 0);
             if (birdbot_moby->target_animation_sequence != 0xB) {
                 blend_moby_animation(birdbot_moby, 0xB, 0, scale_game_frames(6));
             }
             birdbot_moby->state = BIRDBOT_STATE_NONFATAL_KNOCKBACK;
-            trooper_anim_update(birdbot_moby, (short *)birdbot_vars->x60);
+            start_hit_color_flash(birdbot_moby, &birdbot_vars->hit_flash);
             break;
         case BIRDBOT_HIT_REACTION_LOW_SPEED_NONFATAL_KNOCKBACK:
         case BIRDBOT_HIT_REACTION_LOW_SPEED_NONFATAL_KNOCKBACK_NO_BLEND:
-            birdbot_vars->w90 = 0x200;
-            birdbot_vars->b67 = 0xFA;
-            birdbot_vars->knockback_gravity_step = 0.008f;
-            birdbot_vars->knockback_horizontal_launch_step =
-                square_root(birdbot_vars->f84 * 2.0f * 1.5f);
-            birdbot_vars->w94 = 1;
-            birdbot_vars->knockback_vertical_launch_step = frame_time * 5.0f;
-            birdbot_vars->knockback_animation_target_frame = 7.0f;
-            birdbot_vars->knockback_animation_stop_frame = 13.5f;
-            birdbot_vars->bAD = 0;
+            birdbot_vars->knockback.collision_radius_1024ths = 0x200;
+            birdbot_vars->hit_flash.flash_red = 0xFA;
+            birdbot_vars->knockback.gravity = 0.008f;
+            birdbot_vars->knockback.speed =
+                square_root(birdbot_vars->knockback.speed_approach_step * 2.0f * 1.5f);
+            birdbot_vars->knockback.flags = 1;
+            birdbot_vars->knockback.vertical_speed = frame_time * 5.0f;
+            birdbot_vars->knockback.apex_animation_frame = 7.0f;
+            birdbot_vars->knockback.landing_animation_frame = 13.5f;
+            birdbot_vars->knockback.unk3D = 0;
             *(u128 *)&va = *(u128 *)&hit->pos;
             trooper_knockback_arc(&va,
                                   &knockback_heading,
-                                  &birdbot_vars->knockback_horizontal_launch_step,
-                                  &birdbot_vars->knockback_vertical_launch_step);
-            FUN_L00_0025c558_u(knockback_heading, birdbot_moby, birdbot_vars->x70, 0xE, 6, 0);
+                                  &birdbot_vars->knockback.speed,
+                                  &birdbot_vars->knockback.vertical_speed);
+            FUN_L00_0025c558_u(
+                knockback_heading, birdbot_moby, &birdbot_vars->knockback, 0xE, 6, 0);
             birdbot_moby->state = BIRDBOT_STATE_NONFATAL_KNOCKBACK;
-            trooper_anim_update(birdbot_moby, (short *)birdbot_vars->x60);
+            start_hit_color_flash(birdbot_moby, &birdbot_vars->hit_flash);
             break;
         }
     }
@@ -713,8 +706,8 @@ void birdbot_update(PeMoby *birdbot_moby) {
         birdbot_vars->fF4 = fall;
         birdbot_vars->fDC = 2.0f;
         birdbot_vars->fD8 = 2.0f;
-        birdbot_vars->f20 = 2.0f;
-        birdbot_vars->initial_health = truncate_float_to_s32(birdbot_vars->f20);
+        birdbot_vars->health = 2.0f;
+        birdbot_vars->initial_health = truncate_float_to_s32(birdbot_vars->health);
         birdbot_vars->b29 = 0;
         birdbot_vars->hit_response_profile_index = 1;
         clear_u64_value(&birdbot_vars->v40);
@@ -1175,7 +1168,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
                                          (u128 *)&birdbot_position_before_update);
         break;
     case BIRDBOT_STATE_NONFATAL_KNOCKBACK:
-        if (step_moby_motion(birdbot_moby, birdbot_vars->x70) & 0x40) {
+        if (step_moby_motion(birdbot_moby, &birdbot_vars->knockback) & 0x40) {
             if (fast_vec_dist(&birdbot_moby->pos, (Vec4 *)birdbot_vars->main.path + (idx + 1)) >
                 0.25f) {
                 int   i;
@@ -1224,7 +1217,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         break;
     case BIRDBOT_STATE_FATAL_KNOCKBACK:
         birdbot_moby->h34 &= 0xEFFF;
-        if ((step_moby_motion(birdbot_moby, birdbot_vars->x70) & 6) ||
+        if ((step_moby_motion(birdbot_moby, &birdbot_vars->knockback) & 6) ||
             birdbot_moby->pos.f[0] < 2.0f || birdbot_moby->pos.f[0] > 1021.0f ||
             birdbot_moby->pos.f[1] < 2.0f || birdbot_moby->pos.f[1] > 1021.0f ||
             birdbot_moby->pos.f[2] < 2.0f || birdbot_moby->pos.f[2] > 1021.0f) {
@@ -1292,7 +1285,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         }
         break;
     }
-    trooper_anim_finish(birdbot_moby, birdbot_vars->x60);
+    update_hit_color_flash(birdbot_moby, &birdbot_vars->hit_flash);
     birdbot_vars->previous_animation_frame = frame;
     if (birdbot_moby->state == BIRDBOT_STATE_TRACK_TARGET_AND_SELECT_ACTION ||
         birdbot_moby->state == 5 || birdbot_moby->state == BIRDBOT_STATE_FIRE_BURST ||

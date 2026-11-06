@@ -65,29 +65,29 @@ void skids_agent_update(struct Moby *moby) __asm__("FUN_L02_002e0dc0");
 
 typedef struct SkidsAgentVars {
     u8           pad_0[0x4];
-    s16          unk4;
+    s16          dialogue_mode;
     u8           pad_6[0x2];
-    u8           unk8;
+    u8           any_direction;
     u8           pad_9[0x3];
-    f32          unkC;
+    f32          radius;
     u8           pad_10[0x10];
-    char        *unk20;
+    char        *dialogue_data;
     u8           pad_24[0x1C];
-    u8           unk40;
+    u8           joint_0_animation;
     u8           pad_41[0x63];
-    f32          unkA4;
-    f32          unkA8;
+    f32          joint_0_target_pitch;
+    f32          joint_0_target_yaw;
     u8           pad_AC[0x4];
-    f32          unkB0;
+    f32          joint_0_scale;
     u8           pad_B4[0xC];
-    u8           unkC0;
+    u8           joint_1_animation;
     u8           pad_C1[0x67];
-    f32          unk128;
+    f32          joint_1_target_yaw;
     u8           pad_12C[0x24];
-    s32          unk150;
+    s32          return_camera_cuboid_index;
     s32          clip_volume_154;
     s32          camera_start_cuboid_index;
-    s32          unk15C;
+    s32          camera_end_cuboid_index;
     u8           idle_look_target_position;
     u8           pad_161[0x11];
     s16          timer_172;
@@ -95,8 +95,8 @@ typedef struct SkidsAgentVars {
     s16          timer_176;
     struct Moby *carried_prop;
     f32          fade_amount;
-    f32          unk180;
-    f32          unk184;
+    f32          camera_blend_t;
+    f32          camera_blend_speed;
 } SkidsAgentVars;
 
 /* Moby class 786 */
@@ -120,7 +120,7 @@ void skids_agent_update(struct Moby *moby) {
         if (item_available[0x2D] != 0) {
             goto kill;
         }
-        skids_agent_vars->unk20 = skids_agent_dialogue_data;
+        skids_agent_vars->dialogue_data = skids_agent_dialogue_data;
         moby->state = SKIDS_AGENT_IDLE_AND_TALK;
         initialize_npc_dialogue(moby, skids_agent_vars);
         initialize_moby_grounding(moby);
@@ -132,11 +132,11 @@ void skids_agent_update(struct Moby *moby) {
         skids_agent_vars->carried_prop->flags |= 0x100;
         break;
     case SKIDS_AGENT_IDLE_AND_TALK:
-        if (skids_agent_vars->unk8 == 1 &&
+        if (skids_agent_vars->any_direction == 1 &&
             is_point_inside_clip_volume(&hero.motion.pos, skids_agent_vars->clip_volume_154) != 0) {
-            skids_agent_vars->unkC = 255.0f;
+            skids_agent_vars->radius = 255.0f;
         } else {
-            skids_agent_vars->unkC = 3.7f;
+            skids_agent_vars->radius = 3.7f;
         }
         if (update_npc_dialogue(moby, skids_agent_vars) != 0) {
             begin_dialogue_camera_transition(moby, 2.2f);
@@ -178,14 +178,14 @@ void skids_agent_update(struct Moby *moby) {
     case SKIDS_AGENT_CONVERSATION_ACTIVE:
         if (level_game_mode != 2) {
             moby->state = SKIDS_AGENT_IDLE_AND_TALK;
-            if (skids_agent_vars->unk4 == 0) {
+            if (skids_agent_vars->dialogue_mode == 0) {
                 jet_clear_persistent(moby->mission);
-                if (skids_agent_vars->unk150 != -1) {
+                if (skids_agent_vars->return_camera_cuboid_index != -1) {
                     char *camera_transform_entry =
-                        (char *)l02_cuboids + (skids_agent_vars->unk150 << 7);
+                        (char *)l02_cuboids + (skids_agent_vars->return_camera_cuboid_index << 7);
                     jet_reset_camera(camera_transform_entry + 0x30, camera_transform_entry + 0x70);
                 }
-            } else if (skids_agent_vars->unk4 == 2) {
+            } else if (skids_agent_vars->dialogue_mode == 2) {
                 moby->visible = 0;
                 moby->collision = 0;
                 moby->flags |= 1;
@@ -214,29 +214,34 @@ void skids_agent_update(struct Moby *moby) {
         Vec4 rot;
         Vec4 from;
         Vec4 to;
-        advance_accelerated_scalar(&skids_agent_vars->unk180,
-                                   &skids_agent_vars->unk184,
+        advance_accelerated_scalar(&skids_agent_vars->camera_blend_t,
+                                   &skids_agent_vars->camera_blend_speed,
                                    1.0f,
                                    frame_time_sq * 0.1f,
                                    frame_time_sq * 0.25f,
                                    frame_time * 0.5f);
         lerp_vector(&pos,
                     (char *)l02_cuboids + (skids_agent_vars->camera_start_cuboid_index << 7) + 0x30,
-                    (char *)l02_cuboids + (skids_agent_vars->unk15C << 7) + 0x30,
-                    skids_agent_vars->unk180);
+                    (char *)l02_cuboids + (skids_agent_vars->camera_end_cuboid_index << 7) + 0x30,
+                    skids_agent_vars->camera_blend_t);
         qcopy_nc(&from,
                  (char *)((skids_agent_vars->camera_start_cuboid_index << 7) + (s32)l02_cuboids) +
                      0x70);
-        qcopy_nc(&to, (char *)((skids_agent_vars->unk15C << 7) + (s32)l02_cuboids) + 0x70);
-        rot.f[2] = fast_add_rotations(
-            fast_subtract_rotations(to.f[2], from.f[2]) * skids_agent_vars->unk180, from.f[2]);
-        rot.f[1] = fast_add_rotations(
-            fast_subtract_rotations(to.f[1], from.f[1]) * skids_agent_vars->unk180, from.f[1]);
-        rot.f[0] = fast_add_rotations(
-            fast_subtract_rotations(to.f[0], from.f[0]) * skids_agent_vars->unk180, from.f[0]);
+        qcopy_nc(&to,
+                 (char *)((skids_agent_vars->camera_end_cuboid_index << 7) + (s32)l02_cuboids) +
+                     0x70);
+        rot.f[2] = fast_add_rotations(fast_subtract_rotations(to.f[2], from.f[2]) *
+                                          skids_agent_vars->camera_blend_t,
+                                      from.f[2]);
+        rot.f[1] = fast_add_rotations(fast_subtract_rotations(to.f[1], from.f[1]) *
+                                          skids_agent_vars->camera_blend_t,
+                                      from.f[1]);
+        rot.f[0] = fast_add_rotations(fast_subtract_rotations(to.f[0], from.f[0]) *
+                                          skids_agent_vars->camera_blend_t,
+                                      from.f[0]);
         set_camera_position(&pos);
         set_camera_rotation(&rot);
-        if (skids_agent_vars->unk180 < 1.0f) {
+        if (skids_agent_vars->camera_blend_t < 1.0f) {
             approach_value(&skids_agent_vars->fade_amount, 0.0f, 0.1f);
         } else {
             approach_value(&skids_agent_vars->fade_amount, 1.0f, 0.1f);
@@ -348,20 +353,23 @@ void skids_agent_update(struct Moby *moby) {
                 pitch = 0.5235988f;
             else if (pitch < -0.5235988f)
                 pitch = -0.5235988f;
-            skids_agent_vars->unkA4 = pitch;
-            skids_agent_vars->unkA8 = yaw * 0.7f;
-            skids_agent_vars->unk128 = yaw * 0.3f;
+            skids_agent_vars->joint_0_target_pitch = pitch;
+            skids_agent_vars->joint_0_target_yaw = yaw * 0.7f;
+            skids_agent_vars->joint_1_target_yaw = yaw * 0.3f;
         }
         if (big_head_cheat_enabled != 0) {
-            skids_agent_vars->unkB0 = 2.75f;
+            skids_agent_vars->joint_0_scale = 2.75f;
         }
         delta = frame_scale_sq;
-        update_joint_animation(
-            rotation_step * delta, rotation_limit * delta, moby, &skids_agent_vars->unk40, 0);
+        update_joint_animation(rotation_step * delta,
+                               rotation_limit * delta,
+                               moby,
+                               &skids_agent_vars->joint_0_animation,
+                               0);
         update_joint_animation(rotation_step * frame_scale_sq,
                                rotation_limit * frame_scale_sq,
                                moby,
-                               &skids_agent_vars->unkC0,
+                               &skids_agent_vars->joint_1_animation,
                                1);
     }
 }

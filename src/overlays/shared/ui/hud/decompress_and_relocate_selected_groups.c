@@ -33,8 +33,8 @@ void decompress_and_relocate_selected_groups(int mode) {
         HUD_DECOMPRESS_BOTH_OPTIONAL_BANKS = 2
     };
     G_234fd0 *decompression_slot_state = &D_L00_0017E4D8_lui;
-    int       decompression_destination = D_L00_001B9CF0.unk104;
-    void     *compressed_data_buffer = (void *)D_L00_001B9CF0.unk10;
+    int       decompression_destination = D_L00_001B9CF0.preview_workspace;
+    void     *compressed_data_buffer = (void *)D_L00_001B9CF0.graphics_workspace;
     {
         int slot_1_size;
         if ((slot_1_size = decompression_slot_state->t->sz[1])) {

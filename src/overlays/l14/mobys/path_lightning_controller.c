@@ -336,10 +336,10 @@ typedef struct {
     V_2EF078 v[4];
     int      col[4];
     float    uv[4][2];
-    long     r70;
+    long     clamp;
     long     tex;
-    long     r80;
-    long     r88;
+    long     tex1;
+    long     alpha;
 } Q_2EF078;
 
 extern V_2EF078 D_L14_001DFD80[];
@@ -378,9 +378,9 @@ void draw_branched_lightning_arc(void) {
     V_2EF078 *nd;
 
     layer_quads[0].tex = get_effect_texture(0x2D);
-    layer_quads[0].r88 = 0x8000000048L;
-    layer_quads[0].r80 = 0xFF9000000260L;
-    layer_quads[0].r70 = 0;
+    layer_quads[0].alpha = 0x8000000048L;
+    layer_quads[0].tex1 = 0xFF9000000260L;
+    layer_quads[0].clamp = 0;
     outer_vertex_alpha =
         func_001FA898_r(convert_integer_to_float(lightning_main_arc_point_ages[0]) /
                         convert_integer_to_float(scale_game_frames(D_L14_00161C70_gp)) * 255.0f) -

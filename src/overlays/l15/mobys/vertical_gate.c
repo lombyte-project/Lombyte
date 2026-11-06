@@ -29,7 +29,7 @@ typedef struct {
     Vec_2A48B0    pos;   /* 0x10 */
     unsigned char state; /* 0x20 */
     char          pad21[0xF];
-    unsigned char f30; /* 0x30 */
+    unsigned char update_dist; /* 0x30 */
     char          pad31[0x47];
     GateVars     *vars; /* 0x78 */
 } GateMoby;
@@ -78,7 +78,7 @@ void vertical_gate_update(GateMoby *gate_moby) {
         gate_moby->state = GATE_WAIT_TO_OPEN;
         gate_vars->locked = 0;
         if (gate_vars->key != -1) {
-            gate_moby->f30 = 0xFF;
+            gate_moby->update_dist = 0xFF;
         }
         if (D_0013DD50 != 0 && gate_vars->key != -1) {
             gate_moby->pos.z = gate_moby->pos.z - vertical_gate_travel_distance_gp;

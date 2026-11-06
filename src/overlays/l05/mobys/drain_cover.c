@@ -475,11 +475,11 @@ extern float fast_add_rotations(float, float);
 typedef struct DrainCoverVars {
     u8  pad_0[0x90];
     f32 tilt_x_velocity;
-    f32 unk94;
-    f32 unk98;
-    f32 unk9C;
-    f32 unkA0;
-    f32 unkA4;
+    f32 tilt_y_velocity;
+    f32 wobble_x_phase;
+    f32 wobble_y_phase;
+    f32 wobble_x_rate;
+    f32 wobble_y_rate;
 } DrainCoverVars;
 
 void update_drain_cover_tilt(char *moby, float turn_scale, float speed_scale) {
@@ -509,11 +509,13 @@ void update_drain_cover_tilt(char *moby, float turn_scale, float speed_scale) {
         vertical = 0.0f;
     }
 
-    drain_cover_vars->unk98 = fast_add_rotations(drain_cover_vars->unk98, drain_cover_vars->unkA0);
-    drain_cover_vars->unk9C = fast_add_rotations(drain_cover_vars->unk9C, drain_cover_vars->unkA4);
-    angle0 = fast_sin(drain_cover_vars->unk98);
+    drain_cover_vars->wobble_x_phase =
+        fast_add_rotations(drain_cover_vars->wobble_x_phase, drain_cover_vars->wobble_x_rate);
+    drain_cover_vars->wobble_y_phase =
+        fast_add_rotations(drain_cover_vars->wobble_y_phase, drain_cover_vars->wobble_y_rate);
+    angle0 = fast_sin(drain_cover_vars->wobble_x_phase);
     target0 = fast_add_rotations(vertical, angle0 * turn_scale * D_L05_00161DD8);
-    angle1 = fast_sin(drain_cover_vars->unk9C);
+    angle1 = fast_sin(drain_cover_vars->wobble_y_phase);
     target1 = fast_add_rotations(horizontal, angle1 * turn_scale * D_L05_00161DD8);
 
     rate0 = drain_cover_tilt_acceleration_gp * speed_scale * 0.017453292f * frame_time_sq;
@@ -523,7 +525,7 @@ void update_drain_cover_tilt(char *moby, float turn_scale, float speed_scale) {
         &MOBY(moby)->rot.x, target0, &drain_cover_vars->tilt_x_velocity, rate0, rate1, limit);
     approach_angle(&MOBY(moby)->rot.y,
                    target1,
-                   &drain_cover_vars->unk94,
+                   &drain_cover_vars->tilt_y_velocity,
                    drain_cover_tilt_acceleration_gp * speed_scale * 0.017453292f * frame_time_sq,
                    drain_cover_tilt_deceleration_gp * speed_scale * 0.017453292f * frame_time_sq,
                    drain_cover_tilt_max_speed_gp * 0.017453292f * frame_time);

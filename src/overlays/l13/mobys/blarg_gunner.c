@@ -46,20 +46,20 @@ extern void spawn_explosion(void *,
                             int) __asm__("FUN_L00_0025e450");
 
 typedef struct {
-    void        *unk0;
-    u8           pad4[0x8];
-    void        *unkC;
-    u8           pad10[0x10];
-    f32          unk20;
-    s16          unk24;
-    u8           pad26[2];
-    u8           unk28;
-    u8           unk29;
-    u8           unk2A;
-    u8           pad2B[5];
-    f32          unk30;
-    u8           pad34[0x2C];
-    u8           unk60[0x10];
+    void *damage_record; /* creature header: points at health */
+    u8    pad4[0x8];
+    void *hit_flash_record; /* creature header: points at hit_flash */
+    u8    pad10[0x10];
+    f32   health;
+    s16   max_health;
+    u8    pad26[2];
+    u8    hit_response_class;
+    u8    wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8    size;
+    u8    pad2B[5];
+    f32   aim_height;
+    u8    pad34[0x2C];
+    u8    hit_flash[0x10];
     struct Moby *parent;
 } Vars;
 
@@ -77,8 +77,8 @@ struct Moby *spawn_blarg_turret_child(struct Moby *parent) {
     if (child_moby != 0) {
         child_vars = (Vars *)child_moby->pvars;
         child_vars->parent = parent;
-        child_vars->unk0 = &child_vars->unk20;
-        child_vars->unkC = child_vars->unk60;
+        child_vars->damage_record = &child_vars->health;
+        child_vars->hit_flash_record = child_vars->hit_flash;
         child_moby->update_dist = parent->update_dist;
         child_moby->draw_dist = child_vars->parent->draw_dist;
         child_moby->visible = 1;
@@ -87,12 +87,12 @@ struct Moby *spawn_blarg_turret_child(struct Moby *parent) {
         child_moby->command = 0;
         qcopy(&child_moby->pos, &child_vars->parent->pos);
         child_moby->scale = child_moby->pclass->scale * parent->scale / parent->pclass->scale;
-        child_vars->unk20 = 1.0f;
-        child_vars->unk24 = 1;
-        child_vars->unk29 = 1;
-        child_vars->unk2A = 3;
-        child_vars->unk28 = 0;
-        child_vars->unk30 = 0.9f;
+        child_vars->health = 1.0f;
+        child_vars->max_health = 1;
+        child_vars->wrench_hit_sound = 1;
+        child_vars->size = 3;
+        child_vars->hit_response_class = 0;
+        child_vars->aim_height = 0.9f;
         update_entity(child_moby);
         copy_hero_moby_field_38(child_moby);
     }
@@ -102,9 +102,9 @@ struct Moby *spawn_blarg_turret_child(struct Moby *parent) {
 extern int
 hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
 
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 void blend_moby_animation(MobyAnim *m, int a, int b, int c) __asm__("FUN_00212f90");
 
@@ -175,7 +175,7 @@ void process_blarg_gunner_hits(struct Moby *moby, char *moby_vars) {
                 }
                 FUN_L00_00257470(moby, 0, -1);
                 moby_vars[0x67] = 0x78;
-                trooper_anim_update(moby, (short *)(moby_vars + 0x60));
+                start_hit_color_flash(moby, (short *)(moby_vars + 0x60));
                 if (moby->prev_seq != 3)
                     blend_moby_animation(moby, 3, 1, 0);
                 moby->state = BLARG_GUNNER_STATE_DESTROY;
@@ -183,12 +183,12 @@ void process_blarg_gunner_hits(struct Moby *moby, char *moby_vars) {
                 *tm = current_health - hit_damage;
                 *(unsigned char *)(moby_vars + 0x67) = 0xFA;
                 *(short *)(moby_vars + 0x26) = scale_game_frames(0x3C);
-                trooper_anim_update(moby, (short *)(moby_vars + 0x60));
+                start_hit_color_flash(moby, (short *)(moby_vars + 0x60));
             }
         }
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, moby_vars + 0x60);
+    update_hit_color_flash(moby, moby_vars + 0x60);
 }
 
 extern float D_L13_001670C0[];

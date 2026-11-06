@@ -1,7 +1,7 @@
 #include "types.h"
 
 struct Sprite {
-    s64 unk0;
+    s64 tex0; /* TEX0 cache, cleared here and every frame by setup_sky_gif_paging */
     s16 x;
     s16 y;
     s16 w;
@@ -22,9 +22,9 @@ struct SpriteFile {
     s16 nsprites;
     u8  padE[2];
     s32 sprites;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
+    s32 texture_data; /* 0x14: base of the texture pixels and palettes */
+    s32 fx_list;      /* 0x18: FX index list */
+    s32 sprite_data;  /* 0x1C: star sprite scratch area, 0 if none */
     s32 groups[1];
 };
 
@@ -57,10 +57,10 @@ void relocate_sky_definition(struct SpriteFile *sky_definition) {
     level_sky_effect_data = sky_definition;
     sky_definition->loaded = 1;
     sky_definition->sprites += (s32)sky_definition;
-    sky_definition->unk14 += (s32)sky_definition;
-    sky_definition->unk18 += (s32)sky_definition;
-    if (sky_definition->unk1C != 0) {
-        sky_definition->unk1C += (s32)sky_definition;
+    sky_definition->texture_data += (s32)sky_definition;
+    sky_definition->fx_list += (s32)sky_definition;
+    if (sky_definition->sprite_data != 0) {
+        sky_definition->sprite_data += (s32)sky_definition;
     }
     serialized_texture_words = (s32 *)level_sky_effect_data->sprites;
     for (i = 0; i < level_sky_effect_data->nsprites; i++) {
@@ -72,7 +72,7 @@ void relocate_sky_definition(struct SpriteFile *sky_definition) {
         ((struct Sprite *)level_sky_effect_data->sprites)[i].x = serialized_texel_offset >> 4;
         ((struct Sprite *)level_sky_effect_data->sprites)[i].w = log2dim(texture_width);
         ((struct Sprite *)level_sky_effect_data->sprites)[i].h = log2dim(texture_height);
-        ((struct Sprite *)level_sky_effect_data->sprites)[i].unk0 = 0;
+        ((struct Sprite *)level_sky_effect_data->sprites)[i].tex0 = 0;
     }
     for (k = 0; k < level_sky_effect_data->ngroups; k++) {
         level_sky_effect_data->groups[k] += (s32)sky_definition;

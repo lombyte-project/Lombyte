@@ -4,8 +4,8 @@
 #include "rnc/game/game_globals.h"
 
 /* Draws the pause menu's ring of 8 icons and the quick-select overlay.
-   arg0 is the pause-state object: unk20/unk24 give the viewport
-   width/height (used for the ring's center and radius), unk50 the
+   arg0 is the pause-state object: w/h give the viewport
+   width/height (used for the ring's center and radius), sel the
    selected slot (drawn with a pulsing highlight box), and slots[i]
    indexes an icon-info table (D_001863D0, 0x4C bytes/entry) and a byte
    flags table (item_text_variant) when nonzero. */

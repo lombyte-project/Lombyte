@@ -1,6 +1,7 @@
 /* Shared moby class gadgebot: comes out of its container, picks targets and fights. */
 
 #include "types.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/mobys/moby_class_id.h"
 #include "rnc/hero/hero.h"
@@ -23,7 +24,9 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/overlay/shared/enemies/gadgebot_spawn_container.h"
 #include "rnc/overlay/shared/enemies/gadgebot_spawn_pad.h"
+#include "rnc/overlay/shared/enemies/gadgebot.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/mobys/ground_move_control.h"
 
 enum {
     GADGEBOT_ABSORPTION_DISABLED = 2
@@ -59,9 +62,9 @@ typedef union {
 
 typedef struct {
     char  p0[0x10];
-    int   unk10;
+    int   collision;
     char  p14[0x10];
-    float unk24;
+    float scale;
 } GbClass;
 
 typedef struct GbMoby {
@@ -73,7 +76,7 @@ typedef struct GbMoby {
     char           p28[4];
     float          scale;
     char           p30;
-    unsigned char  unk31;
+    unsigned char  visible;
     char           p32[2];
     unsigned short flags;
     char           p36[0x12];
@@ -81,46 +84,23 @@ typedef struct GbMoby {
     char           p4C[7];
     unsigned char  anim;
     char           p54[0x1C];
-    unsigned char  unk70;
+    unsigned char  anim_flags;
     char           p71[7];
     void          *vars;
     char           p7C[3];
-    unsigned char  unk7F;
+    unsigned char  shadow_range;
     char           p80[0x14];
-    int            unk94;
+    int            collision;
     char           p98[0xE];
     short          cls_id;
     char           pA8[8];
-    unsigned char  unkB0;
+    unsigned char  mission;
     char           pB1[0xB];
     unsigned char  sub;
     char           pBD[3];
-    float          unkC0[4];
+    float          rot_row0[4];
     char           pD0[0x30];
 } GbMoby;
-
-typedef struct {
-    int   collision_radius_1024ths;
-    float unk04;
-    float unk08;
-    float unk0C;
-    float unk10;
-    float unk14;
-    float unk18;
-    float unk1C;
-    float unk20;
-    float unk24;
-    float unk28;
-    float unk2C;
-    float unk30;
-    float unk34;
-    int   movement_option_flags;
-    float unk3C;
-    float unk40;
-    float unk44;
-    int   i48;
-    float unk4C;
-} GbCtl;
 
 typedef struct {
     int id[16];
@@ -128,86 +108,86 @@ typedef struct {
 } GbPaths;
 
 typedef struct {
-    float         unk0[4] __attribute__((aligned(16)));
-    float         unk10;
-    float         unk14;
-    float         unk18;
-    char          p1C[0x14];
-    GbCtl         ctl;
-    char          unk80[0x60];
-    float         unkE0[4] __attribute__((aligned(16)));
-    float         unkF0[4] __attribute__((aligned(16)));
-    unsigned char unk100;
-    unsigned char scale_manipulator_attached;
-    char          p102[0x1E];
-    float         unk120;
-    float         unk124;
-    float         unk128;
-    char          p12C[0x44];
-    GbMoby       *spawn_container_moby;
-    GbMoby       *target; /* nearest mine/box moby found by FUN_L06_002f2910 (0: none) */
-    char          p178[4];
-    float         approach_heading_offset;
-    char          p180[4];
-    int           unk184;
-    float         unk188;
-    int           attack_target_search_frame;
-    short         unk190;
-    char          p192[2];
-    int           attack_substate_timer;
-    short         unk198;
-    short         target_searched; /* set once FUN_L06_002f2910 has run the search */
-    GbMoby       *collision_contact_moby;
-    char          p1A0[0x40];
-    GbPaths       paths;
-    char          p260[0x1C];
-    int           selected_path_slot;
-    char          p280[4];
-    float         collision_correction_speed;
-    float         unk288;
-    float         glow_pulse_angle;
-    char          p290[0x10];
-    int           follow_gate_moby_indices[8];
-    int           unk2C0[8];
-    GbVec         position_history_latest;
-    GbVec         position_history_previous;
-    float         ground_height_change_limit;
-    GbMoby       *absorption_owner_moby;
-    float         unk308;
-    int           target_group; /* moby group searched for targets (-1: whole level list) */
-    int           configured_path_count;
+    float                    follow_anchor[4] __attribute__((aligned(16)));
+    float                    unk10;
+    float                    unk14;
+    float                    unk18;
+    char                     p1C[0x14];
+    struct GroundMoveControl ctl;
+    struct KnockbackMotion   knockback;
+    float                    home_position[4] __attribute__((aligned(16)));
+    float                    stall_check_position[4] __attribute__((aligned(16)));
+    unsigned char            scale_manipulator;
+    unsigned char            scale_manipulator_attached;
+    char                     p102[0x1E];
+    float                    scale_manipulator_scale_x;
+    float                    scale_manipulator_scale_y;
+    float                    scale_manipulator_scale_z;
+    char                     p12C[0x44];
+    GbMoby                  *spawn_container_moby;
+    GbMoby                  *target; /* nearest mine/box moby found by FUN_L06_002f2910 (0: none) */
+    char                     p178[4];
+    float                    approach_heading_offset;
+    char                     p180[4];
+    int                      follow_frame_count;
+    float                    stall_hero_distance;
+    int                      attack_target_search_frame;
+    short                    unk190;
+    char                     p192[2];
+    int                      attack_substate_timer;
+    short                    has_target;
+    short                    target_searched; /* set once FUN_L06_002f2910 has run the search */
+    GbMoby                  *collision_contact_moby;
+    char                     p1A0[0x40];
+    GbPaths                  paths;
+    char                     p260[0x1C];
+    int                      selected_path_slot;
+    char                     p280[4];
+    float                    collision_correction_speed;
+    float                    ground_spring_velocity;
+    float                    glow_pulse_angle;
+    char                     p290[0x10];
+    int                      follow_gate_moby_indices[8];
+    int                      follow_gate_volumes[8];
+    GbVec                    position_history_latest;
+    GbVec                    position_history_previous;
+    float                    ground_height_change_limit;
+    GbMoby                  *absorption_owner_moby;
+    float                    manipulator_scale;
+    int target_group; /* moby group searched for targets (-1: whole level list) */
+    int configured_path_count;
 } GbVars;
 
 typedef struct {
     char p0[0x14];
-    int  unk14;
+    int  absorbs_remaining;
 } GbOwnerVars;
 
 typedef struct {
     char    p0[0x18];
-    GbMoby *unk18;
-    int     unk1C;
+    GbMoby *moby;
+    int     surface_type; /* 0x1C: CollisionHit.surface_type */
     char    p20[0x10];
-    float   unk30[4];
-    float   unk40[2];
-    float   unk48;
+    float   position[4];
+    float   normal_xy[2];
+    float   normal_z;
 } GbHit;
 
 typedef struct {
     char p0[0x2C];
-    int  unk2C;
+    int  in_range_count; /* gadgebots near the hero that take a command this frame */
 } GbStats;
 
 typedef int u128_c __attribute__((mode(TI)));
 
 typedef struct {
     char  p0[0x18];
-    Moby *unk18;
-    int   unk1C;
+    Moby *moby;
+    int   surface_type; /* 0x1C: CollisionHit.surface_type */
     char  p20[0x10];
-    float unk30[4];
-    float unk40[2];
-    float unk48;
+    float position[4];
+    float normal_xy[2];
+    float normal_z;
 } GbHit_2f2250;
 
 typedef struct {
@@ -220,7 +200,7 @@ typedef struct {
     char  p190[2];
     short candidate_count;
     char  p194[4];
-    short unk198;
+    short has_target;
     short target_searched;
     char  p19C[4];
     int   candidates[8];
@@ -321,12 +301,6 @@ void gadgebot_update(GbMoby *moby) {
         GADGEBOT_ATTACK_WAIT_FOR_TARGET = 4
     };
     enum {
-        GADGEBOT_COMMAND_FOLLOW_HERO = 1,
-        GADGEBOT_COMMAND_STAND_AND_FACE_HERO = 2,
-        GADGEBOT_COMMAND_SEEK_AND_ATTACK_TARGET = 3,
-        GADGEBOT_COMMAND_SEEK_INTERACTION_TARGET = 4
-    };
-    enum {
         GADGEBOT_FOLLOW_INITIALIZE = 0,
         GADGEBOT_FOLLOW_MOVE_TOWARD_HERO = 1,
         GADGEBOT_FOLLOW_WAIT_AND_FACE_HERO = 2
@@ -335,23 +309,23 @@ void gadgebot_update(GbMoby *moby) {
         GADGEBOT_INTERACTION_SEARCH_TARGET = 0,
         GADGEBOT_INTERACTION_APPROACH_TARGET = 1
     };
-    float   movement_displacement_output[4];
-    float   raised_position_snapshot[4];
-    float   save0[4];
-    float   save1[4];
-    float   vector_and_hit_scratch[4];
-    float   position_and_displacement_scratch[4];
-    float   temporary_position[4];
-    float   path_and_attack_vector[4];
-    float   attack_probe_near_position[4];
-    float   owner_radial_angle;
-    float   step;
-    GbVars *gadgebot_vars = moby->vars;
-    GbCtl  *movement_control;
-    int     flags;
-    float   hero_distance;
-    float   dz;
-    int     interaction_result;
+    float                     movement_displacement_output[4];
+    float                     raised_position_snapshot[4];
+    float                     save0[4];
+    float                     save1[4];
+    float                     vector_and_hit_scratch[4];
+    float                     position_and_displacement_scratch[4];
+    float                     temporary_position[4];
+    float                     path_and_attack_vector[4];
+    float                     attack_probe_near_position[4];
+    float                     owner_radial_angle;
+    float                     step;
+    GbVars                   *gadgebot_vars = moby->vars;
+    struct GroundMoveControl *movement_control;
+    int                       flags;
+    float                     hero_distance;
+    float                     dz;
+    int                       interaction_result;
 
     flags = 0;
     movement_control = &gadgebot_vars->ctl;
@@ -370,7 +344,7 @@ void gadgebot_update(GbMoby *moby) {
                 ok = 1;
             }
             if (ok) {
-                l06_gadgebot_command_range_stats.unk2C++;
+                l06_gadgebot_command_range_stats.in_range_count++;
                 switch (D_00141610[0]) {
                 case GADGEBOT_COMMAND_FOLLOW_HERO:
                     if (moby->state != GADGEBOT_FOLLOW_HERO) {
@@ -397,52 +371,52 @@ void gadgebot_update(GbMoby *moby) {
     }
     if (GB_FLAG != 0) {
         if (gadgebot_vars->scale_manipulator_attached == 0) {
-            attach_manipulator((char *)moby, 0, &gadgebot_vars->unk100);
+            attach_manipulator((char *)moby, 0, &gadgebot_vars->scale_manipulator);
         }
         if (moby->state != GADGEBOT_WAIT_FOR_SPAWN_PAD) {
-            approach_value(&gadgebot_vars->unk308, 2.3f, frame_scale * 0.1f);
+            approach_value(&gadgebot_vars->manipulator_scale, 2.3f, frame_scale * 0.1f);
         } else {
-            approach_value(&gadgebot_vars->unk308, 1.0f, frame_scale * 0.1f);
+            approach_value(&gadgebot_vars->manipulator_scale, 1.0f, frame_scale * 0.1f);
         }
-        gadgebot_vars->unk120 = gadgebot_vars->unk308;
-        gadgebot_vars->unk124 = gadgebot_vars->unk308;
-        gadgebot_vars->unk128 = gadgebot_vars->unk308;
+        gadgebot_vars->scale_manipulator_scale_x = gadgebot_vars->manipulator_scale;
+        gadgebot_vars->scale_manipulator_scale_y = gadgebot_vars->manipulator_scale;
+        gadgebot_vars->scale_manipulator_scale_z = gadgebot_vars->manipulator_scale;
     } else if (gadgebot_vars->scale_manipulator_attached != 0) {
-        detach_manipulator(moby, &gadgebot_vars->unk100);
+        detach_manipulator(moby, &gadgebot_vars->scale_manipulator);
     }
     switch (moby->state) {
     case GADGEBOT_INITIALIZE: {
         int i;
 
-        gadgebot_vars->unk308 = 1.0f;
+        gadgebot_vars->manipulator_scale = 1.0f;
         moby->pos[2] = probe_ground_height(moby->pos, 0, 0.5f);
         spawn_gadgebot_pad((char *)moby);
         gadgebot_vars->position_history_previous.q = gadgebot_vars->position_history_latest.q =
             *(OvlQuad *)moby->pos;
-        if (visited52[moby->unkB0 + current_level_index * 16] == 0xFF) {
+        if (visited52[moby->mission + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(moby);
             return;
         }
         gadgebot_vars->spawn_container_moby =
             (GbMoby *)spawn_gadgebot_spawn_container((char *)moby);
         moby->pos[2] = probe_ground_height(moby->pos, 0, 0.5f);
-        qcopy(gadgebot_vars->unk0, moby->pos);
-        qcopy(gadgebot_vars->unkE0, moby->pos);
+        qcopy(gadgebot_vars->follow_anchor, moby->pos);
+        qcopy(gadgebot_vars->home_position, moby->pos);
         gadgebot_vars->unk14 = frame_time * 2.0f;
         gadgebot_vars->unk18 = frame_time * 2.6179938f;
         gadgebot_vars->ctl.collision_radius_1024ths = 0x12C;
-        gadgebot_vars->ctl.unk04 = 0.51f;
-        gadgebot_vars->ctl.unk08 = gadgebot_vars->ground_height_change_limit;
-        gadgebot_vars->ctl.unk0C = gadgebot_vars->ground_height_change_limit;
-        gadgebot_vars->ctl.unk24 = frame_time * 3.0f + frame_time * 0.1f;
-        gadgebot_vars->ctl.unk1C = frame_scale_sq * 0.02f;
-        gadgebot_vars->ctl.unk20 = frame_scale_sq * 0.3f;
-        gadgebot_vars->ctl.unk28 = 0.6981317f;
-        gadgebot_vars->ctl.unk2C = 0.2f;
-        gadgebot_vars->ctl.unk3C = frame_scale_sq * 0.03f;
-        gadgebot_vars->ctl.unk40 = frame_scale_sq * 0.3f;
-        gadgebot_vars->ctl.unk44 = frame_time * 3.1415927f;
-        gadgebot_vars->ctl.i48 = scale_game_frames(4);
+        gadgebot_vars->ctl.step_height = 0.51f;
+        gadgebot_vars->ctl.max_drop = gadgebot_vars->ground_height_change_limit;
+        gadgebot_vars->ctl.max_climb = gadgebot_vars->ground_height_change_limit;
+        gadgebot_vars->ctl.max_speed = frame_time * 3.0f + frame_time * 0.1f;
+        gadgebot_vars->ctl.acceleration = frame_scale_sq * 0.02f;
+        gadgebot_vars->ctl.brake = frame_scale_sq * 0.3f;
+        gadgebot_vars->ctl.heading_tolerance = 0.6981317f;
+        gadgebot_vars->ctl.arrive_distance = 0.2f;
+        gadgebot_vars->ctl.turn_spring = frame_scale_sq * 0.03f;
+        gadgebot_vars->ctl.turn_damping = frame_scale_sq * 0.3f;
+        gadgebot_vars->ctl.max_turn_step = frame_time * 3.1415927f;
+        gadgebot_vars->ctl.move_timer = scale_game_frames(4);
         gadgebot_vars->ctl.movement_option_flags |= 1;
         for (i = 0; i < 16; i++) {
             if (gadgebot_vars->paths.id[i] >= 0) {
@@ -452,7 +426,7 @@ void gadgebot_update(GbMoby *moby) {
         gadgebot_vars->glow_pulse_angle = random_angle_radians();
         gadgebot_vars->selected_path_slot = -1;
         moby->state = GADGEBOT_WAIT_FOR_SPAWN_PAD;
-        moby->unk94 = 0;
+        moby->collision = 0;
         break;
     }
     case GADGEBOT_WAIT_FOR_SPAWN_PAD:
@@ -485,7 +459,7 @@ void gadgebot_update(GbMoby *moby) {
                 gadgebot_position_snapshot_z_offset_gp = 0.27f;
             }
             moby->flags = (moby->flags & 0xFFBE) | 0x1000;
-            moby->unk94 = moby->cls->unk10;
+            moby->collision = moby->cls->collision;
             moby->state = GADGEBOT_FOLLOW_HERO;
         } else {
             if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
@@ -493,16 +467,16 @@ void gadgebot_update(GbMoby *moby) {
                 gadgebot_vars->spawn_container_moby->flags |= 0x41;
                 moby->flags &= 0xEFFF;
                 gadgebot_vars->spawn_container_moby->flags &= 0xEFFF;
-                gadgebot_vars->spawn_container_moby->unk94 = 0;
+                gadgebot_vars->spawn_container_moby->collision = 0;
             } else {
                 moby->flags &= 0xFFBE;
                 gadgebot_vars->spawn_container_moby->flags &= 0xFFBE;
                 moby->flags |= 0x1000;
                 gadgebot_vars->spawn_container_moby->flags |= 0x1000;
-                gadgebot_vars->spawn_container_moby->unk94 =
-                    gadgebot_vars->spawn_container_moby->cls->unk10;
+                gadgebot_vars->spawn_container_moby->collision =
+                    gadgebot_vars->spawn_container_moby->cls->collision;
             }
-            if (moby->unk31 != 0) {
+            if (moby->visible != 0) {
                 update_gadgebot_glow_effects((char *)moby);
             }
             return;
@@ -545,14 +519,14 @@ void gadgebot_update(GbMoby *moby) {
 
             {
                 int *ca = &gadgebot_vars->follow_gate_moby_indices[j];
-                int *cb = &gadgebot_vars->unk2C0[j];
+                int *cb = &gadgebot_vars->follow_gate_volumes[j];
 
                 if (*ca == -1 || *cb == -1) {
                     break;
                 }
             }
             ta = &gadgebot_vars->follow_gate_moby_indices[j];
-            tb = &gadgebot_vars->unk2C0[j];
+            tb = &gadgebot_vars->follow_gate_volumes[j];
             referenced_moby = &(*(GbMoby **)&D_L06_0015FFD8)[*ta];
             if (referenced_moby->cls_id == 0x3F7 && referenced_moby->state != 4 &&
                 is_point_inside_clip_volume(((GbMoby *)hero.moby)->pos, *tb) != 0 &&
@@ -566,9 +540,9 @@ void gadgebot_update(GbMoby *moby) {
             switch (moby->sub) {
             case GADGEBOT_FOLLOW_INITIALIZE:
                 moby->sub = 1;
-                gadgebot_vars->unk184 = 0;
+                gadgebot_vars->follow_frame_count = 0;
                 gadgebot_vars->unk190 = 0;
-                qcopy(gadgebot_vars->unkF0, moby->pos);
+                qcopy(gadgebot_vars->stall_check_position, moby->pos);
                 gadgebot_vars->approach_heading_offset = randf_sym(0.13962634f, 0.34906584f);
             case GADGEBOT_FOLLOW_MOVE_TOWARD_HERO: {
                 int hit;
@@ -608,22 +582,23 @@ void gadgebot_update(GbMoby *moby) {
                         fast_arc_tan(position_and_displacement_scratch[0] - moby->pos[0],
                                      position_and_displacement_scratch[1] - moby->pos[1]),
                         gadgebot_vars->approach_heading_offset),
-                    &gadgebot_vars->ctl.unk14,
+                    &gadgebot_vars->ctl.turn_velocity,
                     frame_scale_sq * 0.07f,
                     frame_scale_sq * 0.3f,
                     frame_time * 5.2359877f);
                 if (hero_distance > 2.3f) {
                     approach_value(
-                        &gadgebot_vars->ctl.unk24, frame_time * 3.0f * 1.35f, frame_time_sq);
+                        &gadgebot_vars->ctl.max_speed, frame_time * 3.0f * 1.35f, frame_time_sq);
                 } else if (hero_distance < 1.2f) {
-                    approach_value(
-                        &gadgebot_vars->ctl.unk24, frame_time * 3.0f * 0.77f, frame_time_sq * 2.0f);
+                    approach_value(&gadgebot_vars->ctl.max_speed,
+                                   frame_time * 3.0f * 0.77f,
+                                   frame_time_sq * 2.0f);
                 } else {
                     approach_value(
-                        &gadgebot_vars->ctl.unk24, frame_time * 3.0f * 0.95f, frame_time_sq);
+                        &gadgebot_vars->ctl.max_speed, frame_time * 3.0f * 0.95f, frame_time_sq);
                 }
-                if (frame_time * 3.0f * 1.35f < gadgebot_vars->ctl.unk24) {
-                    gadgebot_vars->ctl.unk24 = frame_time * 3.0f * 1.35f;
+                if (frame_time * 3.0f * 1.35f < gadgebot_vars->ctl.max_speed) {
+                    gadgebot_vars->ctl.max_speed = frame_time * 3.0f * 1.35f;
                 }
                 if (hero_distance > 0.8f) {
                     flags = move_moby_with_ground_and_collision_checks(moby,
@@ -648,14 +623,14 @@ void gadgebot_update(GbMoby *moby) {
                 }
                 hit = 0;
                 if (flags & 1) {
-                    if (gadgebot_vars->unk184 % 14 == 0) {
-                        if (vector_distance_xy(gadgebot_vars->unkF0, moby->pos) <
-                            gadgebot_vars->ctl.unk10) {
+                    if (gadgebot_vars->follow_frame_count % 14 == 0) {
+                        if (vector_distance_xy(gadgebot_vars->stall_check_position, moby->pos) <
+                            gadgebot_vars->ctl.speed) {
                             hit = 1;
-                            gadgebot_vars->unk188 =
+                            gadgebot_vars->stall_hero_distance =
                                 vector_distance_xy(hero.motion.pos.f, moby->pos);
                         }
-                        qcopy(gadgebot_vars->unkF0, moby->pos);
+                        qcopy(gadgebot_vars->stall_check_position, moby->pos);
                     }
                 }
                 if (flags & 0x20) {
@@ -663,16 +638,17 @@ void gadgebot_update(GbMoby *moby) {
                     *(OvlQuad *)moby->pos = *(OvlQuad *)temporary_position;
                 }
                 if (hero_distance < 0.8f || hit != 0 || dz > 1.75f) {
-                    qcopy(gadgebot_vars->unk0, moby->pos);
+                    qcopy(gadgebot_vars->follow_anchor, moby->pos);
                     moby->sub = 2;
                 }
                 break;
             }
             case GADGEBOT_FOLLOW_WAIT_AND_FACE_HERO: {
-                float hd = vector_distance_xy(gadgebot_vars->unk0, hero.motion.pos.f);
+                float hd = vector_distance_xy(gadgebot_vars->follow_anchor, hero.motion.pos.f);
 
                 if ((gadgebot_vars->unk190 == 0 && hd > 1.8f) ||
-                    (gadgebot_vars->unk190 != 0 && hd > gadgebot_vars->unk188 + 0.5f)) {
+                    (gadgebot_vars->unk190 != 0 &&
+                     hd > gadgebot_vars->stall_hero_distance + 0.5f)) {
                     if (dz < 1.75f) {
                         moby->sub = 0;
                     }
@@ -683,14 +659,14 @@ void gadgebot_update(GbMoby *moby) {
                 FUN_L00_00258278((char *)moby,
                                  fast_arc_tan(hero.motion.pos.f[0] - moby->pos[0],
                                               hero.motion.pos.f[1] - moby->pos[1]),
-                                 &gadgebot_vars->ctl.unk14,
+                                 &gadgebot_vars->ctl.turn_velocity,
                                  frame_scale_sq * 0.05f,
                                  frame_scale_sq * 0.3f,
                                  frame_time * 3.4906585f);
                 break;
             }
             }
-            gadgebot_vars->unk184++;
+            gadgebot_vars->follow_frame_count++;
         }
         break;
     }
@@ -701,7 +677,7 @@ void gadgebot_update(GbMoby *moby) {
         FUN_L00_00258278(
             (char *)moby,
             fast_arc_tan(hero.motion.pos.f[0] - moby->pos[0], hero.motion.pos.f[1] - moby->pos[1]),
-            &gadgebot_vars->ctl.unk14,
+            &gadgebot_vars->ctl.turn_velocity,
             frame_scale_sq * 0.05f,
             frame_scale_sq * 0.3f,
             frame_time * 3.4906585f);
@@ -728,7 +704,7 @@ void gadgebot_update(GbMoby *moby) {
         if (moby->sub == 0) {
             moby->sub = 1;
             gadgebot_vars->target = 0;
-            gadgebot_vars->unk198 = 0;
+            gadgebot_vars->has_target = 0;
             gadgebot_vars->target_searched = 0;
             gadgebot_vars->approach_heading_offset = randf_sym(0.13962634f, 0.34906584f);
             gadgebot_vars->attack_target_search_frame = level_frame_count;
@@ -789,11 +765,11 @@ void gadgebot_update(GbMoby *moby) {
                 }
                 FUN_L00_00258278((char *)moby,
                                  approach_heading,
-                                 &gadgebot_vars->ctl.unk14,
+                                 &gadgebot_vars->ctl.turn_velocity,
                                  frame_scale_sq * 0.07f,
                                  frame_scale_sq * 0.3f,
                                  frame_time * 5.2359877f);
-                gadgebot_vars->ctl.unk24 = frame_time * 4.5f;
+                gadgebot_vars->ctl.max_speed = frame_time * 4.5f;
                 if (move_moby_with_ground_and_collision_checks(moby,
                                                                &gadgebot_vars->ctl,
                                                                gadgebot_vars->target->pos,
@@ -840,7 +816,7 @@ void gadgebot_update(GbMoby *moby) {
                     record_moby_hit(gadgebot_vars->target, vector_and_hit_scratch);
                 }
             }
-            if (moby->unk70 & 2) {
+            if (moby->anim_flags & 2) {
                 gadgebot_vars->target_searched = 0;
                 gadgebot_vars->attack_substate_timer = scale_game_frames(0x1E);
                 moby->sub = 3;
@@ -896,14 +872,14 @@ void gadgebot_update(GbMoby *moby) {
                     gadgebot_vars->target->cls_id != 0x15F) {
                     fast_vec_add(vector_and_hit_scratch,
                                  gadgebot_vars->target->pos,
-                                 gadgebot_vars->target->unkC0);
+                                 gadgebot_vars->target->rot_row0);
                 } else {
                     *(OvlQuad *)vector_and_hit_scratch = *(OvlQuad *)gadgebot_vars->target->pos;
                 }
                 FUN_L00_00258278((char *)moby,
                                  fast_arc_tan(vector_and_hit_scratch[0] - moby->pos[0],
                                               vector_and_hit_scratch[1] - moby->pos[1]),
-                                 &gadgebot_vars->ctl.unk14,
+                                 &gadgebot_vars->ctl.turn_velocity,
                                  frame_scale_sq * 0.07f,
                                  frame_scale_sq * 0.3f,
                                  frame_time * 5.2359877f);
@@ -940,10 +916,10 @@ void gadgebot_update(GbMoby *moby) {
         if (rr <= 0.0f) {
             GbOwnerVars *ov = gadgebot_vars->absorption_owner_moby->vars;
 
-            if (ov->unk14 > 0) {
-                ov->unk14--;
+            if (ov->absorbs_remaining > 0) {
+                ov->absorbs_remaining--;
             }
-            if (ov->unk14 == 0) {
+            if (ov->absorbs_remaining == 0) {
                 trooper_play_sound(1, 0, (int)gadgebot_vars->absorption_owner_moby, 0x516);
             } else {
                 trooper_play_sound(0, 0, (int)gadgebot_vars->absorption_owner_moby, 0x516);
@@ -957,23 +933,23 @@ void gadgebot_update(GbMoby *moby) {
         moby->pos[0] = vector_and_hit_scratch[0] + gadgebot_vars->absorption_owner_moby->pos[0];
         moby->pos[1] = vector_and_hit_scratch[1] + gadgebot_vars->absorption_owner_moby->pos[1];
         if (rr < 1.0f) {
-            moby->scale = moby->cls->unk24 * rr;
+            moby->scale = moby->cls->scale * rr;
             spawn_source_attached_fading_effect_particle(
                 (1.0f - rr) * 0.5f * 210000.0f, (char *)moby, 0x3000407F, scale_game_frames(2), 3);
         }
-        if (moby->unk31 != 0) {
+        if (moby->visible != 0) {
             update_gadgebot_glow_effects((char *)moby);
         }
-        moby->unk94 = 0;
+        moby->collision = 0;
         moby->flags &= 0xEFFF;
         return;
     }
     case GADGEBOT_UPDATE_KNOCKBACK:
-        if (step_moby_motion(moby, gadgebot_vars->unk80) & 0x41) {
+        if (step_moby_motion(moby, &gadgebot_vars->knockback) & 0x41) {
             int i;
 
             cart_burst(moby, moby->pos, -1, 0.5f, 13.0f);
-            qcopy(moby->pos, gadgebot_vars->unkE0);
+            qcopy(moby->pos, gadgebot_vars->home_position);
             moby->state = GADGEBOT_STAND_AND_FACE_HERO;
             for (i = 0; i < 10; i++) {
                 float effect_scale_factor = random_float_between(0.1f, 1.0f);
@@ -1026,14 +1002,14 @@ void gadgebot_update(GbMoby *moby) {
         qcopy(raised_position_snapshot, moby->pos);
         raised_position_snapshot[2] += gadgebot_position_snapshot_z_offset_gp + 0.02f;
         qcopy(vector_and_hit_scratch, moby->pos);
-        saved_control_f10 = gadgebot_vars->ctl.unk10;
-        saved_control_f24 = gadgebot_vars->ctl.unk24;
-        gadgebot_vars->ctl.unk10 = 0.0f;
-        gadgebot_vars->ctl.unk24 = 0.0f;
+        saved_control_f10 = gadgebot_vars->ctl.speed;
+        saved_control_f24 = gadgebot_vars->ctl.max_speed;
+        gadgebot_vars->ctl.speed = 0.0f;
+        gadgebot_vars->ctl.max_speed = 0.0f;
         move_moby_with_ground_and_collision_checks(
             moby, &gadgebot_vars->ctl, moby->pos, movement_displacement_output, 1.0f);
-        gadgebot_vars->ctl.unk10 = saved_control_f10;
-        gadgebot_vars->ctl.unk24 = saved_control_f24;
+        gadgebot_vars->ctl.speed = saved_control_f10;
+        gadgebot_vars->ctl.max_speed = saved_control_f24;
         moby->pos[2] = vector_and_hit_scratch[2];
         if (fast_vec_dist(vector_and_hit_scratch, moby->pos) > 0.005f) {
             float max;
@@ -1072,13 +1048,13 @@ void gadgebot_update(GbMoby *moby) {
 
             if (interaction_result == 0) {
                 float  z = moby->pos[2];
-                float *hp = D_L06_001745C0.unk30;
+                float *hp = D_L06_001745C0.position;
                 int    i;
 
                 i = 0;
                 do {
                     qcopy(position_and_displacement_scratch, moby->pos);
-                    position_and_displacement_scratch[2] += gadgebot_vars->ctl.unk04;
+                    position_and_displacement_scratch[2] += gadgebot_vars->ctl.step_height;
                     if (coll_sphere(
                             position_and_displacement_scratch,
                             convert_integer_to_float(gadgebot_vars->ctl.collision_radius_1024ths) *
@@ -1087,52 +1063,52 @@ void gadgebot_update(GbMoby *moby) {
                             moby) == 0) {
                         break;
                     }
-                    if (fast_arc_tan(D_L06_001745C0.unk48, vector_length_xy(D_L06_001745C0.unk40)) >
-                        0.5235988f) {
+                    if (fast_arc_tan(D_L06_001745C0.normal_z,
+                                     vector_length_xy(D_L06_001745C0.normal_xy)) > 0.5235988f) {
                         qcopy(moby->pos, hp);
-                        moby->pos[2] -= gadgebot_vars->ctl.unk04;
+                        moby->pos[2] -= gadgebot_vars->ctl.step_height;
                     }
                     i++;
                 } while (i < 6);
                 moby->pos[2] = z;
                 if (absolute_float(save1[2] - probe_ground_height(moby->pos, 0, 0.5f)) >=
-                    gadgebot_vars->ctl.unk0C) {
+                    gadgebot_vars->ctl.max_climb) {
                     *(OvlQuad *)moby->pos = *(OvlQuad *)save1;
                     gadgebot_vars->collision_correction_speed = 0.0f;
                 }
             }
-            movement_control->unk18 -= frame_time_sq * 7.0f;
-            if (movement_control->unk18 < frame_time * -8.0f) {
-                movement_control->unk18 = frame_time * -8.0f;
+            movement_control->vertical_velocity -= frame_time_sq * 7.0f;
+            if (movement_control->vertical_velocity < frame_time * -8.0f) {
+                movement_control->vertical_velocity = frame_time * -8.0f;
             }
             moby->pos[2] += 0.25f;
             ground_height = probe_ground_height(moby->pos, 0, 0.5f);
             moby->pos[2] -= 0.25f;
             if (moby->pos[2] < ground_height) {
                 vendor_spring(&moby->pos[2],
-                              &gadgebot_vars->unk288,
+                              &gadgebot_vars->ground_spring_velocity,
                               ground_height,
                               frame_scale_sq * 0.04f,
                               frame_scale_sq * 0.3f,
                               frame_time * 1.5f);
-                movement_control->unk18 = 0.0f;
+                movement_control->vertical_velocity = 0.0f;
             } else if (ground_height < moby->pos[2]) {
-                moby->pos[2] += movement_control->unk18;
+                moby->pos[2] += movement_control->vertical_velocity;
                 if (moby->pos[2] < ground_height) {
                     moby->pos[2] = ground_height;
                 }
             }
         }
-        if (moby->pos[2] < gadgebot_vars->unkE0[2] - 5.0f || moby->pos[0] < 2.0f ||
+        if (moby->pos[2] < gadgebot_vars->home_position[2] - 5.0f || moby->pos[0] < 2.0f ||
             moby->pos[0] > 1021.0f || moby->pos[1] < 2.0f || moby->pos[1] > 1021.0f ||
             moby->pos[2] < 2.0f || moby->pos[2] > 1021.0f) {
-            qcopy(moby->pos, gadgebot_vars->unkE0);
+            qcopy(moby->pos, gadgebot_vars->home_position);
             moby->state = GADGEBOT_STAND_AND_FACE_HERO;
             return;
         }
     }
-    if (D_L06_001745C0.unk18 != 0 && D_L06_001745C0.unk1C > 0) {
-        gadgebot_vars->collision_contact_moby = D_L06_001745C0.unk18;
+    if (D_L06_001745C0.moby != 0 && D_L06_001745C0.surface_type > 0) {
+        gadgebot_vars->collision_contact_moby = D_L06_001745C0.moby;
     } else {
         gadgebot_vars->collision_contact_moby = 0;
     }
@@ -1145,17 +1121,17 @@ void gadgebot_update(GbMoby *moby) {
     position_and_displacement_scratch[2] += 1.0f;
     if (collision_line(
             position_and_displacement_scratch, vector_and_hit_scratch, 0, (int)moby, 0) != 0 &&
-        D_L06_001745C0.unk18 != 0 &&
-        (D_L06_001745C0.unk18->cls_id == 0x409 || D_L06_001745C0.unk18->cls_id == 0x359 ||
-         is_moby_in_class_range_500_to_540(D_L06_001745C0.unk18) != 0)) {
+        D_L06_001745C0.moby != 0 &&
+        (D_L06_001745C0.moby->cls_id == 0x409 || D_L06_001745C0.moby->cls_id == 0x359 ||
+         is_moby_in_class_range_500_to_540(D_L06_001745C0.moby) != 0)) {
         *(OvlQuad *)moby->pos = *(OvlQuad *)save0;
     }
-    if (moby->unk31 != 0) {
+    if (moby->visible != 0) {
         if (fast_vec_dist(moby->pos, D_L06_00167540) < 17.0f) {
             FUN_L00_0025a120(moby);
-            moby->unk7F = 0xD;
+            moby->shadow_range = 0xD;
         }
-        if (moby->unk31 != 0) {
+        if (moby->visible != 0) {
             update_gadgebot_glow_effects((char *)moby);
         }
     }
@@ -1259,7 +1235,7 @@ void assign_gadgebot_attack_targets(void) {
                 *(float *)(start + 8) += 0.25f;
                 *(float *)(end + 8) += 0.25f;
                 if (collision_line(start, end, 2, (int)moby, 0) != 0 &&
-                    (char *)D_L06_001745C0.unk18 != candidate)
+                    (char *)D_L06_001745C0.moby != candidate)
                     continue;
                 score = score_gadgebot_target_candidate(moby, candidate, 5);
                 for (k = 0; k < CANDIDATE_COUNT(vars); k++) {
@@ -1381,7 +1357,7 @@ void assign_gadgebot_attack_targets(void) {
         slots->target = (char *)claimed;
         slots->target_searched = 1;
         if (claimed != 0)
-            slots->unk198 = 1;
+            slots->has_target = 1;
     }
 }
 

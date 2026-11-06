@@ -15,12 +15,12 @@
 
 typedef struct LampVars {
     u8  pad0[0x10];
-    u8  unk10[0x30];
-    f32 unk40;
-    f32 unk44;
-    f32 unk48;
-    f32 unk4C;
-    f32 unk50;
+    u8  tilt_rotation[0x30];
+    f32 base_yaw;
+    f32 yaw_wobble_phase;
+    f32 tilt_wobble_phase;
+    f32 yaw_wobble_rate;
+    f32 tilt_wobble_rate;
 } LampVars;
 
 typedef struct {
@@ -68,17 +68,17 @@ void moby_wobble_update(unsigned char *moby) {
     float     random_angular_sample, lo, hi;
     switch (MOBY(moby)->state) {
     case MOBY_WOBBLE_STATE_INITIALIZE:
-        wobble_vars->unk40 = MOBY(moby)->rot.z;
-        wobble_vars->unk48 = random_angle_radians();
+        wobble_vars->base_yaw = MOBY(moby)->rot.z;
+        wobble_vars->tilt_wobble_phase = random_angle_radians();
         random_angular_sample = random_angle_radians();
         lo = frame_time * 0.47123888f;
         hi = frame_time * 0.5235988f;
-        wobble_vars->unk44 = random_angular_sample;
+        wobble_vars->yaw_wobble_phase = random_angular_sample;
         random_angular_sample = randf_sym(lo, hi);
         lo = frame_time * 0.20943951f;
         hi = frame_time * 0.2617994f;
-        wobble_vars->unk50 = random_angular_sample;
-        wobble_vars->unk4C = randf_sym(lo, hi);
+        wobble_vars->tilt_wobble_rate = random_angular_sample;
+        wobble_vars->yaw_wobble_rate = randf_sym(lo, hi);
         set_moby_color(moby, 0x80, 0x80, 0x80);
         attach_manipulator((char *)moby, 0, wobble_vars);
         MOBY(moby)->state = MOBY_WOBBLE_STATE_ANIMATE;
@@ -87,12 +87,15 @@ void moby_wobble_update(unsigned char *moby) {
         float k = 0.5235988f;
         float wobble_phase;
         add_draw_callback((void *)draw_moby_wobble_quads, moby);
-        wobble_phase = fast_add_rotations(wobble_vars->unk44, wobble_vars->unk4C);
-        wobble_vars->unk44 = wobble_phase;
-        MOBY(moby)->rot.z = fast_add_rotations(wobble_vars->unk40, fast_sin(wobble_phase) * k);
-        wobble_phase = fast_add_rotations(wobble_vars->unk48, wobble_vars->unk50);
-        wobble_vars->unk48 = wobble_phase;
-        build_axis_rotation_quaternion(&wobble_vars->unk10, 1, fast_sin(wobble_phase) * k + k);
+        wobble_phase =
+            fast_add_rotations(wobble_vars->yaw_wobble_phase, wobble_vars->yaw_wobble_rate);
+        wobble_vars->yaw_wobble_phase = wobble_phase;
+        MOBY(moby)->rot.z = fast_add_rotations(wobble_vars->base_yaw, fast_sin(wobble_phase) * k);
+        wobble_phase =
+            fast_add_rotations(wobble_vars->tilt_wobble_phase, wobble_vars->tilt_wobble_rate);
+        wobble_vars->tilt_wobble_phase = wobble_phase;
+        build_axis_rotation_quaternion(
+            &wobble_vars->tilt_rotation, 1, fast_sin(wobble_phase) * k + k);
         break;
     }
     }
@@ -120,7 +123,7 @@ void draw_moby_wobble_quads(struct Moby *moby) {
     moby_point_position(moby, 0, position);
     clear_u64_value(rotation);
     rotation[2] = moby->rot.z;
-    rotation[1] = fast_sin(moby_wobble_vars->unk48) * 0.5235988f + 0.5235988f;
+    rotation[1] = fast_sin(moby_wobble_vars->tilt_wobble_phase) * 0.5235988f + 0.5235988f;
     side = matrix;
     euler_rotation_matrix(side, rotation);
     direction = matrix + 4;

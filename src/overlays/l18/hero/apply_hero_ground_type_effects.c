@@ -37,7 +37,7 @@ void apply_hero_ground_type_effects(void) {
     hero_state->ground_sound_class = keep;
     hero_state->ground_type = -1;
     hero_state->wading = 0;
-    hero_state->unk308 = 0;
+    hero_state->magnetic_floor = 0;
     if (saved_ground_type == -1)
         return;
     if (saved_ground_type == GROUND_TYPE_MAGNETIC) {
@@ -46,7 +46,7 @@ void apply_hero_ground_type_effects(void) {
             if (hero_state->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                 char *item_moby = ((char *)hero_state->items[1].moby);
                 if (item_moby != 0 && MOBY(item_moby)->oclass == 0xAD)
-                    hero_state->unk308 = 1;
+                    hero_state->magnetic_floor = 1;
             }
         }
     }
@@ -104,7 +104,7 @@ void apply_hero_ground_type_effects(void) {
     }
     if (saved_ground_type == 0x9) {
         struct Hero *q = &hero;
-        *(char *)&q->unk12EE = 1;
+        *(char *)&q->grind_jump_block = 1;
     }
     if (saved_ground_type == 0xC) {
         struct Hero *q = &hero;
@@ -228,7 +228,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
     hero.damage_source_moby = (struct Moby *)response_record->p20;
     D_0015EEA8++;
     if (hero.state.control_mode == HERO_MODE_GRIND) {
-        hero.unk5BE = 1;
+        hero.grind_hit = 1;
         return 0;
     }
     if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {

@@ -63,9 +63,9 @@ extern char D_00140940[];
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
-extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *, short *) __asm__("FUN_L00_0025d458");
 
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 extern char *D_L13_001B07B0[];
 
@@ -74,7 +74,7 @@ hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN
 
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
 
 void process_blarg_space_fighter_damage(struct Moby   *moby,
                                         unsigned char *moby_data,
@@ -121,13 +121,13 @@ void process_blarg_space_fighter_damage(struct Moby *moby, unsigned char *moby_d
                 *fp = 0;
                 moby->flags &= 0xEFFF;
                 moby_data[0x67] = 0x78;
-                trooper_anim_update(moby, (short *)(moby_data + 0x60));
+                start_hit_color_flash(moby, (short *)(moby_data + 0x60));
                 moby->state = FIGHTER_EMIT_DESTRUCTION_EFFECTS;
             } else {
                 *fp = *fp - *(float *)(hit_record + 0x2C);
                 moby_data[0x67] = 0xFA;
                 *(short *)(moby_data + 0x26) = scale_game_frames(0x3C);
-                trooper_anim_update(moby, (short *)(moby_data + 0x60));
+                start_hit_color_flash(moby, (short *)(moby_data + 0x60));
                 fast_vec_normalize(hit_position_offset, hit_record + 0x10, 0.1f);
                 fast_vec_add(&moby->pos, &moby->pos, hit_position_offset);
                 random_vector(hit_position_offset, -0.1f, 0.1f);
@@ -138,7 +138,7 @@ void process_blarg_space_fighter_damage(struct Moby *moby, unsigned char *moby_d
             moby->hit_slot = 0xFF;
         }
     }
-    trooper_anim_finish(moby, moby_data + 0x60);
+    update_hit_color_flash(moby, moby_data + 0x60);
 }
 
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
@@ -439,14 +439,14 @@ typedef float Vec_2C56B0[4] __attribute__((aligned(16)));
 
 typedef struct Cls_2C56B0 {
     char pad0[0x10];
-    int  f10;
+    int  collision; /* MobyClass.collision */
 } Cls_2C56B0;
 
 typedef struct Veh {
     char      pad0[0x10];
     V4_2C56B0 vel;
     char      pad20[0x44];
-    float     f64;
+    float     speed;
 } Veh;
 
 typedef struct Boss {
@@ -462,25 +462,25 @@ typedef struct Moby_2C56B0 {
     char           pad21[3];
     Cls_2C56B0    *cls;
     char           pad28[8];
-    unsigned char  b30;
-    unsigned char  b31;
-    short          h32;
+    unsigned char  update_dist;
+    unsigned char  visible;
+    short          draw_dist;
     unsigned short flags;
     char           pad36[0x42];
     void          *data;
     char           pad7C[0x18];
-    int            f94;
+    int            collision;
     char           pad98[0xE];
-    short          hA6;
+    short          oclass;
     char           padA8[0xA];
     short          diagnostic_moby_number;
     char           padB4[8];
-    unsigned char  bBC;
+    unsigned char  command;
 } Moby_2C56B0;
 
 typedef struct Data_2C56B0 {
     char        pad0[0x20];
-    float       f20;
+    float       health;
     short       reinitialization_health;
     char        pad26[0x4A];
     V4_2C56B0   vel;
@@ -505,14 +505,14 @@ typedef struct Hero_2C56B0 {
     char         pad0[0x15F0];
     Moby_2C56B0 *veh;
     char         pad15F4[0xA90];
-    int          f2084;
+    int          state_current; /* Hero.state.current */
 } Hero_2C56B0;
 
 typedef struct Snd {
     char          pad0[0x74];
-    unsigned char b74;
+    unsigned char voice_state;
     char          pad75[0x13];
-    void         *f88;
+    void         *voice_owner;
 } Snd;
 
 extern char blarg_space_fighter_missing_path_debug_format[] __asm__("D_L13_001F4700");
@@ -574,7 +574,7 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
     }
     switch (moby->state) {
     case FIGHTER_INITIALIZE:
-        if (moby->b30 == 0 && moby->h32 == 0) {
+        if (moby->update_dist == 0 && moby->draw_dist == 0) {
             mark_moby_for_removal(moby);
             return;
         }
@@ -594,13 +594,13 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
         qcopy(&fighter_data->path_join_position, path + 0x20);
         qcopy(&moby->pos, &fighter_data->path_join_position);
         fighter_data->fire_exit_frame_counter = scale_game_frames(0x14) + 5;
-        moby->b30 = 0xFF;
-        moby->h32 = 0xFF;
+        moby->update_dist = 0xFF;
+        moby->draw_dist = 0xFF;
         moby->state = FIGHTER_WAIT_TO_JOIN_PATH;
-        moby->bBC = 0;
+        moby->command = 0;
         moby->flags = (moby->flags | 1) & 0xEFFF;
-        moby->f94 = 0;
-        moby->b31 = 0;
+        moby->collision = 0;
+        moby->visible = 0;
         fighter_data->path_node_step = 1;
         break;
     case FIGHTER_WAIT_TO_JOIN_PATH: {
@@ -608,7 +608,7 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
         if (fighter_data->linked_boss_index == -1 ||
             (p = (Moby_2C56B0 *)(D_L13_0015FFD8 + (fighter_data->linked_boss_index << 8))) == 0 ||
             p->state == MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END ||
-            p->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END || p->bBC == 4) {
+            p->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END || p->command == 4) {
             fast_vec_normalize(scratch_vector, D_L13_001670C0 + 0x84, 40.0f);
             fast_vec_sub(scratch_vector, D_L13_001670C0, scratch_vector);
             fighter_data->previous_path_node_index = fighter_data->target_path_node_index =
@@ -616,8 +616,8 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
             qcopy(&fighter_data->path_join_position,
                   path + (fighter_data->previous_path_node_index * 16 + 0x10));
             qcopy(&moby->pos, &fighter_data->path_join_position);
-            moby->f94 = moby->cls->f10;
-            moby->b31 = 1;
+            moby->collision = moby->cls->collision;
+            moby->visible = 1;
             moby->flags = (moby->flags & 0xFFFE) | 0x1000;
             moby->state = FIGHTER_FOLLOW_PATH_AND_ATTACK;
         }
@@ -629,15 +629,15 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
         float        fighter_to_vehicle_distance;
 
         FUN_L13_002c37e0_c(
-            (unsigned char *)moby, (unsigned char *)fighter_data, &fighter_data->f20);
+            (unsigned char *)moby, (unsigned char *)fighter_data, &fighter_data->health);
         if (veh != 0 && veh->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
             veh->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
             vehd = veh->data;
             qcopy(hpos, &((Hero_2C56B0 *)(((char *)&D_0013F350)))->veh->pos);
             close = 0;
             fighter_to_vehicle_distance = fast_vec_dist(&moby->pos, hpos);
-            if (((Hero_2C56B0 *)(((char *)&D_0013F350)))->f2084 == 0x32 &&
-                (veh->hA6 == 0x45 || veh->hA6 == 0x4DA)) {
+            if (((Hero_2C56B0 *)(((char *)&D_0013F350)))->state_current == 0x32 &&
+                (veh->oclass == 0x45 || veh->oclass == 0x4DA)) {
                 if (fighter_to_vehicle_distance < 110.0f) {
                     close = 1;
                 }
@@ -645,7 +645,7 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
         } else {
             qcopy(hpos, ((char *)&D_0013F3D0));
         }
-        if (moby->b31 == 0) {
+        if (moby->visible == 0) {
             fighter_data->fire_exit_frame_counter++;
         } else if (close != 0) {
             fighter_data->fire_exit_frame_counter = 0;
@@ -664,7 +664,7 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
         if (boss == 0 || boss->state == MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END ||
             boss->state == MOBY_STATE_REMOVAL_BELOW_INSTANCE_END || boss->state == 1) {
             moby->state = FIGHTER_WAIT_TO_REINITIALIZE;
-            moby->f94 = 0;
+            moby->collision = 0;
             moby->flags = (moby->flags | 0x41) & 0xEFFF;
             return;
         }
@@ -672,21 +672,21 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
             Snd *e;
             if (fighter_data->fighter_voice_slot == -1 ||
                 (e = (Snd *)(((char *)&D_0013E550) + fighter_data->fighter_voice_slot * 0x70))
-                        ->f88 != moby ||
-                e->b74 == 0) {
+                        ->voice_owner != moby ||
+                e->voice_state == 0) {
                 fighter_data->fighter_voice_slot = -1;
                 fighter_data->fighter_voice_slot = allocate_voice_for_target_entry(1, 4, moby);
             }
         }
         func_L13_002C5248_56B0(moby, fighter_data, 1);
-        switch (moby->bBC) {
+        switch (moby->command) {
         case FIGHTER_ATTACK_WAIT_TO_FIRE:
-            if (vehd != 0 && veh->state == 4 && moby->b31 != 0 && close != 0 && boss != 0 &&
+            if (vehd != 0 && veh->state == 4 && moby->visible != 0 && close != 0 && boss != 0 &&
                 bossd->firing_fighter_update_count < 3) {
                 fighter_data->attack_phase_timer = scale_game_frames(0x258);
                 fighter_data->aim_offset_radius_scale = 1.0f;
                 fighter_data->fire_exit_frame_counter = 0;
-                moby->bBC = 1;
+                moby->command = 1;
             }
             break;
         case FIGHTER_ATTACK_FIRE:
@@ -694,17 +694,17 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
                 bossd->firing_fighter_update_count++;
             }
             if (bossd->firing_fighter_update_count < 4) {
-                if (moby->b31 == 0) {
+                if (moby->visible == 0) {
                     fighter_data->fire_exit_frame_counter++;
                 }
-                if (moby->b31 == 0 || close == 0 ||
+                if (moby->visible == 0 || close == 0 ||
                     scale_game_frames(0x14) <= fighter_data->fire_exit_frame_counter) {
                     fighter_data->attack_phase_timer = scale_game_frames(0x1E);
-                    moby->bBC = 2;
+                    moby->command = 2;
                 }
                 if (fast_dec_timer(&fighter_data->attack_phase_timer) != 0) {
                     fighter_data->attack_phase_timer = scale_game_frames(0x78);
-                    moby->bBC = 2;
+                    moby->command = 2;
                 }
                 if (fast_dec_timer(&fighter_data->shot_interval_timer) != 0 &&
                     optional_glow_suppression_level < 0.9f &&
@@ -738,7 +738,8 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
                         lead = vector_distance_xy(&moby->pos, ((char *)&D_0013F3D0));
                         fast_vec_normalize(vehicle_lead_offset,
                                            &vehd->vel,
-                                           vehd->f64 * (lead / (vehd->f64 + D_0015ED6C * 50.0f)));
+                                           vehd->speed *
+                                               (lead / (vehd->speed + D_0015ED6C * 50.0f)));
                         fast_vec_add(scratch_vector, scratch_vector, vehicle_lead_offset);
                         fast_vec_sub(scratch_vector, scratch_vector, &moby->pos);
                         fast_vec_normalize(spawn_position, scratch_vector, 2.6f);
@@ -768,7 +769,7 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
             break;
         case FIGHTER_ATTACK_COOLDOWN:
             if (fast_dec_timer(&fighter_data->attack_phase_timer) != 0) {
-                moby->bBC = 0;
+                moby->command = 0;
             }
             break;
         }
@@ -780,7 +781,7 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
 
         if (fighter_data->fighter_voice_slot != -1) {
             Snd *e = (Snd *)(((char *)&D_0013E550) + fighter_data->fighter_voice_slot * 0x70);
-            if (e->f88 == moby && e->b74 != 0) {
+            if (e->voice_owner == moby && e->voice_state != 0) {
                 release_voice_slot(fighter_data->fighter_voice_slot);
             }
             fighter_data->fighter_voice_slot = -1;
@@ -841,7 +842,7 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
             }
         }
         moby->state = FIGHTER_WAIT_TO_REINITIALIZE;
-        moby->f94 = 0;
+        moby->collision = 0;
         moby->flags = (moby->flags | 0x41) & 0xEFFF;
         break;
     }
@@ -850,8 +851,8 @@ void blarg_space_fighter_update(Moby_2C56B0 *moby) {
         if (fighter_data->linked_boss_index != -1 &&
             (p = (Moby_2C56B0 *)(D_L13_0015FFD8 + (fighter_data->linked_boss_index << 8))) != 0 &&
             p->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END &&
-            p->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END && p->bBC != 4) {
-            fighter_data->f20 = fighter_data->reinitialization_health;
+            p->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END && p->command != 4) {
+            fighter_data->health = fighter_data->reinitialization_health;
             moby->state = FIGHTER_INITIALIZE;
         }
         break;

@@ -11,7 +11,7 @@ struct TalkState {
     u8    pad6[0x1A];
     void *script; /* 0x20 */
     u8    pad24[0x12];
-    s16   unk36;
+    s16   entry; /* 0x36: current dialogue entry of update_npc_dialogue, -1 none */
     u8    pad38[0x10];
     s32   unk48;
     s32   warp; /* 0x4C: index into l03_cuboids, -1 for none */

@@ -21,9 +21,9 @@ typedef struct {
 /* The fields of a moby class header read when a moby changes class. */
 typedef struct {
     u8  pad0[0xE];
-    u8  unkE;
+    u8  lod_trans;
     u8  padF;
-    u32 unk10;
+    u32 collision;
     u8  pad14[0x10];
     f32 scale; /* 0x24 */
 } MobyClassHeader;
@@ -64,8 +64,8 @@ void eudora_bridge_update(struct Moby *moby) {
             moby->unk71 = 0xFF;
             moby->scale = ((MobyClassHeader *)moby->pclass)->scale;
             update_moby_animation_state(moby);
-            moby->unk72 = ((MobyClassHeader *)moby->pclass)->unkE;
-            moby->collision = ((MobyClassHeader *)moby->pclass)->unk10;
+            moby->lod_dist = ((MobyClassHeader *)moby->pclass)->lod_trans;
+            moby->collision = ((MobyClassHeader *)moby->pclass)->collision;
             refresh_moby_spatial_bounds_from_basis(moby);
         }
         break;
@@ -97,8 +97,8 @@ void eudora_bridge_update(struct Moby *moby) {
                     moby->unk71 = 0xFF;
                     moby->scale = ((MobyClassHeader *)moby->pclass)->scale;
                     update_moby_animation_state(moby);
-                    moby->unk72 = ((MobyClassHeader *)moby->pclass)->unkE;
-                    moby->collision = ((MobyClassHeader *)moby->pclass)->unk10;
+                    moby->lod_dist = ((MobyClassHeader *)moby->pclass)->lod_trans;
+                    moby->collision = ((MobyClassHeader *)moby->pclass)->collision;
                     refresh_moby_spatial_bounds_from_basis(moby);
                     moby->state = EUDORA_BRIDGE_STATE_RELEASE_MOVEMENT_VOICE;
                 }

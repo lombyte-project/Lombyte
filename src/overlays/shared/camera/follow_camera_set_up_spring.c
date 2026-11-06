@@ -7,11 +7,13 @@
 #include "sda.h"
 #include "rnc/camera/follow_cam.h"
 
-/* Stores f at +0x1CC of D_L00_00166E00+0x70 while the short at 0x86 is 0. */
-void FUN_L00_002e8540(float stored_value) {
+/* Sets FollowCamState.tail.script_pitch (radians) while the record's short at 0x86 is 0. */
+void set_follow_camera_script_pitch(float pitch) __asm__("FUN_L00_002e8540");
+
+void set_follow_camera_script_pitch(float pitch) {
     char *camera_record = current_follow_cam;
     if (*(short *)(camera_record + 0x86) == 0) {
-        *(float *)(*(char **)(camera_record + 0x70) + 0x1cc) = stored_value;
+        *(float *)(*(char **)(camera_record + 0x70) + 0x1cc) = pitch;
     }
 }
 

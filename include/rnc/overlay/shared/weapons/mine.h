@@ -22,24 +22,24 @@ struct W910 {
     char  p10[0x20];
     M910 *owner;
     short h34;
-    short h36;
+    short prediction_done; /* 0x36: set once the owner stops the impact preview */
     char  p38[8];
-    float f40;
+    float homing_speed; /* 0x40: grows toward frame_time * 4 */
     char  p44[4];
-    int   i48;
-    M910 *p4C;
-    short h50;
-    short h52;
-    M910 *p54;
-    int   i58;
-    int   i5C;
+    int   homing_phase_timer; /* 0x48: frames of the rise or fall phase */
+    M910 *attached_moby;      /* 0x4C: moby the mine came to rest on */
+    short in_water;           /* 0x50: set by the splash; gravity is a tenth */
+    short homing_phase;       /* 0x52: 1 rise, 2 fall, 0 level */
+    M910 *target;             /* 0x54 */
+    int   homing_timer;       /* 0x58: the mine explodes when it runs out */
+    int   spawn_frame;
     float f60;
     float f64;
-    int   i68;
-    float f6C;
-    float f70;
-    int   i74;
-    int   i78;
+    int   voice;           /* 0x68: -1 none */
+    float bob_amplitude;   /* 0x6C: set at the first bounce, decays to 0.05 */
+    float bob_phase;       /* 0x70 */
+    int   bob_start_frame; /* 0x74: frame of the first bounce; the bob ramps in from it */
+    int   extended_range;  /* 0x78: nonzero triples the target range for one frame */
 };
 
 struct M910 {

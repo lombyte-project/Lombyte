@@ -604,7 +604,7 @@ spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *launch_position, fl
         unsigned char *spawned_moby_vars = ((unsigned char *)MOBY(spawned_moby)->pvars);
         struct Hero   *G = &hero;
         V_2b58d8       collision_start;
-        G->unk1FE0 = spawned_moby;
+        G->visibomb_missile = spawned_moby;
         D_L00_0017E508 = 1;
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
@@ -612,8 +612,8 @@ spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *launch_position, fl
         MOBY(spawned_moby)->state = 1;
         MOBY(spawned_moby)->rot.z = fa;
         MOBY(spawned_moby)->rot.y = fb;
-        *(unsigned char **)(spawned_moby_vars + 0x24) = G->unk1F60;
-        *(unsigned char **)(spawned_moby_vars + 0x28) = G->unk1FA0;
+        *(unsigned char **)(spawned_moby_vars + 0x24) = G->visibomb_fin_manip0;
+        *(unsigned char **)(spawned_moby_vars + 0x28) = G->visibomb_fin_manip1;
         *(unsigned char **)(spawned_moby_vars + 0x0) = source_moby;
         qcopy(&MOBY(spawned_moby)->pos, launch_position);
         *(int *)(spawned_moby_vars + 0x8) = 0;

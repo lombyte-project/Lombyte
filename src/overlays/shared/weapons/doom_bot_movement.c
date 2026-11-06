@@ -64,12 +64,12 @@ typedef struct {
 
 typedef struct {
     u8   pad0[0x18];
-    Hit *unk18;
+    Hit *moby;
 } XD;
 
 typedef struct Cls_2C0CF8 {
     char  pad0[0x24];
-    float unk24; /* 0x24 */
+    float scale; /* 0x24 */
 } Cls_2C0CF8;
 
 typedef struct Mob_2C0CF8 {
@@ -170,30 +170,30 @@ int probe_moby_raised_sphere_collision(char *moby, int b, Vx *position_override)
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFE98), where it is exact; names translated to the US level program. */
 
-/* Saves the moby's position, word 0x4C and float 0x5C into ((char *)&hero) at 0x1ED0. */
+/* Saves the doom bot speed, turn velocity, vertical velocity, move timer and max speed into the hero GroundMoveControl. */
 void save_state_fields_to_hero(char *source_state) __asm__("FUN_L00_002beb90");
 
 void save_state_fields_to_hero(char *source_state) {
     struct Hero *hero_state = &hero;
-    hero_state->unk1ED0 = *(float *)(source_state + 0x40);
-    hero_state->unk1ED4 = *(float *)(source_state + 0x44);
-    hero_state->unk1ED8 = *(float *)(source_state + 0x48);
-    hero_state->unk1F08 = *(int *)(source_state + 0x4C);
-    hero_state->unk1EE4 = *(float *)(source_state + 0x5C);
+    hero_state->move_speed = *(float *)(source_state + 0x40);
+    hero_state->move_turn_velocity = *(float *)(source_state + 0x44);
+    hero_state->move_vertical_velocity = *(float *)(source_state + 0x48);
+    hero_state->move_timer = *(int *)(source_state + 0x4C);
+    hero_state->move_max_speed = *(float *)(source_state + 0x5C);
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFED0), where it is exact; names translated to the US level program. */
 
-/* Restores the moby's position, word 0x4C and float 0x5C from ((char *)&hero) at 0x1ED0. */
+/* Restores the doom bot speed, turn velocity, vertical velocity, move timer and max speed from the hero GroundMoveControl. */
 void restore_state_fields_from_hero(char *destination_state) __asm__("FUN_L00_002bebc8");
 
 void restore_state_fields_from_hero(char *destination_state) {
     struct Hero *hero_state = &hero;
-    *(float *)(destination_state + 0x40) = hero_state->unk1ED0;
-    *(float *)(destination_state + 0x44) = hero_state->unk1ED4;
-    *(float *)(destination_state + 0x48) = hero_state->unk1ED8;
-    *(int *)(destination_state + 0x4C) = hero_state->unk1F08;
-    *(float *)(destination_state + 0x5C) = hero_state->unk1EE4;
+    *(float *)(destination_state + 0x40) = hero_state->move_speed;
+    *(float *)(destination_state + 0x44) = hero_state->move_turn_velocity;
+    *(float *)(destination_state + 0x48) = hero_state->move_vertical_velocity;
+    *(int *)(destination_state + 0x4C) = hero_state->move_timer;
+    *(float *)(destination_state + 0x5C) = hero_state->move_max_speed;
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFF08), where it is exact; names translated to the US level program. */
@@ -203,12 +203,12 @@ void save_state_vector_and_fields_to_hero(char *source_state) __asm__("FUN_L00_0
 
 void save_state_vector_and_fields_to_hero(char *source_state) {
     struct Hero *hero_state = &hero;
-    hero_state->unk1F20 = *(float *)(source_state + 0x50);
-    hero_state->unk1F24 = *(float *)(source_state + 0x54);
-    hero_state->unk1F28 = *(float *)(source_state + 0x58);
-    hero_state->unk1F3F = *(char *)(source_state + 0x68);
-    hero_state->unk1F40 = *(float *)(source_state + 0x44);
-    qcopy(&hero_state->unk1F10, source_state);
+    hero_state->hop_vertical_speed = *(float *)(source_state + 0x50);
+    hero_state->hop_horizontal_speed = *(float *)(source_state + 0x54);
+    hero_state->hop_heading = *(float *)(source_state + 0x58);
+    hero_state->hop_mode = *(char *)(source_state + 0x68);
+    hero_state->hop_turn_velocity = *(float *)(source_state + 0x44);
+    qcopy(&hero_state->hop_target, source_state);
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFF50), where it is exact; names translated to the US level program. */
@@ -218,11 +218,11 @@ void restore_saved_state_fields_from_hero(char *destination_state) __asm__("FUN_
 
 void restore_saved_state_fields_from_hero(char *destination_state) {
     struct Hero *hero_state = &hero;
-    *(float *)(destination_state + 0x50) = hero_state->unk1F20;
-    *(float *)(destination_state + 0x54) = hero_state->unk1F24;
-    *(float *)(destination_state + 0x58) = hero_state->unk1F28;
-    *(char *)(destination_state + 0x68) = hero_state->unk1F3F;
-    *(float *)(destination_state + 0x44) = hero_state->unk1F40;
+    *(float *)(destination_state + 0x50) = hero_state->hop_vertical_speed;
+    *(float *)(destination_state + 0x54) = hero_state->hop_horizontal_speed;
+    *(float *)(destination_state + 0x58) = hero_state->hop_heading;
+    *(char *)(destination_state + 0x68) = hero_state->hop_mode;
+    *(float *)(destination_state + 0x44) = hero_state->hop_turn_velocity;
 }
 
 float probe_moby_landing_height(Vec4_2bec80 *probe_position,
@@ -435,9 +435,9 @@ f32 select_moby_heading_by_collision_probes(Mob *moby,
                 }
             }
         } else {
-            if ((*(XD *)D_L00_00173E40).unk18 == x->p38 ||
-                ((*(XD *)D_L00_00173E40).unk18 != 0 && (*(XD *)D_L00_00173E40).unk18->p24 != 0 &&
-                 (*(XD *)D_L00_00173E40).unk18->p24->h46 == 5)) {
+            if ((*(XD *)D_L00_00173E40).moby == x->p38 ||
+                ((*(XD *)D_L00_00173E40).moby != 0 && (*(XD *)D_L00_00173E40).moby->p24 != 0 &&
+                 (*(XD *)D_L00_00173E40).moby->p24->h46 == 5)) {
                 *probe_distance_score_out = 100.0f;
                 return arc;
             }
@@ -585,7 +585,7 @@ int try_start_moby_hop(Mob_2C0CF8 *moby, Blk *block, void *target, int check_lin
 
     can_halve = 1;
     func_001F9BF0_2C0CF8(jump, target, moby->pos);
-    func_L00_001FF5B0_2C0CF8(moby->spatial_scale * 5.2f / moby->p24->unk24, jump, jump);
+    func_L00_001FF5B0_2C0CF8(moby->spatial_scale * 5.2f / moby->p24->scale, jump, jump);
     func_001F9BD8_2C0CF8(land, moby->pos, jump);
     func_001F9C30_2C0CF8(half, jump, 0.5f);
     half_length = func_001F9CE8_2C0CF8(half);
@@ -601,7 +601,7 @@ int try_start_moby_hop(Mob_2C0CF8 *moby, Blk *block, void *target, int check_lin
         }
         return 0;
     }
-    if (moby->spatial_scale * 3.0f / moby->p24->unk24 < jump[2]) {
+    if (moby->spatial_scale * 3.0f / moby->p24->scale < jump[2]) {
         if (can_halve) {
             return try_start_moby_hop(moby, block, half, 1);
         }
@@ -617,18 +617,18 @@ int try_start_moby_hop(Mob_2C0CF8 *moby, Blk *block, void *target, int check_lin
         }
         return 0;
     }
-    land[2] = land[2] + moby->spatial_scale * 0.025f / moby->p24->unk24;
+    land[2] = land[2] + moby->spatial_scale * 0.025f / moby->p24->scale;
     if (probe_moby_raised_sphere_collision(moby, 6, land)) {
         if (can_halve) {
             return try_start_moby_hop(moby, block, half, 1);
         }
         return 0;
     }
-    land[2] = land[2] - moby->spatial_scale * 0.025f / moby->p24->unk24;
+    land[2] = land[2] - moby->spatial_scale * 0.025f / moby->p24->scale;
     qcopy_nc(from, moby->pos);
-    from[2] = from[2] + moby->spatial_scale * 0.2f / moby->p24->unk24;
+    from[2] = from[2] + moby->spatial_scale * 0.2f / moby->p24->scale;
     qcopy_nc(to, land);
-    to[2] = to[2] + moby->spatial_scale * 0.2f / moby->p24->unk24;
+    to[2] = to[2] + moby->spatial_scale * 0.2f / moby->p24->scale;
     if (check_line) {
         if (func_L00_001EFFF0_2C0CF8(from, to, 6, moby, 0) == 0) {
             if (can_halve) {

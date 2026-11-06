@@ -188,8 +188,8 @@ void help_hints_update(struct Moby *moby) {
             usage_stats.stat[15].level_mask =
                 usage_stats.stat[15].level_mask | (1 << current_level_index) | 0x80000000;
         }
-        if (hero.unk988 != 0 && usage_stats.stat[15].count == 0) {
-            hero.unk988 = 0;
+        if (hero.swingshot_missed != 0 && usage_stats.stat[15].count == 0) {
+            hero.swingshot_missed = 0;
             tutorial_hint_state[21]++;
         }
         if (usage_stats.stat[15].count == 0 &&

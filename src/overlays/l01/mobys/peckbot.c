@@ -1,5 +1,7 @@
 /* Level 01 moby class peckbot. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
 
@@ -19,8 +21,8 @@ extern float D_L01_0015F580[] MACRO_ADDR;
 extern float FUN_L04_001f1978(float);
 extern void  FUN_L00_00257470(void *, int, int);
 extern void  trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
-extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void  select_moby_combat_target(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 extern void  blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
@@ -89,70 +91,56 @@ typedef struct MobyNode {
 } MobyNode;
 
 typedef struct {
-    u8      pad0[0x20];
-    f32     health;
-    s16     x24;
-    s16     flee_timer;
-    u8      pad28;
-    u8      x29;
-    u8      pad2a[0xE];
-    s32     x38;
-    u8      pad3c[0x4];
-    Vec577  vel;
-    u8      pad50[0x8];
-    u8      x58;
-    u8      pad59;
-    u8      x5A;
-    u8      pad5b[0x6D];
-    s16     xC8;
-    u8      padca[0x6];
-    void   *xD0;
-    u8      padd4[0x3C];
-    u8      fx110[0x7];
-    u8      x117;
-    u8      pad118[0x8];
-    u8      knock[0x10];
-    f32     x130;
-    f32     x134;
-    f32     x138;
-    f32     x13C;
-    u8      pad140[0x4];
-    s32     x144;
-    u8      pad148[0x15];
-    u8      x15D;
-    u8      pad15e[0x12];
-    f32     x170;
-    f32     x174;
-    u8      pad178[0x8];
-    s32     x180;
-    u8      pad184[0x4];
-    f32     x188;
-    f32     x18C;
-    u8      pad190[0x8];
-    f32     x198;
-    u8      pad19c[0x8];
-    f32     x1A4;
-    u8      pad1a8[0x28];
-    Vec577  home;
-    Vec577  dest;
-    u8      turn[0x4];
-    f32     turn_off;
-    f32     turn_deg;
-    f32     range;
-    u8      pad200[0x4];
-    f32     speed;
-    s16     x208;
-    s16     x20A;
-    s32     idle_timer;
-    s32     turn_timer;
-    s16     x214;
-    s16     x216;
-    Mob577 *leader;
-    s32     path;
-    u8      pad220[0x8];
-    s32     x228;
-    u8      pad22c[0x4];
-    u8      x230[0x10];
+    u8                     pad0[0x20];
+    f32                    health;
+    s16                    x24;
+    s16                    flee_timer;
+    u8                     pad28;
+    u8                     x29;
+    u8                     pad2a[0xE];
+    s32                    x38;
+    u8                     pad3c[0x4];
+    Vec577                 vel;
+    u8                     pad50[0x8];
+    u8                     x58;
+    u8                     pad59;
+    u8                     x5A;
+    u8                     pad5b[0x6D];
+    s16                    xC8;
+    u8                     padca[0x6];
+    void                  *xD0;
+    u8                     padd4[0x3C];
+    struct HitColorFlash   hit_flash;
+    struct KnockbackMotion knockback;
+    s32                    x180;
+    u8                     pad184[0x4];
+    f32                    x188;
+    f32                    x18C;
+    u8                     pad190[0x8];
+    f32                    x198;
+    u8                     pad19c[0x8];
+    f32                    x1A4;
+    u8                     pad1a8[0x28];
+    Vec577                 home;
+    Vec577                 dest;
+    u8                     turn[0x4];
+    f32                    turn_off;
+    f32                    turn_deg;
+    f32                    range;
+    u8                     pad200[0x4];
+    f32                    speed;
+    s16                    x208;
+    s16                    x20A;
+    s32                    idle_timer;
+    s32                    turn_timer;
+    s16                    x214;
+    s16                    x216;
+    Mob577                *leader;
+    s32                    path;
+    u8                     pad220[0x8];
+    s32                    x228;
+    u8                     pad22c[0x4];
+    u8                     x230[0x10];
 } Mob577Vars;
 
 typedef struct {
@@ -294,37 +282,44 @@ void peckbot_update(Mob577 *peckbot_moby) {
             angle = fast_arc_tan(peckbot_moby->pos.f[0] - target.pos.f[0],
                                  peckbot_moby->pos.f[1] - target.pos.f[1]);
             hp = peckbot_vars->health - hit->dmg;
-            peckbot_vars->x130 = 0.008f;
-            peckbot_vars->x134 = 0.0005f;
-            peckbot_vars->x138 = peckbot_nonfatal_knockback_horizontal_speed_gp * frame_time;
-            peckbot_vars->x13C = peckbot_nonfatal_knockback_vertical_speed_gp * frame_time;
-            peckbot_vars->x144 = 9;
+            peckbot_vars->knockback.gravity = 0.008f;
+            peckbot_vars->knockback.speed_approach_step = 0.0005f;
+            peckbot_vars->knockback.speed =
+                peckbot_nonfatal_knockback_horizontal_speed_gp * frame_time;
+            peckbot_vars->knockback.vertical_speed =
+                peckbot_nonfatal_knockback_vertical_speed_gp * frame_time;
+            peckbot_vars->knockback.flags = 9;
             peckbot_vars->health = hp;
-            peckbot_vars->x15D = 0;
+            peckbot_vars->knockback.unk3D = 0;
             if (hp <= 0.0f) {
                 peckbot_moby->flags &= ~0x1000;
-                peckbot_vars->x13C = peckbot_vars->x138 = frame_time * 11.0f;
+                peckbot_vars->knockback.vertical_speed = peckbot_vars->knockback.speed =
+                    frame_time * 11.0f;
                 vector_scratch.q = hit->pos;
-                trooper_knockback_arc(
-                    &vector_scratch, &angle, &peckbot_vars->x138, &peckbot_vars->x13C);
-                trooper_start_knockback(peckbot_moby, peckbot_vars->knock, 7, 1, 0, angle);
-                peckbot_vars->x170 = 11.0f;
-                peckbot_vars->x174 = 18.0f;
+                trooper_knockback_arc(&vector_scratch,
+                                      &angle,
+                                      &peckbot_vars->knockback.speed,
+                                      &peckbot_vars->knockback.vertical_speed);
+                trooper_start_knockback(peckbot_moby, &peckbot_vars->knockback, 7, 1, 0, angle);
+                peckbot_vars->knockback.apex_animation_frame = 11.0f;
+                peckbot_vars->knockback.landing_animation_frame = 18.0f;
                 peckbot_moby->state = PECKBOT_STATE_FATAL_KNOCKBACK;
-                peckbot_vars->x117 = 0x78;
-                trooper_anim_update(peckbot_moby, peckbot_vars->fx110);
+                peckbot_vars->hit_flash.flash_red = 0x78;
+                start_hit_color_flash(peckbot_moby, &peckbot_vars->hit_flash);
                 FUN_L00_00257470(peckbot_moby, 0, -1);
             } else {
                 vector_scratch.q = hit->pos;
-                trooper_knockback_arc(
-                    &vector_scratch, &angle, &peckbot_vars->x138, &peckbot_vars->x13C);
-                trooper_start_knockback(peckbot_moby, peckbot_vars->knock, 6, 1, 0, angle);
-                peckbot_vars->x170 = 5.0f;
-                peckbot_vars->x174 = 10.0f;
+                trooper_knockback_arc(&vector_scratch,
+                                      &angle,
+                                      &peckbot_vars->knockback.speed,
+                                      &peckbot_vars->knockback.vertical_speed);
+                trooper_start_knockback(peckbot_moby, &peckbot_vars->knockback, 6, 1, 0, angle);
+                peckbot_vars->knockback.apex_animation_frame = 5.0f;
+                peckbot_vars->knockback.landing_animation_frame = 10.0f;
                 peckbot_moby->state = PECKBOT_STATE_NONFATAL_KNOCKBACK;
-                peckbot_vars->x117 = 0xFA;
+                peckbot_vars->hit_flash.flash_red = 0xFA;
                 peckbot_vars->flee_timer = scale_game_frames(0x3C);
-                trooper_anim_update(peckbot_moby, peckbot_vars->fx110);
+                start_hit_color_flash(peckbot_moby, &peckbot_vars->hit_flash);
             }
         }
     }
@@ -478,25 +473,26 @@ void peckbot_update(Mob577 *peckbot_moby) {
                 FUN_L01_0026e090(peckbot_moby->group, 2);
             }
             SET_ANIM(peckbot_moby, 6, 0, scale_game_frames(3));
-            peckbot_vars->x134 = 0.0f;
-            peckbot_vars->x130 = peckbot_home_knockback_acceleration_gp;
-            peckbot_vars->x138 = peckbot_home_knockback_speed_gp * frame_time;
-            peckbot_vars->x13C = FUN_L00_0025abf0(&peckbot_moby->pos,
-                                                  &peckbot_vars->home,
-                                                  &knockback_travel_time,
-                                                  peckbot_vars->x138,
-                                                  -peckbot_home_knockback_acceleration_gp);
-            peckbot_vars->x144 = 13;
-            peckbot_vars->x15D = 0;
+            peckbot_vars->knockback.speed_approach_step = 0.0f;
+            peckbot_vars->knockback.gravity = peckbot_home_knockback_acceleration_gp;
+            peckbot_vars->knockback.speed = peckbot_home_knockback_speed_gp * frame_time;
+            peckbot_vars->knockback.vertical_speed =
+                FUN_L00_0025abf0(&peckbot_moby->pos,
+                                 &peckbot_vars->home,
+                                 &knockback_travel_time,
+                                 peckbot_vars->knockback.speed,
+                                 -peckbot_home_knockback_acceleration_gp);
+            peckbot_vars->knockback.flags = 13;
+            peckbot_vars->knockback.unk3D = 0;
             trooper_start_knockback(
-                peckbot_moby, peckbot_vars->knock, 6, 1, 0, peckbot_moby->rot.f[2]);
-            peckbot_vars->x170 = 5.0f;
-            peckbot_vars->x174 = 10.0f;
+                peckbot_moby, &peckbot_vars->knockback, 6, 1, 0, peckbot_moby->rot.f[2]);
+            peckbot_vars->knockback.apex_animation_frame = 5.0f;
+            peckbot_vars->knockback.landing_animation_frame = 10.0f;
             peckbot_moby->state = PECKBOT_STATE_HOME_TRIGGERED_KNOCKBACK;
         }
         break;
     case PECKBOT_STATE_HOME_TRIGGERED_KNOCKBACK:
-        if (step_moby_motion(peckbot_moby, peckbot_vars->knock) & 1) {
+        if (step_moby_motion(peckbot_moby, &peckbot_vars->knockback) & 1) {
             peckbot_moby->state = PECKBOT_STATE_CHASE_TARGET;
             if (random_integer_below(0x100) & 1) {
                 peckbot_vars->turn_deg = -peckbot_vars->turn_deg;
@@ -676,7 +672,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
         peckbot_moby->hit = 0;
         break;
     case PECKBOT_STATE_NONFATAL_KNOCKBACK:
-        if (step_moby_motion(peckbot_moby, peckbot_vars->knock) & 1) {
+        if (step_moby_motion(peckbot_moby, &peckbot_vars->knockback) & 1) {
             peckbot_moby->state = PECKBOT_STATE_CHASE_TARGET;
             SET_ANIM(peckbot_moby, 2, 0, scale_game_frames(3));
             return;
@@ -687,7 +683,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
         }
         break;
     case 7:
-        if (FUN_L00_002dc9f0(peckbot_moby, peckbot_vars->knock) != 0) {
+        if (FUN_L00_002dc9f0(peckbot_moby, &peckbot_vars->knockback) != 0) {
             peckbot_moby->state = PECKBOT_STATE_AIRBORNE_IDLE;
             peckbot_vars->x228 = scale_game_frames(0xB4);
             SET_ANIM(peckbot_moby, 0, 0, 0);
@@ -696,7 +692,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
         break;
     case PECKBOT_STATE_FATAL_KNOCKBACK:
         peckbot_moby->flags &= ~0x1000;
-        if (step_moby_motion(peckbot_moby, peckbot_vars->knock) & 0x140) {
+        if (step_moby_motion(peckbot_moby, &peckbot_vars->knockback) & 0x140) {
             clear_u64_value(&vector_scratch);
             frame_count_or_animation_id = scale_game_frames(1) * 60.0f;
             if (reserve_expired_frame_slot(D_L01_00161A80, 3, frame_count_or_animation_id) >= 0) {
@@ -865,6 +861,6 @@ void peckbot_update(Mob577 *peckbot_moby) {
         peckbot_moby->hit = 0;
         break;
     }
-    trooper_anim_finish(peckbot_moby, peckbot_vars->fx110);
+    update_hit_color_flash(peckbot_moby, &peckbot_vars->hit_flash);
     FUN_L00_0025a120(peckbot_moby);
 }

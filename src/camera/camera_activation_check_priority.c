@@ -6,12 +6,21 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/camera/update_cam.h"
 
+/* A 0x20-byte row of the level's camera record table: the record's
+   pvars (pvar +0x0C: the clip volume of its activation, +0x24: the spline
+   row of its rail) sit at +0x1C. */
 typedef struct {
-    char unk_00[0x10];
-    int  unk10;
-    char unk14[8];
-    int  unk1C;
-} CamRec20;
+    char pad00[0x1C];
+    int  pvars;
+} CameraRecordRow;
+
+/* A 0x20-byte row of the level's spline table (LevelSpline): path is what
+   hero.rail_spline holds while the hero grinds that rail. */
+typedef struct {
+    char pad00[0x10];
+    int  path;
+    char pad14[0xC];
+} CameraSplineRow;
 
 /* UpdateCam from its activation rule on, as this check reads it: the rule as
    a word, then the priority (UpdateCam.active) and the handoff byte. */
@@ -22,8 +31,8 @@ struct CameraActivation {
     u8  handoff_ready; /* UpdateCam 0x7D */
 };
 
-extern CamRec20 *D_0015EF90 MACRO_ADDR;
-extern CamRec20 *D_0015EF40 MACRO_ADDR;
+extern CameraRecordRow *D_0015EF90 MACRO_ADDR;
+extern CameraSplineRow *D_0015EF40 MACRO_ADDR;
 
 /* Each case ends in `if (x) return 1;` falling out to the one shared
    `return 0;`, which is what lets cross-jumping and reorg give retail's
@@ -75,7 +84,7 @@ int camera_activation_check_priority(struct UpdateCam *candidate, struct UpdateC
         }
         break;
     case CAMERA_ACTIVATION_IN_CLIP_VOLUME: {
-        char *camera_descriptor_bytes = (char *)D_0015EF90[candidate->descriptor_index].unk1C;
+        char *camera_descriptor_bytes = (char *)D_0015EF90[candidate->descriptor_index].pvars;
 
         if (current != 0 && current->transition_state == CAMERA_TRANSITION_PRIORITY_GATED &&
             !(activation->priority > current->active)) {
@@ -88,9 +97,9 @@ int camera_activation_check_priority(struct UpdateCam *candidate, struct UpdateC
     }
     case CAMERA_ACTIVATION_MATCH_LISTENER_GROUP: {
         struct Hero *hero_state = &hero;
-        short        listener_group = candidate->unk86;
+        short        listener_group = candidate->camera_class;
 
-        if (listener_group != hero_state->unk2284) {
+        if (listener_group != hero_state->camera_mode) {
             return 0;
         }
         if (current->transition_state == CAMERA_TRANSITION_PRIORITY_GATED &&
@@ -101,12 +110,12 @@ int camera_activation_check_priority(struct UpdateCam *candidate, struct UpdateC
             return 1;
         }
         {
-            CamRec20 *candidate_descriptor_entry = &D_0015EF90[candidate->descriptor_index];
-            int       secondary_descriptor_index =
-                *(int *)((char *)candidate_descriptor_entry->unk1C + 0x24);
+            CameraRecordRow *candidate_descriptor_entry = &D_0015EF90[candidate->descriptor_index];
+            int              secondary_descriptor_index =
+                *(int *)((char *)candidate_descriptor_entry->pvars + 0x24);
 
             if (secondary_descriptor_index < 0 ||
-                (hero_state->rail_spline == D_0015EF40[secondary_descriptor_index].unk10 &&
+                (hero_state->rail_spline == D_0015EF40[secondary_descriptor_index].path &&
                  hero_state->rail_off_frames == 0)) {
                 return 1;
             }
@@ -121,4 +130,4 @@ extern __typeof__(camera_activation_check_priority) func_001EC210
     __attribute__((alias("FUN_001ec210")));
 
 /* Defined below their only users, so retail reaches them with lui. */
-CamRec20 *D_0015EF40 MACRO_ADDR = 0;
+CameraSplineRow *D_0015EF40 MACRO_ADDR = 0;

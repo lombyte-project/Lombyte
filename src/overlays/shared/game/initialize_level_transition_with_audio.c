@@ -363,7 +363,7 @@ typedef struct {
     struct {
         float u, v;
     } uv[4];
-    long unk70, tex, unk80, unk88;
+    long clamp, tex, tex1, alpha; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
 } Q_28efc8;
 
 typedef struct {

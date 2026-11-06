@@ -17,11 +17,11 @@ void alien_queen_slider_update(unsigned char *moby) __asm__("FUN_L06_002d9d10");
 
 typedef struct AlienQueenSliderVars {
     u8  pad_0[0x10];
-    u8  unk10;
+    u8  end_position;
     u8  pad_11[0xF];
-    f32 unk20;
-    f32 unk24;
-    f32 unk28;
+    f32 blend;
+    f32 blend_speed;
+    f32 target_blend;
 } AlienQueenSliderVars;
 
 /* Moby class 367 */
@@ -37,7 +37,7 @@ void alien_queen_slider_update(unsigned char *moby) {
         char *moby_position = (char *)moby + 0x10;
         char *offset_position_endpoint;
         qcopy(position_interpolation_vars, moby_position);
-        offset_position_endpoint = &position_interpolation_vars->unk10;
+        offset_position_endpoint = &position_interpolation_vars->end_position;
         fast_vec_normalize(offset_position_endpoint, moby + 0xD0, 11.0f);
         fast_vec_add(offset_position_endpoint, offset_position_endpoint, moby_position);
         moby[0x20] = 1;
@@ -45,17 +45,17 @@ void alien_queen_slider_update(unsigned char *moby) {
     }
     case INTERPOLATE_POSITION_TO_TARGET: {
         float blend_acceleration_step = (&frame_time)[1] * 10.0f;
-        advance_accelerated_scalar(&position_interpolation_vars->unk20,
-                                   &position_interpolation_vars->unk24,
-                                   position_interpolation_vars->unk28,
+        advance_accelerated_scalar(&position_interpolation_vars->blend,
+                                   &position_interpolation_vars->blend_speed,
+                                   position_interpolation_vars->target_blend,
                                    blend_acceleration_step,
                                    blend_acceleration_step,
                                    frame_time * 20.0f);
         lerp_vector(moby + 0x10,
                     position_interpolation_vars,
-                    &position_interpolation_vars->unk10,
-                    position_interpolation_vars->unk20);
-        if (position_interpolation_vars->unk20 == position_interpolation_vars->unk28)
+                    &position_interpolation_vars->end_position,
+                    position_interpolation_vars->blend);
+        if (position_interpolation_vars->blend == position_interpolation_vars->target_blend)
             moby[0x20] = 1;
         break;
     }
@@ -95,7 +95,7 @@ void set_listed_alien_queen_sliders_state_2_and_clear_data_28(int moby_list_inde
             if (MOBY(moby)->oclass == 0x16F) {
                 AlienQueenSliderVars *listed_moby_vars = (AlienQueenSliderVars *)MOBY(moby)->pvars;
                 moby[0x20] = 2;
-                *(int *)&listed_moby_vars->unk28 = 0;
+                *(int *)&listed_moby_vars->target_blend = 0;
             }
         } while (*moby_index_cursor++ >= 0);
     }

@@ -97,10 +97,10 @@ void forcefield_update(struct Moby *m) __asm__("FUN_L13_002ed4a8");
 
 typedef struct ForcefieldVars {
     u8  pad_0[0x4];
-    f32 unk4;
+    f32 fade;
     u8  pad_8[0x4];
-    s16 unkC;
-    s16 unkE;
+    s16 point_offset;
+    s16 point_light_slot;
 } ForcefieldVars;
 
 /* Moby classes 404, 405 */
@@ -118,8 +118,8 @@ void forcefield_update(struct Moby *moby) {
         moby->state = FORCEFIELD_STATE_MONITOR_LINKED_MOBY;
         moby->alpha = 0x14;
         moby->flags |= 0xA08;
-        forcefield_data->unkE = -1;
-        forcefield_data->unk4 = 1.0f;
+        forcefield_data->point_light_slot = -1;
+        forcefield_data->fade = 1.0f;
         set_moby_color(moby, 0x80, 0x80, 0x80);
         break;
     case FORCEFIELD_STATE_MONITOR_LINKED_MOBY:
@@ -130,38 +130,38 @@ void forcefield_update(struct Moby *moby) {
                 (D_0014C190_257218[current_level_index][((short)MOBY(linked_moby)->save_id) >> 5] >>
                  (MOBY(linked_moby)->save_id & 0x1F)) &
                     1) {
-                forcefield_data->unk4 = 1.0f;
+                forcefield_data->fade = 1.0f;
                 moby->state = FORCEFIELD_STATE_FADE_OUT;
             }
         } else {
-            forcefield_data->unk4 = 1.0f;
+            forcefield_data->fade = 1.0f;
             moby->state = FORCEFIELD_STATE_FADE_OUT;
             stub_printf(forcefield_missing_trigger_format, moby->oclass, ((short)moby->save_id));
         }
         spawn_forcefield_contact_effects(moby, forcefield_data);
         break;
     case FORCEFIELD_STATE_FADE_OUT:
-        forcefield_data->unk4 -= frame_scale * 0.05f;
-        if (forcefield_data->unk4 < 0.0f)
+        forcefield_data->fade -= frame_scale * 0.05f;
+        if (forcefield_data->fade < 0.0f)
             moby->state = FORCEFIELD_STATE_REMOVE;
         else
-            moby->alpha = truncate_float_to_s32(forcefield_data->unk4 * 20.0f);
+            moby->alpha = truncate_float_to_s32(forcefield_data->fade * 20.0f);
         break;
     case FORCEFIELD_STATE_REMOVE:
-        if (forcefield_data->unkE != -1) {
-            release_point_light_slot(forcefield_data->unkE);
-            forcefield_data->unkE = -1;
+        if (forcefield_data->point_light_slot != -1) {
+            release_point_light_slot(forcefield_data->point_light_slot);
+            forcefield_data->point_light_slot = -1;
         }
         mark_moby_for_removal(moby);
         return;
     }
     wrap_adjusted_step = 0xC0;
-    forcefield_data->unkC += 0xC0;
-    if (forcefield_data->unkC > 0x1000) {
-        forcefield_data->unkC -= 0x1000;
+    forcefield_data->point_offset += 0xC0;
+    if (forcefield_data->point_offset > 0x1000) {
+        forcefield_data->point_offset -= 0x1000;
         wrap_adjusted_step = -0xF40;
-    } else if (forcefield_data->unkC < 0) {
-        forcefield_data->unkC += 0x1000;
+    } else if (forcefield_data->point_offset < 0) {
+        forcefield_data->point_offset += 0x1000;
         wrap_adjusted_step = 0x10C0;
     }
     offset_moby_class_point_pairs(((void *)moby->pclass), wrap_adjusted_step, 0);

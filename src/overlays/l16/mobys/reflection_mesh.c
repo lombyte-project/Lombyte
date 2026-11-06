@@ -59,8 +59,11 @@ extern float
 float *single_reflection_mesh_position_tables[2] __asm__("D_L16_00161F60") = {
     single_reflection_mesh_positions, 0};
 
-extern float D_L16_001DD0C0[];
-float *single_reflection_mesh_unused_pair_tables[2] __asm__("D_L16_00161F68") = {D_L16_001DD0C0, 0};
+extern float
+    single_reflection_mesh_unused_pairs[250] __asm__("D_L16_001DD0C0"); /* 125 points x 2 floats */
+
+float *single_reflection_mesh_unused_pair_tables[2] __asm__("D_L16_00161F68") = {
+    single_reflection_mesh_unused_pairs, 0};
 
 extern float
     single_reflection_mesh_directions[375] __asm__("D_L16_001DD4A8"); /* 125 points x 3 floats */
@@ -296,3 +299,24 @@ u32 single_reflection_mesh_colours[125] __asm__("D_L16_001DDA88") = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f};
+
+float single_reflection_mesh_unused_pairs[250] __asm__("D_L16_001DD0C0") = {
+    0.5f, -1.0f, 0.0f, -1.0f, 0.5f, -0.5f, 0.0f, -0.5f, 0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f,
+    0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f, 1.0f, -0.5f, 0.5f, -1.0f, 1.0f, -0.5f,
+    1.0f, -1.0f, 0.0f, -0.5f, 0.5f, -1.0f, 0.0f, -0.5f, 0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f,
+    0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f, 1.0f, -0.5f, 0.5f, -1.0f, 1.0f, -0.5f,
+    1.0f, -1.0f, 0.0f, -0.5f, 0.5f, -1.0f, 0.0f, -0.5f, 0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f,
+    0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f, 1.0f, -0.5f, 0.5f, -1.0f, 1.0f, -0.5f,
+    1.0f, -1.0f, 0.0f, -0.5f, 0.5f, -1.0f, 0.0f, -0.5f, 0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f,
+    0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f, 1.0f, -0.5f, 0.5f, -1.0f, 1.0f, -0.5f,
+    1.0f, -1.0f, 0.0f, -0.5f, 0.5f, -1.0f, 0.0f, -0.5f, 0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f,
+    0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f, 1.0f, -0.5f, 0.5f, -1.0f, 1.0f, -0.5f,
+    1.0f, -1.0f, 0.0f, -0.5f, 0.5f, -1.0f, 0.0f, -0.5f, 0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f,
+    0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f, 1.0f, -0.5f, 0.5f, -1.0f, 1.0f, -0.5f,
+    1.0f, -1.0f, 0.0f, -0.5f, 0.5f, -1.0f, 0.0f, -0.5f, 0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f,
+    0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f, 1.0f, -0.5f, 0.5f, -1.0f, 1.0f, -0.5f,
+    1.0f, -1.0f, 0.0f, -0.5f, 0.5f, -1.0f, 0.0f, -0.5f, 0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f,
+    0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f, 1.0f, -0.5f, 0.5f, -1.0f, 1.0f, -0.5f,
+    1.0f, -1.0f, 0.5f, -0.5f, 0.5f, -1.0f, 0.5f, -0.5f, 1.0f, -1.0f, 0.5f, -0.5f, 1.0f, -0.5f,
+    0.5f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,  0.0f, -0.5f, 0.0f, 0.0f,
+};

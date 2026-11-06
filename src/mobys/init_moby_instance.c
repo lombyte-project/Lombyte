@@ -6,70 +6,70 @@
 typedef struct {
     char          pad00[0x10];
     unsigned char nframes; /* 0x10 */
-    signed char   unk11;   /* 0x11 */
+    signed char   sound;   /* 0x11 */
 } MobyISeq;
 
 typedef struct {
     char           pad00[6];
-    unsigned char  unk06; /* 0x06 */
+    unsigned char  metal_count; /* 0x06 */
     char           pad07[5];
-    unsigned char  unk0C; /* 0x0C */
+    unsigned char  seq_count; /* 0x0C */
     char           pad0D;
-    unsigned char  unk0E; /* 0x0E */
-    unsigned char  unk0F; /* 0x0F */
-    int            unk10; /* 0x10 */
+    unsigned char  lod_trans;    /* 0x0E */
+    unsigned char  shadow_count; /* 0x0F */
+    int            collision;    /* 0x10 */
     char           pad14[0x10];
-    float          unk24; /* 0x24 */
+    float          scale; /* 0x24 */
     char           pad28[0x18];
-    int            unk40; /* 0x40 */
-    unsigned short unk44; /* 0x44 */
+    int            glow_rgba; /* 0x40 */
+    unsigned short flags;     /* 0x44 */
     char           pad46[2];
     MobyISeq      *seq; /* 0x48 */
 } MobyIClass;
 
 typedef struct {
     char           pad00[0x21];
-    unsigned char  unk21;  /* 0x21 */
+    unsigned char  group;  /* 0x21 */
     unsigned char  oClass; /* 0x22 */
-    unsigned char  unk23;  /* 0x23 */
+    unsigned char  alpha;  /* 0x23 */
     MobyIClass    *pClass; /* 0x24 */
     char           pad28[4];
-    float          unk2C; /* 0x2C */
+    float          scale; /* 0x2C */
     char           pad30[4];
-    unsigned short flags; /* 0x34 */
-    unsigned short unk36; /* 0x36 */
-    unsigned long  unk38; /* 0x38 */
+    unsigned short flags;     /* 0x34 */
+    unsigned short occlusion; /* 0x36 */
+    unsigned long  lights;    /* 0x38 */
     char           pad40[0x18];
-    float          unk58; /* 0x58 */
-    float          unk5C; /* 0x5C */
+    float          anim_speed; /* 0x58 */
+    float          anim_rate;  /* 0x5C */
     char           pad60[0x11];
-    unsigned char  unk71; /* 0x71 */
-    unsigned char  unk72; /* 0x72 */
-    unsigned char  unk73; /* 0x73 */
-    int            unk74; /* 0x74 */
+    unsigned char  unk71;       /* 0x71 */
+    unsigned char  lod_dist;    /* 0x72 */
+    unsigned char  metal_alpha; /* 0x73 */
+    int            update;      /* 0x74 */
     char           pad78[4];
-    unsigned char  unk7C; /* 0x7C */
-    unsigned char  unk7D; /* 0x7D */
-    unsigned char  unk7E; /* 0x7E */
-    unsigned char  unk7F; /* 0x7F */
+    unsigned char  seq_sound;          /* 0x7C */
+    unsigned char  sound_slot;         /* 0x7D */
+    unsigned char  anim_trigger_count; /* 0x7E */
+    unsigned char  shadow_range;       /* 0x7F */
     char           pad80[4];
-    int            unk84; /* 0x84 */
-    int            unk88; /* 0x88 */
+    int            shadow_slab_lo; /* 0x84 */
+    int            shadow_slab_hi; /* 0x88 */
     char           pad8C[4];
-    int            unk90; /* 0x90 */
-    int            unk94; /* 0x94 */
+    int            glow_color; /* 0x90 */
+    int            collision;  /* 0x94 */
     char           pad98[8];
-    unsigned char  unkA0; /* 0xA0 */
-    unsigned char  unkA1; /* 0xA1 */
-    unsigned char  unkA2; /* 0xA2 */
-    unsigned char  unkA3; /* 0xA3 */
-    unsigned char  unkA4; /* 0xA4 */
+    unsigned char  unkA0;    /* 0xA0 */
+    unsigned char  unkA1;    /* 0xA1 */
+    unsigned char  unkA2;    /* 0xA2 */
+    unsigned char  unkA3;    /* 0xA3 */
+    unsigned char  hit_slot; /* 0xA4 */
     char           padA5;
     short          original_class_id; /* 0xA6 */
-    int            unkA8;             /* 0xA8 */
-    int            unkAC;             /* 0xAC */
+    int            change_counter;    /* 0xA8 */
+    int            grid_index;        /* 0xAC */
     char           padB0[0xD];
-    unsigned char  unkBD; /* 0xBD */
+    unsigned char  shadow_dir; /* 0xBD */
     char           padBE[0x42];
 } MobyI;
 
@@ -96,27 +96,27 @@ void init_moby_instance(void *moby_mem, int oClass) {
 
     fill_transfer_words(moby_instance, 0, 0x100);
     resident_class_slot = resident_class_slot_by_id[oClass];
-    moby_instance->unk23 = 0x80;
+    moby_instance->alpha = 0x80;
     moby_instance->oClass = resident_class_slot;
-    moby_instance->unkA4 = 0xFF;
-    moby_instance->unk21 = 0xFF;
+    moby_instance->hit_slot = 0xFF;
+    moby_instance->group = 0xFF;
     moby_instance->unk71 = 0xFF;
-    moby_instance->unk72 = 0xFF;
+    moby_instance->lod_dist = 0xFF;
     moby_instance->original_class_id = oClass;
-    moby_instance->unk38 = 0x40404000000000L;
-    moby_instance->unk36 = 0x7F80;
+    moby_instance->lights = 0x40404000000000L;
+    moby_instance->occlusion = 0x7F80;
     resident_pool_slot_index = ((char *)moby_instance - (char *)resident_object_pool) >> 8;
-    moby_instance->unkA8 = resident_pool_slot_index << 16;
-    moby_instance->unkAC = resident_pool_slot_index;
-    moby_instance->unk7E = 0;
-    moby_instance->unk7C = 0xFF;
+    moby_instance->change_counter = resident_pool_slot_index << 16;
+    moby_instance->grid_index = resident_pool_slot_index;
+    moby_instance->anim_trigger_count = 0;
+    moby_instance->seq_sound = 0xFF;
     moby_instance->unkA0 = 0x7F;
     moby_instance->unkA2 = 0x80;
-    moby_instance->unk7D = 0xFF;
+    moby_instance->sound_slot = 0xFF;
     moby_instance->unkA1 = 0x7F;
     moby_instance->unkA3 = 0x80;
-    moby_instance->unk74 = moby_class_updates[moby_instance->oClass];
-    if (moby_instance->unk74 == 0) {
+    moby_instance->update = moby_class_updates[moby_instance->oClass];
+    if (moby_instance->update == 0) {
         moby_instance->flags |= 2;
     }
     pClass = moby_class_resources[moby_instance->oClass];
@@ -124,15 +124,15 @@ void init_moby_instance(void *moby_mem, int oClass) {
         MobyIClass *class_resource;
 
         moby_instance->pClass = pClass;
-        moby_instance->unk72 = pClass->unk0E;
-        moby_instance->flags |= pClass->unk44;
-        moby_instance->unk94 = pClass->unk10;
-        moby_instance->unk2C = pClass->unk24;
-        moby_instance->unk58 = 1.0f;
-        moby_instance->unk5C = 1.0f;
-        if (pClass->unk40 != 0) {
+        moby_instance->lod_dist = pClass->lod_trans;
+        moby_instance->flags |= pClass->flags;
+        moby_instance->collision = pClass->collision;
+        moby_instance->scale = pClass->scale;
+        moby_instance->anim_speed = 1.0f;
+        moby_instance->anim_rate = 1.0f;
+        if (pClass->glow_rgba != 0) {
             moby_instance->flags |= 0x10;
-            moby_instance->unk90 = pClass->unk40;
+            moby_instance->glow_color = pClass->glow_rgba;
         }
         {
             /* retail re-reads m->pClass (lw v0, 0x24(s1)) before each of the
@@ -142,15 +142,15 @@ void init_moby_instance(void *moby_mem, int oClass) {
                a real load; the stores still go through the plain m. */
             volatile MobyI *vm = moby_instance;
 
-            if (vm->pClass->unk0F != 0) {
-                moby_instance->unk7F = 0x18;
+            if (vm->pClass->shadow_count != 0) {
+                moby_instance->shadow_range = 0x18;
                 moby_instance->flags |= 0x400;
-                moby_instance->unk84 = 0;
-                moby_instance->unk88 = 0;
-                moby_instance->unkBD = 0;
+                moby_instance->shadow_slab_lo = 0;
+                moby_instance->shadow_slab_hi = 0;
+                moby_instance->shadow_dir = 0;
             }
-            if (vm->pClass->unk06 != 0) {
-                moby_instance->unk73 = 0x18;
+            if (vm->pClass->metal_count != 0) {
+                moby_instance->metal_alpha = 0x18;
             }
             if (vm->pClass->seq == 0) {
                 return;
@@ -161,10 +161,10 @@ void init_moby_instance(void *moby_mem, int oClass) {
             moby_instance->flags &= 0xFFFD;
         }
         class_resource = moby_instance->pClass;
-        if (class_resource->unk0C == 1) {
+        if (class_resource->seq_count == 1) {
             if (class_resource->seq->nframes < 2) {
-                moby_instance->unk58 = 0.0f;
-                if (class_resource->seq->unk11 < 0) {
+                moby_instance->anim_speed = 0.0f;
+                if (class_resource->seq->sound < 0) {
                     moby_instance->flags |= 0x40;
                 }
             }
@@ -173,7 +173,7 @@ void init_moby_instance(void *moby_mem, int oClass) {
     }
     moby_instance->pClass = 0;
     moby_instance->flags |= 5;
-    moby_instance->unk94 = 0;
+    moby_instance->collision = 0;
 }
 
 extern __typeof__(init_moby_instance) func_0020C5F0 __attribute__((alias("FUN_0020c5f0")));

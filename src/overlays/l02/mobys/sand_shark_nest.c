@@ -29,8 +29,8 @@ extern void  trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void
 trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 #include "qcopy.h"
 
@@ -98,8 +98,8 @@ extern int FUN_L00_001fefc8(void *);
 /* pvars of the class sand_shark_nest_update updates (only the fields it touches). */
 typedef struct {
     char          pad0[0x20];
-    float         f20; /* 0x20 */
-    short         s24; /* 0x24 */
+    float         health;     /* 0x20 */
+    short         max_health; /* 0x24 */
     char          pad26[8];
     unsigned char removal_request_state; /* 0x2E */
     char          pad2F[0x11];
@@ -171,13 +171,13 @@ void sand_shark_nest_update(unsigned char *moby) {
     }
     switch (MOBY(moby)->state) {
     case SAND_SHARK_NEST_INITIALIZE:
-        MOBY(moby)->unkB4 -= bolt_source_stats_lui[2][moby[0xB1]].bolts;
-        if (MOBY(moby)->unkB4 <= 0) {
-            MOBY(moby)->unkB4 = 1;
+        MOBY(moby)->bolts -= bolt_source_stats_lui[2][moby[0xB1]].bolts;
+        if (MOBY(moby)->bolts <= 0) {
+            MOBY(moby)->bolts = 1;
         }
         MOBY(moby)->state = SAND_SHARK_NEST_WAIT_FOR_SPAWN;
-        nest_vars->f20 = 3.0f;
-        nest_vars->s24 = 3;
+        nest_vars->health = 3.0f;
+        nest_vars->max_health = 3;
         nest_vars->removal_request_state = SAND_SHARK_NEST_REMOVAL_REQUEST_IDLE;
         nest_vars->timer = scale_game_frames(nest_vars->delay);
         if (nest_vars->spawner >= 0) {
@@ -378,10 +378,10 @@ void handle_sand_shark_nest_damage(struct Moby *moby) {
                 blend_moby_animation(moby, 3, 0, 0);
             FUN_L00_00257470(moby, 0, -1);
         }
-        trooper_anim_update(moby, (short *)(nest_vars + 0x60));
+        start_hit_color_flash(moby, (short *)(nest_vars + 0x60));
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, nest_vars + 0x60);
+    update_hit_color_flash(moby, nest_vars + 0x60);
     FUN_L00_001fefc8(&moby->command);
 }
 

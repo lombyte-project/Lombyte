@@ -40,7 +40,7 @@ typedef struct {
     s16 type;         /* 0x2C: 1..11, picks timing and easing */
     s16 timer;        /* 0x2E: frames since the camera started, 0 when off */
     f32 offset_scale; /* 0x30: follow_camera_set_offset_scale; follow.look_height on a type 5 snap */
-    s16 keep_unk10;   /* 0x34: 0 clears FollowCamState.unk10 each frame */
+    s16 keep_leash;   /* 0x34: 0 clears FollowCamState.leash each frame */
     s16 check_yaw; /* 0x36: nonzero ends the camera when D_L00_00166DD8 is 80 degrees or more off `yaw` */
     f32 lateral_stiffness; /* 0x38: eased in over 120 frames from start_lateral_stiffness */
     f32 lateral_damping;   /* 0x3C: likewise from start_lateral_damping */
@@ -49,9 +49,9 @@ typedef struct {
     s16 l_buttons_end; /* 0x48: type 5 ends on L1 or L2; with `done` set it does not restart */
     s16 done;          /* 0x4A: set when the camera ends */
     s32 clip_volume2;  /* 0x4C: second clip volume, -1 none */
-    f32 unk50;         /* 0x50: degrees, passed to FUN_L00_002e8540 */
-    s16 set_flag1;     /* 0x54: sets tail.ctl.flags bit 1 each frame */
-    s16 set_flag0;     /* 0x56: sets tail.ctl.flags bit 0 each frame */
+    f32 script_pitch; /* 0x50: degrees, FollowCamState.tail.script_pitch through set_follow_camera_script_pitch */
+    s16 set_flag1; /* 0x54: sets tail.ctl.flags bit 1 each frame */
+    s16 set_flag0; /* 0x56: sets tail.ctl.flags bit 0 each frame */
 } SwingCameraParams;
 
 extern void follow_camera_set_distance(int, float, float) __asm__("FUN_L00_002e8450");
@@ -103,7 +103,7 @@ s32 volume_camera_swing_active(struct UpdateCam *swing_camera_record) {
     u16                type;
 
     params = camera_descriptors[swing_camera_record->descriptor_index].params;
-    if (current_follow_cam->unk86 != 0) {
+    if (current_follow_cam->camera_class != 0) {
         return 0;
     }
     type = *(u16 *)&params->type;
@@ -215,32 +215,32 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
         /* A second pointer to the same state: retail keeps both. */
         state = rig;
         reset = &state->reset;
-        fast_vec_normalize(tail->unk130, tail->unk130, params->distance);
-        tail->unk15C = params->distance;
-        tail->distance = params->height;
+        fast_vec_normalize(tail->eye_offset, tail->eye_offset, params->distance);
+        tail->distance = params->distance;
+        tail->pivot_height = params->height;
         follow->look_height = params->offset_scale;
-        qcopy(state->tail.unk140, tail->unk130);
-        fast_vec_scale(gravity_offset_or_yaw_direction, &hero.gravity_dir, -tail->distance);
+        qcopy(state->tail.saved_eye_offset, tail->eye_offset);
+        fast_vec_scale(gravity_offset_or_yaw_direction, &hero.gravity_dir, -tail->pivot_height);
         pos = &current_follow_camera_record->pos;
-        fast_vec_add(state->follow.eye, &hero.motion.pos, gravity_offset_or_yaw_direction);
-        fast_vec_add(pos, state->follow.eye, tail->unk130);
+        fast_vec_add(state->follow.pivot, &hero.motion.pos, gravity_offset_or_yaw_direction);
+        fast_vec_add(pos, state->follow.pivot, tail->eye_offset);
         fast_vec_scale(gravity_offset_or_yaw_direction, &hero.gravity_dir, -follow->look_height);
         fast_vec_add(state->follow.look_target, &hero.motion.pos, gravity_offset_or_yaw_direction);
-        qcopy(state->follow.unkD0, state->follow.look_target);
+        qcopy(state->follow.snap_look_target, state->follow.look_target);
         qcopy(follow->focus, &hero.motion.pos);
         qcopy(state->follow.offset, follow->focus);
         qcopy(state->position, pos);
-        qcopy(state->tail.snap.unk1F0, pos);
-        snap->unk200 = tail->unk15C - fast_vec_length(tail->unk130);
-        *(s32 *)&reset->unk34 = 0;
+        qcopy(state->tail.snap.shot_pos, pos);
+        snap->distance_reduction = tail->distance - fast_vec_length(tail->eye_offset);
+        *(s32 *)&reset->pitch_bias = 0;
         reset->look_height = follow->look_height;
         {
-            f32 zero = reset->unk34;
-            f32 distance = tail->distance;
-            reset->distance = distance;
-            reset->unk38 = zero;
-            reset->unk30 = zero;
-            reset->unk2C = zero;
+            f32 zero = reset->pitch_bias;
+            f32 distance = tail->pivot_height;
+            reset->pivot_height = distance;
+            reset->pitch_bias_vel = zero;
+            reset->pivot_height_vel = zero;
+            reset->look_height_vel = zero;
         }
     }
     at_end = 0;
@@ -263,7 +263,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
             at_end = 1;
             params->timer = scale_game_frames(200);
         }
-        FUN_L00_002e8620();
+        lock_follow_camera_run_toward();
     } else if (params->type == SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_AT_END ||
                params->type == SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_ALLOW_AIRBORNE_ENTRY ||
                params->type == SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END ||
@@ -312,10 +312,10 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
         if (params->type == SWING_CAMERA_TYPE_REQUIRE_ZERO_FOLLOW_MODE ||
             params->type == SWING_CAMERA_TYPE_REQUIRE_NONZERO_FOLLOW_MODE) {
             follow_camera_set_distance(0, params->distance, 0.002f);
-            FUN_L00_002e8490(params->distance + 1.36f);
+            set_follow_camera_pull_back_max(params->distance + 1.36f);
         } else {
             follow_camera_set_distance(0, params->distance, 0.003f);
-            FUN_L00_002e8620();
+            lock_follow_camera_run_toward();
         }
     }
     if (params->height != 0.0f) {
@@ -334,8 +334,8 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
             follow_camera_set_offset_scale(0, params->offset_scale, 0.005f);
         }
     }
-    if (params->unk50 != 0.0f) {
-        FUN_L00_002e8540(params->unk50 * 0.017453292f);
+    if (params->script_pitch != 0.0f) {
+        set_follow_camera_script_pitch(params->script_pitch * 0.017453292f);
     }
     if (params->set_flag1 != 0) {
         {
@@ -349,7 +349,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
             ctl->flags |= 1;
         }
     }
-    if (params->keep_unk10 == 0) {
+    if (params->keep_leash == 0) {
         set_follow_camera_orbit_clamp_mode(0);
     }
     if (params->lateral_stiffness != 0.0f || params->lateral_damping != 0.0f) {
@@ -370,7 +370,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
     if (params->type == SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_AT_END ||
         params->type == SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_ALLOW_AIRBORNE_ENTRY ||
         params->type == SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END) {
-        FUN_L00_002e8620();
+        lock_follow_camera_run_toward();
         follow_camera_start_slide();
         follow_camera_set_up_spring(0.01f, 0.2f);
     }
@@ -393,7 +393,7 @@ s32 volume_camera_swing_check(struct UpdateCam *swing_camera_record) {
         if (hero_data->frames_off_ground.s != 0) {
             if (current_level_index != LEVEL_OLTANIS)
                 return 0;
-            if (hero_data->unk2284 != 13)
+            if (hero_data->camera_mode != 13)
                 return 0;
         }
     }

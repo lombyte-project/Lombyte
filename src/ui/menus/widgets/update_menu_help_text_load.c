@@ -61,7 +61,7 @@ int update_menu_help_text_load(struct MenuScreen *menu) {
                 int text_base = (int)text_entries - 8;
                 *(int *)((char *)text_entries + i * 0x10) += text_base;
             }
-            menu->unk10 &= ~MENU_SCREEN_HIDDEN;
+            menu->flags &= ~MENU_SCREEN_HIDDEN;
             menu->data.help.load_state = HELP_TEXT_LOAD_READY;
         }
         break;

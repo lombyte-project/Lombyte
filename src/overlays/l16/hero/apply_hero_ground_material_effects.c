@@ -47,7 +47,7 @@ void apply_hero_ground_material_effects(void) {
     hero_data->ground_sound_class = keep;
     hero_data->ground_type = -1;
     hero_data->wading = 0;
-    hero_data->unk308 = 0;
+    hero_data->magnetic_floor = 0;
     if (saved_ground_type == -1)
         return;
     if (saved_ground_type == GROUND_MATERIAL_MAGNET) {
@@ -56,7 +56,7 @@ void apply_hero_ground_material_effects(void) {
             if (hero_data->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                 char *item_moby = (char *)hero_data->items[1].moby;
                 if (item_moby != 0 && MOBY(item_moby)->oclass == 0xAD)
-                    hero_data->unk308 = 1;
+                    hero_data->magnetic_floor = 1;
             }
         }
     }
@@ -101,7 +101,7 @@ void apply_hero_ground_material_effects(void) {
     }
     if (saved_ground_type == 0x6) {
         struct Hero *q = &hero;
-        q->unk12E9 = 1;
+        q->selector_6 = 1;
     }
     if (saved_ground_type == GROUND_MATERIAL_MAGNET) {
         struct Hero *q = &hero;
@@ -121,7 +121,7 @@ void apply_hero_ground_material_effects(void) {
     }
     if (saved_ground_type == 0x9) {
         struct Hero *q = &hero;
-        q->unk12EE = 1;
+        q->grind_jump_block = 1;
     }
     if (saved_ground_type == 0xC) {
         struct Hero *q = &hero;
@@ -285,7 +285,7 @@ void update_hero_ground_contact(void) {
             hero.on_flagged_ground_moby = 1;
         }
     }
-    if (HH.unk1C > 0) {
+    if (HH.surface_type > 0) {
         qcopy((u8 *)&hero.ground_point, &HH.point);
         hero.ground_z.f = HH.point.f[2];
         hero.ground_distance = fast_vec_dist((u8 *)&hero.motion.pos, (u8 *)&hero.ground_point);
@@ -334,13 +334,13 @@ d1:
         break;
     }
     hero.ground_pitch.i = 0;
-    hero.unk2E8.i = 0;
-    hero.unk2D0.i[0] = 0;
-    hero.unk2D0.i[1] = 0;
-    hero.unk2C8.i[0] = 0;
-    hero.unk2C8.i[1] = 0;
-    hero.unk2C0.i[0] = 0;
-    hero.unk2C0.i[1] = 0;
+    hero.ground_roll.i = 0;
+    hero.side_probe_roll.i[0] = 0;
+    hero.side_probe_roll.i[1] = 0;
+    hero.side_probe_pitch.i[0] = 0;
+    hero.side_probe_pitch.i[1] = 0;
+    hero.side_probe_drop.i[0] = 0;
+    hero.side_probe_drop.i[1] = 0;
     if (hero.state.control_mode == HERO_MODE_GRIND || hero.state.control_mode == 0x15 ||
         hero.state.control_mode == HERO_MODE_ATTACK || hero.state.control_mode == HERO_MODE_JUMP ||
         hero.state.control_mode == HERO_MODE_LAND || hero.state.control_mode == HERO_MODE_LEDGE) {
@@ -354,7 +354,7 @@ d1:
         hero.ground_pitch.f = ground_offset_or_angles.f[1];
     }
     if (-0.78539819f < ground_offset_or_angles.f[0] && ground_offset_or_angles.f[0] < 0.78539819f) {
-        hero.unk2E8.f = ground_offset_or_angles.f[0];
+        hero.ground_roll.f = ground_offset_or_angles.f[0];
     }
     for (i = 0; i < 2; i++) {
         side_probe_angle = 1.5707964f;
@@ -367,24 +367,24 @@ d1:
         if (collision_line(
                 &side_probe_endpoint, &collision_ray_endpoint, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
-            hero.unk2C0.f[i] = f;
+            hero.side_probe_drop.f[i] = f;
             if (0.4f < absolute_float(f)) {
-                hero.unk2C0.f[i] = 0.0f;
+                hero.side_probe_drop.f[i] = 0.0f;
             }
             sceVu0Normalize(&normalized_hit_normal, (u8 *)&HH.normal_x);
             compute_rotated_vector_angles(&normalized_hit_normal, &probe_surface_angles);
             if (-0.78539819f < probe_surface_angles.f[1] &&
                 probe_surface_angles.f[1] < 0.78539819f) {
-                hero.unk2C8.f[i] = probe_surface_angles.f[1];
+                hero.side_probe_pitch.f[i] = probe_surface_angles.f[1];
             }
             if (-0.78539819f < probe_surface_angles.f[0] &&
                 probe_surface_angles.f[0] < 0.78539819f) {
-                hero.unk2D0.f[i] = probe_surface_angles.f[0];
+                hero.side_probe_roll.f[i] = probe_surface_angles.f[0];
             }
         } else {
-            hero.unk2C0.i[i] = 0;
-            hero.unk2C8.f[i] = hero.ground_pitch.f;
-            hero.unk2D0.f[i] = hero.unk2E8.f;
+            hero.side_probe_drop.i[i] = 0;
+            hero.side_probe_pitch.f[i] = hero.ground_pitch.f;
+            hero.side_probe_roll.f[i] = hero.ground_roll.f;
         }
     }
 }
@@ -429,9 +429,9 @@ s32 resolve_hero_position_collisions(s32 mode) {
             transform_hero_local_offset_to_world(&collision_position_offset, 0.0f, 0.0f, 0.7f);
             fast_vec_sub(
                 &collision_position_offset, &collision_position_offset, &hero.motion.pos.q);
-        } else if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN || hero.unk1F8 != 0) {
-            if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL || hero.unk1F8 != 0 ||
-                (unsigned)(hero.state.control_mode - 0x15) < 2) {
+        } else if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN || hero.magnet_walk_timer != 0) {
+            if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
+                hero.magnet_walk_timer != 0 || (unsigned)(hero.state.control_mode - 0x15) < 2) {
                 add_hero_up_offset(&collision_position_offset, &collision_position_offset, 0.6f);
             } else {
                 add_hero_gravity_offset(

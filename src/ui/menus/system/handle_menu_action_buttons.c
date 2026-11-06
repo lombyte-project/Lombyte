@@ -23,10 +23,10 @@ s32 handle_menu_action_buttons(struct MenuScreen *menu_screen) {
         allocate_voice_for_target_entry(0, 0x11, menu_screen->moby);
         return 1;
     } else if (controller_state.pressed_unmasked & PAD_CIRCLE) {
-        menu_system.unkE4 = selected_level_index[0];
-        menu_system.unkF0 = menu_system.current;
+        menu_system.travel_level = selected_level_index[0];
+        menu_system.travel_page = menu_system.current;
         menu_system.close_request = 3;
-        menu_system.unkF4 = 0xF;
+        menu_system.travel_state = 0xF;
         allocate_voice_for_target_entry(0, 0x11, menu_screen->moby);
     }
     return 0;

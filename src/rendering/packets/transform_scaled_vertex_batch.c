@@ -2,7 +2,7 @@
 
 struct VertexBatch {
     u8  pad_0[0x2C];
-    s32 unk2C;
+    f32 scale; /* 0x2C: Moby.scale */
 };
 
 extern void fast_vec_add(void *arg0, void *arg1, void *arg2) __asm__("func_001F9A10");

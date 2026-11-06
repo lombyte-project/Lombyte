@@ -785,10 +785,10 @@ void update_pyrocitor_usage_and_cleanup(struct Moby *pyrocitor_moby) {
             P->stat[10].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
         P->stat[10].level_mask = P->stat[10].level_mask | (1 << current_level_index) | 0x80000000;
     } else if (*(short *)(pyrocitor_vars + 0x50) < scale_game_frames(0x1E)) {
-        hero.unk20B4++;
+        hero.pyrocitor_tap_count++;
     }
     *(short *)(pyrocitor_vars + 0x50) = 0;
-    if (hero.unk20B4 >= 3)
+    if (hero.pyrocitor_tap_count >= 3)
         help_request(0x4E24, 0x4E);
 }
 

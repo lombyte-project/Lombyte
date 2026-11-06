@@ -12,7 +12,7 @@ typedef struct {
     u8 pad0[0x20];
     u8 state;
     u8 pad21[0xF];
-    u8 unk30;
+    u8 update_dist; /* 0x30: struct Moby update_dist */
 } FlockMoby;
 
 typedef struct {
@@ -27,17 +27,17 @@ typedef struct {
     u8  pad0[4];
     s32 unk4;
     u8  pad8[2];
-    u8  unkA;
+    u8  alpha; /* 0x0A: alpha of the spark colour */
     u8  initial_duration_frames;
 } FlockTail;
 
 typedef struct {
     u8        pad0[3];
-    u8        unk3;
+    u8        blend; /* 0x03: as EffectParticle */
     u8        pad4[4];
-    u8        unk8;
+    u8        spin;
     u8        pad9;
-    s16       unkA;
+    s16       life;
     u8        padC[0x20 - 0xC];
     FlockTail tail;
 } FlockPart;
@@ -69,7 +69,7 @@ void phase_effect_controller_update(FlockMoby *moby) {
 
     switch (moby->state) {
     case FLOCK_EFFECT_STATE_INITIALIZE:
-        moby->unk30 = 0xFF;
+        moby->update_dist = 0xFF;
         moby->state = FLOCK_EFFECT_STATE_PROCESS_PHASE_EFFECTS;
         break;
     case FLOCK_EFFECT_STATE_PROCESS_PHASE_EFFECTS:
@@ -108,13 +108,13 @@ void phase_effect_controller_update(FlockMoby *moby) {
                                       1.03f,
                                       120000.0f);
                     if (part != 0) {
-                        part->unk3 = 0x44;
+                        part->blend = 0x44;
                         tail = &part->tail;
-                        part->unk8 = random_int_between(0, 0xFF);
-                        part->unkA = scale_game_frames_s32(60);
+                        part->spin = random_int_between(0, 0xFF);
+                        part->life = scale_game_frames_s32(60);
                         tail->unk4 = 2;
-                        tail->unkA = color >> 24;
-                        tail->initial_duration_frames = part->unkA;
+                        tail->alpha = color >> 24;
+                        tail->initial_duration_frames = part->life;
                     }
                 }
             }

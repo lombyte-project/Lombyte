@@ -1,19 +1,19 @@
-/* Level 05 moby class that turns when triggered. */
+/* Level 05 moby class 895: starts turned 90 degrees from its placed yaw and turns to 40 degrees from it once its linked moby gets a command. */
 #include "types.h"
+#include "rnc/overlay/l05.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 
-extern int   allocate_voice_for_target_entry() __asm__("FUN_0022da68");
-extern short D_L05_0015FFD8 __asm__("D_L05_0015FFD8");
+extern int allocate_voice_for_target_entry() __asm__("FUN_0022da68");
 extern float
 approach_angle(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 
-void         triggered_moby_yaw_update(struct Moby *moby) __asm__("FUN_L05_003166a0");
+void         moby_895_update(struct Moby *moby) __asm__("FUN_L05_003166a0");
 extern float fast_add_rotations(float, float);
 extern float fast_subtract_rotations(float, float);
 
 /* Moby class 895 */
-void triggered_moby_yaw_update(struct Moby *moby) {
+void moby_895_update(struct Moby *moby) {
     enum {
         MOBY_INITIALIZE_YAW = 0,
         MOBY_WAIT_FOR_TRIGGER = 1,
@@ -33,7 +33,7 @@ void triggered_moby_yaw_update(struct Moby *moby) {
             moby->rot.z = fast_add_rotations(moby->rot.z, 1.5707964f);
         /* fall through */
     case MOBY_WAIT_FOR_TRIGGER:
-        if (((unsigned char *)*(int *)&D_L05_0015FFD8)[yaw_control_vars[2] * 256 + 0xBC] != 0) {
+        if (((unsigned char *)l05_moby_array)[yaw_control_vars[2] * 256 + 0xBC] != 0) {
             allocate_voice_for_target_entry(0, 0, moby);
             moby->state = MOBY_APPROACH_SAVED_YAW_OFFSET;
         }

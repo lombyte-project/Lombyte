@@ -23,7 +23,7 @@ void sandshark_egg_update(struct Moby *moby) __asm__("FUN_L02_002e0280");
 
 typedef struct SandsharkEggVars {
     u8    pad_0[0x60];
-    char *unk60;
+    char *linked_moby;
 } SandsharkEggVars;
 
 /* Moby class 755 */
@@ -67,13 +67,14 @@ void sandshark_egg_update(struct Moby *moby) {
         } while (i >= 0);
         break;
     case SANDSHARK_EGG_HANDOFF_TO_LINKED_MOBY:
-        linked_moby = egg_vars->unk60;
+        linked_moby = egg_vars->linked_moby;
         qcopy(linked_moby + 0x10, &moby->pos);
         linked_moby[0x20] = 0x11;
-        blend_moby_animation(egg_vars->unk60, 5, 0, 1);
-        *(int *)(egg_vars->unk60 + 0x94) = *(int *)(*(char **)(egg_vars->unk60 + 0x24) + 0x10);
-        *(float *)(egg_vars->unk60 + 0x58) = 1.0f;
-        update_entity(egg_vars->unk60);
+        blend_moby_animation(egg_vars->linked_moby, 5, 0, 1);
+        *(int *)(egg_vars->linked_moby + 0x94) =
+            *(int *)(*(char **)(egg_vars->linked_moby + 0x24) + 0x10);
+        *(float *)(egg_vars->linked_moby + 0x58) = 1.0f;
+        update_entity(egg_vars->linked_moby);
         mark_moby_for_removal(moby);
         break;
     }

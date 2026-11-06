@@ -43,8 +43,8 @@ struct MobyTrail {
 struct HeroManipulator {
     u8   anim_joint; /* 0x00 */
     u8   attached;   /* 0x01 */
-    u8   unk2;       /* 0x02 */
-    u8   absolute;   /* 0x03 */
+    u8   pad_2;
+    u8   absolute; /* 0x03 */
     u8   pad_4[0x8];
     f32  blend;       /* 0x0C */
     Vec4 quat;        /* 0x10 */
@@ -76,7 +76,7 @@ struct HeroItemSlot {
     struct Moby *moby;  /* 0x00: item moby */
     struct Moby *moby2; /* 0x04: second item moby */
     u8           pad_08[0x4];
-    u8          *unk0C;           /* 0x0C */
+    u8          *moby3;           /* 0x0C: third item moby */
     s32          button_mask;     /* 0x10: pad buttons that hold the gadget states */
     s32          respawn_frame;   /* 0x14: set on release */
     s16          timer;           /* 0x18: counts down; a slot change waits for 0 */
@@ -89,23 +89,23 @@ struct HeroItemSlot {
     s32          state;        /* 0x24: 0 empty, 2 ready, 3 released */
     s32          item_id;      /* 0x28: item in the slot */
     f32          glow_phase;   /* 0x2C: phase of the item moby's colour pulse (FUN_L00_002080b0) */
-    f32          unk30;        /* 0x30 */
-    f32          unk34;        /* 0x34 */
-    s32          unk38;        /* 0x38 */
-    s16          unk3C;        /* 0x3C */
-    u16          unk3E;        /* 0x3E */
-    s32          locked_on;    /* 0x40: on slot 6, nonzero makes the Ryno aim along unk4C */
+    f32          effect_random_base;       /* 0x30: configure_hero_point_effect_emission */
+    f32          effect_random_half_range; /* 0x34 */
+    s32          effect_updates_left;      /* 0x38 */
+    s16          effect_count_per_point;   /* 0x3C */
+    u16          effect_flags;             /* 0x3E */
+    s32          locked_on; /* 0x40: on slot 6, nonzero makes the Ryno aim along lock_yaw */
     u8           pad_44[0x4];
     struct Moby
-        *lock_target; /* 0x48: on slot 6, the moby the weapons lock on to while unk40 is set */
+        *lock_target; /* 0x48: on slot 6, the moby the weapons lock on to while locked_on is set */
     f32  lock_yaw;    /* 0x4C: yaw */
 };
 
 /*
- * One key of the hero's per-state vertical velocity curve (hero.unk3E4[i]),
- * run by hero_integrate_velocity between state frames unk3D0 and unk3D4. Entering a
- * key sets hero.unk3F0 to value * frame_time_sq (-999999 keeps it); each later
- * frame adds delta * frame_time_sq. A key lasts scale_game_frames(frames).
+ * One key of the hero's per-state vertical velocity curve (hero.velocity_keys[i]),
+ * run by hero_integrate_velocity between state frames velocity_keys_start_frame and
+ * velocity_keys_end_frame. Entering a key sets hero.velocity_key_accel to
+ * value * frame_time_sq (-999999 keeps it); each later frame adds delta * frame_time_sq. A key lasts scale_game_frames(frames).
  */
 struct HeroVelocityKey {
     f32 value;
@@ -128,7 +128,7 @@ struct HeroMotion {
     Vec4 resolved_velocity_z;  /* 0x120 */
     Vec4 resolved_velocity_xy; /* 0x130 */
     Vec4 platform_carry;       /* 0x140 */
-    Vec4 momentum;             /* 0x150: copied from unk110/displacement on hero_set_state */
+    Vec4 momentum;             /* 0x150: copied from displacement on hero_set_state */
     f32 speed_xy; /* 0x160: current horizontal speed per frame; eases toward ground_speed, capped at frame_time * 52 */
     f32  flat_speed;    /* 0x164 */
     f32  forward_speed; /* 0x168 */
@@ -163,8 +163,8 @@ struct HeroState {
 struct HeroHealth {
     s32 hp;              /* 0x22A8: hit points; 0 = dead */
     s32 vehicle_mode_hp; /* 0x22AC: swapped with health.hp */
-    s16 unk22B0;         /* 0x22B0: s16 copy of health.hp */
-    s16 unk22B2;         /* 0x22B2 */
+    s16 saved_hp;        /* 0x22B0: s16 copy of health.hp */
+    s16 fall_voice_slot; /* 0x22B2 */
 };
 
 /*
@@ -172,11 +172,6 @@ struct HeroHealth {
  * code in src/ or src/overlays uses are listed; unkXXX = meaning not known yet,
  * pad_XXX = no named access. Some level overlays read the item-slot mobys and
  * 0x2080 as raw bytes, and one view reads 0x560 as an int *.
- * Notes on unknown fields:
- *   unk200 / unk210 - copied from the collision hit (FUN_L00_002133a8)
- *   unk458 / unk45C - speeds eased in and scaled into velocity (hero_update_hop_velocity)
- *   unk22D2         - set on a pad bit-0x10 press (no C reader yet)
- *   unk22DA         - nonzero makes FUN_L00_002133a8 call FUN_L00_002347c0
  * Item switching (hero_switch_item): a nonzero pending_item[i] that differs
  * moves into selected_item[i] and changes slot i; saved_item[i] keeps the
  * slot's item while 0x1C, 0x1D, 6 or 4 is forced in (0x26 when it was empty).
@@ -189,41 +184,41 @@ struct Hero {
     struct HeroMotion motion;             /* 0x80 */
     f32 target_speed; /* 0x190: horizontal speed ground_speed eases toward; the stick handler writes it (0 with the stick centred) */
     f32 ground_speed; /* 0x194: horizontal speed target this frame (0.095 running, i.e. 5.7 u/s at 60 fps; 0 idle) */
-    s32  state_timer;           /* 0x198: frames in the current state */
-    s32  control_mode_timer;    /* 0x19C */
-    s32  step_frames;           /* 0x1A0 */
-    s32  anim_seq_frames;       /* 0x1A4 */
-    s32  stick_held_frames;     /* 0x1A8 */
-    s32  stick_idle_frames;     /* 0x1AC */
-    s16  ledge_probe_cooldown;  /* 0x1B0 */
-    s16  unk1B2;                /* 0x1B2 */
-    s32  wall_jump_window;      /* 0x1B4 */
-    s32  long_jump_lockout;     /* 0x1B8 */
-    s32  item_anim_frames;      /* 0x1BC */
-    s32  invulnerable_frames;   /* 0x1C0 */
-    s32  move_lock_timer;       /* 0x1C4 */
-    s16  unk1C8;                /* 0x1C8 */
-    s16  rail_catch_grace;      /* 0x1CA */
-    s32  collision_off_frames;  /* 0x1CC */
-    s32  unk1D0;                /* 0x1D0 */
-    s32  jump_buffer_lockout;   /* 0x1D4 */
-    s16  jump_lockout_timer;    /* 0x1D8 */
-    s16  unk1DA;                /* 0x1DA */
-    s16  unk1DC;                /* 0x1DC */
-    s16  unk1DE;                /* 0x1DE */
-    s16  unk1E0;                /* 0x1E0 */
-    s16  still_frames;          /* 0x1E2 */
-    s16  rail_grab_cooldown;    /* 0x1E4 */
-    s16  grapple_lockout_timer; /* 0x1E6 */
-    s16  fidget_cooldown;       /* 0x1E8 */
-    s16  unk1EA;                /* 0x1EA */
-    s16  unk1EC;                /* 0x1EC */
-    s16  unk1EE;                /* 0x1EE */
-    s16  unk1F0;                /* 0x1F0 */
-    s16  jump_lock_timer;       /* 0x1F2 */
-    s16  unk1F4;                /* 0x1F4 */
-    s16  unk1F6;                /* 0x1F6 */
-    s16  unk1F8;                /* 0x1F8 */
+    s32  state_timer;                /* 0x198: frames in the current state */
+    s32  control_mode_timer;         /* 0x19C */
+    s32  step_frames;                /* 0x1A0 */
+    s32  anim_seq_frames;            /* 0x1A4 */
+    s32  stick_held_frames;          /* 0x1A8 */
+    s32  stick_idle_frames;          /* 0x1AC */
+    s16  ledge_probe_cooldown;       /* 0x1B0 */
+    s16  item_select_override_timer; /* 0x1B2 */
+    s32  wall_jump_window;           /* 0x1B4 */
+    s32  long_jump_lockout;          /* 0x1B8 */
+    s32  item_anim_frames;           /* 0x1BC */
+    s32  invulnerable_frames;        /* 0x1C0 */
+    s32  move_lock_timer;            /* 0x1C4 */
+    s16  grind_catch_lockout;        /* 0x1C8 */
+    s16  rail_catch_grace;           /* 0x1CA */
+    s32  collision_off_frames;       /* 0x1CC */
+    s32  idle_return_delay;          /* 0x1D0 */
+    s32  jump_buffer_lockout;        /* 0x1D4 */
+    s16  jump_lockout_timer;         /* 0x1D8 */
+    s16  item_swap_timer;            /* 0x1DA */
+    s16  face_expression_timer;      /* 0x1DC */
+    s16  dive_lock;                  /* 0x1DE */
+    s16  sinking_floor_hold;         /* 0x1E0 */
+    s16  still_frames;               /* 0x1E2 */
+    s16  rail_grab_cooldown;         /* 0x1E4 */
+    s16  grapple_lockout_timer;      /* 0x1E6 */
+    s16  fidget_cooldown;            /* 0x1E8 */
+    s16  wall_push_out_timer;        /* 0x1EA */
+    s16  unk1EC;                     /* 0x1EC */
+    s16  hit_flash_timer;            /* 0x1EE */
+    s16  ledge_ahead_timer;          /* 0x1F0 */
+    s16  jump_lock_timer;            /* 0x1F2 */
+    s16  edge_brake_lock_timer;      /* 0x1F4 */
+    s16  pushed_timer;               /* 0x1F6 */
+    s16  magnet_walk_timer;          /* 0x1F8 */
     u8   pad_1FA[0x6];
     Vec4 wall_contact_normal;   /* 0x200 */
     Vec4 wall_contact_point;    /* 0x210 */
@@ -233,13 +228,13 @@ struct Hero {
     f32  capsule_bottom_target; /* 0x22C */
     f32  capsule_radius_target; /* 0x230 */
     f32  capsule_radius;        /* 0x234 */
-    f32  unk238;                /* 0x238: velocity of the unk234 spring (FUN_L00_00211380) */
-    u8  *coll_hit_moby;         /* 0x23C: moby of the last push-out collision hit */
-    s32  unk240;                /* 0x240 */
+    f32  capsule_radius_speed; /* 0x238: velocity of the capsule_radius spring (FUN_L00_00211380) */
+    u8  *coll_hit_moby;        /* 0x23C: moby of the last push-out collision hit */
+    s32  wall_moby;            /* 0x240 */
     union {
         f32 f;
         s32 i;
-    } unk244;                 /* 0x244: written as a float and zeroed as an int */
+    } wall_push_out_speed;    /* 0x244: written as a float and zeroed as an int */
     f32  wall_probe_distance; /* 0x248 */
     u8   pad_24C[0x4];
     f32  wall_normal_pitch;              /* 0x250 */
@@ -259,15 +254,15 @@ struct Hero {
     union {
         f32 f[2];
         s32 i[2];
-    } unk2C0; /* 0x2C0: written as floats and zeroed as ints */
+    } side_probe_drop; /* 0x2C0: written as floats and zeroed as ints */
     union {
         f32 f[2];
         s32 i[2];
-    } unk2C8; /* 0x2C8: written as floats and zeroed as ints */
+    } side_probe_pitch; /* 0x2C8: written as floats and zeroed as ints */
     union {
         f32 f[2];
         s32 i[2];
-    } unk2D0; /* 0x2D0: written as floats and zeroed as ints */
+    } side_probe_roll; /* 0x2D0: written as floats and zeroed as ints */
     union {
         f32 f;
         s32 i;
@@ -284,7 +279,7 @@ struct Hero {
     union {
         f32 f;
         s32 i;
-    } unk2E8;                            /* 0x2E8: written as a float and zeroed as an int */
+    } ground_roll;                       /* 0x2E8: written as a float and zeroed as an int */
     f32          downhill_yaw;           /* 0x2EC */
     f32          water_surface_z;        /* 0x2F0 */
     f32          sink_surface_z;         /* 0x2F4 */
@@ -292,7 +287,7 @@ struct Hero {
     struct Moby *ground_moby;            /* 0x2FC: moby the ground probe hit (0 = level ground) */
     s32          grounded_frames;        /* 0x300: frames on the ground */
     f32          ground_spring_velocity; /* 0x304 */
-    s16          unk308;                 /* 0x308 */
+    s16          magnetic_floor;         /* 0x308 */
     s16          on_flagged_ground_moby; /* 0x30A */
     union {
         s16 s;
@@ -309,72 +304,72 @@ struct Hero {
     u8   pad_340[0x10];
     Vec4
         attached_moby_move; /* 0x350: per-frame move of the moby the hero is attached to (FUN_L00_00233f80) */
-    s32 unk360;             /* 0x360: attached moby (FUN_L00_00233f80) */
-    s32 attach_flags; /* 0x364: attach flags, bits 0 and 1 */
+    s32 platform_moby; /* 0x360: attached moby (FUN_L00_00233f80) */
+    s32 attach_flags;  /* 0x364: attach flags, bits 0 and 1 */
     u8  pad_368[0x48];
-    f32 unk3B0; /* 0x3B0 */
+    f32 run_speed_ratio; /* 0x3B0 */
     union {
         f32 f;
         s32 i;
-    } unk3B4;   /* 0x3B4: written as a float and zeroed as an int */
-    s16 unk3B8; /* 0x3B8 */
+    } prev_ground_pitch;  /* 0x3B4: written as a float and zeroed as an int */
+    s16 move_along_stick; /* 0x3B8 */
     u8  pad_3BA[0x2];
     s16 run_start_blending; /* 0x3BC */
-    s16 unk3BE;             /* 0x3BE */
+    s16 sharp_turn;         /* 0x3BE */
     u8  pad_3C0[0x10];
-    s32 unk3D0;                  /* 0x3D0 */
-    s32 velocity_keys_end_frame; /* 0x3D4 */
-    f32 keyed_move_target_frame; /* 0x3D8 */
-    f32 unk3DC;                  /* 0x3DC */
-    s32 keyed_anim_target_frame; /* 0x3E0 */
-    struct HeroVelocityKey
-        *unk3E4;          /* 0x3E4: keys run by hero_integrate_velocity while unk41C is set */
-    s32  unk3E8;          /* 0x3E8: current key in unk3E4, -1 before the first */
-    s32  unk3EC;          /* 0x3EC: frames spent in the current key */
-    f32  unk3F0;          /* 0x3F0: value added to velocity.z each frame */
-    f32  long_jump_speed; /* 0x3F4 */
-    f32  fall_gravity;    /* 0x3F8 */
+    s32 velocity_keys_start_frame; /* 0x3D0 */
+    s32 velocity_keys_end_frame;   /* 0x3D4 */
+    f32 keyed_move_target_frame;   /* 0x3D8 */
+    f32 unk3DC;                    /* 0x3DC */
+    s32 keyed_anim_target_frame;   /* 0x3E0 */
+    struct HeroVelocityKey *
+        velocity_keys; /* 0x3E4: keys run by hero_integrate_velocity while velocity_keys_active is set */
+    s32  velocity_key_index;  /* 0x3E8: current key in velocity_keys, -1 before the first */
+    s32  velocity_key_frames; /* 0x3EC: frames spent in the current key */
+    f32  velocity_key_accel;  /* 0x3F0: value added to velocity.z each frame */
+    f32  long_jump_speed;     /* 0x3F4 */
+    f32  fall_gravity;        /* 0x3F8 */
     u8   pad_3FC[0x4];
     Vec4 takeoff_pos;          /* 0x400 */
     f32  smoothed_ground_z;    /* 0x410 */
     f32  air_turn_rate;        /* 0x414 */
-    s32  rail_land_frames;     /* 0x418: set when velocity.z clamps to unk500.z, counts up */
+    s32  rail_land_frames;     /* 0x418: set when velocity.z clamps to rail_point.z, counts up */
     s16  velocity_keys_active; /* 0x41C */
     s16  past_jump_apex;       /* 0x41E: set to 1 when gravity_z(velocity) < 0.001 */
-    s32  takeoff_frame;       /* 0x420: per-state scale_game_frames(N), compared with state_timer */
-    f32  air_stick_speed;     /* 0x424 */
-    f32  unk428;              /* 0x428 */
-    f32  unk42C;              /* 0x42C */
-    f32  unk430;              /* 0x430 */
-    f32  unk434;              /* 0x434 */
-    f32  high_jump_drift_yaw; /* 0x438 */
-    f32  takeoff_yaw;         /* 0x43C */
-    f32  apex_anim_frame;     /* 0x440 */
-    f32  target_anim_frame;   /* 0x444 */
+    s32  takeoff_frame;   /* 0x420: per-state scale_game_frames(N), compared with state_timer */
+    f32  air_stick_speed; /* 0x424 */
+    f32  pending_jump_impulse;   /* 0x428 */
+    f32  jump_impulse_total;     /* 0x42C */
+    f32  jump_height;            /* 0x430 */
+    f32  air_capsule_bottom;     /* 0x434 */
+    f32  high_jump_drift_yaw;    /* 0x438 */
+    f32  takeoff_yaw;            /* 0x43C */
+    f32  apex_anim_frame;        /* 0x440 */
+    f32  target_anim_frame;      /* 0x444 */
     f32  jump_land_anim_frame;   /* 0x448 */
     s32  frames_to_land;         /* 0x44C */
-    s32  unk450;                 /* 0x450 */
+    s32  jump_stick_direction;   /* 0x450 */
     f32  air_target_speed;       /* 0x454 */
     f32  high_jump_drift_speed;  /* 0x458 */
     f32  ledge_jump_speed;       /* 0x45C */
-    Vec4 unk460;                 /* 0x460 */
-    Vec4 unk470;                 /* 0x470 */
+    Vec4 wall_hit_normal;        /* 0x460 */
+    Vec4 wall_jump_normal;       /* 0x470 */
     f32  air_speed_step_up;      /* 0x480 */
     f32  jump_decel;             /* 0x484 */
     f32  jump_height_start;      /* 0x488 */
-    f32  unk48C;                 /* 0x48C */
+    f32  jump_height_target;     /* 0x48C */
     f32  fall_start_distance;    /* 0x490 */
     f32  jump_anim_retime_scale; /* 0x494 */
-    s16  unk498;                 /* 0x498 */
+    s16  jump_ramp_frames;       /* 0x498 */
     s16  jump_max_frames;        /* 0x49A */
-    s16  unk49C;                 /* 0x49C */
-    s16  unk49E;                 /* 0x49E */
+    s16  fire_ring_timer;        /* 0x49C: frames to the next fire-ring puff while rising */
+    s16  side_spark_timer;       /* 0x49E: frames to the next side spark while rising */
     f32  jump_gravity;           /* 0x4A0 */
     s16  jump_blocked_ahead;     /* 0x4A4 */
-    s16  unk4A6;                 /* 0x4A6 */
-    s16  unk4A8;                 /* 0x4A8 */
+    s16  pack_glide_delay;       /* 0x4A6 */
+    s16  took_off_from_ice;      /* 0x4A8 */
     s16  fall_delay_frames;      /* 0x4AA */
-    s16  unk4AC;                 /* 0x4AC */
+    s16  can_use_item_in_jump;   /* 0x4AC */
     u8   can_chain_high_jump;    /* 0x4AE */
     u8   can_double_jump;        /* 0x4AF */
     f32  rise_fall_gravity;      /* 0x4B0 */
@@ -388,58 +383,58 @@ struct Hero {
     f32  ledge_top_z;      /* 0x4E0: ledge height (FUN_L00_0020bed0) */
     f32  ledge_normal_yaw; /* 0x4E4 */
     s32  ledge_found;      /* 0x4E8 */
-    f32  unk4EC;           /* 0x4EC */
-    f32  unk4F0;           /* 0x4F0 */
+    f32 ledge_gravity; /* 0x4EC: gravity on ledge-hang entry: jump_gravity after a jump, else 24 * frame_time_sq */
+    f32 smoothed_air_z; /* 0x4F0 */
     u32 ledge_flags; /* 0x4F4: ledge flags, bit 0: no headroom above the ledge (FUN_L00_0020bed0) */
     s32 ledge_moby;  /* 0x4F8: first argument of FUN_L00_00233f80 (FUN_L01_00233de0) */
     u8  pad_4FC[0x4];
-    Vec4 rail_point;           /* 0x500 */
-    Vec4 joint9_world_pos;     /* 0x510 */
-    Vec4 joint14_world_pos;    /* 0x520 */
-    Vec4 root_joint_pos;       /* 0x530 */
-    Vec4 prev_rail_point;      /* 0x540 */
-    Vec4 jump_target_pos;      /* 0x550 */
-    s32  rail_spline;          /* 0x560 */
-    s32  rail_segment;         /* 0x564 */
-    f32  rail_seg_frac;        /* 0x568 */
-    s32  grind_rail;           /* 0x56C */
-    s32  rail_off_frames;      /* 0x570 */
-    f32  unk574;               /* 0x574 */
-    s32  grind_direction;      /* 0x578 */
-    f32  rail_dir_yaw;         /* 0x57C */
-    f32  rail_pitch;           /* 0x580 */
-    s32  rail_spline_loops;    /* 0x584 */
-    f32  grind_yaw_offset;     /* 0x588 */
-    s32  grind_anim_variant;   /* 0x58C */
-    s32  rail_switching;       /* 0x590 */
-    s32  transfer_from_spline; /* 0x594 */
-    s32  prev_rail_segment;    /* 0x598 */
-    f32  prev_rail_seg_frac;   /* 0x59C */
-    s32  unk5A0;               /* 0x5A0 */
-    s32  rail_transfer_frames; /* 0x5A4 */
-    s32  grind_pose;           /* 0x5A8 */
+    Vec4 rail_point;             /* 0x500 */
+    Vec4 joint9_world_pos;       /* 0x510 */
+    Vec4 joint14_world_pos;      /* 0x520 */
+    Vec4 root_joint_pos;         /* 0x530 */
+    Vec4 prev_rail_point;        /* 0x540 */
+    Vec4 jump_target_pos;        /* 0x550 */
+    s32  rail_spline;            /* 0x560 */
+    s32  rail_segment;           /* 0x564 */
+    f32  rail_seg_frac;          /* 0x568 */
+    s32  grind_rail;             /* 0x56C */
+    s32  rail_off_frames;        /* 0x570 */
+    f32  grind_speed;            /* 0x574 */
+    s32  grind_direction;        /* 0x578 */
+    f32  rail_dir_yaw;           /* 0x57C */
+    f32  rail_pitch;             /* 0x580 */
+    s32  rail_spline_loops;      /* 0x584 */
+    f32  grind_yaw_offset;       /* 0x588 */
+    s32  grind_anim_variant;     /* 0x58C */
+    s32  rail_switching;         /* 0x590 */
+    s32  transfer_from_spline;   /* 0x594 */
+    s32  prev_rail_segment;      /* 0x598 */
+    f32  prev_rail_seg_frac;     /* 0x59C */
+    s32  prev_rail_spline_loops; /* 0x5A0 */
+    s32  rail_transfer_frames;   /* 0x5A4 */
+    s32  grind_pose;             /* 0x5A8 */
     union {
         f32 f;
         s32 i;
-    } unk5AC;                         /* 0x5AC: float approached toward a speed, zeroed as an int */
-    f32          grind_base_speed;    /* 0x5B0 */
-    s32          unk5B4;              /* 0x5B4 */
-    s32          unk5B8;              /* 0x5B8 */
-    s16          unk5BC;              /* 0x5BC */
-    s16          unk5BE;              /* 0x5BE */
-    s32          rail_jump_queued;    /* 0x5C0 */
-    s32          rail_gap_jump;       /* 0x5C4 */
-    f32          rail_jump_gravity;   /* 0x5C8 */
-    f32          unk5CC;              /* 0x5CC */
-    f32          rail_lean;           /* 0x5D0 */
-    f32          grind_lean_vel;      /* 0x5D4 */
-    struct Moby *grind_look_moby;     /* 0x5D8 */
-    f32          rail_snap_dist;      /* 0x5DC */
-    Vec4         grab_rail_point;     /* 0x5E0 */
-    s32         *follow_path_spline;  /* 0x5F0 */
-    s32          follow_path_segment; /* 0x5F4 */
-    f32          rail_candidate_frac; /* 0x5F8 */
-    s32          grab_rail_found;     /* 0x5FC */
+    } grind_speed_boost;   /* 0x5AC: float approached toward a speed, zeroed as an int */
+    f32 grind_base_speed;  /* 0x5B0 */
+    s32 rail_swing_target; /* 0x5B4 */
+    s32 rail_jump_armed;   /* 0x5B8 */
+    s16 rail_jump_trigger; /* 0x5BC */
+    s16 grind_hit;         /* 0x5BE */
+    s32 rail_jump_queued;  /* 0x5C0 */
+    s32 rail_gap_jump;     /* 0x5C4 */
+    f32 rail_jump_gravity; /* 0x5C8 */
+    f32 grind_recovery_speed; /* 0x5CC: rail speed in HERO_STATE_GRIND_COLLISION_RECOVERY (2.5 * frame_time) */
+    f32          rail_lean;              /* 0x5D0 */
+    f32          grind_lean_vel;         /* 0x5D4 */
+    struct Moby *grind_look_moby;        /* 0x5D8 */
+    f32          rail_snap_dist;         /* 0x5DC */
+    Vec4         grab_rail_point;        /* 0x5E0 */
+    s32         *follow_path_spline;     /* 0x5F0 */
+    s32          follow_path_segment;    /* 0x5F4 */
+    f32          rail_candidate_frac;    /* 0x5F8 */
+    s32          grab_rail_found;        /* 0x5FC */
     s32          follow_path_end_frames; /* 0x600 */
     f32          follow_path_speed;      /* 0x604 */
     u8           pad_608[0x4];
@@ -449,7 +444,7 @@ struct Hero {
     union {
         f32 f;
         s32 i;
-    } unk618; /* 0x618: float distance clamp, zeroed as an int */
+    } follow_path_pull_speed; /* 0x618: float distance clamp, zeroed as an int */
     u8           pad_61C[0x24];
     Vec4         basis[3]; /* 0x640: rotation rows (transform_vector_by_basis) */
     f32          facing_x; /* 0x670 */
@@ -458,33 +453,35 @@ struct Hero {
     f32          basis_pitch;   /* 0x684 */
     f32          held_pose_yaw; /* 0x688 */
     u8           pad_68C[0x4];
-    f32          unk690;           /* 0x690 */
-    f32          unk694;           /* 0x694 */
-    s32          unk698;           /* 0x698 */
-    f32          unk69C;           /* 0x69C */
-    s32          unk6A0;           /* 0x6A0 */
-    struct Moby *sink_effect_moby; /* 0x6A4 */
-    f32          unk6A8;           /* 0x6A8 */
-    f32          unk6AC;           /* 0x6AC */
-    f32          unk6B0;           /* 0x6B0 */
-    f32          unk6B4;           /* 0x6B4 */
+    f32          swim_bob_offset;           /* 0x690 */
+    f32          swim_bob_velocity;         /* 0x694 */
+    s32          swim_stroke_timer;         /* 0x698 */
+    f32          swim_water_level;          /* 0x69C */
+    f32          swim_water_level_velocity; /* 0x6A0: spring velocity of swim_water_level */
+    struct Moby *sink_effect_moby;          /* 0x6A4 */
+    f32          bob_phase;                 /* 0x6A8 */
+    f32          bob_offset;                /* 0x6AC */
+    f32          sway_phase;                /* 0x6B0 */
+    f32          sway_axis_phase;           /* 0x6B4 */
     u8           pad_6B8[0x8];
     Vec4         smoothed_spin_stick; /* 0x6C0: 0x60 bytes cleared by fill_transfer_words */
     f32          pivot_rot_x;         /* 0x6D0 */
     f32          trick_rot_y;         /* 0x6D4 */
     u8           pad_6D8[0x8];
-    s32          tricks_landed[6]; /* 0x6E0: one flag per pose, indexed by unk88F */
-    s32          unk6F8;           /* 0x6F8: counts the flags set in unk6E0 */
+    s32          tricks_landed[6];    /* 0x6E0: one flag per pose, indexed by air_pose_index */
+    s32          tricks_landed_count; /* 0x6F8: counts the flags set in tricks_landed */
     u8           pad_6FC[0x4];
-    s32  unk700[3]; /* 0x700: cleared with unk6E0 when the HUD combo ends (FUN_L05_00262b58) */
-    s32  unk70C;    /* 0x70C: combo count the HUD keeps the best of (FUN_L05_00262b58) */
+    s32          flips_per_axis
+        [3]; /* 0x700: flips of the jump per axis; cleared with tricks_landed when the HUD combo ends (FUN_L05_00262b58) */
+    s32  trick_combo_count; /* 0x70C: combo count the HUD keeps the best of (FUN_L05_00262b58) */
     u8   pad_710[0x10];
     Vec4 smoothed_steer_stick; /* 0x720 */
     u8   pad_730[0x10];
-    Vec4 unk740;                        /* 0x740 */
-    Vec4 landing_displacement;          /* 0x750 */
-    Vec4 board_ground_pos;              /* 0x760 */
-    Vec4 unk770;                        /* 0x770 */
+    Vec4 grounded_normal;      /* 0x740: copy of ground_normal while grounded (l16 board update) */
+    Vec4 landing_displacement; /* 0x750 */
+    Vec4 board_ground_pos;     /* 0x760 */
+    Vec4
+        ramp_launch_forward; /* 0x770: hero forward axis at a ramp launch, kept flat to the ground normal */
     Vec4 tilt_up_dir;                   /* 0x780 */
     Vec4 ground_move_dir;               /* 0x790 */
     s16  racer_laps[8];                 /* 0x7A0 */
@@ -492,80 +489,81 @@ struct Hero {
     s16  race_rank[8];                  /* 0x7C0 */
     f32  ground_distance_history[0x20]; /* 0x7D0 */
     u8   pad_850[0x4];
-    f32  board_vertical_speed;   /* 0x854 */
-    f32  unk858;                 /* 0x858 */
-    f32  hoverboard_speed;       /* 0x85C */
-    f32  board_gravity;          /* 0x860 */
-    s32  boost_frames;           /* 0x864 */
-    f32  boost_speed;            /* 0x868 */
-    u8  *hoverboard_moby;        /* 0x86C */
-    s32  unk870;                 /* 0x870 */
-    f32  board_air_yaw;          /* 0x874 */
-    f32  air_yaw_spring_vel;     /* 0x878 */
-    f32  unk87C;                 /* 0x87C */
-    s32  trick_hud_handle;       /* 0x880 */
-    s16  board_boost_active;     /* 0x884 */
-    s16  landing_turn_delay;     /* 0x886 */
-    s16  board_jump_land_frames; /* 0x888 */
-    s16  prev_air_frames;        /* 0x88A */
-    u8   steep_jump;             /* 0x88C */
-    u8   trick_input;            /* 0x88D */
-    u8   vert_ramp_launch;       /* 0x88E */
-    u8   air_pose_index;         /* 0x88F */
-    u8  *unk890;                 /* 0x890 */
-    s32  race_time_frames; /* 0x894: frame counter shown as m:ss.hh on the HUD (FUN_L05_00266710) */
-    s16  race_path_node;   /* 0x898 */
-    s16  race_lap;         /* 0x89A: shown + 1 (capped at 3) on the HUD (FUN_L05_00266320) */
-    s16  board_jump_frames;             /* 0x89C */
-    s16  board_jump_cooldown;           /* 0x89E */
-    f32  board_floor_z;                 /* 0x8A0 */
-    f32  unk8A4;                        /* 0x8A4 */
-    s32  race_score;                    /* 0x8A8: count shown on the HUD (FUN_L05_00266710) */
-    s16  high_jump_window;              /* 0x8AC */
-    u8   off_course_frames;             /* 0x8AE */
-    u8   off_course_reset_pending;      /* 0x8AF */
-    s16  height_ring_count;             /* 0x8B0 */
-    s16  ground_distance_history_index; /* 0x8B2 */
-    void *race_path;                    /* 0x8B4 */
+    f32  board_vertical_speed;        /* 0x854 */
+    f32  board_spring_angle_velocity; /* 0x858: vendor_spring velocity of board_spring_angle */
+    f32  hoverboard_speed;            /* 0x85C */
+    f32  board_gravity;               /* 0x860 */
+    s32  boost_frames;                /* 0x864 */
+    f32  boost_speed;                 /* 0x868 */
+    u8  *hoverboard_moby;             /* 0x86C */
+    s32  unk870;                      /* 0x870 */
+    f32  board_air_yaw;               /* 0x874 */
+    f32  air_yaw_spring_vel;          /* 0x878 */
+    f32 board_spring_angle; /* 0x87C: sprung toward 70 degrees on the board, faster while boosting */
+    s32 trick_hud_handle;   /* 0x880 */
+    s16 board_boost_active;     /* 0x884 */
+    s16 landing_turn_delay;     /* 0x886 */
+    s16 board_jump_land_frames; /* 0x888 */
+    s16 prev_air_frames;        /* 0x88A */
+    u8  steep_jump;             /* 0x88C */
+    u8  trick_input;            /* 0x88D */
+    u8  vert_ramp_launch;       /* 0x88E */
+    u8  air_pose_index;         /* 0x88F */
+    u8 *race_moby;              /* 0x890: the race moby (freeze-menu restart sets its +0xBC to 3) */
+    s32 race_time_frames;  /* 0x894: frame counter shown as m:ss.hh on the HUD (FUN_L05_00266710) */
+    s16 race_path_node;    /* 0x898 */
+    s16 race_lap;          /* 0x89A: shown + 1 (capped at 3) on the HUD (FUN_L05_00266320) */
+    s16 board_jump_frames; /* 0x89C */
+    s16 board_jump_cooldown;           /* 0x89E */
+    f32 board_floor_z;                 /* 0x8A0 */
+    f32 wall_face_yaw;                 /* 0x8A4 */
+    s32 race_score;                    /* 0x8A8: count shown on the HUD (FUN_L05_00266710) */
+    s16 high_jump_window;              /* 0x8AC */
+    u8  off_course_frames;             /* 0x8AE */
+    u8  off_course_reset_pending;      /* 0x8AF */
+    s16 height_ring_count;             /* 0x8B0 */
+    s16 ground_distance_history_index; /* 0x8B2 */
+    void *race_path;                   /* 0x8B4 */
     union {
         f32 f;
         s32 i;
-    } unk8B8;                  /* 0x8B8: read as a float, zeroed as an int */
-    s16  hoverboard_airborne;  /* 0x8BC */
-    s16  board_respawn_delay;  /* 0x8BE */
-    s32  race_position;        /* 0x8C0: 1..3 picks the HUD rank string (FUN_L05_00266320) */
-    s32  boost_pad_timer;      /* 0x8C4 */
-    s16  wrong_way_path_point; /* 0x8C8 */
-    s16  help_hint_frames;     /* 0x8CA */
-    s16  boost_min_frames;     /* 0x8CC */
-    u8   race_ammo;            /* 0x8CE */
-    u8   shot_cooldown;        /* 0x8CF */
-    Vec4 unk8D0;               /* 0x8D0 */
-    s32  unk8E0;               /* 0x8E0 */
-    f32  swim_lean_vel;        /* 0x8E4 */
-    f32  swim_roll_velocity;   /* 0x8E8 */
-    f32  unk8EC;               /* 0x8EC */
-    s32  puff_timer;           /* 0x8F0 */
-    s32  unk8F4;               /* 0x8F4 */
-    s16  pack_particle_timer;  /* 0x8F8 */
-    u8   pad_8FA[0x2];
-    f32  drown_sink_speed;        /* 0x8FC */
-    s16  cw_turn_frames;          /* 0x900 */
-    s16  swim_square_hold_frames; /* 0x902 */
-    s16  unk904;                  /* 0x904 */
-    s16  unk906;                  /* 0x906 */
-    s16  unk908;                  /* 0x908 */
-    s16  splash_effect_timer;     /* 0x90A */
-    s16  swim_hard_press_frames;  /* 0x90C */
-    s16  jump_button_frames;      /* 0x90E */
-    s32  swim_cross_tap_count;    /* 0x910 */
-    s32  last_cross_press_frame;  /* 0x914 */
-    u8   pad_918[0x8];
+    } last_ground_z;          /* 0x8B8: read as a float, zeroed as an int */
+    s16 hoverboard_airborne;  /* 0x8BC */
+    s16 board_respawn_delay;  /* 0x8BE */
+    s32 race_position;        /* 0x8C0: 1..3 picks the HUD rank string (FUN_L05_00266320) */
+    s32 boost_pad_timer;      /* 0x8C4 */
+    s16 wrong_way_path_point; /* 0x8C8 */
+    s16 help_hint_frames;     /* 0x8CA */
+    s16 boost_min_frames;     /* 0x8CC */
+    u8  race_ammo;            /* 0x8CE */
+    u8  shot_cooldown;        /* 0x8CF */
+    Vec4
+        smoothed_board_stick; /* 0x8D0: board stick smoothed by smooth_and_clamp_value_pair (l16), like smoothed_steer_stick */
+    s32 swim_entry_frames;   /* 0x8E0: frames in the swim entry splash step */
+    f32 swim_lean_vel;       /* 0x8E4 */
+    f32 swim_roll_velocity;  /* 0x8E8 */
+    f32 swim_yaw_rate;       /* 0x8EC */
+    s32 puff_timer;          /* 0x8F0 */
+    s32 swim_thrust_timer;   /* 0x8F4 */
+    s16 pack_particle_timer; /* 0x8F8 */
+    u8  pad_8FA[0x2];
+    f32 drown_sink_speed;        /* 0x8FC */
+    s16 cw_turn_frames;          /* 0x900 */
+    s16 swim_square_hold_frames; /* 0x902 */
+    s16 wake_ring_counter;       /* 0x904 */
+    s16 spray_counter;           /* 0x906 */
+    s16 bow_ring_counter;        /* 0x908 */
+    s16 splash_effect_timer;     /* 0x90A */
+    s16 swim_hard_press_frames;  /* 0x90C */
+    s16 jump_button_frames;      /* 0x90E */
+    s32 swim_cross_tap_count;    /* 0x910 */
+    s32 last_cross_press_frame;  /* 0x914 */
+    u8  pad_918[0x8];
     Vec4
         move_impulse; /* 0x920: one-frame displacement; the hero update adds it to motion.pos and clears it (some states; zero while running) */
-    f32          unk930; /* 0x930 */
-    f32          unk934; /* 0x934 */
-    f32          unk938; /* 0x938 */
+    f32 push_length; /* 0x930: length of the move_impulse that build_scaled_hero_move_impulse builds; > 0 enables it */
+    f32          push_pitch; /* 0x934: second angle of that offset (build_spherical_offset) */
+    f32          push_yaw;   /* 0x938: first angle (yaw) of that offset */
     u8           pad_93C[0x4];
     f32          fall_state_gravity;         /* 0x940 */
     f32          stickless_decel;            /* 0x944 */
@@ -578,36 +576,36 @@ struct Hero {
     struct Moby *grapple_target;          /* 0x964 */
     s32          grapple_target_in_sight; /* 0x968 */
     f32          target_arrival_frames;   /* 0x96C */
-    f32          unk970;                  /* 0x970 */
+    f32          grapple_target_dist;     /* 0x970 */
     s32          grapple_pull_ending;     /* 0x974 */
-    s32          unk978;                  /* 0x978 */
-    f32          tether_radius;           /* 0x97C */
-    f32          grapple_target_radius;   /* 0x980 */
-    f32          unk984;                  /* 0x984 */
-    s32          unk988;                  /* 0x988 */
+    s32 grapple_target_swings; /* 0x978: target pvars +8; nonzero swings around it (HERO_STATE_CONSTRAIN_TO_TARGET_RADIUS), else pulls to it */
+    f32          tether_radius;         /* 0x97C */
+    f32          grapple_target_radius; /* 0x980 */
+    f32          swing_max_range;       /* 0x984 */
+    s32          swingshot_missed;      /* 0x988 */
     u8           pad_98C[0x4];
-    struct Moby *swing_target;          /* 0x990 */
-    struct Moby *swing_target_moby;     /* 0x994 */
-    f32          swing_target_dist;     /* 0x998 */
-    s16          unk99C;                /* 0x99C */
-    s16          swing_target_in_sight; /* 0x99E */
-    f32          unk9A0;                /* 0x9A0 */
-    f32          unk9A4;                /* 0x9A4 */
-    f32          swing_length_vel;      /* 0x9A8 */
-    f32          swing_yaw;             /* 0x9AC */
-    f32          swing_gravity;         /* 0x9B0 */
-    f32          swing_push_speed;      /* 0x9B4 */
-    f32          swing_yaw_vel;         /* 0x9B8 */
-    s16          swing_anim_dir;        /* 0x9BC */
-    s16          swing_entry_push;      /* 0x9BE */
+    struct Moby *swing_target;             /* 0x990 */
+    struct Moby *swing_target_moby;        /* 0x994 */
+    f32          swing_target_dist;        /* 0x998 */
+    s16          swing_hooked;             /* 0x99C */
+    s16          swing_target_in_sight;    /* 0x99E */
+    f32          swing_rope_target_length; /* 0x9A0 */
+    f32          swing_rope_length;        /* 0x9A4 */
+    f32          swing_length_vel;         /* 0x9A8 */
+    f32          swing_yaw;                /* 0x9AC */
+    f32          swing_gravity;            /* 0x9B0 */
+    f32          swing_push_speed;         /* 0x9B4 */
+    f32          swing_yaw_vel;            /* 0x9B8 */
+    s16          swing_anim_dir;           /* 0x9BC */
+    s16          swing_entry_push;         /* 0x9BE */
     u8           pad_9C0[0x4];
     f32          swing_rope_spring_k;  /* 0x9C4 */
-    f32          unk9C8;               /* 0x9C8 */
+    f32          swing_rope_damping;   /* 0x9C8 */
     f32          swing_rope_max_speed; /* 0x9CC */
     f32          rail_yaw;             /* 0x9D0: rail yaw (FUN_L01_002f6328) */
     f32          rail_ride_pitch;      /* 0x9D4 */
     u8           pad_9D8[0x4];
-    f32          unk9DC;               /* 0x9DC: rail speed, eased toward the rail's speed */
+    f32          rail_speed;           /* 0x9DC: rail speed, eased toward the rail's speed */
     f32          rail_pull_step;       /* 0x9E0: pull toward the rail, capped at the distance */
     f32          roll_spring_velocity; /* 0x9E4 */
     f32          rail_ride_pitch_vel;  /* 0x9E8 */
@@ -617,16 +615,16 @@ struct Hero {
     s32          heading_locked;    /* 0xA58 */
     f32          attack_target_yaw; /* 0xA5C */
     s32          attack_record;     /* 0xA60 */
-    s32          unkA64;            /* 0xA64 */
+    s32          melee_hit;         /* 0xA64 */
     f32          pushback_yaw;      /* 0xA68 */
     f32 speed_scale; /* 0xA6C: multiplier on the run target in some states (target = frame_time * 5.7 * speed_scale); 1.0 normally */
     f32   slam_descending;      /* 0xA70 */
     f32   aim_yaw;              /* 0xA74: gadget aim yaw (FUN_L00_00217658) */
     f32   aim_pitch;            /* 0xA78: gadget aim pitch */
-    s32   unkA7C;               /* 0xA7C */
+    s32   crouch_swing_toggle;  /* 0xA7C: flipped 0/1 on every HERO_STATE_CROUCH_SWING entry */
     s32   last_landed_moby;     /* 0xA80 */
-    u8   *unkA84;               /* 0xA84 */
-    u8   *unkA88;               /* 0xA88 */
+    u8   *replacement_moby;     /* 0xA84 */
+    u8   *base_moby;            /* 0xA88 */
     void *vehicle_mode3_moby;   /* 0xA8C */
     f32   anim_speed;           /* 0xA90 */
     f32   anim_frame_rate;      /* 0xA94 */
@@ -645,52 +643,52 @@ struct Hero {
     u8 *item_slot_blends
         [2]; /* 0xD00: per item slot 0/1: blend from FUN_L00_0024f028, faded by update_hero_item_slot_blends */
     u8 *held_item_anim_blend[2]; /* 0xD08: per item slot 0/1: moby from FUN_L00_0024f028 */
-    u8 *unkD10;                  /* 0xD10 */
-    s32 unkD14;                  /* 0xD14 */
+    u8 *face_anim_layer;         /* 0xD10 */
+    s32 arm_layer_fade;          /* 0xD14 */
     u8  pad_D18[0x8];
-    f32 unkD20; /* 0xD20 */
+    f32 shadow_pitch; /* 0xD20: pitch of the hero shadow direction, eased toward 0.97 */
     u8  pad_D24[0xC];
     struct HeroManipulator
         manipulators[7]; /* 0xD30: attached by FUN_L00_002056a8 while rand_timer runs */
     u8  pad_EF0[0x100];
     struct HeroRandTimer rand_timer; /* 0xFF0 */
     u8                   pad_FFC[0x8];
-    s32                  unk1004; /* 0x1004 */
-    s32                  unk1008; /* 0x1008 */
+    s32                  head_look_pitch; /* 0x1004 */
+    s32                  head_look_yaw;   /* 0x1008 */
     u8                   pad_100C[0x4];
-    s32                  unk1010;             /* 0x1010 */
+    s32                  head_look_timer;     /* 0x1010 */
     f32                  idle_look_ease_rate; /* 0x1014 */
-    f32                  unk1018;             /* 0x1018 */
-    u8                   pad_101C[0x8];
-    s32                  unk1024; /* 0x1024: cleared by FUN_L00_0020a500 */
-    s32                  unk1028; /* 0x1028: cleared by FUN_L00_0020a500 */
-    u8                   pad_102C[0x8];
-    s32                  unk1034; /* 0x1034: cleared by FUN_L00_0020a500 */
-    s32                  unk1038; /* 0x1038: cleared by FUN_L00_0020a500 */
-    u8                   pad_103C[0x8];
-    s32                  unk1044; /* 0x1044: cleared by FUN_L00_0020a500 */
-    s32                  unk1048; /* 0x1048: cleared by FUN_L00_0020a500 */
-    u8                   pad_104C[0x8];
-    s32                  unk1054; /* 0x1054: cleared by FUN_L00_0020a500 */
-    s32                  unk1058; /* 0x1058: cleared by FUN_L00_0020a500 */
-    u8                   pad_105C[0x34];
-    struct HeroItemSlot  items[7]; /* 0x1090: item slots; slot 0 is the equipped gadget */
-    u8                   pad_12C0[0x20];
-    s16                  ground_type;        /* 0x12E0 */
-    u8                   on_ice_ground;      /* 0x12E2 */
-    u8                   selector_4;         /* 0x12E3 */
-    u8                   base_condition;     /* 0x12E4 */
-    u8                   selector_1;         /* 0x12E5 */
-    u8                   selector_3;         /* 0x12E6 */
-    u8                   on_magnet_ground;   /* 0x12E7 */
-    u8                   selector_5;         /* 0x12E8 */
-    u8                   unk12E9;            /* 0x12E9 */
-    u8                   on_slip_ground;     /* 0x12EA */
-    u8                   selector_11;        /* 0x12EB */
-    u8                   selector_13;        /* 0x12EC */
-    u8                   ground_sound_class; /* 0x12ED */
-    u8                   unk12EE;            /* 0x12EE */
-    u8                   pad_12EF[0x301];
+    f32 idle_look_damping; /* 0x1018: head look spring damping (idle_look_ease_rate is its k) */
+    u8  pad_101C[0x8];
+    s32 unk1024; /* 0x1024: cleared by FUN_L00_0020a500 */
+    s32 unk1028; /* 0x1028: cleared by FUN_L00_0020a500 */
+    u8  pad_102C[0x8];
+    s32 unk1034; /* 0x1034: cleared by FUN_L00_0020a500 */
+    s32 unk1038; /* 0x1038: cleared by FUN_L00_0020a500 */
+    u8  pad_103C[0x8];
+    s32 unk1044; /* 0x1044: cleared by FUN_L00_0020a500 */
+    s32 unk1048; /* 0x1048: cleared by FUN_L00_0020a500 */
+    u8  pad_104C[0x8];
+    s32 unk1054; /* 0x1054: cleared by FUN_L00_0020a500 */
+    s32 unk1058; /* 0x1058: cleared by FUN_L00_0020a500 */
+    u8  pad_105C[0x34];
+    struct HeroItemSlot items[7]; /* 0x1090: item slots; slot 0 is the equipped gadget */
+    u8                  pad_12C0[0x20];
+    s16                 ground_type;        /* 0x12E0 */
+    u8                  on_ice_ground;      /* 0x12E2 */
+    u8                  selector_4;         /* 0x12E3 */
+    u8                  base_condition;     /* 0x12E4 */
+    u8                  selector_1;         /* 0x12E5 */
+    u8                  selector_3;         /* 0x12E6 */
+    u8                  on_magnet_ground;   /* 0x12E7 */
+    u8                  selector_5;         /* 0x12E8 */
+    u8                  selector_6;         /* 0x12E9: set on ground material 6 */
+    u8                  on_slip_ground;     /* 0x12EA */
+    u8                  selector_11;        /* 0x12EB */
+    u8                  selector_13;        /* 0x12EC */
+    u8                  ground_sound_class; /* 0x12ED */
+    u8                  grind_jump_block;   /* 0x12EE */
+    u8                  pad_12EF[0x301];
     struct Moby *ship_moby;   /* 0x15F0: the ship the hero is flying (l17 fighter_jet_update) */
     s16          ship_oclass; /* 0x15F4: its oclass, -1 when none */
     u8 ship_ammo; /* 0x15F6: shots left in the space levels; firing needs one and takes it (FUN_L11_003126f8) */
@@ -703,157 +701,164 @@ struct Hero {
     f32 ship_hp_max;     /* 0x1600: full ship_hp; the HUD bar shows ship_hp over it */
     f32 unk1604;         /* 0x1604 */
     s32 ship_hp_percent; /* 0x1608: ship_hp as a percentage for the HUD */
-    s16 unk160C;         /* 0x160C */
+    s16 ship_hud_handle; /* 0x160C */
     u8  unk160E;         /* 0x160E */
     u8 ship_flags; /* 0x160F: 2 = being steered back from the edge or height limit of the space arena (FUN_L11_00313f60) */
-    u8    pad_1610[0x4];
-    s32   unk1614; /* 0x1614 */
-    u8    pad_1618[0x8];
-    void *unk1620;    /* 0x1620 */
-    void *unk1624;    /* 0x1624 */
+    u8 pad_1610[0x4];
+    s32 fidget_prop_moby; /* 0x1614: moby animated with HERO_STATE_FIDGET_ALT, removed when it ends */
+    u8 pad_1618[0x8];
+    void *
+        clank_rotor_moby; /* 0x1620: Clank's rotor moby (class 0x47A), made while hero.vehicle_mode is Clank */
+    void *clank_antenna_glow_moby; /* 0x1624: Clank's antenna glow moby (class 0x4B4) */
     f32   glow_phase; /* 0x1628: phase of the hero moby's colour pulse (FUN_L00_002080b0) */
     u8    pad_162C[0x4];
     s32   vehicle_hp;                /* 0x1630 */
-    s16   unk1634;                   /* 0x1634 */
+    s16   vehicle_anim_handle;       /* 0x1634 */
     s16   vehicle_triangle_cooldown; /* 0x1636 */
     u8    pad_1638[0x8];
-    Vec4  target_pose; /* 0x1640 */
-    s32   unk1650;     /* 0x1650 */
+    Vec4  target_pose;        /* 0x1640 */
+    s32   state_entry_option; /* 0x1650 */
     u8    pad_1654[0xC];
     s32   sink_jump_count; /* 0x1660 */
     u8    pad_1664[0xC];
     struct MobyTrail trail; /* 0x1670: trail of moby copies following hero.moby */
-    u8 unk17B0[0x140];      /* 0x17B0: buffer handed to FUN_L00_00262500 / FUN_L00_00262528 */
+    u8 wrench_trail[0x140]; /* 0x17B0: after-image trail of the thrown wrench (Comet-Strike) */
     struct HeroEase item_eases
         [3]; /* 0x18F0: eased records, kind 5 set when an item slot is ready (FUN_L00_00210748) */
-    Vec4 pos_history[32];     /* 0x1B00: ring of 32 quads indexed by unk21B0 */
+    Vec4 pos_history[32];     /* 0x1B00: ring of 32 quads indexed by pos_history_index */
     u8   saved_pos_rot[0x20]; /* 0x1D00 */
     f32  stick_x;             /* 0x1D20: stick vector (d-pad when the stick is idle) */
     f32  stick_y;             /* 0x1D24 */
     u8   pad_1D28[0x68];
     struct HeroEase
-         unk1D90; /* 0x1D90: manipulator record handed to attach_manipulator (FUN_L00_00234808) */
-    u8   pad_1E40[0x70];
-    s16  unk1EB0; /* 0x1EB0 */
-    s16  unk1EB2; /* 0x1EB2: once flag for queueing FUN_L00_00207d40 */
-    u8   pad_1EB4[0x1C];
-    f32  unk1ED0; /* 0x1ED0 */
-    f32  unk1ED4; /* 0x1ED4 */
-    f32  unk1ED8; /* 0x1ED8 */
+        item5_manipulator; /* 0x1D90: manipulator record handed to attach_manipulator (FUN_L00_00234808) */
+    u8 pad_1E40[0x70];
+    s16 glow_point_count; /* 0x1EB0: glow sprite points queued this frame, cleared each hero update */
+    s16 glow_draw_queued; /* 0x1EB2: draw_hero_glow_quads queued this frame */
+    u8  pad_1EB4[0x1C];
+    /* 0x1EC0..0x1F10: a struct GroundMoveControl (ground_move_control.h) that doom
+       bots hand to step_mover; 0x1F10..0x1F50: the hop arc state update_arc_motion
+       steps. Doom bots copy their own copies of the fields in and out
+       (save_state_fields_to_hero, save_state_vector_and_fields_to_hero). */
+    f32  move_speed;             /* 0x1ED0: GroundMoveControl.speed */
+    f32  move_turn_velocity;     /* 0x1ED4: GroundMoveControl.turn_velocity */
+    f32  move_vertical_velocity; /* 0x1ED8: GroundMoveControl.vertical_velocity */
     u8   pad_1EDC[0x8];
-    f32  unk1EE4; /* 0x1EE4 */
+    f32  move_max_speed; /* 0x1EE4: GroundMoveControl.max_speed */
     u8   pad_1EE8[0x20];
-    s32  unk1F08; /* 0x1F08 */
+    s32  move_timer; /* 0x1F08: GroundMoveControl.move_timer */
     u8   pad_1F0C[0x4];
-    Vec4 unk1F10; /* 0x1F10 */
-    f32  unk1F20; /* 0x1F20 */
-    f32  unk1F24; /* 0x1F24 */
-    f32  unk1F28; /* 0x1F28 */
+    Vec4 hop_target;           /* 0x1F10: landing point */
+    f32  hop_vertical_speed;   /* 0x1F20: launch speed, capped at 7 * frame_time */
+    f32  hop_horizontal_speed; /* 0x1F24 */
+    f32  hop_heading;          /* 0x1F28: atan2 toward hop_target */
     u8   pad_1F2C[0x13];
-    s8   unk1F3F; /* 0x1F3F */
-    f32  unk1F40; /* 0x1F40 */
+    s8   hop_mode;          /* 0x1F3F: cleared when a hop starts */
+    f32  hop_turn_velocity; /* 0x1F40: spring turn velocity toward hop_heading */
     u8   pad_1F44[0x1C];
-    u8   unk1F60[0x40]; /* 0x1F60: 0x40-byte buffer cleared by FUN_L00_002b58d8 */
-    u8   unk1FA0[0x40]; /* 0x1FA0: 0x40-byte buffer cleared by FUN_L00_002b58d8 */
-    u8  *unk1FE0;       /* 0x1FE0: moby set by FUN_L00_002b58d8 */
-    u8   pad_1FE4[0x11];
-    u8   unk1FF5;       /* 0x1FF5 */
-    u8   ammo_used;     /* 0x1FF6 */
-    u8   ammo_capacity; /* 0x1FF7 */
-    u8   pad_1FF8[0x28];
-    u8  *unk2020[6]; /* 0x2020: six moby slots, filled at the index a moby carries at +0x54 */
-    u8   pad_2038[0x8];
+    u8   visibomb_fin_manip0
+        [0x40]; /* 0x1F60: joint manipulator of the visibomb missile fin 0 (spawn_visibomb_missile) */
+    u8  visibomb_fin_manip1[0x40]; /* 0x1FA0: fin 1 */
+    u8 *visibomb_missile;          /* 0x1FE0: moby set by FUN_L00_002b58d8 */
+    u8  pad_1FE4[0x11];
+    u8  launch_drones; /* 0x1FF5 */
+    u8  ammo_used;     /* 0x1FF6 */
+    u8  ammo_capacity; /* 0x1FF7 */
+    u8  pad_1FF8[0x28];
+    u8 *drone_mobys[6]; /* 0x2020: six moby slots, filled at the index a moby carries at +0x54 */
+    u8  pad_2038[0x8];
     struct Moby
         *metal_detector_target; /* 0x2040: nearest oclass 0x25D moby (metal_detector_update) */
-    f32  detector_target_dist;  /* 0x2044: distance to unk2040; 100000 when none */
+    f32  detector_target_dist;  /* 0x2044: distance to metal_detector_target; 100000 when none */
     s32  nearby_moby_close;     /* 0x2048 */
     u8   pad_204C[0x4];
-    struct Moby     *unk2050[10];          /* 0x2050 */
+    struct Moby     *suction_mobys[10];    /* 0x2050 */
     s32              sucked_moby_count;    /* 0x2078 */
     s32              suck_cannon_incoming; /* 0x207C */
     struct Moby     *moby;                 /* 0x2080: the hero's moby */
     struct HeroState state;                /* 0x2084 */
     u8               vehicle_mode;         /* 0x20A4 */
-    u8               unk20A5;              /* 0x20A5 */
+    u8               hidden;               /* 0x20A5 */
     u8               force_slot0_item8;    /* 0x20A6: forces slot 0 to item 8 */
     u8               item_select_blocked;  /* 0x20A7 */
     u8               item_anim_active;     /* 0x20A8 */
     u8               wading;               /* 0x20A9 */
-    u8               unk20AA;              /* 0x20AA */
-    u8  item_slot_anim_count; /* 0x20AB: item slot blends to play: 0 none, 1 slot 0, 2 both */
-    u8  item_use_locked;      /* 0x20AC */
-    u8  tilt_disabled;        /* 0x20AD */
-    u8  unk20AE;              /* 0x20AE */
-    u8  unk20AF;              /* 0x20AF */
-    u8  hydro_tank_full;      /* 0x20B0 */
-    u8  fall_fade_pending;    /* 0x20B1 */
-    u8  unk20B2;              /* 0x20B2 */
-    u8  gravity_mode;         /* 0x20B3 */
-    u8  unk20B4;              /* 0x20B4 */
-    u8  wrench_combo_step;    /* 0x20B5 */
+    u8               weapon_up;            /* 0x20AA */
+    u8 item_slot_anim_count; /* 0x20AB: item slot blends to play: 0 none, 1 slot 0, 2 both */
+    u8 item_use_locked;      /* 0x20AC */
+    u8 tilt_disabled;        /* 0x20AD */
+    u8 wrench_hidden_by_state; /* 0x20AE: hides the wrench in slot 0 (ledge, special and water jump states) */
+    u8  hand_item_hidden;    /* 0x20AF */
+    u8  hydro_tank_full;     /* 0x20B0 */
+    u8  fall_fade_pending;   /* 0x20B1 */
+    u8  on_hoverboard;       /* 0x20B2 */
+    u8  gravity_mode;        /* 0x20B3 */
+    u8  pyrocitor_tap_count; /* 0x20B4 */
+    u8  wrench_combo_step;   /* 0x20B5 */
     u8  pad_20B6[0x2];
     s32 pending_item[7];   /* 0x20B8: per slot: item to switch to */
     s32 selected_item[7];  /* 0x20D4: per slot: item after a switch */
     s32 saved_item[7];     /* 0x20F0: per slot: item kept while another is forced in */
     s32 restore_item[7];   /* 0x210C: per slot: 1 puts saved_item back */
-    f32 yaw_history[32];   /* 0x2128: ring of 32 yaws (motion.rot.z) indexed by unk21A8 */
-    s32 yaw_history_index; /* 0x21A8: unk2128 ring index */
-    s32 yaw_ring_count;    /* 0x21AC: unk2128 ring count */
-    s32 pos_history_index; /* 0x21B0: unk1B00 ring index */
-    s32 pos_history_count; /* 0x21B4: unk1B00 ring count */
+    f32 yaw_history[32];   /* 0x2128: ring of 32 yaws (motion.rot.z) indexed by yaw_history_index */
+    s32 yaw_history_index; /* 0x21A8: yaw_history ring index */
+    s32 yaw_ring_count;    /* 0x21AC: yaw_history ring count */
+    s32 pos_history_index; /* 0x21B0: pos_history ring index */
+    s32 pos_history_count; /* 0x21B4: pos_history ring count */
     u8  pad_21B8[0x20];
-    s16 unk21D8[8][4]; /* 0x21D8: 8 slots of four s16 */
+    s16 delayed_voices
+        [8][4]; /* 0x21D8: delayed voice queue (help_queue_add): busy, entry, timer, argument */
     s32 grind_voice; /* 0x2218: voice of sound slot 0, -1 = none (slots 0-7 run to 0x2234, FUN_L00_00206c08) */
-    s32          unk221C;           /* 0x221C: voice of sound slot 1 */
+    s32          voice_slot1;       /* 0x221C: voice of sound slot 1 */
     s32          voice_slot2;       /* 0x2220 */
-    s32          unk2224;           /* 0x2224 */
+    s32          loop_voice_slot;   /* 0x2224: voice of the looping move sound, -1 = none */
     s32          voice_slot4;       /* 0x2228 */
     s32          pack_swim_voice;   /* 0x222C */
     s32          voice_slot6;       /* 0x2230 */
     s32          board_boost_voice; /* 0x2234 */
-    struct Moby *unk2238
-        [8]; /* 0x2238: per sound slot (unk2218 + i * 4): moby the sound plays on, 0 = hero.moby */
-    u8                pad_2258[0x18];
-    s32               fidget_index;       /* 0x2270 */
-    s32               unk2274;            /* 0x2274 */
-    void             *unk2278;            /* 0x2278 */
-    s32               unk227C;            /* 0x227C */
-    struct Moby      *damage_source_moby; /* 0x2280 */
-    s32               unk2284;            /* 0x2284 */
-    f32               reach_distance;     /* 0x2288 */
-    f32               reach_height;       /* 0x228C */
-    f32               unk2290;            /* 0x2290 */
-    s32               item_hold_anim;     /* 0x2294 */
-    s32               item_anim_item_id;  /* 0x2298 */
-    f32               stick_magnitude;    /* 0x229C */
-    s32               underwater_air;     /* 0x22A0 */
-    f32               water_depth;        /* 0x22A4 */
-    struct HeroHealth health;             /* 0x22A8 */
-    s32               unk22B4;            /* 0x22B4 */
+    struct Moby *sound_slot_moby
+        [8]; /* 0x2238: per sound slot (grind_voice + i * 4): moby the sound plays on, 0 = hero.moby */
+    u8           pad_2258[0x18];
+    s32          fidget_index;       /* 0x2270 */
+    s32          look_target;        /* 0x2274 */
+    void        *anim_link_moby;     /* 0x2278 */
+    s32          anim_link_table;    /* 0x227C */
+    struct Moby *damage_source_moby; /* 0x2280 */
+    s32          camera_mode;        /* 0x2284 */
+    f32          reach_distance;     /* 0x2288 */
+    f32          reach_height;       /* 0x228C */
+    f32 stop_decel;        /* 0x2290: 12 * frame_time_sq scaled by slope, set in HERO_STATE_STOP */
+    s32 item_hold_anim;    /* 0x2294 */
+    s32 item_anim_item_id; /* 0x2298 */
+    f32 stick_magnitude;   /* 0x229C */
+    s32 underwater_air;    /* 0x22A0 */
+    f32 water_depth;       /* 0x22A4 */
+    struct HeroHealth health;      /* 0x22A8 */
+    s32               wall_jumped; /* 0x22B4 */
     f32 current_path_dist; /* 0x22B8: distance to the nearest carrying path this frame (water_current_update keeps the minimum) */
     u8  pad_22BC[0x8];
     s32 slot3_anim_timer; /* 0x22C4 */
-    s16 unk22C8;          /* 0x22C8 */
-    u8  unk22CA;          /* 0x22CA */
+    s16 weapon_lowered;   /* 0x22C8 */
+    u8  hover_latch;      /* 0x22CA */
     u8  vent_updraft;     /* 0x22CB */
-    s16 unk22CC;          /* 0x22CC */
-    s16 unk22CE;          /* 0x22CE */
+    s16 requested_state;  /* 0x22CC */
+    s16 face_expression;  /* 0x22CE */
     u8  pad_22D0[0x2];
-    s16 item_selector_timer;   /* 0x22D2 */
-    s16 quick_swap_tap_timer;  /* 0x22D4: countdown set on pad bit 0x10 press */
-    s16 quick_swap_tap_window; /* 0x22D6: countdown; nonzero with unk22D4 switches pending_item[0] */
-    s16 pack_disabled;         /* 0x22D8 */
+    s16 item_selector_timer;  /* 0x22D2 */
+    s16 quick_swap_tap_timer; /* 0x22D4: countdown set on pad bit 0x10 press */
+    s16 quick_swap_tap_window; /* 0x22D6: countdown; nonzero with quick_swap_tap_timer switches pending_item[0] */
+    s16 pack_disabled;          /* 0x22D8 */
     s16 path_constrain_pending; /* 0x22DA */
-    s16 unk22DC;                /* 0x22DC */
-    s16 vehicle_toggle_timer;   /* 0x22DE */
-    s16 glow_pulse_level;       /* 0x22E0 */
+    s16 scale_pulse_step; /* 0x22DC: index into the hero/item scale table (D_L00_001797D8), 1 starts it, 0 when the -1 end is reached */
+    s16 vehicle_toggle_timer; /* 0x22DE */
+    s16 glow_pulse_level;     /* 0x22E0 */
     u8  pad_22E2[0x6];
-    f32 unk22E8;           /* 0x22E8: phase for the items[4].moby colour */
-    f32 unk22EC;           /* 0x22EC: phase for the items[4].moby2 colour */
-    f32 unk22F0;           /* 0x22F0: phase for the items[5].moby colour */
-    s32 color_fade_active; /* 0x22F4 */
-    s32 tint_color;        /* 0x22F8 */
-    s16 unk22FC;           /* 0x22FC */
+    f32 item4_glow_phase;     /* 0x22E8: phase for the items[4].moby colour */
+    f32 item4_alt_glow_phase; /* 0x22EC: phase for the items[4].moby2 colour */
+    f32 item5_glow_phase;     /* 0x22F0: phase for the items[5].moby colour */
+    s32 color_fade_active;    /* 0x22F4 */
+    s32 tint_color;           /* 0x22F8 */
+    s16 attachment_pulse_timer; /* 0x22FC: 57 frames after an attachment pulse; speeds the glow and tints it by 0x22FE */
 };
 
 /* Offsets are checked in src/check/hero_layout_check.c (make check). */

@@ -39,8 +39,8 @@ void quartu_cutscene_trigger_update(struct Moby *moby) __asm__("FUN_L15_002eb4c0
 
 typedef struct QuartuCutsceneTriggerVars {
     u8  pad_0[0x4];
-    s32 unk4;
-    s32 unk8;
+    s32 camera_cuboid;
+    s32 watched_moby_index;
 } QuartuCutsceneTriggerVars;
 
 /* Moby class 1419 */
@@ -62,7 +62,7 @@ void quartu_cutscene_trigger_update(struct Moby *moby) {
             break;
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)trigger_data) == 0)
             break;
-        if (((unsigned char *)l15_moby_array)[(trigger_data->unk8 << 8) + 0x20] != 3)
+        if (((unsigned char *)l15_moby_array)[(trigger_data->watched_moby_index << 8) + 0x20] != 3)
             break;
         start_scene(3);
         moby->state = CUTSCENE_TRIGGER_WAIT_FOR_FIRST_SCENE;
@@ -80,8 +80,8 @@ void quartu_cutscene_trigger_update(struct Moby *moby) {
             start_scene(4);
             moby->state = CUTSCENE_TRIGGER_FINALIZE_AND_SAVE;
             update_hero_item_moby_flags();
-            if (trigger_data->unk4 != -1) {
-                char *o = D_L15_001600EC + (trigger_data->unk4 << 7);
+            if (trigger_data->camera_cuboid != -1) {
+                char *o = D_L15_001600EC + (trigger_data->camera_cuboid << 7);
                 set_race_camera(o + 0x30, o + 0x70, 0, 1);
             }
         }
@@ -89,8 +89,8 @@ void quartu_cutscene_trigger_update(struct Moby *moby) {
     case CUTSCENE_TRIGGER_FINALIZE_AND_SAVE:
         if (D_L15_0015F5C4 != 2) {
             unlock_planet(0x11);
-            if (trigger_data->unk4 != -1) {
-                char *o = D_L15_001600EC + (trigger_data->unk4 << 7);
+            if (trigger_data->camera_cuboid != -1) {
+                char *o = D_L15_001600EC + (trigger_data->camera_cuboid << 7);
                 jet_reset_camera(o + 0x30, o + 0x70);
             }
             queue_planet_unlock_message(0x11);

@@ -18,6 +18,7 @@
 #include "rnc/hero/hero.h"
 #include "rnc/math_consts.h"
 #include "rnc/overlay/shared/world/level_labels.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 
 enum {
     GADGEBOT_INITIALIZE = 0,
@@ -98,7 +99,7 @@ void gadgebot_update(unsigned char *moby) {
         else
             MOBY(moby)->flags &= 0x7FFF;
         MOBY(moby)->flags |= 0x100;
-        MOBY(moby)->unk73 = D_L18_00162608;
+        MOBY(moby)->metal_alpha = D_L18_00162608;
         *(void **)(moby_vars + 0x140) = &D_L18_001625F0;
         *(float *)(moby_vars + 0x20) = 1.0f;
         moby_vars[0x58] = 8;
@@ -252,41 +253,28 @@ extern int  random_integer_below(int) __asm__("FUN_00213260");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void
 trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern int
 FUN_L00_0025ff38_c100(float, void *, void *, int, int, int *, int) __asm__("FUN_L00_0025ff38");
 
 typedef struct {
-    char          pad0[0x20];
-    float         health; /* 0x20 */
-    char          pad24[0x3C];
-    char          anim[0x7];  /* 0x60 */
-    unsigned char anim_flags; /* 0x67 */
-    char          pad68[8];
-    char          fall[0x10]; /* 0x70 */
-    float         unk80;
-    float         death_fall_horizontal_speed_approach_step;
-    float         unk88;
-    float         death_fall_initial_vertical_speed;
-    int           death_fall_collision_radius_fixed_point;
-    int           unk94;
-    float         unk98;
-    char          pad9C[0x11];
-    unsigned char unkAD; /* 0xAD */
-    char          padAE[0xE];
-    float         unkBC;
-    float         unkC0;
-    float         unkC4;
-    char          padC8[0xB8];
-    u128          target; /* 0x180 */
-    char          pad190[0x30];
-    struct Moby  *target_moby; /* 0x1C0 */
-    int           target_mode; /* 0x1C4 */
-    char          pad1C8[0x18];
-    int           path; /* 0x1E0 */
-    char          pad1E4[0x14];
-    float         spin; /* 0x1F8 */
+    char                   pad0[0x20];
+    float                  health; /* 0x20 */
+    char                   pad24[0x3C];
+    char                   anim[0x7];  /* 0x60 */
+    unsigned char          anim_flags; /* 0x67 */
+    char                   pad68[8];
+    struct KnockbackMotion knockback; /* 0x70 */
+    char                   padD0[0xB0];
+    u128                   target; /* 0x180 */
+    char                   pad190[0x30];
+    struct Moby           *target_moby; /* 0x1C0 */
+    int                    target_mode; /* 0x1C4 */
+    char                   pad1C8[0x18];
+    int                    path; /* 0x1E0 */
+    char                   pad1E4[0x14];
+    float                  spin; /* 0x1F8 */
 } SentryVars_c100;
 
 extern int gadgebot_joint_glows_last_queued_frame_gp __asm__("D_L18_00162604") __attribute__((sda));
@@ -356,37 +344,38 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
                 moby->state = GADGEBOT_EXPLODE;
             } else {
                 fall_setup_value_or_path_slot_address = 0x200;
-                sentry_vars->death_fall_collision_radius_fixed_point =
+                sentry_vars->knockback.collision_radius_1024ths =
                     fall_setup_value_or_path_slot_address;
-                sentry_vars->unk98 = 0.5f;
-                sentry_vars->unk80 = gadgebot_death_fall_gravity_gp * frame_time_sq;
-                sentry_vars->death_fall_horizontal_speed_approach_step =
+                sentry_vars->knockback.collision_z_offset = 0.5f;
+                sentry_vars->knockback.gravity = gadgebot_death_fall_gravity_gp * frame_time_sq;
+                sentry_vars->knockback.speed_approach_step =
                     gadgebot_death_fall_horizontal_speed_approach_rate_gp * frame_time_sq;
-                sentry_vars->unk88 = gadgebot_death_fall_base_horizontal_speed_gp * frame_time;
-                sentry_vars->death_fall_initial_vertical_speed =
+                sentry_vars->knockback.speed =
+                    gadgebot_death_fall_base_horizontal_speed_gp * frame_time;
+                sentry_vars->knockback.vertical_speed =
                     gadgebot_death_fall_base_vertical_speed_gp * frame_time;
                 reaction_value_or_path_address = 0x29;
-                sentry_vars->unk94 = reaction_value_or_path_address;
-                sentry_vars->unkAD = 0;
-                sentry_vars->unkBC = frame_time + frame_time;
+                sentry_vars->knockback.flags = reaction_value_or_path_address;
+                sentry_vars->knockback.unk3D = 0;
+                sentry_vars->knockback.target_speed = frame_time + frame_time;
                 moby->flags &= ~0x1000;
                 v.q = *(u128 *)(coll + 0x10);
                 trooper_knockback_arc(&v,
                                       &angle,
-                                      &sentry_vars->unk88,
-                                      &sentry_vars->death_fall_initial_vertical_speed);
-                trooper_start_knockback(moby, sentry_vars->fall, 3, 1, 0, angle);
-                sentry_vars->unkC0 = 7.5f;
-                sentry_vars->unkC4 = 15.0f;
+                                      &sentry_vars->knockback.speed,
+                                      &sentry_vars->knockback.vertical_speed);
+                trooper_start_knockback(moby, &sentry_vars->knockback, 3, 1, 0, angle);
+                sentry_vars->knockback.apex_animation_frame = 7.5f;
+                sentry_vars->knockback.landing_animation_frame = 15.0f;
                 moby->state = GADGEBOT_DEATH_FALL;
                 moby->collision = 0;
                 sentry_vars->anim_flags = 0x78;
-                trooper_anim_update(moby, sentry_vars->anim);
+                start_hit_color_flash(moby, sentry_vars->anim);
             }
         }
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, sentry_vars->anim);
+    update_hit_color_flash(moby, sentry_vars->anim);
     fall_setup_value_or_path_slot_address = (int)&D_L18_001B0EB0[sentry_vars->path];
     reaction_value_or_path_address = *(int *)fall_setup_value_or_path_slot_address;
     FUN_L00_0025ff38_c100(512.0f,
@@ -467,7 +456,7 @@ typedef struct {
     u8  pad1E0[0xC];
     f32 spin; /* 0x1EC: random 15..45 degrees, in radians */
     u8  pad1F0[4];
-    f32 unk1F4; /* 0x1F4: set to 1.0 on launch */
+    f32 launch_effect; /* 0x1F4: 1.0 on launch, falls to 0: stretches the moby and fades the launch glow */
 } LaunchedMobyVars;
 
 extern float FUN_L00_0025abf0(void *, void *, float, float, int);
@@ -497,7 +486,7 @@ int launch_first_idle_group_class_0772_moby(int group, void *from, void *to, flo
                 moby->flags |= 0x1000;
                 qcopy(&moby->pos, from);
                 moby->state = GADGEBOT_LAUNCH_FLIGHT;
-                launched_moby_vars->unk1F4 = 1.0f;
+                launched_moby_vars->launch_effect = 1.0f;
                 fast_vec_sub(launched_moby_vars->velocity, to, from);
                 launched_moby_vars->velocity[2] = 0.0f;
                 fast_vec_normalize(

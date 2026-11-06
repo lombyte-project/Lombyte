@@ -29,11 +29,11 @@ typedef struct {
 
 typedef struct {
     float damage;
-    s16   unk4;
+    s16   max_health; /* 0x04: the target info resolve_moby_hit_response takes (MobyTargetInfo) */
     u8    pad6[0xA];
-    float unk10;
+    float aim_height;
     u8    pad14[0x26];
-    u8    unk3A;
+    u8    look_height;
     u8    unk3B;
     u8    pad3C[4];
 } HitInfo;
@@ -116,10 +116,10 @@ void bolt_thief_mine_update(struct Moby *moby) {
         }
         hit = find_moby_hit(moby, 0x230000, 0);
         fast_mem_zero16(&scratch.info, 0x40);
-        scratch.info.unk4 = 1;
+        scratch.info.max_health = 1;
         scratch.info.damage = 1.0f;
-        scratch.info.unk10 = 0.5f;
-        scratch.info.unk3A = 7;
+        scratch.info.aim_height = 0.5f;
+        scratch.info.look_height = 7;
         scratch.info.unk3B = 0xFF;
         resolve_moby_hit_response(moby, hit, &scratch.info, 0, &count, 0, 0, 4);
         if ((count >= 2 && hit != 0 && hit->moby->oclass != 0x283) ||

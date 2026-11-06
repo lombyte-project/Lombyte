@@ -31,31 +31,32 @@ typedef union {
     f32  f[4];
 } V4;
 
+/* Suck cannon record of a chicken slot (state at +0x68, defaults from +0x78). */
 typedef struct {
     u8    pad00[0x70];
-    void *unk70;
+    void *sequences; /* 0x70: the class's sequence table, read by the suck cannon handlers */
     u8    pad74[0xB0 - 0x74];
-} Node;
+} SuckRecord;
 
 typedef struct {
     u8    pad00[0x10];
-    void *unk10;
-    void *unk14;
+    void *slot_buffer; /* 0x10: same fields as ChickenVars */
+    void *slot_record; /* 0x14 */
     u8    pad18[0x64 - 0x18];
-    u16   unk64;
-    u16   unk66;
+    u16   sound_timer;
+    u16   flee_timer;
     u8    pad68[0x70 - 0x68];
-    s32   unk70;
-    u32   unk74;
-    f32   unk78;
+    s32   expire_timer;
+    u32   gold;
+    f32   health;
 } Sub;
 
 /* Class header view: pclass + 0xE and + 0x10. */
 typedef struct {
     u8  pad00[0xE];
-    u8  unkE;
+    u8  lod_trans; /* 0xE: MobyClass.lod_trans */
     u8  pad0F;
-    u32 unk10;
+    u32 collision; /* 0x10: the class's default moby collision */
 } Part;
 
 typedef struct {
@@ -74,7 +75,7 @@ typedef struct {
 
 typedef struct {
     u8   pad00[0xC];
-    Opt *unk0C;
+    Opt *color_options; /* 0x0C */
 } Holder;
 
 typedef struct {
@@ -83,9 +84,9 @@ typedef struct {
     u8      pad20[0x34 - 0x20];
     u16     flags34;
     u8      pad36[0x38 - 0x36];
-    u64     unk38;
+    u64     spawn_frame; /* 0x38: struct Moby names */
     u8      pad40[0x78 - 0x40];
-    Holder *unk78;
+    Holder *pvars;
 } State;
 
 typedef struct {
@@ -121,9 +122,10 @@ typedef struct {
 
 /* Vars of a morph-o-ray chicken, set up by FUN_L00_002c9348. */
 typedef struct {
-    u8    pad0[0x10];
-    void *unk10;
-    char *unk14;
+    u8 pad0[0x10];
+    void
+        *slot_buffer; /* 0x10: 0x60-byte buffer of the chicken's slot, passed to FUN_L00_002dc9f0 */
+    char *slot_record; /* 0x14: l00_morphoray_chicken_slot_records entry */
     u8    pad18[8];
     u8    manipulator[0x44]; /* 0x20: scaled by FUN_L00_00263ac8 */
     short sound_timer;       /* 0x64 */
@@ -142,7 +144,7 @@ extern void         fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28")
 extern u8           D_0013E520[];
 extern Data         D_L00_00173E40;
 extern struct Moby *D_L00_001DD100[];
-extern Node         l00_morphoray_chicken_slot_records[] __asm__("D_L00_001DD150");
+extern SuckRecord   l00_morphoray_chicken_slot_records[] __asm__("D_L00_001DD150");
 extern u8           morphoray_chicken_slot_buffers[] __asm__("D_L00_001DDF10");
 extern s32          D_L00_00161854 __attribute__((sda));
 extern s32          D_L00_00161854_gp __asm__("D_L00_00161854") __attribute__((sda));
@@ -264,15 +266,15 @@ struct Moby *spawn_morphoray_chicken(State *source_state) {
         spawned_moby->visible = 1;
         moby_vars = (Sub *)spawned_moby->pvars;
         if ((source_state->flags34 & 0x20) != 0) {
-            color_options = source_state->unk78->unk0C;
+            color_options = source_state->pvars->color_options;
             if (color_options != NULL) {
                 set_moby_color(
                     spawned_moby, color_options->f4, color_options->green, color_options->blue);
             } else {
-                spawned_moby->spawn_frame = source_state->unk38;
+                spawned_moby->spawn_frame = source_state->spawn_frame;
             }
         } else {
-            spawned_moby->spawn_frame = source_state->unk38;
+            spawned_moby->spawn_frame = source_state->spawn_frame;
         }
         spawned_moby->anim_speed = random_float_between(0.85f, 1.15f);
         qcopy(&spawned_moby->pos, &source_state->pos);
@@ -297,16 +299,17 @@ struct Moby *spawn_morphoray_chicken(State *source_state) {
             spawned_moby->rot.x = -ground_height_pitch_and_variant_scratch;
             spawned_moby->rot.y = fast_arc_tan(loc.yaw_local_z, loc.yaw_local_x);
         }
-        spawned_moby->collision = ((Part *)spawned_moby->pclass)->unk10;
+        spawned_moby->collision = ((Part *)spawned_moby->pclass)->collision;
         allocate_voice_for_target_entry(1, 0, spawned_moby);
         spawned_moby->state = CHICKEN_STATE_IDLE;
-        moby_vars->unk66 = 0;
-        moby_vars->unk64 = FUN_L00_00257b90(scale_game_frames(0x78), scale_game_frames(0x12C));
+        moby_vars->flee_timer = 0;
+        moby_vars->sound_timer =
+            FUN_L00_00257b90(scale_game_frames(0x78), scale_game_frames(0x12C));
         ground_height_pitch_and_variant_scratch = convert_integer_to_float(D_0013E520[0x15]);
-        moby_vars->unk70 = -1;
-        moby_vars->unk78 = ground_height_pitch_and_variant_scratch * 3.0f + 1.0f;
-        moby_vars->unk74 = D_0013E520[0x15];
-        spawned_moby->command = moby_vars->unk74;
+        moby_vars->expire_timer = -1;
+        moby_vars->health = ground_height_pitch_and_variant_scratch * 3.0f + 1.0f;
+        moby_vars->gold = D_0013E520[0x15];
+        spawned_moby->command = moby_vars->gold;
         FUN_L00_00257470(source_state, 0, -1);
         source_record = get_moby_target_info(source_state);
         if (source_record != NULL && *(u8 *)((u8 *)source_record + 0xE) == 1) {
@@ -328,26 +331,29 @@ struct Moby *spawn_morphoray_chicken(State *source_state) {
             previous_slot_moby->state != MOBY_STATE_SPAWN_POOL_REMOVAL &&
             previous_slot_moby->state != MOBY_STATE_NON_SPAWN_POOL_REMOVAL) {
             if (previous_slot_moby->state == CHICKEN_STATE_EMIT_FEATHERS) {
-                moby_vars->unk78 = yaw_cosine_scratch;
+                moby_vars->health = yaw_cosine_scratch;
                 spawned_moby->flags &= ~0x20;
-            } else if (!moby_vars->unk74) {
-                moby_vars->unk14 = (void *)&l00_morphoray_chicken_slot_records[D_L00_00161854];
-                moby_vars->unk10 = (void *)(morphoray_chicken_slot_buffers + D_L00_00161854 * 0x60);
+            } else if (!moby_vars->gold) {
+                moby_vars->slot_record =
+                    (void *)&l00_morphoray_chicken_slot_records[D_L00_00161854];
+                moby_vars->slot_buffer =
+                    (void *)(morphoray_chicken_slot_buffers + D_L00_00161854 * 0x60);
                 spawned_moby->flags |= 0x1020;
-                ((Node *)moby_vars->unk14)->unk70 = (void *)D_L00_00161840;
+                ((SuckRecord *)moby_vars->slot_record)->sequences = (void *)D_L00_00161840;
             }
-            ((Sub *)D_L00_001DD100[D_L00_00161854]->pvars)->unk70 = (void *)1;
-        } else if (!moby_vars->unk74) {
-            moby_vars->unk14 = (void *)&l00_morphoray_chicken_slot_records[D_L00_00161854];
-            moby_vars->unk10 = (void *)(morphoray_chicken_slot_buffers + D_L00_00161854 * 0x60);
+            ((Sub *)D_L00_001DD100[D_L00_00161854]->pvars)->expire_timer = (void *)1;
+        } else if (!moby_vars->gold) {
+            moby_vars->slot_record = (void *)&l00_morphoray_chicken_slot_records[D_L00_00161854];
+            moby_vars->slot_buffer =
+                (void *)(morphoray_chicken_slot_buffers + D_L00_00161854 * 0x60);
             spawned_moby->flags |= 0x1020;
-            ((Node *)moby_vars->unk14)->unk70 = (void *)D_L00_00161840;
+            ((SuckRecord *)moby_vars->slot_record)->sequences = (void *)D_L00_00161840;
         }
-        FUN_L00_002c92d8_c(moby_vars->unk14);
+        FUN_L00_002c92d8_c(moby_vars->slot_record);
         D_L00_001DD100[D_L00_00161854] = spawned_moby;
         D_L00_00161854_gp = D_L00_00161854 + 1;
         D_L00_00161854 = (D_L00_00161854 + 1) % 20;
-        if (moby_vars->unk74) {
+        if (moby_vars->gold) {
             spawned_moby->flags &= ~0x20;
         }
         update_entity(spawned_moby);
@@ -737,9 +743,9 @@ void morphoray_chicken_update(Moby *chicken_moby) {
         }
         break;
     case CHICKEN_STATE_EMIT_FEATHERS:
-        if (FUN_L00_002dc9f0(chicken_moby, chicken_vars->unk10) != 0) {
+        if (FUN_L00_002dc9f0(chicken_moby, chicken_vars->slot_buffer) != 0) {
             chicken_moby->state = CHICKEN_STATE_INITIALIZE;
-            *(short *)(chicken_vars->unk14 + 0x68) = 0;
+            *(short *)(chicken_vars->slot_record + 0x68) = 0;
         }
         if (random_integer_below(4) != 0) {
             return;

@@ -32,8 +32,8 @@ enum {
 
 extern int
 hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 /* Updates moby 347, a turret of Drek's fleet: waits for the hero, aims at its zone or at the hero's ship and fires. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002CC788), where it is exact; names translated to the US level program. */
@@ -115,7 +115,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
         break;
     case FLEET_TURRET_WAIT_FOR_TARGET: {
         struct Hero *g = &hero;
-        if (g->unk308 != 0) {
+        if (g->magnetic_floor != 0) {
             qcopy(targeting_vector_scratch, &turret_moby->pos);
             targeting_vector_scratch[2] += 10.0f;
             fast_vec_sub(
@@ -137,7 +137,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
         break;
     }
     case FLEET_TURRET_AIM_AND_FIRE_AT_ZONE: {
-        if (hero.unk308 == 0) {
+        if (hero.magnetic_floor == 0) {
             turret_moby->state = FLEET_TURRET_WAIT_FOR_TARGET;
         }
         {
@@ -335,10 +335,10 @@ void process_dreks_fleet_turret_hits(struct Moby *turret_moby) {
                 turret_moby->flags &= 0xEFFF;
             }
             *(unsigned char *)(turret_vars + 0x67) = 0xF0;
-            trooper_anim_update(turret_moby, (short *)hit_animation_state);
+            start_hit_color_flash(turret_moby, (short *)hit_animation_state);
         }
         turret_moby->hit_slot = 0xFF;
-        trooper_anim_finish(turret_moby, hit_animation_state);
+        update_hit_color_flash(turret_moby, hit_animation_state);
     }
 }
 

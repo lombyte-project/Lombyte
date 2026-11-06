@@ -130,10 +130,13 @@ void follow_camera_set_distance(s32 copy_distance_to_secondary_slot,
     }
 }
 
-void FUN_L00_002e8490(float camera_state_value) {
+/* Sets FollowCamState.tail.pull_back_max while the record's short at 0x86 is 0. */
+void set_follow_camera_pull_back_max(float pull_back_max) __asm__("FUN_L00_002e8490");
+
+void set_follow_camera_pull_back_max(float pull_back_max) {
     char *current_camera = (char *)current_follow_cam;
     if (*(short *)(current_camera + 0x86) == 0) {
-        *(float *)(*(char **)(current_camera + 0x70) + 0x22C) = camera_state_value;
+        *(float *)(*(char **)(current_camera + 0x70) + 0x22C) = pull_back_max;
     }
 }
 
@@ -197,9 +200,9 @@ void follow_camera_set_lateral_spring(float lateral_spring_value,
 
 /* Sets the short at +0x226 of D_L00_00166E00+0x70 while the short at 0x86 is 0. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E9AD0), where it is exact; names translated to the US level program. */
-void FUN_L00_002e8620(void);
+void lock_follow_camera_run_toward(void) __asm__("FUN_L00_002e8620");
 
-void FUN_L00_002e8620(void) {
+void lock_follow_camera_run_toward(void) {
     char *current_camera = (char *)current_follow_cam;
     if (*(short *)(current_camera + 0x86) == 0) {
         *(short *)(*(char **)(current_camera + 0x70) + 0x226) = 1;

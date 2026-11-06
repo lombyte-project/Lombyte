@@ -29,11 +29,11 @@ void link_triggered_moby_motion_update(struct Moby *moving_moby) __asm__("FUN_L1
 
 typedef struct LinkTriggeredMobyMotionVars {
     u8  pad_0[0x4];
-    f32 unk4;
-    s32 unk8;
-    f32 unkC;
-    f32 unk10;
-    s32 unk14;
+    f32 speed;
+    s32 linked_moby;
+    f32 size_scale;
+    f32 travel_distance;
+    s32 trigger_record_offset;
 } LinkTriggeredMobyMotionVars;
 
 /* Moby class 1159 */
@@ -51,7 +51,7 @@ void link_triggered_moby_motion_update(struct Moby *moving_moby) {
     struct MobyClass            *source_moby_class;
     switch (moving_moby->state) {
     case LINKED_MOTION_STATE_INITIALIZE:
-        moving_moby->pos.z = moving_moby->pos.z + private_data->unkC * 1.9f;
+        moving_moby->pos.z = moving_moby->pos.z + private_data->size_scale * 1.9f;
         spawned_moby = (struct Moby *)create_moby(0x487);
         spawned_moby->visible = 1;
         spawned_moby->draw_dist = 0x40;
@@ -62,36 +62,36 @@ void link_triggered_moby_motion_update(struct Moby *moving_moby) {
         spawned_moby->rot.x = fast_add_rotations(spawned_moby->rot.x, 3.1415927f);
         update_entity(spawned_moby);
         spawned_private_data = (char *)spawned_moby->pvars;
-        *(int *)(spawned_private_data + 8) = private_data->unk8;
-        *(float *)(spawned_private_data + 0x10) = private_data->unk10;
-        *(int *)(spawned_private_data + 0x14) = private_data->unk14;
+        *(int *)(spawned_private_data + 8) = private_data->linked_moby;
+        *(float *)(spawned_private_data + 0x10) = private_data->travel_distance;
+        *(int *)(spawned_private_data + 0x14) = private_data->trigger_record_offset;
         source_moby_class = moving_moby->pclass;
-        moving_moby->scale = source_moby_class->scale * private_data->unkC;
-        spawned_moby->scale = source_moby_class->scale * private_data->unkC;
+        moving_moby->scale = source_moby_class->scale * private_data->size_scale;
+        spawned_moby->scale = source_moby_class->scale * private_data->size_scale;
         spawned_moby->state = LINKED_MOTION_STATE_WAIT_FOR_LINK_TRIGGER;
         moving_moby->state = LINKED_MOTION_STATE_WAIT_FOR_LINK_TRIGGER;
         break;
     case LINKED_MOTION_STATE_WAIT_FOR_LINK_TRIGGER:
-        linked_moby = (struct Moby *)((private_data->unk8 << 8) + (int)D_L11_0015FFD8);
+        linked_moby = (struct Moby *)((private_data->linked_moby << 8) + (int)D_L11_0015FFD8);
         if (linked_moby->oclass == 0x267 && linked_moby->state == 4) {
             goto go;
         }
         if (linked_moby->oclass == 0x33E && linked_moby->command != 0) {
         go:
             moving_moby->state = LINKED_MOTION_STATE_MOVE_ALONG_LOCAL_AXIS;
-            ((Rec57 *)(private_data->unk14 + (int)(alternate_item_available)))->motion_triggered =
-                1;
+            ((Rec57 *)(private_data->trigger_record_offset + (int)(alternate_item_available)))
+                ->motion_triggered = 1;
             allocate_voice_for_target_entry(0, 0, moving_moby);
         }
         break;
     case LINKED_MOTION_STATE_MOVE_ALONG_LOCAL_AXIS:
         advance_accelerated_scalar((float *)private_data,
-                                   &private_data->unk4,
-                                   private_data->unk10,
+                                   &private_data->speed,
+                                   private_data->travel_distance,
                                    frame_time_sq,
                                    frame_time_sq,
                                    frame_time + frame_time);
-        fast_vec_normalize(motion_displacement, &moving_moby->rot_row1, -private_data->unk4);
+        fast_vec_normalize(motion_displacement, &moving_moby->rot_row1, -private_data->speed);
         fast_vec_add(&moving_moby->pos, &moving_moby->pos, motion_displacement);
         break;
     }

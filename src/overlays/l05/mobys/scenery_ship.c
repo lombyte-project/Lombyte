@@ -1,5 +1,6 @@
 /* Level 05 moby class scenery_ship: ships flying a path, with glow quads and trails. */
 #include "types.h"
+#include "rnc/overlay/l05.h"
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -404,7 +405,6 @@ int                  l05_scenery_ship_trail_blend_d_selector __asm__("D_L05_0016
 int                  l05_scenery_ship_trail_fade_start_color __asm__("D_L05_00161408") = 0x40806060;
 int                  l05_scenery_ship_trail_fade_end_color __asm__("D_L05_0016140C") = 0x802020;
 extern unsigned char l05_scenery_ship_extended_trail_selector __asm__("D_L05_0015EDB2");
-extern struct Moby  *D_L05_0015FFD8 __asm__("D_L05_0015FFD8");
 extern short        *D_L05_001ABCC0_7920[] __asm__("D_L05_001ABCC0");
 
 float D_L05_001CDD70[4][2] = {
@@ -471,7 +471,7 @@ void draw_group_scenery_ship_trails(struct Moby *moby) {
     matrix[6] = -0.15f;
     list = D_L05_001ABCC0_7920[(unsigned char)((char)moby->group)];
     do {
-        member = (struct Moby *)(((*list & 0x7fff) << 8) + (int)D_L05_0015FFD8);
+        member = (struct Moby *)(((*list & 0x7fff) << 8) + (int)l05_moby_array);
         if (member->oclass == 0x4f && member->state == SCENERY_SHIP_FOLLOW_PATH) {
             scenery_ship_vars = (char *)member->pvars;
             qcopy_nc(center, &member->pos);

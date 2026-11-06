@@ -53,11 +53,11 @@ struct HudBank {
     s32 has60;
     s32 has64;
     u8  pad68[0x2C];
-    s32 unk94;
+    s32 bank0_stash; /* 0x94: stash_send_data handle of chunk 1 (bank 0) */
     s32 unk98;
-    s32 unk9C;
-    s32 unkA0;
-    s32 unkA4;
+    s32 bank2_stash; /* 0x9C: of chunk 3 */
+    s32 bank3_stash; /* 0xA0: of chunk 4 */
+    s32 bank4_stash; /* 0xA4: of chunk 5 */
 };
 
 struct HudState {
@@ -76,7 +76,7 @@ struct HudState {
     struct HudTexPage  *image_pages;   /* 0x24 */
     struct HudTexPage  *palette_pages; /* 0x28 */
     s32                 unk2C;
-    s32                 unk30;
+    s32                 skip_update; /* 0x30: update_hud skips one frame and clears it */
 };
 
 /* Compile-time layout checks: a wrong offset makes the array size negative. */
@@ -90,7 +90,7 @@ HUD_STATE_OFFSET_CHECK(anim_defs, 0x1C);
 HUD_STATE_OFFSET_CHECK(frame_refs, 0x20);
 HUD_STATE_OFFSET_CHECK(image_pages, 0x24);
 HUD_STATE_OFFSET_CHECK(palette_pages, 0x28);
-HUD_STATE_OFFSET_CHECK(unk30, 0x30);
+HUD_STATE_OFFSET_CHECK(skip_update, 0x30);
 
 extern struct HudState hud_state __asm__("D_0019A3E8");
 

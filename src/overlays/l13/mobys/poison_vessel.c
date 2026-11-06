@@ -250,9 +250,9 @@ extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *
 
 extern void stop_moby_sound_7b10(void *, int, int) __asm__("FUN_L00_00257470");
 
-extern void trooper_anim_update(struct Moby *, void *) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(struct Moby *, void *) __asm__("FUN_L00_0025d458");
 
-extern void trooper_anim_finish(struct Moby *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(struct Moby *, void *) __asm__("FUN_L00_0025d538");
 
 extern void spawn_type_52_particle_near_moby(struct Moby *) __asm__("FUN_L10_002e3de8");
 
@@ -326,7 +326,7 @@ void poison_vessel_update(struct Moby *moby) {
                 moby->flags &= 0xEFFF;
                 stop_moby_sound_7b10(moby, 0, -1);
                 poison_vessel_vars->effect_level = 0x78;
-                trooper_anim_update(moby, effects);
+                start_hit_color_flash(moby, effects);
                 poison_vessel_vars->timer = 0;
                 spawn_poison_vessel_destruction_effects(moby, poison_vessel_vars);
                 spawn_type_52_particle_near_moby(moby);
@@ -336,13 +336,13 @@ void poison_vessel_update(struct Moby *moby) {
                 *health = *health - hit->damage;
                 poison_vessel_vars->effect_level = 0xFA;
                 poison_vessel_vars->effect_timer = scale_game_frames(0x3C);
-                trooper_anim_update(moby, effects);
+                start_hit_color_flash(moby, effects);
                 moby->rot.x = random_float_between(-0.034906585f, 0.034906585f);
                 moby->rot.y = random_float_between(-0.034906585f, 0.034906585f);
             }
         }
         moby->hit_slot = 0xFF;
-        trooper_anim_finish(moby, effects);
+        update_hit_color_flash(moby, effects);
         break;
     case POISON_VESSEL_BLASTING:
         qcopy(pos, &moby->pos);

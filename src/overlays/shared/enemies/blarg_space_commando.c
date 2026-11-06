@@ -15,6 +15,7 @@
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/game/interpolated_record.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/mobys/ground_move_control.h"
 
 /* Movement controller block at vars + 0xC0 (FUN_L01_0026d930 init, FUN_L00_00258b50 step). */
 enum {
@@ -34,62 +35,51 @@ enum {
 };
 
 typedef struct {
-    s32 unk0;
-    f32 unk4;
-    f32 unk8;
-    f32 unkC;
-    u8  pad10[0x14];
-    f32 unk24;
-    u8  pad28[0x10];
-    s32 flags; /* 0x38 */
-} MoveCtl;
-
-typedef struct {
     u8  pad0[0x18];
-    u8  unk18;
-    u8  unk19;
+    u8  attack_type;    /* 0x18: MobyHit.attack_type */
+    u8  attack_subtype; /* 0x19: MobyHit.attack_subtype */
     s16 oclass;
     u8  pad1C[0x14];
 } ShotInfo;
 
 /* pvars of blarg_space_commando_update */
 typedef struct {
-    u8           pad0[0x20];
-    f32          unk20;
-    s16          unk24;
-    u8           pad26[2];
-    u8           unk28;
-    u8           unk29;
-    u8           pad2A[6];
-    f32          unk30;
-    u8           pad34[0xC];
-    Vec4         unk40;
-    u8           pad50[8];
-    u8           unk58;
-    u8           pad59;
-    u8           unk5A;
-    u8           pad5B[5];
-    Vec4         vel; /* 0x60 */
-    u8           pad70[0x50];
-    MoveCtl      ctl; /* 0xC0 */
-    u8           padFC[0x64];
-    struct Moby *target; /* 0x160 */
-    s32          unk164;
-    u8           pad168[8];
-    Vec4         home; /* 0x170 */
-    u8           pad180[8];
-    s32          unk188;
-    f32          turn_speed; /* 0x18C */
-    u8           pad190[0xC];
-    s32          timer; /* 0x19C */
-    u8           pad1A0[4];
-    s32          path;   /* 0x1A4 */
-    s32          route;  /* 0x1A8 */
-    s32          volume; /* 0x1AC */
-    u8           pad1B0[0x50];
-    Vec4         unk200;
-    u8           pad210[0x210];
-    u8           unk420[1];
+    u8   pad0[0x20];
+    f32  health;
+    s16  max_health;
+    u8   pad26[2];
+    u8   hit_response_class;
+    u8   wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8   pad2A[6];
+    f32  aim_height;
+    u8   pad34[0xC];
+    Vec4 unk40;
+    u8   pad50[8];
+    u8   look_range;
+    u8   pad59;
+    u8   look_height;
+    u8   pad5B[5];
+    Vec4 vel; /* 0x60 */
+    u8   pad70[0x50];
+    struct GroundMoveControl ctl; /* 0xC0 */
+    u8                       pad110[0x50];
+    struct Moby             *target; /* 0x160 */
+    s32                      target_selection_status;
+    u8                       pad168[8];
+    Vec4                     home; /* 0x170 */
+    u8                       pad180[8];
+    s32                      pursuit_timer;
+    f32                      turn_speed; /* 0x18C */
+    u8                       pad190[0xC];
+    s32                      timer; /* 0x19C */
+    u8                       pad1A0[4];
+    s32                      path;   /* 0x1A4 */
+    s32                      route;  /* 0x1A8 */
+    s32                      volume; /* 0x1AC */
+    u8                       pad1B0[0x50];
+    Vec4                     melee_sweep_previous_position;
+    u8                       pad210[0x210];
+    u8                       big_head_manipulator[1];
 } Moby1068Vars;
 
 extern f32 D_L06_00161FA8 __attribute__((sda));
@@ -106,7 +96,7 @@ extern f32   D_L06_0015F580[] MACRO_ADDR;
 extern void moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern s32  move_moby_with_ground_and_collision_checks(
-     struct Moby *, MoveCtl *, void *, void *, f32) __asm__("FUN_L00_00258b50");
+     struct Moby *, struct GroundMoveControl *, void *, void *, f32) __asm__("FUN_L00_00258b50");
 extern void
 make_hit_descriptor(ShotInfo *, struct Moby *, s32, void *, f32) __asm__("FUN_L00_00259888");
 extern void sweep_hit_segment(
@@ -138,7 +128,6 @@ resolve_point_path_segment_xy_clearance(s32, void *, void *, f32) __asm__("FUN_L
 extern void FUN_L00_00263ac8(struct Moby *, s32, void *, f32);
 extern void
 FUN_L00_00263fd8(struct Moby *, s32, void *, void *, s32, s32, f32, f32 *, f32 *, f32 *);
-extern void FUN_L01_0026d930(MoveCtl *);
 extern void FUN_L06_002feb40_u(struct Moby *) __asm__("FUN_L06_002feb40");
 extern void FUN_L06_002ff100_u(struct Moby *) __asm__("FUN_L06_002ff100");
 
@@ -162,7 +151,7 @@ void blarg_space_commando_update(struct Moby *moby) {
 
     FUN_L06_002feb40_u(moby);
     target = blarg_commando_state->target;
-    FUN_L00_00263ac8(moby, 1, blarg_commando_state->unk420, 2.5f);
+    FUN_L00_00263ac8(moby, 1, blarg_commando_state->big_head_manipulator, 2.5f);
     if (moby->visible != 0 && fast_vec_dist(&moby->pos, &D_L06_00167540) < 27.0f) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 0x15;
@@ -170,20 +159,21 @@ void blarg_space_commando_update(struct Moby *moby) {
     moby->anim_speed = 1.0f;
     switch (moby->state) {
     case BLARG_COMMANDO_STATE_INITIALIZE:
-        blarg_commando_state->unk28 = 1;
-        blarg_commando_state->unk20 = 2.0f;
-        blarg_commando_state->unk30 = 2.0f;
-        blarg_commando_state->unk29 = 1;
-        blarg_commando_state->unk24 = 2;
-        blarg_commando_state->unk58 = truncate_float_to_s32(12.0f);
-        blarg_commando_state->unk5A = truncate_float_to_s32(13.6f);
-        FUN_L01_0026d930(&blarg_commando_state->ctl);
-        blarg_commando_state->ctl.unk8 = 2.0f;
-        blarg_commando_state->ctl.unkC = 0.5f;
-        blarg_commando_state->ctl.unk0 = truncate_float_to_s32(D_L06_00161FA8 * 307.2f);
-        blarg_commando_state->ctl.unk4 = D_L06_00161FA8 * 0.3f;
-        blarg_commando_state->ctl.unk24 = movement_max_horizontal_speed_gp * frame_time;
-        blarg_commando_state->ctl.flags |= 8;
+        blarg_commando_state->hit_response_class = 1;
+        blarg_commando_state->health = 2.0f;
+        blarg_commando_state->aim_height = 2.0f;
+        blarg_commando_state->wrench_hit_sound = 1;
+        blarg_commando_state->max_health = 2;
+        blarg_commando_state->look_range = truncate_float_to_s32(12.0f);
+        blarg_commando_state->look_height = truncate_float_to_s32(13.6f);
+        init_ground_move_control(&blarg_commando_state->ctl);
+        blarg_commando_state->ctl.max_drop = 2.0f;
+        blarg_commando_state->ctl.max_climb = 0.5f;
+        blarg_commando_state->ctl.collision_radius_1024ths =
+            truncate_float_to_s32(D_L06_00161FA8 * 307.2f);
+        blarg_commando_state->ctl.step_height = D_L06_00161FA8 * 0.3f;
+        blarg_commando_state->ctl.max_speed = movement_max_horizontal_speed_gp * frame_time;
+        blarg_commando_state->ctl.movement_option_flags |= 8;
         qcopy(&blarg_commando_state->home, &moby->pos);
         moby->state = BLARG_COMMANDO_STATE_SELECT_ACTION;
         break;
@@ -203,7 +193,7 @@ void blarg_space_commando_update(struct Moby *moby) {
                        frame_time_sq * 6.2831855f,
                        frame_time_sq * 6.2831855f,
                        frame_time * 3.1415927f);
-        if (blarg_commando_state->unk164 != 2) {
+        if (blarg_commando_state->target_selection_status != 2) {
             if (melee_attack_distance_threshold_gp < vector_distance_xy(&moby->pos, &target->pos)) {
                 if (fast_difference_between_rotations(
                         moby->rot.z,
@@ -220,7 +210,7 @@ void blarg_space_commando_update(struct Moby *moby) {
                     blend_moby_animation(moby, 6, 0, scale_game_frames(10));
                 }
             }
-        } else if (blarg_commando_state->unk188 != 0) {
+        } else if (blarg_commando_state->pursuit_timer != 0) {
             moby->state = BLARG_COMMANDO_STATE_CHASE_TARGET;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(20));
@@ -290,7 +280,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         break;
     case BLARG_COMMANDO_STATE_RANGED_ATTACK_RECOVERY:
         if (moby->anim_flags & 2) {
-            if (blarg_commando_state->unk164 != 2) {
+            if (blarg_commando_state->target_selection_status != 2) {
                 moby->state = BLARG_COMMANDO_STATE_RANGED_ATTACK_COOLDOWN;
                 if (moby->prev_seq != 4) {
                     blend_moby_animation(moby, 4, 0, scale_game_frames(20));
@@ -323,7 +313,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             }
-        } else if (blarg_commando_state->unk188 != 0) {
+        } else if (blarg_commando_state->pursuit_timer != 0) {
             moby->state = BLARG_COMMANDO_STATE_CHASE_TARGET;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(20));
@@ -350,18 +340,18 @@ void blarg_space_commando_update(struct Moby *moby) {
             movement_output_or_hit_vector_or_path_point.f[2] = 1.0f;
             movement_output_or_hit_vector_or_path_point.f[3] = 5627.925f;
             make_hit_descriptor(&shot, moby, 1, &movement_output_or_hit_vector_or_path_point, 1.0f);
-            shot.unk18 = 0;
-            shot.unk19 = 1;
+            shot.attack_type = 0;
+            shot.attack_subtype = 1;
             shot.oclass = moby->oclass;
             sweep_hit_segment(&position_or_movement_vector,
                               &movement_input_or_output_or_melee_origin,
-                              &blarg_commando_state->unk200,
+                              &blarg_commando_state->melee_sweep_previous_position,
                               &movement_input_or_output_or_melee_origin,
                               moby,
                               &shot,
                               5);
         }
-        qcopy(&blarg_commando_state->unk200, &position_or_movement_vector);
+        qcopy(&blarg_commando_state->melee_sweep_previous_position, &position_or_movement_vector);
         if (moby->anim_flags & 2) {
             moby->state = BLARG_COMMANDO_STATE_MELEE_RECOVERY;
             moby->command = 1;
@@ -403,7 +393,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             fast_vec_dist(&moby->pos, &movement_output_or_hit_vector_or_path_point) < 0.8f) {
             near = 1;
         }
-        if (blarg_commando_state->unk188 == 0) {
+        if (blarg_commando_state->pursuit_timer == 0) {
             moby->state = BLARG_COMMANDO_STATE_RETURN_HOME;
         } else if (near != 0) {
             moby->state = BLARG_COMMANDO_STATE_CHASE_MELEE_ATTACK;
@@ -429,18 +419,18 @@ void blarg_space_commando_update(struct Moby *moby) {
             movement_output_or_hit_vector_or_path_point.f[2] = 1.0f;
             movement_output_or_hit_vector_or_path_point.f[3] = 5627.925f;
             make_hit_descriptor(&shot, moby, 1, &movement_output_or_hit_vector_or_path_point, 1.0f);
-            shot.unk18 = 0;
-            shot.unk19 = 1;
+            shot.attack_type = 0;
+            shot.attack_subtype = 1;
             shot.oclass = moby->oclass;
             sweep_hit_segment(&position_or_movement_vector,
                               &movement_input_or_output_or_melee_origin,
-                              &blarg_commando_state->unk200,
+                              &blarg_commando_state->melee_sweep_previous_position,
                               &movement_input_or_output_or_melee_origin,
                               moby,
                               &shot,
                               5);
         }
-        qcopy(&blarg_commando_state->unk200, &position_or_movement_vector);
+        qcopy(&blarg_commando_state->melee_sweep_previous_position, &position_or_movement_vector);
         if (moby->anim_flags & 2) {
             moby->state = BLARG_COMMANDO_STATE_CHASE_TARGET;
             if (moby->prev_seq != 1) {
@@ -569,8 +559,8 @@ extern unsigned char D_0013D408[];
 extern void          FUN_L00_00257470(void *, int, int);
 extern void
 trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 void        update_blarg_space_commando_beam(void *owner_moby) __asm__("FUN_L06_002ff2c8");
 
@@ -727,10 +717,10 @@ void process_blarg_space_commando_hits(char *moby) {
         default:
             break;
         }
-        trooper_anim_update(moby, (short *)(commando_state + 0x110));
+        start_hit_color_flash(moby, (short *)(commando_state + 0x110));
     }
     MOBY(moby)->hit_slot = 0xFF;
-    trooper_anim_finish(moby, commando_state + 0x110);
+    update_hit_color_flash(moby, commando_state + 0x110);
     if (*(int *)(commando_state + 0x188) != 0) {
         *(float *)(commando_state + 0x198) = base_home_distance_limit_gp + 6.0f;
     } else {
@@ -898,8 +888,8 @@ void update_blarg_space_commando_beam(void *owner_moby) {
                 }
                 make_hit_descriptor(&shot, (struct Moby *)moby, hit_type, point, 1.0f);
                 shot.oclass = MOBY(moby)->oclass;
-                shot.unk18 = 0;
-                shot.unk19 = 1;
+                shot.attack_type = 0;
+                shot.attack_subtype = 1;
                 collision_line(&beam_state->pts[j], &beam_state->pts[j + 1], 0, moby, &shot);
             }
         }

@@ -22,9 +22,9 @@ typedef struct {
 } VendorList;
 
 typedef struct {
-    s32 sound;
-    u8  pad4[0xC];
-    s32 message;
+    s32 sound;   /* 0x00: copied to the item's vendor row */
+    f32 unk4[3]; /* 0x04 */
+    s32 message; /* 0x10: help text shown for the item */
 } VendorSound;
 
 typedef struct {
@@ -42,43 +42,46 @@ typedef struct {
     s32 item;    /* 0x00: item id */
     s32 is_ammo; /* 0x04: 1 = the row sells ammo for the item */
     s32 state;   /* 0x08 */
-    s32 unkC;
+    u8  pad_C[0x4];
     s32 sound; /* 0x10 */
 } VendorMenuRow;
 
 /* The vendor menu state at D_L00_001CA4C0. */
 typedef struct {
-    s32                state;  /* 0x00: menu state: 0 opening, 1 open, 2 closing, 3 exit cutscene */
-    s32                frames; /* 0x04: frames in the current state */
-    s32                unk08;
-    s32                unk0C;
-    s32                unk10;
-    struct VendorMoby *unk14;
-    s32                unk18;       /* 0x18: decompressed resource data */
+    s32 state;         /* 0x00: menu state: 0 opening, 1 open, 2 closing, 3 exit cutscene */
+    s32 frames;        /* 0x04: frames in the current state */
+    s32 capture_state; /* 0x08: 0 until draw_vendor_screen captures the frame, then 1 */
+    s32 capture_request; /* 0x0C: set when the menu opens; draw_vendor_screen captures and clears it */
+    s32 capture_buffer; /* 0x10: frame capture buffer (D_L00_00173E00[2] + 0x60000) */
+    struct VendorMoby *
+        moby_buffer; /* 0x14: auxiliary_moby at +0, menu_mobys at +0x100, scratch_buffer at +0x1400 */
+    s32 animation_data; /* 0x18: vendor animation data, streamed from disc and decompressed */
     struct VendorMoby *vendor_moby; /* 0x1C */
     struct VendorMoby *menu_mobys;  /* 0x20: the menu's mobys [0..5] */
-    struct VendorMoby *unk24;
-    struct VendorMoby *unk28;
-    s32                unk2C;
-    s32                unk30;
-    s32                unk34;
-    s32                timer; /* 0x38 */
-    s32                unk3C;
-    s32                mode; /* 0x40: nonzero: rows and prices are for ammo */
-    s32                unk44;
-    s32                purchased_item; /* 0x48 */
-    s32                scroll;         /* 0x4C: list scroll, in steps of 0x38 */
-    s32                item_text;      /* 0x50: hud animation of the item text, -1 = none */
-    s32                title_text;     /* 0x54 */
-    s32                cursor;         /* 0x58: selected row */
-    s32                purchase_state; /* 0x5C */
-    Vec4               eye;            /* 0x60 */
-    Vec4               look;           /* 0x70 */
-    Vec4               basis[4];       /* 0x80: the vendor's transform */
-    Vec4               unkC0;
-    VendorMenuRow      rows[16];  /* 0xD0 */
-    s32                row_count; /* 0x210 */
-    u8                 pad214[0xC];
+    struct VendorMoby
+        *auxiliary_moby; /* 0x24: placed at vendor_auxiliary_moby_local_offset on the vendor */
+    struct VendorMoby
+        *exit_anchor_moby;        /* 0x28: the hero is placed beside it after the exit cutscene */
+    s32  scratch_buffer;          /* 0x2C: 0x400 zeroed bytes before animation_data */
+    s32  auxiliary_reaction_time; /* 0x30: frame of the auxiliary moby's last selection reaction */
+    u8   pad_34[0x4];
+    s32  language; /* 0x38: game language - 1 (clamped to 0), added to the reaction dialogue ids */
+    s32  auxiliary_reaction_variant; /* 0x3C: dialogue variant of the auxiliary moby's reaction */
+    s32  mode;                       /* 0x40: nonzero: rows and prices are for ammo */
+    s32  unk44;
+    s32  purchased_item;     /* 0x48 */
+    s32  scroll;             /* 0x4C: list scroll, in steps of 0x38 */
+    s32  item_text;          /* 0x50: hud animation of the item text, -1 = none */
+    s32  title_text;         /* 0x54 */
+    s32  cursor;             /* 0x58: selected row */
+    s32  purchase_state;     /* 0x5C */
+    Vec4 eye;                /* 0x60 */
+    Vec4 look;               /* 0x70 */
+    Vec4 basis[4];           /* 0x80: the vendor's transform */
+    Vec4 cutscene_offset;    /* 0xC0: added to the exit cutscene positions after basis */
+    VendorMenuRow rows[16];  /* 0xD0 */
+    s32           row_count; /* 0x210 */
+    u8            pad214[0xC];
 } VendorMenu;
 
 void open_vendor_menu(void *) __asm__("FUN_L00_0029a6b0");

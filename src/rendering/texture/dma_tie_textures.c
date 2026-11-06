@@ -8,10 +8,10 @@ extern struct TagPtr D_00160F68;
 
 #include "rnc/rendering/texture/dma_tie_textures_globals.h"
 
-extern char tie_texture_overflow_message[] __asm__("D_001E8A50");
-extern s32  build_tie_texture_dma(s32) __asm__("FUN_002370c0");
-extern void vu1_tex_flush(void) __asm__("func_00233B68");
-void        dma_tie_textures(void) __asm__("FUN_00235640");
+extern const char tie_texture_overflow_message[] __asm__("D_001E8A50");
+extern s32        build_tie_texture_dma(s32) __asm__("FUN_002370c0");
+extern void       vu1_tex_flush(void) __asm__("func_00233B68");
+void              dma_tie_textures(void) __asm__("FUN_00235640");
 
 void dma_tie_textures(void) {
     struct DmaTag *tag;
@@ -47,3 +47,5 @@ void dma_tie_textures(void) {
 extern __typeof__(dma_tie_textures) func_00235640 __attribute__((alias("FUN_00235640")));
 
 s32 max_tie_texture_dma_size = 0;
+
+const char tie_texture_overflow_message[] __asm__("D_001E8A50") = "tie texture overflow\n";

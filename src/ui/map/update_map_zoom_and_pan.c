@@ -15,7 +15,7 @@ int update_map_zoom_and_pan(void) {
     if (controller_state.pressed & (PAD_SELECT | PAD_R3)) {
         return 1;
     }
-    if (level_map_selection.unk24 == 0) {
+    if (level_map_selection.map_ready == 0) {
         return 0;
     }
     if (level_map_selection.loaded < 0) {

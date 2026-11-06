@@ -11,8 +11,8 @@
 
 struct AnimSeq670 {
     u8    pad0[0x10];
-    u8    frame_count; /* 0x10 */
-    u8    unk11;
+    u8    frame_count;   /* 0x10 */
+    u8    sound;         /* 0x11: looping sound (Moby.seq_sound) */
     u8    trigger_count; /* 0x12 */
     u8    pad13[9];
     void *frames[1]; /* 0x1C; the triggers follow the frames */
@@ -39,11 +39,11 @@ extern void sync_hero_slot3_animation_speed(void) __asm__("FUN_L00_00232128");
 extern void sync_hero_mapped_moby_animation_speed(void) __asm__("FUN_L00_002322c8");
 
 /* Hero animation frame advance: steps the hero moby's frame position
-   (unk54) by the rate in hero.anim_speed/unkA94 or a scripted table, moves to
+   (anim_time) by the rate in hero.anim_frame_rate or a scripted table, moves to
    the next frame of the sequence each time it passes 1.0 (wrapping or
-   jumping as hero.anim_loop_frame/unkAB4/unkAB8 request), fires the sequence's sound
+   jumping as hero.queued_anim_frame and queued_frame_request request), fires the sequence's sound
    triggers crossed this frame, keeps the moby's looping sound in step,
-   and records the distance moved (hero.anim_frame/unkAAC). */
+   and records the distance moved (hero.anim_frame_delta). */
 void advance_hero_animation(void) __asm__("FUN_L00_00232670");
 
 void advance_hero_animation(void) {
@@ -132,12 +132,12 @@ void advance_hero_animation(void) {
             (struct VoiceSlot670 *)(((u8 *)&voice_pool) + hero_moby->sound_slot * 0x70);
         if (active_voice_slot->owner != hero_moby) {
             hero_moby->sound_slot = 0xFF;
-        } else if (active_voice_slot->sound != hero_moby->unk7C) {
+        } else if (active_voice_slot->sound != hero_moby->seq_sound) {
             release_voice_slot(hero_moby->sound_slot);
             hero_moby->sound_slot = 0xFF;
         }
-    } else if (hero_moby->unk7C != 0xFF && D_L00_0015F5C4 != 2 && D_L00_0015F5C4 != 6) {
-        hero_moby->sound_slot = allocate_voice_for_target_entry(hero_moby->unk7C, 4, hero_moby);
+    } else if (hero_moby->seq_sound != 0xFF && D_L00_0015F5C4 != 2 && D_L00_0015F5C4 != 6) {
+        hero_moby->sound_slot = allocate_voice_for_target_entry(hero_moby->seq_sound, 4, hero_moby);
     }
     sync_hero_slot3_animation_speed();
     sync_hero_mapped_moby_animation_speed();

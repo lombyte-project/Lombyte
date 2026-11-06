@@ -171,7 +171,7 @@ typedef unsigned int u128_259a88 __attribute__((mode(TI), aligned(16)));
 typedef struct {
     u128_259a88    v;
     int            x, y;
-    unsigned char  b0, b1;
+    unsigned char  attack_type, attack_subtype;
     unsigned short s;
     float          f;
     int            flag;
@@ -205,9 +205,9 @@ void record_moby_hit(struct Moby *owner_moby, L_259a88 *hit_descriptor) {
     qcopy(&moby_hits[i].direction, &hit_descriptor->v);
     hit_record->source_moby = (u8 *)hit_descriptor->x;
     hit_record->flags = hit_descriptor->y;
-    hit_record->unk28 = hit_descriptor->b0;
-    hit_record->unk29 = hit_descriptor->b1;
-    hit_record->unk2A = hit_descriptor->s;
+    hit_record->attack_type = hit_descriptor->attack_type;
+    hit_record->attack_subtype = hit_descriptor->attack_subtype;
+    hit_record->source_class = hit_descriptor->s;
     hit_record->damage = hit_descriptor->f;
     hit_record->has_direction = hit_descriptor->flag;
     hit_record->owner = owner_moby;
