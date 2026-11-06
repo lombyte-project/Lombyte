@@ -160,7 +160,7 @@ typedef struct BlargHelicopterVars {
     s32                  muzzle_index;
     s16                  rockets_fired;
     s16                  target_first_path_endpoint;
-    s32                  unkC0;
+    s32                  respawns; /* nonzero: comes back after it is destroyed */
     s32                  activation_timer;
     u8                   pad_C8[0x8];
     u8                   manipulator;
@@ -207,7 +207,7 @@ void blarg_helicopter_update(struct Moby *moby) {
             release_voice_slot(index);
         blarg_helicopter_vars->voice = -1;
     }
-    index = blarg_helicopter_vars->unkC0;
+    index = blarg_helicopter_vars->respawns;
     if (current_level_index == LEVEL_HOVEN && D_L12_00161F00 != 0) {
         if (index == 0) {
             if (l12_camera.focus_moby == moby)
@@ -220,7 +220,7 @@ void blarg_helicopter_update(struct Moby *moby) {
                 mark_moby_for_removal(moby);
                 return;
             }
-            index = blarg_helicopter_vars->unkC0;
+            index = blarg_helicopter_vars->respawns;
             goto check_mode;
         }
     } else {
@@ -270,7 +270,7 @@ update_state:
             blarg_helicopter_vars->commander->flags |= 0x41;
         }
         qcopy(&moby->pos, ((char *)l12_paths[blarg_helicopter_vars->initial_path_index]) + 0x10);
-        if (blarg_helicopter_vars->unkC0 != 0 && blarg_helicopter_vars->activation_timer == 0) {
+        if (blarg_helicopter_vars->respawns != 0 && blarg_helicopter_vars->activation_timer == 0) {
             a = scale_game_frames(240);
             b = scale_game_frames(400);
             a = FUN_L00_00257b90(a, b);
@@ -292,7 +292,7 @@ update_state:
         int          triggered, a;
         struct Moby *child;
         triggered = 0;
-        if (blarg_helicopter_vars->unkC0 && D_L12_00161F00)
+        if (blarg_helicopter_vars->respawns && D_L12_00161F00)
             triggered = fast_dec_timer(&blarg_helicopter_vars->activation_timer) != 0;
         if ((blarg_helicopter_vars->trigger_volume != -1 &&
              is_point_inside_clip_volume(&hero.motion.pos,
@@ -314,11 +314,11 @@ update_state:
         break;
     }
     case BLARG_HELICOPTER_FOLLOW_INITIAL_PATH:
-        if (blarg_helicopter_vars->unkC0 == 0 && l12_camera.focus_moby == 0) {
+        if (blarg_helicopter_vars->respawns == 0 && l12_camera.focus_moby == 0) {
             l12_camera.focus_moby = moby;
             l12_camera.focus_time = 0;
         }
-        if (blarg_helicopter_vars->unkC0) {
+        if (blarg_helicopter_vars->respawns) {
             count = blarg_helicopter_vars->rocket_fire_timer_frames;
             limit = D_L12_00161F20 - 3;
             if (limit > 5)
@@ -337,7 +337,7 @@ update_state:
         if (current_level_index == LEVEL_HOVEN && !D_0013D4CB && !D_00141C50)
             help_request(0x2ee2, 0x5d);
         distance = vector_distance_xy(&moby->pos, &hero.motion.pos);
-        if (blarg_helicopter_vars->unkC0 == 0) {
+        if (blarg_helicopter_vars->respawns == 0) {
             if (distance < 21.0f && moby->pos.z - hero.motion.pos.f[2] > 1.0f) {
                 if (l12_camera.focus_moby == 0) {
                     l12_camera.focus_moby = moby;
@@ -347,7 +347,8 @@ update_state:
                 l12_camera.focus_moby = 0;
         }
         distance = vector_distance_xy(&moby->pos, target);
-        if ((distance < 40.0f && moby->pos.z - target[2] > -2.0f) || blarg_helicopter_vars->unkC0) {
+        if ((distance < 40.0f && moby->pos.z - target[2] > -2.0f) ||
+            blarg_helicopter_vars->respawns) {
             angle = fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y);
             moby->rot.z = spring_turn(&blarg_helicopter_vars->yaw_turn_velocity,
                                       moby->rot.z,
@@ -370,13 +371,13 @@ update_state:
                 moby_point_position(moby, blarg_helicopter_vars->muzzle_index, &position);
                 blarg_helicopter_vars->muzzle_index = blarg_helicopter_vars->muzzle_index == 0;
                 qcopy(&aim, target + 8);
-                if (blarg_helicopter_vars->unkC0) {
+                if (blarg_helicopter_vars->respawns) {
                     qcopy(&aim, D_L12_00167240);
                     aim.f[2] += random_float_between(-0.5f, 0.1f);
                     aim.f[0] += randf_sym(0.0f, 0.4f);
                 }
                 fast_vec_sub(&delta, &aim, &position);
-                if (blarg_helicopter_vars->unkC0)
+                if (blarg_helicopter_vars->respawns)
                     fast_vec_normalize(&delta, &delta, frame_time * 22.0f);
                 else
                     fast_vec_normalize(&delta, &delta, frame_time * 15.0f);
@@ -400,7 +401,7 @@ update_state:
                     spawn_effect(&position, &velocity, color, 255, life, 30, size, 1);
                 }
                 limit = 4;
-                if (blarg_helicopter_vars->unkC0) {
+                if (blarg_helicopter_vars->respawns) {
                     if (D_L12_00161F20 > 10)
                         limit = 2;
                     if (D_L12_00161F20 > 6)
@@ -490,7 +491,7 @@ update_state:
                         1,
                         -1,
                         0);
-        if (blarg_helicopter_vars->unkC0 == 0)
+        if (blarg_helicopter_vars->respawns == 0)
             FUN_L00_00257470(moby, 0, -1);
         index = blarg_helicopter_vars->voice;
         if (index != -1 &&
@@ -498,7 +499,7 @@ update_state:
             ((VoicePoolWindow *)(D_0013E550 + index * 0x70))->voice.state)
             release_voice_slot(index);
         blarg_helicopter_vars->voice = -1;
-        if (blarg_helicopter_vars->unkC0 == 0) {
+        if (blarg_helicopter_vars->respawns == 0) {
         remove:
             mark_moby_for_removal(moby);
             return;
@@ -528,8 +529,9 @@ update_state:
             blarg_helicopter_vars->commander->flags |= 6;
         }
     }
-    if (blarg_helicopter_vars->unkC0 == 0 && moby->state > BLARG_HELICOPTER_WAIT_FOR_ACTIVATION &&
-        moby->visible && fast_vec_dist(&moby->pos, D_L12_00167240) < 30.0f) {
+    if (blarg_helicopter_vars->respawns == 0 &&
+        moby->state > BLARG_HELICOPTER_WAIT_FOR_ACTIVATION && moby->visible &&
+        fast_vec_dist(&moby->pos, D_L12_00167240) < 30.0f) {
         FUN_L00_0025a120((char *)moby);
         moby->shadow_range = 24;
     }
