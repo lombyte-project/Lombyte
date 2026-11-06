@@ -18,14 +18,14 @@
 #include "rnc/overlay/shared/world/level_labels.h"
 
 typedef struct CutsceneTriggerVars {
-    u8  pad0[0x10];
-    u8  unk10[0x10];
-    s32 unk20;
-    s32 unk24;
-    s32 unk28;
-    s32 unk2C;
-    s32 unk30;
-    s32 unk34;
+    u8  camera_position[0x10]; /* 0x00: copied from the camera cuboid */
+    u8  camera_rotation[0x10]; /* 0x10 */
+    s32 clip_volume;           /* 0x20: the hero entering it starts the sequence */
+    s32 camera_cuboid;         /* 0x24: row of l01_cuboids the camera sits at; -1 is an error */
+    s32 race_camera_cuboid;    /* 0x28: row for set_race_camera, -1 uses the hero */
+    s32 timer;                 /* 0x2C: length in frames, then counts down */
+    s32 blend_from_camera;     /* 0x30: nonzero blends in from the current camera */
+    s32 blend_frames;          /* 0x34: jet_mount transition length */
 } CutsceneTriggerVars;
 
 typedef struct {
@@ -104,14 +104,14 @@ void cutscene_trigger_update(char *moby) {
     func_L01_002FC890_m(moby);
     switch (((unsigned char *)moby)[0x20]) {
     case CUTSCENE_TRIGGER_INITIALIZE:
-        if (trigger_vars->unk24 == -1) {
+        if (trigger_vars->camera_cuboid == -1) {
             debug_print(cutscene_camera_init_position_error_format,
                         MOBY(moby)->oclass,
                         *(unsigned short *)(moby + 0xA8));
             mark_moby_for_removal(moby);
             return;
         }
-        trigger_vars->unk2C = scale_game_frames(trigger_vars->unk2C);
+        trigger_vars->timer = scale_game_frames(trigger_vars->timer);
         MOBY(moby)->state = CUTSCENE_TRIGGER_WAIT_FOR_TRIGGER;
         {
             int ff = 0xFF;
@@ -133,37 +133,38 @@ void cutscene_trigger_update(char *moby) {
             break;
         }
         hero_position = (char *)&hero.motion.pos;
-        if (is_point_inside_clip_volume(hero_position, trigger_vars->unk20) == 0 &&
+        if (is_point_inside_clip_volume(hero_position, trigger_vars->clip_volume) == 0 &&
             ((unsigned char *)moby)[0xBC] != 1)
             break;
         qcopy(saved_camera_position, camera_pos);
         qcopy(saved_camera_rotation, camera_pos + 0x10);
-        if (trigger_vars->unk28 == -1) {
+        if (trigger_vars->race_camera_cuboid == -1) {
             set_race_camera(hero_position, hero_position + 0x10, 0x72, 1);
         } else {
-            LevelCuboid *o = &l01_cuboids[trigger_vars->unk28];
+            LevelCuboid *o = &l01_cuboids[trigger_vars->race_camera_cuboid];
             set_race_camera(&o->pos, &o->rot, 0x72, 1);
         }
-        if (trigger_vars->unk30 != 0) {
-            jet_mount(saved_camera_position, saved_camera_rotation, 2, trigger_vars->unk34, 0);
+        if (trigger_vars->blend_from_camera != 0) {
+            jet_mount(
+                saved_camera_position, saved_camera_rotation, 2, trigger_vars->blend_frames, 0);
         } else {
-            LevelCuboid *o = &l01_cuboids[trigger_vars->unk24];
+            LevelCuboid *o = &l01_cuboids[trigger_vars->camera_cuboid];
             jet_mount(&o->pos, &o->rot, 0, 0, 0);
         }
         cutscene_active = 1;
         MOBY(moby)->state = CUTSCENE_TRIGGER_ACTIVE;
         MOBY(moby)->command = 1;
         {
-            int   o = trigger_vars->unk24 << 7;
+            int   o = trigger_vars->camera_cuboid << 7;
             char *record_table_base = (char *)l01_cuboids;
             qcopy(trigger_vars, (char *)(o + (int)record_table_base) + 0x30);
-            qcopy(&trigger_vars->unk10, (char *)(o + (int)record_table_base) + 0x70);
+            qcopy(&trigger_vars->camera_rotation, (char *)(o + (int)record_table_base) + 0x70);
         }
         break;
     }
     case CUTSCENE_TRIGGER_ACTIVE:
-        if (fast_dec_timer(&trigger_vars->unk2C) != 0 || ((unsigned char *)moby)[0xBC] != 1) {
-            if (trigger_vars->unk30 != 0) {
+        if (fast_dec_timer(&trigger_vars->timer) != 0 || ((unsigned char *)moby)[0xBC] != 1) {
+            if (trigger_vars->blend_from_camera != 0) {
                 jet_end_mount(2);
             } else {
                 jet_end_mount(0);
@@ -174,7 +175,7 @@ void cutscene_trigger_update(char *moby) {
             MOBY(moby)->command = 0;
         } else {
             set_camera_position(trigger_vars);
-            set_camera_rotation(&trigger_vars->unk10);
+            set_camera_rotation(&trigger_vars->camera_rotation);
         }
         break;
     case CUTSCENE_TRIGGER_WAIT_FOR_REARM:
