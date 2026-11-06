@@ -28,10 +28,13 @@
 #include "rnc/overlay/shared/rendering/set_moby_color.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/overlay/shared/hero/hero_tables.h"
+#include "rnc/overlay/shared/hero/jump_velocity_keys.h"
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/help_0024D680.c: func_L05_0024D680), where it is exact; names translated to the US level program. */
 
-extern char           D_L05_0017C380_e[] __asm__("D_L05_0017C380");
+struct HeroVelocityKey level05_hero_transform_trail_jump_velocity_keys
+    [HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS_COUNT] __asm__("D_L05_0017C380") =
+        HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS;
 extern HeroTableRow2C D_L05_0017C088[];
 extern char          *moby_pool_4f60 __asm__("D_L05_0015FFD8");
 extern char          *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
@@ -78,8 +81,10 @@ extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern void draw_hud_timer(void) __asm__("FUN_L05_00266710");
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
-extern int  hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
-extern char level05_hero_water_surface_jump_velocity_keys[] __asm__("D_L05_0017C3C0");
+extern int             hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
+struct HeroVelocityKey level05_hero_water_surface_jump_velocity_keys
+    [HERO_WATER_SURFACE_JUMP_VELOCITY_KEYS_COUNT] __asm__("D_L05_0017C3C0") =
+        HERO_WATER_SURFACE_JUMP_VELOCITY_KEYS;
 
 int hero_set_state(int requested_state, int animation_request_mode) {
     int   saved_state_step;
@@ -1397,7 +1402,7 @@ int hero_set_state(int requested_state, int animation_request_mode) {
                 u->unk3DC = 26.0f;
                 u->keyed_move_target_frame = 0.0f;
                 u->keyed_anim_target_frame = scale_game_frames(0x2D);
-                u->velocity_keys = D_L05_0017C380_e;
+                u->velocity_keys = level05_hero_transform_trail_jump_velocity_keys;
                 u->can_chain_high_jump = 1;
             } else if (u->state.current == 0xF) {
                 u->jump_height = 1.9f;

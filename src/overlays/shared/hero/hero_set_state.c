@@ -4,6 +4,7 @@
 #include "rnc/hero/hero_state.h"
 #include "rnc/weapons/item_id.h"
 #include "rnc/hero/hero.h"
+#include "rnc/overlay/shared/hero/jump_velocity_keys.h"
 #include "rnc/globals.h"
 #include "asm.h"
 
@@ -614,8 +615,9 @@ typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) V4_222B80;
 
-extern char           hero_pal_timed_jump_keys[4] __asm__("D_L00_0015F6E8") __attribute__((sda));
-extern char           D_L00_0017BF60_e[] __asm__("D_L00_0017BF60");
+extern char hero_pal_timed_jump_keys[4] __asm__("D_L00_0015F6E8") __attribute__((sda));
+struct HeroVelocityKey
+    hero_water_surface_jump_velocity_keys[HERO_WATER_SURFACE_JUMP_VELOCITY_KEYS_COUNT] __asm__("D_L00_0017BF60") = HERO_WATER_SURFACE_JUMP_VELOCITY_KEYS;
 extern HeroTableRow2C attack_records[] __asm__("D_L00_0017BC28");
 extern char          *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 
@@ -672,8 +674,9 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
-extern int  hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-extern char hero_velocity_profile_jump_keys[] __asm__("D_L00_0017BF20");
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
+struct HeroVelocityKey
+    hero_velocity_profile_jump_keys[HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS_COUNT] __asm__("D_L00_0017BF20") = HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS;
 
 int hero_set_state(int requested_state, int b) {
     int   previous_state_step;
@@ -1794,7 +1797,7 @@ int hero_set_state(int requested_state, int b) {
                     u->keyed_move_target_frame = 0.0f;
                     u->unk3DC = 18.0f;
                     u->keyed_anim_target_frame = scale_game_frames(0x28);
-                    u->velocity_keys = D_L00_0017BF60_e;
+                    u->velocity_keys = hero_water_surface_jump_velocity_keys;
                 }
                 {
                     struct Hero *w = &hero;
@@ -3917,3 +3920,25 @@ s32                  D_L15_0015F6C8 = 0;
 s32                  D_L16_0015F6D8 = 0;
 s32                  D_L17_0015F6C8 = 0;
 s32                  D_L18_0015F6C8 = 0;
+
+/* The copies hero_set_state reads at its places in levels 4, 7, 9, 10 and 13. */
+struct HeroVelocityKey D_L04_0017C0A0[HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS_COUNT] =
+    HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS;
+struct HeroVelocityKey D_L04_0017C0E0[HERO_WATER_SURFACE_JUMP_VELOCITY_KEYS_COUNT] =
+    HERO_WATER_SURFACE_JUMP_VELOCITY_KEYS;
+struct HeroVelocityKey D_L07_0017BFA0[HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS_COUNT] =
+    HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS;
+struct HeroVelocityKey D_L07_0017BFE0[HERO_WATER_SURFACE_JUMP_VELOCITY_KEYS_COUNT] =
+    HERO_WATER_SURFACE_JUMP_VELOCITY_KEYS;
+struct HeroVelocityKey D_L09_0017C0A0[HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS_COUNT] =
+    HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS;
+struct HeroVelocityKey D_L09_0017C0E0[HERO_WATER_SURFACE_JUMP_VELOCITY_KEYS_COUNT] =
+    HERO_WATER_SURFACE_JUMP_VELOCITY_KEYS;
+struct HeroVelocityKey D_L10_0017C3A0[HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS_COUNT] =
+    HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS;
+struct HeroVelocityKey D_L10_0017C3E0[HERO_WATER_SURFACE_JUMP_VELOCITY_KEYS_COUNT] =
+    HERO_WATER_SURFACE_JUMP_VELOCITY_KEYS;
+struct HeroVelocityKey D_L13_0017C220[HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS_COUNT] =
+    HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS;
+struct HeroVelocityKey D_L13_0017C260[HERO_WATER_SURFACE_JUMP_VELOCITY_KEYS_COUNT] =
+    HERO_WATER_SURFACE_JUMP_VELOCITY_KEYS;

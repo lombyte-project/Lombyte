@@ -24,6 +24,7 @@
 #include "rnc/overlay/shared/hero/hero_frame_update.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/overlay/shared/hero/hero_tables.h"
+#include "rnc/overlay/shared/hero/jump_velocity_keys.h"
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/help_00231228.c: func_L08_00231228), where it is exact; names translated to the US level program. */
 
@@ -64,9 +65,11 @@ extern void pool_splash(void *, int, int, float, float, float, float) __asm__("F
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
-extern int  hero_set_state(int, int) __asm__("FUN_L08_00230b38");
-extern char hero_water_surface_jump_velocity_keys[] __asm__("D_L08_0017C760");
-extern char hero_transform_trail_jump_velocity_keys[] __asm__("D_L08_0017C720");
+extern int hero_set_state(int, int) __asm__("FUN_L08_00230b38");
+struct HeroVelocityKey
+    hero_water_surface_jump_velocity_keys[HERO_WATER_SURFACE_JUMP_VELOCITY_KEYS_COUNT] __asm__("D_L08_0017C760") = HERO_WATER_SURFACE_JUMP_VELOCITY_KEYS;
+struct HeroVelocityKey
+    hero_transform_trail_jump_velocity_keys[HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS_COUNT] __asm__("D_L08_0017C720") = HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS;
 
 int hero_set_state(int requested_state, int animation_request_mode) {
     int   previous_state_step;
