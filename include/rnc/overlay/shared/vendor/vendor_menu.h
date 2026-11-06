@@ -48,14 +48,14 @@ typedef struct {
 
 /* The vendor menu state at D_L00_001CA4C0. */
 typedef struct {
-    s32 state;  /* 0x00: menu state: 0 opening, 1 open, 2 closing, 3 exit cutscene */
-    s32 frames; /* 0x04: frames in the current state */
-    s32 unk08;
-    s32 unk0C;
-    s32 unk10;
+    s32 state;         /* 0x00: menu state: 0 opening, 1 open, 2 closing, 3 exit cutscene */
+    s32 frames;        /* 0x04: frames in the current state */
+    s32 capture_state; /* 0x08: 0 until draw_vendor_screen captures the frame, then 1 */
+    s32 capture_request; /* 0x0C: set when the menu opens; draw_vendor_screen captures and clears it */
+    s32 capture_buffer; /* 0x10: frame capture buffer (D_L00_00173E00[2] + 0x60000) */
     struct VendorMoby
-        *moby_buffer; /* 0x14: auxiliary_moby at +0, menu_mobys at +0x100, unk2C at +0x1400 */
-    s32  unk18;       /* 0x18: decompressed resource data */
+        *moby_buffer;    /* 0x14: auxiliary_moby at +0, menu_mobys at +0x100, unk2C at +0x1400 */
+    s32  animation_data; /* 0x18: vendor animation data, streamed from disc and decompressed */
     struct VendorMoby *vendor_moby; /* 0x1C */
     struct VendorMoby *menu_mobys;  /* 0x20: the menu's mobys [0..5] */
     struct VendorMoby

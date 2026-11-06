@@ -238,17 +238,17 @@ void decompress_and_relocate_vendor_moby_assets(void) {
     int  *entry_offset_cursor;
     char *moby_asset_table_container;
     int   compressed_source_address;
-    compressed_source_address = vendor_menu_lui.unk18 + 0x80000;
+    compressed_source_address = vendor_menu_lui.animation_data + 0x80000;
     FlushCache(0);
-    fast_decompress(compressed_source_address, vendor_menu_lui.unk18);
+    fast_decompress(compressed_source_address, vendor_menu_lui.animation_data);
     FlushCache(0);
-    entry_offset_cursor = (int *)vendor_menu_lui.unk18;
+    entry_offset_cursor = (int *)vendor_menu_lui.animation_data;
     moby_asset_table_container = D_L00_00197300_lui[D_L00_00197BCC];
     for (i = 0; i < 16; i++) {
         int entry_offset = *entry_offset_cursor++;
         if (entry_offset) {
             *(int *)(moby_asset_table_container + 0x48 + i * 4) =
-                vendor_menu_lui.unk18 + entry_offset;
+                vendor_menu_lui.animation_data + entry_offset;
             relocate_asset_entry_pointers(moby_asset_table_container, i);
         }
     }
@@ -445,9 +445,9 @@ void open_vendor_menu(void *vendor_moby_arg) {
     }
     D_L00_0015F5D8 = 1;
     vendor_menu.state = VENDOR_MENU_OPENING;
-    vendor_menu.unk10 = D_L00_00173E00[2] + 0x60000;
+    vendor_menu.capture_buffer = D_L00_00173E00[2] + 0x60000;
     vendor_menu.moby_buffer = (struct VendorMoby *)(D_L00_00173E00[1] + 0x60000);
-    vendor_menu.unk08 = 0;
+    vendor_menu.capture_state = 0;
     vendor_menu.vendor_moby = (struct VendorMoby *)vendor_moby;
     allocate_voice_for_target_entry(3, 0, vendor_moby);
     if (vendor_menu.mode == VENDOR_MENU_MODE_EXISTING_VENDOR) {
@@ -1200,7 +1200,7 @@ void update_vendor_menu(void) {
             if (vendor_menu.frames >= scale_game_frames(40) ||
                 vendor_menu.mode != VENDOR_MENU_MODE_EXISTING_VENDOR) {
                 fade_level = 0.0f;
-                vendor_menu.unk0C = 1;
+                vendor_menu.capture_request = 1;
                 vendor_menu.state = VENDOR_MENU_OPEN;
                 vendor_menu.frames = 0;
                 FUN_00212f90(vendor_menu.vendor_moby, 3, 0, 8);
@@ -1507,7 +1507,7 @@ void update_vendor_menu(void) {
                 ((Vec4 *)g_debug_camera.basis)[1].q = D_L00_00165F80[1].q;
                 ((Vec4 *)g_debug_camera.basis)[2].q = D_L00_00165F80[2].q;
                 vendor_menu.state = VENDOR_MENU_CLOSING;
-                vendor_menu.unk08 = 0;
+                vendor_menu.capture_state = 0;
                 vendor_menu.frames = 0;
                 if (hero.items[0].moby != 0) {
                     select_world_object_resource_tables(((VendorMoby *)hero.items[0].moby)->oclass,
