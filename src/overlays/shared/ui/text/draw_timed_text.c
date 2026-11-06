@@ -47,6 +47,8 @@ void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char
 }
 /* Ported from rac1-decomp (src/overlays/shared/draw_001F3A78.c: func_L00_001FCC50), where it is exact; names translated to the US level program. */
 
+void draw_timed_text(LevelTextEntry *entry, s32 frame) __asm__("FUN_L00_001fcca0");
+
 void draw_timed_text(LevelTextEntry *timed_text_entry, s32 frame) {
     enum {
         TEXT_SEPARATOR_JOIN_WITH_HYPHEN = 1
