@@ -159,22 +159,22 @@ char *spawn_bombomatic_projectile(char *spawn_position,
 
 typedef struct BombomaticVars {
     u8                   pad_0[0x20];
-    u8                   unk20;
-    u8                   pad_21[0x5];
+    f32                  health;
+    u8                   pad_24[0x2];
     s16                  unk26;
     u8                   pad_28[0x38];
     struct HitColorFlash hit_flash;
     u8                   manipulator_70;
     u8                   pad_71[0xF];
-    u8                   unk80;
+    u8                   spin_quaternion; /* quat of manipulator_70, turned by spin_angle */
     u8                   pad_81[0x2F];
-    s32                  unkB0;
-    s32                  unkB4;
-    s16                  timer_B8;
-    s16                  launch_burst_index;
-    f32                  unkBC;
-    f32                  unkC0;
-    s32                  unkC4;
+    s32                  start_delay_frames;
+    s32 next_phase_frame; /* game frame (D_L07_0015F5CC) of the next state change */
+    s16 timer_B8;
+    s16 launch_burst_index;
+    f32 launch_yaw;
+    f32 spin_angle;
+    s32 alternate_launch; /* toggled per shot; between 40 and 90 away only every other shot fires */
 } BombomaticVars;
 
 /* Moby class 1041 */
@@ -229,7 +229,7 @@ void bombomatic_update(char *moby) {
         return;
     }
     hit_info = FUN_L00_0025a420(moby, 0x230000, 0);
-    health_ptr = &moby_data->unk20;
+    health_ptr = &moby_data->health;
     hit_reaction_result = resolve_moby_hit_response(moby, hit_info, health_ptr, 0, &ia, 0, 0, 4);
     switch (hit_reaction_result) {
     case HIT_REACTION_NONE:
@@ -333,25 +333,26 @@ eb20:
     get_target_sight(moby, target_buffer, 20.0f);
     switch (((unsigned char *)moby)[0x20]) {
     case BOMBOMATIC_INITIALIZE: {
-        int initial_delay_frames = scale_game_frames(moby_data->unkB0);
+        int initial_delay_frames = scale_game_frames(moby_data->start_delay_frames);
         int random_initial_delay;
         int random_initial_delay_frames;
         random_initial_delay = random_int_between(0, 10);
         random_initial_delay_frames = scale_game_frames(random_initial_delay);
-        moby_data->unkB4 = D_L07_0015F5CC + initial_delay_frames + random_initial_delay_frames;
+        moby_data->next_phase_frame =
+            D_L07_0015F5CC + initial_delay_frames + random_initial_delay_frames;
         attach_manipulator(moby, 0, &moby_data->manipulator_70);
-        *(int *)&moby_data->unkC0 = 0;
+        *(int *)&moby_data->spin_angle = 0;
         allocate_voice_for_target_entry(0, 4, (int)moby);
         MOBY(moby)->state = BOMBOMATIC_WAIT_TO_LAUNCH;
-        moby_data->unkC4 = 0;
+        moby_data->alternate_launch = 0;
         break;
     }
     case BOMBOMATIC_WAIT_TO_LAUNCH: {
-        if (moby_data->unkB4 <= D_L07_0015F5CC) {
+        if (moby_data->next_phase_frame <= D_L07_0015F5CC) {
             int r9 = scale_game_frames(0xB4);
-            moby_data->unkB4 = D_L07_0015F5CC + r9;
+            moby_data->next_phase_frame = D_L07_0015F5CC + r9;
             moby_data->timer_B8 = 0;
-            moby_data->unkBC = random_angle_radians();
+            moby_data->launch_yaw = random_angle_radians();
             moby_data->launch_burst_index = 0;
             MOBY(moby)->state = BOMBOMATIC_LAUNCH_BURST;
         }
@@ -363,16 +364,16 @@ eb20:
             moby_data->timer_B8 = scale_game_frames(7);
             if (((unsigned char *)moby)[0x31] == 0) {
                 if (!(vector_distance_xy(moby + 0x10, debris_far_point) < 90.0f &&
-                      (moby_data->unkC4 & 1) != 0)) {
+                      (moby_data->alternate_launch & 1) != 0)) {
                     if (!(vector_distance_xy(moby + 0x10, debris_far_point) < 40.0f)) {
                         goto eeE4;
                     }
                 }
             }
-            moby_data->unkC4 ^= 1;
+            moby_data->alternate_launch ^= 1;
             if (vector_distance_xy(moby + 0x10, target_buffer) < 20.0f) {
-                moby_data->unkBC = fast_arc_tan(target_buffer[0] - MOBY(moby)->pos.x,
-                                                target_buffer[1] - MOBY(moby)->pos.y);
+                moby_data->launch_yaw = fast_arc_tan(target_buffer[0] - MOBY(moby)->pos.x,
+                                                     target_buffer[1] - MOBY(moby)->pos.y);
             }
             launch_work_vector[0] = random_float_between(3.0f, 11.0f);
             launch_work_vector[1] = random_float_between(-2.0f, 2.0f);
@@ -387,7 +388,8 @@ eb20:
                     FUN_L00_0024f7c8(moby, i, candidate_point_position);
                     f = fast_arc_tan(candidate_point_position[0] - MOBY(moby)->pos.x,
                                      candidate_point_position[1] - MOBY(moby)->pos.y);
-                    g = fast_subtract_rotations(moby_data->unkBC, D_0015ED6C_gp * 17.80235863f);
+                    g = fast_subtract_rotations(moby_data->launch_yaw,
+                                                D_0015ED6C_gp * 17.80235863f);
                     f = fast_difference_between_rotations(f, g);
                     if (f < best) {
                         qcopy(vF0, candidate_point_position);
@@ -397,7 +399,7 @@ eb20:
                 qcopy(vA0, vF0);
             }
             qzero(launch_rotation);
-            launch_rotation[2] = moby_data->unkBC;
+            launch_rotation[2] = moby_data->launch_yaw;
             euler_rotation_matrix(vB0, launch_rotation);
             transform_vector(launch_work_vector, launch_work_vector, vB0);
             fast_vec_normalize(debris_velocity, launch_work_vector, D_0015ED6C_gp * 7.0f);
@@ -410,9 +412,9 @@ eb20:
             moby_data->launch_burst_index = moby_data->launch_burst_index + 1;
         }
     eeE4:
-        if (moby_data->unkB4 <= D_L07_0015F5CC) {
+        if (moby_data->next_phase_frame <= D_L07_0015F5CC) {
             int r9 = scale_game_frames(0x78);
-            moby_data->unkB4 = D_L07_0015F5CC + r9;
+            moby_data->next_phase_frame = D_L07_0015F5CC + r9;
             MOBY(moby)->state = BOMBOMATIC_WAIT_TO_LAUNCH;
         }
         break;
@@ -421,8 +423,8 @@ eb20:
 
     if (((unsigned char *)moby)[0x20] != 0) {
         float f = D_0015ED6C_gp * 17.80235863f;
-        float g = fast_add_rotations(moby_data->unkC0, f);
-        moby_data->unkC0 = g;
-        build_axis_rotation_quaternion(&moby_data->unk80, 2, g);
+        float g = fast_add_rotations(moby_data->spin_angle, f);
+        moby_data->spin_angle = g;
+        build_axis_rotation_quaternion(&moby_data->spin_quaternion, 2, g);
     }
 }

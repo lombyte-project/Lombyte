@@ -36,11 +36,10 @@ typedef struct HeroFallingPlatformVars {
     u8  pad_29[0x15];
     s16 unk3E;
     u8  pad_40[0x20];
-    f32 unk60[4];
-    u8  pad_70[0x30];
+    f32 transform[16];
     s16 timer_A0;
     s16 contact_sound_entry_index;
-    f32 unkA4;
+    f32 fall_speed;
     f32 unkA8;
     f32 unkAC;
 } HeroFallingPlatformVars;
@@ -98,7 +97,7 @@ void hero_falling_platform_update(char *moby) {
             MOBY(moby)->pos.z -= descent_frame_scale * 0.002f;
         }
         if (fast_dec_timer_s16(&moby_data->timer_A0)) {
-            moby_data->unkA4 = frame_scale * 0.002f;
+            moby_data->fall_speed = frame_scale * 0.002f;
             MOBY(moby)->state = LEAF_ACCELERATED_FALL;
         }
         break;
@@ -108,8 +107,8 @@ void hero_falling_platform_update(char *moby) {
         tilt_descent_work_value = fast_sin(tilt_descent_work_value);
         gravity_step = frame_time_sq * 9.8f;
         MOBY(moby)->pos.z -= tilt_descent_work_value + tilt_descent_work_value;
-        moby_data->unkA4 += gravity_step;
-        MOBY(moby)->pos.z -= moby_data->unkA4;
+        moby_data->fall_speed += gravity_step;
+        MOBY(moby)->pos.z -= moby_data->fall_speed;
         if (MOBY(moby)->pos.z < 2.0f) {
             mark_moby_for_removal(moby);
             return;
@@ -119,5 +118,5 @@ void hero_falling_platform_update(char *moby) {
         break;
     }
     fast_vec_sub(position_delta, moby + 0x10, previous_position);
-    update_entity_matrix(moby_data->unk60, position_delta, moby + 0x40, moby + 0x40);
+    update_entity_matrix(moby_data->transform, position_delta, moby + 0x40, moby + 0x40);
 }

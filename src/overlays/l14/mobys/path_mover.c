@@ -36,7 +36,7 @@ typedef struct {
     f32 rise;         /* 0xBC: height gained this frame */
     s32 trigger;      /* 0xC0: clip volume that activates it, -1 once active */
     s32 voice;        /* 0xC4 */
-    s32 silent;       /* 0xC8 */
+    s32 free_ride;    /* 0xC8: nonzero: the hero is not locked while riding */
     s32 show_volume;  /* 0xCC: clip volume that makes it visible, -1 once shown */
     f32 ease[3];      /* 0xD0: per-axis easing state for vendor_spring */
 } PathMoverVars;
@@ -170,7 +170,7 @@ void path_mover_update(struct Moby *moby) {
         }
         break;
     case PATH_MOVER_COMMAND_TRAVERSE_PATH:
-        if (path_mover_vars->silent == 0 && is_hero_on_moby(moby)) {
+        if (path_mover_vars->free_ride == 0 && is_hero_on_moby(moby)) {
             hero.jump_lock_timer = 4;
             hero.edge_brake_lock_timer = 4;
         }
