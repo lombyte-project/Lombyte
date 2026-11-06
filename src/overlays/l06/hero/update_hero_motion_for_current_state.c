@@ -782,52 +782,7 @@ void update_hero_airborne_planar_velocity(void) {
 #include "rnc/math/vector.h"
 #include "rnc/math/fast_math.h"
 
-struct MobyView {
-    u8  pad0[0xC];
-    f32 fC;
-    union {
-        Vec4 v10;
-        f32  f10;
-        struct {
-            u8  pad[0x4];
-            f32 v;
-        } f14;
-        struct {
-            u8  pad[0x8];
-            f32 v;
-        } f18;
-    } u10;
-    u8  pad20[0x3];
-    u8  b23;
-    u8  pad24[0xC];
-    u8  b30;
-    u8  b31;
-    s16 h32;
-    union {
-        s32 i34;
-        u16 uh34;
-    } u34;
-    u8 pad38[0x8];
-    union {
-        Vec4 v40;
-        struct {
-            u8  pad[0x8];
-            f32 v;
-        } f48;
-    } u40;
-    u8               pad50[0x1];
-    u8               b51;
-    u8               b52;
-    u8               b53;
-    u8               pad54[0x1C];
-    u8               b70;
-    u8               pad71[0x7];
-    struct MobyView *pm78;
-    u8               pad7C[0x2A];
-    s16              hA6;
-    u8               padA8[0x18];
-    Vec4             vC0;
-};
+#include "rnc/overlay/shared/hero/hero_moby_view.h"
 
 struct PlayerJointTable {
     u8  pad0[0x60];
@@ -1019,7 +974,7 @@ void update_hero_motion_for_current_state(void) __asm__("FUN_L06_0022e020");
 void update_hero_motion_for_current_state(void) {
     struct MobyView *moby = (struct MobyView *)hero.moby;
     s32              initial_state_step = hero.state.step;
-    s32              anim = moby->b53;
+    s32              anim = moby->prev_seq;
     f32              speed;
     Vec4             vector_or_hit_descriptor_scratch;
     Vec4             v10;
@@ -1079,8 +1034,8 @@ void update_hero_motion_for_current_state(void) {
             }
         }
         if (hero.state.current == HERO_STATE_CROUCH || hero.state.current == 0x17) {
-            if (hero.stick_magnitude > 0.2f || ((struct MobyView *)hero.moby)->b53 == 0xE ||
-                ((struct MobyView *)hero.moby)->b53 == 0xF) {
+            if (hero.stick_magnitude > 0.2f || ((struct MobyView *)hero.moby)->prev_seq == 0xE ||
+                ((struct MobyView *)hero.moby)->prev_seq == 0xF) {
                 if (hero.state.current == HERO_STATE_CROUCH) {
                     turn_to(0,
                             frame_scale_sq * 0.002f,
@@ -1092,7 +1047,7 @@ void update_hero_motion_for_current_state(void) {
                 if (absolute_float(hero.motion.yaw_rate) > D_0015ED6C_c * 0.34906584f) {
                     s32 neg = hero.motion.yaw_rate < 0.0f;
                     s32 anim = neg + 0xE;
-                    if (((struct MobyView *)hero.moby)->b53 != anim) {
+                    if (((struct MobyView *)hero.moby)->prev_seq != anim) {
                         set_hero_animation(anim, 0, scale_game_frames(5));
                     }
                     hero.anim_speed =
@@ -1108,7 +1063,7 @@ void update_hero_motion_for_current_state(void) {
                     if (hero.state.current == 0x17) {
                         anim = get_hero_help_value(0);
                     }
-                    if (((struct MobyView *)hero.moby)->b53 != anim) {
+                    if (((struct MobyView *)hero.moby)->prev_seq != anim) {
                         set_hero_animation(anim, 0, scale_game_frames(7));
                     }
                 }
@@ -1122,15 +1077,15 @@ void update_hero_motion_for_current_state(void) {
             }
             speed = frame_time_sq * 12.0f * s;
             hero.unk2290 = speed;
-            if (((struct MobyView *)hero.moby)->b52 == ((struct MobyView *)hero.moby)->b53 &&
-                ((struct MobyView *)hero.moby)->b52 != 0x14) {
+            if (((struct MobyView *)hero.moby)->seq == ((struct MobyView *)hero.moby)->prev_seq &&
+                ((struct MobyView *)hero.moby)->seq != 0x14) {
                 f32 r = hero.motion.flat_speed / speed;
-                if (scale_game_frames(5) < r && ((struct MobyView *)hero.moby)->b51 < 5.5f) {
+                if (scale_game_frames(5) < r && ((struct MobyView *)hero.moby)->prev_frame < 5.5f) {
                     adjust_hero_animation_speed_for_target_frame(13.0f, r, 0.5f, -1.0f);
                     if (hero.anim_speed > 1.1f) {
                         hero.anim_speed = 1.1f;
                     }
-                } else if (((struct MobyView *)hero.moby)->b51 > 6.5f) {
+                } else if (((struct MobyView *)hero.moby)->prev_frame > 6.5f) {
                     hero.anim_speed = 1.0f;
                 }
             }
@@ -1178,28 +1133,28 @@ void update_hero_motion_for_current_state(void) {
             if (m == NULL) {
                 goto drop;
             }
-            qcopy(&m->u10.v10, &hero.motion.pos);
-            qcopy(&m->u40.v40, &hero.motion.rot);
-            m->h32 = h40;
-            ((struct MobyView *)hero.sink_effect_moby)->b31 = 1;
-            ((struct MobyView *)hero.sink_effect_moby)->b30 = 0;
-            ((struct MobyView *)hero.sink_effect_moby)->b23 = 0;
-            ((struct MobyView *)hero.sink_effect_moby)->u34.uh34 |= 0x800;
+            qcopy(&m->pos.v, &hero.motion.pos);
+            qcopy(&m->rot.v, &hero.motion.rot);
+            m->draw_dist = h40;
+            ((struct MobyView *)hero.sink_effect_moby)->visible = 1;
+            ((struct MobyView *)hero.sink_effect_moby)->update_dist = 0;
+            ((struct MobyView *)hero.sink_effect_moby)->alpha = 0;
+            ((struct MobyView *)hero.sink_effect_moby)->flags |= 0x800;
             update_entity((struct MobyView *)hero.sink_effect_moby);
             allocate_voice_for_target_entry(0, 0, (struct MobyView *)hero.sink_effect_moby);
         }
         if ((struct MobyView *)hero.sink_effect_moby != NULL) {
             struct MobyView *m;
             struct MobyView *o;
-            ((struct MobyView *)hero.sink_effect_moby)->b23 +=
+            ((struct MobyView *)hero.sink_effect_moby)->alpha +=
                 truncate_float_to_s32(frame_scale * 5.0f);
-            if (((struct MobyView *)hero.sink_effect_moby)->b23 > 0x80) {
-                ((struct MobyView *)hero.sink_effect_moby)->b23 = 0x80;
+            if (((struct MobyView *)hero.sink_effect_moby)->alpha > 0x80) {
+                ((struct MobyView *)hero.sink_effect_moby)->alpha = 0x80;
             }
             m = (struct MobyView *)hero.sink_effect_moby;
             o = (struct MobyView *)hero.moby;
-            qcopy(&m->u10.v10, &o->u10.v10);
-            qcopy(&m->u40.v40, &o->u40.v40);
+            qcopy(&m->pos.v, &o->pos.v);
+            qcopy(&m->rot.v, &o->rot.v);
             update_entity(m);
         }
     drop:
@@ -1233,10 +1188,10 @@ void update_hero_motion_for_current_state(void) {
             add_hero_gravity_offset(
                 &hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 54.0f);
         }
-        if (anim != -1 && ((struct MobyView *)hero.moby)->b52 != 0x36) {
+        if (anim != -1 && ((struct MobyView *)hero.moby)->seq != 0x36) {
             set_hero_animation(anim, 0, frames);
-        } else if ((((struct MobyView *)hero.moby)->b70 & 2) &&
-                   ((struct MobyView *)hero.moby)->b52 == 0x36) {
+        } else if ((((struct MobyView *)hero.moby)->anim_flags & 2) &&
+                   ((struct MobyView *)hero.moby)->seq == 0x36) {
             s32 an = get_hero_help_value(0);
             set_hero_animation(an, 0, scale_game_frames(5));
         }
@@ -1259,16 +1214,15 @@ void update_hero_motion_for_current_state(void) {
         }
         if ((struct MobyView *)hero.grapple_target != NULL) {
             hero.motion.move_yaw =
-                fast_arc_tan(((struct MobyView *)hero.grapple_target)->u10.f10 - moby->u10.f10,
-                             ((struct MobyView *)hero.grapple_target)->u10.f14.v - moby->u10.f14.v);
+                fast_arc_tan(((struct MobyView *)hero.grapple_target)->pos.x - moby->pos.x,
+                             ((struct MobyView *)hero.grapple_target)->pos.y.v - moby->pos.y.v);
             turn_to(0, frame_scale_sq * 0.02f, frame_scale_sq * 0.15f, D_0015ED6C_c * 6.2831855f);
         }
         break;
     case HERO_STATE_APPROACH_TARGET_MOBY: {
         f32 hit;
         f32 hit2;
-        qcopy(&vector_or_hit_descriptor_scratch,
-              &((struct MobyView *)hero.grapple_target)->u10.v10);
+        qcopy(&vector_or_hit_descriptor_scratch, &((struct MobyView *)hero.grapple_target)->pos.v);
         hero.grapple_target_dist =
             fast_vec_dist(&hero.motion.pos, &vector_or_hit_descriptor_scratch);
         hero.target_arrival_frames = scale_game_frames(60);
@@ -1278,8 +1232,8 @@ void update_hero_motion_for_current_state(void) {
         if (hero.state.step == 0) {
             approach_value(&hero.grapple_pull_speed, D_0015ED6C_c * 27.0f, frame_time_sq * 80.0f);
             hero.motion.move_yaw =
-                fast_arc_tan(((struct MobyView *)hero.grapple_target)->u10.f10 - moby->u10.f10,
-                             ((struct MobyView *)hero.grapple_target)->u10.f14.v - moby->u10.f14.v);
+                fast_arc_tan(((struct MobyView *)hero.grapple_target)->pos.x - moby->pos.x,
+                             ((struct MobyView *)hero.grapple_target)->pos.y.v - moby->pos.y.v);
             turn_to(0, frame_scale_sq * 0.03f, frame_scale_sq * 0.15f, D_0015ED6C_c * 7.330383f);
         } else if (hero.state.step == 1) {
             approach_value(&hero.grapple_pull_speed, 0.0f, frame_time_sq * 42.0f);
@@ -1313,9 +1267,8 @@ void update_hero_motion_for_current_state(void) {
         vector_or_descriptor_scratch.f[2] = 0.0f;
         fast_vec_add(
             &vector_or_descriptor_scratch, &vector_or_descriptor_scratch, &hero.motion.pos);
-        FUN_001f9a28_c(&v10,
-                       &((struct MobyView *)hero.grapple_target)->u10.v10,
-                       &vector_or_descriptor_scratch);
+        FUN_001f9a28_c(
+            &v10, &((struct MobyView *)hero.grapple_target)->pos.v, &vector_or_descriptor_scratch);
         fast_vec_normalize(&hero.motion.velocity, &v10, hero.grapple_pull_speed);
         if (scale_game_frames(30) > hero.target_arrival_frames) {
             f32 t = scale_game_frames(30) - hero.target_arrival_frames;
@@ -1328,8 +1281,7 @@ void update_hero_motion_for_current_state(void) {
         qcopy(&hero.motion.velocity, &hero.motion.displacement);
         fast_vec_scale(&hero.motion.velocity, &hero.motion.velocity, 0.9f);
         hero.motion.velocity.f[2] -= frame_time_sq * 15.0f;
-        qcopy(&vector_or_hit_descriptor_scratch,
-              &((struct MobyView *)hero.grapple_target)->u10.v10);
+        qcopy(&vector_or_hit_descriptor_scratch, &((struct MobyView *)hero.grapple_target)->pos.v);
         hero.grapple_target_dist =
             fast_vec_dist(&hero.motion.pos, &vector_or_hit_descriptor_scratch);
         fast_vec_add(&v10, &hero.motion.pos, &hero.motion.velocity);
@@ -1345,15 +1297,15 @@ void update_hero_motion_for_current_state(void) {
     case HERO_STATE_GRAPPLE_SWING_ENTRY: {
         f32 vz;
         s32 above;
-        if ((hero.anim_flags & 2) && moby->b53 == 0x34) {
+        if ((hero.anim_flags & 2) && moby->prev_seq == 0x34) {
             set_hero_animation(0x35, 10, scale_game_frames(12));
             hero.anim_speed = 0.3f;
         }
         vz = hero.motion.velocity.f[2];
         if ((struct MobyView *)hero.swing_target_moby != NULL &&
-            ((struct MobyView *)hero.swing_target_moby)->pm78 != NULL &&
-            ((struct MobyView *)hero.swing_target_moby)->pm78->u34.i34 != 0) {
-            f32 a = ((struct MobyView *)hero.swing_target_moby)->u40.f48.v;
+            ((struct MobyView *)hero.swing_target_moby)->pvars != NULL &&
+            ((struct MobyView *)hero.swing_target_moby)->pvars->align_yaw != 0) {
+            f32 a = ((struct MobyView *)hero.swing_target_moby)->rot.z.v;
             if (fast_difference_between_rotations(a, hero.motion.rot.f[2]) > 90.0f) {
                 a = fast_add_rotations(a, 3.1415927f);
             }
@@ -1368,7 +1320,7 @@ void update_hero_motion_for_current_state(void) {
         hero.motion.move_yaw = hero.swing_yaw;
         turn_to(0, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f, D_0015ED6C_c * 4.712389f);
         FUN_001f9a28_c(&vector_or_hit_descriptor_scratch,
-                       &((struct MobyView *)hero.swing_target_moby)->u10.v10,
+                       &((struct MobyView *)hero.swing_target_moby)->pos.v,
                        &hero.motion.pos);
         fast_vec_normalize(
             &vector_or_hit_descriptor_scratch, &vector_or_hit_descriptor_scratch, 1.0f);
@@ -1404,7 +1356,7 @@ void update_hero_motion_for_current_state(void) {
                      frame_scale_sq * 0.2f,
                      D_0015ED6C_c * 9.599311f);
         above = 1;
-        if (!(hero.motion.pos.f[2] < ((struct MobyView *)hero.swing_target_moby)->u10.f18.v)) {
+        if (!(hero.motion.pos.f[2] < ((struct MobyView *)hero.swing_target_moby)->pos.z.v)) {
             above = 0;
         }
         if (hero.swing_hooked != 0) {
@@ -1427,7 +1379,7 @@ void update_hero_motion_for_current_state(void) {
         if (hero.swing_hooked != 0) {
             f32 s;
             if (vector_distance_xy(&hero.motion.pos,
-                                   &((struct MobyView *)hero.swing_target_moby)->u10.v10) <
+                                   &((struct MobyView *)hero.swing_target_moby)->pos.v) <
                     hero.swing_rope_target_length * 1.57f ||
                 hero.ground_distance > 1.5f) {
                 add_hero_gravity_offset(
@@ -1435,7 +1387,7 @@ void update_hero_motion_for_current_state(void) {
                 if (hero.swing_entry_push != 0 && gravity_z(&hero.motion.velocity) > 0.0f) {
                     FUN_001f9a28_c(&position_or_delta_scratch,
                                    &hero.motion.pos,
-                                   &((struct MobyView *)hero.swing_target_moby)->u10.v10);
+                                   &((struct MobyView *)hero.swing_target_moby)->pos.v);
                     add_hero_gravity_offset(
                         &hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 57.0f);
                 }
@@ -1446,12 +1398,12 @@ void update_hero_motion_for_current_state(void) {
             fast_vec_add(&hero.motion.velocity, &hero.motion.velocity, &position_or_delta_scratch);
         }
         {
-            struct MobyView *r;
+            struct SwingTargetVars *r;
             if ((struct MobyView *)hero.swing_target_moby != NULL &&
-                (r = ((struct MobyView *)hero.swing_target_moby)->pm78) != NULL) {
+                (r = ((struct MobyView *)hero.swing_target_moby)->pvars) != NULL) {
                 f32 len = fast_vec_length(&hero.motion.velocity);
-                if (r->fC < len) {
-                    approach_value(&len, r->fC, frame_time_sq * 15.0f);
+                if (r->max_speed < len) {
+                    approach_value(&len, r->max_speed, frame_time_sq * 15.0f);
                     fast_vec_normalize(&hero.motion.velocity, &hero.motion.velocity, len);
                 }
             }
@@ -1467,10 +1419,10 @@ void update_hero_motion_for_current_state(void) {
             fast_vec_add(&position_or_delta_scratch, &vD0, &hero.motion.velocity);
             FUN_001f9a28_c(&vC0,
                            &position_or_delta_scratch,
-                           &((struct MobyView *)hero.swing_target_moby)->u10.v10);
+                           &((struct MobyView *)hero.swing_target_moby)->pos.v);
             fast_vec_normalize(&vC0, &vC0, hero.swing_rope_length);
             fast_vec_add(&position_or_delta_scratch,
-                         &((struct MobyView *)hero.swing_target_moby)->u10.v10,
+                         &((struct MobyView *)hero.swing_target_moby)->pos.v,
                          &vC0);
             FUN_001f9a28_c(&hero.motion.velocity, &position_or_delta_scratch, &vD0);
             previous_swing_radius = hero.swing_rope_length;
@@ -1516,20 +1468,20 @@ void update_hero_motion_for_current_state(void) {
                     up = forward_component(&position_or_delta_scratch) > 0.0f;
                 }
                 if (up) {
-                    if (moby->b53 != 0x35) {
+                    if (moby->prev_seq != 0x35) {
                         set_hero_animation(0x35, 6, scale_game_frames(17));
                         hero.swing_anim_dir = 1;
-                    } else if (((struct MobyView *)hero.moby)->b52 ==
-                               ((struct MobyView *)hero.moby)->b53) {
+                    } else if (((struct MobyView *)hero.moby)->seq ==
+                               ((struct MobyView *)hero.moby)->prev_seq) {
                         adjust_hero_animation_speed_for_target_frame(42.0f, t, 0.5f, -1.0f);
                         hero.swing_anim_dir = 0;
                     }
                 } else {
-                    if (moby->b53 != 0x35) {
+                    if (moby->prev_seq != 0x35) {
                         set_hero_animation(0x35, 0x15, scale_game_frames(9));
                         hero.swing_anim_dir = 2;
-                    } else if (((struct MobyView *)hero.moby)->b52 ==
-                               ((struct MobyView *)hero.moby)->b53) {
+                    } else if (((struct MobyView *)hero.moby)->seq ==
+                               ((struct MobyView *)hero.moby)->prev_seq) {
                         adjust_hero_animation_speed_for_target_frame(12.0f, t, 0.5f, -1.0f);
                         hero.swing_anim_dir = 0;
                     }
@@ -1593,7 +1545,7 @@ void update_hero_motion_for_current_state(void) {
         hero.target_speed = 0.0f;
         if ((struct MobyView *)hero.melee_target != NULL) {
             f32 d = vector_distance_xy(&hero.motion.pos,
-                                       &((struct MobyView *)hero.melee_target)->u10.v10);
+                                       &((struct MobyView *)hero.melee_target)->pos.v);
             if (d > 2.0f && d < 5.0f) {
                 hero.target_speed = D_0015ED6C_c * 4.5f;
             }
@@ -1727,7 +1679,7 @@ void update_hero_motion_for_current_state(void) {
         hero.target_speed = 0.0f;
         if ((struct MobyView *)hero.melee_target != NULL &&
             scale_game_frames(4) > hero.state_timer) {
-            f32 d = vector_distance_xy(&((struct MobyView *)hero.melee_target)->u10.v10,
+            f32 d = vector_distance_xy(&((struct MobyView *)hero.melee_target)->pos.v,
                                        &hero.motion.pos) -
                     0.5f;
             f32 off;
@@ -1880,7 +1832,7 @@ void update_hero_motion_for_current_state(void) {
                 vector_or_hit_descriptor_scratch.f[3] = 5627.925f;
                 ((u8 *)&v10)[8] = 0;
                 a = hero.motion.rot.f[2];
-                ((s16 *)&v10)[5] = o->hA6;
+                ((s16 *)&v10)[5] = o->oclass;
                 matrix_or_vector_scratch[0].f[0] = fast_cos(a) * 0.8f;
                 matrix_or_vector_scratch[0].f[1] = fast_sin(a) * 0.8f;
                 matrix_or_vector_scratch[0].f[2] = 0.55f;
@@ -2202,14 +2154,14 @@ void update_hero_motion_for_current_state(void) {
                 f32 a;
                 f32 k;
                 FUN_001f9a28_c(&vector_or_descriptor_scratch,
-                               &((struct MobyView *)hero.grind_look_moby)->u10.v10,
+                               &((struct MobyView *)hero.grind_look_moby)->pos.v,
                                &hero.motion.pos);
                 transform_vector_by_basis(&vector_or_descriptor_scratch,
                                           &vector_or_descriptor_scratch,
                                           (Vec4 *)hero.inv_rot_matrix);
                 a = fast_arc_tan(vector_or_descriptor_scratch.f[0],
                                  vector_or_descriptor_scratch.f[1]);
-                if (((struct MobyView *)hero.moby)->b52 == 0x31) {
+                if (((struct MobyView *)hero.moby)->seq == 0x31) {
                     a = fast_subtract_rotations(a, 1.5707964f);
                     AN.f278 = a * 0.3f;
                     AN.f1C8 = a * 0.2f;
@@ -2218,15 +2170,15 @@ void update_hero_motion_for_current_state(void) {
                     AN.f278 = a * 0.3f;
                     AN.f1C8 = a * 0.5f;
                 }
-            } else if (((struct MobyView *)hero.moby)->b53 == 0x31) {
+            } else if (((struct MobyView *)hero.moby)->prev_seq == 0x31) {
                 AN.f278 = fast_add_rotations(-0.82030475f, hero.rail_lean);
                 AN.f118 = fast_add_rotations(0.7330383f, hero.rail_lean / 1.7f);
                 AN.f1C8 = fast_add_rotations(0.7330383f, hero.rail_lean / 1.7f);
-            } else if (((struct MobyView *)hero.moby)->b53 == 0x4B) {
+            } else if (((struct MobyView *)hero.moby)->prev_seq == 0x4B) {
                 AN.f278 = fast_add_rotations(0.13962634f, hero.rail_lean);
                 AN.f118 = fast_add_rotations(-0.06981317f, hero.rail_lean * 0.5f);
                 AN.f1C8 = fast_add_rotations(-0.06981317f, hero.rail_lean * 0.5f);
-            } else if (((struct MobyView *)hero.moby)->b53 == 0x4A) {
+            } else if (((struct MobyView *)hero.moby)->prev_seq == 0x4A) {
                 AN.f278 = fast_add_rotations(-0.82030475f, hero.rail_lean);
                 AN.f118 = fast_add_rotations(0.7330383f, hero.rail_lean / 1.7f);
                 AN.f1C8 = fast_add_rotations(0.7330383f, hero.rail_lean / 1.7f);
@@ -3264,7 +3216,7 @@ void update_hero_motion_for_current_state(void) {
     if (initial_state_step != hero.state.step) {
         hero.step_frames = 0;
     }
-    if (anim != moby->b53) {
+    if (anim != moby->prev_seq) {
         hero.anim_seq_frames = 0;
     }
 }
