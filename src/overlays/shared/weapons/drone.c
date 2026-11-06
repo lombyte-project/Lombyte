@@ -42,7 +42,7 @@ typedef int OvlQuad_2C9820 __attribute__((mode(TI)));
 typedef struct {
     u8 pad0[0x18];
     s32 moby; /* 0x18: passed to FUN_002141f8 (reads moby+0x34, moby+0x78); 0 when no moby was hit */
-    s32 unk1C; /* 0x1C: > 0 gates copying point and the normal into the hero (get_hero_idle_animation_index in shared/hero/hero_frame_update.c) */
+    s32 surface_type; /* 0x1C: hit face type word (CollisionHit.surface_type); > 0 gates copying point and the normal into the hero */
     union {
         OvlQuad_2C9820 q;
         f32            f[4];
@@ -88,12 +88,13 @@ typedef struct {
 
 /* Hit record passed to FUN_L00_00259a88; the drone builds it over its direction and rotated vectors. */
 typedef struct {
-    Vec4 direction; /* 0x00 */
-    s32  unk10[2];
-    u8   kind;   /* 0x18 */
-    u8   mode;   /* 0x19 */
-    u16  oclass; /* 0x1A */
-    f32  amount; /* 0x1C: read back after the hit */
+    Vec4 direction;   /* 0x00 */
+    s32  source_moby; /* 0x10: hit descriptor (record_moby_hit): MobyHit.source_moby */
+    s32  flags;       /* 0x14: MobyHit.flags */
+    u8   kind;        /* 0x18 */
+    u8   mode;        /* 0x19 */
+    u16  oclass;      /* 0x1A */
+    f32  amount;      /* 0x1C: read back after the hit */
 } BombHit;
 
 extern s32          D_L00_0015F5C4_2c8440 __asm__("D_L00_0015F5C4"); /* nonzero: no throws */

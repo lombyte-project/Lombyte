@@ -31,11 +31,12 @@ typedef union {
     f32  f[4];
 } V4;
 
+/* Suck cannon record of a chicken slot (state at +0x68, defaults from +0x78). */
 typedef struct {
     u8    pad00[0x70];
-    void *unk70;
+    void *sequences; /* 0x70: the class's sequence table, read by the suck cannon handlers */
     u8    pad74[0xB0 - 0x74];
-} Node;
+} SuckRecord;
 
 typedef struct {
     u8    pad00[0x10];
@@ -143,7 +144,7 @@ extern void         fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28")
 extern u8           D_0013E520[];
 extern Data         D_L00_00173E40;
 extern struct Moby *D_L00_001DD100[];
-extern Node         l00_morphoray_chicken_slot_records[] __asm__("D_L00_001DD150");
+extern SuckRecord   l00_morphoray_chicken_slot_records[] __asm__("D_L00_001DD150");
 extern u8           morphoray_chicken_slot_buffers[] __asm__("D_L00_001DDF10");
 extern s32          D_L00_00161854 __attribute__((sda));
 extern s32          D_L00_00161854_gp __asm__("D_L00_00161854") __attribute__((sda));
@@ -338,7 +339,7 @@ struct Moby *spawn_morphoray_chicken(State *source_state) {
                 moby_vars->slot_buffer =
                     (void *)(morphoray_chicken_slot_buffers + D_L00_00161854 * 0x60);
                 spawned_moby->flags |= 0x1020;
-                ((Node *)moby_vars->slot_record)->unk70 = (void *)D_L00_00161840;
+                ((SuckRecord *)moby_vars->slot_record)->sequences = (void *)D_L00_00161840;
             }
             ((Sub *)D_L00_001DD100[D_L00_00161854]->pvars)->expire_timer = (void *)1;
         } else if (!moby_vars->gold) {
@@ -346,7 +347,7 @@ struct Moby *spawn_morphoray_chicken(State *source_state) {
             moby_vars->slot_buffer =
                 (void *)(morphoray_chicken_slot_buffers + D_L00_00161854 * 0x60);
             spawned_moby->flags |= 0x1020;
-            ((Node *)moby_vars->slot_record)->unk70 = (void *)D_L00_00161840;
+            ((SuckRecord *)moby_vars->slot_record)->sequences = (void *)D_L00_00161840;
         }
         FUN_L00_002c92d8_c(moby_vars->slot_record);
         D_L00_001DD100[D_L00_00161854] = spawned_moby;
