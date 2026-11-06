@@ -96,6 +96,11 @@ register that nothing set on that path (to keep it live) as
 - **Locals and fields:** name them by what they hold (`count`, `next`), not by
   register or offset (`v1`, `unk_70`). Keep `unkXXX` only until the meaning is
   clear.
+- **Where names come from:** what the code does with the value first. SDK
+  code takes the names of the PS2 SDK headers (`sceSifServeData`,
+  `sceIpuDmaEnv`, `sceCdCLOCK`) or of newlib (`FILE`, `_reent`). A file-local
+  copy of a shared struct (a moby, a moby class) uses the names of its header
+  (`rnc/mobys/moby.h`), even when it keeps its own layout.
 
 ## Structs and data
 
