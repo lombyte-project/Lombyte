@@ -2,7 +2,6 @@
 #define LOMBYTE_RNC_UI_MENUS_MENU_SYSTEM_H
 
 #include "types.h"
-#include "rnc/math/vector.h"
 
 struct MenuScreen;
 
@@ -75,13 +74,13 @@ struct MenuSystem {
     s32              close_request;      /* 0x00C: nonzero closes the menu */
     s32              graphics_workspace; /* 0x010: buffer address D_001940C0[2] + 0xA0000 */
     s32              timer;              /* 0x014: 12 on a switch, 2 on close; counts down */
-    s32  saved_texture_start; /* 0x018: gs_texture_allocation_start to restore on close */
-    s32  current_gadget;      /* 0x01C: gadget of the queued preview animation, -1 none */
-    u8   pad_20[0x10];
-    s32  equipped[4];           /* 0x030: gadget id held by each slot */
-    Vec4 saved_camera_position; /* 0x040: debug camera position while paused */
-    Vec4 saved_camera_angles;   /* 0x050 */
-    u8   pad_60[0x40];
+    s32 saved_texture_start; /* 0x018: gs_texture_allocation_start to restore on close */
+    s32 current_gadget;      /* 0x01C: gadget of the queued preview animation, -1 none */
+    u8  pad_20[0x10];
+    s32 equipped[4];              /* 0x030: gadget id held by each slot */
+    f32 saved_camera_position[4]; /* 0x040: debug camera position while paused */
+    f32 saved_camera_angles[4];   /* 0x050 */
+    u8  pad_60[0x40];
 
     /* Preview animation stream */
     s32 stream_buffer[2];       /* 0x0A0: double buffer */
