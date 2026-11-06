@@ -35,11 +35,22 @@ typedef struct {
 #include "rnc/ui/menus/system/process_menu_entry_globals.h"
 
 /* Small data, defined above the code so it is reached $gp-relative. */
-s32             menu_help_hud_item __asm__("D_00160070") = -1;
-extern s32      world_update_time_macro __asm__("D_0015F60C") MACRO_ADDR;
-extern Suffixes menu_bolt_threshold_thousands_separators __asm__("D_001E8680");
-extern char     help_text_integer_placeholder[] __asm__("D_00160088");
-extern char     bolt_threshold_number_format[] __asm__("D_00160090");
+s32         menu_help_hud_item __asm__("D_00160070") = -1;
+extern s32  world_update_time_macro __asm__("D_0015F60C") MACRO_ADDR;
+extern char thousands_separator_comma[] __asm__("D_00160078");
+extern char thousands_separator_period[] __asm__("D_00160080");
+
+/* The thousands separator of each language. */
+const Suffixes menu_bolt_threshold_thousands_separators __asm__("D_001E8680") = {
+    {
+     thousands_separator_comma, thousands_separator_comma,
+     thousands_separator_comma, thousands_separator_period,
+     thousands_separator_comma, thousands_separator_period,
+     }
+};
+
+extern char help_text_integer_placeholder[] __asm__("D_00160088");
+extern char bolt_threshold_number_format[] __asm__("D_00160090");
 
 #include "rnc/game/item_state.h"
 #include "rnc/game/game_globals.h"
