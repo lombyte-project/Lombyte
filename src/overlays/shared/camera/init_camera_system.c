@@ -77,7 +77,7 @@ typedef struct {
 
 #include "rnc/overlay/shared/camera/level_camera.h"
 
-/* Sets h and clears b in the block l00_camera.unk180 points to. */
+/* Sets h and clears b in the block l00_camera.current_camera points to. */
 void initialize_camera_record_handoff_defaults(void) __asm__("FUN_L00_001eb448");
 
 void initialize_camera_record_handoff_defaults(void) {
@@ -144,7 +144,7 @@ void init_camera_system(void) {
     camera_record_vector_destination[1] = camera_vector_snapshot[1];
     camera_record_vector_destination[2] = camera_vector_snapshot[2];
     vector_copy_source = (float *)(D_0013E533 + 0xE9D);
-    vector_copy_destination = (float *)(&camera_system_state->unk190);
+    vector_copy_destination = (float *)(&camera_system_state->smoothed_hero);
     vector_copy_destination[0] = vector_copy_source[0];
     vector_copy_destination[1] = vector_copy_source[1];
     vector_copy_destination[2] = vector_copy_source[2];
@@ -204,15 +204,15 @@ void setup_level_cameras(void) {
     }
     camera_system_state_alias = &l00_camera;
     hero_state = &hero;
-    q = &camera_system_state_alias->unk190;
-    normalized_hero_vector = &camera_system_state_alias->unk190[32];
+    q = &camera_system_state_alias->smoothed_hero;
+    normalized_hero_vector = &camera_system_state_alias->smoothed_hero[32];
     *(int *)&camera_system_state_alias->previous_camera = 0;
     camera_system_state_alias->transition_mode = 0;
     fast_vec_normalize(normalized_hero_vector, (char *)(((int)hero_state->moby) + 0xE0), 1.0f);
-    qcopy(&camera_system_state_alias->unk1C0, normalized_hero_vector);
-    qcopy(&camera_system_state_alias->unk1D0, normalized_hero_vector);
-    clear_u64_value(&camera_system_state_alias->unk1D0[16]);
-    qcopy(&camera_system_state_alias->unk1D0[32], &hero_state->motion.pos);
+    qcopy(&camera_system_state_alias->gravity_up, normalized_hero_vector);
+    qcopy(&camera_system_state_alias->tracking, normalized_hero_vector);
+    clear_u64_value(&camera_system_state_alias->tracking[16]);
+    qcopy(&camera_system_state_alias->tracking[32], &hero_state->motion.pos);
     {
         float hero_rotation_z = hero_state->motion.rot.f[2];
         float hero_position_z = hero_state->motion.pos.f[2];

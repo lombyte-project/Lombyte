@@ -532,8 +532,8 @@ void initialize_hero_aligned_camera_mode(void) {
     camera_globals->transition_position_rate = 0.05f;
     camera_globals->transition_rotation_rate = 0.05f;
     FUN_L00_002e9ef0_v();
-    if (camera_globals->unk254 != 0)
-        allocate_voice_for_target_entry(0, 0, camera_globals->unk254);
+    if (camera_globals->camera_moby != 0)
+        allocate_voice_for_target_entry(0, 0, camera_globals->camera_moby);
 }
 
 void select_camera_mode_by_hero_vector_alignment(A_2ea810 *camera_object) __asm__("FUN_L00_002ea810");
@@ -556,7 +556,7 @@ void select_camera_mode_by_hero_vector_alignment(A_2ea810 *camera_object) {
         Q.transition_rotation_rate = 0.018f;
         return;
     }
-    comparison_axis = Q.unk1C0;
+    comparison_axis = Q.gravity_up;
     dot_product_or_asin_result = FUN_001f9ab0_2ea810(comparison_axis, camera_object);
     FUN_001f9a68_2ea810(scaled_axis_scratch, comparison_axis, dot_product_or_asin_result);
     FUN_001f9a28_2ea810(camera_vector_residual, camera_object, scaled_axis_scratch);
