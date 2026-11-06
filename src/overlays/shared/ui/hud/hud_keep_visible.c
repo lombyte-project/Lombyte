@@ -31,8 +31,8 @@ void reset_hud_animation_channels(void) {
 
     for (i = 0; i < 13; i++) {
         queue_animation_update(i, 0xFFFF, 0, 0, 0, 0, 1);
-        hud_elements[i].unk7C = 0;
-        hud_elements[i].unk6C = -6;
+        hud_elements[i].visible_timer = 0;
+        hud_elements[i].slide = -6;
         apply_pending_animation(&hud_elements[i]);
     }
 }
@@ -83,7 +83,7 @@ void apply_hud_slide_offset(HudElem *hud_element, int *x, int *y, int slide_inde
     int   dy = 0;
     float slide_scale;
 
-    if (hud_element->unk7C != 0) {
+    if (hud_element->visible_timer != 0) {
         slide_index -= slide_step;
     } else {
         slide_index += slide_step;
@@ -94,7 +94,7 @@ void apply_hud_slide_offset(HudElem *hud_element, int *x, int *y, int slide_inde
     if (slide_index > 23) {
         slide_index = 23;
     }
-    if (hud_element->unk7C != 0) {
+    if (hud_element->visible_timer != 0) {
         slide_scale = hud_slide_timer_active_scales[slide_index];
     } else {
         slide_scale = hud_slide_timer_inactive_scales[slide_index];
@@ -124,19 +124,19 @@ void apply_hud_slide_offset(HudElem *hud_element, int *x, int *y, int slide_inde
 void initialize_numeric_hud_values_and_dimensions(HudElem *hud_element) __asm__("FUN_L00_00235c80");
 
 void initialize_numeric_hud_values_and_dimensions(HudElem *hud_element) {
-    int *numeric_value_source = hud_element->unk0C;
+    int *numeric_value_source = hud_element->value_source;
     int  digits;
     int  decimal_quotient, flags, width;
     if (numeric_value_source && !((int)numeric_value_source & 3)) {
-        hud_element->unk78 = *numeric_value_source;
-        if (hud_element->unk08 < hud_element->unk78)
-            hud_element->unk78 = hud_element->unk08;
-        hud_element->unk74 = hud_element->unk78;
+        hud_element->target_value = *numeric_value_source;
+        if (hud_element->max_value < hud_element->target_value)
+            hud_element->target_value = hud_element->max_value;
+        hud_element->shown_value = hud_element->target_value;
     } else {
-        hud_element->unk78 = 99999;
-        hud_element->unk74 = 99999;
+        hud_element->target_value = 99999;
+        hud_element->shown_value = 99999;
     }
-    decimal_quotient = hud_element->unk08;
+    decimal_quotient = hud_element->max_value;
     digits = 0;
     flags = hud_element->flags;
     width = hud_element->h;
@@ -160,25 +160,25 @@ void initialize_numeric_hud_values_and_dimensions(HudElem *hud_element) {
 
 extern void initialize_numeric_hud_values_and_dimensions(HudElem *) __asm__("FUN_L00_00235c80");
 
-/* Sets unk7C to scale_game_frames(0xB4) + 0x1E, clears 0x48/0x4A, calls FUN_L00_00235c80. */
+/* Sets visible_timer to scale_game_frames(0xB4) + 0x1E, clears offset_x/offset_y, calls FUN_L00_00235c80. */
 void reset_numeric_hud_element(HudElem *hud_element) __asm__("FUN_L00_00235d80");
 
 void reset_numeric_hud_element(HudElem *hud_element) {
-    hud_element->unk7C = scale_game_frames(0xB4) + 0x1E;
-    hud_element->unk48 = 0;
-    hud_element->unk4A = 0;
+    hud_element->visible_timer = scale_game_frames(0xB4) + 0x1E;
+    hud_element->offset_x = 0;
+    hud_element->offset_y = 0;
     initialize_numeric_hud_values_and_dimensions(hud_element);
 }
 /* func_L00_00236710 for a 32 x 32 element. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236750), where it is exact; names translated to the US level program. */
 
-/* Sets unk7C to scale_game_frames(0xB4) + 0x1E, clears 0x48/0x4A, w/h 0x20, calls 00235c80. */
+/* Sets visible_timer to scale_game_frames(0xB4) + 0x1E, clears offset_x/offset_y, w/h 0x20, calls 00235c80. */
 void reset_numeric_hud_element_32x32_base(HudElem *hud_element) __asm__("FUN_L00_00235dc0");
 
 void reset_numeric_hud_element_32x32_base(HudElem *hud_element) {
-    hud_element->unk7C = scale_game_frames(0xB4) + 0x1E;
-    hud_element->unk48 = 0;
-    hud_element->unk4A = 0;
+    hud_element->visible_timer = scale_game_frames(0xB4) + 0x1E;
+    hud_element->offset_x = 0;
+    hud_element->offset_y = 0;
     hud_element->w = 0x20;
     hud_element->h = 0x20;
     initialize_numeric_hud_values_and_dimensions(hud_element);
@@ -197,8 +197,9 @@ s32 hud_keep_visible(s32 key, s32 minimum_visible_frames) {
     }
     if (i < 13 && hud_elements[i].unk68 == 0) {
         hud_element = hud_elements + i;
-        hud_element->unk7C = (minimum_visible_frames < hud_element->unk7C) ? hud_element->unk7C
-                                                                           : minimum_visible_frames;
+        hud_element->visible_timer = (minimum_visible_frames < hud_element->visible_timer)
+                                         ? hud_element->visible_timer
+                                         : minimum_visible_frames;
         return 0;
     }
     return 1;
@@ -215,21 +216,21 @@ void hud_update_counter(e) HudElem *e __asm__("FUN_L00_00235ea0");
     int            d;
     int            s;
 
-    if (e->unk0C != 0) {
-        v = *e->unk0C;
-        cap = e->unk08;
+    if (e->value_source != 0) {
+        v = *e->value_source;
+        cap = e->max_value;
         if (v < 0) {
             v = 0;
         }
-        e->unk78 = v;
+        e->target_value = v;
         if (cap < v) {
-            e->unk78 = cap;
+            e->target_value = cap;
         }
     }
-    if (e->unk74 != e->unk78) {
-        e->unk7C = scale_game_frames(0xB4);
-        if (e->unk6C >= 0x18) {
-            int t = e->unk74 - e->unk78;
+    if (e->shown_value != e->target_value) {
+        e->visible_timer = scale_game_frames(0xB4);
+        if (e->slide >= 0x18) {
+            int t = e->shown_value - e->target_value;
             d = t < 0 ? -t : t;
             if (d != 0) {
                 s = truncate_float_to_s32(square_root(convert_integer_to_float(d) / 25.0f) * 5.0f);
@@ -244,17 +245,17 @@ void hud_update_counter(e) HudElem *e __asm__("FUN_L00_00235ea0");
                 c[3] += s;
                 if (c[3] > scale_game_frames(2)) {
                     s = c[3] / scale_game_frames(2);
-                    if (e->unk78 < e->unk74) {
-                        e->unk74 = e->unk74 - s;
+                    if (e->target_value < e->shown_value) {
+                        e->shown_value = e->shown_value - s;
                     } else {
-                        e->unk74 = e->unk74 + s;
+                        e->shown_value = e->shown_value + s;
                     }
                     c[3] -= s * scale_game_frames(2);
                 }
             }
         }
     }
-    if (e->unk7C >= scale_game_frames(5)) {
+    if (e->visible_timer >= scale_game_frames(5)) {
         if (c[0] < scale_game_frames(8)) {
             c[0]++;
         } else if (c[1] < scale_game_frames(8)) {
@@ -262,7 +263,7 @@ void hud_update_counter(e) HudElem *e __asm__("FUN_L00_00235ea0");
         }
     } else {
         if (c[1] != 0 || c[0] != 0) {
-            e->unk6C = 1;
+            e->slide = 1;
         }
         if (c[1] != 0) {
             c[1]--;
@@ -281,24 +282,24 @@ void update_numeric_hud_element_direct_value(HudElem *hud_element) {
     int            sampled_value;
     int            cap;
 
-    if (hud_element->unk0C != 0) {
-        sampled_value = *hud_element->unk0C;
-        cap = hud_element->unk08;
+    if (hud_element->value_source != 0) {
+        sampled_value = *hud_element->value_source;
+        cap = hud_element->max_value;
         if (sampled_value < 0) {
             sampled_value = 0;
         }
-        hud_element->unk78 = sampled_value;
+        hud_element->target_value = sampled_value;
         if (cap < sampled_value) {
-            hud_element->unk78 = cap;
+            hud_element->target_value = cap;
         }
     }
-    if (hud_element->unk74 != hud_element->unk78) {
-        hud_element->unk7C = scale_game_frames(0xB4);
-        if (hud_element->unk6C >= 0x18) {
-            hud_element->unk74 = hud_element->unk78;
+    if (hud_element->shown_value != hud_element->target_value) {
+        hud_element->visible_timer = scale_game_frames(0xB4);
+        if (hud_element->slide >= 0x18) {
+            hud_element->shown_value = hud_element->target_value;
         }
     }
-    if (hud_element->unk7C >= scale_game_frames(5)) {
+    if (hud_element->visible_timer >= scale_game_frames(5)) {
         if (hud_counters[0] < scale_game_frames(8)) {
             hud_counters[0]++;
         } else if (hud_counters[1] < scale_game_frames(8)) {
@@ -306,7 +307,7 @@ void update_numeric_hud_element_direct_value(HudElem *hud_element) {
         }
     } else {
         if (hud_counters[1] != 0 || hud_counters[0] != 0) {
-            hud_element->unk6C = 1;
+            hud_element->slide = 1;
         }
         if (hud_counters[1] != 0) {
             hud_counters[1]--;
@@ -430,21 +431,21 @@ int draw_hud_stars(HudElem *element) {
 
     {
         int width = D_L00_0015F760;
-        x = element->unk50;
-        y = element->unk54;
+        x = element->x;
+        y = element->y;
         element->w = width;
         element->h = D_L00_0015F764;
     }
     hud_screen_position(element, &x, &y);
-    apply_hud_slide_offset(element, &x, &y, element->unk6C, 0);
+    apply_hud_slide_offset(element, &x, &y, element->slide, 0);
 
     {
         int left_inset = D_L00_0015F760 * 0xD0;
         int top_inset = D_L00_0015F764 * 0xA0;
         int bar_width = D_L00_0015F760 * 0x260;
         int bottom = D_L00_0015F764 * 0xEA0;
-        int left = (x + element->unk48) << 4;
-        int top = (y + element->unk4A) << 4;
+        int left = (x + element->offset_x) << 4;
+        int top = (y + element->offset_y) << 4;
         int right;
         left += left_inset / 64;
         top += top_inset / 256;
@@ -453,14 +454,14 @@ int draw_hud_stars(HudElem *element) {
         append_screen_rect_packet(left, top, right, bottom, 0x80684C2F, 1);
     }
 
-    if (element->unk74 * 3 < 10001) {
+    if (element->shown_value * 3 < 10001) {
         frames = scale_game_frames(1);
         seconds = scale_time(0.75f);
         previous = (D_L00_0015F3F8 - 1) % (int)((float)frames * 60.0f) < (int)(seconds * 60.0f);
     } else {
         previous = 0;
     }
-    if (element->unk74 * 3 < 10001) {
+    if (element->shown_value * 3 < 10001) {
         frames = scale_game_frames(1);
         seconds = scale_time(0.75f);
         current = D_L00_0015F3F8 % (int)((float)frames * 60.0f) < (int)(seconds * 60.0f);
@@ -475,7 +476,7 @@ int draw_hud_stars(HudElem *element) {
     sixteen = 16.0f;
     thirty_two = 32.0f;
     draw_rotated_hud_sprite(
-        image, x + element->unk48, y + element->unk4A, D_L00_0015F760, D_L00_0015F764, 0x80);
+        image, x + element->offset_x, y + element->offset_y, D_L00_0015F760, D_L00_0015F764, 0x80);
 
     {
         float center_x, center_y, half_w, half_h;
@@ -483,8 +484,8 @@ int draw_hud_stars(HudElem *element) {
         half_h = -(D_L00_0015F764 * D_L00_0015F76C * 0.5f) / 116.0f;
         origin[2] = 1.0f;
         origin[3] = 1.0f;
-        center_x = D_L00_0015F760 * D_L00_0015F768 * 0.5f + (x + element->unk48);
-        center_y = D_L00_0015F764 * D_L00_0015F76C * 0.5f + (y + element->unk4A);
+        center_x = D_L00_0015F760 * D_L00_0015F768 * 0.5f + (x + element->offset_x);
+        center_y = D_L00_0015F764 * D_L00_0015F76C * 0.5f + (y + element->offset_y);
         direction[0] = (center_x + (1.0f - D_L00_0015F768) * 0.5f * D_L00_0015F760) * sixteen;
         direction[1] = (center_y + (1.0f - D_L00_0015F76C) * 0.5f * D_L00_0015F764) * sixteen;
         direction[2] = 0.0f;
@@ -492,7 +493,7 @@ int draw_hud_stars(HudElem *element) {
         origin[0] = half_w * sixteen;
         origin[1] = half_h * sixteen;
     }
-    offset = (float)(10000 - element->unk74) / 10000.0f;
+    offset = (float)(10000 - element->shown_value) / 10000.0f;
     offset = 116.0f - (offset + offset) * 116.0f;
     image = get_icon_frame(*(int *)element, 2);
 
@@ -562,16 +563,16 @@ int draw_uniform_size_hud_stars(HudElem *hud_element) {
     s32   image;
     int   star_width, i;
 
-    x = hud_element->unk50;
-    y = hud_element->unk54;
+    x = hud_element->x;
+    y = hud_element->y;
     hud_element->w = D_L00_0015F760;
     hud_element->h = D_L00_0015F764;
     hud_screen_position(hud_element, &x, &y);
-    apply_hud_slide_offset(hud_element, &x, &y, hud_element->unk6C, 0);
+    apply_hud_slide_offset(hud_element, &x, &y, hud_element->slide, 0);
     image = get_icon_frame(*(int *)hud_element, 0);
     draw_rotated_hud_sprite(image,
-                            x + hud_element->unk48,
-                            y + hud_element->unk4A,
+                            x + hud_element->offset_x,
+                            y + hud_element->offset_y,
                             D_L00_0015F760,
                             D_L00_0015F764,
                             0x80);
@@ -581,8 +582,8 @@ int draw_uniform_size_hud_stars(HudElem *hud_element) {
         half_h = -(D_L00_0015F764 * D_L00_0015F76C * 0.5f) / 116.0f;
         origin[2] = 1.0f;
         origin[3] = 1.0f;
-        center_x = D_L00_0015F760 * D_L00_0015F768 * 0.5f + (x + hud_element->unk48);
-        center_y = D_L00_0015F764 * D_L00_0015F76C * 0.5f + (y + hud_element->unk4A);
+        center_x = D_L00_0015F760 * D_L00_0015F768 * 0.5f + (x + hud_element->offset_x);
+        center_y = D_L00_0015F764 * D_L00_0015F76C * 0.5f + (y + hud_element->offset_y);
         direction[0] = (center_x + (1.0f - D_L00_0015F768) * 0.5f * D_L00_0015F760) * 16.0f;
         direction[1] = (center_y + (1.0f - D_L00_0015F76C) * 0.5f * D_L00_0015F764) * 16.0f;
         direction[2] = 0.0f;
@@ -590,7 +591,7 @@ int draw_uniform_size_hud_stars(HudElem *hud_element) {
         origin[0] = half_w * 16.0f;
         origin[1] = half_h * 16.0f;
     }
-    offset = (10000 - hud_element->unk74) / 10000.0f;
+    offset = (10000 - hud_element->shown_value) / 10000.0f;
     offset = 116.0f - (offset + offset) * 116.0f;
     image = get_icon_frame(*(int *)hud_element, 1);
     clear_u64_value(first_step);

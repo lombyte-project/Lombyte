@@ -32,10 +32,10 @@ void hud_release_held_element(void) {
 
 typedef struct {
     u8  pad[0x48];
-    s16 unk48;
-    s16 unk4A;
+    s16 offset_x;
+    s16 offset_y;
     u8  pad2[0x7C - 0x4C];
-    s32 unk7C;
+    s32 visible_timer;
 } HudElemX;
 
 extern void initialize_numeric_hud_values_and_dimensions(void *) __asm__("FUN_L00_00235c80");
@@ -46,9 +46,9 @@ void initialize_trick_combo_hud(HudElemX *hud_element) __asm__("FUN_L05_00262ae8
 void initialize_trick_combo_hud(HudElemX *hud_element) {
     s32  i;
     s32 *reset_slot;
-    hud_element->unk7C = scale_game_frames(0xB4) + 0x1E;
-    hud_element->unk48 = 0;
-    hud_element->unk4A = 0;
+    hud_element->visible_timer = scale_game_frames(0xB4) + 0x1E;
+    hud_element->offset_x = 0;
+    hud_element->offset_y = 0;
     i = 3;
     reset_slot = &D_L05_0015FAFC;
     for (; i >= 0; i--) {

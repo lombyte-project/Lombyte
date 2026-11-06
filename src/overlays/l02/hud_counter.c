@@ -78,8 +78,8 @@ s32 draw_hud_counter(HudElem *hud_element) {
     if (fade[0] == 0) {
         return hud_element->w;
     }
-    x = hud_element->unk50;
-    y = hud_element->unk54;
+    x = hud_element->x;
+    y = hud_element->y;
     hud_screen_position(hud_element, &x, &y);
     left = x < 0x101;
     if (left) {
@@ -103,9 +103,9 @@ s32 draw_hud_counter(HudElem *hud_element) {
     } else if (shade < 0.0f) {
         shade = 0.0f;
     }
-    sprintf(text, hud_counter_decimal_format, hud_element->unk74);
+    sprintf(text, hud_counter_decimal_format, hud_element->shown_value);
     alpha = truncate_float_to_s32((f32)truncate_float_to_s32(grow * 128.0f) * 0.7f);
-    if (hud_element->unk08 < 10) {
+    if (hud_element->max_value < 10) {
         full_bar_width = l02_hud_counter_narrow_bar_width;
     } else {
         full_bar_width = l02_hud_counter_wide_bar_width;

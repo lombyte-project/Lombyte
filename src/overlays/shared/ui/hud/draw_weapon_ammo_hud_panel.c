@@ -213,19 +213,19 @@ int update_hud_elements(int call) {
     hud_timer_refresh_control = &D_L00_0017E4D8;
     do {
         if ((hud_element->unk04 & 0x10) || hud_timer_refresh_control->b != 0) {
-            if (hud_element->unk7C < scale_game_frames(10)) {
-                hud_element->unk7C = scale_game_frames(10);
+            if (hud_element->visible_timer < scale_game_frames(10)) {
+                hud_element->visible_timer = scale_game_frames(10);
             }
         }
-        if (hud_element->unk7C > 0 && --hud_element->unk7C > 0) {
+        if (hud_element->visible_timer > 0 && --hud_element->visible_timer > 0) {
             positive_timer_count++;
-            if (hud_element->unk6C < 30)
-                hud_element->unk6C++;
+            if (hud_element->slide < 30)
+                hud_element->slide++;
         } else {
-            if (hud_element->unk6C >= -5)
-                hud_element->unk6C--;
+            if (hud_element->slide >= -5)
+                hud_element->slide--;
         }
-        if (hud_element->unk68 && hud_element->unk6C == -6) {
+        if (hud_element->unk68 && hud_element->slide == -6) {
             apply_pending_animation(hud_element);
         }
         if (call && hud_element->update) {
