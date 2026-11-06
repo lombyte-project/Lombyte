@@ -43,7 +43,7 @@ struct MenuPage {
  *
  * Evidence for the less obvious fields:
  * - close_request: nonzero makes update_menu_system call close_menu_system (release the
- *   page, state 20); 1 from a screen update, 3 with travel_level..unkF4 set
+ *   page, state 20); 1 from a screen update, 3 with travel_level..travel_state set
  *   (fun_00221968, draw_map_screen), 3/4/5 from update_menu_entry_actions.
  * - equipped: D_001863D8[id] +0 names the slot; draw_menu_item_grid draws the
  *   held item with frame +1; load_hand_gadget builds the preview mobys from
@@ -63,7 +63,7 @@ struct MenuPage {
  *   selected class.
  * - unk134 / unk138: while set, pages with flags 8 / 4 are skipped
  *   (find_next_pause_page) and grid items with those flags draw frame +2.
- * - The buffer addresses (graphics_workspace, unkFC..stream_buffer_base) are carved from
+ * - The buffer addresses (graphics_workspace, first_base..stream_buffer_base) are carved from
  *   D_001940C0[1] / [2] by FUN_00218f98.
  */
 struct MenuSystem {
@@ -99,19 +99,19 @@ struct MenuSystem {
     struct MenuPage *previous; /* 0x0D0: page left by the last switch */
     s32 save_prompt_variant; /* 0x0D4: 0 saving_data_menu, 1/2 saving_data_menu2; picks draw_prompt_box text */
     s32 goodies_tab_shown; /* 0x0D8: render_level_effects_and_screen_sprites draws slot 6 only while set */
-    s32 unkDC;             /* 0x0DC: pause_all_sounds: (mode == 0x23) */
-    s32 save_slot;         /* 0x0E0: memcard_make_whole_save / memcard_restore_game argument */
-    s32 travel_level;       /* 0x0E4: written with travel_page/unkF4 before close_request 3 */
+    s32 sequence_autoclose; /* 0x0DC: pause_all_sounds mode 0x23; the timed sequence closes the menu at its end and start/select close it only with L1+L2+R1+R2+triangle held */
+    s32 save_slot;          /* 0x0E0: memcard_make_whole_save / memcard_restore_game argument */
+    s32 travel_level; /* 0x0E4: written with travel_page/travel_state before close_request 3 */
     f32 saved_tan_half_fov; /* 0x0E8: view tan_half_fov while paused */
     s32 action_message;     /* 0x0EC: menu_action_messages[] entry (update_menu_entry_actions) */
     struct MenuPage *
         travel_page; /* 0x0F0: menu_system.current, or map_circle_destination_page (draw_map_screen) */
-    s32 unkF4;       /* 0x0F4: 0, 2, 0xB or 0xF */
-    s32 unkF8;       /* 0x0F8: read by pause_all_sounds */
+    s32 travel_state; /* 0x0F4: state resumed with travel_page (0, 2, 0xB or 0xF); the level copy restores it as pending_state */
+    s32 unkF8;        /* 0x0F8: read by pause_all_sounds */
 
     /* Buffers carved at init (FUN_00218f98) */
-    s32 unkFC;              /* 0x0FC: from D_001940C0[1] */
-    s32 unk100;             /* 0x100: from D_001940C0[2] */
+    s32 first_base; /* 0x0FC: allocation cursor in D_001940C0[1]; the level copy allocates from it */
+    s32 second_base;        /* 0x100: allocation cursor in D_001940C0[2] */
     s32 preview_workspace;  /* 0x104: D_001940C0[1] + 0xA0000 */
     s32 help_text_buffer;   /* 0x108: help text read target, D_001940C0[1] + 0xDC000 */
     s32 stream_buffer_base; /* 0x10C: D_001940C0[2] + 0x180000 */

@@ -83,7 +83,7 @@ s32 update_timed_menu_sequence(struct MenuScreen *menu) {
     s32 previous_counter_value;
 
     flag = (((struct PadStateWords *)&controller_state)->buttons.held_pressed & 0xF) == 0xF;
-    if ((menu_system.unkDC == 0) ||
+    if ((menu_system.sequence_autoclose == 0) ||
         (flag &&
          (((s32)((struct PadStateWords *)&controller_state)->buttons.held_pressed) & 0x10))) {
         if ((controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) &&
@@ -231,7 +231,7 @@ s32 update_timed_menu_sequence(struct MenuScreen *menu) {
 
     case WAIT_FOR_FINAL_DELAY:
         if (menu->data.timed.timer == 0) {
-            if (menu_system.unkDC != 0) {
+            if (menu_system.sequence_autoclose != 0) {
                 return 1;
             }
         }

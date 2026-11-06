@@ -40,9 +40,9 @@ struct GameState {
     u8          padDC[8];
     void       *travel_level;       /* 0xE4: level, movie or scene for close_request */
     f32         saved_tan_half_fov; /* 0xE8 */
-    void       *unkEC;
-    struct Own *pending_owner;
-    s32         pending_state;
+    void       *action_message;     /* 0xEC */
+    struct Own *pending_owner;      /* 0xF0: travel_page in the boot copy */
+    s32         pending_state;      /* 0xF4: travel_state in the boot copy */
     u8          padF8[4];
     s32         first_base;         /* 0xFC: render archive allocation */
     s32         second_base;        /* 0x100 */

@@ -68,7 +68,7 @@ void pause_all_sounds(s32 mode) {
     {
         struct MenuSystem         *g = &menu_system;
         struct MenuTextListScreen *head = &pause_menu_chain_head;
-        g->unkDC = mode == 0x23;
+        g->sequence_autoclose = mode == 0x23;
         head->list.up = g->goodies_tab_shown ? (struct MenuScreen *)&pause_goodies_tab
                                              : (struct MenuScreen *)&pause_menu_chain_tail;
     }

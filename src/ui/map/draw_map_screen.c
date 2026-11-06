@@ -99,7 +99,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
         }
         if ((controller_state.pressed_unmasked & PAD_CIRCLE) && level_map_selection.level != 0) {
             menu_system.travel_page = (struct MenuPage *)map_circle_destination_page;
-            menu_system.unkF4 = 0xB;
+            menu_system.travel_state = 0xB;
             menu_system.close_request = 3;
             menu_system.travel_level = level_map_selection.level;
             allocate_voice_for_target_entry(0, 0x11, screen->moby);
