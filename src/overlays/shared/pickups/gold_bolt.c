@@ -33,13 +33,13 @@ enum {
 typedef struct {
     s32   id; /* collected flag index (gold_bolts_collected + level * 4), -1 none */
     u8    pad4[8];
-    s16   unkC; /* nonzero: collect at once, no cutscene */
+    s16   collect_without_cutscene; /* nonzero: collect at once, no cutscene */
     u8    padE[2];
     Vec4f home; /* spawn position; w = spawn yaw */
     u8    pad20[0x40];
-    f32   unk60;
-    f32   unk64;
-    f32   unk68;
+    f32   spin_z_step;
+    f32   spin_y_step;
+    f32   spin_x_step;
     s32   timer; /* frames until the pickup finishes */
 } Vars;
 
@@ -496,11 +496,11 @@ void gold_bolt_update(struct Moby *moby) {
         moby->rot.y = random_angle_radians();
         moby->rot.z = random_angle_radians();
         moby->rot.w = random_angle_radians();
-        gold_bolt_instance_vars->unk68 =
+        gold_bolt_instance_vars->spin_x_step =
             gold_bolt_spin_x_degrees_per_second_gp * 0.017453292f * frame_time_macro;
-        gold_bolt_instance_vars->unk64 =
+        gold_bolt_instance_vars->spin_y_step =
             gold_bolt_spin_y_degrees_per_second_gp * 0.017453292f * frame_time_macro;
-        gold_bolt_instance_vars->unk60 =
+        gold_bolt_instance_vars->spin_z_step =
             gold_bolt_spin_z_degrees_per_second_gp * 0.017453292f * frame_time_macro;
         moby->state = GOLD_BOLT_WAIT_FOR_PICKUP;
         initialize_gold_bolt_data(moby);
@@ -534,7 +534,7 @@ void gold_bolt_update(struct Moby *moby) {
         if (hero.vehicle_mode != 3 && hero.vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT) {
             return;
         }
-        if (gold_bolt_instance_vars->unkC != 0) {
+        if (gold_bolt_instance_vars->collect_without_cutscene != 0) {
             D_L01_0015F640 = scale_game_frames(180);
             queue_dialogue_message(0x53B3, -1);
             gold_bolts_collected[gold_bolt_instance_vars->id + current_level_index_macro * 4] = 1;

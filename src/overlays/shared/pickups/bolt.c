@@ -41,20 +41,20 @@ typedef struct {
     Vec4         vel;  /* 0x20 */
     Vec4         spin; /* 0x30 */
     u8           pad40[8];
-    f32          unk48;       /* 0x48 */
-    f32          unk4C;       /* 0x4C */
-    f32          unk50;       /* 0x50 */
-    u8           landed;      /* 0x54 */
-    u8           unk55;       /* 0x55 */
-    u8           hop_frames;  /* 0x56 */
-    u8           hop_left;    /* 0x57 */
-    f32          unk58;       /* 0x58 */
-    void        *ground_moby; /* 0x5C */
-    struct Bolt *unk60;       /* 0x60 */
-    f32          speed;       /* 0x64 */
-    f32          ground_z;    /* 0x68 */
-    s16          slot;        /* 0x6C */
-    s16          slot_timer;  /* 0x6E */
+    f32          attraction_angle_y; /* 0x48 */
+    f32          attraction_angle_z; /* 0x4C */
+    f32          unk50;              /* 0x50 */
+    u8           landed;             /* 0x54 */
+    u8           unk55;              /* 0x55 */
+    u8           hop_frames;         /* 0x56 */
+    u8           hop_left;           /* 0x57 */
+    f32          unk58;              /* 0x58 */
+    void        *ground_moby;        /* 0x5C */
+    struct Bolt *unk60;              /* 0x60 */
+    f32          speed;              /* 0x64 */
+    f32          ground_z;           /* 0x68 */
+    s16          slot;               /* 0x6C */
+    s16          slot_timer;         /* 0x6E */
 } BoltVars;
 
 typedef struct Bolt {
@@ -423,12 +423,12 @@ void bolt_update(Bolt *bolt_moby) {
         fast_vec_add(&bolt_moby->pos, &bolt_moby->pos, &v->vel);
         fast_vec_sub(&collection_offset, &hero.motion.body_center, &bolt_moby->pos);
         if (v->speed < fast_vec_length(&collection_offset)) {
-            if (!(v->unk4C == 0.0f && v->unk48 == 0.0f)) {
+            if (!(v->attraction_angle_z == 0.0f && v->attraction_angle_y == 0.0f)) {
                 transform_vector_by_basis(
                     &collection_offset, &collection_offset, hero.inv_rot_matrix);
                 clear_u64_value(&attraction_rotation_angles);
-                attraction_rotation_angles.f[1] = v->unk48;
-                attraction_rotation_angles.f[2] = v->unk4C;
+                attraction_rotation_angles.f[1] = v->attraction_angle_y;
+                attraction_rotation_angles.f[2] = v->attraction_angle_z;
                 euler_rotation_basis(attraction_rotation_basis, &attraction_rotation_angles);
                 transform_vector_by_basis(
                     &collection_offset, &collection_offset, attraction_rotation_basis);
