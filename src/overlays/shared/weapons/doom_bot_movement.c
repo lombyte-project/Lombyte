@@ -64,12 +64,12 @@ typedef struct {
 
 typedef struct {
     u8   pad0[0x18];
-    Hit *unk18;
+    Hit *moby;
 } XD;
 
 typedef struct Cls_2C0CF8 {
     char  pad0[0x24];
-    float unk24; /* 0x24 */
+    float scale; /* 0x24 */
 } Cls_2C0CF8;
 
 typedef struct Mob_2C0CF8 {
@@ -435,9 +435,9 @@ f32 select_moby_heading_by_collision_probes(Mob *moby,
                 }
             }
         } else {
-            if ((*(XD *)D_L00_00173E40).unk18 == x->p38 ||
-                ((*(XD *)D_L00_00173E40).unk18 != 0 && (*(XD *)D_L00_00173E40).unk18->p24 != 0 &&
-                 (*(XD *)D_L00_00173E40).unk18->p24->h46 == 5)) {
+            if ((*(XD *)D_L00_00173E40).moby == x->p38 ||
+                ((*(XD *)D_L00_00173E40).moby != 0 && (*(XD *)D_L00_00173E40).moby->p24 != 0 &&
+                 (*(XD *)D_L00_00173E40).moby->p24->h46 == 5)) {
                 *probe_distance_score_out = 100.0f;
                 return arc;
             }
@@ -585,7 +585,7 @@ int try_start_moby_hop(Mob_2C0CF8 *moby, Blk *block, void *target, int check_lin
 
     can_halve = 1;
     func_001F9BF0_2C0CF8(jump, target, moby->pos);
-    func_L00_001FF5B0_2C0CF8(moby->spatial_scale * 5.2f / moby->p24->unk24, jump, jump);
+    func_L00_001FF5B0_2C0CF8(moby->spatial_scale * 5.2f / moby->p24->scale, jump, jump);
     func_001F9BD8_2C0CF8(land, moby->pos, jump);
     func_001F9C30_2C0CF8(half, jump, 0.5f);
     half_length = func_001F9CE8_2C0CF8(half);
@@ -601,7 +601,7 @@ int try_start_moby_hop(Mob_2C0CF8 *moby, Blk *block, void *target, int check_lin
         }
         return 0;
     }
-    if (moby->spatial_scale * 3.0f / moby->p24->unk24 < jump[2]) {
+    if (moby->spatial_scale * 3.0f / moby->p24->scale < jump[2]) {
         if (can_halve) {
             return try_start_moby_hop(moby, block, half, 1);
         }
@@ -617,18 +617,18 @@ int try_start_moby_hop(Mob_2C0CF8 *moby, Blk *block, void *target, int check_lin
         }
         return 0;
     }
-    land[2] = land[2] + moby->spatial_scale * 0.025f / moby->p24->unk24;
+    land[2] = land[2] + moby->spatial_scale * 0.025f / moby->p24->scale;
     if (probe_moby_raised_sphere_collision(moby, 6, land)) {
         if (can_halve) {
             return try_start_moby_hop(moby, block, half, 1);
         }
         return 0;
     }
-    land[2] = land[2] - moby->spatial_scale * 0.025f / moby->p24->unk24;
+    land[2] = land[2] - moby->spatial_scale * 0.025f / moby->p24->scale;
     qcopy_nc(from, moby->pos);
-    from[2] = from[2] + moby->spatial_scale * 0.2f / moby->p24->unk24;
+    from[2] = from[2] + moby->spatial_scale * 0.2f / moby->p24->scale;
     qcopy_nc(to, land);
-    to[2] = to[2] + moby->spatial_scale * 0.2f / moby->p24->unk24;
+    to[2] = to[2] + moby->spatial_scale * 0.2f / moby->p24->scale;
     if (check_line) {
         if (func_L00_001EFFF0_2C0CF8(from, to, 6, moby, 0) == 0) {
             if (can_halve) {
