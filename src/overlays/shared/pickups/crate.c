@@ -65,7 +65,7 @@ typedef struct {
 typedef struct {
     u8           pad00[0x20];
     Coll         coll;
-    u64          unk40;
+    u64          velocity; /* 0x40: start of the velocity vector, cleared at init */
     u8           pad48[0xA0 - 0x48];
     struct Moby *rider; /* crate stacked on this one */
     struct Moby *below; /* crate this one sits on */
@@ -75,8 +75,8 @@ typedef struct {
     s32          frameB4;
     u64          saved_spawn_frame; /* saved moby spawn_frame word */
     u8           padC0[0xC6 - 0xC0];
-    s16          unkC6;
-    u8           unkC8;
+    s16          drop_mode; /* 0xC6: nonzero drops ammo pickups (100 for class 0x1FF) */
+    u8           respawns;  /* 0xC8 */
     u8           respawn_delay_timer;
     u8           burst_frame;
     u8           padCB[0xFC - 0xCB];
@@ -304,8 +304,8 @@ void crate_update(struct Moby *moby) {
 
     switch (moby->state) {
     case CRATE_STATE_INITIALIZE:
-        clear_u64_value(&crate_vars->unk40);
-        if (D_0015ED84 == 0x12 && moby->oclass == 0x1FF && crate_vars->unkC8 != 0) {
+        clear_u64_value(&crate_vars->velocity);
+        if (D_0015ED84 == 0x12 && moby->oclass == 0x1FF && crate_vars->respawns != 0) {
             moby->state = CRATE_STATE_WAIT_RESPAWN;
             moby->flags |= 0x41;
             moby->collision = 0;
@@ -319,7 +319,7 @@ void crate_update(struct Moby *moby) {
         }
         crate_vars->flags |= 0x14;
         if (moby->oclass == 0x1FF) {
-            crate_vars->unkC6 = 100;
+            crate_vars->drop_mode = 100;
         } else if (moby->oclass == 0x1F5) {
             create_linked_class_0326_moby(moby);
         }
@@ -382,7 +382,7 @@ void crate_update(struct Moby *moby) {
             break;
         }
         break_crate(moby, moby->oclass == 0x1F9, hit_contact);
-        if (crate_vars->unkC8 != 0 && hit_contact != NULL && hit_contact->hit.s.moby != NULL) {
+        if (crate_vars->respawns != 0 && hit_contact != NULL && hit_contact->hit.s.moby != NULL) {
             s16 hit_moby_class_id = hit_contact->hit.s.moby->oclass;
 
             if (hit_moby_class_id == 0x2CD || hit_moby_class_id == 0x22C) {
@@ -424,7 +424,7 @@ void crate_update(struct Moby *moby) {
             crate_vars->burst_frame++;
             break;
         }
-        if (crate_vars->unkC8 != 0) {
+        if (crate_vars->respawns != 0) {
             moby->flags |= 1;
             moby->collision = 0;
             moby->flags &= ~0x1000;
