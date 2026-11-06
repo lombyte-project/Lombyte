@@ -54,10 +54,10 @@ typedef struct TeleporterVars {
     char *parts[3];
     f32   part_extension;
     f32   part_tilt;
-    s32   unk28;
-    s32   unk2C;
-    s32   unk30;
-    s32   unk34;
+    s32   part_extension_speed; /* f32 bits */
+    s32   part_tilt_speed;      /* f32 bits */
+    s32   music_track;          /* request_music_track (FUN_L01_0027a248) on arrival, -1: none */
+    s32   music_transition;
     u8    pad_38[0x4];
     f32   ring_radius;
 } TeleporterVars;
@@ -129,8 +129,8 @@ void teleporter_update(struct Moby *moby) {
             break;
         allocate_voice_for_target_entry(0, 0, (void *)moby);
         moby->state = TELEPORTER_OPEN_PARTS;
-        teleporter_instance_vars->unk28 = 0;
-        teleporter_instance_vars->unk2C = 0;
+        teleporter_instance_vars->part_extension_speed = 0;
+        teleporter_instance_vars->part_tilt_speed = 0;
         request_hero_target_pose(&moby->pos.x, 0, moby->rot.z);
         FUN_L00_002598b0_2518((int)moby, 1.5f, &moby->pos, 0x10000, 20.0f, 1.0f, 0, 1, 0);
         break;
@@ -139,14 +139,14 @@ void teleporter_update(struct Moby *moby) {
         int teleport_transition_status = get_hero_target_pose_status();
         if (teleporter_instance_vars->part_extension < 1.0f) {
             advance_accelerated_scalar(&teleporter_instance_vars->part_extension,
-                                       (float *)&teleporter_instance_vars->unk28,
+                                       (float *)&teleporter_instance_vars->part_extension_speed,
                                        1.0f,
                                        teleporter_parts_acceleration_gp * frame_time_sq,
                                        teleporter_parts_deceleration_gp * frame_time_sq,
                                        teleporter_parts_max_speed_gp * frame_time);
         } else if (teleporter_instance_vars->part_tilt < 1.0f) {
             advance_accelerated_scalar(&teleporter_instance_vars->part_tilt,
-                                       (float *)&teleporter_instance_vars->unk2C,
+                                       (float *)&teleporter_instance_vars->part_tilt_speed,
                                        1.0f,
                                        teleporter_parts_acceleration_gp * frame_time_sq,
                                        teleporter_parts_deceleration_gp * frame_time_sq,
@@ -181,9 +181,10 @@ void teleporter_update(struct Moby *moby) {
             destination_position[2] += 0.2f;
             FUN_L00_00216f90_2518(destination_position, destination_moby + 0x40, 0, 1);
             D_001413F5_lui = 1;
-            if (teleporter_instance_vars->unk30 != -1 && teleporter_instance_vars->unk34 != -1) {
-                FUN_L01_0027a248_2518(teleporter_instance_vars->unk30,
-                                      teleporter_instance_vars->unk34);
+            if (teleporter_instance_vars->music_track != -1 &&
+                teleporter_instance_vars->music_transition != -1) {
+                FUN_L01_0027a248_2518(teleporter_instance_vars->music_track,
+                                      teleporter_instance_vars->music_transition);
             }
             FUN_L11_002f3040_2518(destination_moby);
             MOBY(destination_moby)->state = TELEPORTER_RESET;
@@ -196,8 +197,8 @@ void teleporter_update(struct Moby *moby) {
             moby->state = TELEPORTER_WAIT_FOR_ACTIVATION;
             teleporter_instance_vars->part_extension = 0.0f;
             teleporter_instance_vars->part_tilt = 0.0f;
-            *(float *)&teleporter_instance_vars->unk28 = 0.0f;
-            *(float *)&teleporter_instance_vars->unk2C = 0.0f;
+            *(float *)&teleporter_instance_vars->part_extension_speed = 0.0f;
+            *(float *)&teleporter_instance_vars->part_tilt_speed = 0.0f;
             teleporter_instance_vars->ring_radius = 1.95f;
             update_teleporter_child_transforms(moby);
         }
@@ -210,14 +211,14 @@ void teleporter_update(struct Moby *moby) {
             approach_value(&teleporter_instance_vars->ring_radius, 1.95f, frame_time * 4.0f);
         } else if (0.0f < teleporter_instance_vars->part_tilt) {
             advance_accelerated_scalar(&teleporter_instance_vars->part_tilt,
-                                       (float *)&teleporter_instance_vars->unk28,
+                                       (float *)&teleporter_instance_vars->part_extension_speed,
                                        0.0f,
                                        teleporter_parts_acceleration_gp * frame_time_sq,
                                        teleporter_parts_deceleration_gp * frame_time_sq,
                                        teleporter_parts_max_speed_gp * frame_time);
         } else if (0.0f < teleporter_instance_vars->part_extension) {
             advance_accelerated_scalar(&teleporter_instance_vars->part_extension,
-                                       (float *)&teleporter_instance_vars->unk2C,
+                                       (float *)&teleporter_instance_vars->part_tilt_speed,
                                        0.0f,
                                        teleporter_parts_acceleration_gp * frame_time_sq,
                                        teleporter_parts_deceleration_gp * frame_time_sq,

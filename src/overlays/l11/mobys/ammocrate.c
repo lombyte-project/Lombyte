@@ -80,7 +80,7 @@ void ammocrate_update(struct Moby *m) __asm__("FUN_L11_0030f728");
 typedef struct AmmocrateVars {
     u8           pad_0[0x10];
     f32          velocity[4];
-    f32          unk20[4];
+    f32          position_offset[4];
     f32          wobble_phase;
     struct Moby *child;
     u8           pad_38[0x38];
@@ -191,7 +191,7 @@ void ammocrate_update(struct Moby *pickup) {
         fast_vec_scale(pickup_vars->velocity, pickup_vars->velocity, 0.9f);
         pickup_vars->velocity[2] -= frame_time_sq * 9.8f;
         fast_vec_add(pickup_vars, pickup_vars, pickup_vars->velocity);
-        fast_vec_add(&pickup->pos, pickup_vars, pickup_vars->unk20);
+        fast_vec_add(&pickup->pos, pickup_vars, pickup_vars->position_offset);
         if (sync_ship_pickup_child_pose(pickup, pickup_vars)) {
             if (pickup_vars->child->seq == 1) {
                 fast_vec_scale(pickup_vars->velocity, pickup_vars->velocity, 0.8f);
@@ -214,7 +214,7 @@ void ammocrate_update(struct Moby *pickup) {
             fast_vec_add(pickup_vars->velocity, pickup_vars->velocity, &pickup_vector_scratch);
         }
         fast_vec_add(pickup_vars, pickup_vars, pickup_vars->velocity);
-        fast_vec_add(&pickup->pos, pickup_vars, pickup_vars->unk20);
+        fast_vec_add(&pickup->pos, pickup_vars, pickup_vars->position_offset);
         if (sync_ship_pickup_child_pose(pickup, pickup_vars)) {
             if (pickup_vars->child->state == 2) {
                 pickup->state = pickup_vars->child->state;

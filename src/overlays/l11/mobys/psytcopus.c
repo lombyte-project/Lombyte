@@ -46,11 +46,11 @@ struct PokiPathVars {
     struct KnockbackMotion knockback; /* 0x70 */
     Vec4f                  goal;      /* 0xD0 */
     u8                     pad_E0[0x30];
-    struct Moby           *target; /* 0x110 */
-    s32                    unk114; /* 0x114 */
+    struct Moby           *target;        /* 0x110 */
+    s32                    target_status; /* 0x114 */
     u8                     pad_118[0x18];
-    s32                    unk130;     /* 0x130 */
-    s32                    start_path; /* 0x134 */
+    s32                    starts_on_path; /* 0x130 */
+    s32                    start_path;     /* 0x134 */
     u8                     pad_138[4];
     s32                    path_index; /* 0x13C */
     f32                    reach;      /* 0x140 */
@@ -132,7 +132,7 @@ void psytcopus_update(struct Moby *psytcopus) {
         if (psytcopus->prev_seq != 0) {
             blend_moby_animation(psytcopus, 0, 0, scale_game_frames(10));
         }
-        if (psytcopus_vars->unk130 != 0) {
+        if (psytcopus_vars->starts_on_path != 0) {
             psytcopus->state = 1;
             qcopy(&psytcopus->pos, (char *)(s32 *)l11_paths[psytcopus_vars->start_path] + 0x10);
             break;
@@ -153,7 +153,7 @@ void psytcopus_update(struct Moby *psytcopus) {
                        frame_time_sq * 6.2831855f,
                        frame_time * 6.2831855f);
     }
-        if (psytcopus_vars->unk114 != 2) {
+        if (psytcopus_vars->target_status != 2) {
             psytcopus->state = PSYTCOPUS_STATE_CREATE_PROJECTILE;
             if (psytcopus->prev_seq != 2) {
                 blend_moby_animation(psytcopus, 2, 0, scale_game_frames(10));
@@ -381,7 +381,7 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
             psytcopus, &psytcopus_vars->goal, 0, 0, path + 4, *path, psytcopus_vars->reach) != 2 &&
         (psytcopus_vars->reach < vector_distance_xy(&psytcopus->pos, &psytcopus_vars->goal) ||
          absolute_float(psytcopus->pos.z - psytcopus_vars->goal.z) > 3.0f)) {
-        psytcopus_vars->unk114 = 2;
+        psytcopus_vars->target_status = 2;
     }
     if (psytcopus_vars->target == 0) {
         psytcopus_vars->target = D_001413D0;
