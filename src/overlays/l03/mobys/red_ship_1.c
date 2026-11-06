@@ -524,7 +524,7 @@ typedef struct RedShip1Vars {
     u8  pad_110[0x4];
     f32 roll_spring_velocity;
     u8  pad_118[0x4];
-    f32 unk11C;
+    f32 pitch_spring_velocity;
     u8  pad_120[0xC];
     s16 timer_12C;
     u8  pad_12E[0x3];
@@ -684,7 +684,7 @@ void red_ship_1_update(char *moby) {
         MOBY(moby)->rot.z = fast_arc_tan(spline_moby_pvars->segment_end_tangent[0] - zero[0],
                                          spline_moby_pvars->segment_end_tangent[1] - zero[1]);
         spline_moby_pvars->roll_spring_velocity = 0.0f;
-        spline_moby_pvars->unk11C = 0.0f;
+        spline_moby_pvars->pitch_spring_velocity = 0.0f;
         *(OvlQuad *)&MOBY(moby)->pos = *(OvlQuad *)&spline_moby_pvars->prev_spline_position[0];
         add_moby_rotation_based_offsets(moby, moby_position);
         spline_moby_pvars->unk131 = 7;
