@@ -46,9 +46,9 @@ extern void spawn_explosion(void *,
                             int) __asm__("FUN_L00_0025e450");
 
 typedef struct {
-    void        *unk0;
+    void        *damage_record; /* creature header: points at health */
     u8           pad4[0x8];
-    void        *unkC;
+    void        *hit_flash_record; /* creature header: points at hit_flash */
     u8           pad10[0x10];
     f32          health;
     s16          max_health;
@@ -59,7 +59,7 @@ typedef struct {
     u8           pad2B[5];
     f32          unk30;
     u8           pad34[0x2C];
-    u8           unk60[0x10];
+    u8           hit_flash[0x10];
     struct Moby *parent;
 } Vars;
 
@@ -77,8 +77,8 @@ struct Moby *spawn_blarg_turret_child(struct Moby *parent) {
     if (child_moby != 0) {
         child_vars = (Vars *)child_moby->pvars;
         child_vars->parent = parent;
-        child_vars->unk0 = &child_vars->health;
-        child_vars->unkC = child_vars->unk60;
+        child_vars->damage_record = &child_vars->health;
+        child_vars->hit_flash_record = child_vars->hit_flash;
         child_moby->update_dist = parent->update_dist;
         child_moby->draw_dist = child_vars->parent->draw_dist;
         child_moby->visible = 1;

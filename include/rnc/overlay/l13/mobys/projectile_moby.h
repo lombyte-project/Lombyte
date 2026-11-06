@@ -24,10 +24,15 @@ typedef struct ProjectileMoby {
     char                 pad28[4];
     float                scale;
     char                 pad30;
-    unsigned char        b31;
+    unsigned char        visible;
     char                 pad32[0xE];
     ProjectileVec4       rot;
-    char                 pad50[0x28];
+    char                 pad50[2];
+    char                 seq;
+    char                 prev_seq;
+    char                 pad54[0x1C];
+    char                 anim_flags;
+    char                 pad71[7];
     void                *data;
     char                 pad7C[0x2A];
     short                cls_id;
