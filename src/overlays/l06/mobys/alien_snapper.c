@@ -136,7 +136,7 @@ typedef struct {
     f32   f1C8;                   /* 0x1C8 */
     s32   f1CC;                   /* 0x1CC */
     u8    pad1D0[0x10];
-    u8    f1E0[0x10]; /* 0x1E0 */
+    u8    big_head_manipulator[0x10]; /* 0x1E0 */
 } SnapperVars_91A8;
 
 typedef struct {
@@ -292,7 +292,7 @@ void alien_snapper_update(Moby *moby) {
     float bite_query_position[4];
 
     update_alien_snapper_hit_response_and_targeting(moby);
-    func_L00_00264B40_91A8(2.3f, moby, 1, snapper_behavior->f1E0);
+    func_L00_00264B40_91A8(2.3f, moby, 1, snapper_behavior->big_head_manipulator);
     if (moby->visible != 0 && fast_vec_dist(&moby->pos, D_L06_00167540_macro) < 27.0f) {
         func_L00_0025B178_91A8(moby);
         moby->shadow_range = 0x15;

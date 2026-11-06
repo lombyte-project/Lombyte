@@ -77,7 +77,7 @@ typedef struct {
     float   turn_speed;
     float   move_speed;
     float   movement_yaw_offset;
-    u8      unk200[0x40];
+    u8      big_head_manipulator[0x40];
     ToadVec wander_center;
     float   unk250;
     float   unk254;
@@ -215,7 +215,7 @@ void horny_toad_update(Moby *moby) {
         FUN_L00_0025a120_2d4610(moby);
         moby->shadow_range = 0x15;
     }
-    FUN_L00_00263ac8_2d4610(2.1f, (int)moby, 1, horny_toad_vars->unk200);
+    FUN_L00_00263ac8_2d4610(2.1f, (int)moby, 1, horny_toad_vars->big_head_manipulator);
     switch (moby->state) {
     case HORNY_TOAD_INITIALIZE: {
         float k;

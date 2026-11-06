@@ -243,7 +243,7 @@ typedef struct {
     /* 0x294 */ float         navigation_arrive_distance;
     /* 0x298 */ int           outside_path_return_active;
     /* 0x29C */ int           death_landing_particles_emitted;
-    /* 0x2A0 */ char          unk2A0[0x10];
+    /* 0x2A0 */ char          big_head_manipulator[0x10];
 } Varsd3e50;
 
 extern float        D_0015ED6C;
@@ -311,7 +311,7 @@ void sand_shark_update(struct Moby *moby) {
     *(volatile unsigned int *)0x10000010 = 0x81;
     *(volatile unsigned int *)0x10000000 = 0;
     sand_shark_behavior_vars = (Varsd3e50 *)moby->pvars;
-    FUN_L00_00263ac8_e50(moby, 0, sand_shark_behavior_vars->unk2A0, 2.1f);
+    FUN_L00_00263ac8_e50(moby, 0, sand_shark_behavior_vars->big_head_manipulator, 2.1f);
     if (moby->visible != 0 && fast_vec_dist(&moby->pos, D_L02_001673C0_e50) < 28.0f) {
         FUN_L00_0025a120_e50(moby);
         moby->shadow_range = 0x16;

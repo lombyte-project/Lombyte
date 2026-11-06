@@ -120,7 +120,7 @@ typedef struct {
     u8                       pad1AC[0x34];
     Vec4                     muzzle_position;
     u8                       pad1F0[0x210];
-    u8                       unk400[1];
+    u8                       big_head_manipulator[1];
 } Vars_309330;
 
 extern int move_moby_with_ground_and_collision_checks(
@@ -194,7 +194,7 @@ void blarg_space_commando_update(struct Moby *moby) {
 
     FUN_L13_00308d10_c(moby);
     target = blarg_space_commando_vars->target;
-    FUN_L00_00263ac8(2.5f, moby, 1, blarg_space_commando_vars->unk400);
+    FUN_L00_00263ac8(2.5f, moby, 1, blarg_space_commando_vars->big_head_manipulator);
     if (moby->visible != 0 && fast_vec_dist(&moby->pos, D_L13_001670C0) < 28.0f) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 0x16;

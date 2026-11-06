@@ -79,7 +79,7 @@ typedef struct {
     u8                       pad1B0[0x50];
     Vec4                     melee_sweep_previous_position;
     u8                       pad210[0x210];
-    u8                       unk420[1];
+    u8                       big_head_manipulator[1];
 } Moby1068Vars;
 
 extern f32 D_L06_00161FA8 __attribute__((sda));
@@ -151,7 +151,7 @@ void blarg_space_commando_update(struct Moby *moby) {
 
     FUN_L06_002feb40_u(moby);
     target = blarg_commando_state->target;
-    FUN_L00_00263ac8(moby, 1, blarg_commando_state->unk420, 2.5f);
+    FUN_L00_00263ac8(moby, 1, blarg_commando_state->big_head_manipulator, 2.5f);
     if (moby->visible != 0 && fast_vec_dist(&moby->pos, &D_L06_00167540) < 27.0f) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 0x15;

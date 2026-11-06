@@ -88,7 +88,7 @@ typedef struct LargeAmoeboidVars {
     s32                      activation_volume;
     s32                      target_search_gate_moby_index;
     u8                       pad264[0xc];
-    u8                       unk270[0x4];
+    u8                       big_head_manipulator[0x4];
 } LargeAmoeboidVars;
 
 typedef int u128_2F0040 __attribute__((mode(TI)));
@@ -251,7 +251,7 @@ void large_amoeboid_update(unsigned char *moby) {
         MOBY(moby)->flags |= 1;
         return;
     }
-    FUN_L00_00263ac8(2.9f, moby, 0, &large_amoeboid_vars->unk270);
+    FUN_L00_00263ac8(2.9f, moby, 0, &large_amoeboid_vars->big_head_manipulator);
     if (MOBY(moby)->visible != 0 && fast_vec_dist(&MOBY(moby)->pos, camera_pos) < 28.0f) {
         FUN_L00_0025a120(moby);
         MOBY(moby)->shadow_range = 0x16;
