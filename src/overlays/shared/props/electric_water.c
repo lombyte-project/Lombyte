@@ -55,9 +55,9 @@ typedef struct {
 } HitRecord;
 
 typedef struct {
-    float unk0;
-    float unk4;
-    float unk8;
+    float red; /* the colour, as PointLight.color */
+    float green;
+    float blue;
     int   unkC;
     Vec4  pos; /* w: radius */
 } Light29FF90;
@@ -293,10 +293,10 @@ void electric_water_update(struct Moby *moby) {
                     } else {
                         Light29FF90 *light = &D_L15_001808C0[electric_water_controller_vars->light];
                         qcopy(&light->pos, &electric_water_controller_vars->bolt_start);
-                        light->unk0 = 1.0f;
+                        light->red = 1.0f;
                         light->pos.f[3] = 8.0f;
-                        light->unk4 = 1.0f;
-                        light->unk8 = 0.5f;
+                        light->green = 1.0f;
+                        light->blue = 0.5f;
                         light->unkC = 0;
                     }
                     initialize_electric_water_bolt_effect((char *)moby);
