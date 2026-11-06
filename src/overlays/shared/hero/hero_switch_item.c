@@ -1054,7 +1054,7 @@ void start_equipped_item_animation(void) {
         slot_animation_id = item_defs[item_id].animation_mode_12;
     P->item_anim_active = 1;
     {
-        s32 k = item_defs[item_id].unk30;
+        s32 k = item_defs[item_id].weapon_up;
         P->weapon_up = k;
     }
     animation_step_divisor = scale_game_frames(10);
@@ -2741,7 +2741,7 @@ extern void matrix_from_basis_rows(void *, void *) __asm__("FUN_L00_001ffcf8");
 extern void update_hero_motion_and_collision_probes(void) __asm__("FUN_L00_00221310");
 extern void update_hero_timers_and_reach_state(void) __asm__("FUN_L00_002215c8");
 
-/* Per-frame hero input: stick (or d-pad) into unk1D20/24, the yaw and position
+/* Per-frame hero input: stick (or d-pad) into stick_x/stick_y, the yaw and position
    history rings, then the hero basis matrix and the movement updates. */
 void hero_update(void) __asm__("FUN_L00_00211670");
 
@@ -2831,7 +2831,7 @@ int test_hero_animation_frame_window(float animation_frame_threshold) {
     return 0;
 }
 
-/* Clears hero.target_speed and unk194 as words. */
+/* Clears hero.target_speed and ground_speed as words. */
 void clear_hero_target_and_ground_speeds(void) __asm__("FUN_L00_002118b0");
 
 void clear_hero_target_and_ground_speeds(void) {
@@ -2925,7 +2925,7 @@ void stick_target(float scale, int mode) {
     hero.target_speed = scale * vector_length_xy(&stick_vector);
 }
 
-/* Hero speed clamp after a move update (twin of hero_speed_from_table): in state 0x3F it scales unk190 by 3.5 frame steps with a floor; otherwise it picks a table speed, and in state 0x73 it slows by 0.8 down to a floor. */
+/* Hero speed clamp after a move update (twin of hero_speed_from_table): in state 0x3F it scales target_speed by 3.5 frame steps with a floor; otherwise it picks a table speed, and in state 0x73 it slows by 0.8 down to a floor. */
 void update_hero_target_speed_from_stick(void) __asm__("FUN_L00_00211be8");
 
 void update_hero_target_speed_from_stick(void) {
@@ -3790,15 +3790,15 @@ void resolve_hero_collisions_with_history(void) {
 #include "rnc/sdk/eetypes.h"
 /*
  * Hero movement step (FUN_L01_00233de0 twin; control mode 0xF caps the horizontal speed, 0xD and 0xE skip the cap): clamps the velocity, moves the hero by it (plus the
- * one-frame impulse at unk920 and the push at unkF0), runs collision, then
+ * one-frame impulse move_impulse and the push platform_delta), runs collision, then
  * derives this frame's movement vectors and speeds:
- *   motion.unk100  position change this frame
- *   motion.unk110  movement direction scaled by the velocity along it
- *   motion.unk120  same, without the gravity-up component
- *   motion.unk130  same, gravity-up part only
- *   motion.unk140  displacement caused by the push
- *   motion.speed_xy  speed, unk164 horizontal speed, unk168 forward speed
- *   motion.unk16C  slope: vertical / horizontal change, clamped to +-0.5
+ *   motion.displacement  position change this frame
+ *   motion.resolved_velocity  movement direction scaled by the velocity along it
+ *   motion.resolved_velocity_z  same, without the gravity-up component
+ *   motion.resolved_velocity_xy  same, gravity-up part only
+ *   motion.platform_carry  displacement caused by the push
+ *   motion.speed_xy  speed, flat_speed horizontal speed, forward_speed forward speed
+ *   motion.move_slope  slope: vertical / horizontal change, clamped to +-0.5
  */
 
 /* The FUN_L00_00233xxx helpers work in the hero's gravity frame (hero byte
@@ -3936,7 +3936,7 @@ void apply_hero_motion_and_resolve_collisions(void) {
     }
     fast_vec_sub(&hero.motion.platform_carry, &hero.motion.pos, &movement_scratch_vector);
     {
-        /* push w moves to unk140.w; a block-local keeps retail's order */
+        /* push w moves to platform_carry.w; a block-local keeps retail's order */
         f32 push_w = hero.motion.platform_delta.f[3];
 
         hero.motion.platform_delta.f[3] = 0.0f;
@@ -4082,7 +4082,7 @@ void steer_hero_planar_velocity(f32 step) {
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: HeroAirAccel). */
 void air_accel(f32 step) __asm__("FUN_L01_00234358");
 
-/* Same steering as FUN_L00_00213e68, without the copy into motion.unk130. */
+/* Same steering as FUN_L00_00213e68, without the copy into motion.resolved_velocity_xy. */
 void air_accel(f32 step) {
     struct Hero *player = &hero;
     f32          delta[4];
@@ -4306,7 +4306,7 @@ tail:
         if (z < floor) {
             z = floor;
         }
-        /* Fakematch: unk20AD is a u8, so this test never fires. It only
+        /* Fakematch: tilt_disabled is a u8, so this test never fires. It only
            keeps g alive past the subtraction, which gives retail's
            mov.s $f2,$f0; every clean spelling (MIN/MAX, helpers, ternary,
            a constant in a variable) folds g into the sub.s instead. */

@@ -76,7 +76,7 @@ void initialize_hero(void) {
         clear_u64_value(&hero_eases_lui[i].pos);
         clear_u64_value(&hero_eases_lui[i].pos_vel);
     }
-    /* the eight voice slots unk2218..unk2234 as one array, indexed from the hero base */
+    /* the eight voice slots grind_voice..0x2234 as one array, indexed from the hero base */
     for (i = 0; i < 8; i++)
         ((struct {
             u8  pad[0x2218];

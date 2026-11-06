@@ -39,11 +39,11 @@ extern void sync_hero_slot3_animation_speed(void) __asm__("FUN_L00_00232128");
 extern void sync_hero_mapped_moby_animation_speed(void) __asm__("FUN_L00_002322c8");
 
 /* Hero animation frame advance: steps the hero moby's frame position
-   (unk54) by the rate in hero.anim_speed/unkA94 or a scripted table, moves to
+   (anim_time) by the rate in hero.anim_frame_rate or a scripted table, moves to
    the next frame of the sequence each time it passes 1.0 (wrapping or
-   jumping as hero.anim_loop_frame/unkAB4/unkAB8 request), fires the sequence's sound
+   jumping as hero.queued_anim_frame and queued_frame_request request), fires the sequence's sound
    triggers crossed this frame, keeps the moby's looping sound in step,
-   and records the distance moved (hero.anim_frame/unkAAC). */
+   and records the distance moved (hero.anim_frame_delta). */
 void advance_hero_animation(void) __asm__("FUN_L00_00232670");
 
 void advance_hero_animation(void) {

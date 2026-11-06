@@ -402,7 +402,7 @@ extern f32 D_0015EE18;
    symbol (D_0015EDB0[3]) changes the code */
 #define BYTE_0015EDB3 (*(u8 *)0x15EDB3)
 
-/* In hero state 2, sets the lean values from motion.unk188 (clamped to
+/* In hero state 2, sets the lean values from motion.yaw_error (clamped to
    +-1.4); needs the moby in item slot 3. */
 void update_hero_lean_and_sway_parameters(void) __asm__("FUN_L00_00215ef8");
 
