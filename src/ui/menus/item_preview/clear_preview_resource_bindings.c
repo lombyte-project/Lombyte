@@ -21,7 +21,7 @@ void clear_preview_resource_bindings(void) {
     if (resource_index < (resource_index + menu_system.preview_resource_count)) {
         u8 *class_slots = resident_class_slot_by_id;
         u8 *class_resources = (u8 *)moby_class_resources;
-        u8 *bindings = preview_resource_bindings;
+        u8 *bindings = (u8 *)preview_resource_bindings;
 
         binding_base = bindings;
         binding = (PreviewResourceBinding *)((resource_index * 8) + binding_base);
@@ -39,3 +39,24 @@ void clear_preview_resource_bindings(void) {
     }
     menu_system.preview_resource_count = 0;
 }
+
+PreviewResourceBinding preview_resource_bindings[PREVIEW_RESOURCE_BINDING_COUNT] = {
+    /* {moby class id, animation index in its class} */
+    {168,  5},
+    {657,  1},
+    { 74,  3},
+    {497,  1},
+    {497,  2},
+    {497,  3},
+    {203,  3},
+    {186,  8},
+    {186,  9},
+    {186, 10},
+    {483,  3},
+    {634,  8},
+    {188,  3},
+    {433,  3},
+    {163,  4},
+    {619,  3},
+    {270,  4},
+};

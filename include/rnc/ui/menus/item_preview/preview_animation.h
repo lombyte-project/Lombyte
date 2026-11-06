@@ -28,6 +28,14 @@ typedef struct {
     s32 animation_index;
 } PreviewResourceBinding;
 
+/* The animations a gadget preview streams in: gadget_animations
+   (rnc/weapons/hand_gadget.h) names a range of these per gadget, the
+   highest ending at 17. */
+#define PREVIEW_RESOURCE_BINDING_COUNT 17
+
+extern PreviewResourceBinding
+    preview_resource_bindings[PREVIEW_RESOURCE_BINDING_COUNT] __asm__("D_001D59D8");
+
 extern f32 ammo_preview_offsets[6] __asm__("D_001D5E90");
 
 extern f32 ammo_preview_velocities[6] __asm__("D_001D5EA8");
