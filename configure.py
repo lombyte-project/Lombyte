@@ -940,6 +940,7 @@ OVERLAY_SN_UNITS = {
 # link fails when the section is not SIZE bytes.  Both the assembly-backed and
 # the promoted (normalized) unit names resolve to the same retail bytes.
 RODATA_OVERLAYS = {
+    "ui/text/copy_text_to_shared_buffer": (0x1E7AA8, 0xE8A28, 19),  # "(Message too long)"
     "_dtoa_r": (0x152310, 0x53290, 88),  # Infinity/NaN/0 strings, f64 literals, switch table
     # _getpic's switch emits a 5-entry jump table (0x14 bytes) that retail
     # stored at 0x153AA0 inside core_rdata; the expected object references it
@@ -973,7 +974,7 @@ RODATA_OVERLAYS = {
     "ui/help/draw_help": (0x1E7A70, 0xE89F0, 28),  # switch table (migrated)
     "ui/help/dismiss_help": (0x1E7A20, 0xE89A0, 32),  # switch table (migrated)
     "_sceFs_Rcv_Intr": (0x1528E0, 0x53860, 100),  # retail switch table (jtbl_001528E0)
-    "ui/menus/system/process_menu_entry": (0x1E86A0, 0xE9620, 24),  # retail switch table (jtbl_001E86A0)
+    "ui/menus/system/process_menu_entry": (0x1E8680, 0xE9600, 56),  # thousands separators, switch table (jtbl_001E86A0)
     "draw_sky_shells": (0x1E8910, 0xE9890, 24),  # switch table
     "ui/menus/system/update_timed_menu_sequence": (0x1E8810, 0xE9790, 80),  # switch table
     "mobys/animation/update_resident_dialogue_animation_state": (0x1E8A90, 0xE9A10, 52),  # switch table
