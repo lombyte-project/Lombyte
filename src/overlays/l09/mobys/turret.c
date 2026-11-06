@@ -56,11 +56,11 @@ typedef struct {
 
 typedef struct {
     u8  pad0[0x160];
-    f32 unk160;
+    f32 shake_amplitude;
     u8  pad164[4];
     s32 longer_shot_response_frame_count;
     u8  pad16C[4];
-    f32 unk170;
+    f32 shake2_amplitude;
     u8  pad174[4];
     s32 shorter_shot_response_frame_count;
 } TurretShake;
@@ -263,10 +263,10 @@ void turret_update(struct Moby *moby) {
                     moby_point_position(moby, 1, &muzzle);
                     spawn_turret_shot(moby, &muzzle, &shot, scale_game_frames(90));
                     allocate_voice_for_target_entry(0, 0, moby);
-                    l09_turret_shot_response_state.unk160 = 0.03f;
+                    l09_turret_shot_response_state.shake_amplitude = 0.03f;
                     l09_turret_shot_response_state.longer_shot_response_frame_count =
                         scale_game_frames(10);
-                    l09_turret_shot_response_state.unk170 = 0.03f;
+                    l09_turret_shot_response_state.shake2_amplitude = 0.03f;
                     l09_turret_shot_response_state.shorter_shot_response_frame_count =
                         scale_game_frames(7);
                     turret_vars->barrel = 0;
@@ -312,10 +312,10 @@ void turret_update(struct Moby *moby) {
                     moby_point_position(moby, 2, &muzzle);
                     spawn_turret_shot(moby, &muzzle, &shot, scale_game_frames(90));
                     allocate_voice_for_target_entry(0, 0, moby);
-                    l09_turret_shot_response_state.unk160 = 0.03f;
+                    l09_turret_shot_response_state.shake_amplitude = 0.03f;
                     l09_turret_shot_response_state.longer_shot_response_frame_count =
                         scale_game_frames(10);
-                    l09_turret_shot_response_state.unk170 = 0.03f;
+                    l09_turret_shot_response_state.shake2_amplitude = 0.03f;
                     l09_turret_shot_response_state.shorter_shot_response_frame_count =
                         scale_game_frames(7);
                     turret_vars->barrel = 1;
