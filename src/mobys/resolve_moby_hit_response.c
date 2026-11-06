@@ -28,9 +28,9 @@ typedef struct {
     } u;
     T_25a478 *tgt;
     u8        pad24[4];
-    u8        state;
-    u8        sub;
-    u16       kind;
+    u8        attack_type;    /* 0x28: MobyHit.attack_type */
+    u8        attack_subtype; /* 0x29 */
+    u16       source_class;   /* 0x2A */
     f32       f2C;
 } P_25a478;
 
@@ -95,7 +95,7 @@ s32 resolve_moby_hit_response(O_25a478 *hit_recipient_moby,
         SUBSTATE_GATED_COOLDOWN_DAMAGE_CLEARING_HIT_STATE = 7
     };
     enum {
-        FALLBACK_RESPONSE_HIT_STATE = 8
+        FALLBACK_ATTACK_TYPE = 8
     };
     enum {
         FALLBACK_HIT_KIND = 0x47
@@ -146,8 +146,8 @@ s32 resolve_moby_hit_response(O_25a478 *hit_recipient_moby,
         V_25a478 *hit_vector = &hit_record->u.pos;
         fast_vec_scale(hit_vector,
                        hit_vector,
-                       hit_vector_scale_table[hit_vector_scale_row][hit_record->state]);
-        kind = hit_record->kind;
+                       hit_vector_scale_table[hit_vector_scale_row][hit_record->attack_type]);
+        kind = hit_record->source_class;
         hit_record->u.s.f1C = 5627.9248f;
         if (kind == FALLBACK_HIT_KIND) {
             hit_blend_vector.f[0] =
@@ -166,28 +166,28 @@ s32 resolve_moby_hit_response(O_25a478 *hit_recipient_moby,
         }
     } else {
         if (!hit_record->tgt) {
-            hit_record->state = FALLBACK_RESPONSE_HIT_STATE;
+            hit_record->attack_type = FALLBACK_ATTACK_TYPE;
             kind = FALLBACK_HIT_KIND;
         } else {
             kind = hit_record->tgt->hA6;
-            hit_record->state = FALLBACK_RESPONSE_HIT_STATE;
+            hit_record->attack_type = FALLBACK_ATTACK_TYPE;
         }
     }
-    switch (hit_record->state) {
+    switch (hit_record->attack_type) {
     case KIND_GATED_HIT_STATE:
-        if (hit_record->kind == 1 || hit_record->kind == 2) {
+        if (hit_record->source_class == 1 || hit_record->source_class == 2) {
             *hit_status_output = 2;
             hit_response_index = 0;
             break;
         }
         goto dflt;
     case SUBSTATE_GATED_DAMAGE_PRESERVING_HIT_STATE:
-        if (hit_record->sub < 2) {
+        if (hit_record->attack_subtype < 2) {
             *hit_status_output = 2;
             hit_response_index = 0xB;
             break;
         }
-        if (hit_record->sub == 2) {
+        if (hit_record->attack_subtype == 2) {
             *hit_status_output = 2;
             hit_response_index = 5;
             break;
@@ -196,7 +196,7 @@ s32 resolve_moby_hit_response(O_25a478 *hit_recipient_moby,
         hit_response_index = 9;
         break;
     case SUBSTATE_GATED_HIT_STATE:
-        if (hit_record->sub < 2) {
+        if (hit_record->attack_subtype < 2) {
             *hit_status_output = 2;
             hit_response_index = 8;
             break;
@@ -205,12 +205,12 @@ s32 resolve_moby_hit_response(O_25a478 *hit_recipient_moby,
         hit_response_index = 0xD;
         break;
     case COOLDOWN_RESETTING_HIT_STATE:
-        if (hit_record->sub < 2) {
+        if (hit_record->attack_subtype < 2) {
             *hit_status_output = 2;
             hit_response_index = 0xA;
             break;
         }
-        if (hit_record->sub < 3) {
+        if (hit_record->attack_subtype < 3) {
             *hit_status_output = 2;
             hit_response_index = 0xF;
             break;
@@ -225,7 +225,7 @@ s32 resolve_moby_hit_response(O_25a478 *hit_recipient_moby,
         hit_response_index = 0xE;
         break;
     case SUBSTATE_GATED_AUXILIARY_FLAG_HIT_STATE:
-        if (hit_record->sub < 2) {
+        if (hit_record->attack_subtype < 2) {
             *hit_status_output = 3;
             hit_response_index = 4;
             break;
@@ -234,7 +234,7 @@ s32 resolve_moby_hit_response(O_25a478 *hit_recipient_moby,
         hit_response_index = 7;
         break;
     case SUBSTATE_GATED_COOLDOWN_DAMAGE_CLEARING_HIT_STATE:
-        if (hit_record->sub < 2) {
+        if (hit_record->attack_subtype < 2) {
             *hit_status_output = 2;
             hit_response_index = 0xC;
             break;

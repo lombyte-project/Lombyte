@@ -36,8 +36,9 @@ typedef struct {
     short        count3e;
     short        target_timer;
     short        second_timer;
-    short        unk44;
-    short        second_target_hit_cooldown;
+    short
+        target_hit_cooldown; /* 0x44: frames before the target is hit again; tested with target_timer in one word */
+    short second_target_hit_cooldown;
 } WalloperBeam;
 
 typedef struct {
@@ -1226,7 +1227,7 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
             aim = (char *)get_moby_target_info(beam_state->target);
             if (aim && *(short *)(aim + 4) == 1)
                 frames = 1;
-            beam_state->unk44 = scale_game_frames(frames);
+            beam_state->target_hit_cooldown = scale_game_frames(frames);
         }
     }
     if (beam_state->second_target &&

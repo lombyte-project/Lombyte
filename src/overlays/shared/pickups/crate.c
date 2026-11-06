@@ -252,7 +252,7 @@ extern int   get_first_moby_in_group(struct Moby **, int, int, int) __asm__("FUN
 extern int
 get_next_moby_in_group(struct Moby **, struct Moby *, int, int) __asm__("FUN_L00_002592b8");
 
-/* D_L00_001C40B0 rows (0x18 bytes); unkE is compared with weapon_ammo_counts. */
+/* D_L00_001C40B0 rows (0x18 bytes); hE (the ammo capacity) is compared with weapon_ammo_counts. */
 
 void crate_update(struct Moby *moby) __asm__("FUN_L00_002cf218");
 
