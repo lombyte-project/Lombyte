@@ -267,14 +267,14 @@ void draw_sky_shells_with_particles_and_rotating_shell(void) {
 
 typedef struct {
     u8  pad0[0x20];
-    u8  unk20[4];
-    s16 unk24;
+    u8  talk[4]; /* dialogue record (initialize_npc_dialogue / update_npc_dialogue) */
+    s16 talk_mode;
     u8  pad26[6];
-    f32 unk2C;
+    f32 talk_range;
     u8  pad30[0x26];
     s16 unk56;
     u8  pad58[8];
-    s32 unk60;
+    s32 talk_volume; /* talk_range is 16 while the hero is inside */
 } DoorVars;
 
 typedef struct {
@@ -282,7 +282,7 @@ typedef struct {
     u8        state;
     u8        pad21[0xF];
     u8        alpha;
-    u8        unk31;
+    u8        visible;
     u8        pad32[2];
     u16       flags;
     u8        pad36[0x42];
@@ -305,22 +305,22 @@ void clank_cutscene_trigger_update(DoorMoby *moby) {
 
     vars = moby->vars;
     if (D_L00_0015F5C4 == 2) {
-        moby->unk31 = 0;
+        moby->visible = 0;
         moby->flags |= 1;
     } else {
-        moby->unk31 = 1;
+        moby->visible = 1;
         moby->flags &= ~1;
     }
     switch (moby->state) {
     case CLANK_TRIGGER_INITIALIZE_DIALOGUE:
         D_00141628[0] = 1;
-        initialize_npc_dialogue(moby, vars->unk20);
+        initialize_npc_dialogue(moby, vars->talk);
         if (alternate_item_available[8] != 0) {
             vars->unk56 = 1;
-            vars->unk2C = 3.0f;
-            vars->unk24 = 0;
+            vars->talk_range = 3.0f;
+            vars->talk_mode = 0;
         } else {
-            vars->unk2C = 255.0f;
+            vars->talk_range = 255.0f;
         }
         alternate_item_available[8] = 1;
         moby->alpha = 0xFF;
@@ -328,17 +328,17 @@ void clank_cutscene_trigger_update(DoorMoby *moby) {
         break;
     case CLANK_TRIGGER_POLL_DIALOGUE:
         if (vars->unk56 != 0) {
-            if (is_point_inside_clip_volume((s32)(&hero.motion.pos), vars->unk60) != 0) {
-                vars->unk2C = 16.0f;
+            if (is_point_inside_clip_volume((s32)(&hero.motion.pos), vars->talk_volume) != 0) {
+                vars->talk_range = 16.0f;
             } else {
-                vars->unk2C = 3.0f;
+                vars->talk_range = 3.0f;
             }
         }
-        if (update_npc_dialogue(moby, vars->unk20) != 0) {
+        if (update_npc_dialogue(moby, vars->talk) != 0) {
             moby->state = CLANK_TRIGGER_WAIT_TO_REPOLL_DIALOGUE;
-            vars->unk2C = 3.0f;
+            vars->talk_range = 3.0f;
         }
-        if (vars->unk24 >= 4 && D_L00_0015F5C4 != 6) {
+        if (vars->talk_mode >= 4 && D_L00_0015F5C4 != 6) {
             request_space_load(1);
         }
         break;

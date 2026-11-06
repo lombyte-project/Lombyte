@@ -124,8 +124,8 @@ typedef struct {
     s32            flags;
     u8             unk88;
     u8             unk89;
-    u16            unk8A;
-    f32            unk8C;
+    u16            oclass;
+    f32            radius;
     s32            unk90;
 } ElectroidProbe;
 
@@ -311,12 +311,12 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         query.flags = 0x10000;
         query.moby = moby;
         query.unk90 = 1;
-        query.unk8C = 1.0f;
+        query.radius = 1.0f;
         query.dir[0] = fast_cos(moby->rot.f[2]);
         query.dir[1] = fast_sin(moby->rot.f[2]);
         query.dir[3] = 5627.925f;
         query.unk89 = 1;
-        query.unk8A = moby->oclass;
+        query.oclass = moby->oclass;
         query.dir[2] = 1.0f;
         query.unk88 = 0;
         if (moby->blend_source_animation == moby->anim &&
@@ -614,14 +614,14 @@ typedef union {
 typedef struct {
     GlowVec corner[4];
     u32     color[4];
-    s32     unk50;
-    s32     unk54;
-    s32     unk58;
-    f32     unk5C;
-    f32     unk60;
-    s32     unk64;
-    f32     unk68;
-    f32     unk6C;
+    s32     u0; /* texture coordinates of the four corners */
+    s32     v0;
+    s32     u1;
+    f32     v1;
+    f32     u2;
+    s32     v2;
+    f32     u3;
+    f32     v3;
     s64     clamp; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
     s64     tex;
     s64     tex1;
@@ -669,15 +669,15 @@ void draw_veldin_robot_effect_quad(GlowMoby *moby) {
     quad.color[3] = 0x80FFFFFF;
     quad.color[2] = 0x80FFFFFF;
     quad.color[1] = 0x80FFFFFF;
-    quad.unk50 = 0;
-    quad.unk54 = 0;
-    quad.unk58 = 0;
-    quad.unk5C = one;
-    quad.unk60 = one;
+    quad.u0 = 0;
+    quad.v0 = 0;
+    quad.u1 = 0;
+    quad.v1 = one;
+    quad.u2 = one;
     quad.color[0] = 0x80FFFFFF;
-    quad.unk64 = 0;
-    quad.unk68 = one;
-    quad.unk6C = one;
+    quad.v2 = 0;
+    quad.u3 = one;
+    quad.v3 = one;
     template_corner = l00_veldin_robot_effect_quad_template_corners;
     quad_corner = quad.corner;
     for (i = 0; i < 4; i++) {
