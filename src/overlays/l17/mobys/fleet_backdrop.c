@@ -63,9 +63,9 @@ void draw_fleet_backdrop_quads(struct Moby *moby) __asm__("FUN_L17_002f32f0");
 
 typedef struct FleetBackdropAnimationVars {
     u8  pad_0[0x10];
-    f32 unk10;
-    f32 unk14;
-    f32 unk18;
+    f32 endpoint_x;
+    f32 endpoint_y;
+    f32 endpoint_z;
     u8  pad_1C[0xC];
     f32 unk28;
     u8  pad_2C[0x18];
@@ -87,11 +87,11 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
     float                      *quad_vertex_v_coordinates;
     vu1_add_g_sregister(0x47, 0x513F1);
     vb = &vv[2];
-    backdrop_endpoint_position = &backdrop_pvars->unk10;
+    backdrop_endpoint_position = &backdrop_pvars->endpoint_x;
     pu = &pkt.uv[0];
     quad_vertex_v_coordinates = &pkt.uv[1];
     D_L17_0016D3E4 = 8192000.0f;
-    backdrop_pvars->unk14 = -8000.0f;
+    backdrop_pvars->endpoint_y = -8000.0f;
     for (i = 0; i < 2; i++) {
         fast_vec_sub(vb, backdrop_pvars, backdrop_endpoint_position);
         fast_vec_sub(&vv[0], backdrop_pvars, D_L17_001676C0);
@@ -137,11 +137,11 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
     for (k = 0; k < 5; k++) {
         float quad_side_length = backdrop_quad_side_lengths[k];
         float uv_rotation_angle = backdrop_quad_uv_rotation_angles[k];
-        float x = backdrop_pvars->unk10 - quad_side_length * 0.5f;
+        float x = backdrop_pvars->endpoint_x - quad_side_length * 0.5f;
         float z;
         ((float *)&pkt)[0] = x;
-        ((float *)&pkt)[1] = backdrop_pvars->unk14 + 1000.0f;
-        z = backdrop_pvars->unk18 + quad_side_length * 0.5f;
+        ((float *)&pkt)[1] = backdrop_pvars->endpoint_y + 1000.0f;
+        z = backdrop_pvars->endpoint_z + quad_side_length * 0.5f;
         ((float *)&pkt)[3] = 1.0f;
         ((float *)&pkt)[2] = z;
         pkt.m[3] = pkt.m[0];
@@ -239,9 +239,9 @@ done:
         fast_vec_add(vector_sum, offset_accumulator, pvar_angle_offset);
         *(OvlQuad *)offset_accumulator = *(OvlQuad *)vector_sum;
         fast_vec_add(vector_sum, moby_pvars, offset_accumulator);
-        *(OvlQuad *)&moby_pvars->unk10 = *(OvlQuad *)vector_sum;
+        *(OvlQuad *)&moby_pvars->endpoint_x = *(OvlQuad *)vector_sum;
         moby->update_dist = 0xFF;
-        moby_pvars->unk10 -= 300.0f;
+        moby_pvars->endpoint_x -= 300.0f;
     } else {
         for (i = 0; i < 5; i++) {
             backdrop_quad_color_blend_factors[i] +=
