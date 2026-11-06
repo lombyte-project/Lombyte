@@ -111,7 +111,7 @@ struct MobyClassUpdate moby_classes[190] __asm__("D_L08_001FC900")
         { 226,           devestator_ammo_update, default_moby_methods},
         { 229,             glove_of_doom_update, default_moby_methods},
         { 230,          doom_bot_spawner_update, default_moby_methods},
-        { 248,                  moby_248_update, default_moby_methods},
+        { 248,                blarg_bomb_update, default_moby_methods},
         { 252,                  scoutbot_update,       D_L08_001FD200},
         { 253,               bomber_tank_update, default_moby_methods},
         { 270,         morphoray_chicken_update,       D_L08_001FD218},

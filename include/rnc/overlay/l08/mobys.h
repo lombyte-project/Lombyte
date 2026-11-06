@@ -12,7 +12,7 @@ void           batalia_textured_effect_update(struct Moby *) __asm__("FUN_L08_00
 void           blarg_bombthrower_update(struct Moby *) __asm__("FUN_L08_002dabf0");
 void           bolt_pickup_update() __asm__("FUN_L08_002b82a0");
 void           bolt_thief_update(struct Moby *) __asm__("FUN_L08_002e2df0");
-void           moby_248_update(char *) __asm__("FUN_L08_002d23f0");
+void           blarg_bomb_update(char *) __asm__("FUN_L08_002d23f0");
 void           bomber_tank_update() __asm__("FUN_L08_002d42d8");
 void           commando_update() __asm__("FUN_L08_00302ce8");
 void           cutscene_camera_target_update(struct Moby *) __asm__("FUN_L08_003084d8");
