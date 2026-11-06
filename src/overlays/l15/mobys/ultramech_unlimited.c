@@ -146,9 +146,9 @@ struct UMoby {
     char           pad21[3];
     char          *cls;
     char           pad28[8];
-    unsigned char  b30;
+    unsigned char  update_dist;
     char           pad31;
-    unsigned short h32;
+    unsigned short draw_dist;
     unsigned short flags;
     char           pad36[0xA];
     Vec4           rot;
@@ -210,7 +210,7 @@ struct UData {
     int            activation_clip_volume;
     int            snd;
     char           pad1E4[0x1C];
-    unsigned char  v200[0x10];
+    unsigned char  big_head_manipulator[0x10];
 };
 
 typedef struct {
@@ -323,7 +323,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
         ultramech_moby->state = ULTRAMECH_WAIT_FOR_ACTIVATION;
         return;
     }
-    FUN_L00_00263ac8(2.5f, (int)ultramech_moby, 6, ultramech_vars->v200);
+    FUN_L00_00263ac8(2.5f, (int)ultramech_moby, 6, ultramech_vars->big_head_manipulator);
     switch (ultramech_moby->state) {
     case ULTRAMECH_INITIALIZE:
         ultramech_vars->health = 12.0f;
@@ -334,8 +334,8 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
         ultramech_vars->b29 = 0;
         {
             int ff = 0xFF;
-            ultramech_moby->h32 = ff;
-            ultramech_moby->b30 = ff;
+            ultramech_moby->draw_dist = ff;
+            ultramech_moby->update_dist = ff;
         }
         ultramech_vars->snd = -1;
         ultramech_vars->turnVel = 0.0f;

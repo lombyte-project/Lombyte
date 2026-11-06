@@ -317,7 +317,7 @@ typedef struct {
     u8           pad26[2];
     u8           hit_response_class;
     u8           pad29[5];
-    u8           unk2E;
+    u8           removal_status; /* 0x2E: anything but 1 removes it */
     u8           pad2F;
     f32          unk30;
     u8           pad34[0x24];
@@ -345,7 +345,7 @@ typedef struct {
     f32          wake_range;
     f32          chase_range;
     f32          range;
-    s32          unk1A4;
+    s32          giant_clank_only; /* 0x1A4: nonzero parks it unless the hero is Giant Clank */
     f32          height;
     s32          entry_path;
     s32          trigger_volume;
@@ -430,7 +430,7 @@ void helicopter_update(struct Moby *moby) {
         helicopter_instance_vars->pilot = create_class_55b_moby_from_source(moby);
     }
     if (moby->state != HELICOPTER_INITIALIZE && moby->state != HELICOPTER_DEAD_WAIT_FOR_RESET &&
-        helicopter_instance_vars->unk1A4 != 0 &&
+        helicopter_instance_vars->giant_clank_only != 0 &&
         hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK) {
         moby->collision = 0;
         moby->flags = (moby->flags | 0x41) & 0xEFFF;
@@ -462,7 +462,7 @@ void helicopter_update(struct Moby *moby) {
     if (goal.target == 0)
         goal.target = hero.moby;
     target = goal.target;
-    if (moby->state != HELICOPTER_INITIALIZE && helicopter_instance_vars->unk2E != 1) {
+    if (moby->state != HELICOPTER_INITIALIZE && helicopter_instance_vars->removal_status != 1) {
         if (helicopter_instance_vars->pilot != 0)
             mark_moby_for_removal(helicopter_instance_vars->pilot);
         mark_moby_for_removal(moby);
@@ -478,7 +478,7 @@ void helicopter_update(struct Moby *moby) {
         helicopter_instance_vars->hit_response_class = 2;
         helicopter_instance_vars->unk58 = 0x19;
         helicopter_instance_vars->unk30 = 1.0f;
-        helicopter_instance_vars->unk2E = 1;
+        helicopter_instance_vars->removal_status = 1;
         helicopter_instance_vars->unk59 = 1;
         helicopter_instance_vars->unk5A = 6;
         moby->update_dist = 0xFF;
@@ -513,7 +513,7 @@ void helicopter_update(struct Moby *moby) {
             helicopter_instance_vars->pilot->flags |= 0x41;
         break;
     case HELICOPTER_WAIT_FOR_ACTIVATION:
-        if (helicopter_instance_vars->unk1A4 != 0 &&
+        if (helicopter_instance_vars->giant_clank_only != 0 &&
             hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK) {
             moby->collision = 0;
             moby->flags = (moby->flags | 0x41) & 0xEFFF;

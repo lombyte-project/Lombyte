@@ -67,13 +67,13 @@ void ultramech_scientist_update(struct Moby *moby) __asm__("FUN_L15_002ec760");
 
 typedef struct UltramechScientistVars {
     u8  pad_0[0x4];
-    s16 unk4;
+    s16 dialogue_mode;
     u8  pad_6[0x2];
-    u8  unk8;
+    u8  dialogue_any_direction;
     u8  pad_9[0x3];
-    f32 unkC;
+    f32 dialogue_radius;
     u8  pad_10[0x26];
-    s16 unk36;
+    s16 dialogue_entry;
     u8  pad_38[0x108];
     s32 unk140;
     s32 first_pre_scene_moby_group_index;
@@ -160,7 +160,7 @@ void ultramech_scientist_update(struct Moby *moby) {
     case ULTRAMECH_SCIENTIST_INITIALIZE:
         moby->state = ULTRAMECH_SCIENTIST_WAIT_FOR_DIALOGUE;
         moby->update_dist = 0xFF;
-        ultramech_scientist_private_data->unkC = 20.0f;
+        ultramech_scientist_private_data->dialogue_radius = 20.0f;
         initialize_npc_dialogue(moby, ultramech_scientist_private_data);
         if (visited52[ultramech_scientist_private_data->dialogue_mission_id +
                       (current_level_index_gp << 4)] != 0xFF) {
@@ -248,7 +248,7 @@ void ultramech_scientist_update(struct Moby *moby) {
             break;
         }
         moby->anim_speed = 1.0f;
-        if (ultramech_scientist_private_data->unk4 == 0) {
+        if (ultramech_scientist_private_data->dialogue_mode == 0) {
             if (ultramech_scientist_private_data->camera_reset_cuboid != -1) {
                 char *paths = D_L15_001600EC;
                 FUN_L00_00284e50(
@@ -300,8 +300,8 @@ void ultramech_scientist_update(struct Moby *moby) {
                            0,
                            0);
         ultramech_scientist_private_data->unk140 = 1;
-        ultramech_scientist_private_data->unk36 = 1;
-        ultramech_scientist_private_data->unk8 = 1;
+        ultramech_scientist_private_data->dialogue_entry = 1;
+        ultramech_scientist_private_data->dialogue_any_direction = 1;
         unlock_planet(0x10);
         jet_clear_persistent(ultramech_scientist_private_data->pre_scene_persistent_mission_id);
         request_music_track(0, 5);

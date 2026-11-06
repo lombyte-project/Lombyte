@@ -13,16 +13,16 @@
 typedef struct Talk {
     int  zone[4];
     int  npc[3];
-    int  vol1C;
-    int  vol20[3];
-    int  vol2C;
+    int  giant_clank_hint_volume; /* help 0x80 */
+    int  dwell_volumes[3];
+    int  visited_volume; /* sets hint_clip_volume_visited */
     int  pad30;
     int  wait;
-    int  hold38;
-    int  hold3C;
+    int  dwell_frames;
+    int  npc_zone_frames;
     int  last;
     char pad44[0x54 - 0x44];
-    int  vol54;
+    int  help_88_volume;
 } Talk;
 
 typedef struct Help {
@@ -31,13 +31,14 @@ typedef struct Help {
     int  cur;
 } Help;
 
+/* The help records (HelpRecord D_00141968) of help messages 0x7B and 0x7C. */
 typedef struct Stats {
     char           p0[0x3DA];
-    unsigned short t3DA;
+    unsigned short help_7b_latest_time_bucket;
     char           p1[0x3E0 - 0x3DC];
-    unsigned short n3E0;
-    unsigned short t3E2;
-    int            lv3E4;
+    unsigned short help_7c_count;
+    unsigned short help_7c_latest_time_bucket;
+    int            help_7c_level_flags;
 } Stats;
 
 typedef struct Items {
@@ -96,42 +97,42 @@ void help_hints_update(struct Moby *moby) {
                 if (D_0013D4DF_2ed398[0] == 0) {
                     int lim, now;
                     now = scale_game_frames(D_0015EEA4_macro);
-                    lim = now - ((Stats *)D_00141968_2ed398)->t3DA * 600;
+                    lim = now - ((Stats *)D_00141968_2ed398)->help_7b_latest_time_bucket * 600;
                     if ((int)((float)scale_game_frames(0x12) * 60.0f) < lim ||
-                        ((Stats *)D_00141968_2ed398)->t3DA * 600 == 0) {
+                        ((Stats *)D_00141968_2ed398)->help_7b_latest_time_bucket * 600 == 0) {
                         help_request(0x3A98, 0x7B);
                     } else {
                         now = scale_game_frames(D_0015EEA4_macro);
-                        if (now / 600 > ((Stats *)D_00141968_2ed398)->t3DA) {
-                            ((Stats *)D_00141968_2ed398)->t3DA =
+                        if (now / 600 > ((Stats *)D_00141968_2ed398)->help_7b_latest_time_bucket) {
+                            ((Stats *)D_00141968_2ed398)->help_7b_latest_time_bucket =
                                 scale_game_frames(D_0015EEA4_macro) / 600;
                         }
                     }
-                } else if (((Stats *)D_00141968_2ed398)->n3E0 != 0) {
+                } else if (((Stats *)D_00141968_2ed398)->help_7c_count != 0) {
                     int lim, now;
                     now = scale_game_frames(D_0015EEA4_macro);
-                    lim = now - ((Stats *)D_00141968_2ed398)->t3E2 * 600;
+                    lim = now - ((Stats *)D_00141968_2ed398)->help_7c_latest_time_bucket * 600;
                     if ((int)((float)scale_game_frames(0x12) * 60.0f) < lim ||
-                        ((Stats *)D_00141968_2ed398)->t3E2 * 600 == 0) {
+                        ((Stats *)D_00141968_2ed398)->help_7c_latest_time_bucket * 600 == 0) {
                         help_request(0x3A99, 0x7C);
                     } else {
                         now = scale_game_frames(D_0015EEA4_macro);
-                        if (now / 600 > ((Stats *)D_00141968_2ed398)->t3E2) {
-                            ((Stats *)D_00141968_2ed398)->t3E2 =
+                        if (now / 600 > ((Stats *)D_00141968_2ed398)->help_7c_latest_time_bucket) {
+                            ((Stats *)D_00141968_2ed398)->help_7c_latest_time_bucket =
                                 scale_game_frames(D_0015EEA4_macro) / 600;
                         }
                     }
                 } else {
                     int now;
-                    ((Stats *)D_00141968_2ed398)->n3E0++;
+                    ((Stats *)D_00141968_2ed398)->help_7c_count++;
                     now = scale_game_frames(D_0015EEA4_macro);
-                    if (now / 600 > ((Stats *)D_00141968_2ed398)->t3E2) {
-                        ((Stats *)D_00141968_2ed398)->t3E2 =
+                    if (now / 600 > ((Stats *)D_00141968_2ed398)->help_7c_latest_time_bucket) {
+                        ((Stats *)D_00141968_2ed398)->help_7c_latest_time_bucket =
                             scale_game_frames(D_0015EEA4_macro) / 600;
                     }
-                    ((Stats *)D_00141968_2ed398)->lv3E4 = ((Stats *)D_00141968_2ed398)->lv3E4 |
-                                                          (1 << current_level_index_macro) |
-                                                          0x80000000;
+                    ((Stats *)D_00141968_2ed398)->help_7c_level_flags =
+                        ((Stats *)D_00141968_2ed398)->help_7c_level_flags |
+                        (1 << current_level_index_macro) | 0x80000000;
                 }
             }
         }
@@ -141,7 +142,8 @@ void help_hints_update(struct Moby *moby) {
             help_request(0x3A9F, 0x89);
             D_L15_0015F5A4 = 0;
         }
-        if (is_point_inside_clip_volume(&hero.motion.pos, hint_dialogue_data->vol54) != 0 &&
+        if (is_point_inside_clip_volume(&hero.motion.pos, hint_dialogue_data->help_88_volume) !=
+                0 &&
             hero.vehicle_mode == 3 && hero.glow_pulse_level == 0 && D_L15_00161AC0_macro == 0 &&
             *(unsigned short *)(item_usage + 0x728) == 0) {
             help_request(0x3A9E, 0x88);
@@ -158,16 +160,16 @@ void help_hints_update(struct Moby *moby) {
             }
         }
         if (found != 0) {
-            hint_dialogue_data->hold3C = hint_dialogue_data->hold3C + 1;
+            hint_dialogue_data->npc_zone_frames = hint_dialogue_data->npc_zone_frames + 1;
         } else {
-            hint_dialogue_data->hold3C = 0;
+            hint_dialogue_data->npc_zone_frames = 0;
             hint_dialogue_data->last = -1;
         }
         if (npc != -1) {
             npc_moby = (struct Moby *)((char *)l15_moby_array_macro + (npc << 8));
             if (npc_moby != 0 && npc_moby->oclass == 0x4E && npc_moby->state != 0xFE &&
                 npc_moby->state != 0xFD && npc_moby->state != 3 &&
-                hint_dialogue_data->hold3C > hint_dialogue_data->wait && pick != -1 &&
+                hint_dialogue_data->npc_zone_frames > hint_dialogue_data->wait && pick != -1 &&
                 pick != hint_dialogue_data->last &&
                 (hero.state.control_mode < 2u || hero.state.control_mode == 9) &&
                 ((Help *)quartu_help_message_state)->busy == 0 &&
@@ -177,20 +179,22 @@ void help_hints_update(struct Moby *moby) {
                     help_request(0x3A9A, 0x7D);
                 }
                 hint_dialogue_data->last = pick;
-                hint_dialogue_data->hold3C = 0;
+                hint_dialogue_data->npc_zone_frames = 0;
             }
         }
         if (hero.moby->seq == 0xC && hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
             ((Items *)alternate_item_available)->giant_clank_zone_hint_suppressed = 1;
         }
-        if (is_point_inside_clip_volume(&hero.motion.pos, hint_dialogue_data->vol1C) != 0 &&
+        if (is_point_inside_clip_volume(&hero.motion.pos,
+                                        hint_dialogue_data->giant_clank_hint_volume) != 0 &&
             hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK &&
             ((Items *)alternate_item_available)->giant_clank_zone_hint_suppressed == 0 &&
             ((Help *)quartu_help_message_state)->busy == 0 &&
             ((Help *)quartu_help_message_state)->cur == -1 && *(int *)(item_usage + 0x6EC) >= 0) {
             help_request(0x3A9C, 0x80);
         }
-        if (is_point_inside_clip_volume(&hero.motion.pos, hint_dialogue_data->vol20[0]) != 0 &&
+        if (is_point_inside_clip_volume(&hero.motion.pos, hint_dialogue_data->dwell_volumes[0]) !=
+                0 &&
             ((Help *)quartu_help_message_state)->busy == 0 &&
             ((Help *)quartu_help_message_state)->cur == -1 && l15_dwell_zone_hint_enabled[0] == 0 &&
             !(*(unsigned int *)(item_usage + 0x6FC) & (1 << current_level_index_macro))) {
@@ -199,33 +203,35 @@ void help_hints_update(struct Moby *moby) {
         pick = -1;
         found = 0;
         for (j = 0; j < 3; j++) {
-            if (is_point_inside_clip_volume(&hero.motion.pos, hint_dialogue_data->vol20[j]) != 0) {
+            if (is_point_inside_clip_volume(&hero.motion.pos,
+                                            hint_dialogue_data->dwell_volumes[j]) != 0) {
                 found = 1;
-                if (hint_dialogue_data->last != hint_dialogue_data->vol20[j]) {
-                    pick = hint_dialogue_data->vol20[j];
+                if (hint_dialogue_data->last != hint_dialogue_data->dwell_volumes[j]) {
+                    pick = hint_dialogue_data->dwell_volumes[j];
                 }
                 break;
             }
         }
         if (found == 0) {
-            hint_dialogue_data->hold38 = 0;
+            hint_dialogue_data->dwell_frames = 0;
             hint_dialogue_data->last = -1;
         } else {
-            hint_dialogue_data->hold38 = hint_dialogue_data->hold38 + 1;
+            hint_dialogue_data->dwell_frames = hint_dialogue_data->dwell_frames + 1;
             if (hero.state.current == 0x35) {
-                hint_dialogue_data->hold38 = 0;
+                hint_dialogue_data->dwell_frames = 0;
                 hint_dialogue_data->last = -1;
             }
         }
-        if (scale_game_frames(0xE10) < hint_dialogue_data->hold38 && pick != -1 &&
+        if (scale_game_frames(0xE10) < hint_dialogue_data->dwell_frames && pick != -1 &&
             hero_is_in_special_state() != 0 && ((Help *)quartu_help_message_state)->busy == 0 &&
             ((Help *)quartu_help_message_state)->cur == -1 && l15_dwell_zone_hint_enabled[0] != 0) {
             help_request(0x4E2E, 0x78);
             hint_dialogue_data->last = pick;
-            hint_dialogue_data->hold38 = 0;
+            hint_dialogue_data->dwell_frames = 0;
         }
         if (((Items *)alternate_item_available)->hint_clip_volume_visited == 0 &&
-            is_point_inside_clip_volume(&hero.motion.pos, hint_dialogue_data->vol2C) != 0) {
+            is_point_inside_clip_volume(&hero.motion.pos, hint_dialogue_data->visited_volume) !=
+                0) {
             ((Items *)alternate_item_available)->hint_clip_volume_visited = 1;
         }
         break;

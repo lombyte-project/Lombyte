@@ -14,8 +14,8 @@
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 
 typedef struct {
-    float f0;
-    float f4;
+    float previous_phase;
+    float phase;
 } RippleData;
 
 typedef struct {
@@ -783,9 +783,9 @@ void draw_moby_radial_ripple_mesh_buffers(struct Moby *moby) {
     vu1_add_g_sregister(0x42, ((long)ripple_mesh_buffers_alpha_1_fix << 32) | 0x44);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, ((long)0xFF90 << 32) | 0x260);
-    ripple_data->f0 = ripple_data->f4;
-    ripple_data->f4 = fast_add_rotations(
-        ripple_data->f4,
+    ripple_data->previous_phase = ripple_data->phase;
+    ripple_data->phase = fast_add_rotations(
+        ripple_data->phase,
         360.0f / multiply_global_factor_ed64(ripple_mesh_buffers_phase_advance_divisor_gp) *
             DEG_TO_RAD * frame_time);
     get_moby_color(moby, &r, &g, &b);
@@ -800,7 +800,7 @@ void draw_moby_radial_ripple_mesh_buffers(struct Moby *moby) {
                               FUN_L00_00200260(square_root(p[0] * p[0] + p[1] * p[1]),
                                                ripple_mesh_buffers_radial_wavelength_gp) *
                               6.2831855f / ripple_mesh_buffers_radial_wavelength_gp),
-                          ripple_data->f4));
+                          ripple_data->phase));
             *(float *)(j * 12 + ripple_mesh_buffers_world_vertex_tables[i]) = p[0] + moby->pos.x;
             *(float *)(j * 12 + ripple_mesh_buffers_world_vertex_tables[i] + 4) =
                 p[1] + moby->pos.y;
