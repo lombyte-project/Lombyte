@@ -35,9 +35,9 @@ enum {
 
 typedef struct {
     u8  pad00[0xE];
-    u8  unkE;
+    u8  lod_trans;
     u8  pad0F;
-    u32 unk10;
+    u32 collision;
 } Part;
 
 typedef struct Moby Moby;
@@ -73,7 +73,7 @@ typedef struct {
     u32          flags;
     u8           padB0[0xB4 - 0xB0];
     s32          frameB4;
-    u64          unkB8; /* saved moby spawn_frame word */
+    u64          saved_spawn_frame; /* saved moby spawn_frame word */
     u8           padC0[0xC6 - 0xC0];
     s16          unkC6;
     u8           unkC8;
@@ -349,7 +349,7 @@ void crate_update(struct Moby *moby) {
                 moby->command =
                     truncate_float_to_s32(scale_time(random_float_between(5.0f, 15.0f)));
             }
-            crate_vars->unkB8 = moby->spawn_frame;
+            crate_vars->saved_spawn_frame = moby->spawn_frame;
             doHit = 0;
         }
         if (moby->oclass >= 0x1FB && moby->oclass <= 0x1FD) {
@@ -372,7 +372,7 @@ void crate_update(struct Moby *moby) {
                 moby->class_slot = D_L00_00197BC0[moby->oclass];
                 moby->pclass = D_L00_00197300[moby->class_slot];
                 update_moby_animation_state(moby);
-                moby->lod_dist = ((Part *)moby->pclass)->unkE;
+                moby->lod_dist = ((Part *)moby->pclass)->lod_trans;
                 moby->state = CRATE_STATE_CLASS_CHANGE_COOLDOWN;
                 moby->command = scale_game_frames(15);
                 doHit = 0;
@@ -457,7 +457,7 @@ void crate_update(struct Moby *moby) {
             moby->state = CRATE_STATE_PROCESS_HITS;
             moby->visible = 1;
             moby->flags &= ~1;
-            moby->collision = ((Part *)moby->pclass)->unk10;
+            moby->collision = ((Part *)moby->pclass)->collision;
             moby->flags |= 0x1000;
             break;
         }
@@ -503,7 +503,7 @@ void crate_update(struct Moby *moby) {
                     moby->state = CRATE_STATE_PROCESS_HITS;
                     moby->visible = 1;
                     moby->flags &= ~1;
-                    moby->collision = ((Part *)moby->pclass)->unk10;
+                    moby->collision = ((Part *)moby->pclass)->collision;
                     moby->flags |= 0x1000;
                     crate_vars->flags |= 4;
                     break;
@@ -518,7 +518,7 @@ void crate_update(struct Moby *moby) {
             crate_vars->below = NULL;
             moby->visible = 1;
             moby->flags &= ~1;
-            moby->collision = ((Part *)moby->pclass)->unk10;
+            moby->collision = ((Part *)moby->pclass)->collision;
             moby->flags |= 0x1000;
         }
         break;
@@ -527,7 +527,7 @@ void crate_update(struct Moby *moby) {
     case CRATE_STATE_DETONATION_COUNTDOWN:
         if (moby->command == 0) {
             moby->command = scale_game_frames(60) * 3 - 1;
-            crate_vars->unkB8 = moby->spawn_frame;
+            crate_vars->saved_spawn_frame = moby->spawn_frame;
         } else if (moby->command > scale_game_frames(15) && hit_contact != NULL) {
             moby->command = truncate_float_to_s32(scale_time(random_float_between(5.0f, 15.0f)));
         }
@@ -539,10 +539,10 @@ void crate_update(struct Moby *moby) {
             moby->command < scale_game_frames(15)) {
             set_moby_color(moby, 0xC8, 0x40, 0x40);
         } else {
-            moby->spawn_frame = crate_vars->unkB8;
+            moby->spawn_frame = crate_vars->saved_spawn_frame;
         }
         if (moby->command == 1 || D_001413DC == 0x16) {
-            moby->spawn_frame = crate_vars->unkB8;
+            moby->spawn_frame = crate_vars->saved_spawn_frame;
             break_crate(moby, 1, NULL);
             crate_drop_bolts(moby);
         }
