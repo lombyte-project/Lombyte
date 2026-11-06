@@ -119,11 +119,18 @@ float *reflection_mesh_trio_position_tables[4] __asm__("D_L16_00161F00")
                                           reflection_mesh_trio_positions_2,
                                           0};
 
-extern float D_L16_001DA7E0[];
-extern float D_L16_001DAC80[];
-extern float D_L16_001DB120[];
-float       *reflection_mesh_trio_unused_pair_tables[4] __asm__("D_L16_00161F10")
-    __attribute__((section(".sdata"))) = {D_L16_001DA7E0, D_L16_001DAC80, D_L16_001DB120, 0};
+extern float
+    reflection_mesh_trio_unused_pairs_0[296] __asm__("D_L16_001DA7E0"); /* 148 points x 2 floats */
+extern float
+    reflection_mesh_trio_unused_pairs_1[296] __asm__("D_L16_001DAC80"); /* 148 points x 2 floats */
+extern float
+       reflection_mesh_trio_unused_pairs_2[50] __asm__("D_L16_001DB120"); /* 25 points x 2 floats */
+float *reflection_mesh_trio_unused_pair_tables[4] __asm__("D_L16_00161F10")
+
+    __attribute__((section(".sdata"))) = {reflection_mesh_trio_unused_pairs_0,
+                                          reflection_mesh_trio_unused_pairs_1,
+                                          reflection_mesh_trio_unused_pairs_2,
+                                          0};
 
 extern float
     reflection_mesh_trio_directions_0[444] __asm__("D_L16_001DB1E8"); /* 148 points x 3 floats */
@@ -565,3 +572,60 @@ u32 reflection_mesh_trio_colours_2[25] __asm__("D_L16_001DC598") = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f};
+
+float reflection_mesh_trio_unused_pairs_0[296] __asm__("D_L16_001DA7E0") = {
+    1.0f, -0.5f, 0.5f, -0.5f, 1.0f, 0.0f,  0.5f, 0.0f,  0.0f, -0.5f, 0.5f, -0.5f, 1.0f, -0.5f,
+    0.5f, 0.0f,  1.0f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,  1.0f, -0.5f, 1.0f, 0.0f,
+    0.0f, -0.5f, 0.5f, 0.0f,  0.0f, -0.5f, 0.5f, -0.5f, 1.0f, 0.0f,  0.5f, 0.0f,  0.0f, -0.5f,
+    0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,  1.0f, -0.5f, 0.5f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,
+    1.0f, -0.5f, 0.5f, 0.0f,  1.0f, 0.0f,  0.5f, 0.0f,  0.0f, -0.5f, 0.5f, 0.0f,  0.5f, -0.5f,
+    1.0f, 0.0f,  1.0f, -0.5f, 0.5f, 0.0f,  0.0f, -0.5f, 0.5f, -0.5f, 1.0f, -0.5f, 0.5f, 0.0f,
+    1.0f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,  1.0f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f,
+    0.5f, 0.0f,  1.0f, -0.5f, 1.0f, 0.0f,  0.0f, -0.5f, 0.5f, 0.0f,  0.0f, -0.5f, 0.5f, -0.5f,
+    1.0f, 0.0f,  0.5f, 0.0f,  0.0f, -0.5f, 0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,  1.0f, -0.5f,
+    0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,  1.0f, -0.5f, 0.5f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,
+    1.0f, -0.5f, 0.5f, 0.0f,  1.0f, 0.0f,  0.5f, 0.0f,  0.0f, -0.5f, 0.5f, 0.0f,  0.5f, -0.5f,
+    1.0f, 0.0f,  1.0f, -0.5f, 0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,  1.0f, -0.5f, 0.5f, 0.0f,
+    0.0f, -0.5f, 0.5f, -0.5f, 1.0f, -0.5f, 0.5f, 0.0f,  1.0f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f,
+    0.5f, 0.0f,  1.0f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,  1.0f, -0.5f, 1.0f, 0.0f,
+    0.5f, -0.5f, 0.5f, 0.0f,  1.0f, -0.5f, 1.0f, 0.0f,  0.0f, -0.5f, 0.5f, 0.0f,  0.0f, -0.5f,
+    0.5f, -0.5f, 1.0f, 0.0f,  0.5f, 0.0f,  0.0f, -0.5f, 0.5f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,
+    1.0f, -0.5f, 0.5f, 0.0f,  1.0f, 0.0f,  0.5f, -0.5f, 0.0f, -0.5f, 0.5f, 0.0f,  1.0f, -0.5f,
+    1.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,  1.0f, -0.5f, 1.0f, 0.0f,  0.0f, -0.5f, 0.5f, 0.0f,
+    0.0f, -0.5f, 0.5f, -0.5f, 1.0f, 0.0f,  0.5f, 0.0f,  0.0f, -0.5f, 0.5f, 0.0f,  0.5f, -0.5f,
+    1.0f, 0.0f,  1.0f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f, 0.0f, 0.0f,  0.5f, 0.0f,  1.0f, 0.0f,
+    0.5f, -0.5f, 1.0f, 0.0f,  1.0f, -0.5f, 0.5f, 0.0f,  0.0f, -0.5f, 0.5f, -0.5f, 1.0f, -0.5f,
+    0.5f, 0.0f,
+};
+
+float reflection_mesh_trio_unused_pairs_1[296] __asm__("D_L16_001DAC80") = {
+    1.0f, -0.5f, 0.5f, 0.0f,  1.0f, -0.5f, 1.0f, 0.0f,  0.5f, -0.5f, 0.0f, 0.0f,  0.5f, 0.0f,
+    1.0f, -0.5f, 0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,
+    0.5f, -0.5f, 1.0f, -0.5f, 0.5f, 0.0f,  0.0f, -0.5f, 0.0f, 0.0f,  1.0f, -0.5f, 0.5f, 0.0f,
+    1.0f, -0.5f, 0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,
+    0.5f, -0.5f, 1.0f, -0.5f, 0.5f, 0.0f,  0.0f, -0.5f, 0.0f, 0.0f,  1.0f, -0.5f, 0.5f, 0.0f,
+    1.0f, -0.5f, 0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,
+    0.5f, -0.5f, 1.0f, -0.5f, 0.5f, 0.0f,  0.0f, -0.5f, 0.0f, 0.0f,  1.0f, -0.5f, 0.5f, 0.0f,
+    1.0f, -0.5f, 0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,
+    0.5f, -0.5f, 1.0f, -0.5f, 0.5f, 0.0f,  0.0f, -0.5f, 0.0f, 0.0f,  1.0f, -0.5f, 0.5f, 0.0f,
+    1.0f, -0.5f, 0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,
+    0.5f, -0.5f, 1.0f, -0.5f, 0.5f, 0.0f,  0.0f, -0.5f, 0.0f, 0.0f,  1.0f, -0.5f, 0.5f, 0.0f,
+    1.0f, -0.5f, 0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,
+    0.5f, -0.5f, 1.0f, -0.5f, 0.5f, 0.0f,  0.0f, -0.5f, 0.0f, 0.0f,  1.0f, -0.5f, 0.5f, 0.0f,
+    1.0f, -0.5f, 0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,
+    0.5f, -0.5f, 1.0f, -0.5f, 0.5f, 0.0f,  0.0f, -0.5f, 0.0f, 0.0f,  1.0f, -0.5f, 0.5f, 0.0f,
+    1.0f, -0.5f, 0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,
+    0.5f, -0.5f, 1.0f, -0.5f, 0.5f, 0.0f,  0.0f, -0.5f, 0.0f, 0.0f,  1.0f, -0.5f, 0.5f, 0.0f,
+    1.0f, -0.5f, 0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,
+    0.5f, -0.5f, 1.0f, -0.5f, 0.5f, 0.0f,  0.0f, -0.5f, 0.0f, 0.0f,  1.0f, -0.5f, 0.5f, 0.0f,
+    1.0f, -0.5f, 0.5f, -0.5f, 0.0f, 0.0f,  0.5f, -0.5f, 0.5f, 0.0f,  0.5f, -0.5f, 1.0f, 0.0f,
+    0.5f, -0.5f, 1.0f, -0.5f, 0.5f, 0.0f,  0.0f, -0.5f, 0.0f, 0.0f,  1.0f, -0.5f, 0.5f, 0.0f,
+    1.0f, -0.5f,
+};
+
+float reflection_mesh_trio_unused_pairs_2[50] __asm__("D_L16_001DB120") = {
+    0.5f,  0.0f,  1.0f, -0.5f, 0.5f,  -0.5f, 0.0f,  0.0f, 0.5f,  -0.5f, 0.5f,  0.0f,  0.5f,
+    -0.5f, 1.0f,  0.0f, 0.5f,  -0.5f, 1.0f,  -0.5f, 0.5f, 0.0f,  0.0f,  -0.5f, 0.0f,  0.0f,
+    0.5f,  -0.5f, 0.5f, 0.0f,  0.5f,  -0.5f, 0.0f,  0.0f, 0.5f,  -0.5f, 0.0f,  -0.5f, 0.5f,
+    -0.5f, 1.0f,  0.0f, 0.5f,  -0.5f, 0.5f,  0.0f,  0.0f, -0.5f, 0.0f,  0.0f,
+};
