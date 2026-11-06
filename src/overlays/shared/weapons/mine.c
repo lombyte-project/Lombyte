@@ -33,20 +33,20 @@ enum {
 
 typedef struct MineVars {
     u8  pad0[0x30];
-    s32 unk30;
+    s32 owner;
     u8  pad34[0x2];
-    s16 unk36;
+    s16 prediction_done;
     f32 unk38;
     f32 unk3C;
     u8  pad40[0x1c];
     s32 unk5C;
     f32 unk60;
     f32 unk64;
-    s32 unk68;
-    f32 unk6C;
-    f32 unk70;
-    s32 unk74;
-    s32 unk78;
+    s32 voice;
+    f32 bob_amplitude;
+    f32 bob_phase;
+    s32 bob_start_frame;
+    s32 extended_range;
 } MineVars;
 
 typedef float V910[4] __attribute__((aligned(16)));
@@ -418,9 +418,9 @@ unsigned char *spawn_mine(int mine_owner_moby, OvlQuad *spawn_position) {
         MOBY(mine_moby)->visible = 1;
         MOBY(mine_moby)->scale = MOBY(mine_moby)->scale * 0.5f;
         MOBY(mine_moby)->state = MINE_STATE_OWNER_ATTACHED;
-        mine_vars->unk30 = mine_owner_moby;
-        mine_vars->unk36 = 0;
-        mine_vars->unk78 = 0;
+        mine_vars->owner = mine_owner_moby;
+        mine_vars->prediction_done = 0;
+        mine_vars->extended_range = 0;
         qcopy(&MOBY(mine_moby)->pos, spawn_position);
         clear_u64_value(mine_vars);
         {
@@ -438,11 +438,11 @@ unsigned char *spawn_mine(int mine_owner_moby, OvlQuad *spawn_position) {
             mine_vars->unk3C = frame_scaled_random_sample;
             mine_vars->unk64 = z;
             mine_vars->unk60 = z;
-            mine_vars->unk70 = z;
-            mine_vars->unk6C = z;
+            mine_vars->bob_phase = z;
+            mine_vars->bob_amplitude = z;
             mine_vars->unk5C = x;
-            mine_vars->unk74 = 0;
-            mine_vars->unk68 = -1;
+            mine_vars->bob_start_frame = 0;
+            mine_vars->voice = -1;
             MOBY(mine_moby)->collision = 0;
         }
         update_entity(mine_moby);
@@ -667,7 +667,7 @@ void mine_update(M910 *mine_moby) {
         return;
     }
     if (v->owner != 0 && v->owner->state != 0xFE && v->owner->state != 0xFD &&
-        v->owner->cls == 0xBE && v->h36 == 0 && 0.0f < fast_vec_length(v)) {
+        v->owner->cls == 0xBE && v->prediction_done == 0 && 0.0f < fast_vec_length(v)) {
         if (hero.ground_moby == 0 || FUN_002141f8_cf(hero.ground_moby) == 0) {
             predict_mine_impact(v, mine_moby, 1);
         } else if (predict_mine_impact(v, mine_moby, 0) == 0) {
@@ -707,7 +707,7 @@ void mine_update(M910 *mine_moby) {
             qcopy(&mine_pre_motion_position, &mine_moby->pos);
             if (!(mine_state_snapshot & 4)) {
                 fast_vec_add(&mine_moby->pos, &mine_moby->pos, v);
-                if (v->h50 == 0) {
+                if (v->in_water == 0) {
                     v->vel.f[2] -= frame_time_sq * 9.8f;
                 } else {
                     v->vel.f[2] -= frame_time_sq * 9.8f / 10.0f;
@@ -732,19 +732,19 @@ void mine_update(M910 *mine_moby) {
             q.cls = mine_moby->cls;
             mine_moby->pos.f[2] -= 0.4f;
             q.dir[2] = 1.0f;
-            k = convert_integer_to_float(D_L00_0015F5CC - v->i74);
+            k = convert_integer_to_float(D_L00_0015F5CC - v->bob_start_frame);
             k = k / scale_time(*(float *)&mine_bounce_ramp_duration);
             if (1.0f < k) {
                 k = 1.0f;
             } else if (k < 0.0f) {
                 k = 0.0f;
             }
-            mine_moby->pos.f[2] -= v->f6C * fast_sin(v->f70) * k;
+            mine_moby->pos.f[2] -= v->bob_amplitude * fast_sin(v->bob_phase) * k;
             if (!(mine_moby->state & 4) &&
                 collision_line(
                     &mine_pre_motion_position, &mine_moby->pos, 0x10, (int)mine_moby, (int)&q) !=
                     0) {
-                if (v->h50 == 0 && collision_hit_material() == 0 && v->vel.f[2] < 0.0f) {
+                if (v->in_water == 0 && collision_hit_material() == 0 && v->vel.f[2] < 0.0f) {
                     V910 t;
                     V910 n;
                     {
@@ -758,7 +758,7 @@ void mine_update(M910 *mine_moby) {
                                     mine_moby->pos.f[1],
                                     0.5f,
                                     -0.35f);
-                        v->h50 = 1;
+                        v->in_water = 1;
                         clear_u64_value((float *)v);
                         v->vel.f[2] = frame_time * -1.5f;
                         t[0] = mine_moby->pos.f[0];
@@ -780,7 +780,7 @@ void mine_update(M910 *mine_moby) {
                             spawn_debris_chunk(t, n, random_integer_below(2), life);
                         }
                     }
-                } else if (v->h50 != 0 || collision_hit_material() != 0) {
+                } else if (v->in_water != 0 || collision_hit_material() != 0) {
                     V910 t;
                     V910 n;
                     V910 r;
@@ -820,7 +820,7 @@ void mine_update(M910 *mine_moby) {
                         } else if ((coll_hit.moby != 0 && coll_hit.moby != hero.moby &&
                                     coll_hit.moby != v->owner) ||
                                    coll_hit.i1C > 0) {
-                            if (v->h50 != 0 || collision_hit_material() == 0 ||
+                            if (v->in_water != 0 || collision_hit_material() == 0 ||
                                 v->vel.f[2] < frame_time * -9.8f) {
                                 mine_moby->bBC = 1;
                                 qcopy(&mine_moby->pos, &coll_hit.pos);
@@ -840,16 +840,16 @@ void mine_update(M910 *mine_moby) {
                                 reflect_vector(v, v, &coll_hit.nrm);
                                 scale_vector_xyz(v, v, 0.6f);
                                 v->vel.f[2] *= 0.5f;
-                                if (v->f6C == 0.0f) {
+                                if (v->bob_amplitude == 0.0f) {
                                     float ph;
 
-                                    v->f6C = absolute_float(ov[2]) * 2.0f;
+                                    v->bob_amplitude = absolute_float(ov[2]) * 2.0f;
                                     ph = -2.3561945f;
                                     if (0.0f < ov[2]) {
                                         ph = 0.7853982f;
                                     }
-                                    v->f70 = ph;
-                                    v->i74 = D_L00_0015F5CC;
+                                    v->bob_phase = ph;
+                                    v->bob_start_frame = D_L00_0015F5CC;
                                 }
                                 fast_vec_normalize(t, &coll_hit.nrm, 1.0f);
                                 if (0.707f < fast_vec_dot(t, &up) && ov[2] < 0.0f) {
@@ -864,7 +864,7 @@ void mine_update(M910 *mine_moby) {
                                         mine_moby->state |= 4;
                                         mine_moby->i94 = *(int *)(mine_moby->p24 + 0x10);
                                         if (coll_hit.moby != 0 && hd != 0) {
-                                            v->p4C = coll_hit.moby;
+                                            v->attached_moby = coll_hit.moby;
                                         }
                                     }
                                 }
@@ -889,15 +889,16 @@ void mine_update(M910 *mine_moby) {
             } else if (mine_moby->state & 4) {
                 float fz = probe_ground_height(&mine_moby->pos, 0, 0.5f);
 
-                if (v->p4C != 0) {
-                    if (!(v->p4C != 0 && v->p4C->state != 0xFE && v->p4C->state != 0xFD)) {
+                if (v->attached_moby != 0) {
+                    if (!(v->attached_moby != 0 && v->attached_moby->state != 0xFE &&
+                          v->attached_moby->state != 0xFD)) {
                         mine_moby->bBC = 1;
-                        v->p4C = 0;
+                        v->attached_moby = 0;
                     } else if (coll_hit_moby != 0) {
                         hd = (M910 *)FUN_002141f8_cf((unsigned char *)coll_hit_moby);
                         if (hd != 0) {
                             FUN_L00_00260400(mine_moby,
-                                             v->p4C,
+                                             v->attached_moby,
                                              &mine_moby->pos,
                                              &mine_moby->rx,
                                              &mine_moby->pos,
@@ -908,7 +909,7 @@ void mine_update(M910 *mine_moby) {
                         int s;
 
                         mine_moby->state = MINE_STATE_FREE_MOTION;
-                        s = v->i68;
+                        s = v->voice;
                         if (s != -1) {
                             char *tab = ((char *)&voice_pool);
                             char *e = tab + s * 0x70;
@@ -919,9 +920,9 @@ void mine_update(M910 *mine_moby) {
                             }
                         }
                         v->vel.f[2] = 0.0f;
-                        v->i68 = -1;
+                        v->voice = -1;
                         v->h34 = scale_game_frames(0x78);
-                        v->p4C = 0;
+                        v->attached_moby = 0;
                     }
                 } else if (!(mine_moby->state & 0x10)) {
                     if (mine_moby->pos.f[2] - fz < frame_time_sq * 40.0f) {
@@ -929,13 +930,13 @@ void mine_update(M910 *mine_moby) {
                         v->h34 = 0;
                         if (coll_hit.moby != 0 &&
                             FUN_002141f8_cf((unsigned char *)coll_hit.moby) != 0) {
-                            v->p4C = coll_hit.moby;
+                            v->attached_moby = coll_hit.moby;
                         }
                     } else {
                         int s;
 
                         mine_moby->state = MINE_STATE_FREE_MOTION;
-                        s = v->i68;
+                        s = v->voice;
                         if (s != -1) {
                             char *tab = ((char *)&voice_pool);
                             char *e = tab + s * 0x70;
@@ -946,17 +947,17 @@ void mine_update(M910 *mine_moby) {
                             }
                         }
                         v->vel.f[2] = 0.0f;
-                        v->i68 = -1;
+                        v->voice = -1;
                         v->h34 = scale_game_frames(0x78);
                     }
                 }
-                if ((v->p54 == 0 || v->p54->state == 0xFE || v->p54->state == 0xFD ||
-                     !(v->p54->flags & 0x1000)) &&
+                if ((v->target == 0 || v->target->state == 0xFE || v->target->state == 0xFD ||
+                     !(v->target->flags & 0x1000)) &&
                     (mine_moby->state & 0x10)) {
                     int s;
 
                     mine_moby->state = MINE_STATE_FREE_MOTION;
-                    s = v->i68;
+                    s = v->voice;
                     if (s != -1) {
                         char *tab = ((char *)&voice_pool);
                         char *e = tab + s * 0x70;
@@ -967,14 +968,14 @@ void mine_update(M910 *mine_moby) {
                         }
                     }
                     v->vel.f[2] = 0.0f;
-                    v->p54 = 0;
-                    v->i68 = -1;
+                    v->target = 0;
+                    v->voice = -1;
                     v->h34 = scale_game_frames(0x78);
                     if (mine_moby->anim != 0) {
                         blend_moby_animation(mine_moby, 0, 0, 10);
                     }
                 }
-                if (v->p54 != 0 && (mine_moby->state & 0x10)) {
+                if (v->target != 0 && (mine_moby->state & 0x10)) {
                     V910   t;
                     V910   n;
                     Qry910 homing_hit_descriptor;
@@ -989,30 +990,30 @@ void mine_update(M910 *mine_moby) {
                         if ((mine_moby->b70 & 2) && mine_moby->b52 == 1 && mine_moby->anim != 2) {
                             blend_moby_animation(mine_moby, 2, 0, 10);
                         }
-                        if (voice_is_playing(mine_moby, v->i68) == 0) {
-                            v->i68 = allocate_voice_for_target_entry(1, 4, (int)mine_moby);
+                        if (voice_is_playing(mine_moby, v->voice) == 0) {
+                            v->voice = allocate_voice_for_target_entry(1, 4, (int)mine_moby);
                         }
-                        sp = v->f40 + frame_time_sq * 15.0f;
+                        sp = v->homing_speed + frame_time_sq * 15.0f;
                         max_homing_step = frame_time * 4.0f;
-                        v->f40 = sp;
+                        v->homing_speed = sp;
                         if (max_homing_step < sp) {
-                            v->f40 = max_homing_step;
+                            v->homing_speed = max_homing_step;
                         }
-                        mode = v->h52;
+                        mode = v->homing_phase;
                         if (mode == MINE_HOMING_RISE_PHASE) {
                             mine_moby->pos.f[2] += frame_scale * 0.05f;
-                            if (fast_dec_timer(&v->i48) != 0) {
-                                v->i48 = scale_game_frames(7);
-                                v->h52 = 2;
+                            if (fast_dec_timer(&v->homing_phase_timer) != 0) {
+                                v->homing_phase_timer = scale_game_frames(7);
+                                v->homing_phase = 2;
                             }
                         } else if (mode == MINE_HOMING_FALL_PHASE) {
                             mine_moby->pos.f[2] -= frame_scale * 0.05f;
-                            if (fast_dec_timer(&v->i48) != 0) {
-                                v->h52 = 0;
+                            if (fast_dec_timer(&v->homing_phase_timer) != 0) {
+                                v->homing_phase = 0;
                             }
                         }
-                        fast_vec_sub(t, &v->p54->pos, &mine_moby->pos);
-                        fast_vec_normalize(t, t, v->f40);
+                        fast_vec_sub(t, &v->target->pos, &mine_moby->pos);
+                        fast_vec_normalize(t, t, v->homing_speed);
                         fast_vec_add(&mine_moby->pos, &mine_moby->pos, t);
                         make_hit_descriptor(&homing_hit_descriptor, mine_moby, 0x10000, t, 1.0f);
                         qcopy(&probe, &mine_moby->pos);
@@ -1032,7 +1033,7 @@ void mine_update(M910 *mine_moby) {
                             fast_vec_sub(&collision_correction, &coll_hit_position, &probe);
                             fast_vec_add(&mine_moby->pos, &mine_moby->pos, &collision_correction);
                         }
-                        if (fast_dec_timer(&v->i58) != 0) {
+                        if (fast_dec_timer(&v->homing_timer) != 0) {
                             mine_moby->bBC = 1;
                         }
                     }
@@ -1053,7 +1054,7 @@ void mine_update(M910 *mine_moby) {
             }
             if (!(mine_moby->state & 2) && fast_dec_timer_s16(&v->h34) != 0) {
                 mine_moby->state |= 2;
-                v->p54 = 0;
+                v->target = 0;
             }
             {
                 char *moby_hit_record = find_moby_hit(mine_moby, 0x830000, 0);
@@ -1091,7 +1092,7 @@ void mine_update(M910 *mine_moby) {
                     int   i;
                     M910 *candidate_moby;
 
-                    if (v->i78 != 0) {
+                    if (v->extended_range != 0) {
                         range *= 3.0f;
                     }
                     i = 0;
@@ -1122,7 +1123,8 @@ void mine_update(M910 *mine_moby) {
                               2.0f)) {
                             goto next;
                         }
-                        if (v->p54 != 0 && v->p54->state != 0xFE && v->p54->state != 0xFD) {
+                        if (v->target != 0 && v->target->state != 0xFE &&
+                            v->target->state != 0xFD) {
                             goto next;
                         }
                         if (best != 0) {
@@ -1138,49 +1140,50 @@ void mine_update(M910 *mine_moby) {
                         best = candidate_moby;
                         blend_moby_animation(mine_moby, 1, 0, scale_game_frames(3));
                         allocate_voice_for_target_entry(0, 0, (int)mine_moby);
-                        v->f40 = 0.0f;
-                        v->i58 = scale_game_frames(600);
-                        v->h52 = 1;
-                        v->i48 = scale_game_frames(7);
+                        v->homing_speed = 0.0f;
+                        v->homing_timer = scale_game_frames(600);
+                        v->homing_phase = 1;
+                        v->homing_phase_timer = scale_game_frames(7);
                     next:
                         i++;
                         candidate_moby = (M910 *)active_mobies[i];
                     }
                     if (best != 0) {
-                        v->p54 = best;
+                        v->target = best;
                     }
                 }
             }
-            v->i78 = 0;
+            v->extended_range = 0;
             if (v->i5C < 0 || *(int *)&mine_force_burst != 0) {
                 cart_burst(mine_moby, &mine_moby->pos, -1, 0.33f, 13.0f);
                 mine_spawn_drops(mine_moby, D_L00_001B07B0);
                 mark_moby_for_removal(mine_moby);
             }
             {
-                float amp = v->f6C;
+                float amp = v->bob_amplitude;
 
                 if (0.05f < amp) {
                     float damped = frame_scale * -0.012000024f * amp + amp;
 
-                    v->f6C = damped;
+                    v->bob_amplitude = damped;
                     if (damped < 0.05f) {
-                        v->f6C = 0.05f;
+                        v->bob_amplitude = 0.05f;
                     }
                 }
             }
-            k = convert_integer_to_float(D_L00_0015F5CC - v->i74);
+            k = convert_integer_to_float(D_L00_0015F5CC - v->bob_start_frame);
             k = k / scale_time(*(float *)&mine_bounce_ramp_duration);
             if (1.0f < k) {
                 k = 1.0f;
             } else if (k < 0.0f) {
                 k = 0.0f;
             }
-            v->f70 = fast_add_rotations(v->f70, frame_time * 6.2831855f);
-            mine_moby->pos.f[2] = mine_moby->pos.f[2] + v->f6C * fast_sin(v->f70) * k + 0.4f;
+            v->bob_phase = fast_add_rotations(v->bob_phase, frame_time * 6.2831855f);
+            mine_moby->pos.f[2] =
+                mine_moby->pos.f[2] + v->bob_amplitude * fast_sin(v->bob_phase) * k + 0.4f;
             if (mine_moby->bBC != 0) {
                 explosion_camera_distance = vector_distance_xy(&mine_moby->pos, D_L00_00166DC0);
-                if (v->h50 == 0) {
+                if (v->in_water == 0) {
                     V910 t;
                     {
                         float s = convert_integer_to_float(D_E910.b11) * 0.5f + 1.0f;
@@ -1202,7 +1205,7 @@ void mine_update(M910 *mine_moby) {
                     }
                 }
                 gz = FUN_L00_00259710(&mine_moby->pos);
-                if (v->h50 != 0) {
+                if (v->in_water != 0) {
                     V910 t;
                     V910 n;
                     V910 r;
