@@ -138,7 +138,7 @@ void draw_dialog_text(void) {
         box.anchor_y = 0x136 - box.rendered_height;
         font_print_window(&box, color, text_cursor, -1, get_effect_texture(1), normal_font_metrics);
         tint = fast_tween_color(
-            0x20FFFF, 0x8020FFFF, 1.0f - (f32)freeze.unk24 / (f32)scale_game_frames(30));
+            0x20FFFF, 0x8020FFFF, 1.0f - (f32)freeze.fade_step / (f32)scale_game_frames(30));
         font_print_center(0x100, 0x140, tint, get_help_message_text(0x524A), -1);
         mid = (y + box.anchor_y) >> 1;
         vu1_add_g_sregister(0x47, 0x3004B);
@@ -296,7 +296,7 @@ void draw_dialog_text(void) {
                                   text,
                                   -1);
         tint = fast_tween_color(
-            0x20FFFF, 0x8020FFFF, 1.0f - (f32)freeze.unk24 / (f32)scale_game_frames(30));
+            0x20FFFF, 0x8020FFFF, 1.0f - (f32)freeze.fade_step / (f32)scale_game_frames(30));
         if (left != 0) {
             font_print_center(0xCA, box.bottom - 0x14, tint, get_help_message_text(left), -1);
         }
@@ -376,7 +376,7 @@ void draw_dialog_text(void) {
                                       3.14159f) *
                                      0.5f +
                                  0.5f);
-        scale = (f32)freeze.unk20 * 0.125f;
+        scale = (f32)freeze.box_timer * 0.125f;
         if (scale > 1.0f) {
             scale = 1.0f;
         } else if (scale < 0.1f) {
@@ -385,8 +385,8 @@ void draw_dialog_text(void) {
         shared_dialog_text_color = freeze_shared_dialog_text_base_color;
         matched_record_text_color = freeze_matched_record_text_base_color;
         unmatched_record_text_color = freeze_unmatched_record_text_base_color;
-        if (freeze.unk24 != 0) {
-            color_blend_fraction = (f32)freeze.unk24 * 0.125f;
+        if (freeze.fade_step != 0) {
+            color_blend_fraction = (f32)freeze.fade_step * 0.125f;
             if (color_blend_fraction > 1.0f) {
                 color_blend_fraction = 1.0f;
             } else if (color_blend_fraction < 0.0f) {

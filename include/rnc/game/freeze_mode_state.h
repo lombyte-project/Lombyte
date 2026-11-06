@@ -15,9 +15,11 @@ typedef struct FreezeModeState {
     s32   return_game_mode; /* 0x14: game_mode before the freeze */
     s32   context;          /* 0x18: mode_freeze_init's second argument */
     s32   choice;           /* 0x1C */
-    s32   unk20;
-    s32   unk24;
-    s32   unk28;
+    s32 box_timer; /* 0x20: frames counted per state: delay before the prompt fades in, video preview
+                        timeout, grow step of the choice box (scale box_timer / 8) */
+    s32 fade_step; /* 0x24: counts down to fade the prompt in (1 - fade_step / 30) and to blend the
+                        choice box text (fade_step / 8) */
+    s32 unk28;     /* 0x28: only cleared by mode_freeze_init */
 } FreezeModeState;
 
 extern FreezeModeState freeze __asm__("D_00193300");
