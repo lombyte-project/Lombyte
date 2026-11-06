@@ -317,7 +317,7 @@ void update_hero_motion_for_current_state(void) {
                 s = 1.0f;
             }
             speed = frame_time_sq * 12.0f * s;
-            hero.unk2290 = speed;
+            hero.stop_decel = speed;
             if (((struct MobyView *)hero.moby)->seq == ((struct MobyView *)hero.moby)->prev_seq &&
                 ((struct MobyView *)hero.moby)->seq != 0x14) {
                 f32 r = hero.motion.flat_speed / speed;
@@ -1656,7 +1656,7 @@ void update_hero_motion_for_current_state(void) {
             hero.sharp_turn = 0;
         }
         update_hero_target_speed_from_stick();
-        if (hero.unk930 > 0.0f) {
+        if (hero.push_length > 0.0f) {
             Vec4 *move_impulse = &hero.move_impulse;
             build_scaled_hero_move_impulse(0.7f, 0.0f);
             scratch_vector.q = hero.move_impulse.q;

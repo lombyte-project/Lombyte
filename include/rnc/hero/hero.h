@@ -480,10 +480,11 @@ struct Hero {
     u8   pad_710[0x10];
     Vec4 smoothed_steer_stick; /* 0x720 */
     u8   pad_730[0x10];
-    Vec4 unk740;                        /* 0x740 */
-    Vec4 landing_displacement;          /* 0x750 */
-    Vec4 board_ground_pos;              /* 0x760 */
-    Vec4 unk770;                        /* 0x770 */
+    Vec4 unk740;               /* 0x740 */
+    Vec4 landing_displacement; /* 0x750 */
+    Vec4 board_ground_pos;     /* 0x760 */
+    Vec4
+        ramp_launch_forward; /* 0x770: hero forward axis at a ramp launch, kept flat to the ground normal */
     Vec4 tilt_up_dir;                   /* 0x780 */
     Vec4 ground_move_dir;               /* 0x790 */
     s16  racer_laps[8];                 /* 0x7A0 */
@@ -562,9 +563,9 @@ struct Hero {
     u8   pad_918[0x8];
     Vec4
         move_impulse; /* 0x920: one-frame displacement; the hero update adds it to motion.pos and clears it (some states; zero while running) */
-    f32          unk930; /* 0x930 */
-    f32          unk934; /* 0x934 */
-    f32          unk938; /* 0x938 */
+    f32 push_length; /* 0x930: length of the move_impulse that build_scaled_hero_move_impulse builds; > 0 enables it */
+    f32          push_pitch; /* 0x934: second angle of that offset (build_spherical_offset) */
+    f32          push_yaw;   /* 0x938: first angle (yaw) of that offset */
     u8           pad_93C[0x4];
     f32          fall_state_gravity;         /* 0x940 */
     f32          stickless_decel;            /* 0x944 */
@@ -812,23 +813,23 @@ struct Hero {
     s32          board_boost_voice; /* 0x2234 */
     struct Moby *sound_slot_moby
         [8]; /* 0x2238: per sound slot (grind_voice + i * 4): moby the sound plays on, 0 = hero.moby */
-    u8                pad_2258[0x18];
-    s32               fidget_index;       /* 0x2270 */
-    s32               look_target;        /* 0x2274 */
-    void             *anim_link_moby;     /* 0x2278 */
-    s32               anim_link_table;    /* 0x227C */
-    struct Moby      *damage_source_moby; /* 0x2280 */
-    s32               camera_mode;        /* 0x2284 */
-    f32               reach_distance;     /* 0x2288 */
-    f32               reach_height;       /* 0x228C */
-    f32               unk2290;            /* 0x2290 */
-    s32               item_hold_anim;     /* 0x2294 */
-    s32               item_anim_item_id;  /* 0x2298 */
-    f32               stick_magnitude;    /* 0x229C */
-    s32               underwater_air;     /* 0x22A0 */
-    f32               water_depth;        /* 0x22A4 */
-    struct HeroHealth health;             /* 0x22A8 */
-    s32               wall_jumped;        /* 0x22B4 */
+    u8           pad_2258[0x18];
+    s32          fidget_index;       /* 0x2270 */
+    s32          look_target;        /* 0x2274 */
+    void        *anim_link_moby;     /* 0x2278 */
+    s32          anim_link_table;    /* 0x227C */
+    struct Moby *damage_source_moby; /* 0x2280 */
+    s32          camera_mode;        /* 0x2284 */
+    f32          reach_distance;     /* 0x2288 */
+    f32          reach_height;       /* 0x228C */
+    f32 stop_decel;        /* 0x2290: 12 * frame_time_sq scaled by slope, set in HERO_STATE_STOP */
+    s32 item_hold_anim;    /* 0x2294 */
+    s32 item_anim_item_id; /* 0x2298 */
+    f32 stick_magnitude;   /* 0x229C */
+    s32 underwater_air;    /* 0x22A0 */
+    f32 water_depth;       /* 0x22A4 */
+    struct HeroHealth health;      /* 0x22A8 */
+    s32               wall_jumped; /* 0x22B4 */
     f32 current_path_dist; /* 0x22B8: distance to the nearest carrying path this frame (water_current_update keeps the minimum) */
     u8  pad_22BC[0x8];
     s32 slot3_anim_timer; /* 0x22C4 */
@@ -852,7 +853,7 @@ struct Hero {
     f32 item5_glow_phase;     /* 0x22F0: phase for the items[5].moby colour */
     s32 color_fade_active;    /* 0x22F4 */
     s32 tint_color;           /* 0x22F8 */
-    s16 unk22FC;              /* 0x22FC */
+    s16 attachment_pulse_timer; /* 0x22FC: 57 frames after an attachment pulse; speeds the glow and tints it by 0x22FE */
 };
 
 /* Offsets are checked in src/check/hero_layout_check.c (make check). */

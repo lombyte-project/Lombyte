@@ -2506,11 +2506,12 @@ void update_hero_state_transitions(void) {
                     }
                     break;
                 case HERO_STATE_VEHICLE_MODE_1_IDLE:
-                    if (hero.unk22FC > scale_game_frames(0x39) - scale_game_frames(0xF)) {
+                    if (hero.attachment_pulse_timer >
+                        scale_game_frames(0x39) - scale_game_frames(0xF)) {
                         set_hero_animation(0x12, 0, scale_game_frames(0xA));
                         break;
                     }
-                    if (hero.unk22FC == 0 && (hero.anim_flags & 2)) {
+                    if (hero.attachment_pulse_timer == 0 && (hero.anim_flags & 2)) {
                         if (((unsigned char *)hero.moby)[0x53] != 0) {
                             set_hero_animation(0, 0, scale_game_frames(0xC));
                         } else if (random_float_between(0.0f, 1.0f) < 0.5f) {
@@ -2542,7 +2543,8 @@ void update_hero_state_transitions(void) {
                         hero_set_state(0x44, 1);
                         break;
                     }
-                    if (hero.unk22FC == 0 && ((unsigned char *)hero.moby)[0x53] == 0x12) {
+                    if (hero.attachment_pulse_timer == 0 &&
+                        ((unsigned char *)hero.moby)[0x53] == 0x12) {
                         set_hero_animation(0, 0, scale_game_frames(0xC));
                     }
                     break;

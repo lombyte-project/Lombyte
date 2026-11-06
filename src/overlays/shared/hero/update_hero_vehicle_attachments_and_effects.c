@@ -184,7 +184,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
                     scale = 1.7f;
                     if (D_0015EDB3_macro)
                         scale = 3.1f;
-                    if (g->unk22FC)
+                    if (g->attachment_pulse_timer)
                         scale *= 1.4f;
                     approach_value(*(f32 *)(*(char **)(((char *)g->unk1624) + 0x24) + 0x24) * scale,
                                    0.02f,
@@ -200,7 +200,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
                 struct Hero *g = &hero;
                 g->glow_phase = fast_add_rotations(g->glow_phase, frame_time_macro * 2.9670596f);
             }
-            if (fast_dec_timer_s16(&g->unk22FC) == 0) {
+            if (fast_dec_timer_s16(&g->attachment_pulse_timer) == 0) {
                 struct Hero *g = &hero;
                 g->glow_phase = fast_add_rotations(g->glow_phase, frame_time_macro * 12.217304f);
                 switch (*(s16 *)((char *)g + 0x22fe)) {
@@ -275,7 +275,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
                     *(char **)((char *)g + 0x22c0) + 0x10, 0, ((char *)g->moby));
                 /* Retail copies the low halfword of this pending pointer. */
                 *(s16 *)((char *)g + 0x22fe) = *(u16 *)((char *)g + 0x22c0);
-                g->unk22FC = scale_game_frames(0x39);
+                g->attachment_pulse_timer = scale_game_frames(0x39);
             }
             *(u32 *)((char *)g + 0x22c0) = 0;
         }

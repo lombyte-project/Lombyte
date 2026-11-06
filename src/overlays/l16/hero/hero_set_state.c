@@ -478,7 +478,7 @@ int hero_set_state(int requested_state, int animation_update_mode) {
         p->state.control_mode = 0x15;
         p->camera_mode = 8;
         p->item_select_blocked = 1;
-        qcopy(&p->unk770, p->rot_matrix);
+        qcopy(&p->ramp_launch_forward, p->rot_matrix);
         p->board_gravity = frame_time_sq * 18.0f;
         if (animation_update_mode)
             set_hero_animation(0x52, 0, (float)scale_game_frames(5));

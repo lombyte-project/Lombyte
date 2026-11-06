@@ -772,7 +772,7 @@ void update_hero_planar_movement_velocity(void) {
     target_velocity.f[1] = target_speed_y * turn_factor_or_speed_scale_or_opposition_or_slope_speed;
     qcopy(&target_velocity_before_impulse, &target_velocity);
     zero_or_planar_step_limit_or_slope_heading = target_velocity.f[2];
-    if (zero_or_planar_step_limit_or_slope_heading < hero.unk930) {
+    if (zero_or_planar_step_limit_or_slope_heading < hero.push_length) {
         build_scaled_hero_move_impulse(0.7f,
                                        frame_duration * zero_or_planar_step_limit_or_slope_heading);
         qcopy(&saved_move_impulse, &hero.move_impulse);
@@ -813,7 +813,7 @@ void update_hero_planar_movement_velocity(void) {
     if (frame_time * 5.9f < hero.motion.speed_xy) {
         zero_or_planar_step_limit_or_slope_heading = frame_time_sq * 13.0f;
     }
-    impulse_gate_or_target_length = hero.unk930;
+    impulse_gate_or_target_length = hero.push_length;
     zero_or_slope_step_limit = 0.0f;
     if (zero_or_slope_step_limit < impulse_gate_or_target_length) {
         turn_factor_or_speed_scale_or_opposition_or_slope_speed =
