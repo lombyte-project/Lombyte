@@ -1,5 +1,6 @@
 /* Level 04 moby class blarg_trooper. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "qcopy.h"
@@ -17,53 +18,50 @@
 #include "rnc/overlay/shared/math/quad.h"
 
 typedef struct BlargTrooperVars {
-    u8    pad_0[0x20];
-    f32   health;
-    s16   max_health;
-    u8    pad_26[0x2];
-    u8    hit_response_class;
-    u8    unk29;
-    u8    pad_2A[0x4];
-    u8    unk2E;
-    u8    pad_2F[0x9];
-    s32   retimer;
-    u8    pad_3C[0x1C];
-    u8    unk58;
-    u8    pad_59[0x1];
-    u8    unk5A;
-    u8    pad_5B[0x5];
-    s16   anim_state;
-    u8    pad_62[0x5];
-    u8    hit_flash_target_red;
-    u8    pad_68[0x8];
-    f32   motion[4];
-    f32   unk80[4];
-    u8    pad_90[0x30];
-    f32   unkC0[4];
-    f32   unkD0[4];
-    s32   path_when_selected;
-    s32   path_when_unselected;
-    s16   path_selector;
-    u8    pad_EA[0x2];
-    f32   yaw_turn_velocity;
-    s16   timer_F0;
-    s16   timer_F2;
-    f32   recoil_speed;
-    char *gun_moby;
-    u8    unkFC;
-    u8    unkFD;
-    u8    unkFE;
-    u8    unkFF;
-    u8    pad_100[0x8];
-    s32   timer_108;
-    u8    pad_10C[0x4];
-    f32   manipulator0[4];
-    u8    pad_120[0x58];
-    f32   unk178;
-    u8    pad_17C[0x14];
-    f32   manipulator1[4];
-    u8    pad_1A0[0x58];
-    f32   unk1F8;
+    u8                   pad_0[0x20];
+    f32                  health;
+    s16                  max_health;
+    u8                   pad_26[0x2];
+    u8                   hit_response_class;
+    u8                   unk29;
+    u8                   pad_2A[0x4];
+    u8                   unk2E;
+    u8                   pad_2F[0x9];
+    s32                  retimer;
+    u8                   pad_3C[0x1C];
+    u8                   unk58;
+    u8                   pad_59[0x1];
+    u8                   unk5A;
+    u8                   pad_5B[0x5];
+    struct HitColorFlash hit_flash;
+    f32                  motion[4];
+    f32                  unk80[4];
+    u8                   pad_90[0x30];
+    f32                  unkC0[4];
+    f32                  unkD0[4];
+    s32                  path_when_selected;
+    s32                  path_when_unselected;
+    s16                  path_selector;
+    u8                   pad_EA[0x2];
+    f32                  yaw_turn_velocity;
+    s16                  timer_F0;
+    s16                  timer_F2;
+    f32                  recoil_speed;
+    char                *gun_moby;
+    u8                   unkFC;
+    u8                   unkFD;
+    u8                   unkFE;
+    u8                   unkFF;
+    u8                   pad_100[0x8];
+    s32                  timer_108;
+    u8                   pad_10C[0x4];
+    f32                  manipulator0[4];
+    u8                   pad_120[0x58];
+    f32                  unk178;
+    u8                   pad_17C[0x14];
+    f32                  manipulator1[4];
+    u8                   pad_1A0[0x58];
+    f32                  unk1F8;
 } BlargTrooperVars;
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C5B88), where it is exact; names translated to the US level program. */
@@ -315,7 +313,7 @@ void blarg_trooper_update(struct Moby *moby) {
         case BLARG_TROOPER_HIT_REACTION_FATAL:
         case BLARG_TROOPER_HIT_REACTION_FATAL_KNOCKBACK:
             moby->flags &= 0xEFFF;
-            blarg_trooper_pvars->hit_flash_target_red = 0xFA;
+            blarg_trooper_pvars->hit_flash.flash_red = 0xFA;
             {
                 float a = frame_time_sq * 37.0f;
                 float b = frame_time * 17.0f;
@@ -341,7 +339,7 @@ void blarg_trooper_update(struct Moby *moby) {
         case BLARG_TROOPER_HIT_REACTION_START_HIT_RECOVERY:
         case BLARG_TROOPER_HIT_REACTION_RECOIL_RECOVERY: {
             int attacker_class;
-            blarg_trooper_pvars->hit_flash_target_red = 0x96;
+            blarg_trooper_pvars->hit_flash.flash_red = 0x96;
             blend_moby_animation(moby, (void *)8, 0, (void *)scale_game_frames(5));
             moby->state = BLARG_TROOPER_STATE_HIT_RECOVERY;
             attacker_class = *(short *)(*(char **)(hit + 0x20) + 0xA6);
@@ -360,7 +358,7 @@ void blarg_trooper_update(struct Moby *moby) {
         }
         case BLARG_TROOPER_HIT_REACTION_START_KNOCKBACK_RECOVERY:
         case BLARG_TROOPER_HIT_REACTION_KNOCKBACK_RECOVERY:
-            blarg_trooper_pvars->hit_flash_target_red = 0xFA;
+            blarg_trooper_pvars->hit_flash.flash_red = 0xFA;
             blend_moby_animation(moby, (void *)0xC, 0, (void *)scale_game_frames(5));
             moby->state = BLARG_TROOPER_STATE_KNOCKBACK_RECOVERY;
             blarg_trooper_pvars->recoil_speed = 2.0f / scale_time(15.0f);
@@ -378,7 +376,7 @@ void blarg_trooper_update(struct Moby *moby) {
         case BLARG_TROOPER_HIT_REACTION_IGNORED:
             break;
         }
-        start_hit_color_flash(moby, &blarg_trooper_pvars->anim_state);
+        start_hit_color_flash(moby, &blarg_trooper_pvars->hit_flash);
     }
     moby->hit_slot = 0xFF;
     if (blarg_trooper_pvars->retimer != 0) {
@@ -770,7 +768,7 @@ void blarg_trooper_update(struct Moby *moby) {
         }
         break;
     }
-    update_hit_color_flash(moby, &blarg_trooper_pvars->anim_state);
+    update_hit_color_flash(moby, &blarg_trooper_pvars->hit_flash);
     {
         int current_state = moby->state;
         if (current_state == BLARG_TROOPER_STATE_IDLE ||

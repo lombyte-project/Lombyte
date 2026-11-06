@@ -1,5 +1,6 @@
 /* Level 13 Blarg space commando moby class: damage, targeting, ground motion and its trail (points, quads and sparks). */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
@@ -540,42 +541,40 @@ void blarg_space_commando_update(struct Moby *moby) {
 }
 
 struct WalkerVars_8d10 {
-    u8    pad0[0x20];
-    f32   health; /* 0x20 */
-    u8    pad24[2];
-    s16   stun_timer; /* 0x26 */
-    u8    pad28[0x10];
-    s32   init; /* 0x38: nonzero until the idle timer is first drawn */
-    u8    pad3C[0x24];
-    u8    anim[8];    /* 0x60 */
-    f32   fall_speed; /* 0x68 */
-    u8    pad6C[0xC];
-    f32   knock_up;   /* 0x78 */
-    f32   knock_back; /* 0x7C */
-    s32   hit_sound;  /* 0x80 */
-    u8    pad84[4];
-    f32   hit_scale; /* 0x88 */
-    u8    pad8C[0x24];
-    f32   knock_min; /* 0xB0 */
-    f32   knock_max; /* 0xB4 */
-    u8    padB8[0x58];
-    u8    flash[7];   /* 0x110 */
-    u8    flash_time; /* 0x117 */
-    u8    pad118[8];
-    Vec4f target; /* 0x120 */
-    u8    pad130[0x30];
-    s32   start_frame; /* 0x160 */
-    s32   mode;        /* 0x164 */
-    u8    pad168[8];
-    Vec4f home;          /* 0x170 */
-    s32   path;          /* 0x180 */
-    s32   pursuit_timer; /* 0x184 */
-    u8    pad188[8];
-    f32   range; /* 0x190 */
-    u8    pad194[8];
-    f32   near_range;  /* 0x19C */
-    f32   far_range;   /* 0x1A0 */
-    s32   target_moby; /* 0x1A4: -1: none */
+    u8                   pad0[0x20];
+    f32                  health; /* 0x20 */
+    u8                   pad24[2];
+    s16                  stun_timer; /* 0x26 */
+    u8                   pad28[0x10];
+    s32                  init; /* 0x38: nonzero until the idle timer is first drawn */
+    u8                   pad3C[0x24];
+    u8                   anim[8];    /* 0x60 */
+    f32                  fall_speed; /* 0x68 */
+    u8                   pad6C[0xC];
+    f32                  knock_up;   /* 0x78 */
+    f32                  knock_back; /* 0x7C */
+    s32                  hit_sound;  /* 0x80 */
+    u8                   pad84[4];
+    f32                  hit_scale; /* 0x88 */
+    u8                   pad8C[0x24];
+    f32                  knock_min; /* 0xB0 */
+    f32                  knock_max; /* 0xB4 */
+    u8                   padB8[0x58];
+    struct HitColorFlash hit_flash;
+    Vec4f                target; /* 0x120 */
+    u8                   pad130[0x30];
+    s32                  start_frame; /* 0x160 */
+    s32                  mode;        /* 0x164 */
+    u8                   pad168[8];
+    Vec4f                home;          /* 0x170 */
+    s32                  path;          /* 0x180 */
+    s32                  pursuit_timer; /* 0x184 */
+    u8                   pad188[8];
+    f32                  range; /* 0x190 */
+    u8                   pad194[8];
+    f32                  near_range;  /* 0x19C */
+    f32                  far_range;   /* 0x1A0 */
+    s32                  target_moby; /* 0x1A4: -1: none */
 };
 
 extern f32 D_L13_00161E58 __attribute__((sda));
@@ -681,7 +680,7 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
                                     1,
                                     0,
                                     fast_arc_tan(*(f32 *)(hit + 0x10), *(f32 *)(hit + 0x14)));
-            blarg_space_commando_private_data->flash_time = 0xFA;
+            blarg_space_commando_private_data->hit_flash.flash_red = 0xFA;
             break;
         case HIT_RESULT_DEATH:
         case HIT_RESULT_DYING_KNOCKBACK:
@@ -699,14 +698,14 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
                                     1,
                                     0,
                                     fast_arc_tan(*(f32 *)(hit + 0x10), *(f32 *)(hit + 0x14)));
-            blarg_space_commando_private_data->flash_time = 0xFA;
+            blarg_space_commando_private_data->hit_flash.flash_red = 0xFA;
             stop_moby_sound_8d10(moby, 0, -1);
             break;
         }
-        start_hit_color_flash(moby, blarg_space_commando_private_data->flash);
+        start_hit_color_flash(moby, &blarg_space_commando_private_data->hit_flash);
     }
     moby->hit_slot = 0xFF;
-    update_hit_color_flash(moby, blarg_space_commando_private_data->flash);
+    update_hit_color_flash(moby, &blarg_space_commando_private_data->hit_flash);
     if (blarg_space_commando_private_data->pursuit_timer != 0) {
         blarg_space_commando_private_data->range = blarg_space_commando_private_data->far_range;
     } else {

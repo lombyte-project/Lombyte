@@ -1,5 +1,6 @@
 /* Shared moby class: armed_transport. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -30,39 +31,37 @@ enum {
 };
 
 typedef struct ArmedTransportVars {
-    u8  pad0[0x20];
-    f32 health;
-    s16 max_health;
-    u8  pad26[0x2];
-    s8  hit_response_class;
-    u8  pad29[0x37];
-    u8  trooper_anim[0x7];
-    u8  hit_animation_secondary_red;
-    u8  pad68[0x8];
-    f32 target_position[4];
-    u8  pad80[0x30];
-    s32 target;
-    s32 target_selection_status;
-    u8  padB8[0x8];
-    u8  passenger_moby_indices[0x10];
-    s32 target_path_index;
-    s32 activation_path_index;
-    s32 path_index;
-    s32 second_path_index;
-    u8  joint_animation[0x64];
-    f32 joint_animation_target;
-    u8  pad148[0x18];
-    s32 death_timer_frames;
-    s32 rocket_timer;
-    s32 path_point;
-    s32 path_segment_fraction;
-    f32 path_and_pose_state[4];
-    u8  pose_angle_velocity[0x4];
-    s32 passenger_release_timer;
-    f32 rot_x_velocity;
-    f32 bob_phase_radians;
-    s32 voice;
-    f32 base_height;
+    u8                   pad0[0x20];
+    f32                  health;
+    s16                  max_health;
+    u8                   pad26[0x2];
+    s8                   hit_response_class;
+    u8                   pad29[0x37];
+    struct HitColorFlash hit_flash;
+    f32                  target_position[4];
+    u8                   pad80[0x30];
+    s32                  target;
+    s32                  target_selection_status;
+    u8                   padB8[0x8];
+    u8                   passenger_moby_indices[0x10];
+    s32                  target_path_index;
+    s32                  activation_path_index;
+    s32                  path_index;
+    s32                  second_path_index;
+    u8                   joint_animation[0x64];
+    f32                  joint_animation_target;
+    u8                   pad148[0x18];
+    s32                  death_timer_frames;
+    s32                  rocket_timer;
+    s32                  path_point;
+    s32                  path_segment_fraction;
+    f32                  path_and_pose_state[4];
+    u8                   pose_angle_velocity[0x4];
+    s32                  passenger_release_timer;
+    f32                  rot_x_velocity;
+    f32                  bob_phase_radians;
+    s32                  voice;
+    f32                  base_height;
 } ArmedTransportVars;
 
 typedef union {
@@ -485,7 +484,7 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
             if (response >= 3) {
                 if (response < 9) {
                     FUN_0022da68_i(3, 0, transport_moby);
-                    transport_data->hit_animation_secondary_red = 120;
+                    transport_data->hit_flash.flash_red = 120;
                     transport_data->rot_x_velocity =
                         randf_sym(30.0f, 50.0f) * DEG_TO_RAD * frame_time;
                 }
@@ -504,13 +503,13 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
                 }
                 transport_moby->state = ARMED_TRANSPORT_STATE_DYING;
                 transport_data->death_timer_frames = scale_game_frames(90);
-                transport_data->hit_animation_secondary_red = 120;
+                transport_data->hit_flash.flash_red = 120;
             }
         }
-        start_hit_color_flash(transport_moby, &transport_data->trooper_anim);
+        start_hit_color_flash(transport_moby, &transport_data->hit_flash);
     }
     transport_moby->hit_slot = 255;
-    update_hit_color_flash(transport_moby, &transport_data->trooper_anim);
+    update_hit_color_flash(transport_moby, &transport_data->hit_flash);
     if (transport_data->target_path_index != -1 && D_001413DC[0] != 22) {
         char *path = D_L16_001B0930[transport_data->target_path_index];
         FUN_L00_0025ff38(128.0f,

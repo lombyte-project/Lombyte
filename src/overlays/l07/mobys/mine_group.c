@@ -1,5 +1,6 @@
 /* Level 07 moby class 0x367: mine group; places its group of mines along its path and moves them along it. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"
@@ -186,25 +187,22 @@ void reset_moby_from_class_defaults(struct Moby *moby) {
 }
 
 typedef struct MineGroupVars {
-    u8  pad_0[0x20];
-    f32 unk20;
-    u8  pad_24[0x2];
-    s16 surviving_hit_frame_count;
-    u8  pad_28[0x38];
-    s16 anim_state;
-    u8  pad_62[0x5];
-    u8  unk67;
-    u8  pad_68[0x8];
-    s32 unk70;
-    s32 unk74;
-    s32 unk78;
-    f32 unk7C;
-    f32 unk80;
-    s32 child_reset_gate;
-    u8  pad_88[0x8];
-    s32 child_reset_segment_index;
-    u8  unk94;
-    u8  unk95;
+    u8                   pad_0[0x20];
+    f32                  unk20;
+    u8                   pad_24[0x2];
+    s16                  surviving_hit_frame_count;
+    u8                   pad_28[0x38];
+    struct HitColorFlash hit_flash;
+    s32                  unk70;
+    s32                  unk74;
+    s32                  unk78;
+    f32                  unk7C;
+    f32                  unk80;
+    s32                  child_reset_gate;
+    u8                   pad_88[0x8];
+    s32                  child_reset_segment_index;
+    u8                   unk94;
+    u8                   unk95;
 } MineGroupVars;
 
 /* Moby class 871 */
@@ -295,13 +293,13 @@ void mine_group_update(struct Moby *moby) {
                 return;
             }
             *remaining -= step;
-            boltcrate_pvars->unk67 = 0xfa;
+            boltcrate_pvars->hit_flash.flash_red = 0xfa;
             boltcrate_pvars->surviving_hit_frame_count = scale_game_frames(0x3c);
-            start_hit_color_flash(moby, &boltcrate_pvars->anim_state);
+            start_hit_color_flash(moby, &boltcrate_pvars->hit_flash);
         }
         moby->hit_slot = 0xff;
     }
-    update_hit_color_flash(moby, &boltcrate_pvars->anim_state);
+    update_hit_color_flash(moby, &boltcrate_pvars->hit_flash);
     if (boltcrate_pvars->unk70 == -1)
         return;
     path = D_L07_001B0530[boltcrate_pvars->unk70];

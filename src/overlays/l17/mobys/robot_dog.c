@@ -1,5 +1,6 @@
 /* Level 17 robot_dog: chase and aim, its stun and suction methods, and its glow quads. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/mobys/moby_class_id.h"
@@ -545,38 +546,35 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F1558), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    char          pad0[0x20];
-    float         f20;
-    char          pad24[0x14];
-    int           i38;
-    char          pad3C[0xD4];
-    short         h110[3];
-    char          b116;
-    unsigned char b117;
-    char          pad118[8];
-    float         v120[4];
-    float         f130;
-    float         f134;
-    float         f138;
-    float         f13C;
-    int           i140;
-    int           i144;
-    char          pad148[0x15];
-    char          b15D;
-    char          pad15E[0x12];
-    float         f170;
-    float         f174;
-    char          pad178[8];
-    float         v180[4];
-    char          pad190[0x20];
-    float         v1B0[4];
-    char          pad1C0[0x14];
-    float         f1D4;
-    char          pad1D8[0xC];
-    char          b1E4;
-    char          pad1E5[0xB];
-    float         f1F0;
-    float         f1F4;
+    char                 pad0[0x20];
+    float                f20;
+    char                 pad24[0x14];
+    int                  i38;
+    char                 pad3C[0xD4];
+    struct HitColorFlash hit_flash;
+    float                v120[4];
+    float                f130;
+    float                f134;
+    float                f138;
+    float                f13C;
+    int                  i140;
+    int                  i144;
+    char                 pad148[0x15];
+    char                 b15D;
+    char                 pad15E[0x12];
+    float                f170;
+    float                f174;
+    char                 pad178[8];
+    float                v180[4];
+    char                 pad190[0x20];
+    float                v1B0[4];
+    char                 pad1C0[0x14];
+    float                f1D4;
+    char                 pad1D8[0xC];
+    char                 b1E4;
+    char                 pad1E5[0xB];
+    float                f1F0;
+    float                f1F4;
 } Data;
 
 typedef struct {
@@ -653,8 +651,8 @@ void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_v
         }
         trooper_start_knockback(knockback_heading, moby, moby_vars->v120, 0xB, 1, 0);
         moby->state = ROBOT_DOG_STATE_FALL_THEN_REMOVE;
-        moby_vars->b117 = 0xF0;
-        start_hit_color_flash(moby, moby_vars->h110);
+        moby_vars->hit_flash.flash_red = 0xF0;
+        start_hit_color_flash(moby, &moby_vars->hit_flash);
     }
     moby->bA4 = 0xFF;
     if (clip_volume_suppressed != 0) {

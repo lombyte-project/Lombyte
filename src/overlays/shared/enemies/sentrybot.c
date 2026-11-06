@@ -1,5 +1,6 @@
 /* Shared moby class sentrybot. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/overlay/shared/game/level_save_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -80,68 +81,66 @@ typedef struct SentrybotKnockback {
 } SentrybotKnockback;
 
 typedef struct SentrybotVars {
-    u8                 pad0[0x20];
-    f32                health; /* 0x20: hit damage is taken from it */
-    s16                max_health;
-    u8                 pad26[2];
-    u8                 hit_response_class;
-    u8                 unk29;
-    u8                 pad2A[0xE];
-    s32                unk38; /* 0x38: set: restart target_countdown */
-    u8                 pad3C[0x24];
-    u8                 trooper_anim[7]; /* 0x60: start_hit_color_flash / update_hit_color_flash */
-    u8                 first_channel_blend_target;
-    u8                 pad68[8];
-    SentrybotKnockback knockback; /* 0x70 */
-    u8                 padB0[0x10];
-    f32                knockback_apex_animation_frame;
-    f32                knockback_landing_animation_frame;
-    u8                 padC8[8];
-    f32                path_search_point[4]; /* 0xD0: path point FUN_L00_0025ff38 finds */
-    u8                 padE0[0x20];
-    f32                aim_point[4];
-    char              *target; /* 0x110 */
-    s32                target_mode;
-    u8                 pad118[8];
-    s32                path_index; /* 0x120: into D_L15_001B0AB0 */
-    s32                patrol_path_index;
-    s32                alarm_moby_index;              /* 0x128: moby the alarm is set on */
-    s32                sight_line_ignored_moby_index; /* moby index the sight line ignores */
-    f32                target_countdown;              /* 0x130 */
-    f32                forward_speed;                 /* 0x134 */
-    f32                turn_velocity[1];
-    s32                patrol_point; /* 0x13C */
-    u8                 pad140[4];
-    s32                patrol_point_reached;
-    s32                patrol_pause_duration_frames;
-    s32                patrol_pause_timer;
-    s32                linked_moby_index;
-    s16                linked_moby_deactivation_cooldown;
-    s16                alert_timer; /* 0x156: set by alert_visible_group_sentrybots */
-    s16                target_detected_without_engagement;
-    u8                 has_line_of_sight; /* 0x15A: to the hero */
-    u8                 alert_engagement_suppressed;
-    u8                 next_state;
-    u8                 pending_animation;
-    u8                 saved_alert_engagement_suppression_plus_one;
-    u8                 command_alert_transition_started;
-    f32                home_pos[3]; /* 0x160: position at spawn */
-    f32                home_yaw;    /* 0x16C */
-    f32                turn_start_yaw;
-    f32                turn_target_yaw;
-    f32                turn_delta; /* 0x178 */
-    s32                group_index;
-    s32                linked_moby[4];   /* 0x180: moby indexes, -1: none */
-    char              *attention_target; /* 0x190 */
-    s16                priority_attention_active;
-    s16                attention_scan_timer;
-    char              *attention_source; /* 0x198: set_sentrybot_attention_target */
-    s16                attention_timer;  /* 0x19C */
-    u8                 projectile_emitted_this_animation;
-    u8                 target_in_view;
-    SentrybotJoint     joints[2];             /* 0x1A0 */
-    f32                effect_quad_pos[3][4]; /* 0x2A0: draw_sentrybot_effect_quads */
-    s32                clip_volume[4];        /* 0x2D0: -1: none */
+    u8                   pad0[0x20];
+    f32                  health; /* 0x20: hit damage is taken from it */
+    s16                  max_health;
+    u8                   pad26[2];
+    u8                   hit_response_class;
+    u8                   unk29;
+    u8                   pad2A[0xE];
+    s32                  unk38; /* 0x38: set: restart target_countdown */
+    u8                   pad3C[0x24];
+    struct HitColorFlash hit_flash;
+    SentrybotKnockback   knockback; /* 0x70 */
+    u8                   padB0[0x10];
+    f32                  knockback_apex_animation_frame;
+    f32                  knockback_landing_animation_frame;
+    u8                   padC8[8];
+    f32                  path_search_point[4]; /* 0xD0: path point FUN_L00_0025ff38 finds */
+    u8                   padE0[0x20];
+    f32                  aim_point[4];
+    char                *target; /* 0x110 */
+    s32                  target_mode;
+    u8                   pad118[8];
+    s32                  path_index; /* 0x120: into D_L15_001B0AB0 */
+    s32                  patrol_path_index;
+    s32                  alarm_moby_index;              /* 0x128: moby the alarm is set on */
+    s32                  sight_line_ignored_moby_index; /* moby index the sight line ignores */
+    f32                  target_countdown;              /* 0x130 */
+    f32                  forward_speed;                 /* 0x134 */
+    f32                  turn_velocity[1];
+    s32                  patrol_point; /* 0x13C */
+    u8                   pad140[4];
+    s32                  patrol_point_reached;
+    s32                  patrol_pause_duration_frames;
+    s32                  patrol_pause_timer;
+    s32                  linked_moby_index;
+    s16                  linked_moby_deactivation_cooldown;
+    s16                  alert_timer; /* 0x156: set by alert_visible_group_sentrybots */
+    s16                  target_detected_without_engagement;
+    u8                   has_line_of_sight; /* 0x15A: to the hero */
+    u8                   alert_engagement_suppressed;
+    u8                   next_state;
+    u8                   pending_animation;
+    u8                   saved_alert_engagement_suppression_plus_one;
+    u8                   command_alert_transition_started;
+    f32                  home_pos[3]; /* 0x160: position at spawn */
+    f32                  home_yaw;    /* 0x16C */
+    f32                  turn_start_yaw;
+    f32                  turn_target_yaw;
+    f32                  turn_delta; /* 0x178 */
+    s32                  group_index;
+    s32                  linked_moby[4];   /* 0x180: moby indexes, -1: none */
+    char                *attention_target; /* 0x190 */
+    s16                  priority_attention_active;
+    s16                  attention_scan_timer;
+    char                *attention_source; /* 0x198: set_sentrybot_attention_target */
+    s16                  attention_timer;  /* 0x19C */
+    u8                   projectile_emitted_this_animation;
+    u8                   target_in_view;
+    SentrybotJoint       joints[2];             /* 0x1A0 */
+    f32                  effect_quad_pos[3][4]; /* 0x2A0: draw_sentrybot_effect_quads */
+    s32                  clip_volume[4];        /* 0x2D0: -1: none */
 } SentrybotVars;
 
 typedef struct {
@@ -1646,7 +1645,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, i
             break;
         case SENTRYBOT_FIRST_CHANNEL_BLEND_HIT_RESPONSE:
         case SENTRYBOT_FIRST_CHANNEL_BLEND_TARGET_HIT_RESPONSE:
-            sentrybot_data->first_channel_blend_target = 0xFA;
+            sentrybot_data->hit_flash.flash_red = 0xFA;
             break;
         case NONLETHAL_KNOCKBACK_HIT_RESPONSE:
         case NONLETHAL_ARC_HIT_RESPONSE:
@@ -1688,7 +1687,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, i
             trooper_start_knockback(moby, &sentrybot_data->knockback, 7, 1, 0, angle);
             MOBY(moby)->state = SENTRYBOT_RECOVERABLE_KNOCKBACK;
             MOBY(moby)->command = 2;
-            sentrybot_data->first_channel_blend_target = 0x78;
+            sentrybot_data->hit_flash.flash_red = 0x78;
             break;
         case LETHAL_HIT_RESPONSE:
         case DEATH_KNOCKBACK_HIT_RESPONSE: {
@@ -1727,13 +1726,13 @@ void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, i
             trooper_start_knockback(moby, &sentrybot_data->knockback, 8, 1, 0, fall_angle);
             MOBY(moby)->state = SENTRYBOT_DEATH_KNOCKBACK;
             MOBY(moby)->command = 2;
-            sentrybot_data->first_channel_blend_target = 0xF0;
+            sentrybot_data->hit_flash.flash_red = 0xF0;
             break;
         }
-        start_hit_color_flash(moby, &sentrybot_data->trooper_anim);
+        start_hit_color_flash(moby, &sentrybot_data->hit_flash);
     }
     MOBY(moby)->hit_slot = 0xFF;
-    update_hit_color_flash(moby, &sentrybot_data->trooper_anim);
+    update_hit_color_flash(moby, &sentrybot_data->hit_flash);
     if (flag != 0)
         return;
     if (sentrybot_data->unk38 != 0) {

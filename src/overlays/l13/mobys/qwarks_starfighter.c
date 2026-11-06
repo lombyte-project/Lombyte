@@ -1,5 +1,6 @@
 /* Level 13 Qwark's starfighter moby class: voice lines, joint attachments and effects, path steering, damage, death, weapons, attack commands and tractor beam. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -671,22 +672,21 @@ typedef struct {
 } Sub;
 
 typedef struct {
-    char           pad0[0x20];
-    Sub            sub;
-    char           pad28[0x38];
-    char           q60[7];
-    unsigned char  damage_flash_red;
-    char           pad68[0x5C];
-    Moby_2EAE80   *list[11];
-    Moby_2EAE80   *first;
-    char           padF4[0xC];
-    int            tractor_beam_timer_frames;
-    char           pad104[0x18];
-    int            tractor_beam_voice_slot_index;
-    char           pad120[0x18];
-    unsigned short h138;
-    char           pad13A[0xE];
-    unsigned char  b148;
+    char                 pad0[0x20];
+    Sub                  sub;
+    char                 pad28[0x38];
+    struct HitColorFlash hit_flash;
+    char                 pad70[0x54];
+    Moby_2EAE80         *list[11];
+    Moby_2EAE80         *first;
+    char                 padF4[0xC];
+    int                  tractor_beam_timer_frames;
+    char                 pad104[0x18];
+    int                  tractor_beam_voice_slot_index;
+    char                 pad120[0x18];
+    unsigned short       h138;
+    char                 pad13A[0xE];
+    unsigned char        b148;
 } Data_2EAE80;
 
 typedef struct {
@@ -783,10 +783,10 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                     moby_data->first->bA4 = 0xFF;
                 } else {
                     dd->health = dd->health - r->damage_amount;
-                    moby_data->damage_flash_red = 0xFA;
+                    moby_data->hit_flash.flash_red = 0xFA;
                     mode = ATTACHMENT_DAMAGE_APPLIED;
                     moby_data->sub.h6 = scale_game_frames(0);
-                    start_hit_color_flash(moby, moby_data->q60);
+                    start_hit_color_flash(moby, &moby_data->hit_flash);
                     moby_data->first->bA4 = 0xFF;
                 }
                 if (moby->state == STARFIGHTER_STATE_DEATH_FLIGHT) {
@@ -882,10 +882,10 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                 moby_data->list[i]->bA4 = 0xFF;
             } else {
                 dd->health = dd->health - r->damage_amount;
-                moby_data->damage_flash_red = 0xFA;
+                moby_data->hit_flash.flash_red = 0xFA;
                 mode = ATTACHMENT_DAMAGE_APPLIED;
                 moby_data->sub.h6 = scale_game_frames(0);
-                start_hit_color_flash(moby, moby_data->q60);
+                start_hit_color_flash(moby, &moby_data->hit_flash);
                 moby_data->list[i]->bA4 = 0xFF;
             }
             if (moby->state == STARFIGHTER_STATE_DEATH_FLIGHT) {
@@ -980,7 +980,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
             }
         }
     }
-    update_hit_color_flash(moby, moby_data->q60);
+    update_hit_color_flash(moby, &moby_data->hit_flash);
 }
 
 void predict_hero_ship_projectile_lead_position(char *predicted_target_position,

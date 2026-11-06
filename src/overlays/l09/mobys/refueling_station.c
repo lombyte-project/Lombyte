@@ -1,5 +1,6 @@
 /* Level 09 moby class 0x494: refueling station. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "asm.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/audio/voice_pool.h"
@@ -25,12 +26,11 @@ typedef struct {
 } VendorHitSource;
 
 typedef struct {
-    u8  pad0[0x26];
-    s16 hurt_timer;
-    u8  pad28[0x38];
-    u8  anim[8];
-    u8  pad68[8];
-    s32 link;
+    u8                   pad0[0x26];
+    s16                  hurt_timer;
+    u8                   pad28[0x38];
+    struct HitColorFlash hit_flash;
+    s32                  link;
 } VendorVars;
 
 extern struct Moby *moby_list __asm__("D_L09_0015FFD8");
@@ -147,19 +147,19 @@ void handle_refueling_station_damage(struct Moby *moby,
                     }
                 }
                 FUN_L00_00257470(moby, 0, -1);
-                refueling_station_vars->anim[7] = 0x78;
-                start_hit_color_flash(moby, refueling_station_vars->anim);
+                refueling_station_vars->hit_flash.flash_red = 0x78;
+                start_hit_color_flash(moby, &refueling_station_vars->hit_flash);
                 moby->state = REFUELING_STATION_STATE_EXPLODE;
             } else {
                 *health -= damage_hit_record->damage;
-                refueling_station_vars->anim[7] = 0xFA;
+                refueling_station_vars->hit_flash.flash_red = 0xFA;
                 refueling_station_vars->hurt_timer = scale_game_frames(60);
-                start_hit_color_flash(moby, refueling_station_vars->anim);
+                start_hit_color_flash(moby, &refueling_station_vars->hit_flash);
             }
         }
         moby->hit_slot = 0xFF;
     }
-    update_hit_color_flash(moby, refueling_station_vars->anim);
+    update_hit_color_flash(moby, &refueling_station_vars->hit_flash);
 }
 
 typedef struct RefuelingStationVars {

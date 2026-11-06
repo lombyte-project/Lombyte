@@ -1,5 +1,6 @@
 /* Level 11 moby class psytcopus: hits and its path state machine. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -41,9 +42,7 @@ struct PokiPathVars {
     u8                     pad_59;
     u8                     unk5A; /* 0x5A */
     u8                     pad_5B[5];
-    u8                     move[7]; /* 0x60: passed to trooper_anim_update / trooper_anim_finish */
-    u8                     hit_reaction_channel_target; /* 0x67 */
-    u8                     pad_68[8];
+    struct HitColorFlash   hit_flash;
     struct KnockbackMotion knockback; /* 0x70 */
     Vec4f                  goal;      /* 0xD0 */
     u8                     pad_E0[0x30];
@@ -311,7 +310,7 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
             break;
         case HIT_REACTION_HURT_WITHOUT_KNOCKBACK:
         case HIT_REACTION_HURT_WITHOUT_STATE_CHANGE:
-            psytcopus_vars->hit_reaction_channel_target = 0xFA;
+            psytcopus_vars->hit_flash.flash_red = 0xFA;
             break;
         case HIT_REACTION_KNOCKBACK:
         case HIT_REACTION_KNOCKBACK_AND_CANCEL_PROJECTILE:
@@ -336,7 +335,7 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
                                &psytcopus_vars->knockback.vertical_speed);
             FUN_L00_0025c558_p(psytcopus, &psytcopus_vars->knockback, 5, 1, 0, angle1);
             psytcopus->state = PSYTCOPUS_STATE_KNOCKBACK;
-            psytcopus_vars->hit_reaction_channel_target = 0x78;
+            psytcopus_vars->hit_flash.flash_red = 0x78;
             if (psytcopus_vars->held_projectile != 0) {
                 FUN_L00_002371e0_p(psytcopus_vars->held_projectile);
                 psytcopus_vars->held_projectile = 0;
@@ -364,7 +363,7 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
                                &psytcopus_vars->knockback.vertical_speed);
             FUN_L00_0025c558_p(psytcopus, &psytcopus_vars->knockback, 6, 1, 0, angle2);
             psytcopus->state = PSYTCOPUS_STATE_DEATH_KNOCKBACK;
-            psytcopus_vars->hit_reaction_channel_target = 0xF0;
+            psytcopus_vars->hit_flash.flash_red = 0xF0;
             if (psytcopus_vars->held_projectile != 0) {
                 FUN_L00_002371e0_p(psytcopus_vars->held_projectile);
                 psytcopus_vars->held_projectile = 0;
@@ -372,10 +371,10 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
             FUN_L00_00257470_p(psytcopus, 0, -1);
             break;
         }
-        start_hit_color_flash(psytcopus, psytcopus_vars->move);
+        start_hit_color_flash(psytcopus, &psytcopus_vars->hit_flash);
     }
     psytcopus->hit_slot = 0xFF;
-    update_hit_color_flash(psytcopus, psytcopus_vars->move);
+    update_hit_color_flash(psytcopus, &psytcopus_vars->hit_flash);
     psytcopus_vars->reach = 24.0f;
     path = (s32 *)l11_paths[psytcopus_vars->path_index];
     if (FUN_L00_0025ff38_p(

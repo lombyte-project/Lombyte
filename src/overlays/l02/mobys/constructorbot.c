@@ -1,5 +1,6 @@
 /* Level 02 moby class constructorbot (0x264): its update, and its damage handling and retargeting. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -562,13 +563,10 @@ extern int select_moby_target_goal(char *a, char *o, float best) __asm__("FUN_L0
 
 /* pvars of the class FUN_L02_002d85b8 serves (only the fields it touches). */
 typedef struct {
-    char          pad0[0x20];
-    float         hp; /* 0x20 */
-    char          pad24[0x3C];
-    short         anim[3]; /* 0x60: passed to start_hit_color_flash / update_hit_color_flash */
-    unsigned char pad66;
-    unsigned char flash; /* 0x67 */
-    char          pad68[8];
+    char                   pad0[0x20];
+    float                  hp; /* 0x20 */
+    char                   pad24[0x3C];
+    struct HitColorFlash   hit_flash;
     struct KnockbackMotion knockback; /* 0x70 */
     char                   padD0[0x150];
     char                  *target; /* 0x220 */
@@ -596,10 +594,10 @@ void handle_constructorbot_damage_and_retargeting(void *owner_moby) {
         moby_vars->knockback.collision_z_offset = 0.6f;
         if (0.0f < moby_vars->hp) {
             if (dmg < 1.0f) {
-                moby_vars->flash = 100;
+                moby_vars->hit_flash.flash_red = 100;
             } else {
                 void *k = &moby_vars->knockback;
-                moby_vars->flash = 0x78;
+                moby_vars->hit_flash.flash_red = 0x78;
                 moby_vars->knockback.gravity = constructorbot_gravity_gp * frame_time_sq;
                 moby_vars->knockback.speed_approach_step =
                     constructorbot_hit_knockback_horizontal_speed_approach_rate_gp * frame_time_sq;
@@ -646,10 +644,10 @@ void handle_constructorbot_damage_and_retargeting(void *owner_moby) {
             moby_vars->knockback.apex_animation_frame = 6.5f;
             moby_vars->knockback.landing_animation_frame = 13.0f;
             MOBY(moby)->flags &= 0xEFFF;
-            moby_vars->flash = 0xFA;
+            moby_vars->hit_flash.flash_red = 0xFA;
             moby[0x20] = 0x11;
         }
-        start_hit_color_flash(moby, moby_vars->anim);
+        start_hit_color_flash(moby, &moby_vars->hit_flash);
     }
     ((unsigned char *)moby)[0xA4] = 0xFF;
     current_target = moby_vars->target;
@@ -663,5 +661,5 @@ void handle_constructorbot_damage_and_retargeting(void *owner_moby) {
     if (moby_vars->target == 0) {
         moby_vars->target = ((char *)hero.moby);
     }
-    update_hit_color_flash(moby, moby_vars->anim);
+    update_hit_color_flash(moby, &moby_vars->hit_flash);
 }

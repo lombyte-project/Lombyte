@@ -1,5 +1,6 @@
 /* Level 12 moby class hoven_anklebiter: its suck cannon callbacks, pursuit, movement, sparks, damage and alerts. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -839,39 +840,37 @@ void spawn_hoven_anklebiter_death_sparks(struct Moby *moby) {
 
 /* Variables of the Hoven anklebiter (moby->pvars); the l00 ElectroidVars damage layout moved by 0xB0. */
 typedef struct {
-    u8  pad0[0x20];
-    f32 health; /* 0x20 */
-    u8  pad24[2];
-    s16 stun_timer; /* 0x26 */
-    u8  pad28[0x10];
-    s32 reset_alert; /* 0x38 */
-    u8  pad3C[0xD4];
-    u8  anim[7];             /* 0x110: animation blend state */
-    u8  damage_blend_target; /* 0x117 */
-    u8  pad118[8];
-    u8  fall[0x10]; /* 0x120 */
-    f32 unk130;     /* 0x130 */
-    f32 unk134;     /* 0x134 */
-    f32 unk138;     /* 0x138 */
-    f32 unk13C;     /* 0x13C */
-    u8  pad140[4];
-    s32 unk144; /* 0x144 */
-    u8  pad148[8];
-    f32 unk150; /* 0x150 */
-    f32 unk154; /* 0x154 */
-    f32 unk158; /* 0x158 */
-    u8  pad15C;
-    u8  unk15D; /* 0x15D */
-    u8  pad15E[0x12];
-    f32 knockback_ascent_animation_target;  /* 0x170 */
-    f32 knockback_descent_animation_target; /* 0x174 */
-    u8  pad178[0x134];
-    f32 speed; /* 0x2AC */
-    u8  pad2B0[0x14];
-    s32 alert_timer; /* 0x2C4 */
-    u8  pad2C8[0x20];
-    s16 call_enabled; /* 0x2E8 */
-    s16 call_timer;   /* 0x2EA */
+    u8                   pad0[0x20];
+    f32                  health; /* 0x20 */
+    u8                   pad24[2];
+    s16                  stun_timer; /* 0x26 */
+    u8                   pad28[0x10];
+    s32                  reset_alert; /* 0x38 */
+    u8                   pad3C[0xD4];
+    struct HitColorFlash hit_flash;  /* 0x110 */
+    u8                   fall[0x10]; /* 0x120 */
+    f32                  unk130;     /* 0x130 */
+    f32                  unk134;     /* 0x134 */
+    f32                  unk138;     /* 0x138 */
+    f32                  unk13C;     /* 0x13C */
+    u8                   pad140[4];
+    s32                  unk144; /* 0x144 */
+    u8                   pad148[8];
+    f32                  unk150; /* 0x150 */
+    f32                  unk154; /* 0x154 */
+    f32                  unk158; /* 0x158 */
+    u8                   pad15C;
+    u8                   unk15D; /* 0x15D */
+    u8                   pad15E[0x12];
+    f32                  knockback_ascent_animation_target;  /* 0x170 */
+    f32                  knockback_descent_animation_target; /* 0x174 */
+    u8                   pad178[0x134];
+    f32                  speed; /* 0x2AC */
+    u8                   pad2B0[0x14];
+    s32                  alert_timer; /* 0x2C4 */
+    u8                   pad2C8[0x20];
+    s16                  call_enabled; /* 0x2E8 */
+    s16                  call_timer;   /* 0x2EA */
 } AnklebiterVars;
 
 extern s32 D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
@@ -965,8 +964,8 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
                 anklebiter_vars->knockback_ascent_animation_target = 11.0f;
                 anklebiter_vars->knockback_descent_animation_target = 18.0f;
                 moby->state = ANKLEBITER_DEATH_FALL;
-                anklebiter_vars->damage_blend_target = 0x78;
-                start_hit_color_flash(moby, anklebiter_vars->anim);
+                anklebiter_vars->hit_flash.flash_red = 0x78;
+                start_hit_color_flash(moby, &anklebiter_vars->hit_flash);
             } else {
                 help_direction_or_hit_position.q = coll->pos.q;
                 trooper_knockback_arc(&help_direction_or_hit_position,
@@ -977,13 +976,13 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
                 anklebiter_vars->knockback_descent_animation_target =
                     anklebiter_vars->knockback_ascent_animation_target = -1.0f;
                 moby->state = ANKLEBITER_KNOCKBACK_FALL;
-                anklebiter_vars->damage_blend_target = 0xFA;
+                anklebiter_vars->hit_flash.flash_red = 0xFA;
                 anklebiter_vars->stun_timer = scale_game_frames(0x3C);
-                start_hit_color_flash(moby, anklebiter_vars->anim);
+                start_hit_color_flash(moby, &anklebiter_vars->hit_flash);
             }
             spawn_hoven_anklebiter_death_sparks(moby);
         }
     }
     moby->hit_slot = 0xFF;
-    update_hit_color_flash(moby, anklebiter_vars->anim);
+    update_hit_color_flash(moby, &anklebiter_vars->hit_flash);
 }

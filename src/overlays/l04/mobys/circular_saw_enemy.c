@@ -1,5 +1,6 @@
 /* Level 04 moby class circular_saw_enemy: flying saw blades that flock and attack, and their suck cannon methods. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "qcopy.h"
@@ -319,79 +320,77 @@ extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 typedef float V4_35F0[4] __attribute__((aligned(16)));
 
 typedef struct D_35F0 {
-    char           pad00[0x20];
-    float          hp;
-    short          max_health;
-    char           pad26[2];
-    unsigned char  hit_response_class;
-    unsigned char  f29;
-    char           pad2A[4];
-    unsigned char  f2E;
-    char           pad2F;
-    float          f30;
-    char           pad34[4];
-    int            alert_range_refresh_trigger;
-    char           pad3C[0x1C];
-    unsigned char  f58;
-    char           pad59;
-    unsigned char  f5A;
-    char           pad5B[5];
-    int            f60;
-    float          f64;
-    float          f68;
-    float          f6C;
-    char           pad70[8];
-    float          downward_move_step;
-    char           pad7C[8];
-    float          f84;
-    char           pad88[0x10];
-    int            f98;
-    char           pad9C[0x14];
-    char           fB0[7];
-    unsigned char  fB7;
-    char           padB8[8];
-    char           fC0[0x10];
-    float          fD0;
-    float          fD4;
-    float          fD8;
-    char           padDC[8];
-    int            fE4;
-    char           padE8[0x15];
-    unsigned char  fFD;
-    char           padFE[0x22];
-    V4_35F0        home_position;
-    float          yaw_turn_step;
-    char           pad134[2];
-    short          alert_range_timer;
-    int            movement_boundary_path_index;
-    float          knockback_move_step;
-    float          target_detection_range;
-    short          movement_animation_change_timer;
-    short          action_timer;
-    char           pad148[4];
-    unsigned char  movement_direction_index;
-    unsigned char  hit_reaction_cooldown_timer;
-    unsigned short combat_history_flags;
-    int            patrol_path_index;
-    int            f154;
-    short          f158;
-    short          point_attack_phase;
-    char           pad15C[4];
-    int            point_attack_cuboid_indices[4];
-    char           pad170[0x78];
-    short          suck_cannon_phase;
-    char           pad1EA[6];
-    short         *suck_cannon_config;
-    char           pad1F4[0x44];
-    int            engine_sound_voice_handle;
-    char           pad23C[4];
-    V4_35F0        f240;
-    char           pad250[4];
-    float          wander_move_step;
-    float          wander_turn_step;
-    float          wander_radius;
-    char           pad260[0x10];
-    unsigned char  f270[4];
+    char                 pad00[0x20];
+    float                hp;
+    short                max_health;
+    char                 pad26[2];
+    unsigned char        hit_response_class;
+    unsigned char        f29;
+    char                 pad2A[4];
+    unsigned char        f2E;
+    char                 pad2F;
+    float                f30;
+    char                 pad34[4];
+    int                  alert_range_refresh_trigger;
+    char                 pad3C[0x1C];
+    unsigned char        f58;
+    char                 pad59;
+    unsigned char        f5A;
+    char                 pad5B[5];
+    int                  f60;
+    float                f64;
+    float                f68;
+    float                f6C;
+    char                 pad70[8];
+    float                downward_move_step;
+    char                 pad7C[8];
+    float                f84;
+    char                 pad88[0x10];
+    int                  f98;
+    char                 pad9C[0x14];
+    struct HitColorFlash hit_flash;
+    char                 fC0[0x10];
+    float                fD0;
+    float                fD4;
+    float                fD8;
+    char                 padDC[8];
+    int                  fE4;
+    char                 padE8[0x15];
+    unsigned char        fFD;
+    char                 padFE[0x22];
+    V4_35F0              home_position;
+    float                yaw_turn_step;
+    char                 pad134[2];
+    short                alert_range_timer;
+    int                  movement_boundary_path_index;
+    float                knockback_move_step;
+    float                target_detection_range;
+    short                movement_animation_change_timer;
+    short                action_timer;
+    char                 pad148[4];
+    unsigned char        movement_direction_index;
+    unsigned char        hit_reaction_cooldown_timer;
+    unsigned short       combat_history_flags;
+    int                  patrol_path_index;
+    int                  f154;
+    short                f158;
+    short                point_attack_phase;
+    char                 pad15C[4];
+    int                  point_attack_cuboid_indices[4];
+    char                 pad170[0x78];
+    short                suck_cannon_phase;
+    char                 pad1EA[6];
+    short               *suck_cannon_config;
+    char                 pad1F4[0x44];
+    int                  engine_sound_voice_handle;
+    char                 pad23C[4];
+    V4_35F0              f240;
+    char                 pad250[4];
+    float                wander_move_step;
+    float                wander_turn_step;
+    float                wander_radius;
+    char                 pad260[0x10];
+    unsigned char        f270[4];
 } D_35F0;
 
 typedef struct M_35F0 {
@@ -614,11 +613,11 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 }
                 moby->state = CIRCULAR_SAW_STATE_HIT_RECOVERY;
                 moby->rot = fast_add_rotations(3.1415927f, ang);
-                data->fB7 = 0x78;
-                start_hit_color_flash(moby, (short *)data->fB0);
+                data->hit_flash.flash_red = 0x78;
+                start_hit_color_flash(moby, &data->hit_flash);
                 data->hit_reaction_cooldown_timer = scale_game_frames(0x14);
-                data->fB7 = 0x78;
-                start_hit_color_flash(moby, (short *)data->fB0);
+                data->hit_flash.flash_red = 0x78;
+                start_hit_color_flash(moby, &data->hit_flash);
                 data->hit_reaction_cooldown_timer = scale_game_frames(0x14);
                 break;
             case CIRCULAR_SAW_HIT_REACTION_IGNORED:
@@ -1155,7 +1154,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 scale_game_frames(alt ? random_int_between(10, 15) : random_int_between(20, 30)));
         }
     }
-    update_hit_color_flash(moby, data->fB0);
+    update_hit_color_flash(moby, &data->hit_flash);
 }
 
 extern int launch_suck_cannon_projectile(char *, int, int, float) __asm__("FUN_L00_002dbc30");

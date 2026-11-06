@@ -1,5 +1,6 @@
 /* Level 07 moby class 0x466: machinegun turret. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/mobys/moby.h"
@@ -38,32 +39,29 @@ extern float D_0015ED6C MACRO_ADDR;
 void                    machinegun_turret_update(unsigned char *moby) __asm__("FUN_L07_0031a250");
 
 typedef struct MachinegunTurretVars {
-    u8  pad_0[0x20];
-    u8  health;
-    u8  pad_21[0x5];
-    s16 unk26;
-    u8  pad_28[0x1];
-    u8  unk29;
-    u8  pad_2A[0x36];
-    u8  anim_state;
-    u8  pad_61[0x6];
-    u8  hit_flash_target_red;
-    u8  pad_68[0x8];
-    s32 sweep_start_moby;
-    s32 sweep_end_moby;
-    f32 turn_speed_degrees;
-    s16 fire_timer;
-    s16 sweep_reversing;
-    f32 sweep_start_yaw;
-    f32 sweep_end_yaw;
-    f32 sweep_offset;
-    f32 sweep_range;
-    f32 base_z;
-    u16 burst_length;
-    u8  pad_96[0x2];
-    s32 burst_pause;
-    u16 burst_timer;
-    u8  unk9E;
+    u8                   pad_0[0x20];
+    u8                   health;
+    u8                   pad_21[0x5];
+    s16                  unk26;
+    u8                   pad_28[0x1];
+    u8                   unk29;
+    u8                   pad_2A[0x36];
+    struct HitColorFlash hit_flash;
+    s32                  sweep_start_moby;
+    s32                  sweep_end_moby;
+    f32                  turn_speed_degrees;
+    s16                  fire_timer;
+    s16                  sweep_reversing;
+    f32                  sweep_start_yaw;
+    f32                  sweep_end_yaw;
+    f32                  sweep_offset;
+    f32                  sweep_range;
+    f32                  base_z;
+    u16                  burst_length;
+    u8                   pad_96[0x2];
+    s32                  burst_pause;
+    u16                  burst_timer;
+    u8                   unk9E;
 } MachinegunTurretVars;
 
 /* Moby class 1126 */
@@ -90,14 +88,14 @@ void machinegun_turret_update(unsigned char *moby) {
     if (turret_instance_vars == 0)
         return;
     collision = &turret_instance_vars->health;
-    animation = &turret_instance_vars->anim_state;
+    animation = &turret_instance_vars->hit_flash;
     hit = find_moby_hit(moby, 0x230000, 0);
     resolve_moby_hit_response((void *)moby, (MobyHit *)hit, collision, 0, contact, 0, 0, 4);
     if ((u8)MOBY(moby)->state < TURRET_HIT_SPIN && contact[0] > 1) {
         FUN_0022da68(1, 0, moby);
         FUN_L00_00257470(moby, 0, -1);
         MOBY(moby)->flags &= 0xefff;
-        turret_instance_vars->hit_flash_target_red = 0xfa;
+        turret_instance_vars->hit_flash.flash_red = 0xfa;
         turret_instance_vars->unk26 = scale_game_frames(60);
         start_hit_color_flash(moby, animation);
         turret_instance_vars->fire_timer = scale_game_frames(60);

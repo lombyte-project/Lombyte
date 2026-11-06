@@ -1,5 +1,6 @@
 /* Level 12 moby class blarg_helicopter: path following, tilt and hits. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -128,44 +129,41 @@ void cache_consecutive_point_distances(int point_data_index) {
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 
 typedef struct BlargHelicopterVars {
-    u8           pad_0[0x20];
-    f32          health;
-    s16          max_health;
-    u8           pad_26[0x2];
-    u8           hit_response_class;
-    u8           unk29;
-    u8           pad_2A[0x2E];
-    u8           unk58;
-    u8           unk59;
-    u8           unk5A;
-    u8           pad_5B[0x5];
-    u8           anim_state;
-    u8           pad_61[0x6];
-    u8           hit_flash_target_red;
-    u8           pad_68[0x8];
-    f32          velocity[4];
-    s32          trigger_volume;
-    u8           pad_84[0x4];
-    f32          yaw_turn_velocity;
-    s16          rocket_fire_timer_frames;
-    s16          knockback_timer_frames;
-    f32          bob_angle;
-    f32          speed;
-    f32          roll_turn_velocity;
-    f32          pitch_turn_velocity;
-    s32          initial_path_index;
-    s32          endpoint_path_index;
-    u8           pad_A8[0x4];
-    struct Moby *commander;
-    s32          voice;
-    s32          path_point;
-    s32          muzzle_index;
-    s16          rockets_fired;
-    s16          target_first_path_endpoint;
-    s32          unkC0;
-    s32          activation_timer;
-    u8           pad_C8[0x8];
-    u8           manipulator;
+    u8                   pad_0[0x20];
+    f32                  health;
+    s16                  max_health;
+    u8                   pad_26[0x2];
+    u8                   hit_response_class;
+    u8                   unk29;
+    u8                   pad_2A[0x2E];
+    u8                   unk58;
+    u8                   unk59;
+    u8                   unk5A;
+    u8                   pad_5B[0x5];
+    struct HitColorFlash hit_flash;
+    f32                  velocity[4];
+    s32                  trigger_volume;
+    u8                   pad_84[0x4];
+    f32                  yaw_turn_velocity;
+    s16                  rocket_fire_timer_frames;
+    s16                  knockback_timer_frames;
+    f32                  bob_angle;
+    f32                  speed;
+    f32                  roll_turn_velocity;
+    f32                  pitch_turn_velocity;
+    s32                  initial_path_index;
+    s32                  endpoint_path_index;
+    u8                   pad_A8[0x4];
+    struct Moby         *commander;
+    s32                  voice;
+    s32                  path_point;
+    s32                  muzzle_index;
+    s16                  rockets_fired;
+    s16                  target_first_path_endpoint;
+    s32                  unkC0;
+    s32                  activation_timer;
+    u8                   pad_C8[0x8];
+    u8                   manipulator;
 } BlargHelicopterVars;
 
 /* Moby class 326 */
@@ -665,8 +663,8 @@ void process_blarg_helicopter_hits(struct Moby *moby) {
             allocate_voice_for_target_entry(2, 0, moby);
             moby->state = BLARG_HELICOPTER_EXPLODE_AND_REMOVE_OR_RESET;
         } else if (hit_reaction_code != 0xB) {
-            blarg_helicopter_hit_vars->hit_flash_target_red = 0xB4;
-            start_hit_color_flash(moby, (short *)&blarg_helicopter_hit_vars->anim_state);
+            blarg_helicopter_hit_vars->hit_flash.flash_red = 0xB4;
+            start_hit_color_flash(moby, &blarg_helicopter_hit_vars->hit_flash);
             if (*(float *)(hit_record + 0x1C) == 5627.925f &&
                 moby->state != BLARG_HELICOPTER_KNOCKBACK) {
                 hit_to_moby_angle = fast_arc_tan(moby->pos.x - *(float *)(hit_record + 0),
@@ -691,5 +689,5 @@ void process_blarg_helicopter_hits(struct Moby *moby) {
         }
     }
     moby->hit_slot = 0xFF;
-    update_hit_color_flash(moby, &blarg_helicopter_hit_vars->anim_state);
+    update_hit_color_flash(moby, &blarg_helicopter_hit_vars->hit_flash);
 }

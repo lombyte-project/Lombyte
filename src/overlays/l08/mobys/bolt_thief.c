@@ -1,5 +1,6 @@
 /* Level 08 moby class 0x1c4: bolt thief. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "asm.h"
 #include "rnc/mobys/moby.h"
 #include "sda.h"
@@ -50,29 +51,27 @@ begin_bolt_attraction(struct Moby *, struct Moby *, float, float) __asm__("FUN_L
 extern void FUN_00212f90(struct Moby *, int, int, int);
 
 typedef struct {
-    char              pad0[0x29];
-    unsigned char     b29;
-    char              pad2A[0x16];
-    Vec4              v40;
-    char              pad50[0x10];
-    char              x60[7];
-    unsigned char     b67;
-    char              pad68[8];
-    char              x70[0x10];
-    float             f80, f84, f88, f8C;
-    int               w90, w94;
-    char              pad98[0x15];
-    unsigned char     bAD;
-    char              padAE[0x22];
-    SwarmPathFollower follow[2];
-    char              pad130[0x28];
-    struct Moby      *list[0x32];
-    int               w220;
-    float             f224;
-    char              pad228[4];
-    int               w22C;
-    char              pad230[0x30];
-    unsigned char     x260[1];
+    char                 pad0[0x29];
+    unsigned char        b29;
+    char                 pad2A[0x16];
+    Vec4                 v40;
+    char                 pad50[0x10];
+    struct HitColorFlash hit_flash;
+    char                 x70[0x10];
+    float                f80, f84, f88, f8C;
+    int                  w90, w94;
+    char                 pad98[0x15];
+    unsigned char        bAD;
+    char                 padAE[0x22];
+    SwarmPathFollower    follow[2];
+    char                 pad130[0x28];
+    struct Moby         *list[0x32];
+    int                  w220;
+    float                f224;
+    char                 pad228[4];
+    int                  w22C;
+    char                 pad230[0x30];
+    unsigned char        x260[1];
 } BoltThiefVars;
 
 void bolt_thief_update(struct Moby *moby) __asm__("FUN_L08_002e2df0");
@@ -155,7 +154,7 @@ void bolt_thief_update(struct Moby *moby) {
             4,
             1,
             0);
-        bolt_thief_instance_vars->b67 = 0x78;
+        bolt_thief_instance_vars->hit_flash.flash_red = 0x78;
         FUN_L00_00257470(moby, 0, -1);
         moby->state = BOLT_THIEF_KNOCKBACK;
     }
@@ -375,5 +374,5 @@ void bolt_thief_update(struct Moby *moby) {
         }
         break;
     }
-    update_hit_color_flash(moby, bolt_thief_instance_vars->x60);
+    update_hit_color_flash(moby, &bolt_thief_instance_vars->hit_flash);
 }

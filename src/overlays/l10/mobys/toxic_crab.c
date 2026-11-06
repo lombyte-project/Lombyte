@@ -1,5 +1,6 @@
 /* Level 10 moby class toxic_crab: sight, targeting, group approach, particles and hit reactions. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/mobys/moby_state.h"
 #include "rnc/game/item_state.h"
 #include "rnc/hero/hero.h"
@@ -89,68 +90,66 @@ typedef struct {
 } Hit2E30F8;
 
 typedef struct Crab2E30F8 {
-    char          p000[0x20];
-    float         health;
-    short         max_health;
-    char          p26[2];
-    unsigned char hit_response_class;
-    unsigned char b29;
-    char          p2A[6];
-    float         f30;
-    char          p34[0x24];
-    unsigned char b58;
-    char          p59;
-    unsigned char b5A;
-    char          p5B[5];
-    char          q60[7];
-    unsigned char b67;
-    char          p68[8];
-    float         knockback_motion_xy[2];
-    float         vertical_motion_step;
-    char          p7C[4];
-    float         f80;
-    char          p84[0xC];
-    int           knockback_probe_radius_fixed;
-    int           i94;
-    float         f98;
-    char          p9C[0x11];
-    unsigned char bAD;
-    char          pAE[0x12];
-    float         fC0;
-    float         fC4;
-    char          pC8[8];
-    int           movement_size_scale_fixed;
-    float         movement_size_scale;
-    float         maximum_ground_drop;
-    float         maximum_ground_rise;
-    char          pE0[0x14];
-    float         horizontal_movement_step_limit;
-    char          pF8[0x28];
-    float         tracked_position_x;
-    float         tracked_position_y;
-    char          p128[0x38];
-    char         *tgt;
-    int           tracked_target_selection_status;
-    char          p168[8];
-    float         home_position_and_heading[4];
-    char          p180[0x10];
-    float         heading_turn_step;
-    float         pursuit_entry_angle_sample_radians;
-    float         pursuit_entry_angle_bound_degrees;
-    char          p19C[4];
-    float         f1A0;
-    float         movement_speed;
-    int           behavior_timer_frames;
-    char          p1AC[8];
-    int           activation_override_enabled;
-    int           pursuit_delay_upper_bound_frames;
-    int           activation_dependency_moby_index;
-    float         pursuit_progress_sample_position[4];
-    char          p1D0[8];
-    int           pursuit_movement_blocked;
-    int           remove_in_clank_mode;
-    char          p1E0[0xD0];
-    unsigned char q2B0[4];
+    char                 p000[0x20];
+    float                health;
+    short                max_health;
+    char                 p26[2];
+    unsigned char        hit_response_class;
+    unsigned char        b29;
+    char                 p2A[6];
+    float                f30;
+    char                 p34[0x24];
+    unsigned char        b58;
+    char                 p59;
+    unsigned char        b5A;
+    char                 p5B[5];
+    struct HitColorFlash hit_flash;
+    float                knockback_motion_xy[2];
+    float                vertical_motion_step;
+    char                 p7C[4];
+    float                f80;
+    char                 p84[0xC];
+    int                  knockback_probe_radius_fixed;
+    int                  i94;
+    float                f98;
+    char                 p9C[0x11];
+    unsigned char        bAD;
+    char                 pAE[0x12];
+    float                fC0;
+    float                fC4;
+    char                 pC8[8];
+    int                  movement_size_scale_fixed;
+    float                movement_size_scale;
+    float                maximum_ground_drop;
+    float                maximum_ground_rise;
+    char                 pE0[0x14];
+    float                horizontal_movement_step_limit;
+    char                 pF8[0x28];
+    float                tracked_position_x;
+    float                tracked_position_y;
+    char                 p128[0x38];
+    char                *tgt;
+    int                  tracked_target_selection_status;
+    char                 p168[8];
+    float                home_position_and_heading[4];
+    char                 p180[0x10];
+    float                heading_turn_step;
+    float                pursuit_entry_angle_sample_radians;
+    float                pursuit_entry_angle_bound_degrees;
+    char                 p19C[4];
+    float                f1A0;
+    float                movement_speed;
+    int                  behavior_timer_frames;
+    char                 p1AC[8];
+    int                  activation_override_enabled;
+    int                  pursuit_delay_upper_bound_frames;
+    int                  activation_dependency_moby_index;
+    float                pursuit_progress_sample_position[4];
+    char                 p1D0[8];
+    int                  pursuit_movement_blocked;
+    int                  remove_in_clank_mode;
+    char                 p1E0[0xD0];
+    unsigned char        q2B0[4];
 } Crab2E30F8;
 
 typedef struct Moby2E30F8 {
@@ -825,8 +824,8 @@ void toxic_crab_update(Moby2E30F8 *m) {
                                     1,
                                     0,
                                     fast_add_rotations(m->heading_radians, 3.1415927f));
-                crab_data->b67 = 0xFA;
-                start_hit_color_flash(m, (short *)crab_data->q60);
+                crab_data->hit_flash.flash_red = 0xFA;
+                start_hit_color_flash(m, &crab_data->hit_flash);
                 FUN_L00_00257470(m, 0, -1);
                 break;
             }
@@ -1012,45 +1011,43 @@ typedef struct Hero Hero;
 typedef int u128_2E52B0 __attribute__((mode(TI)));
 
 typedef struct D_2E52B0 {
-    char          p0[0x10];
-    struct Moby  *f10;
-    char          p14[0xC];
-    float         f20;
-    char          p24[2];
-    short         hit_reaction_suppression_timer_frames;
-    char          p28[0x10];
-    int           target_range_boost_pending;
-    char          p3C[0x24];
-    char          a60[7];
-    unsigned char b67;
-    char          p68[8];
-    float         a70[4];
-    float         f80;
-    char          p84[4];
-    float         knockback_xy_scale;
-    float         knockback_z_scale;
-    int           f90;
-    int           knockback_motion_flags;
-    float         f98;
-    char          p9C[0x11];
-    unsigned char bAD;
-    char          pAE[0x12];
-    float         fC0;
-    float         fC4;
-    char          pC8[0x58];
-    AlignedVec4f  a120;
-    char          p130[0x30];
-    struct Moby  *selected_target_moby;
-    int           target_selection_status;
-    char          p168[8];
-    AlignedVec4f  a170;
-    char          p180[0x20];
-    float         f1A0;
-    char          p1A4[8];
-    int           target_range_boost_timer_frames;
-    int           target_path_index;
-    char          p1B4[0x20];
-    int           target_loss_frames;
+    char                 p0[0x10];
+    struct Moby         *f10;
+    char                 p14[0xC];
+    float                f20;
+    char                 p24[2];
+    short                hit_reaction_suppression_timer_frames;
+    char                 p28[0x10];
+    int                  target_range_boost_pending;
+    char                 p3C[0x24];
+    struct HitColorFlash hit_flash;
+    float                a70[4];
+    float                f80;
+    char                 p84[4];
+    float                knockback_xy_scale;
+    float                knockback_z_scale;
+    int                  f90;
+    int                  knockback_motion_flags;
+    float                f98;
+    char                 p9C[0x11];
+    unsigned char        bAD;
+    char                 pAE[0x12];
+    float                fC0;
+    float                fC4;
+    char                 pC8[0x58];
+    AlignedVec4f         a120;
+    char                 p130[0x30];
+    struct Moby         *selected_target_moby;
+    int                  target_selection_status;
+    char                 p168[8];
+    AlignedVec4f         a170;
+    char                 p180[0x20];
+    float                f1A0;
+    char                 p1A4[8];
+    int                  target_range_boost_timer_frames;
+    int                  target_path_index;
+    char                 p1B4[0x20];
+    int                  target_loss_frames;
 } D_2E52B0;
 
 typedef struct Hit_2E52B0 {
@@ -1207,8 +1204,8 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
             trooper_knockback_arc(
                 &vA, &fx, &moby_data->knockback_xy_scale, &moby_data->knockback_z_scale);
             func_L00_0025D5B0_2E52B0(moby, moby_data->a70, 9, 1, 0, fx);
-            moby_data->b67 = 0xFA;
-            start_hit_color_flash(moby, moby_data->a60);
+            moby_data->hit_flash.flash_red = 0xFA;
+            start_hit_color_flash(moby, &moby_data->hit_flash);
             break;
         case VEHICLE_SCALED_KNOCKBACK_HIT_RESPONSE:
         case VEHICLE_DEPENDENT_KNOCKBACK_HIT_RESPONSE: {
@@ -1225,8 +1222,8 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
                 &vA, &fx, &moby_data->knockback_xy_scale, &moby_data->knockback_z_scale);
             func_L00_0025D5B0_2E52B0(
                 moby, moby_data->a70, 9, 1, 0, fast_arc_tan(hit_record->pos.x, hit_record->pos.y));
-            moby_data->b67 = 0xFA;
-            start_hit_color_flash(moby, moby_data->a60);
+            moby_data->hit_flash.flash_red = 0xFA;
+            start_hit_color_flash(moby, &moby_data->hit_flash);
             break;
         }
         case LETHAL_HIT_RESPONSE:
@@ -1240,7 +1237,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
         }
     }
     moby->hit_slot = 0xFF;
-    update_hit_color_flash(moby, moby_data->a60);
+    update_hit_color_flash(moby, &moby_data->hit_flash);
     if ((unsigned char)(moby->state - 10) < 3) {
         moby_data->target_loss_frames = 0;
         return;

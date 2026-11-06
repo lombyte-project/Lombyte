@@ -1,5 +1,6 @@
 /* Shared moby class plasmabot: its update, path walk, aiming, beam, hit reaction and effects. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
@@ -55,65 +56,65 @@ enum {
 };
 
 typedef struct PlasmabotVars {
-    u8  pad0[0x20];
-    f32 health;
-    s16 max_health;
-    s16 stagger_reaction_duration_frames;
-    s8  hit_response_class;
-    s8  unk29;
-    u8  pad2A[0x6];
-    f32 unk30;
-    u8  pad34[0xc];
-    u8  unk40[0x18];
-    s8  unk58;
-    u8  pad59[0x1];
-    s8  unk5A;
-    u8  pad5B[0x5];
-    u8  motion[0x18];
-    f32 knockback_speed;
-    f32 knockback_vertical_speed;
-    s32 knockback_collision_radius;
-    u8  pad84[0x4];
-    f32 knockback_collision_z_offset;
-    u8  pad8C[0x24];
-    f32 knockback_apex_animation_frame;
-    f32 knockback_landing_animation_frame;
-    u8  padB8[0x8];
-    u8  trooper_anim[0x10];
-    u8  path_search_point[0x40];
-    s32 target; /* 0x110: target moby */
-    s32 target_selection_status;
-    u8  pad118[0x8];
-    u8  aim_joint_manipulator[0x10];
-    u8  aim_joint_rotation[0x30];
-    u8  manipulator_attachment_header[0x10];
-    u8  aim_quaternion_storage[0x70];
-    u8  unk1E0[0x10];
-    u8  nozzle_position[0x10];
-    u8  unk200[0x10];
-    u8  beam_start_position_storage[0x10];
-    u8  beam_end_position_storage[0x14];
-    f32 target_range;
-    u8  pad238[0x4];
-    s32 heading_angular_velocity;
-    s32 path_index; /* 0x240: into l14_paths, -1: none */
-    s32 target_path_index;
-    s16 path_traversal_delay_timer;
-    u8  pad24A[0x2];
-    s32 path_segment_index;
-    f32 path_offset_and_spring_velocities[4];
-    s16 beam_cooldown_timer;
-    s16 aim_sweep_timer;
-    s32 hatch_index;
-    f32 aim_yaw_offset;
-    s32 aim_yaw_angular_velocity;
-    s32 aim_joint_angle;
-    s32 aim_joint_angular_velocity;
-    f32 aim_sweep_center_angle;
-    f32 path_traversal_direction;
-    s32 aim_pitch_angle;
-    s32 aim_pitch_angular_velocity;
-    s32 unk288;
+    u8                   pad0[0x20];
+    f32                  health;
+    s16                  max_health;
+    s16                  stagger_reaction_duration_frames;
+    s8                   hit_response_class;
+    s8                   unk29;
+    u8                   pad2A[0x6];
+    f32                  unk30;
+    u8                   pad34[0xc];
+    u8                   unk40[0x18];
+    s8                   unk58;
+    u8                   pad59[0x1];
+    s8                   unk5A;
+    u8                   pad5B[0x5];
+    u8                   motion[0x18];
+    f32                  knockback_speed;
+    f32                  knockback_vertical_speed;
+    s32                  knockback_collision_radius;
+    u8                   pad84[0x4];
+    f32                  knockback_collision_z_offset;
+    u8                   pad8C[0x24];
+    f32                  knockback_apex_animation_frame;
+    f32                  knockback_landing_animation_frame;
+    u8                   padB8[0x8];
+    struct HitColorFlash hit_flash;
+    u8                   path_search_point[0x40];
+    s32                  target; /* 0x110: target moby */
+    s32                  target_selection_status;
+    u8                   pad118[0x8];
+    u8                   aim_joint_manipulator[0x10];
+    u8                   aim_joint_rotation[0x30];
+    u8                   manipulator_attachment_header[0x10];
+    u8                   aim_quaternion_storage[0x70];
+    u8                   unk1E0[0x10];
+    u8                   nozzle_position[0x10];
+    u8                   unk200[0x10];
+    u8                   beam_start_position_storage[0x10];
+    u8                   beam_end_position_storage[0x14];
+    f32                  target_range;
+    u8                   pad238[0x4];
+    s32                  heading_angular_velocity;
+    s32                  path_index; /* 0x240: into l14_paths, -1: none */
+    s32                  target_path_index;
+    s16                  path_traversal_delay_timer;
+    u8                   pad24A[0x2];
+    s32                  path_segment_index;
+    f32                  path_offset_and_spring_velocities[4];
+    s16                  beam_cooldown_timer;
+    s16                  aim_sweep_timer;
+    s32                  hatch_index;
+    f32                  aim_yaw_offset;
+    s32                  aim_yaw_angular_velocity;
+    s32                  aim_joint_angle;
+    s32                  aim_joint_angular_velocity;
+    f32                  aim_sweep_center_angle;
+    f32                  path_traversal_direction;
+    s32                  aim_pitch_angle;
+    s32                  aim_pitch_angular_velocity;
+    s32                  unk288;
 } PlasmabotVars;
 
 extern char D_0013E533[];
@@ -1122,7 +1123,7 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
     if (((unsigned char *)moby)[0x20] == 0 || ((unsigned char *)moby)[0x20] == 0xB) {
         if (((unsigned char *)moby)[0x20] == 0xB) {
             ((unsigned char *)moby)[0xA4] = 0xFF;
-            update_hit_color_flash(moby, &state->trooper_anim);
+            update_hit_color_flash(moby, &state->hit_flash);
         }
         return;
     }
@@ -1206,10 +1207,10 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
         case HIT_REACTION_NONE:
             break;
         }
-        start_hit_color_flash(moby, (short *)(&state->trooper_anim));
+        start_hit_color_flash(moby, &state->hit_flash);
     }
     ((unsigned char *)moby)[0xA4] = 0xFF;
-    update_hit_color_flash(moby, &state->trooper_anim);
+    update_hit_color_flash(moby, &state->hit_flash);
 }
 /* steers the moby toward its target: queries the path, eases x/y, then turns to face the heading */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4668), where it is exact; names translated to the US level program. */

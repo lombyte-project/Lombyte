@@ -7,6 +7,7 @@
 #include "rnc/mobys/attach_manipulator.h"
 #include "rnc/overlay/shared/rendering/set_moby_color.h"
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -41,34 +42,34 @@ typedef struct {
 } Fx_6ee0;
 
 typedef struct {
-    char          pad0[0x60];
-    unsigned char effect[0x10]; /* 0x60 */
-    int           f70;
-    int           path_sampling_state;
-    int           path;  /* 0x78 */
-    int           sound; /* 0x7C */
-    float         position_x_spring_state;
-    float         position_y_spring_state;
-    float         f88;
-    short         timer; /* 0x8C */
-    char          pad8E[2];
-    float         bank_spring_state;
-    float         pitch_spring_state;
-    float         yaw_spring_state;
-    char          pad9C[4];
-    int           part; /* 0xA0 */
-    float         fA4;
-    float         fA8;
-    float         fAC;
-    int           fB0;
-    int           fB4;
-    int           fB8;
-    int           fBC;
-    int           fC0;
-    int           trigger; /* 0xC4 */
-    int           fC8;
-    int           fCC;
-    Fx_6ee0       fx; /* 0xD0 */
+    char                 pad0[0x60];
+    struct HitColorFlash hit_flash;
+    int                  f70;
+    int                  path_sampling_state;
+    int                  path;  /* 0x78 */
+    int                  sound; /* 0x7C */
+    float                position_x_spring_state;
+    float                position_y_spring_state;
+    float                f88;
+    short                timer; /* 0x8C */
+    char                 pad8E[2];
+    float                bank_spring_state;
+    float                pitch_spring_state;
+    float                yaw_spring_state;
+    char                 pad9C[4];
+    int                  part; /* 0xA0 */
+    float                fA4;
+    float                fA8;
+    float                fAC;
+    int                  fB0;
+    int                  fB4;
+    int                  fB8;
+    int                  fBC;
+    int                  fC0;
+    int                  trigger; /* 0xC4 */
+    int                  fC8;
+    int                  fCC;
+    Fx_6ee0              fx; /* 0xD0 */
 } Data_6ee0;
 
 typedef struct {
@@ -177,7 +178,7 @@ void flying_car_update(struct Moby *flying_car_moby) {
         }
         fill_transfer_words(&flying_car_data->fx, 0, 0x40);
         attach_manipulator(flying_car_moby, 0, &flying_car_data->fx);
-        start_hit_color_flash(flying_car_moby, flying_car_data->effect);
+        start_hit_color_flash(flying_car_moby, &flying_car_data->hit_flash);
         if (flying_car_data->trigger >= 0) {
             flying_car_moby->flags |= 0x41;
             flying_car_moby->collision = 0;
@@ -253,9 +254,9 @@ void flying_car_update(struct Moby *flying_car_moby) {
         if (fast_dec_timer_s16(&flying_car_data->timer)) {
             Path_6ee0 *path = ((Path_6ee0 *)l14_paths[flying_car_data->path]);
             set_moby_color(flying_car_moby,
-                           flying_car_data->effect[4],
-                           flying_car_data->effect[5],
-                           flying_car_data->effect[6]);
+                           flying_car_data->hit_flash.original_red,
+                           flying_car_data->hit_flash.original_green,
+                           flying_car_data->hit_flash.original_blue);
             flying_car_moby->flags &= 0xFFBE;
             flying_car_moby->collision = flying_car_moby->pclass->collision;
             flying_car_data->timer = scale_game_frames(flying_car_path_reset_delay_frames_gp);

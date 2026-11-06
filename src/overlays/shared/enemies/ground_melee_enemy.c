@@ -1,5 +1,6 @@
 /* Ground melee enemy class (0xC1): reacts to damage, guards its home inside a leash and chases, attacks or returns home. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -47,69 +48,67 @@ typedef struct {
 } __attribute__((aligned(16))) V_2E39E0;
 
 typedef struct {
-    char           pad0[0x20];
-    float          health;
-    short          f24;
-    short          cooldown;
-    char           pad28[1];
-    unsigned char  f29;
-    char           pad2A[0xE];
-    int            hurt;
-    char           pad3C[0x1C];
-    unsigned char  f58;
-    char           pad59[1];
-    unsigned char  f5A;
-    char           pad5B[0x6D];
-    short          fC8;
-    char           padCA[6];
-    unsigned char *settings;
-    char           padD4[0x3C];
-    char           effects[7];
-    unsigned char  f117;
-    char           pad118[8];
-    char           motion[0x10];
-    float          f130;
-    float          f134;
-    float          up;
-    float          back;
-    char           pad140[4];
-    int            f144;
-    char           pad148[0x15];
-    unsigned char  f15D;
-    char           pad15E[0x12];
-    float          f170;
-    float          f174;
-    char           pad178[8];
-    int            steer;
-    char           pad184[4];
-    float          f188;
-    float          f18C;
-    float          horizontal_movement_step;
-    char           pad194[4];
-    float          fall;
-    char           pad19C[8];
-    float          horizontal_step_limit;
-    char           pad1A8[0x28];
-    V_2E39E0       home;
-    char           pad1E0[0x10];
-    char           turn[4];
-    float          side;
-    float          side_deg;
-    float          range;
-    char           pad200[4];
-    float          speed;
-    int            f208;
-    char           pad20C[4];
-    int            side_timer;
-    short          alert;
-    short          leash;
-    Moby          *anchor;
-    int            path;
-    char           pad220[4];
-    int            home_timer;
-    int            hidden;
-    char           pad22C[4];
-    char           sound[4];
+    char                 pad0[0x20];
+    float                health;
+    short                f24;
+    short                cooldown;
+    char                 pad28[1];
+    unsigned char        f29;
+    char                 pad2A[0xE];
+    int                  hurt;
+    char                 pad3C[0x1C];
+    unsigned char        f58;
+    char                 pad59[1];
+    unsigned char        f5A;
+    char                 pad5B[0x6D];
+    short                fC8;
+    char                 padCA[6];
+    unsigned char       *settings;
+    char                 padD4[0x3C];
+    struct HitColorFlash hit_flash;
+    char                 motion[0x10];
+    float                f130;
+    float                f134;
+    float                up;
+    float                back;
+    char                 pad140[4];
+    int                  f144;
+    char                 pad148[0x15];
+    unsigned char        f15D;
+    char                 pad15E[0x12];
+    float                f170;
+    float                f174;
+    char                 pad178[8];
+    int                  steer;
+    char                 pad184[4];
+    float                f188;
+    float                f18C;
+    float                horizontal_movement_step;
+    char                 pad194[4];
+    float                fall;
+    char                 pad19C[8];
+    float                horizontal_step_limit;
+    char                 pad1A8[0x28];
+    V_2E39E0             home;
+    char                 pad1E0[0x10];
+    char                 turn[4];
+    float                side;
+    float                side_deg;
+    float                range;
+    char                 pad200[4];
+    float                speed;
+    int                  f208;
+    char                 pad20C[4];
+    int                  side_timer;
+    short                alert;
+    short                leash;
+    Moby                *anchor;
+    int                  path;
+    char                 pad220[4];
+    int                  home_timer;
+    int                  hidden;
+    char                 pad22C[4];
+    char                 sound[4];
 } Data_2E39E0;
 
 typedef struct {
@@ -277,8 +276,8 @@ void ground_melee_enemy_update(Moby *moby) {
                         explode_2E39E0(moby, 0, -1);
                     moby->collision = 0;
                     moby->state = GROUND_ENEMY_STATE_FATAL_KNOCKBACK;
-                    ground_enemy_vars->f117 = 120;
-                    start_hit_color_flash(moby, ground_enemy_vars->effects);
+                    ground_enemy_vars->hit_flash.flash_red = 120;
+                    start_hit_color_flash(moby, &ground_enemy_vars->hit_flash);
                 } else {
                     if (hit->kind == 180) {
                         ground_enemy_vars->up = lift * 1.35f;
@@ -293,9 +292,9 @@ void ground_melee_enemy_update(Moby *moby) {
                     ground_enemy_vars->f170 = 5.0f;
                     ground_enemy_vars->f174 = 10.0f;
                     moby->state = GROUND_ENEMY_STATE_HURT_KNOCKBACK;
-                    ground_enemy_vars->f117 = 250;
+                    ground_enemy_vars->hit_flash.flash_red = 250;
                     ground_enemy_vars->cooldown = scale_game_frames(60);
-                    start_hit_color_flash(moby, ground_enemy_vars->effects);
+                    start_hit_color_flash(moby, &ground_enemy_vars->hit_flash);
                 }
             }
         }
@@ -674,7 +673,7 @@ void ground_melee_enemy_update(Moby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    update_hit_color_flash(moby, ground_enemy_vars->effects);
+    update_hit_color_flash(moby, &ground_enemy_vars->hit_flash);
 }
 
 int   D_L15_001619D8 = 0x7000000;

@@ -1,5 +1,6 @@
 /* Shared moby class blarg_paratrooper. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -53,9 +54,7 @@ typedef struct Paratrooper302618 {
     u8                       pad59[0x1];
     unsigned char            f5A;
     u8                       pad5B[0x5];
-    u8                       trooper_anim[0x7];
-    u8                       hit_flash_red;
-    u8                       pad68[0x8];
+    struct HitColorFlash     hit_flash;
     struct KnockbackMotion   knockback;    /* 0x70 */
     struct GroundMoveControl move_control; /* 0xD0 */
     u8                       path_search_point[0x8];
@@ -688,7 +687,7 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
                 break;
             case 9:
             case 10:
-                paratrooper_instance_state->hit_flash_red = 0xfa;
+                paratrooper_instance_state->hit_flash.flash_red = 0xfa;
                 break;
             case PARATROOPER_HIT_REACTION_RECOVERY_KNOCKBACK:
             case 4:
@@ -719,7 +718,7 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
                 trooper_start_knockback(
                     moby, &paratrooper_instance_state->knockback, knock_angle, 8, 1, 0);
                 MOBY(moby)->state = PARATROOPER_STATE_KNOCKBACK_RECOVERY;
-                paratrooper_instance_state->hit_flash_red = 0x78;
+                paratrooper_instance_state->hit_flash.flash_red = 0x78;
                 break;
             case PARATROOPER_HIT_REACTION_LETHAL:
             case PARATROOPER_HIT_REACTION_DEATH_KNOCKBACK: {
@@ -757,17 +756,17 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
                 trooper_start_knockback(
                     moby, &paratrooper_instance_state->knockback, second_knock_angle, 12, 1, 0);
                 MOBY(moby)->state = PARATROOPER_STATE_DEATH_EFFECTS_AND_REMOVE;
-                paratrooper_instance_state->hit_flash_red = 0xf0;
+                paratrooper_instance_state->hit_flash.flash_red = 0xf0;
                 spawn_randomized_bolt_drop(moby, 2, 3, 0, -1);
                 break;
             default:
                 break;
             }
         }
-        start_hit_color_flash(moby, &paratrooper_instance_state->trooper_anim);
+        start_hit_color_flash(moby, &paratrooper_instance_state->hit_flash);
     }
     MOBY(moby)->hit_slot = 0xff;
-    update_hit_color_flash(moby, &paratrooper_instance_state->trooper_anim);
+    update_hit_color_flash(moby, &paratrooper_instance_state->hit_flash);
 
     if (paratrooper_instance_state->unk38 != 0) {
         angle = random_float_between(180.0f, 240.0f);

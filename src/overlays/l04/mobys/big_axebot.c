@@ -1,5 +1,6 @@
 /* Level 04 moby class big_axebot: the large axe-swinging robot, and the spawn of its axe. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "qcopy.h"
@@ -138,9 +139,7 @@ typedef struct D_B7B0 {
     char                   pad59;
     unsigned char          f5A;
     char                   pad5B[0x55];
-    char                   hit_transition_state[7];
-    unsigned char          fB7;
-    char                   padB8[8];
+    struct HitColorFlash   hit_flash;
     struct KnockbackMotion knockback; /* 0xC0 */
     Manip_B7B0             recoil_manipulator;
     Manip_B7B0             aim_manipulator;
@@ -391,8 +390,8 @@ void big_axebot_update(M_B7B0 *moby) {
                     data->recoil_pitch_angle = -0.5235988f;
                 }
                 data->recoil_pose_cooldown_timer = scale_game_frames(0x1E);
-                data->fB7 = 0x78;
-                start_hit_color_flash(moby, (short *)data->hit_transition_state);
+                data->hit_flash.flash_red = 0x78;
+                start_hit_color_flash(moby, &data->hit_flash);
             } else {
                 switch (hit_reaction_result) {
                 case BIG_AXEBOT_HIT_REACTION_NONE:
@@ -414,8 +413,8 @@ void big_axebot_update(M_B7B0 *moby) {
                         moby->state = BIG_AXEBOT_STATE_HIT_RECOVERY;
                     }
                     data->recoil_displacement = 3.4f / scale_time(7.0f) * 0.5f;
-                    data->fB7 = 0x78;
-                    start_hit_color_flash(moby, (short *)data->hit_transition_state);
+                    data->hit_flash.flash_red = 0x78;
+                    start_hit_color_flash(moby, &data->hit_flash);
                     data->hit_response_cooldown_timer = scale_game_frames(0x46);
                     data->extended_detection_timer = scale_game_frames(0xF0);
                     break;
@@ -434,8 +433,8 @@ void big_axebot_update(M_B7B0 *moby) {
                     data->knockback.apex_animation_frame = 5.0f;
                     data->knockback.landing_animation_frame = 10.0f;
                     data->recoil_displacement = 3.4f / scale_time(7.0f);
-                    data->fB7 = 0x78;
-                    start_hit_color_flash(moby, (short *)data->hit_transition_state);
+                    data->hit_flash.flash_red = 0x78;
+                    start_hit_color_flash(moby, &data->hit_flash);
                     data->hit_response_cooldown_timer = scale_game_frames(0x46);
                     data->extended_detection_timer = scale_game_frames(0xF0);
                     break;
@@ -447,8 +446,8 @@ void big_axebot_update(M_B7B0 *moby) {
                     data->idle_action_delay_timer = scale_game_frames(0x28);
                     moby->state = BIG_AXEBOT_STATE_IDLE;
                     data->recoil_displacement = 3.4f / scale_time(7.0f);
-                    data->fB7 = 0x78;
-                    start_hit_color_flash(moby, (short *)data->hit_transition_state);
+                    data->hit_flash.flash_red = 0x78;
+                    start_hit_color_flash(moby, &data->hit_flash);
                     data->hit_response_cooldown_timer = scale_game_frames(0x46);
                     data->extended_detection_timer = scale_game_frames(0xF0);
                     break;
@@ -465,8 +464,8 @@ void big_axebot_update(M_B7B0 *moby) {
                     data->knockback.apex_animation_frame = 12.0f;
                     data->knockback.landing_animation_frame = 25.0f;
                     moby->state = BIG_AXEBOT_STATE_DYING;
-                    data->fB7 = 0x78;
-                    start_hit_color_flash(moby, (short *)data->hit_transition_state);
+                    data->hit_flash.flash_red = 0x78;
+                    start_hit_color_flash(moby, &data->hit_flash);
                     FUN_L00_00257470(moby, 0, -1);
                     break;
                 case BIG_AXEBOT_HIT_REACTION_SKIP_ADDITIONAL_RESPONSE:
@@ -903,7 +902,7 @@ void big_axebot_update(M_B7B0 *moby) {
         }
         break;
     }
-    update_hit_color_flash(moby, data->hit_transition_state);
+    update_hit_color_flash(moby, &data->hit_flash);
     if (data->recoil_displacement > 0.0f) {
         struct Hero *h = &hero;
 

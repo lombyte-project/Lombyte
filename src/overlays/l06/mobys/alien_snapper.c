@@ -1,5 +1,6 @@
 /* Level 06 moby class 0x418: alien snapper. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -204,35 +205,33 @@ typedef struct {
 } Target;
 
 typedef struct BlargVars {
-    char          pad00[0x20];
-    float         health; /* 0x20 */
-    char          pad24[0x14];
-    int           targeting_boost_refresh_pending; /* 0x38 */
-    char          pad3C[0x24];
-    char          f60[0x7]; /* 0x60 */
-    unsigned char f67;      /* 0x67 */
-    char          pad68[0x8];
-    char          f70[0x18];               /* 0x70 */
-    float         horizontal_motion_speed; /* 0x88 */
-    float         f8C;                     /* 0x8C */
-    char          pad90[0x30];
-    float         motion_apex_animation_frame;    /* 0xC0 */
-    float         motion_landing_animation_frame; /* 0xC4 */
-    char          padC8[0x58];
-    char          selected_target_xy[0x8]; /* 0x120 */
-    float         selected_target_z;       /* 0x128 */
-    char          pad12C[0x34];
-    int           selected_target_moby; /* 0x160 */
-    int           f164;                 /* 0x164 */
-    char          pad168[0x8];
-    char          home_position[0x30]; /* 0x170 */
-    float         f1A0;                /* 0x1A0 */
-    char          pad1A4[0x8];
-    int           f1AC;                /* 0x1AC */
-    int           movement_path_index; /* 0x1B0 */
-    char          pad1B4[0x14];
-    float         f1C8; /* 0x1C8 */
-    int           f1CC; /* 0x1CC */
+    char                 pad00[0x20];
+    float                health; /* 0x20 */
+    char                 pad24[0x14];
+    int                  targeting_boost_refresh_pending; /* 0x38 */
+    char                 pad3C[0x24];
+    struct HitColorFlash hit_flash;
+    char                 f70[0x18];               /* 0x70 */
+    float                horizontal_motion_speed; /* 0x88 */
+    float                f8C;                     /* 0x8C */
+    char                 pad90[0x30];
+    float                motion_apex_animation_frame;    /* 0xC0 */
+    float                motion_landing_animation_frame; /* 0xC4 */
+    char                 padC8[0x58];
+    char                 selected_target_xy[0x8]; /* 0x120 */
+    float                selected_target_z;       /* 0x128 */
+    char                 pad12C[0x34];
+    int                  selected_target_moby; /* 0x160 */
+    int                  f164;                 /* 0x164 */
+    char                 pad168[0x8];
+    char                 home_position[0x30]; /* 0x170 */
+    float                f1A0;                /* 0x1A0 */
+    char                 pad1A4[0x8];
+    int                  f1AC;                /* 0x1AC */
+    int                  movement_path_index; /* 0x1B0 */
+    char                 pad1B4[0x14];
+    float                f1C8; /* 0x1C8 */
+    int                  f1CC; /* 0x1CC */
 } BlargVars;
 
 extern int level_frame_count __asm__("D_L06_0015F5CC");
@@ -812,7 +811,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
             reaction = 1;
         } else if (snapper_vars->f1CC != 0) {
             reaction = 0xB;
-            snapper_vars->f67 = 0xFA;
+            snapper_vars->hit_flash.flash_red = 0xFA;
         }
 
         switch (reaction) {
@@ -833,7 +832,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
             snapper_vars->motion_landing_animation_frame = 8.5f;
             func_L00_0025D5B0_2FA618(
                 moby, snapper_vars->f70, 9, 1, 0, fast_arc_tan(target->x, target->y));
-            snapper_vars->f67 = 0xFA;
+            snapper_vars->hit_flash.flash_red = 0xFA;
             break;
         case REACTION_DEATH:
         case HIT_RESPONSE_DEATH_SEQUENCE:
@@ -845,17 +844,17 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
             snapper_vars->motion_landing_animation_frame = 14.5f;
             func_L00_0025D5B0_2FA618(
                 moby, snapper_vars->f70, 10, 1, 0, fast_arc_tan(target->x, target->y));
-            snapper_vars->f67 = 0xFA;
+            snapper_vars->hit_flash.flash_red = 0xFA;
             mark_moby_for_removal_cf(moby, 0, -1);
             break;
         case REACTION_NO_RESPONSE:
             break;
         }
-        start_hit_color_flash(moby, snapper_vars->f60);
+        start_hit_color_flash(moby, &snapper_vars->hit_flash);
     }
 
     moby->hit_slot = 0xFF;
-    update_hit_color_flash(moby, snapper_vars->f60);
+    update_hit_color_flash(moby, &snapper_vars->hit_flash);
     switch (moby->state) {
     case SNAPPER_APPROACH_TARGET:
     case SNAPPER_REPOSITION_AROUND_TARGET:
