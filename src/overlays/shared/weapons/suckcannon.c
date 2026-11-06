@@ -413,6 +413,9 @@ typedef union {
     Q41 q;
 } V41 __attribute__((aligned(16)));
 
+#define SUCK_BEAM_RING_COUNT        10
+#define SUCK_BEAM_RING_VERTEX_COUNT 20
+
 typedef struct {
     u8  pad0[0x34];
     u16 flags;
@@ -586,19 +589,22 @@ I6 l00_suck_cannon_explosion_second_color_choices __asm__("D_L00_001EA118") = {
     {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
 };
 
-extern float                D_0015ED6C;
-extern int                 *D_L00_00177F00[];
-extern float                frame_scale_sq_macro __asm__("D_0015ED64") MACRO_ADDR;
-extern float                frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
-extern unsigned char        D_0013E629_2DDEA0[] __asm__("D_0013E529");
-extern unsigned char        D_001404FC_2DDEA0[] __asm__("D_001403FC");
-extern char                 D_0013F4D0_2DDEA0[] __asm__("D_0013F3D0");
-extern char                 D_0013FA90_2DDEA0[] __asm__("D_0013F990");
-extern char                 D_L00_001EA4B0_2DDEA0[] __asm__("D_L00_001EA130");
-extern char                 D_L00_001E5EE0[] NOT_SDA;
-extern char                 D_L00_001E6020[] NOT_SDA;
+extern float         D_0015ED6C;
+extern int          *D_L00_00177F00[];
+extern float         frame_scale_sq_macro __asm__("D_0015ED64") MACRO_ADDR;
+extern float         frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
+extern unsigned char D_0013E629_2DDEA0[] __asm__("D_0013E529");
+extern unsigned char D_001404FC_2DDEA0[] __asm__("D_001403FC");
+extern char          D_0013F4D0_2DDEA0[] __asm__("D_0013F3D0");
+extern char          D_0013FA90_2DDEA0[] __asm__("D_0013F990");
+extern char          D_L00_001EA4B0_2DDEA0[] __asm__("D_L00_001EA130");
+extern char          D_L00_001E5EE0[] NOT_SDA;
+/* The beam mesh: SUCK_BEAM_RING_COUNT rings of SUCK_BEAM_RING_VERTEX_COUNT points,
+   ring 0 at the nozzle, and the alpha of each ring (0..64, fading in and out). */
+extern V41
+    suck_beam_rings[SUCK_BEAM_RING_COUNT][SUCK_BEAM_RING_VERTEX_COUNT] __asm__("D_L00_001E6020");
 extern float                suck_beam_texture_v_step __asm__("D_L00_00161B50") __attribute__((sda));
-extern short                D_L00_001E6008[] NOT_SDA;
+extern s16                  suck_beam_ring_alphas[SUCK_BEAM_RING_COUNT] __asm__("D_L00_001E6008");
 s32                         suck_beam_particles_reset_pending_gp __asm__("D_L00_00161B44") = 1;
 s32                         suck_beam_reset_pending_gp __asm__("D_L00_00161B40") = 1;
 extern E04                  D_L00_001E4C80[];
@@ -613,7 +619,6 @@ extern int                  suck_beam_reset_pending __asm__("D_L00_00161B40") __
 extern int   suck_beam_particles_reset_pending __asm__("D_L00_00161B44") __attribute__((sda));
 extern int   l00_suck_beam_step_blend_elapsed_frames __asm__("D_L00_00161B54") __attribute__((sda));
 extern int   suck_beam_wave_phase __asm__("D_L00_00161B58") __attribute__((sda));
-extern short D_L00_001E6008[];
 extern V41   l00_suck_beam_ring_source_offsets[] __asm__("D_L00_001E4B40");
 extern E04   D_L00_001E4C80_lui[] __asm__("D_L00_001E4C80");
 extern char  D_L00_00161B60[];
@@ -621,7 +626,6 @@ int          suck_beam_wave_phase_gp __asm__("D_L00_00161B58") = 0;
 extern char  D_L00_00161B70[];
 extern char  collision_hit_point[] __asm__("D_L00_00173E60");
 extern char  D_L00_001E5EE0[];
-extern char  D_L00_001E6020[];
 extern float D_0015ED60;
 extern float D_L00_00161B84;
 extern float D_L00_00161B80;
@@ -669,42 +673,6 @@ E04 D_L17_001D77F0[200] = {0};
 
 E04 D_L18_001D7B30[200] = {0};
 
-s16 D_L01_00200968[1] __attribute__((section(".data"))) = {0};
-
-s16 D_L02_001D8AD8[1] __attribute__((section(".data"))) = {0};
-
-s16 D_L03_001D78D8[1] __attribute__((section(".data"))) = {0};
-
-s16 D_L04_001D8718[1] __attribute__((section(".data"))) = {0};
-
-s16 D_L05_0020D248[1] __attribute__((section(".data"))) = {0};
-
-s16 D_L06_001DA1C8[1] __attribute__((section(".data"))) = {0};
-
-s16 D_L07_001DC188[1] __attribute__((section(".data"))) = {0};
-
-s16 D_L08_001EEAA8[1] __attribute__((section(".data"))) = {0};
-
-s16 D_L09_00205488[1] __attribute__((section(".data"))) = {0};
-
-s16 D_L10_001D9288[1] __attribute__((section(".data"))) = {0};
-
-s16 D_L11_001D8E58[1] __attribute__((section(".data"))) = {0};
-
-s16 D_L12_001FA828[1] __attribute__((section(".data"))) = {0};
-
-s16 D_L13_001D8E88[1] __attribute__((section(".data"))) = {0};
-
-s16 D_L14_001E5338[1] __attribute__((section(".data"))) = {0};
-
-s16 D_L15_001D8858[1] __attribute__((section(".data"))) = {0};
-
-s16 D_L16_001D7D78[1] __attribute__((section(".data"))) = {0};
-
-s16 D_L17_001D8B78[1] __attribute__((section(".data"))) = {0};
-
-s16 D_L18_001D8EB8[1] __attribute__((section(".data"))) = {0};
-
 char D_L01_0020B708 NOT_SDA = 0x63;
 char                D_L01_00161EB0[1] = {-37};
 
@@ -719,7 +687,6 @@ I6 D_L01_0020B838 = {
 };
 
 char D_L01_00200840 NOT_SDA = 0;
-char D_L01_00200980 NOT_SDA = 0;
 float               D_L01_00161ED0 = 0.006f;
 int                 D_L01_00161EC4 = 1;
 int                 D_L01_00161EC0 = 1;
@@ -745,7 +712,6 @@ I6 D_L02_001FACC8 = {
 };
 
 char D_L02_001D89B0 NOT_SDA = 0;
-char D_L02_001D8AF0 NOT_SDA = 0;
 float               D_L02_00161E70 = 0.006f;
 int                 D_L02_00161E64 = 1;
 int                 D_L02_00161E60 = 1;
@@ -771,7 +737,6 @@ I6 D_L03_001E3578 = {
 };
 
 char D_L03_001D77B0 NOT_SDA = 0;
-char D_L03_001D78F0 NOT_SDA = 0;
 float               D_L03_00161B70 = 0.006f;
 int                 D_L03_00161B64 = 1;
 int                 D_L03_00161B60 = 1;
@@ -797,7 +762,6 @@ I6 D_L04_001DC6E8 = {
 };
 
 char D_L04_001D85F0 NOT_SDA = 0;
-char D_L04_001D8730 NOT_SDA = 0;
 float               D_L04_00161CA0 = 0.006f;
 int                 D_L04_00161C94 = 1;
 int                 D_L04_00161C90 = 1;
@@ -823,7 +787,6 @@ I6 D_L05_00218928 = {
 };
 
 char D_L05_0020D120 NOT_SDA = 0;
-char D_L05_0020D260 NOT_SDA = 0;
 float               D_L05_00161E40 = 0.006f;
 int                 D_L05_00161E34 = 1;
 int                 D_L05_00161E30 = 1;
@@ -849,7 +812,6 @@ I6 D_L06_00201588 = {
 };
 
 char D_L06_001DA0A0 NOT_SDA = 0;
-char D_L06_001DA1E0 NOT_SDA = 0;
 float               D_L06_00161CA0 = 0.006f;
 int                 D_L06_00161C94 = 1;
 int                 D_L06_00161C90 = 1;
@@ -875,7 +837,6 @@ I6 D_L07_002114D8 = {
 };
 
 char D_L07_001DC060 NOT_SDA = 0;
-char D_L07_001DC1A0 NOT_SDA = 0;
 float               D_L07_00161AF0 = 0.006f;
 char                D_L07_00161B00 = 0;
 char                D_L07_00161B10 = 0;
@@ -899,7 +860,6 @@ I6 D_L08_001FC588 = {
 };
 
 char D_L08_001EE980 NOT_SDA = 0;
-char D_L08_001EEAC0 NOT_SDA = 0;
 float               D_L08_00162140 = 0.006f;
 int                 D_L08_00162134 = 1;
 int                 D_L08_00162130 = 1;
@@ -925,7 +885,6 @@ I6 D_L09_00208E58 = {
 };
 
 char D_L09_00205360 NOT_SDA = 0;
-char D_L09_002054A0 NOT_SDA = 0;
 float               D_L09_00161B90 = 0.006f;
 int                 D_L09_00161B84 = 1;
 int                 D_L09_00161B80 = 1;
@@ -951,7 +910,6 @@ I6 D_L10_001DD058 = {
 };
 
 char D_L10_001D9160 NOT_SDA = 0;
-char D_L10_001D92A0 NOT_SDA = 0;
 float               D_L10_00161B90 = 0.006f;
 int                 D_L10_00161B84 = 1;
 int                 D_L10_00161B80 = 1;
@@ -977,7 +935,6 @@ I6 D_L11_0021B3E8 = {
 };
 
 char D_L11_001D8D30 NOT_SDA = 0;
-char D_L11_001D8E70 NOT_SDA = 0;
 float               D_L11_00161D80 = 0.006f;
 int                 D_L11_00161D74 = 1;
 int                 D_L11_00161D70 = 1;
@@ -1003,7 +960,6 @@ I6 D_L12_0020C888 = {
 };
 
 char D_L12_001FA700 NOT_SDA = 0;
-char D_L12_001FA840 NOT_SDA = 0;
 float               D_L12_00161CA0 = 0.006f;
 int                 D_L12_00161C94 = 1;
 int                 D_L12_00161C90 = 1;
@@ -1029,7 +985,6 @@ I6 D_L13_001F5448 = {
 };
 
 char D_L13_001D8D60 NOT_SDA = 0;
-char D_L13_001D8EA0 NOT_SDA = 0;
 float               D_L13_00161CE0 = 0.006f;
 int                 D_L13_00161CD4 = 1;
 int                 D_L13_00161CD0 = 1;
@@ -1055,7 +1010,6 @@ I6 D_L14_001FCD98 = {
 };
 
 char D_L14_001E5210 NOT_SDA = 0;
-char D_L14_001E5350 NOT_SDA = 0;
 float               D_L14_00161EE0 = 0.006f;
 int                 D_L14_00161ED4 = 1;
 int                 D_L14_00161ED0 = 1;
@@ -1081,7 +1035,6 @@ I6 D_L15_001E3448 = {
 };
 
 char D_L15_001D8730 NOT_SDA = 0;
-char D_L15_001D8870 NOT_SDA = 0;
 float               D_L15_00161E80 = 0.006f;
 int                 D_L15_00161E74 = 1;
 int                 D_L15_00161E70 = 1;
@@ -1107,7 +1060,6 @@ I6 D_L16_001E84D8 = {
 };
 
 char D_L16_001D7C50 NOT_SDA = 0;
-char D_L16_001D7D90 NOT_SDA = 0;
 float               D_L16_00161C00 = 0.006f;
 int                 D_L16_00161BF4 = 1;
 int                 D_L16_00161BF0 = 1;
@@ -1133,7 +1085,6 @@ I6 D_L17_001E6BF8 = {
 };
 
 char D_L17_001D8A50 NOT_SDA = 0;
-char D_L17_001D8B90 NOT_SDA = 0;
 float               D_L17_00161D70 = 0.006f;
 int                 D_L17_00161D64 = 1;
 int                 D_L17_00161D60 = 1;
@@ -1159,7 +1110,6 @@ I6 D_L18_001F2928 = {
 };
 
 char D_L18_001D8D90 NOT_SDA = 0;
-char D_L18_001D8ED0 NOT_SDA = 0;
 float               D_L18_00161E90 = 0.006f;
 int                 D_L18_00161E84 = 1;
 int                 D_L18_00161E80 = 1;
@@ -2786,8 +2736,8 @@ void suck_beam_draw_mesh(void) {
             suction_effect_texture_v_offset -= 7.0f;
         next_row_texture_u = row_texture_u + step;
         for (j = 0; j < 20; j++) {
-            qcopy(quad_packet.q[0], D_L00_001E6020 + (j * 16 + i * 0x140));
-            qcopy(quad_packet.q[1], D_L00_001E6020 + ((j + 1) % 20 * 16 + i * 0x140));
+            qcopy(quad_packet.q[0], (char *)suck_beam_rings + (j * 16 + i * 0x140));
+            qcopy(quad_packet.q[1], (char *)suck_beam_rings + ((j + 1) % 20 * 16 + i * 0x140));
             qcopy(quad_packet.q[2], D_L00_001E5EE0 + (j * 16 + i * 0x140));
             qcopy(quad_packet.q[3], D_L00_001E5EE0 + ((j + 1) % 20 * 16 + i * 0x140));
             fast_vec_sub(vc, quad_packet.q[0], quad_packet.q[1]);
@@ -2800,8 +2750,8 @@ void suck_beam_draw_mesh(void) {
             } else {
                 next_segment_texture_v = segment_texture_v + 0.05f;
                 am = row_texture_u - step;
-                y = D_L00_001E6008[i - 1];
-                row_alpha_counter = &D_L00_001E6008[i];
+                y = suck_beam_ring_alphas[i - 1];
+                row_alpha_counter = &suck_beam_ring_alphas[i];
                 row_alpha_or_packed_color = *row_alpha_counter;
                 for (k = 0; k < 2; k++) {
                     if (row_alpha_or_packed_color < 0)
@@ -2837,11 +2787,11 @@ void suck_beam_draw_mesh(void) {
     vu1_add_g_sregister(0x47, 0x5360B);
 }
 
-/* Sets suck_beam_reset_pending_gp and suck_beam_particles_reset_pending_gp to 1 and clears D_L00_001E6008. */
+/* Sets suck_beam_reset_pending_gp and suck_beam_particles_reset_pending_gp to 1 and clears suck_beam_ring_alphas. */
 void FUN_L00_002ddca0(void) {
     suck_beam_reset_pending_gp = 1;
     suck_beam_particles_reset_pending_gp = 1;
-    (*(short *)D_L00_001E6008) = 0;
+    suck_beam_ring_alphas[0] = 0;
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002DF168), where it is exact; names translated to the US level program. */
@@ -2880,12 +2830,12 @@ void suck_beam_build(char *cannon_moby, char *suction_origin) {
         (char *)beam_initialization_vectors + 0x30, beam_initialization_vectors, D_L00_00161B84);
     fast_vec_normalize((char *)beam_initialization_vectors + 0x40, orientation_up_vector, 1.0f);
     qcopy(D_L00_001E5F40, suction_origin);
-    D_L00_001E6008[0] = 0;
+    suck_beam_ring_alphas[0] = 0;
     for (i = 1; i < 10; i++) {
         fast_vec_add(D_L00_001E5F40 + i * 0x10,
                      l00_suck_beam_previous_segment_positions + i * 0x10,
                      (char *)beam_initialization_vectors + 0x30);
-        D_L00_001E6008[i] = 0;
+        suck_beam_ring_alphas[i] = 0;
     }
     clear_u64_value(D_L00_00161B60);
     beam_initialization_vectors[5] = 0;
@@ -2952,19 +2902,19 @@ void suck_beam_update(void *moby, void *position) {
         n = truncate_float_to_s32(vector_distance_xy(collision_hit_point, position) /
                                   D_L00_00161B84);
         for (i = n; i < 10; i++) {
-            if (D_L00_001E6008[i] > 64)
-                D_L00_001E6008[i] = 64;
-            D_L00_001E6008[i] = (u16)D_L00_001E6008[i] - 4;
-            if (D_L00_001E6008[i] < 0)
-                D_L00_001E6008[i] = 0;
+            if (suck_beam_ring_alphas[i] > 64)
+                suck_beam_ring_alphas[i] = 64;
+            suck_beam_ring_alphas[i] = (u16)suck_beam_ring_alphas[i] - 4;
+            if (suck_beam_ring_alphas[i] < 0)
+                suck_beam_ring_alphas[i] = 0;
         }
         for (k = n - 1; k >= 0; k--)
-            D_L00_001E6008[k] = D_L00_001E6008[k + 1] + 32;
+            suck_beam_ring_alphas[k] = suck_beam_ring_alphas[k + 1] + 32;
     } else {
         int i;
-        D_L00_001E6008[0] = (u16)D_L00_001E6008[0] + 4;
+        suck_beam_ring_alphas[0] = (u16)suck_beam_ring_alphas[0] + 4;
         for (i = 1; i < 10; i++)
-            D_L00_001E6008[i] = D_L00_001E6008[i - 1] - 32;
+            suck_beam_ring_alphas[i] = suck_beam_ring_alphas[i - 1] - 32;
     }
     transform_vector_by_basis(&start, &(*(V41 *)D_L00_00161B60), orientation);
     fast_vec_add(&start, &start, &step);
@@ -3003,7 +2953,7 @@ void suck_beam_update(void *moby, void *position) {
         for (k = 0; k < 20; k++) {
             fast_vec_scale(&tmp_a, &l00_suck_beam_ring_source_offsets[k], 0.1f);
             transform_vector_by_basis(&tmp_a, &tmp_a, frame);
-            fast_vec_add(&((V41 *)D_L00_001E6020)[k], D_L00_001E5F40, &tmp_a);
+            fast_vec_add(&((V41 *)suck_beam_rings)[k], D_L00_001E5F40, &tmp_a);
         }
     }
     {
@@ -3052,8 +3002,7 @@ void suck_beam_update(void *moby, void *position) {
                              0.1f;
                     fast_vec_scale(&tmp_f, &l00_suck_beam_ring_source_offsets[j], angle);
                     transform_vector_by_basis(&tmp_f, &tmp_f, &interp);
-                    fast_vec_add(
-                        &((V41(*)[20])D_L00_001E6020)[i][j], D_L00_001E5F40 + i * 16, &tmp_f);
+                    fast_vec_add(&suck_beam_rings[i][j], D_L00_001E5F40 + i * 16, &tmp_f);
                 }
             }
             fast_vec_normalize(&step, &motion, D_L00_00161B84);
@@ -3066,7 +3015,7 @@ void suck_beam_update(void *moby, void *position) {
         sparks = 0;
         for (i = 0; i < 200; i++) {
             if (!D_L00_001E4C80_lui[i].p && count < 5) {
-                for (segment = 9; segment >= 0 && D_L00_001E6008[segment] < 64; segment--)
+                for (segment = 9; segment >= 0 && suck_beam_ring_alphas[segment] < 64; segment--)
                     ;
                 if (segment > 0) {
                     if (segment >= 2 && sparks < 2) {
@@ -3074,7 +3023,7 @@ void suck_beam_update(void *moby, void *position) {
                             int  k = random_integer_below(20);
                             V41 *ring;
                             amount = random_float_between(0.2f, 1.0f);
-                            ring = (V41 *)D_L00_001E6020 + k;
+                            ring = (V41 *)suck_beam_rings + k;
                             lerp_vector(&tmp_a, ring, ring + segment * 20, amount);
                         }
                         lerp_vector(&tmp_c, D_L00_001E5F40, D_L00_001E5F40 + segment * 16, amount);
@@ -3168,8 +3117,8 @@ void suck_beam_update(void *moby, void *position) {
                                      &tmp_a);
                         j = D_L00_001E4C80_lui[i].angle;
                         fast_vec_sub(&tmp_b,
-                                     (char *)((V41 *)D_L00_001E6020) +
-                                         D_L00_001E4C80_lui[i].idx * 320 + j * 16,
+                                     (char *)suck_beam_rings + D_L00_001E4C80_lui[i].idx * 320 +
+                                         j * 16,
                                      D_L00_001E5F40 + D_L00_001E4C80_lui[i].idx * 16);
                         fast_vec_sub(&tmp_c,
                                      (char *)((V41 *)D_L00_001E5EE0) +
@@ -3179,8 +3128,8 @@ void suck_beam_update(void *moby, void *position) {
                         interpolate_vector(&motion, &tmp_b, &tmp_c, amount);
                         j = (j + 19) % 20;
                         fast_vec_sub(&tmp_d,
-                                     (char *)((V41 *)D_L00_001E6020) +
-                                         D_L00_001E4C80_lui[i].idx * 320 + j * 16,
+                                     (char *)suck_beam_rings + D_L00_001E4C80_lui[i].idx * 320 +
+                                         j * 16,
                                      D_L00_001E5F40 + D_L00_001E4C80_lui[i].idx * 16);
                         fast_vec_sub(&tmp_e,
                                      (char *)((V41 *)D_L00_001E5EE0) +
@@ -3206,14 +3155,14 @@ void suck_beam_update(void *moby, void *position) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002E0490), where it is exact; names translated to the US level program. */
 
-/* When D_L00_001E6008[0] > 0: caps the ten counters at 0x40, lowers each by 4, queues 002dd8e8. */
+/* When suck_beam_ring_alphas[0] > 0: caps the ten counters at 0x40, lowers each by 4, queues 002dd8e8. */
 void suck_beam_queue_draw(int draw_callback_context) {
     int i;
-    if (D_L00_001E6008[0] > 0) {
+    if (suck_beam_ring_alphas[0] > 0) {
         for (i = 0; i < 10; i++) {
-            if (D_L00_001E6008[i] > 0x40)
-                D_L00_001E6008[i] = 0x40;
-            D_L00_001E6008[i] = (unsigned short)D_L00_001E6008[i] - 4;
+            if (suck_beam_ring_alphas[i] > 0x40)
+                suck_beam_ring_alphas[i] = 0x40;
+            suck_beam_ring_alphas[i] = (unsigned short)suck_beam_ring_alphas[i] - 4;
         }
         add_draw_callback(suck_beam_draw_mesh, draw_callback_context);
     }
@@ -3269,7 +3218,7 @@ void scatter_moby_from_hazards(O_2df1e0 *pickup_moby) {
         return;
     if (!(fast_vec_dist(pickup_moby->v10, &hero.motion.pos) < 30.0f))
         return;
-    for (i = 0; i < 10 && D_L00_001E6008[i] >= 8; i++) {
+    for (i = 0; i < 10 && suck_beam_ring_alphas[i] >= 8; i++) {
         beam_segment_collection_radius = i * 0.3f + 0.1f;
         if (beam_segment_collection_radius < 2.0f)
             beam_segment_collection_radius = 2.0f;
@@ -3283,3 +3232,79 @@ void scatter_moby_from_hazards(O_2df1e0 *pickup_moby) {
         }
     }
 }
+
+s16 suck_beam_ring_alphas[SUCK_BEAM_RING_COUNT] = {0};
+
+V41 suck_beam_rings[SUCK_BEAM_RING_COUNT][SUCK_BEAM_RING_VERTEX_COUNT] = {0};
+
+s16 D_L01_00200968[SUCK_BEAM_RING_COUNT] = {0};
+
+V41 D_L01_00200980[SUCK_BEAM_RING_COUNT][SUCK_BEAM_RING_VERTEX_COUNT] = {0};
+
+s16 D_L02_001D8AD8[SUCK_BEAM_RING_COUNT] = {0};
+
+V41 D_L02_001D8AF0[SUCK_BEAM_RING_COUNT][SUCK_BEAM_RING_VERTEX_COUNT] = {0};
+
+s16 D_L03_001D78D8[SUCK_BEAM_RING_COUNT] = {0};
+
+V41 D_L03_001D78F0[SUCK_BEAM_RING_COUNT][SUCK_BEAM_RING_VERTEX_COUNT] = {0};
+
+s16 D_L04_001D8718[SUCK_BEAM_RING_COUNT] = {0};
+
+V41 D_L04_001D8730[SUCK_BEAM_RING_COUNT][SUCK_BEAM_RING_VERTEX_COUNT] = {0};
+
+s16 D_L05_0020D248[SUCK_BEAM_RING_COUNT] = {0};
+
+V41 D_L05_0020D260[SUCK_BEAM_RING_COUNT][SUCK_BEAM_RING_VERTEX_COUNT] = {0};
+
+s16 D_L06_001DA1C8[SUCK_BEAM_RING_COUNT] = {0};
+
+V41 D_L06_001DA1E0[SUCK_BEAM_RING_COUNT][SUCK_BEAM_RING_VERTEX_COUNT] = {0};
+
+s16 D_L07_001DC188[SUCK_BEAM_RING_COUNT] = {0};
+
+V41 D_L07_001DC1A0[SUCK_BEAM_RING_COUNT][SUCK_BEAM_RING_VERTEX_COUNT] = {0};
+
+s16 D_L08_001EEAA8[SUCK_BEAM_RING_COUNT] = {0};
+
+V41 D_L08_001EEAC0[SUCK_BEAM_RING_COUNT][SUCK_BEAM_RING_VERTEX_COUNT] = {0};
+
+s16 D_L09_00205488[SUCK_BEAM_RING_COUNT] = {0};
+
+V41 D_L09_002054A0[SUCK_BEAM_RING_COUNT][SUCK_BEAM_RING_VERTEX_COUNT] = {0};
+
+s16 D_L10_001D9288[SUCK_BEAM_RING_COUNT] = {0};
+
+V41 D_L10_001D92A0[SUCK_BEAM_RING_COUNT][SUCK_BEAM_RING_VERTEX_COUNT] = {0};
+
+s16 D_L11_001D8E58[SUCK_BEAM_RING_COUNT] = {0};
+
+V41 D_L11_001D8E70[SUCK_BEAM_RING_COUNT][SUCK_BEAM_RING_VERTEX_COUNT] = {0};
+
+s16 D_L12_001FA828[SUCK_BEAM_RING_COUNT] = {0};
+
+V41 D_L12_001FA840[SUCK_BEAM_RING_COUNT][SUCK_BEAM_RING_VERTEX_COUNT] = {0};
+
+s16 D_L13_001D8E88[SUCK_BEAM_RING_COUNT] = {0};
+
+V41 D_L13_001D8EA0[SUCK_BEAM_RING_COUNT][SUCK_BEAM_RING_VERTEX_COUNT] = {0};
+
+s16 D_L14_001E5338[SUCK_BEAM_RING_COUNT] = {0};
+
+V41 D_L14_001E5350[SUCK_BEAM_RING_COUNT][SUCK_BEAM_RING_VERTEX_COUNT] = {0};
+
+s16 D_L15_001D8858[SUCK_BEAM_RING_COUNT] = {0};
+
+V41 D_L15_001D8870[SUCK_BEAM_RING_COUNT][SUCK_BEAM_RING_VERTEX_COUNT] = {0};
+
+s16 D_L16_001D7D78[SUCK_BEAM_RING_COUNT] = {0};
+
+V41 D_L16_001D7D90[SUCK_BEAM_RING_COUNT][SUCK_BEAM_RING_VERTEX_COUNT] = {0};
+
+s16 D_L17_001D8B78[SUCK_BEAM_RING_COUNT] = {0};
+
+V41 D_L17_001D8B90[SUCK_BEAM_RING_COUNT][SUCK_BEAM_RING_VERTEX_COUNT] = {0};
+
+s16 D_L18_001D8EB8[SUCK_BEAM_RING_COUNT] = {0};
+
+V41 D_L18_001D8ED0[SUCK_BEAM_RING_COUNT][SUCK_BEAM_RING_VERTEX_COUNT] = {0};
