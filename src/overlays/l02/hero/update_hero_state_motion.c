@@ -889,7 +889,7 @@ void update_hero_state_motion(void) {
                 t = 1.0f;
             }
             speed = frame_time_sq * 12.0f * t;
-            hero.unk2290 = speed;
+            hero.stop_decel = speed;
             if (hero.moby->seq == hero.moby->prev_seq && hero.moby->seq != 0x14) {
                 float r;
 
@@ -1821,7 +1821,7 @@ void update_hero_state_motion(void) {
             }
         }
         update_hero_stick_target_magnitude();
-        if (hero.unk930 > 0.0f) {
+        if (hero.push_length > 0.0f) {
             build_scaled_hero_move_impulse(0.7f, 0.0f);
             *(OvlQuad *)motion_geometry_scratch[0] = *(OvlQuad *)hero.move_impulse.f;
             hero.target_speed = hero.target_speed + forward_component(motion_geometry_scratch[0]);

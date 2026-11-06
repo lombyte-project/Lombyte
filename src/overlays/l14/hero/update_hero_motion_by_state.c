@@ -579,7 +579,7 @@ void update_hero_motion_by_state(void) {
                 s = 1.0f;
             }
             speed = frame_time_sq * 12.0f * s;
-            hero.unk2290 = speed;
+            hero.stop_decel = speed;
             if (MV(hero.moby)->seq == MV(hero.moby)->prev_seq && MV(hero.moby)->seq != 0x14) {
                 f32 r = hero.motion.flat_speed / speed;
                 if (scale_game_frames(5) < r && MV(hero.moby)->prev_frame < 5.5f) {
@@ -1474,7 +1474,7 @@ void update_hero_motion_by_state(void) {
             hero.sharp_turn = 0;
         }
         update_hero_stick_target_magnitude();
-        if (hero.unk930 > 0.0f) {
+        if (hero.push_length > 0.0f) {
             Vec4 *move_impulse_ptr = &hero.move_impulse;
             build_scaled_hero_move_impulse(0.7f, 0.0f);
             vector_and_descriptor_scratch.q = hero.move_impulse.q;

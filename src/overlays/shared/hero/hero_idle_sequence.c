@@ -823,7 +823,7 @@ void update_hero_in_vehicle_mode(void) {
                     scale = 1.7f;
                     if (D_0015EDB3_macro)
                         scale = 3.1f;
-                    if (g->unk22FC)
+                    if (g->attachment_pulse_timer)
                         scale *= 1.4f;
                     FUN_L00_0025b868(*(f32 *)(*(char **)(((char *)g->unk1624) + 0x24) + 0x24) *
                                          scale,
@@ -840,7 +840,7 @@ void update_hero_in_vehicle_mode(void) {
                 struct Hero *g = &hero;
                 g->glow_phase = FUN_L00_002000e8(g->glow_phase, frame_time_macro * 2.9670596f);
             }
-            if (FUN_L00_001fef98(&g->unk22FC) == 0) {
+            if (FUN_L00_001fef98(&g->attachment_pulse_timer) == 0) {
                 struct Hero *g = &hero;
                 g->glow_phase = FUN_L00_002000e8(g->glow_phase, frame_time_macro * 12.217304f);
                 switch (*(s16 *)((char *)g + 0x22fe)) {
@@ -915,7 +915,7 @@ void update_hero_in_vehicle_mode(void) {
             if (*(char **)((char *)g + 0x22c0)) {
                 FUN_L00_0028dbe8(*(char **)((char *)g + 0x22c0) + 0x10, 0, ((char *)g->moby));
                 *(s16 *)((char *)g + 0x22fe) = *(u16 *)((char *)g + 0x22c0);
-                g->unk22FC = FUN_L00_001fef20(0x39);
+                g->attachment_pulse_timer = FUN_L00_001fef20(0x39);
             }
             *(u32 *)((char *)g + 0x22c0) = 0;
         }
