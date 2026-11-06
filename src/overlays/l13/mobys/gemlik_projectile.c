@@ -98,7 +98,7 @@ typedef struct GemlikProjectileVars {
     f32   deflected_marker; /* 31337.6 once the hero has knocked it back */
     f32   launch_position[4];
     void *owner;
-    s32   unk24;
+    s32   hits_level; /* 0: the hit line skips the level (collision_line flag 1) */
     f32   max_travel_distance;
     s32   timer_2C;
 } GemlikProjectileVars;
@@ -115,7 +115,7 @@ void gemlik_projectile_update(struct Moby *moby) {
     } work;
     int                    i;
     int                    flags;
-    int                    stationary;
+    int                    skip_level;
     unsigned char         *hero_bytes;
     char                  *ent;
     struct L13Ent00178480 *target_hit_entry;
@@ -169,7 +169,7 @@ void gemlik_projectile_update(struct Moby *moby) {
     *(unsigned short *)(work.hit + 0x1A) = *(unsigned short *)((char *)moby + 0xA6);
     work.hit[0x18] = 1;
     work.hit[0x19] = 1;
-    stationary = projectile_vars->unk24 == 0;
+    skip_level = projectile_vars->hits_level == 0;
     if (projectile_vars->max_travel_distance <
             vector_distance_xy(&moby->pos, projectile_vars->launch_position) ||
         fast_dec_timer(&projectile_vars->timer_2C) != 0) {
@@ -194,7 +194,7 @@ void gemlik_projectile_update(struct Moby *moby) {
         }
         goto remove;
     }
-    if (collision_line(&work.old_pos, &moby->pos, stationary, projectile_vars->owner, work.hit) ==
+    if (collision_line(&work.old_pos, &moby->pos, skip_level, projectile_vars->owner, work.hit) ==
         0)
         goto bounds;
     qcopy(&moby->pos, &coll_hit_1638.point);

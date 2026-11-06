@@ -53,7 +53,7 @@ typedef struct AttachedRocketVars {
     u8           launch_position;
     u8           pad_11[0xF];
     struct Moby *source_moby;
-    s16          unk24;
+    s16          hits_level; /* 0: the hit line skips the level (collision_line flag 1) */
     s16          attachment_joint_index;
     f32          max_travel_distance;
     s32          distance_reference_moby;
@@ -134,7 +134,7 @@ void attached_rocket_update(struct Moby *moby) {
         L13Vector_5a58 random_direction;
     } work;
     int   i;
-    int   stationary;
+    int   skip_level;
     float length;
     float distance;
     float other_distance;
@@ -195,7 +195,7 @@ void attached_rocket_update(struct Moby *moby) {
     set_vector_length_xy(&work.velocity, &work.velocity, 1.0f);
     work.velocity.z = 1.0f;
     make_hit_descriptor(work.hit, moby, 0x10001, 1.0f, &work.velocity);
-    stationary = attached_rocket_vars->unk24 == 0;
+    skip_level = attached_rocket_vars->hits_level == 0;
     distance = vector_distance_xy(&moby->pos, &attached_rocket_vars->launch_position);
     other_distance =
         vector_distance_xy(*(char **)&attached_rocket_vars->distance_reference_moby + 0x10,
@@ -221,7 +221,7 @@ void attached_rocket_update(struct Moby *moby) {
         spawn_attached_rocket_explosion(moby);
         goto remove;
     }
-    if (collision_line(&work.old_pos, &moby->pos, stationary, moby, work.hit) == 0)
+    if (collision_line(&work.old_pos, &moby->pos, skip_level, moby, work.hit) == 0)
         goto bounds;
     {
         struct Moby *target = (struct Moby *)coll_hit_1638.moby;
