@@ -1140,6 +1140,7 @@ SDATA_OVERLAYS = {
 # The same for a unit's `.data`: data only that unit reads, defined in it.
 # `scripts/data-refs.py --emit` writes the definition and prints the entry.
 DATA_OVERLAYS = {
+    "ui/menus/system/setup_menu_display_text": (0x1E0888, 0xE1808, 76),  # gold bolts per level
     "sdk/kernel/supplement_crt0": (0x130320, 0x312A0, 8),
     "sdk/graph/sce_gs_get_gparam": (0x132D40, 0x33CC0, 16),
     "sdk/input/sce_pad2_init": (0x132DD0, 0x33D50, 4),  # pad2_initialized
