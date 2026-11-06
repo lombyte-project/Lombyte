@@ -30,7 +30,7 @@
    contents into a power-of-two texture page and blits it back, and finally
    draws the flashing panel overlays.
 
-   Slot 6 is skipped in every loop while menu_system.unkD8 is clear. */
+   Slot 6 is skipped in every loop while menu_system.goodies_tab_shown is clear. */
 
 typedef struct {
     u8  pad0[0x50];

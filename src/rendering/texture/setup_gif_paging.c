@@ -8,9 +8,11 @@
 
 extern int *gif_page_marker __asm__("D_0015F450") MACRO_ADDR;
 
+/* An effect texture definition (EffectTextureDefinition in get_effect_texture);
+   a cleared tex0 makes get_effect_texture upload it again. */
 typedef struct {
-    long unk0;
-    long unk8;
+    long tex0;
+    u8   pad_8[0x8];
 } PageSlot;
 
 extern char D_0019A3E8[];
@@ -49,7 +51,7 @@ void setup_gif_paging(int skip_paging_entry_reset) {
         int k;
 
         for (k = 0; k < effect_tex_cnt; k++) {
-            effect_texture_definitions[k].unk0 = 0;
+            effect_texture_definitions[k].tex0 = 0;
         }
     }
     if (skip_paging_entry_reset == 0) {
