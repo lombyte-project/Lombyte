@@ -55,9 +55,9 @@ typedef struct BossCameraTransitionVars {
     f32 start_rotation_z;
     u8  pad_2C[0x4];
     f32 end_rotation[4];
-    u8  unk40;
+    u8  hero_position; /* where FUN_L00_00216f90 places the hero */
     u8  pad_41[0xB];
-    f32 unk4C;
+    f32 hero_yaw;
     u8  pad_50[0x10];
     f32 transition_progress;
     s32 transition_progress_rate;
@@ -98,9 +98,9 @@ void boss_camera_transition_update(struct Moby *moby) {
             if (1.0f <= t) {
                 camera_transition_active = 1;
                 clear_u64_value(transition_scratch_vectors);
-                transition_scratch_vectors[2] = transition_private_vars->unk4C;
+                transition_scratch_vectors[2] = transition_private_vars->hero_yaw;
                 FUN_L00_00216f90_q(
-                    &transition_private_vars->unk40, transition_scratch_vectors, 0x72, 1);
+                    &transition_private_vars->hero_position, transition_scratch_vectors, 0x72, 1);
                 FUN_L00_002eaaa0_q(
                     transition_private_vars, &transition_private_vars->start_rotation, 1, 0, 0);
                 if (transition_private_vars->transition_mode == 1) {
@@ -148,16 +148,18 @@ void boss_camera_transition_update(struct Moby *moby) {
             if (1.0f <= transition_progress) {
                 camera_transition_active = 0;
                 clear_u64_value(transition_scratch_vectors + 8);
-                transition_scratch_vectors[10] = transition_private_vars->unk4C;
+                transition_scratch_vectors[10] = transition_private_vars->hero_yaw;
                 FUN_L00_00216f90_q(
-                    &transition_private_vars->unk40, transition_scratch_vectors + 8, 0, 0);
+                    &transition_private_vars->hero_position, transition_scratch_vectors + 8, 0, 0);
                 jet_end_mount(2);
                 moby->state = STATE_POST_TRANSITION_RAMP_DOWN;
             } else if (*(int *)(camera_secondary_mode_lui) != 0x72) {
                 clear_u64_value(transition_scratch_vectors + 8);
-                transition_scratch_vectors[10] = transition_private_vars->unk4C;
-                FUN_L00_00216f90_q(
-                    &transition_private_vars->unk40, transition_scratch_vectors + 8, 0x72, 1);
+                transition_scratch_vectors[10] = transition_private_vars->hero_yaw;
+                FUN_L00_00216f90_q(&transition_private_vars->hero_position,
+                                   transition_scratch_vectors + 8,
+                                   0x72,
+                                   1);
                 return;
             }
         }
@@ -201,17 +203,17 @@ void boss_camera_transition_update(struct Moby *moby) {
                 camera_transition_active = 0;
                 transition_private_vars->transition_progress = 1.0f;
                 clear_u64_value(transition_scratch_vectors + 8);
-                transition_scratch_vectors[10] = transition_private_vars->unk4C;
+                transition_scratch_vectors[10] = transition_private_vars->hero_yaw;
                 FUN_L00_00216f90_q(
-                    &transition_private_vars->unk40, transition_scratch_vectors + 8, 0, 0);
+                    &transition_private_vars->hero_position, transition_scratch_vectors + 8, 0, 0);
                 jet_end_mount(3);
                 moby->state = STATE_POST_TRANSITION_RAMP_DOWN;
             }
         } else if (*(int *)(camera_secondary_mode_lui) != 0x72) {
             clear_u64_value(transition_scratch_vectors + 8);
-            transition_scratch_vectors[10] = transition_private_vars->unk4C;
+            transition_scratch_vectors[10] = transition_private_vars->hero_yaw;
             FUN_L00_00216f90_q(
-                &transition_private_vars->unk40, transition_scratch_vectors + 8, 0x72, 1);
+                &transition_private_vars->hero_position, transition_scratch_vectors + 8, 0x72, 1);
             return;
         } else {
             approach_value(&transition_private_vars->ramp, 0.0f, (*(float *)&frame_time) * 4.0f);
@@ -263,7 +265,7 @@ void start_camera_transition(struct Moby *moby,
     qcopy(&position_rotation_transition_vars->end_position, transition_target_position);
     qcopy(&position_rotation_transition_vars->start_rotation, transition_start_rotation);
     qcopy(position_rotation_transition_vars->end_rotation, transition_target_rotation);
-    qcopy(&position_rotation_transition_vars->unk40, transition_setup_vector);
+    qcopy(&position_rotation_transition_vars->hero_position, transition_setup_vector);
     moby->state = CAMERA_TRANSITION_STATE_PRE_TRANSITION_RAMP_UP;
     position_rotation_transition_vars->progress_acceleration = frame_time_sq * 0.333f;
     position_rotation_transition_vars->max_progress_rate =
