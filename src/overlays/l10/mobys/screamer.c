@@ -1,5 +1,7 @@
 /* Level 10 moby class screamer: path following, targeting and hit reactions. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 #include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/game/item_state.h"
 #include "rnc/hero/hero.h"
@@ -330,36 +332,29 @@ typedef struct Hit_2DFC38 {
 } Hit_2DFC38;
 
 typedef struct MobyData_2DFC38 {
-    char          pad0[0x20];
-    float         f20;
-    char          pad24[2];
-    short         nonlethal_hit_duration_frames;
-    char          pad28[0x10];
-    int           target_range_boost_requested;
-    char          pad3C[0x24];
-    char          f60[0x10];
-    float         f70, f74, f78, f7C;
-    char          pad80[4];
-    int           knockback_flags;
-    char          pad88[0x15];
-    unsigned char f9D;
-    char          pad9E[0x22];
-    char          selected_target_vectors[0x40];
-    int           f100, f104;
-    char          pad108[8];
-    char          color_reaction_state_header[7];
-    unsigned char secondary_color_red;
-    char          pad118[0x18];
-    char          navigation_state[0x44];
-    int           f174;
-    float         default_target_range;
-    int           active_target_path_index;
-    float         current_target_range;
-    int           target_range_boost_timer;
-    float         activation_wait_target_range;
-    int           activation_wait_target_path_index;
-    char          pad190[4];
-    int           target_bounds_cuboid_index;
+    char                   pad0[0x20];
+    float                  health;
+    char                   pad24[2];
+    short                  nonlethal_hit_duration_frames;
+    char                   pad28[0x10];
+    int                    target_range_boost_requested;
+    char                   pad3C[0x24];
+    struct KnockbackMotion knockback; /* 0x60 */
+    char                   selected_target_vectors[0x40];
+    int                    f100, f104;
+    char                   pad108[8];
+    struct HitColorFlash   hit_flash; /* 0x110 */
+    char                   pad120[0x10];
+    char                   navigation_state[0x44];
+    int                    f174;
+    float                  default_target_range;
+    int                    active_target_path_index;
+    float                  current_target_range;
+    int                    target_range_boost_timer;
+    float                  activation_wait_target_range;
+    int                    activation_wait_target_path_index;
+    char                   pad190[4];
+    int                    target_bounds_cuboid_index;
 } MobyData_2DFC38;
 
 extern char D_0013F3D0[];
@@ -406,44 +401,44 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
     if (moby->state != SCREAMER_STATE_DEATH_KNOCKBACK) {
         hit_record = (Hit_2DFC38 *)find_moby_hit(moby, 0x330000, 0);
         hit_update_2DFC38(
-            moby, hit_record, &screamer_vars->f20, 5, &hit_processing_status, 0, 0, 4);
+            moby, hit_record, &screamer_vars->health, 5, &hit_processing_status, 0, 0, 4);
         if (hit_record != 0) {
-            if (screamer_vars->f20 <= hit_record->damage) {
+            if (screamer_vars->health <= hit_record->damage) {
                 if (screamer_death_message_gate != 0 && item_unlocked[0x10] == 0) {
                     item_unlocked[0x10] = 1;
                     allocate_voice_for_bank_entry_2DFC38(1, 0, 0);
                     queue_dialogue_message(0x53d6, -1);
                 }
-                screamer_vars->f20 = 0.0f;
+                screamer_vars->health = 0.0f;
                 moby->flags &= 0xEFFF;
                 if (moby->prev_seq != 5)
                     blend_moby_animation(moby, 5, 0, scale_game_frames(10));
                 moby->state = SCREAMER_STATE_DEATH_KNOCKBACK;
-                screamer_vars->f70 = D_0015ED70 * 26.0f;
-                screamer_vars->f9D = 3;
-                screamer_vars->f74 = 0.0005f;
-                screamer_vars->knockback_flags = 9;
-                screamer_vars->f78 = D_0015ED6C * 7.0f;
-                screamer_vars->f7C = D_0015ED6C * 10.0f;
+                screamer_vars->knockback.gravity = D_0015ED70 * 26.0f;
+                screamer_vars->knockback.unk3D = 3;
+                screamer_vars->knockback.speed_approach_step = 0.0005f;
+                screamer_vars->knockback.flags = 9;
+                screamer_vars->knockback.speed = D_0015ED6C * 7.0f;
+                screamer_vars->knockback.vertical_speed = D_0015ED6C * 10.0f;
                 if (hit_record->f30 & 1)
                     knockback_angle = fast_arc_tan(hit_record->f10[0], hit_record->f10[1]);
                 else
                     knockback_angle =
                         fast_arc_tan(moby->pos.x - hit_record->x, moby->pos.y - hit_record->y);
-                trooper_start_knockback(moby, screamer_vars->f60, knockback_angle, 5, 1, 0);
-                screamer_vars->secondary_color_red = 0x78;
-                trooper_anim_update(moby, screamer_vars->color_reaction_state_header);
+                trooper_start_knockback(moby, &screamer_vars->knockback, knockback_angle, 5, 1, 0);
+                screamer_vars->hit_flash.flash_red = 0x78;
+                trooper_anim_update(moby, &screamer_vars->hit_flash);
                 func_L00_00261B00_2E2B80(moby, 1, 3, 0, -1);
             } else {
-                screamer_vars->f20 = screamer_vars->f20 - hit_record->damage;
-                screamer_vars->secondary_color_red = 0xfa;
+                screamer_vars->health = screamer_vars->health - hit_record->damage;
+                screamer_vars->hit_flash.flash_red = 0xfa;
                 screamer_vars->nonlethal_hit_duration_frames = scale_game_frames(60);
-                trooper_anim_update(moby, screamer_vars->color_reaction_state_header);
+                trooper_anim_update(moby, &screamer_vars->hit_flash);
             }
             moby->hit_slot = 0xff;
         }
     }
-    trooper_anim_finish(moby, screamer_vars->color_reaction_state_header);
+    trooper_anim_finish(moby, &screamer_vars->hit_flash);
     if (screamer_vars->f174 == 2)
         screamer_vars->current_target_range = 42.0f;
     else if (screamer_vars->target_range_boost_timer != 0)

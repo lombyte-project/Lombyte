@@ -1,5 +1,7 @@
 /* Level 10 moby class 1199, the darter (the bat-like Orxon flyer): rises from its spawn, wanders, chases and dives at its target. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 #include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/game/item_state.h"
 #include "rnc/hero/hero.h"
@@ -78,40 +80,41 @@ extern short *moby_group_member_lists[] __asm__("D_L10_001ABCC0");
 typedef struct Hero Hero_2e01a8;
 
 typedef struct Vars_2e01a8 {
-    char          p0[0x20];
-    float         health;
-    short         max_health;
-    char          p26[2];
-    unsigned char hit_response_class;
-    unsigned char b29;
-    char          p2A[6];
-    float         f30;
-    char          p34[0x24];
-    unsigned char b58;
-    char          p59;
-    unsigned char b5A;
-    char          p5B[5];
-    char          a60[0x80];
-    AlignedVec4f  dive_attack_aim_position;
-    char          pF0[0x10];
-    Moby         *target;
-    int           f104;
-    char          p108[0x18];
-    AlignedVec4f  velocity;
-    AlignedVec4f  home;
-    AlignedVec4f  goal;
-    char          p150[0x20];
-    float         turn_speed;
-    int           spawn_kind;
-    char          p178[0x18];
-    float         side_angle;
-    int           f194;
-    int           wait;
-    float         bob_angle;
-    float         height_offset;
-    int           height_timer;
-    char          p1A8[0xC8];
-    char          a270[4];
+    char                   p0[0x20];
+    float                  health;
+    short                  max_health;
+    char                   p26[2];
+    unsigned char          hit_response_class;
+    unsigned char          b29;
+    char                   p2A[6];
+    float                  f30;
+    char                   p34[0x24];
+    unsigned char          b58;
+    char                   p59;
+    unsigned char          b5A;
+    char                   p5B[5];
+    struct KnockbackMotion knockback; /* 0x60 */
+    char                   pC0[0x20];
+    AlignedVec4f           dive_attack_aim_position;
+    char                   pF0[0x10];
+    Moby                  *target;
+    int                    f104;
+    char                   p108[0x18];
+    AlignedVec4f           velocity;
+    AlignedVec4f           home;
+    AlignedVec4f           goal;
+    char                   p150[0x20];
+    float                  turn_speed;
+    int                    spawn_kind;
+    char                   p178[0x18];
+    float                  side_angle;
+    int                    f194;
+    int                    wait;
+    float                  bob_angle;
+    float                  height_offset;
+    int                    height_timer;
+    char                   p1A8[0xC8];
+    char                   a270[4];
 } Vars_2e01a8;
 
 extern float l10_darter_attack_distance __asm__("D_L10_00161DFC") __attribute__((sda));
@@ -591,7 +594,7 @@ void darter_update(Moby *moby) {
         break;
     }
     case DARTER_STATE_DYING:
-        if ((step_moby_motion(moby, darter_vars->a60) & 1) == 0)
+        if ((step_moby_motion(moby, &darter_vars->knockback) & 1) == 0)
             break;
         mark_moby_for_removal_cf(moby, 0x200, -1);
         spawn_color_swapped_explosion_burst(moby, &moby->pos, -1, 0.5f, 10.0f);
@@ -625,40 +628,30 @@ typedef struct Hit_2E2B80 {
 } Hit_2E2B80;
 
 typedef struct MobyData {
-    char          pad0[0x20];
-    float         f20;
-    char          pad24[2];
-    short         f26;
-    char          pad28[0x10];
-    int           f38;
-    char          pad3C[0x24];
-    char          f60[0x10];
-    float         f70;
-    float         f74;
-    float         f78;
-    float         f7C;
-    char          pad80[4];
-    int           f84;
-    char          pad88[0x15];
-    unsigned char f9D;
-    char          pad9E[0x22];
-    char          fC0[0x40];
-    int           f100;
-    int           f104;
-    char          pad108[8];
-    char          f110[7];
-    unsigned char f117;
-    char          pad118[0x18];
-    char          f130[0x44];
-    int           f174;
-    float         f178;
-    int           f17C;
-    float         f180;
-    int           f184;
-    float         f188;
-    int           f18C;
-    char          pad190[4];
-    int           f194;
+    char                   pad0[0x20];
+    float                  health;
+    char                   pad24[2];
+    short                  nonlethal_hit_duration_frames;
+    char                   pad28[0x10];
+    int                    target_range_boost_requested;
+    char                   pad3C[0x24];
+    struct KnockbackMotion knockback; /* 0x60 */
+    char                   selected_target_vectors[0x40];
+    int                    f100;
+    int                    f104;
+    char                   pad108[8];
+    struct HitColorFlash   hit_flash; /* 0x110 */
+    char                   pad120[0x10];
+    char                   navigation_state[0x44];
+    int                    f174;
+    float                  default_target_range;
+    int                    active_target_path_index;
+    float                  current_target_range;
+    int                    target_range_boost_timer;
+    float                  activation_wait_target_range;
+    int                    activation_wait_target_path_index;
+    char                   pad190[4];
+    int                    target_bounds_cuboid_index;
 } MobyData;
 
 extern int resolve_moby_hit_response() __asm__("FUN_00213928");
@@ -680,29 +673,29 @@ void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
     Hit_2E2B80 *hit_record;
     int         target_selection_status;
 
-    if (class_1199_vars->f38 != 0) {
-        class_1199_vars->f184 =
+    if (class_1199_vars->target_range_boost_requested != 0) {
+        class_1199_vars->target_range_boost_timer =
             truncate_float_to_s32(scale_time(random_float_between(180.0f, 240.0f)));
-        class_1199_vars->f38 = 0;
+        class_1199_vars->target_range_boost_requested = 0;
     }
-    fast_dec_timer(&class_1199_vars->f184);
+    fast_dec_timer(&class_1199_vars->target_range_boost_timer);
     if (moby->state != DARTER_STATE_DYING) {
         hit_record = find_moby_hit(moby, 0x330000, 0);
         resolve_moby_hit_response(
-            moby, hit_record, &class_1199_vars->f20, 5, &hit_processing_status, 0, 0, 4);
+            moby, hit_record, &class_1199_vars->health, 5, &hit_processing_status, 0, 0, 4);
         if (hit_record != 0 && hit_record->moby->oclass != moby->oclass) {
-            if (class_1199_vars->f20 <= hit_record->damage) {
-                class_1199_vars->f20 = 0.0f;
+            if (class_1199_vars->health <= hit_record->damage) {
+                class_1199_vars->health = 0.0f;
                 moby->flags &= 0xEFFF;
                 if (moby->prev_seq != 4)
                     blend_moby_animation(moby, 4, 0, scale_game_frames(10));
                 moby->state = DARTER_STATE_DYING;
-                class_1199_vars->f70 = D_0015ED70 * 26.0f;
-                class_1199_vars->f9D = 3;
-                class_1199_vars->f84 = 9;
-                class_1199_vars->f74 = 0.0005f;
-                class_1199_vars->f78 = D_0015ED6C * 7.0f;
-                class_1199_vars->f7C = D_0015ED6C * 10.0f;
+                class_1199_vars->knockback.gravity = D_0015ED70 * 26.0f;
+                class_1199_vars->knockback.unk3D = 3;
+                class_1199_vars->knockback.flags = 9;
+                class_1199_vars->knockback.speed_approach_step = 0.0005f;
+                class_1199_vars->knockback.speed = D_0015ED6C * 7.0f;
+                class_1199_vars->knockback.vertical_speed = D_0015ED6C * 10.0f;
                 allocate_voice_for_target_entry(2, 0, moby);
                 if (hit_record->f30 & 1) {
                     knockback_angle = fast_arc_tan(hit_record->f10[0], hit_record->f10[1]);
@@ -711,35 +704,39 @@ void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
                         fast_arc_tan(moby->pos.x - hit_record->x, moby->pos.y - hit_record->y);
                 }
                 *(OvlQuad *)vector_scratch = *(OvlQuad *)hit_record->f10;
-                trooper_knockback_arc(
-                    vector_scratch, &knockback_angle, &class_1199_vars->f78, &class_1199_vars->f7C);
-                trooper_start_knockback(moby, class_1199_vars->f60, knockback_angle, 4, 1, 0);
-                class_1199_vars->f117 = 0x78;
-                trooper_anim_update(moby, class_1199_vars->f110);
+                trooper_knockback_arc(vector_scratch,
+                                      &knockback_angle,
+                                      &class_1199_vars->knockback.speed,
+                                      &class_1199_vars->knockback.vertical_speed);
+                trooper_start_knockback(
+                    moby, &class_1199_vars->knockback, knockback_angle, 4, 1, 0);
+                class_1199_vars->hit_flash.flash_red = 0x78;
+                trooper_anim_update(moby, &class_1199_vars->hit_flash);
                 func_L00_00261B00_2E2B80(moby, 1, 3, 0, -1);
             } else {
-                class_1199_vars->f20 = class_1199_vars->f20 - hit_record->damage;
-                class_1199_vars->f117 = 0xFA;
-                class_1199_vars->f26 = scale_game_frames(60);
-                trooper_anim_update(moby, class_1199_vars->f110);
+                class_1199_vars->health = class_1199_vars->health - hit_record->damage;
+                class_1199_vars->hit_flash.flash_red = 0xFA;
+                class_1199_vars->nonlethal_hit_duration_frames = scale_game_frames(60);
+                trooper_anim_update(moby, &class_1199_vars->hit_flash);
             }
         }
         moby->hit_slot = 0xFF;
     }
-    trooper_anim_finish(moby, class_1199_vars->f110);
+    trooper_anim_finish(moby, &class_1199_vars->hit_flash);
     if (class_1199_vars->f174 == 2) {
-        class_1199_vars->f180 = 42.0f;
-    } else if (class_1199_vars->f184 != 0) {
-        class_1199_vars->f180 = class_1199_vars->f178 + 6.0f;
+        class_1199_vars->current_target_range = 42.0f;
+    } else if (class_1199_vars->target_range_boost_timer != 0) {
+        class_1199_vars->current_target_range = class_1199_vars->default_target_range + 6.0f;
     } else if (moby->state == 1) {
-        class_1199_vars->f180 = class_1199_vars->f188;
+        class_1199_vars->current_target_range = class_1199_vars->activation_wait_target_range;
     } else {
-        class_1199_vars->f180 = class_1199_vars->f178;
+        class_1199_vars->current_target_range = class_1199_vars->default_target_range;
     }
     if (class_1199_vars->f174 == 2) {
-        target_selection_status = ahead_f(class_1199_vars->f180, moby, class_1199_vars->fC0);
+        target_selection_status = ahead_f(
+            class_1199_vars->current_target_range, moby, class_1199_vars->selected_target_vectors);
         if (target_selection_status != TARGET_SELECTION_DEFAULT_REJECTED_NO_REPLACEMENT) {
-            LevelCuboid *bp = &l10_cuboids[class_1199_vars->f194];
+            LevelCuboid *bp = &l10_cuboids[class_1199_vars->target_bounds_cuboid_index];
             fast_vec_sub(vector_scratch, D_0013F3D0, &bp->pos);
             vector_scratch[3] = 0.0f;
             transform_vector_by_basis(transformed_offset, vector_scratch, bp->to_local);
@@ -749,28 +746,32 @@ void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
                 class_1199_vars->f104 = 2;
             }
         }
-    } else if (moby->state == 1 && class_1199_vars->f18C >= 0) {
-        target_selection_status = activate_effect_l08(class_1199_vars->f180,
-                                                      moby,
-                                                      class_1199_vars->fC0,
-                                                      0,
-                                                      0,
-                                                      l10_paths[class_1199_vars->f18C]->points,
-                                                      l10_paths[class_1199_vars->f18C]->count);
-    } else if (moby->state != 1 && class_1199_vars->f17C >= 0) {
-        target_selection_status = activate_effect_l08(class_1199_vars->f180,
-                                                      moby,
-                                                      class_1199_vars->fC0,
-                                                      0,
-                                                      0,
-                                                      l10_paths[class_1199_vars->f17C]->points,
-                                                      l10_paths[class_1199_vars->f17C]->count);
+    } else if (moby->state == 1 && class_1199_vars->activation_wait_target_path_index >= 0) {
+        target_selection_status = activate_effect_l08(
+            class_1199_vars->current_target_range,
+            moby,
+            class_1199_vars->selected_target_vectors,
+            0,
+            0,
+            l10_paths[class_1199_vars->activation_wait_target_path_index]->points,
+            l10_paths[class_1199_vars->activation_wait_target_path_index]->count);
+    } else if (moby->state != 1 && class_1199_vars->active_target_path_index >= 0) {
+        target_selection_status =
+            activate_effect_l08(class_1199_vars->current_target_range,
+                                moby,
+                                class_1199_vars->selected_target_vectors,
+                                0,
+                                0,
+                                l10_paths[class_1199_vars->active_target_path_index]->points,
+                                l10_paths[class_1199_vars->active_target_path_index]->count);
     } else {
-        target_selection_status = ahead_f(class_1199_vars->f180, moby, class_1199_vars->fC0);
+        target_selection_status = ahead_f(
+            class_1199_vars->current_target_range, moby, class_1199_vars->selected_target_vectors);
     }
     if (target_selection_status != TARGET_SELECTION_DEFAULT_REJECTED_NO_REPLACEMENT) {
-        if (class_1199_vars->f180 <
-            vector_distance_xy(class_1199_vars->f130, class_1199_vars->fC0)) {
+        if (class_1199_vars->current_target_range <
+            vector_distance_xy(class_1199_vars->navigation_state,
+                               class_1199_vars->selected_target_vectors)) {
             class_1199_vars->f104 = 2;
         } else if (moby->visible == 0) {
             class_1199_vars->f104 = 2;

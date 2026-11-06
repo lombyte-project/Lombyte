@@ -19,7 +19,8 @@ struct KnockbackMotion {
     u8  particle_mode;            /* 0x2E: 1 spawns shape point particles */
     u8  particle_count;           /* 0x2F */
     f32 restitution;              /* 0x30: bounce off steep walls */
-    u8  pad34[8];
+    f32 unk34;                    /* 0x34: set by the launch setups; neither step reads it */
+    f32 unk38;
     u8  active;                  /* 0x3C: set at launch */
     u8  unk3D;                   /* cleared when the hit reaction is set up */
     s16 phase;                   /* 0x3E: 0 rising, 1 falling, 2 grounded */
