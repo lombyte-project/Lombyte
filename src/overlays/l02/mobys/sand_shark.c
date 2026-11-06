@@ -187,7 +187,7 @@ void emit_sand_shark_dust_burst(void *moby) {
 typedef struct {
     /* 0x000 */ char          pad0[0x20];
     /* 0x020 */ float         health;
-    /* 0x024 */ short         unk24;
+    /* 0x024 */ short         max_health;
     /* 0x026 */ char          pad26[3];
     /* 0x029 */ unsigned char wrench_hit_sound;
     /* 0x02A */ char          pad2A[4];
@@ -337,7 +337,7 @@ void sand_shark_update(struct Moby *moby) {
         }
         qcopy(&sand_shark_behavior_vars->home, &moby->pos);
         qcopy(&sand_shark_behavior_vars->spawn_position, &moby->pos);
-        sand_shark_behavior_vars->unk24 = 1;
+        sand_shark_behavior_vars->max_health = 1;
         sand_shark_behavior_vars->health = 1.0f;
         sand_shark_behavior_vars->look_range = D_L02_00161900;
         sand_shark_behavior_vars->unk5C = 1;
