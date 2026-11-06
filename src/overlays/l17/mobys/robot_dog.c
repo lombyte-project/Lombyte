@@ -1,5 +1,6 @@
 /* Level 17 robot_dog: chase and aim, its stun and suction methods, and its glow quads. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 #include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/input/pad_globals.h"
@@ -546,35 +547,23 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F1558), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    char                 pad0[0x20];
-    float                f20;
-    char                 pad24[0x14];
-    int                  i38;
-    char                 pad3C[0xD4];
-    struct HitColorFlash hit_flash;
-    float                v120[4];
-    float                f130;
-    float                f134;
-    float                f138;
-    float                f13C;
-    int                  i140;
-    int                  i144;
-    char                 pad148[0x15];
-    char                 b15D;
-    char                 pad15E[0x12];
-    float                f170;
-    float                f174;
-    char                 pad178[8];
-    float                v180[4];
-    char                 pad190[0x20];
-    float                v1B0[4];
-    char                 pad1C0[0x14];
-    float                f1D4;
-    char                 pad1D8[0xC];
-    char                 b1E4;
-    char                 pad1E5[0xB];
-    float                f1F0;
-    float                f1F4;
+    char                   pad0[0x20];
+    float                  f20;
+    char                   pad24[0x14];
+    int                    i38;
+    char                   pad3C[0xD4];
+    struct HitColorFlash   hit_flash;
+    struct KnockbackMotion knockback;
+    float                  v180[4];
+    char                   pad190[0x20];
+    float                  v1B0[4];
+    char                   pad1C0[0x14];
+    float                  f1D4;
+    char                   pad1D8[0xC];
+    char                   b1E4;
+    char                   pad1E5[0xB];
+    float                  f1F0;
+    float                  f1F4;
 } Data;
 
 typedef struct {
@@ -634,22 +623,24 @@ void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_v
     hit_reaction(moby, hit_record, &moby_vars->f20, 0, &x, &y, 0, 4);
     if (x != 1 && moby->state != ROBOT_DOG_STATE_FALL_THEN_REMOVE) {
         moby_vars->f20 -= y;
-        moby_vars->f130 = frame_time_sq * 42.0f;
-        moby_vars->f134 = frame_time_sq * 24.0f;
-        moby_vars->b15D = 0;
-        moby_vars->i144 = 9;
-        moby_vars->f13C = frame_time * 15.7f;
-        moby_vars->f138 = frame_time * 19.0f;
-        moby_vars->f170 = -1.0f;
-        moby_vars->f174 = -1.0f;
+        moby_vars->knockback.gravity = frame_time_sq * 42.0f;
+        moby_vars->knockback.speed_approach_step = frame_time_sq * 24.0f;
+        moby_vars->knockback.unk3D = 0;
+        moby_vars->knockback.flags = 9;
+        moby_vars->knockback.vertical_speed = frame_time * 15.7f;
+        moby_vars->knockback.speed = frame_time * 19.0f;
+        moby_vars->knockback.apex_animation_frame = -1.0f;
+        moby_vars->knockback.landing_animation_frame = -1.0f;
         *(OvlQuad *)position_buffer = *(OvlQuad *)hit_record->pos;
-        trooper_knockback_arc(
-            position_buffer, &knockback_heading, &moby_vars->f138, &moby_vars->f13C);
+        trooper_knockback_arc(position_buffer,
+                              &knockback_heading,
+                              &moby_vars->knockback.speed,
+                              &moby_vars->knockback.vertical_speed);
         if (hit_record != 0 && hit_record->moby != 0 && hit_record->moby->moby_class_id == 0x63) {
             knockback_heading =
                 fast_arc_tan(moby_vars->f1F0 - moby->pos[0], moby_vars->f1F4 - moby->pos[1]);
         }
-        trooper_start_knockback(knockback_heading, moby, moby_vars->v120, 0xB, 1, 0);
+        trooper_start_knockback(knockback_heading, moby, &moby_vars->knockback, 0xB, 1, 0);
         moby->state = ROBOT_DOG_STATE_FALL_THEN_REMOVE;
         moby_vars->hit_flash.flash_red = 0xF0;
         start_hit_color_flash(moby, &moby_vars->hit_flash);

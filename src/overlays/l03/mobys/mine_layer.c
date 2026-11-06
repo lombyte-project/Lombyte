@@ -1,5 +1,6 @@
 /* Level 03 moby class mine_layer: patrols a path and lobs mines. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 #include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/globals.h"
@@ -51,19 +52,7 @@ typedef struct {
     u8                   unk5A;
     u8                   pad5B[5];
     struct HitColorFlash hit_flash;
-    u8                   knockback[0x10]; /* 0x70 */
-    f32                  kb_speed;        /* 0x80 */
-    u8                   pad84[4];
-    f32                  kb_lift;    /* 0x88 */
-    f32                  kb_gravity; /* 0x8C */
-    u8                   pad90[4];
-    s32                  kb_frames; /* 0x94 */
-    u8                   pad98[0x15];
-    u8                   kb_landed; /* 0xAD */
-    u8                   padAE[0x12];
-    f32                  kb_min; /* 0xC0 */
-    f32                  kb_max; /* 0xC4 */
-    u8                   padC8[8];
+    struct KnockbackMotion   knockback;
     struct GroundMoveControl walk;   /* 0xD0 */
     TrooperPatrol            patrol; /* 0x120 */
     u8                       pad138[0x18];
@@ -254,7 +243,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         }
         break;
     case MINE_LAYER_KNOCKBACK_AND_RECOVER:
-        if (step_moby_motion(mine_layer_moby, mine_layer_vars->knockback) & 0x60) {
+        if (step_moby_motion(mine_layer_moby, &mine_layer_vars->knockback) & 0x60) {
             if (mine_layer_moby->prev_seq != 0) {
                 blend_moby_animation(mine_layer_moby, 0, 0, scale_game_frames(10));
             }
@@ -286,7 +275,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         }
         break;
     case MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION:
-        if ((step_moby_motion(mine_layer_moby, mine_layer_vars->knockback) & 0x60) ||
+        if ((step_moby_motion(mine_layer_moby, &mine_layer_vars->knockback) & 0x60) ||
             mine_layer_moby->pos.z < 5.0f) {
             qcopy(muzzle, &mine_layer_moby->pos);
             muzzle[2] += 0.5f;
@@ -417,70 +406,76 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
         switch (damage_response) {
         case TROOPER_DAMAGE_SHORT_KNOCKBACK:
         case TROOPER_DAMAGE_SHORT_KNOCKBACK_ALTERNATE:
-            trooper_vars->kb_speed =
+            trooper_vars->knockback.gravity =
                 mine_layer_nonlethal_knockback_speed_scale_gp * frame_time_sq_macro;
-            trooper_set_knockback(trooper_vars->knockback,
+            trooper_set_knockback(&trooper_vars->knockback,
                                   mine_layer_nonlethal_knockback_horizontal_speed_scale_gp,
                                   mine_layer_nonlethal_knockback_vertical_launch_input_gp);
-            trooper_vars->kb_landed = 0;
-            trooper_vars->kb_frames = 9;
+            trooper_vars->knockback.unk3D = 0;
+            trooper_vars->knockback.flags = 9;
             *(u128 *)&at = *(u128 *)&hit_record->pos;
-            trooper_knockback_arc(
-                &at, &knockback_arc_angle, &trooper_vars->kb_lift, &trooper_vars->kb_gravity);
+            trooper_knockback_arc(&at,
+                                  &knockback_arc_angle,
+                                  &trooper_vars->knockback.speed,
+                                  &trooper_vars->knockback.vertical_speed);
             trooper_start_knockback(fast_arc_tan(damaged_moby->pos.x - hero.motion.pos.f[0],
                                                  damaged_moby->pos.y - hero.motion.pos.f[1]),
                                     damaged_moby,
-                                    trooper_vars->knockback,
+                                    &trooper_vars->knockback,
                                     3,
                                     1,
                                     0);
-            trooper_vars->kb_min = 5.0f;
-            trooper_vars->kb_max = 10.0f;
+            trooper_vars->knockback.apex_animation_frame = 5.0f;
+            trooper_vars->knockback.landing_animation_frame = 10.0f;
             damaged_moby->state = MINE_LAYER_KNOCKBACK_AND_RECOVER;
             break;
         case TROOPER_DAMAGE_LONG_KNOCKBACK:
         case TROOPER_DAMAGE_LONG_KNOCKBACK_ALTERNATE:
-            trooper_vars->kb_speed =
+            trooper_vars->knockback.gravity =
                 mine_layer_nonlethal_knockback_speed_scale_gp * frame_time_sq_macro;
-            trooper_set_knockback(trooper_vars->knockback,
+            trooper_set_knockback(&trooper_vars->knockback,
                                   mine_layer_nonlethal_knockback_horizontal_speed_scale_gp,
                                   mine_layer_nonlethal_knockback_vertical_launch_input_gp);
-            trooper_vars->kb_landed = 0;
-            trooper_vars->kb_frames = 9;
+            trooper_vars->knockback.unk3D = 0;
+            trooper_vars->knockback.flags = 9;
             *(u128 *)&at = *(u128 *)&hit_record->pos;
-            trooper_knockback_arc(
-                &at, &knockback_arc_angle, &trooper_vars->kb_lift, &trooper_vars->kb_gravity);
+            trooper_knockback_arc(&at,
+                                  &knockback_arc_angle,
+                                  &trooper_vars->knockback.speed,
+                                  &trooper_vars->knockback.vertical_speed);
             trooper_start_knockback(fast_arc_tan(damaged_moby->pos.x - hero.motion.pos.f[0],
                                                  damaged_moby->pos.y - hero.motion.pos.f[1]),
                                     damaged_moby,
-                                    trooper_vars->knockback,
+                                    &trooper_vars->knockback,
                                     4,
                                     1,
                                     0);
-            trooper_vars->kb_min = 7.5f;
-            trooper_vars->kb_max = 15.0f;
+            trooper_vars->knockback.apex_animation_frame = 7.5f;
+            trooper_vars->knockback.landing_animation_frame = 15.0f;
             damaged_moby->state = MINE_LAYER_KNOCKBACK_AND_RECOVER;
             break;
         case TROOPER_DAMAGE_LETHAL:
-            trooper_vars->kb_speed =
+            trooper_vars->knockback.gravity =
                 mine_layer_lethal_knockback_speed_scale_gp * frame_time_sq_macro;
-            trooper_set_knockback(trooper_vars->knockback,
+            trooper_set_knockback(&trooper_vars->knockback,
                                   mine_layer_lethal_knockback_horizontal_speed_scale_gp,
                                   mine_layer_lethal_knockback_vertical_launch_input_gp);
-            trooper_vars->kb_landed = 0;
-            trooper_vars->kb_frames = 9;
+            trooper_vars->knockback.unk3D = 0;
+            trooper_vars->knockback.flags = 9;
             *(u128 *)&at = *(u128 *)&hit_record->pos;
-            trooper_knockback_arc(
-                &at, &knockback_arc_angle, &trooper_vars->kb_lift, &trooper_vars->kb_gravity);
+            trooper_knockback_arc(&at,
+                                  &knockback_arc_angle,
+                                  &trooper_vars->knockback.speed,
+                                  &trooper_vars->knockback.vertical_speed);
             trooper_start_knockback(fast_arc_tan(damaged_moby->pos.x - hero.motion.pos.f[0],
                                                  damaged_moby->pos.y - hero.motion.pos.f[1]),
                                     damaged_moby,
-                                    trooper_vars->knockback,
+                                    &trooper_vars->knockback,
                                     5,
                                     1,
                                     0);
-            trooper_vars->kb_min = 8.0f;
-            trooper_vars->kb_max = 15.0f;
+            trooper_vars->knockback.apex_animation_frame = 8.0f;
+            trooper_vars->knockback.landing_animation_frame = 15.0f;
             damaged_moby->flags &= 0xEFFF;
             *((u8 *)trooper_vars + 0x67) = 0xFA;
             damaged_moby->state = MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION;
