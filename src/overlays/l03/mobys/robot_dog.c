@@ -1,5 +1,6 @@
 /* Level 03 moby class robot_dog. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/mobys/moby_state.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -63,58 +64,58 @@ typedef struct {
 } Tgt2c5bb8;
 
 typedef struct {
-    char  p00[0x20];
-    float f20;
-    short s24;
-    char  p26[3];
-    u8    b29;
-    char  p2A[0x16];
-    float v40[4];
-    char  p50[8];
-    u8    b58;
-    char  p59;
-    u8    b5A;
-    char  p5B[0x6D];
-    short sC8;
-    char  pCA[6];
-    void *pD0;
-    char  pD4[0x3C];
-    char  animation_state[0x10];
-    char  knockback_motion_state[0x60];
-    int   i180;
-    char  p184[4];
-    float movement_drop_limit;
-    float movement_rise_limit;
-    char  p190[0x14];
-    float max_movement_step;
-    float movement_heading_error_limit;
-    float movement_arrival_distance;
-    char  p1B0[8];
-    int   movement_control_flags;
-    float path_turn_spring_strength;
-    float path_turn_damping_factor;
-    float path_turn_step_limit;
-    char  p1C8[0x38];
-    float home[4];
-    char  p210[0x10];
-    float v220[4];
-    float target_engagement_radius;
-    float movement_speed;
-    char  p238[4];
-    int   chase_timer;
-    int   extended_engagement_radius_timer;
-    int   melee_cooldown_timer;
-    int   linked_partner_index;
-    char  p24C[0x14];
-    int   i260;
-    float f264;
-    char  p268[4];
-    int   i26C;
-    int   activation_path_index;
-    float path_activation_distance;
-    int   path_target_node_index;
-    int   activation_clip_volume_id;
-    char  m280[0x10];
+    char                 p00[0x20];
+    float                f20;
+    short                s24;
+    char                 p26[3];
+    u8                   b29;
+    char                 p2A[0x16];
+    float                v40[4];
+    char                 p50[8];
+    u8                   b58;
+    char                 p59;
+    u8                   b5A;
+    char                 p5B[0x6D];
+    short                sC8;
+    char                 pCA[6];
+    void                *pD0;
+    char                 pD4[0x3C];
+    struct HitColorFlash hit_flash;
+    char                 knockback_motion_state[0x60];
+    int                  i180;
+    char                 p184[4];
+    float                movement_drop_limit;
+    float                movement_rise_limit;
+    char                 p190[0x14];
+    float                max_movement_step;
+    float                movement_heading_error_limit;
+    float                movement_arrival_distance;
+    char                 p1B0[8];
+    int                  movement_control_flags;
+    float                path_turn_spring_strength;
+    float                path_turn_damping_factor;
+    float                path_turn_step_limit;
+    char                 p1C8[0x38];
+    float                home[4];
+    char                 p210[0x10];
+    float                v220[4];
+    float                target_engagement_radius;
+    float                movement_speed;
+    char                 p238[4];
+    int                  chase_timer;
+    int                  extended_engagement_radius_timer;
+    int                  melee_cooldown_timer;
+    int                  linked_partner_index;
+    char                 p24C[0x14];
+    int                  i260;
+    float                f264;
+    char                 p268[4];
+    int                  i26C;
+    int                  activation_path_index;
+    float                path_activation_distance;
+    int                  path_target_node_index;
+    int                  activation_clip_volume_id;
+    char                 m280[0x10];
 } Data2c5bb8;
 
 extern char *D_L03_0015FFD8_c5bb8 __asm__("D_L03_0015FFD8");
@@ -491,7 +492,7 @@ void robot_dog_update(char *moby) {
     if (((unsigned char *)moby)[0x31] != 0 && fast_vec_dist(moby + 0x10, D_L03_00166EC0) < 32.0f) {
         FUN_L00_0025a120(moby);
     }
-    update_hit_color_flash(moby, robot_dog_state->animation_state);
+    update_hit_color_flash(moby, &robot_dog_state->hit_flash);
     ((unsigned char *)moby)[0xBC] = 0;
 }
 /* Applies damage reaction, knockback parameters and animation state. */

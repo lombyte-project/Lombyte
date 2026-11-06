@@ -1,5 +1,6 @@
 /* Level 03 moby class mine_layer: patrols a path and lobs mines. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -35,34 +36,34 @@ typedef struct {
 
 /* Pvars of the l03 trooper. */
 typedef struct {
-    u8  pad0[0x20];
-    f32 health; /* 0x20 */
-    s16 max_health;
-    u8  pad26[2];
-    u8  hit_response_class;
-    u8  unk29;
-    u8  pad2A[0xE];
-    s32 alerted; /* 0x38: set when it is hit */
-    u8  pad3C[4];
-    u8  effect[0x18]; /* 0x40: debris record (spawn_explosion, FUN_L00_00259028) */
-    u8  unk58;
-    u8  pad59;
-    u8  unk5A;
-    u8  pad5B[5];
-    u8  anim[0x10];      /* 0x60: animation driver */
-    u8  knockback[0x10]; /* 0x70 */
-    f32 kb_speed;        /* 0x80 */
-    u8  pad84[4];
-    f32 kb_lift;    /* 0x88 */
-    f32 kb_gravity; /* 0x8C */
-    u8  pad90[4];
-    s32 kb_frames; /* 0x94 */
-    u8  pad98[0x15];
-    u8  kb_landed; /* 0xAD */
-    u8  padAE[0x12];
-    f32 kb_min; /* 0xC0 */
-    f32 kb_max; /* 0xC4 */
-    u8  padC8[8];
+    u8                   pad0[0x20];
+    f32                  health; /* 0x20 */
+    s16                  max_health;
+    u8                   pad26[2];
+    u8                   hit_response_class;
+    u8                   unk29;
+    u8                   pad2A[0xE];
+    s32                  alerted; /* 0x38: set when it is hit */
+    u8                   pad3C[4];
+    u8                   effect[0x18]; /* 0x40: debris record (spawn_explosion, FUN_L00_00259028) */
+    u8                   unk58;
+    u8                   pad59;
+    u8                   unk5A;
+    u8                   pad5B[5];
+    struct HitColorFlash hit_flash;
+    u8                   knockback[0x10]; /* 0x70 */
+    f32                  kb_speed;        /* 0x80 */
+    u8                   pad84[4];
+    f32                  kb_lift;    /* 0x88 */
+    f32                  kb_gravity; /* 0x8C */
+    u8                   pad90[4];
+    s32                  kb_frames; /* 0x94 */
+    u8                   pad98[0x15];
+    u8                   kb_landed; /* 0xAD */
+    u8                   padAE[0x12];
+    f32                  kb_min; /* 0xC0 */
+    f32                  kb_max; /* 0xC4 */
+    u8                   padC8[8];
     struct GroundMoveControl walk;   /* 0xD0 */
     TrooperPatrol            patrol; /* 0x120 */
     u8                       pad138[0x18];
@@ -485,10 +486,10 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
             damaged_moby->state = MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION;
             break;
         }
-        start_hit_color_flash(damaged_moby, trooper_vars->anim);
+        start_hit_color_flash(damaged_moby, &trooper_vars->hit_flash);
     }
     damaged_moby->hit_slot = 0xFF;
-    update_hit_color_flash(damaged_moby, trooper_vars->anim);
+    update_hit_color_flash(damaged_moby, &trooper_vars->hit_flash);
 }
 
 extern void set_path_2cc888(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");

@@ -1,5 +1,6 @@
 /* Level 01 moby class birdbot. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/overlay/shared/mobys/knockback_motion.h"
@@ -312,9 +313,7 @@ typedef struct {
     char                   pad59;
     unsigned char          b5A;
     char                   pad5B[5];
-    char                   x60[7];
-    unsigned char          b67;
-    char                   pad68[8];
+    struct HitColorFlash   hit_flash;
     struct KnockbackMotion knockback; /* 0x70 */
     char                   xD0[8];
     float                  fD8;
@@ -596,16 +595,16 @@ void birdbot_update(PeMoby *birdbot_moby) {
                                9,
                                scale_game_frames(2),
                                0);
-            birdbot_vars->b67 = 0xB4;
+            birdbot_vars->hit_flash.flash_red = 0xB4;
             birdbot_moby->state = BIRDBOT_STATE_FATAL_KNOCKBACK;
             birdbot_moby->h34 &= 0xEFFF;
-            start_hit_color_flash(birdbot_moby, (short *)birdbot_vars->x60);
+            start_hit_color_flash(birdbot_moby, &birdbot_vars->hit_flash);
             birdbot_vars->hit_reaction_cooldown = scale_game_frames(0x3C);
             break;
         case BIRDBOT_HIT_REACTION_NONFATAL_KNOCKBACK:
         case BIRDBOT_HIT_REACTION_ANIMATED_NONFATAL_KNOCKBACK:
             birdbot_vars->knockback.collision_radius_1024ths = 0x200;
-            birdbot_vars->b67 = 0x78;
+            birdbot_vars->hit_flash.flash_red = 0x78;
             birdbot_vars->knockback.collision_z_offset = 0.5f;
             birdbot_vars->knockback.gravity = 0.008f;
             birdbot_vars->knockback.speed =
@@ -626,12 +625,12 @@ void birdbot_update(PeMoby *birdbot_moby) {
                 blend_moby_animation(birdbot_moby, 0xB, 0, scale_game_frames(6));
             }
             birdbot_moby->state = BIRDBOT_STATE_NONFATAL_KNOCKBACK;
-            start_hit_color_flash(birdbot_moby, (short *)birdbot_vars->x60);
+            start_hit_color_flash(birdbot_moby, &birdbot_vars->hit_flash);
             break;
         case BIRDBOT_HIT_REACTION_LOW_SPEED_NONFATAL_KNOCKBACK:
         case BIRDBOT_HIT_REACTION_LOW_SPEED_NONFATAL_KNOCKBACK_NO_BLEND:
             birdbot_vars->knockback.collision_radius_1024ths = 0x200;
-            birdbot_vars->b67 = 0xFA;
+            birdbot_vars->hit_flash.flash_red = 0xFA;
             birdbot_vars->knockback.gravity = 0.008f;
             birdbot_vars->knockback.speed =
                 square_root(birdbot_vars->knockback.speed_approach_step * 2.0f * 1.5f);
@@ -648,7 +647,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
             FUN_L00_0025c558_u(
                 knockback_heading, birdbot_moby, &birdbot_vars->knockback, 0xE, 6, 0);
             birdbot_moby->state = BIRDBOT_STATE_NONFATAL_KNOCKBACK;
-            start_hit_color_flash(birdbot_moby, (short *)birdbot_vars->x60);
+            start_hit_color_flash(birdbot_moby, &birdbot_vars->hit_flash);
             break;
         }
     }
@@ -1286,7 +1285,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         }
         break;
     }
-    update_hit_color_flash(birdbot_moby, birdbot_vars->x60);
+    update_hit_color_flash(birdbot_moby, &birdbot_vars->hit_flash);
     birdbot_vars->previous_animation_frame = frame;
     if (birdbot_moby->state == BIRDBOT_STATE_TRACK_TARGET_AND_SELECT_ACTION ||
         birdbot_moby->state == 5 || birdbot_moby->state == BIRDBOT_STATE_FIRE_BURST ||

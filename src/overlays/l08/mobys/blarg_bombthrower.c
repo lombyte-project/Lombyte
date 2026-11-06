@@ -1,5 +1,6 @@
 /* Level 08 moby class 0x14d: blarg bombthrower. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -47,47 +48,44 @@ typedef struct {
 } Look;
 
 typedef struct {
-    char          pad0[0x20];
-    float         health;
-    char          pad24[5];
-    unsigned char b29;
-    char          pad2A[0xE];
-    int           alternate_throw_trigger;
-    char          pad3C[4];
-    float         v40[4];
-    char          pad50[8];
-    unsigned char b58;
-    char          pad59;
-    unsigned char b5A;
-    char          pad5B[5];
-    short         anim[3];
-    char          pad66;
-    unsigned char tint;
-    char          pad68[8];
-    char          blk70[0x10];
-    float         f80, f84, f88, f8C;
-    int           pad90;
-    int           i94;
-    char          pad98[0x15];
-    unsigned char bAD;
-    char          padAE[0x12];
-    float         fC0, fC4;
-    char          padC8[8];
-    char          blkD0[8];
-    float         fD8, fDC;
-    char          padE0[0x14];
-    float         fF4;
-    char          padF8[0x14];
-    float         f10C, f110, f114;
-    char          pad118[8];
-    struct Moby  *waypoint;
-    struct Moby  *thrown_bomb;
-    int           throw_delay_timer;
-    char          blk12C[4];
-    short         s130, s132;
-    int           waypoint_reselection_timer;
-    char          pad138[0x28];
-    char          blk160[0x10];
+    char                 pad0[0x20];
+    float                health;
+    char                 pad24[5];
+    unsigned char        b29;
+    char                 pad2A[0xE];
+    int                  alternate_throw_trigger;
+    char                 pad3C[4];
+    float                v40[4];
+    char                 pad50[8];
+    unsigned char        b58;
+    char                 pad59;
+    unsigned char        b5A;
+    char                 pad5B[5];
+    struct HitColorFlash hit_flash;
+    char                 blk70[0x10];
+    float                f80, f84, f88, f8C;
+    int                  pad90;
+    int                  i94;
+    char                 pad98[0x15];
+    unsigned char        bAD;
+    char                 padAE[0x12];
+    float                fC0, fC4;
+    char                 padC8[8];
+    char                 blkD0[8];
+    float                fD8, fDC;
+    char                 padE0[0x14];
+    float                fF4;
+    char                 padF8[0x14];
+    float                f10C, f110, f114;
+    char                 pad118[8];
+    struct Moby         *waypoint;
+    struct Moby         *thrown_bomb;
+    int                  throw_delay_timer;
+    char                 blk12C[4];
+    short                s130, s132;
+    int                  waypoint_reselection_timer;
+    char                 pad138[0x28];
+    char                 blk160[0x10];
 } Data_DBF68;
 
 char        *spawn_bomb_with_velocity(int arg, char *pos, char *vec) __asm__("FUN_L08_002d22e0");
@@ -251,7 +249,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         bombthrower_vars->health -= damage;
         if (0.0f < bombthrower_vars->health) {
             if (damage < 1.0f) {
-                bombthrower_vars->tint = 100;
+                bombthrower_vars->hit_flash.flash_red = 100;
             } else {
                 char *hero_bytes;
                 bombthrower_vars->f80 = frame_time_sq * 30.0f;
@@ -270,7 +268,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
                                         0);
                 bombthrower_vars->fC0 = 6.0f;
                 bombthrower_vars->fC4 = 10.0f;
-                bombthrower_vars->tint = 0x78;
+                bombthrower_vars->hit_flash.flash_red = 0x78;
                 moby->state = BOMBTHROWER_STATE_DAMAGE_KNOCKBACK;
             }
         } else {
@@ -293,12 +291,12 @@ void blarg_bombthrower_update(struct Moby *moby) {
             bombthrower_vars->fC0 = 6.0f;
             bombthrower_vars->fC4 = 10.0f;
             explode_2D5FA8_c(moby, 0, -1);
-            bombthrower_vars->tint = 0xFA;
+            bombthrower_vars->hit_flash.flash_red = 0xFA;
             moby->state = BOMBTHROWER_STATE_DYING;
             moby->flags &= 0xEFFF;
             bombthrower_vars->waypoint->command = 0;
         }
-        start_hit_color_flash(moby, bombthrower_vars->anim);
+        start_hit_color_flash(moby, &bombthrower_vars->hit_flash);
     }
     moby->hit_slot = 0xFF;
     search.result = select_nearest_xy_moby_with_hero_fallback(moby, 16.0f, &search);
@@ -552,6 +550,6 @@ void blarg_bombthrower_update(struct Moby *moby) {
         }
         break;
     }
-    update_hit_color_flash(moby, bombthrower_vars->anim);
+    update_hit_color_flash(moby, &bombthrower_vars->hit_flash);
     bombthrower_vars->alternate_throw_trigger = 0;
 }

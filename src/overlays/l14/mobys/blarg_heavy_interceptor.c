@@ -1,5 +1,6 @@
 /* Level 14 Blarg heavy interceptor moby class: patrol paths, aiming, light ring effects and turret groups. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
@@ -195,66 +196,63 @@ extern Vec4 D_L14_00174560;
 void blarg_heavy_interceptor_update(struct Moby *m) __asm__("FUN_L14_002ac618");
 
 typedef struct BlargHeavyInterceptorVars {
-    u8  pad_0[0x20];
-    f32 health;
-    s16 max_health;
-    u8  pad_26[0x2];
-    u8  hit_response_class;
-    u8  pad_29[0x5];
-    u8  removal_status;
-    u8  pad_2F[0x11];
-    f32 unk40[4];
-    u8  pad_50[0x8];
-    u8  unk58;
-    u8  pad_59[0x1];
-    u8  unk5A;
-    u8  pad_5B[0x5];
-    s16 anim_state;
-    u8  pad_62[0x5];
-    u8  hit_flash_target_red;
-    u8  pad_68[0x8];
-    s32 turret_group;
-    s32 spawn_path;
-    s32 path_index;
-    u8  pad_7C[0x4];
-    s32 path_point;
-    s32 path_segment;
-    s16 unk88;
-    s16 rejoin_path_loop;
-    f32 path_point_segment_distance;
-    f32 cached_aim_point_position[4];
-    f32 bone_transform[4][4];
-    f32 manipulator0[4];
-    f32 manipulator0_rotation[4];
-    u8  pad_100[0x20];
-    f32 manipulator1[4];
-    f32 manipulator1_rotation[4];
-    f32 unk140[4];
-    u8  pad_150[0x10];
-    f32 beam_rotation_blink_and_aim_path_state[4];
-    f32 aim_point_position[4];
-    f32 unk180[4];
-    f32 unk190[4];
-    f32 oscillation_state[4];
-    f32 unk1B0[4];
-    f32 unk1C0[4];
-    f32 unk1D0[4];
-    f32 death_velocity[4];
-    s16 timer_1F0;
-    s16 timer_1F2;
-    f32 unk1F4;
-    f32 unk1F8;
-    f32 yaw_drift;
-    s16 unk200;
-    s16 red_light_tint_enabled;
-    s32 patrol_path;
-    s16 return_path_complete;
-    s16 group_member_count;
-    s32 flags;
-    f32 initial_path_distance_fraction;
-    f32 aim_point_glow_quad_scale;
-    f32 glow_camera_pull_distance_limit;
-    f32 unk21C;
+    u8                   pad_0[0x20];
+    f32                  health;
+    s16                  max_health;
+    u8                   pad_26[0x2];
+    u8                   hit_response_class;
+    u8                   pad_29[0x5];
+    u8                   removal_status;
+    u8                   pad_2F[0x11];
+    f32                  unk40[4];
+    u8                   pad_50[0x8];
+    u8                   unk58;
+    u8                   pad_59[0x1];
+    u8                   unk5A;
+    u8                   pad_5B[0x5];
+    struct HitColorFlash hit_flash;
+    s32                  turret_group;
+    s32                  spawn_path;
+    s32                  path_index;
+    u8                   pad_7C[0x4];
+    s32                  path_point;
+    s32                  path_segment;
+    s16                  unk88;
+    s16                  rejoin_path_loop;
+    f32                  path_point_segment_distance;
+    f32                  cached_aim_point_position[4];
+    f32                  bone_transform[4][4];
+    f32                  manipulator0[4];
+    f32                  manipulator0_rotation[4];
+    u8                   pad_100[0x20];
+    f32                  manipulator1[4];
+    f32                  manipulator1_rotation[4];
+    f32                  unk140[4];
+    u8                   pad_150[0x10];
+    f32                  beam_rotation_blink_and_aim_path_state[4];
+    f32                  aim_point_position[4];
+    f32                  unk180[4];
+    f32                  unk190[4];
+    f32                  oscillation_state[4];
+    f32                  unk1B0[4];
+    f32                  unk1C0[4];
+    f32                  unk1D0[4];
+    f32                  death_velocity[4];
+    s16                  timer_1F0;
+    s16                  timer_1F2;
+    f32                  unk1F4;
+    f32                  unk1F8;
+    f32                  yaw_drift;
+    s16                  unk200;
+    s16                  red_light_tint_enabled;
+    s32                  patrol_path;
+    s16                  return_path_complete;
+    s16                  group_member_count;
+    s32                  flags;
+    f32                  initial_path_distance_fraction;
+    f32                  aim_point_glow_quad_scale;
+    f32                  glow_camera_pull_distance_limit;
+    f32                  unk21C;
 } BlargHeavyInterceptorVars;
 
 /* Moby class 8 */
@@ -848,7 +846,7 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
         switch (hit_reaction_result) {
         case HIT_REACTION_ANIMATE_WITH_LOW_RED_FLASH:
         case HIT_REACTION_LOW_RED_FLASH_AND_HIT_ANIMATION:
-            blarg_heavy_interceptor_vars->hit_flash_target_red = 0x64;
+            blarg_heavy_interceptor_vars->hit_flash.flash_red = 0x64;
             blend_moby_animation(moby, 1, 0, 5);
             break;
         case HIT_REACTION_PLAY_HIT_ANIMATION:
@@ -870,10 +868,10 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
         case HIT_REACTION_NONE:
             break;
         }
-        start_hit_color_flash(moby, &blarg_heavy_interceptor_vars->anim_state);
+        start_hit_color_flash(moby, &blarg_heavy_interceptor_vars->hit_flash);
     }
     moby->hit_slot = 0xFF;
-    update_hit_color_flash(moby, &blarg_heavy_interceptor_vars->anim_state);
+    update_hit_color_flash(moby, &blarg_heavy_interceptor_vars->hit_flash);
 }
 
 extern s32 blarg_heavy_interceptor_light_ring_vertex_count_gp __asm__("D_L14_00161418")

@@ -1,5 +1,6 @@
 /* Level 13 hovering rocket attacker moby class. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
@@ -75,39 +76,36 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 void hovering_rocket_attacker_update(unsigned char *moby) __asm__("FUN_L13_002c25b8");
 
 typedef struct HoveringRocketAttackerVars {
-    u8  pad_0[0x20];
-    f32 health;
-    s16 max_health;
-    u8  pad_26[0x2];
-    u8  hit_response_class;
-    u8  pad_29[0x2F];
-    u8  unk58;
-    u8  pad_59[0x1];
-    u8  unk5A;
-    u8  pad_5B[0x5];
-    u8  anim_state;
-    u8  pad_61[0x6];
-    u8  hit_reaction_interpolation_target;
-    u8  pad_68[0x8];
-    f32 path_search_point[4];
-    u8  pad_80[0x30];
-    u8 *target;
-    s32 target_selection_status;
-    u8  pad_B8[0x8];
-    f32 hover_center[4];
-    s32 search_path;
-    s32 table_point;
-    f32 target_range;
-    u8  yaw_velocity;
-    u8  pad_DD[0xB];
-    s32 timer;
-    f32 rocket_max_travel_distance;
-    f32 move_speed;
-    s32 fire_second_rocket;
-    u8 *rocket1;
-    u8 *rocket0;
-    f32 hover_oscillation[4];
-    s32 voice_handle;
+    u8                   pad_0[0x20];
+    f32                  health;
+    s16                  max_health;
+    u8                   pad_26[0x2];
+    u8                   hit_response_class;
+    u8                   pad_29[0x2F];
+    u8                   unk58;
+    u8                   pad_59[0x1];
+    u8                   unk5A;
+    u8                   pad_5B[0x5];
+    struct HitColorFlash hit_flash;
+    f32                  path_search_point[4];
+    u8                   pad_80[0x30];
+    u8                  *target;
+    s32                  target_selection_status;
+    u8                   pad_B8[0x8];
+    f32                  hover_center[4];
+    s32                  search_path;
+    s32                  table_point;
+    f32                  target_range;
+    u8                   yaw_velocity;
+    u8                   pad_DD[0xB];
+    s32                  timer;
+    f32                  rocket_max_travel_distance;
+    f32                  move_speed;
+    s32                  fire_second_rocket;
+    u8                  *rocket1;
+    u8                  *rocket0;
+    f32                  hover_oscillation[4];
+    s32                  voice_handle;
 } HoveringRocketAttackerVars;
 
 /* Moby class 101 */
@@ -511,7 +509,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
         switch (hit_reaction_code) {
         case HIT_REACTION_HIGH_INTERPOLATION_TARGET:
         case HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE:
-            moby_data->hit_reaction_interpolation_target = 0xFA;
+            moby_data->hit_flash.flash_red = 0xFA;
             break;
         case HIT_REACTION_LOW_INTERPOLATION_TARGET:
         case HIT_REACTION_LOW_INTERPOLATION_TARGET_ALTERNATE:
@@ -519,23 +517,23 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
         case HIT_REACTION_LOW_INTERPOLATION_TARGET_THIRD_ALTERNATE:
         case HIT_REACTION_LOW_INTERPOLATION_TARGET_FOURTH_ALTERNATE:
         case HIT_REACTION_LOW_INTERPOLATION_TARGET_FIFTH_ALTERNATE:
-            moby_data->hit_reaction_interpolation_target = 0x78;
+            moby_data->hit_flash.flash_red = 0x78;
             break;
         case HIT_REACTION_LETHAL:
         case HIT_REACTION_REMOVE:
             FUN_L00_00257470(moby, 0, -1);
             MOBY(moby)->state = EMIT_EFFECT_AND_REMOVE;
-            moby_data->hit_reaction_interpolation_target = 0xF0;
+            moby_data->hit_flash.flash_red = 0xF0;
             break;
         case HIT_REACTION_NONE:
         case HIT_REACTION_NO_HIT:
         default:
             break;
         }
-        start_hit_color_flash(moby, &moby_data->anim_state);
+        start_hit_color_flash(moby, &moby_data->hit_flash);
     }
     MOBY(moby)->hit_slot = 0xFF;
-    update_hit_color_flash(moby, &moby_data->anim_state);
+    update_hit_color_flash(moby, &moby_data->hit_flash);
     if (MOBY(moby)->state == UPDATE_ATTACK_SEQUENCE) {
         moby_data->target_range = 50.0f;
     } else {

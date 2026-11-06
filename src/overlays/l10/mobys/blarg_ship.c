@@ -1,5 +1,6 @@
 /* Level 10 moby class blarg_ship: rises, follows its path, hovers and fires at its target. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/game/item_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
@@ -509,21 +510,18 @@ extern int  follow_5968(float, void *, void *, int, int, void *, int) __asm__("F
 void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) __asm__("FUN_L10_002e5968");
 
 typedef struct BlargShipVars {
-    u8  pad_0[0x20];
-    f32 health;
-    u8  pad_24[0x2];
-    s16 unk26;
-    u8  pad_28[0x98];
-    u8  anim_state;
-    u8  pad_C1[0x6];
-    u8  damage_secondary_red;
-    u8  pad_C8[0x8];
-    u8  path_search_point;
-    u8  pad_D1[0x3F];
-    s32 target;
-    s32 target_selection_status;
-    u8  pad_118[0x78];
-    s32 path_190;
+    u8                   pad_0[0x20];
+    f32                  health;
+    u8                   pad_24[0x2];
+    s16                  unk26;
+    u8                   pad_28[0x98];
+    struct HitColorFlash hit_flash;
+    u8                   path_search_point;
+    u8                   pad_D1[0x3F];
+    s32                  target;
+    s32                  target_selection_status;
+    u8                   pad_118[0x78];
+    s32                  path_190;
 } BlargShipVars;
 
 void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
@@ -554,20 +552,20 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
         case COLOR_UPDATE_ONLY_HIT_RESPONSE:
         case COLOR_UPDATE_WITHOUT_STATE_CHANGE_HIT_RESPONSE:
         case COLOR_EFFECT_ONLY_HIT_RESPONSE:
-            pvars->damage_secondary_red = 0xFA;
-            start_hit_color_flash(moby, &pvars->anim_state);
+            pvars->hit_flash.flash_red = 0xFA;
+            start_hit_color_flash(moby, &pvars->hit_flash);
             break;
         case LETHAL_HIT_RESPONSE:
-            pvars->damage_secondary_red = 0xFA;
-            start_hit_color_flash(moby, &pvars->anim_state);
+            pvars->hit_flash.flash_red = 0xFA;
+            start_hit_color_flash(moby, &pvars->hit_flash);
             moby->state = BLARG_SHIP_STATE_EXPLODE;
             break;
         case NO_REACTION_HIT_RESPONSE:
             break;
         default:
-            pvars->damage_secondary_red = 0xFA;
+            pvars->hit_flash.flash_red = 0xFA;
             pvars->unk26 = scale_game_frames(0x3C);
-            start_hit_color_flash(moby, &pvars->anim_state);
+            start_hit_color_flash(moby, &pvars->hit_flash);
             blend_moby_animation(moby, 4, 0, scale_game_frames(6));
             moby->command = moby->state;
             moby->state = BLARG_SHIP_STATE_HIT_REACTION;
@@ -575,7 +573,7 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
         }
     }
     moby->hit_slot = 0xFF;
-    update_hit_color_flash(moby, &pvars->anim_state);
+    update_hit_color_flash(moby, &pvars->hit_flash);
     if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         select_hero_or_gadgebot_target(101.0f, moby, &pvars->target);
         if (*(char **)&pvars->target == 0) {

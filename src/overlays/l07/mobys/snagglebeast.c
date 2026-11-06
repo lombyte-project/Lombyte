@@ -1,5 +1,6 @@
 /* Level 07 moby class 0x452: snagglebeast. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -71,86 +72,84 @@ extern void  draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 
 typedef struct SnagglebeastVars {
-    u8  pad_0[0x20];
-    f32 health;
-    s16 max_health;
-    s16 unk26;
-    u8  pad_28[0x1];
-    u8  unk29;
-    u8  pad_2A[0x2E];
-    u8  unk58;
-    u8  pad_59[0x1];
-    u8  unk5A;
-    u8  pad_5B[0x5];
-    s16 move;
-    u8  pad_62[0x5];
-    u8  damage_flash;
-    u8  pad_68[0x1C];
-    s32 unk84;
-    u8  pad_88[0x10];
-    f32 turn_start_angle;
-    f32 unk9C;
-    u8  pad_A0[0x8];
-    s32 unkA8;
-    u8  pad_AC[0x14];
-    f32 turn_target[4];
-    u8  pad_D0[0x30];
-    f32 velocity[4];
-    f32 rope_start_position[4];
-    f32 rope_end_position[4];
-    f32 rope_tip_velocity[4];
-    f32 rope_tip_position[4];
-    f32 unk150[4];
-    s32 timer;
-    s32 substate;
-    s32 turn_controller_state;
-    f32 rope_extension_length;
-    s32 navigation_ids[6];
-    s32 nav_path;
-    s32 measured_path;
-    f32 measured_path_length;
-    s16 timer_194;
-    s16 timer_196;
-    s16 timer_198;
-    s16 timer_19A;
-    u8  navigation_mask;
-    u8  unk19D;
-    s16 ammo_drain_step;
-    s32 path_1A0;
-    s32 unk1A4;
-    s32 unk1A8;
-    f32 drop_path_distance;
-    s32 health_hud_handle;
-    s32 health_display;
-    f32 unk1B8;
-    u8  pad_1BC[0x4];
-    s32 nav_point;
-    u8  hero_captured;
-    u8  sphere_fade_direction;
-    u8  sphere_shade;
-    u8  hero_capture_attack_enabled;
-    f32 sphere_fade;
-    s32 unk1CC;
-    s32 unk1D0;
-    u8  pad_1D4[0x1C];
-    s32 cuboid;
-    u8  turn_saved_state;
-    u8  turn_fixed_target;
-    u8  turn_resume_animation;
-    u8  timer_1F7;
-    s32 voice;
-    f32 damage_reaction_amount;
-    u8  joint_animation[0x64];
-    f32 joint_damage_reaction_target;
-    f32 target_yaw_offset;
-    u8  pad_26C[0x14];
-    s16 point_light;
-    u8  pad_282[0xE];
-    s32 chase_path;
-    s32 unk294;
-    s32 unk298;
-    s32 unk29C;
-    u8  manipulator[1];
+    u8                   pad_0[0x20];
+    f32                  health;
+    s16                  max_health;
+    s16                  unk26;
+    u8                   pad_28[0x1];
+    u8                   unk29;
+    u8                   pad_2A[0x2E];
+    u8                   unk58;
+    u8                   pad_59[0x1];
+    u8                   unk5A;
+    u8                   pad_5B[0x5];
+    struct HitColorFlash hit_flash;
+    u8                   pad_70[0x14];
+    s32                  unk84;
+    u8                   pad_88[0x10];
+    f32                  turn_start_angle;
+    f32                  unk9C;
+    u8                   pad_A0[0x8];
+    s32                  unkA8;
+    u8                   pad_AC[0x14];
+    f32                  turn_target[4];
+    u8                   pad_D0[0x30];
+    f32                  velocity[4];
+    f32                  rope_start_position[4];
+    f32                  rope_end_position[4];
+    f32                  rope_tip_velocity[4];
+    f32                  rope_tip_position[4];
+    f32                  unk150[4];
+    s32                  timer;
+    s32                  substate;
+    s32                  turn_controller_state;
+    f32                  rope_extension_length;
+    s32                  navigation_ids[6];
+    s32                  nav_path;
+    s32                  measured_path;
+    f32                  measured_path_length;
+    s16                  timer_194;
+    s16                  timer_196;
+    s16                  timer_198;
+    s16                  timer_19A;
+    u8                   navigation_mask;
+    u8                   unk19D;
+    s16                  ammo_drain_step;
+    s32                  path_1A0;
+    s32                  unk1A4;
+    s32                  unk1A8;
+    f32                  drop_path_distance;
+    s32                  health_hud_handle;
+    s32                  health_display;
+    f32                  unk1B8;
+    u8                   pad_1BC[0x4];
+    s32                  nav_point;
+    u8                   hero_captured;
+    u8                   sphere_fade_direction;
+    u8                   sphere_shade;
+    u8                   hero_capture_attack_enabled;
+    f32                  sphere_fade;
+    s32                  unk1CC;
+    s32                  unk1D0;
+    u8                   pad_1D4[0x1C];
+    s32                  cuboid;
+    u8                   turn_saved_state;
+    u8                   turn_fixed_target;
+    u8                   turn_resume_animation;
+    u8                   timer_1F7;
+    s32                  voice;
+    f32                  damage_reaction_amount;
+    u8                   joint_animation[0x64];
+    f32                  joint_damage_reaction_target;
+    f32                  target_yaw_offset;
+    u8                   pad_26C[0x14];
+    s16                  point_light;
+    u8                   pad_282[0xE];
+    s32                  chase_path;
+    s32                  unk294;
+    s32                  unk298;
+    s32                  unk29C;
+    u8                   manipulator[1];
 } SnagglebeastVars;
 
 static inline int tint_color(int color) {
@@ -520,8 +519,8 @@ void process_snagglebeast_damage(char             *moby,
                 *health = 0.0f;
                 MOBY(moby)->flags &= 0xefff;
                 FUN_L00_00257470(moby, 0, -1);
-                snagglebeast_instance_vars->damage_flash = 0x78;
-                start_hit_color_flash(moby, &snagglebeast_instance_vars->move);
+                snagglebeast_instance_vars->hit_flash.flash_red = 0x78;
+                start_hit_color_flash(moby, &snagglebeast_instance_vars->hit_flash);
                 if ((u8)moby[0x53] != 2)
                     FUN_00212f90(moby, 2, 0, random_int_between(10, 13));
                 if (camera_secondary_mode_lui == 0x78)
@@ -547,9 +546,9 @@ void process_snagglebeast_damage(char             *moby,
                     scratch.threshold = 5.0f;
                 scratch.threshold *= frame;
                 *health -= *(float *)(hit + 0x2c);
-                snagglebeast_instance_vars->damage_flash = 0xfa;
+                snagglebeast_instance_vars->hit_flash.flash_red = 0xfa;
                 snagglebeast_instance_vars->unk26 = scale_game_frames(0);
-                start_hit_color_flash(moby, &snagglebeast_instance_vars->move);
+                start_hit_color_flash(moby, &snagglebeast_instance_vars->hit_flash);
                 if ((u8)moby[0x20] < 10 && *health < scratch.threshold) {
                     int slot;
                     if (camera_secondary_mode_lui == 0x78)
@@ -589,7 +588,7 @@ void process_snagglebeast_damage(char             *moby,
             snagglebeast_instance_vars->sphere_shade = 0;
         MOBY(moby)->hit_slot = 0xff;
     }
-    update_hit_color_flash(moby, &snagglebeast_instance_vars->move);
+    update_hit_color_flash(moby, &snagglebeast_instance_vars->hit_flash);
     output = snagglebeast_instance_vars->damage_reaction_amount + 0.3f;
     snagglebeast_instance_vars->damage_reaction_amount = output;
     if (output > 0.0f)
@@ -1860,8 +1859,8 @@ void snagglebeast_update(unsigned char *moby) {
             if (fast_dec_timer(&snagglebeast_instance_state->timer)) {
                 snagglebeast_instance_state->substate -= 1;
                 *health -= 1.0f;
-                snagglebeast_instance_state->damage_flash = 0xFA;
-                start_hit_color_flash(moby, &snagglebeast_instance_state->move);
+                snagglebeast_instance_state->hit_flash.flash_red = 0xFA;
+                start_hit_color_flash(moby, &snagglebeast_instance_state->hit_flash);
                 if (*health <= 0.0f) {
                     *health = 0.0f;
                     if (MOBY(moby)->prev_seq != 8)

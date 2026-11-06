@@ -1,5 +1,6 @@
 /* Shared moby class seeker: its update and its damage and target handling. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/mobys/moby_state.h"
 #include "rnc/globals.h"
 #include "qzero.h"
@@ -341,38 +342,36 @@ typedef struct {
 } Cls;
 
 typedef struct Data {
-    char          p0[0x20];
-    float         health;
-    char          p24[0x14];
-    int           f38;
-    char          p3C[0x24];
-    char          react[7];
-    unsigned char reactTime;
-    char          p68[8];
-    float         f70[4];
-    float         f80;
-    float         f84;
-    float         f88;
-    float         f8C;
-    int           f90;
-    int           f94;
-    float         f98;
-    char          p9C[0x11];
-    unsigned char bAD;
-    char          pAE[0x12];
-    float         fC0;
-    float         fC4;
-    char          pC8[0x58];
-    float         target[4];
-    char          p130[0x30];
-    Moby         *f160;
-    int           f164;
-    char          p168[0x18];
-    int           path;
-    int           timer;
-    float         reach;
-    char          p18C[4];
-    int           retreat;
+    char                 p0[0x20];
+    float                health;
+    char                 p24[0x14];
+    int                  f38;
+    char                 p3C[0x24];
+    struct HitColorFlash hit_flash;
+    float                f70[4];
+    float                f80;
+    float                f84;
+    float                f88;
+    float                f8C;
+    int                  f90;
+    int                  f94;
+    float                f98;
+    char                 p9C[0x11];
+    unsigned char        bAD;
+    char                 pAE[0x12];
+    float                fC0;
+    float                fC4;
+    char                 pC8[0x58];
+    float                target[4];
+    char                 p130[0x30];
+    Moby                *f160;
+    int                  f164;
+    char                 p168[0x18];
+    int                  path;
+    int                  timer;
+    float                reach;
+    char                 p18C[4];
+    int                  retreat;
 } Data;
 
 typedef struct {
@@ -464,8 +463,8 @@ void update_seeker_damage_and_target(Moby *moby) {
         seeker_vars->timer == scale_game_frames(0x3C) ||
         seeker_vars->timer == scale_game_frames(0x78) ||
         seeker_vars->timer == scale_game_frames(0xB3)) {
-        seeker_vars->reactTime = 0xF0;
-        start_hit_color_flash(moby, seeker_vars->react);
+        seeker_vars->hit_flash.flash_red = 0xF0;
+        start_hit_color_flash(moby, &seeker_vars->hit_flash);
     }
     damage = 0.0f;
     source = find_moby_hit(moby, 0x330000, 0);
@@ -487,7 +486,7 @@ void update_seeker_damage_and_target(Moby *moby) {
         switch (response) {
         case RESPONSE_REACTION_ONLY:
         case 10:
-            seeker_vars->reactTime = 0xFA;
+            seeker_vars->hit_flash.flash_red = 0xFA;
             break;
         case RESPONSE_HURT_KNOCKBACK:
         case 4:
@@ -508,7 +507,7 @@ void update_seeker_damage_and_target(Moby *moby) {
             if (moby->group != 0xFF) {
                 func_L01_0026F040_2C73D0(moby->group, 1);
             }
-            seeker_vars->reactTime = 0x78;
+            seeker_vars->hit_flash.flash_red = 0x78;
             break;
         case RESPONSE_FATAL_KNOCKBACK:
         case 2:
@@ -526,17 +525,17 @@ void update_seeker_damage_and_target(Moby *moby) {
             func_L00_0025D5B0_2C73D0(moby, seeker_vars->f70, knock_angle_fatal, 4, 1, 0);
             mark_moby_for_removal_cf(moby, 0, -1);
             moby->state = SEEKER_STATE_FATAL_KNOCKBACK;
-            seeker_vars->reactTime = 0xF0;
+            seeker_vars->hit_flash.flash_red = 0xF0;
             break;
         case RESPONSE_NONE:
         case RESPONSE_NO_REACTION:
         default:
             break;
         }
-        start_hit_color_flash(moby, seeker_vars->react);
+        start_hit_color_flash(moby, &seeker_vars->hit_flash);
     }
     moby->hit_slot = 0xFF;
-    update_hit_color_flash(moby, seeker_vars->react);
+    update_hit_color_flash(moby, &seeker_vars->hit_flash);
     if (seeker_vars->f38 != 0 || moby->command == 1) {
         seeker_vars->retreat =
             truncate_float_to_s32(func_001F9878_2C73D0(random_float_between(180.0f, 240.0f)));

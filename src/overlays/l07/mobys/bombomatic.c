@@ -1,5 +1,6 @@
 /* Level 07 moby class 0x411: bombomatic. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
@@ -157,26 +158,23 @@ char *spawn_bombomatic_projectile(char *spawn_position,
 }
 
 typedef struct BombomaticVars {
-    u8  pad_0[0x20];
-    u8  unk20;
-    u8  pad_21[0x5];
-    s16 unk26;
-    u8  pad_28[0x38];
-    s16 anim_state;
-    u8  pad_62[0x5];
-    u8  hit_transition_target;
-    u8  pad_68[0x8];
-    u8  manipulator_70;
-    u8  pad_71[0xF];
-    u8  unk80;
-    u8  pad_81[0x2F];
-    s32 unkB0;
-    s32 unkB4;
-    s16 timer_B8;
-    s16 launch_burst_index;
-    f32 unkBC;
-    f32 unkC0;
-    s32 unkC4;
+    u8                   pad_0[0x20];
+    u8                   unk20;
+    u8                   pad_21[0x5];
+    s16                  unk26;
+    u8                   pad_28[0x38];
+    struct HitColorFlash hit_flash;
+    u8                   manipulator_70;
+    u8                   pad_71[0xF];
+    u8                   unk80;
+    u8                   pad_81[0x2F];
+    s32                  unkB0;
+    s32                  unkB4;
+    s16                  timer_B8;
+    s16                  launch_burst_index;
+    f32                  unkBC;
+    f32                  unkC0;
+    s32                  unkC4;
 } BombomaticVars;
 
 /* Moby class 1041 */
@@ -325,13 +323,13 @@ void bombomatic_update(char *moby) {
         }
         tv -= hit_damage;
         *(float *)health_ptr = tv;
-        moby_data->hit_transition_target = 0xFA;
+        moby_data->hit_flash.flash_red = 0xFA;
         moby_data->unk26 = scale_game_frames(60);
-        start_hit_color_flash(moby, &moby_data->anim_state);
+        start_hit_color_flash(moby, &moby_data->hit_flash);
     }
 eb20:
     ((unsigned char *)moby)[0xA4] = 0xFF;
-    update_hit_color_flash(moby, &moby_data->anim_state);
+    update_hit_color_flash(moby, &moby_data->hit_flash);
     get_target_sight(moby, target_buffer, 20.0f);
     switch (((unsigned char *)moby)[0x20]) {
     case BOMBOMATIC_INITIALIZE: {

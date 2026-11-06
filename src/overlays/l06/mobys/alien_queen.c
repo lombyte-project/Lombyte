@@ -1,6 +1,7 @@
 /* Level 06 moby class 0x41b: alien queen. */
 #include "rnc/input/pad_globals.h"
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -356,58 +357,55 @@ void clear_moby_list_state_18(int index) {
 }
 
 typedef struct AlienQueenVars {
-    u8    pad_0[0x20];
-    f32   health;
-    s16   max_health;
-    u8    pad_26[0x2];
-    u8    hit_response_class;
-    u8    unk29;
-    u8    pad_2A[0x4];
-    u8    death_control_flags;
-    u8    pad_2F[0x19];
-    f32   z_velocity;
-    u8    pad_4C[0xC];
-    u8    unk58;
-    u8    pad_59[0x1];
-    u8    unk5A;
-    u8    pad_5B[0x5];
-    u8    anim_state;
-    u8    pad_61[0x6];
-    u8    hit_reaction_tween_target;
-    u8    pad_68[0x8];
-    u8    unk70;
-    u8    pad_71[0x3F];
-    char *target;
-    s32   target_selection_status;
-    u8    pad_B8[0x8];
-    f32   home_position[4];
-    f32   path_midpoint[4];
-    u8    turn_velocity;
-    u8    pad_E1[0x7];
-    f32   move_speed;
-    s32   path;
-    s32   frog_list;
-    s32   state18_list;
-    s32   cuboid;
-    s32   unkFC;
-    s32   unk100;
-    s32   slider_list;
-    s32   unk108;
-    s32   animation_update;
-    s32   health_sixteenths;
-    s32   saved_path_point_count;
-    f32   camera_blend_fraction;
-    u8    unk11C;
-    u8    pad_11D[0x3];
-    s32   timer_120;
-    u8    pad_124[0x4];
-    f32   unk128;
-    s32   timer_12C;
-    u8    unk130;
-    u8    pad_131[0x3F];
-    s32   intro_or_recovery_delay_active;
-    f32   recovery_health;
-    s32   suppress_death_dialogue;
+    u8                   pad_0[0x20];
+    f32                  health;
+    s16                  max_health;
+    u8                   pad_26[0x2];
+    u8                   hit_response_class;
+    u8                   unk29;
+    u8                   pad_2A[0x4];
+    u8                   death_control_flags;
+    u8                   pad_2F[0x19];
+    f32                  z_velocity;
+    u8                   pad_4C[0xC];
+    u8                   unk58;
+    u8                   pad_59[0x1];
+    u8                   unk5A;
+    u8                   pad_5B[0x5];
+    struct HitColorFlash hit_flash;
+    u8                   unk70;
+    u8                   pad_71[0x3F];
+    char                *target;
+    s32                  target_selection_status;
+    u8                   pad_B8[0x8];
+    f32                  home_position[4];
+    f32                  path_midpoint[4];
+    u8                   turn_velocity;
+    u8                   pad_E1[0x7];
+    f32                  move_speed;
+    s32                  path;
+    s32                  frog_list;
+    s32                  state18_list;
+    s32                  cuboid;
+    s32                  unkFC;
+    s32                  unk100;
+    s32                  slider_list;
+    s32                  unk108;
+    s32                  animation_update;
+    s32                  health_sixteenths;
+    s32                  saved_path_point_count;
+    f32                  camera_blend_fraction;
+    u8                   unk11C;
+    u8                   pad_11D[0x3];
+    s32                  timer_120;
+    u8                   pad_124[0x4];
+    f32                  unk128;
+    s32                  timer_12C;
+    u8                   unk130;
+    u8                   pad_131[0x3F];
+    s32                  intro_or_recovery_delay_active;
+    f32                  recovery_health;
+    s32                  suppress_death_dialogue;
 } AlienQueenVars;
 
 /* Moby class 1051 */
@@ -887,7 +885,7 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
         case HIT_RESPONSE_NONLETHAL_ANIMATION_MAINTENANCE:
         case HIT_RESPONSE_NONLETHAL_ANIMATION_FEEDBACK:
         case HIT_RESPONSE_NONLETHAL_ANIMATION_RESPONSE:
-            alien_queen_hit_recovery_vars->hit_reaction_tween_target = 200;
+            alien_queen_hit_recovery_vars->hit_flash.flash_red = 200;
             break;
         case HIT_RESPONSE_DEATH:
         case HIT_RESPONSE_DEATH_SEQUENCE: {
@@ -903,15 +901,15 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
             MOBY(moby)->flags &= 0xEFFF;
             if ((unsigned char)moby[0x53] != 10)
                 FUN_00212f90(moby, 10, 0, scale_game_frames(10));
-            alien_queen_hit_recovery_vars->hit_reaction_tween_target = 0xFA;
+            alien_queen_hit_recovery_vars->hit_flash.flash_red = 0xFA;
             break;
         }
         }
     hit_response_done:
-        start_hit_color_flash(moby, &alien_queen_hit_recovery_vars->anim_state);
+        start_hit_color_flash(moby, &alien_queen_hit_recovery_vars->hit_flash);
     }
     MOBY(moby)->hit_slot = 0xFF;
-    update_hit_color_flash(moby, &alien_queen_hit_recovery_vars->anim_state);
+    update_hit_color_flash(moby, &alien_queen_hit_recovery_vars->hit_flash);
     if ((alien_queen_hit_recovery_vars->death_control_flags & 2) &&
         (unsigned char)moby[0x20] != 15) {
         if (alien_queen_hit_recovery_vars->animation_update != -1) {

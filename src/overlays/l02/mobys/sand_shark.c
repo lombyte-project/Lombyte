@@ -1,5 +1,6 @@
 /* Level 02 moby class sand_shark. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -1201,17 +1202,14 @@ void emit_sand_shark_single_particle(Vec4 *from) {
 
 /* pvars of the class FUN_L02_002d5c88 updates (only the fields it touches). */
 typedef struct {
-    char          pad0[0x20];
-    float         hp; /* 0x20 */
-    char          pad24[0xA];
-    unsigned char relaunch_request_state; /* 0x2E: 2 = respawn requested */
-    char          pad2F[9];
-    int           target_range_timer_refresh_request; /* 0x38 */
-    char          pad3C[0xD4];
-    short         anim[3]; /* 0x110: passed to start_hit_color_flash / update_hit_color_flash */
-    char          pad116;
-    unsigned char hit_flash_target_red; /* 0x117 */
-    char          pad118[8];
+    char                   pad0[0x20];
+    float                  hp; /* 0x20 */
+    char                   pad24[0xA];
+    unsigned char          relaunch_request_state; /* 0x2E: 2 = respawn requested */
+    char                   pad2F[9];
+    int                    target_range_timer_refresh_request; /* 0x38 */
+    char                   pad3C[0xD4];
+    struct HitColorFlash   hit_flash;
     struct KnockbackMotion knockback; /* 0x120 */
     char                   pad180[0x50];
     float                  tgt[4]; /* 0x1D0: point followed along the path */
@@ -1357,12 +1355,12 @@ void handle_sand_shark_damage_and_targeting(unsigned char *moby) {
             moby_vars->knockback.landing_animation_frame = 14.0f;
             moby[0x20] = 0x18;
             MOBY(moby)->collision = 0;
-            moby_vars->hit_flash_target_red = 0x78;
-            start_hit_color_flash(moby, moby_vars->anim);
+            moby_vars->hit_flash.flash_red = 0x78;
+            start_hit_color_flash(moby, &moby_vars->hit_flash);
         }
     }
     moby[0xA4] = 0xFF;
-    update_hit_color_flash(moby, moby_vars->anim);
+    update_hit_color_flash(moby, &moby_vars->hit_flash);
     path = D_L02_001B0AB0_5c88[moby_vars->configured_path_index];
     if (FUN_L00_0025ff38(moby_vars->effective_target_selection_range,
                          moby,

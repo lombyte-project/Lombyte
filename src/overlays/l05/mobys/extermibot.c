@@ -1,5 +1,6 @@
 /* Level 05 moby class extermibot. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -677,10 +678,7 @@ typedef struct Wing {
     char                   pad1[0x14];
     int                    targeting_range_boost_pending;
     char                   pad2[0x24];
-    short                  f60[3];
-    char                   pad3[0x1];
-    unsigned char          hit_flash_target;
-    char                   pad4[0x8];
+    struct HitColorFlash   hit_flash;
     struct KnockbackMotion knockback; /* 0x70 */
     char                   pad8[0x50];
     char                   selected_target_position_xy[8];
@@ -816,7 +814,7 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
             break;
         case EXTERMIBOT_HIT_FLASH:
         case EXTERMIBOT_HIT_FLASH_ONLY:
-            moby_data->hit_flash_target = 0xFA;
+            moby_data->hit_flash.flash_red = 0xFA;
             break;
         case EXTERMIBOT_HIT_NONLETHAL_KNOCKBACK:
         case EXTERMIBOT_HIT_KNOCKBACK_AND_FLASH:
@@ -839,7 +837,7 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
             trooper_start_knockback(
                 moby, &moby_data->knockback, nonlethal_knockback_heading, 5, 1, 0);
             moby->state = EXTERMIBOT_NONLETHAL_KNOCKBACK;
-            moby_data->hit_flash_target = 0x78;
+            moby_data->hit_flash.flash_red = 0x78;
             break;
         case EXTERMIBOT_HIT_LETHAL:
         case EXTERMIBOT_HIT_DEATH_KNOCKBACK:
@@ -859,7 +857,7 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
                                   &moby_data->knockback.vertical_speed);
             trooper_start_knockback(moby, &moby_data->knockback, death_knockback_heading, 6, 1, 0);
             moby->state = EXTERMIBOT_DEATH_KNOCKBACK;
-            moby_data->hit_flash_target = 0xF0;
+            moby_data->hit_flash.flash_red = 0xF0;
             if (hit_record->who != 0 && *(struct Moby **)&hit_record->who->pclass != 0 &&
                 *(short *)((u8 *)((struct Moby *)hit_record->who->pclass) + 0x46) == 5) {
                 stop_animation_l08(moby, 0x800, -1);
@@ -868,10 +866,10 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
             }
             break;
         }
-        start_hit_color_flash(moby, moby_data->f60);
+        start_hit_color_flash(moby, &moby_data->hit_flash);
     }
     moby->hit_slot = 0xFF;
-    update_hit_color_flash(moby, moby_data->f60);
+    update_hit_color_flash(moby, &moby_data->hit_flash);
     if (moby_data->targeting_range_boost_pending != 0) {
         moby_data->targeting_range_boost_timer =
             truncate_float_to_s32(scale_time(random_float_between(180.0f, 240.0f)));

@@ -1,5 +1,6 @@
 /* Level 13 robosquawker moby class: target selection, particle, ground height and update. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "sda.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
@@ -260,72 +261,72 @@ typedef struct {
 } RsTarget;
 
 typedef struct {
-    char          pad0[0x20];
-    float         health;
-    short         max_health;
-    short         damage_cooldown_frames;
-    unsigned char hit_response_class;
-    unsigned char b29;
-    char          pad2A[0xE];
-    int           alert_refresh_requested;
-    char          pad3C[4];
-    RsVec         v40;
-    char          pad50[8];
-    unsigned char b58;
-    char          pad59;
-    unsigned char b5A;
-    char          pad5B[0x6D];
-    short         hC8;
-    char          padCA[6];
-    void         *pD0;
-    char          padD4[0x3C];
-    char          x110[0x10];
-    char          x120[0x10];
-    float         motion_gravity_step;
-    float         motion_horizontal_speed_change_limit;
-    float         motion_horizontal_launch_step;
-    float         motion_vertical_launch_step;
-    int           motion_collision_radius_fixed_point;
-    int           motion_behavior_flags;
-    float         motion_bounce_restitution;
-    char          pad14C[0x11];
-    unsigned char b15D;
-    char          pad15E[0x12];
-    float         motion_ascent_end_animation_frame;
-    float         motion_descent_end_animation_frame;
-    char          pad178[8];
-    int           w180;
-    int           w184;
-    float         ground_max_drop_height;
-    float         ground_max_rise_height;
-    char          pad190[8];
-    float         ground_vertical_step;
-    char          pad19C[8];
-    float         ground_movement_step_length;
-    char          pad1A8[0x10];
-    int           ground_movement_flags;
-    char          pad1BC[0x14];
-    RsVec         home_position;
-    RsVec         flight_destination;
-    float         yaw_turn_step;
-    float         chase_yaw_offset_radians;
-    float         chase_yaw_offset_degrees;
-    float         target_engagement_radius;
-    float         default_target_engagement_radius;
-    float         walking_speed;
-    short         h208;
-    short         ground_idle_preference;
-    int           random_flight_timer_frames;
-    int           chase_yaw_flip_timer_frames;
-    short         alert_timer_frames;
-    short         walk_range_radius;
-    char         *walk_range_anchor;
-    int           ground_navigation_path_index;
-    int           flight_path_index;
-    int           flight_waypoint_index;
-    void         *p228;
-    int           target_clip_volume_index;
-    unsigned char x230[1];
+    char                 pad0[0x20];
+    float                health;
+    short                max_health;
+    short                damage_cooldown_frames;
+    unsigned char        hit_response_class;
+    unsigned char        b29;
+    char                 pad2A[0xE];
+    int                  alert_refresh_requested;
+    char                 pad3C[4];
+    RsVec                v40;
+    char                 pad50[8];
+    unsigned char        b58;
+    char                 pad59;
+    unsigned char        b5A;
+    char                 pad5B[0x6D];
+    short                hC8;
+    char                 padCA[6];
+    void                *pD0;
+    char                 padD4[0x3C];
+    struct HitColorFlash hit_flash;
+    char                 x120[0x10];
+    float                motion_gravity_step;
+    float                motion_horizontal_speed_change_limit;
+    float                motion_horizontal_launch_step;
+    float                motion_vertical_launch_step;
+    int                  motion_collision_radius_fixed_point;
+    int                  motion_behavior_flags;
+    float                motion_bounce_restitution;
+    char                 pad14C[0x11];
+    unsigned char        b15D;
+    char                 pad15E[0x12];
+    float                motion_ascent_end_animation_frame;
+    float                motion_descent_end_animation_frame;
+    char                 pad178[8];
+    int                  w180;
+    int                  w184;
+    float                ground_max_drop_height;
+    float                ground_max_rise_height;
+    char                 pad190[8];
+    float                ground_vertical_step;
+    char                 pad19C[8];
+    float                ground_movement_step_length;
+    char                 pad1A8[0x10];
+    int                  ground_movement_flags;
+    char                 pad1BC[0x14];
+    RsVec                home_position;
+    RsVec                flight_destination;
+    float                yaw_turn_step;
+    float                chase_yaw_offset_radians;
+    float                chase_yaw_offset_degrees;
+    float                target_engagement_radius;
+    float                default_target_engagement_radius;
+    float                walking_speed;
+    short                h208;
+    short                ground_idle_preference;
+    int                  random_flight_timer_frames;
+    int                  chase_yaw_flip_timer_frames;
+    short                alert_timer_frames;
+    short                walk_range_radius;
+    char                *walk_range_anchor;
+    int                  ground_navigation_path_index;
+    int                  flight_path_index;
+    int                  flight_waypoint_index;
+    void                *p228;
+    int                  target_clip_volume_index;
+    unsigned char        x230[1];
 } RsVars;
 
 typedef struct {
@@ -573,8 +574,8 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 robosquawker_vars->motion_descent_end_animation_frame = 18.0f;
                 robosquawker_moby->state = ROBOSQUAWKER_STATE_DEATH_KNOCKBACK;
                 release_robosquawker_particle((Level13VendorMoby *)robosquawker_vars);
-                robosquawker_vars->x110[7] = 0x78;
-                start_hit_color_flash(robosquawker_moby, (short *)robosquawker_vars->x110);
+                robosquawker_vars->hit_flash.flash_red = 0x78;
+                start_hit_color_flash(robosquawker_moby, &robosquawker_vars->hit_flash);
                 FUN_L00_00257470(robosquawker_moby, 0, -1);
             } else {
                 *(u128 *)&va = *(u128 *)&hit->pos;
@@ -592,9 +593,9 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 robosquawker_vars->motion_descent_end_animation_frame = 10.0f;
                 robosquawker_moby->state = ROBOSQUAWKER_STATE_DAMAGE_KNOCKBACK;
                 release_robosquawker_particle((Level13VendorMoby *)robosquawker_vars);
-                *(unsigned char *)&robosquawker_vars->x110[7] = 0xFA;
+                robosquawker_vars->hit_flash.flash_red = 0xFA;
                 robosquawker_vars->damage_cooldown_frames = scale_game_frames(0x3C);
-                start_hit_color_flash(robosquawker_moby, (short *)robosquawker_vars->x110);
+                start_hit_color_flash(robosquawker_moby, &robosquawker_vars->hit_flash);
             }
         }
     }
@@ -1391,7 +1392,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         break;
     }
     }
-    update_hit_color_flash(robosquawker_moby, robosquawker_vars->x110);
+    update_hit_color_flash(robosquawker_moby, &robosquawker_vars->hit_flash);
     if (robosquawker_moby->pos.f[0] < 2.0f || robosquawker_moby->pos.f[0] > 1021.0f ||
         robosquawker_moby->pos.f[1] < 2.0f || robosquawker_moby->pos.f[1] > 1021.0f ||
         robosquawker_moby->pos.f[2] < 2.0f || robosquawker_moby->pos.f[2] > 1021.0f) {

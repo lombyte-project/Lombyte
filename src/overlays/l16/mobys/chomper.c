@@ -1,5 +1,6 @@
 /* Level 16 chomper. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -202,34 +203,31 @@ extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E7670), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    char          pad0[0x110];
-    short         reaction[3]; /* 0x110: record func_L00_0025E4B0 and func_L00_0025E590 take */
-    char          pad116;
-    unsigned char reaction_time; /* 0x117 */
-    char          pad118[8];
-    float         knock[4];     /* 0x120: record func_L00_0025D5B0 fills */
-    float         speed;        /* 0x130 */
-    float         acceleration; /* 0x134 */
-    float         jump_speed;   /* 0x138 */
-    float         turn_speed;   /* 0x13C */
-    int           flags;        /* 0x140 */
-    int           kind;         /* 0x144 */
-    float         strength;     /* 0x148 */
-    char          pad14C[0x11];
-    unsigned char pending; /* 0x15D */
-    char          pad15E[0xE];
-    float         timer; /* 0x16C */
-    float         knockback_ascent_animation_target;
-    float         knockback_descent_animation_target;
-    char          pad178[8];
-    float         target[4]; /* 0x180 */
-    char          pad190[0x30];
-    int           target_moby;
-    int           target_selection_status;
-    char          pad1C8[8];
-    float         home[4]; /* 0x1D0 */
-    char          pad1E0[0x10];
-    int           path; /* 0x1F0: index into D_L16_001B0C30 */
+    char                 pad0[0x110];
+    struct HitColorFlash hit_flash;
+    float                knock[4];     /* 0x120: record func_L00_0025D5B0 fills */
+    float                speed;        /* 0x130 */
+    float                acceleration; /* 0x134 */
+    float                jump_speed;   /* 0x138 */
+    float                turn_speed;   /* 0x13C */
+    int                  flags;        /* 0x140 */
+    int                  kind;         /* 0x144 */
+    float                strength;     /* 0x148 */
+    char                 pad14C[0x11];
+    unsigned char        pending; /* 0x15D */
+    char                 pad15E[0xE];
+    float                timer; /* 0x16C */
+    float                knockback_ascent_animation_target;
+    float                knockback_descent_animation_target;
+    char                 pad178[8];
+    float                target[4]; /* 0x180 */
+    char                 pad190[0x30];
+    int                  target_moby;
+    int                  target_selection_status;
+    char                 pad1C8[8];
+    float                home[4]; /* 0x1D0 */
+    char                 pad1E0[0x10];
+    int                  path; /* 0x1F0: index into D_L16_001B0C30 */
 } L16PursuitData;
 
 typedef struct {
@@ -298,11 +296,11 @@ void update_chomper_hit_reaction_and_target(void *chomper_instance) {
         pursuit_data->knockback_descent_animation_target = 16.0f;
         chomper_moby->state = CHOMPER_KNOCKBACK;
         chomper_moby->i94 = 0;
-        pursuit_data->reaction_time = 0x78;
-        start_hit_color_flash(chomper_moby, pursuit_data->reaction);
+        pursuit_data->hit_flash.flash_red = 0x78;
+        start_hit_color_flash(chomper_moby, &pursuit_data->hit_flash);
     }
     chomper_moby->bA4 = 0xFF;
-    update_hit_color_flash(chomper_moby, pursuit_data->reaction);
+    update_hit_color_flash(chomper_moby, &pursuit_data->hit_flash);
     reaction_flags_or_path_entry_address = (int)&D_L16_001B0930[pursuit_data->path];
     reaction_kind_or_path_address = *(int *)reaction_flags_or_path_entry_address;
     if (FUN_L00_0025ff38(chomper_moby,

@@ -1,5 +1,6 @@
 /* Shared moby class spawner (0x1C7): takes hits and drops class 0x221 bombs that hatch its pooled children. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
@@ -19,41 +20,38 @@ typedef struct {
 } __attribute__((aligned(16))) Vec4A_2bef68;
 
 typedef struct Data_2C0330 {
-    char          pad0[0x20];
-    float         hp;
-    char          pad24[5];
-    unsigned char b29;
-    char          pad2A[0x2E];
-    unsigned char b58;
-    char          pad59;
-    unsigned char b5A;
-    char          pad5B[5];
-    short         f60[3];
-    char          b66;
-    unsigned char hit_effect_blend_target;
-    char          pad68[8];
-    char          f70[0x12];
-    unsigned char spawn_trigger_mode;
-    unsigned char bomb_spawn_options;
-    unsigned char proximity_activation_mode;
-    unsigned char spawn_target_mode;
-    unsigned char count;
-    unsigned char max;
-    short         timer;
-    short         spawn_interval_frames;
-    short         h8C;
-    char          pad8E[2];
-    float         spawn_distance_limit;
-    char          pad94[8];
-    float         activation_distance_threshold;
-    int           pts[4];
-    char          padB0[0x20];
-    int           spawn_trigger_volume_index;
-    char          padD4[8];
-    float         trajectory_gravity;
-    char          padE0[4];
-    float         launch_speed_distance_factor;
-    int           ids[18];
+    char                 pad0[0x20];
+    float                hp;
+    char                 pad24[5];
+    unsigned char        b29;
+    char                 pad2A[0x2E];
+    unsigned char        b58;
+    char                 pad59;
+    unsigned char        b5A;
+    char                 pad5B[5];
+    struct HitColorFlash hit_flash;
+    char                 f70[0x12];
+    unsigned char        spawn_trigger_mode;
+    unsigned char        bomb_spawn_options;
+    unsigned char        proximity_activation_mode;
+    unsigned char        spawn_target_mode;
+    unsigned char        count;
+    unsigned char        max;
+    short                timer;
+    short                spawn_interval_frames;
+    short                h8C;
+    char                 pad8E[2];
+    float                spawn_distance_limit;
+    char                 pad94[8];
+    float                activation_distance_threshold;
+    int                  pts[4];
+    char                 padB0[0x20];
+    int                  spawn_trigger_volume_index;
+    char                 padD4[8];
+    float                trajectory_gravity;
+    char                 padE0[4];
+    float                launch_speed_distance_factor;
+    int                  ids[18];
 } Data_2C0330;
 
 typedef struct {
@@ -269,13 +267,13 @@ void bomb_spawner_update(struct Moby *moby) {
         float remaining_health = spawner_data->hp - r->hit_damage;
         spawner_data->hp = remaining_health;
         if (remaining_health > 0.0f) {
-            spawner_data->hit_effect_blend_target = 0x5A;
-            start_hit_color_flash(moby, spawner_data->f60);
+            spawner_data->hit_flash.flash_red = 0x5A;
+            start_hit_color_flash(moby, &spawner_data->hit_flash);
         } else {
             mark_moby_for_removal_cf(moby, 0, -1);
             moby->state = SPAWNER_DESTROY;
-            spawner_data->hit_effect_blend_target = 0x78;
-            start_hit_color_flash(moby, spawner_data->f60);
+            spawner_data->hit_flash.flash_red = 0x78;
+            start_hit_color_flash(moby, &spawner_data->hit_flash);
         }
     }
     moby->hit_slot = 0xFF;
@@ -561,7 +559,7 @@ void bomb_spawner_update(struct Moby *moby) {
             }
         }
     }
-    update_hit_color_flash(moby, spawner_data->f60);
+    update_hit_color_flash(moby, &spawner_data->hit_flash);
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002C59A0), where it is exact; names translated to the US level program. */

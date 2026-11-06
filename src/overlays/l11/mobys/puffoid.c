@@ -1,5 +1,6 @@
 /* Level 11 moby class puffoid (class 0x4DE): spawns on a path or a carrier moby, wanders, chases and attacks; its damage and path goal, group count, target exclusion test and suck cannon callbacks. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -682,14 +683,12 @@ extern float l11_puffoid_horizontal_speed_limit __asm__("D_L11_001622FC") __attr
 
 /* Private variables of the moby FUN_L11_00315968 updates (only the fields it uses). */
 struct L11PatrolVars {
-    u8  pad0[0x20];
-    f32 hp; /* 0x20 */
-    u8  pad24[0x14];
-    s32 retimer; /* 0x38: nonzero restarts the timer at 0x244 */
-    u8  pad3C[0xD4];
-    u8  move[7]; /* 0x110: movement state (start_hit_color_flash / update_hit_color_flash) */
-    u8  hit_flash_red_target; /* 0x117 */
-    u8  pad118[8];
+    u8                     pad0[0x20];
+    f32                    hp; /* 0x20 */
+    u8                     pad24[0x14];
+    s32                    retimer; /* 0x38: nonzero restarts the timer at 0x244 */
+    u8                     pad3C[0xD4];
+    struct HitColorFlash   hit_flash;
     struct KnockbackMotion knockback; /* 0x120 */
     u8                     pad180[0x24];
     f32                    horizontal_movement_step_limit; /* 0x1A4 */
@@ -807,7 +806,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
                 break;
             case HIT_RESPONSE_NON_KNOCKBACK_REACTION:
             case HIT_RESPONSE_NON_KNOCKBACK_REACTION_ALTERNATE:
-                patrol_vars->hit_flash_red_target = 0xFA;
+                patrol_vars->hit_flash.flash_red = 0xFA;
                 break;
             case HIT_RESPONSE_KNOCKBACK:
             case HIT_RESPONSE_KNOCKBACK_ALTERNATE:
@@ -834,7 +833,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
                 } else {
                     moby->state = PUFFOID_STATE_CARRIER_KNOCKBACK;
                 }
-                patrol_vars->hit_flash_red_target = 0x78;
+                patrol_vars->hit_flash.flash_red = 0x78;
                 break;
             }
             case HIT_RESPONSE_DEATH:
@@ -861,18 +860,18 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
                 } else {
                     moby->state = PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK;
                 }
-                patrol_vars->hit_flash_red_target = 0xF0;
+                patrol_vars->hit_flash.flash_red = 0xF0;
                 FUN_L00_00257470(moby, 0, -1);
                 break;
             }
             case HIT_RESPONSE_COOLDOWN_NO_KNOCKBACK:
                 break;
             }
-            start_hit_color_flash(moby, patrol_vars->move);
+            start_hit_color_flash(moby, &patrol_vars->hit_flash);
         }
     }
     moby->hit_slot = 0xFF;
-    update_hit_color_flash(moby, patrol_vars->move);
+    update_hit_color_flash(moby, &patrol_vars->hit_flash);
     if (patrol_vars->timer != 0) {
         if (moby->state == PUFFOID_STATE_IDLE ||
             (moby->state == PUFFOID_STATE_WANDER_NEAR_HOME && (moby->anim_flags & 2))) {

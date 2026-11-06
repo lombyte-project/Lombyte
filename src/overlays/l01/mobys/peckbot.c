@@ -1,5 +1,6 @@
 /* Level 01 moby class peckbot. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
 
@@ -89,70 +90,68 @@ typedef struct MobyNode {
 } MobyNode;
 
 typedef struct {
-    u8      pad0[0x20];
-    f32     health;
-    s16     x24;
-    s16     flee_timer;
-    u8      pad28;
-    u8      x29;
-    u8      pad2a[0xE];
-    s32     x38;
-    u8      pad3c[0x4];
-    Vec577  vel;
-    u8      pad50[0x8];
-    u8      x58;
-    u8      pad59;
-    u8      x5A;
-    u8      pad5b[0x6D];
-    s16     xC8;
-    u8      padca[0x6];
-    void   *xD0;
-    u8      padd4[0x3C];
-    u8      fx110[0x7];
-    u8      x117;
-    u8      pad118[0x8];
-    u8      knock[0x10];
-    f32     x130;
-    f32     x134;
-    f32     x138;
-    f32     x13C;
-    u8      pad140[0x4];
-    s32     x144;
-    u8      pad148[0x15];
-    u8      x15D;
-    u8      pad15e[0x12];
-    f32     x170;
-    f32     x174;
-    u8      pad178[0x8];
-    s32     x180;
-    u8      pad184[0x4];
-    f32     x188;
-    f32     x18C;
-    u8      pad190[0x8];
-    f32     x198;
-    u8      pad19c[0x8];
-    f32     x1A4;
-    u8      pad1a8[0x28];
-    Vec577  home;
-    Vec577  dest;
-    u8      turn[0x4];
-    f32     turn_off;
-    f32     turn_deg;
-    f32     range;
-    u8      pad200[0x4];
-    f32     speed;
-    s16     x208;
-    s16     x20A;
-    s32     idle_timer;
-    s32     turn_timer;
-    s16     x214;
-    s16     x216;
-    Mob577 *leader;
-    s32     path;
-    u8      pad220[0x8];
-    s32     x228;
-    u8      pad22c[0x4];
-    u8      x230[0x10];
+    u8                   pad0[0x20];
+    f32                  health;
+    s16                  x24;
+    s16                  flee_timer;
+    u8                   pad28;
+    u8                   x29;
+    u8                   pad2a[0xE];
+    s32                  x38;
+    u8                   pad3c[0x4];
+    Vec577               vel;
+    u8                   pad50[0x8];
+    u8                   x58;
+    u8                   pad59;
+    u8                   x5A;
+    u8                   pad5b[0x6D];
+    s16                  xC8;
+    u8                   padca[0x6];
+    void                *xD0;
+    u8                   padd4[0x3C];
+    struct HitColorFlash hit_flash;
+    u8                   knock[0x10];
+    f32                  x130;
+    f32                  x134;
+    f32                  x138;
+    f32                  x13C;
+    u8                   pad140[0x4];
+    s32                  x144;
+    u8                   pad148[0x15];
+    u8                   x15D;
+    u8                   pad15e[0x12];
+    f32                  x170;
+    f32                  x174;
+    u8                   pad178[0x8];
+    s32                  x180;
+    u8                   pad184[0x4];
+    f32                  x188;
+    f32                  x18C;
+    u8                   pad190[0x8];
+    f32                  x198;
+    u8                   pad19c[0x8];
+    f32                  x1A4;
+    u8                   pad1a8[0x28];
+    Vec577               home;
+    Vec577               dest;
+    u8                   turn[0x4];
+    f32                  turn_off;
+    f32                  turn_deg;
+    f32                  range;
+    u8                   pad200[0x4];
+    f32                  speed;
+    s16                  x208;
+    s16                  x20A;
+    s32                  idle_timer;
+    s32                  turn_timer;
+    s16                  x214;
+    s16                  x216;
+    Mob577              *leader;
+    s32                  path;
+    u8                   pad220[0x8];
+    s32                  x228;
+    u8                   pad22c[0x4];
+    u8                   x230[0x10];
 } Mob577Vars;
 
 typedef struct {
@@ -311,8 +310,8 @@ void peckbot_update(Mob577 *peckbot_moby) {
                 peckbot_vars->x170 = 11.0f;
                 peckbot_vars->x174 = 18.0f;
                 peckbot_moby->state = PECKBOT_STATE_FATAL_KNOCKBACK;
-                peckbot_vars->x117 = 0x78;
-                start_hit_color_flash(peckbot_moby, peckbot_vars->fx110);
+                peckbot_vars->hit_flash.flash_red = 0x78;
+                start_hit_color_flash(peckbot_moby, &peckbot_vars->hit_flash);
                 FUN_L00_00257470(peckbot_moby, 0, -1);
             } else {
                 vector_scratch.q = hit->pos;
@@ -322,9 +321,9 @@ void peckbot_update(Mob577 *peckbot_moby) {
                 peckbot_vars->x170 = 5.0f;
                 peckbot_vars->x174 = 10.0f;
                 peckbot_moby->state = PECKBOT_STATE_NONFATAL_KNOCKBACK;
-                peckbot_vars->x117 = 0xFA;
+                peckbot_vars->hit_flash.flash_red = 0xFA;
                 peckbot_vars->flee_timer = scale_game_frames(0x3C);
-                start_hit_color_flash(peckbot_moby, peckbot_vars->fx110);
+                start_hit_color_flash(peckbot_moby, &peckbot_vars->hit_flash);
             }
         }
     }
@@ -865,6 +864,6 @@ void peckbot_update(Mob577 *peckbot_moby) {
         peckbot_moby->hit = 0;
         break;
     }
-    update_hit_color_flash(peckbot_moby, peckbot_vars->fx110);
+    update_hit_color_flash(peckbot_moby, &peckbot_vars->hit_flash);
     FUN_L00_0025a120(peckbot_moby);
 }

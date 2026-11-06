@@ -1,5 +1,6 @@
 /* Level 14 bolt thief moby class and its path movement. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -30,32 +31,30 @@ enum {
 };
 
 typedef struct {
-    char          pad00[0x60];
-    char          effect[7]; /* 0x60: record func_L00_0025E590 updates */
-    unsigned char ticks;     /* 0x67 */
-    char          pad68[8];
-    float         knock[4];      /* 0x70: record func_L00_0025D5B0 fills (velocity first) */
-    float         knock_drag;    /* 0x80 */
-    float         knock_gravity; /* 0x84 */
-    float         knock_speed;   /* 0x88 */
-    float         knock_rise;    /* 0x8C */
-    int           unknown90;
-    int           knock_flags; /* 0x94 */
-    char          pad98[0x15];
-    unsigned char knock_bAD; /* 0xAD */
-    char          padAE[0x22];
-    int           counter;    /* 0xD0 */
-    float         timer;      /* 0xD4 */
-    int           path;       /* 0xD8: index into D_L14_001B0BB0 */
-    int           other_path; /* 0xDC */
-    int           trigger;    /* 0xE0 */
-    float         vx;         /* 0xE4 */
-    float         vy;         /* 0xE8 */
-    float         vz;         /* 0xEC */
-    float         turn;       /* 0xF0 */
-    char         *child;      /* 0xF4 */
-    int           unknownF8;
-    int           mode; /* 0xFC */
+    char                 pad00[0x60];
+    struct HitColorFlash hit_flash;
+    float                knock[4];      /* 0x70: record func_L00_0025D5B0 fills (velocity first) */
+    float                knock_drag;    /* 0x80 */
+    float                knock_gravity; /* 0x84 */
+    float                knock_speed;   /* 0x88 */
+    float                knock_rise;    /* 0x8C */
+    int                  unknown90;
+    int                  knock_flags; /* 0x94 */
+    char                 pad98[0x15];
+    unsigned char        knock_bAD; /* 0xAD */
+    char                 padAE[0x22];
+    int                  counter;    /* 0xD0 */
+    float                timer;      /* 0xD4 */
+    int                  path;       /* 0xD8: index into D_L14_001B0BB0 */
+    int                  other_path; /* 0xDC */
+    int                  trigger;    /* 0xE0 */
+    float                vx;         /* 0xE4 */
+    float                vy;         /* 0xE8 */
+    float                vz;         /* 0xEC */
+    float                turn;       /* 0xF0 */
+    char                *child;      /* 0xF4 */
+    int                  unknownF8;
+    int                  mode; /* 0xFC */
 } L16CrateData;
 
 typedef struct {
@@ -155,7 +154,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
                                 0,
                                 fast_arc_tan(moby->position[0] - player->motion.pos.f[0],
                                              moby->position[1] - player->motion.pos.f[1]));
-        moby_data->ticks = 0x78;
+        moby_data->hit_flash.flash_red = 0x78;
         FUN_L00_00257470(moby, 0, -1);
         moby->state = BOLT_THIEF_STATE_KNOCKBACK;
     }
@@ -315,7 +314,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         }
         break;
     }
-    update_hit_color_flash(moby, moby_data->effect);
+    update_hit_color_flash(moby, &moby_data->hit_flash);
 }
 
 extern int sample_path(char *, float *, float *, float *, int, float) __asm__("FUN_L00_0025d808");

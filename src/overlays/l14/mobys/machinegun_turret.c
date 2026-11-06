@@ -1,5 +1,6 @@
 /* Level 14 machinegun turret moby class: target selection, update and hit reactions. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/mobys/moby.h"
 #include "qzero.h"
 #include "qcopy.h"
@@ -199,31 +200,28 @@ int select_moby_by_xy_distance(char *selection_reference, char *selection_output
 }
 
 typedef struct MachinegunTurretVars {
-    u8  pad_0[0x20];
-    f32 health;
-    u8  pad_24[0x1C];
-    u8  unk40;
-    u8  pad_41[0x1F];
-    u8  anim_state;
-    u8  pad_61[0x6];
-    u8  unk67;
-    u8  pad_68[0x8];
-    f32 base_z;
-    s16 unk74;
-    s16 unk76;
-    f32 unk78;
-    u8  pad_7C[0x4];
-    s32 aiming_cuboid;
-    f32 unk84;
-    s16 unk88;
-    u8  unk8A;
-    u8  unk8B;
-    f32 unk8C;
-    s32 unk90;
-    s32 unk94;
-    s32 timer;
-    s16 timer_9C;
-    s16 unk9E;
+    u8                   pad_0[0x20];
+    f32                  health;
+    u8                   pad_24[0x1C];
+    u8                   unk40;
+    u8                   pad_41[0x1F];
+    struct HitColorFlash hit_flash;
+    f32                  base_z;
+    s16                  unk74;
+    s16                  unk76;
+    f32                  unk78;
+    u8                   pad_7C[0x4];
+    s32                  aiming_cuboid;
+    f32                  unk84;
+    s16                  unk88;
+    u8                   unk8A;
+    u8                   unk8B;
+    f32                  unk8C;
+    s32                  unk90;
+    s32                  unk94;
+    s32                  timer;
+    s16                  timer_9C;
+    s16                  unk9E;
 } MachinegunTurretVars;
 
 void machinegun_turret_update(char *moby) __asm__("FUN_L14_002b3bf0");
@@ -544,7 +542,7 @@ void process_machinegun_turret_hit_reactions(struct Moby *moby) {
             break;
         case HIT_REACTION_ANIMATE_WITH_LOW_RED_FLASH:
         case HIT_REACTION_LOW_RED_FLASH_AND_HIT_ANIMATION:
-            moby_vars->unk67 = 100;
+            moby_vars->hit_flash.flash_red = 100;
             break;
         case HIT_REACTION_PLAY_HIT_ANIMATION:
         case HIT_REACTION_HIGH_RED_FLASH_AND_HIT_ANIMATION:
@@ -552,20 +550,20 @@ void process_machinegun_turret_hit_reactions(struct Moby *moby) {
         case HIT_REACTION_BLEND_HIT_ANIMATION_WITH_HIGH_RED_FLASH:
         case HIT_REACTION_HIGH_RED_FLASH_WITH_BLENDED_HIT_ANIMATION:
         case HIT_REACTION_BLEND_HIT_ANIMATION_AND_HIGH_RED_FLASH:
-            moby_vars->unk67 = 200;
+            moby_vars->hit_flash.flash_red = 200;
             break;
         case HIT_REACTION_LETHAL:
         case HIT_REACTION_DESTROY:
             moby->state = TURRET_STATE_DESTROY;
             moby->flags &= 0xEFFF;
-            moby_vars->unk67 = 0xF0;
+            moby_vars->hit_flash.flash_red = 0xF0;
             FUN_L00_00257470(moby, 0, -1);
             break;
         }
-        start_hit_color_flash(moby, (short *)&moby_vars->anim_state);
+        start_hit_color_flash(moby, &moby_vars->hit_flash);
     }
     moby->hit_slot = 0xFF;
-    update_hit_color_flash(moby, &moby_vars->anim_state);
+    update_hit_color_flash(moby, &moby_vars->hit_flash);
 }
 
 extern int D_L14_0016150C_gp __asm__("D_L14_0016150C") __attribute__((sda));

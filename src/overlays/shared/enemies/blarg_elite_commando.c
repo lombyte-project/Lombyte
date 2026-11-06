@@ -1,6 +1,7 @@
 /* Shared moby class blarg_elite_commando. */
 
 #include "types.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
@@ -41,81 +42,78 @@ enum {
 };
 
 typedef struct L16DamageData {
-    u8            pad0[0x20];
-    float         health;
-    s16           max_health;
-    u8            pad26[0x2];
-    s8            hit_response_class;
-    s8            unk29;
-    u8            pad2A[0x6];
-    f32           unk30;
-    u8            pad34[0x4];
-    int           reset_timer;
-    u8            pad3C[0x24];
-    short         damage[3];
-    u8            pad66[0x1];
-    unsigned char animation;
-    u8            pad68[0x8];
-    float         knockback[4];
-    float         impulse_time;
-    float         vertical_impulse;
-    float         forward_impulse;
-    float         lateral_impulse;
-    int           sound_timer;
-    int           active;
-    float         damping;
-    u8            pad9C[0x11];
-    unsigned char pending;
-    u8            padAE[0x12];
-    float         blend_start;
-    float         blend_end;
-    u8            padC8[0x8];
-    float         target[4];
-    u8            padE0[0x30];
-    int           owner;
-    int           pursuit_mode;
-    u8            pad118[0x8];
-    s32           spawn_path_index;
-    float         pursuit_range;
-    s32           starts_on_parent;
-    int           path_index;
-    u8            joint_1_animation[0x64];
-    f32           joint_1_target_pitch;
-    f32           joint_1_target_yaw;
-    u8            pad19C[0x14];
-    u8            joint_2_animation[0x64];
-    f32           joint_2_target_pitch;
-    f32           joint_2_target_yaw;
-    u8            pad21C[0x14];
-    u8            joint_3_animation[0x64];
-    f32           joint_3_target_pitch;
-    f32           joint_3_target_yaw;
-    u8            pad29C[0x14];
-    f32           initial_position_x;
-    f32           initial_position_y;
-    u8            pad2B8[0x4];
-    f32           cached_position_z;
-    f32           base_position_x;
-    f32           base_position_y;
-    f32           base_position_z;
-    f32           parent_heading_offset;
-    char         *parent_moby;
-    f32           movement_step_length;
-    u8            heading_angular_step[0x4];
-    s16           state_countdown_ticks;
-    u16           rocket_fire_cycle_count;
-    int           pursuit_timer;
-    f32           bobbing_z_phase_step;
-    f32           bobbing_z_phase;
-    f32           bobbing_amplitude;
-    f32           bobbing_x_phase_step;
-    f32           bobbing_x_phase;
-    f32           bobbing_y_phase_step;
-    f32           bobbing_y_phase;
-    s16           selected_path_node_index;
-    s16           patrol_countdown_ticks;
-    s32           voice_playback_handle;
-    int           reward_hits;
+    u8                   pad0[0x20];
+    float                health;
+    s16                  max_health;
+    u8                   pad26[0x2];
+    s8                   hit_response_class;
+    s8                   unk29;
+    u8                   pad2A[0x6];
+    f32                  unk30;
+    u8                   pad34[0x4];
+    int                  reset_timer;
+    u8                   pad3C[0x24];
+    struct HitColorFlash hit_flash;
+    float                knockback[4];
+    float                impulse_time;
+    float                vertical_impulse;
+    float                forward_impulse;
+    float                lateral_impulse;
+    int                  sound_timer;
+    int                  active;
+    float                damping;
+    u8                   pad9C[0x11];
+    unsigned char        pending;
+    u8                   padAE[0x12];
+    float                blend_start;
+    float                blend_end;
+    u8                   padC8[0x8];
+    float                target[4];
+    u8                   padE0[0x30];
+    int                  owner;
+    int                  pursuit_mode;
+    u8                   pad118[0x8];
+    s32                  spawn_path_index;
+    float                pursuit_range;
+    s32                  starts_on_parent;
+    int                  path_index;
+    u8                   joint_1_animation[0x64];
+    f32                  joint_1_target_pitch;
+    f32                  joint_1_target_yaw;
+    u8                   pad19C[0x14];
+    u8                   joint_2_animation[0x64];
+    f32                  joint_2_target_pitch;
+    f32                  joint_2_target_yaw;
+    u8                   pad21C[0x14];
+    u8                   joint_3_animation[0x64];
+    f32                  joint_3_target_pitch;
+    f32                  joint_3_target_yaw;
+    u8                   pad29C[0x14];
+    f32                  initial_position_x;
+    f32                  initial_position_y;
+    u8                   pad2B8[0x4];
+    f32                  cached_position_z;
+    f32                  base_position_x;
+    f32                  base_position_y;
+    f32                  base_position_z;
+    f32                  parent_heading_offset;
+    char                *parent_moby;
+    f32                  movement_step_length;
+    u8                   heading_angular_step[0x4];
+    s16                  state_countdown_ticks;
+    u16                  rocket_fire_cycle_count;
+    int                  pursuit_timer;
+    f32                  bobbing_z_phase_step;
+    f32                  bobbing_z_phase;
+    f32                  bobbing_amplitude;
+    f32                  bobbing_x_phase_step;
+    f32                  bobbing_x_phase;
+    f32                  bobbing_y_phase_step;
+    f32                  bobbing_y_phase;
+    s16                  selected_path_node_index;
+    s16                  patrol_countdown_ticks;
+    s32                  voice_playback_handle;
+    int                  reward_hits;
 } L16DamageData;
 
 typedef struct {
@@ -567,7 +565,7 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
         switch (response) {
         case HIT_RESPONSE_ANIMATION_ONLY:
         case HIT_RESPONSE_DAMAGE_ANIMATION_ONLY:
-            commando_data->animation = 0xFA;
+            commando_data->hit_flash.flash_red = 0xFA;
             break;
         case HIT_RESPONSE_KNOCKBACK_RECOVERY:
         case HIT_RESPONSE_RECOVERABLE_KNOCKBACK:
@@ -595,7 +593,7 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
             trooper_start_knockback(
                 damage_reaction.angle, commando_moby, commando_data->knockback, 6, 1, 0);
             commando_moby->state = 8;
-            commando_data->animation = 0x78;
+            commando_data->hit_flash.flash_red = 0x78;
             break;
         }
         case HIT_RESPONSE_FATAL:
@@ -640,7 +638,7 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
             trooper_start_knockback(
                 damage_reaction.fatal_angle, commando_moby, commando_data->knockback, 7, 1, 0);
             commando_moby->state = 9;
-            commando_data->animation = 0xF0;
+            commando_data->hit_flash.flash_red = 0xF0;
             FUN_L00_00257470(commando_moby, 0, -1);
             break;
         }
@@ -649,10 +647,10 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
         default:
             break;
         }
-        start_hit_color_flash(commando_moby, commando_data->damage);
+        start_hit_color_flash(commando_moby, &commando_data->hit_flash);
     }
     commando_moby->hit_slot = 0xFF;
-    update_hit_color_flash(commando_moby, commando_data->damage);
+    update_hit_color_flash(commando_moby, &commando_data->hit_flash);
     fast_dec_timer(&commando_data->pursuit_timer);
     if (commando_data->reset_timer) {
         commando_data->pursuit_timer =
