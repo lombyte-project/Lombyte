@@ -134,8 +134,9 @@ typedef struct {
 } BeamStrand;
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E4138). */
+/* beam_transforms seen from 0x10 in: basis rows 1 and 2, the origin, then the next transform's row 0. */
 typedef struct {
-    OvlVec4 axis, unk10, position, unk30;
+    OvlVec4 axis, basis_row2, position, next_basis_row0;
 } TrailSlot;
 
 typedef struct {
