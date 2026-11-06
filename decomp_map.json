@@ -13,9 +13,9 @@
   "c_fuzzy_percent_of_recoverable": 100.0,
   "data": {
     "bytes_total": 12433372,
-    "bytes_matching_c": 7950692,
-    "c_exact_percent": 63.9464,
-    "bytes_matching_c_zero": 4877291
+    "bytes_matching_c": 9596104,
+    "c_exact_percent": 77.1802,
+    "bytes_matching_c_zero": 5007021
   },
   "boot": {
     "units_total": 1425,
@@ -2028,8 +2028,8 @@
     ],
     "data": {
       "bytes_total": 699136,
-      "bytes_matching_c": 252700,
-      "c_exact_percent": 36.1446
+      "bytes_matching_c": 269525,
+      "c_exact_percent": 38.5512
     }
   },
   "overlays": {
@@ -5864,7 +5864,7 @@
             "bytes_matching_c": 784
           },
           {
-            "file": "src/overlays/l05/mobys/triggered_slide.c",
+            "file": "src/overlays/l05/mobys/moby_843.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 748,
@@ -5885,7 +5885,7 @@
             "bytes_matching_c": 576
           },
           {
-            "file": "src/overlays/l05/mobys/triggered_spray_emitter.c",
+            "file": "src/overlays/l05/mobys/moby_855.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 1500,
@@ -5906,14 +5906,14 @@
             "bytes_matching_c": 484
           },
           {
-            "file": "src/overlays/l05/mobys/triggered_motion.c",
+            "file": "src/overlays/l05/mobys/moby_893.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 1092,
             "bytes_matching_c": 1092
           },
           {
-            "file": "src/overlays/l05/mobys/triggered_moby_yaw.c",
+            "file": "src/overlays/l05/mobys/moby_895.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 368,
@@ -6567,7 +6567,7 @@
             "bytes_matching_c": 4224
           },
           {
-            "file": "src/overlays/l08/mobys/bomb.c",
+            "file": "src/overlays/l08/mobys/blarg_bombthrower_bomb.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 1792,
@@ -8957,7 +8957,7 @@
             "bytes_matching_c": 2236
           },
           {
-            "file": "src/overlays/l18/mobys/mine.c",
+            "file": "src/overlays/l18/mobys/drek_boss_mine.c",
             "functions": 6,
             "matching_c": 6,
             "bytes_total": 2344,
@@ -9122,9 +9122,9 @@
     ],
     "data": {
       "bytes_total": 11734236,
-      "bytes_matching_c": 7697992,
-      "c_exact_percent": 65.6028,
-      "bytes_matching_c_zero": 4877291
+      "bytes_matching_c": 9326579,
+      "c_exact_percent": 79.4818,
+      "bytes_matching_c_zero": 5007021
     }
   },
   "total": {
@@ -9140,9 +9140,9 @@
     "c_fuzzy_percent_of_recoverable": 100.0,
     "data": {
       "bytes_total": 12433372,
-      "bytes_matching_c": 7950692,
-      "c_exact_percent": 63.9464,
-      "bytes_matching_c_zero": 4877291
+      "bytes_matching_c": 9596104,
+      "c_exact_percent": 77.1802,
+      "bytes_matching_c_zero": 5007021
     }
   }
 }
