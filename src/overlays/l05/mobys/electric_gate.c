@@ -23,7 +23,7 @@ void         electric_gate_update(char *m) __asm__("FUN_L05_0030dc68");
 
 typedef struct ElectricGateVars {
     u8   pad_0[0x4];
-    s32 *unk4;
+    s32 *voice; /* voice slot shared by the gates, -1: none */
 } ElectricGateVars;
 
 /* Moby class 838 */
@@ -47,7 +47,7 @@ void electric_gate_update(char *gate_moby) {
         MOBY(gate_moby)->flags |= 1;
         MOBY(gate_moby)->state = ELECTRIC_GATE_WAIT_FOR_TRIGGER;
         MOBY(gate_moby)->visible = 0;
-        *electric_gate_vars->unk4 = -1;
+        *electric_gate_vars->voice = -1;
         break;
     case ELECTRIC_GATE_WAIT_FOR_TRIGGER:
         if (*(int *)&electric_gate_beam_callback_frame_gp != D_L05_0015F5CC_e[2]) {
@@ -57,7 +57,7 @@ void electric_gate_update(char *gate_moby) {
         gate_position = gate_moby + 0x10;
         tab = D_L05_001671C0;
         if (fast_vec_dist(gate_position, tab) < 64.0f) {
-            voice_slot_index = *electric_gate_vars->unk4;
+            voice_slot_index = *electric_gate_vars->voice;
             if (voice_slot_index >= 0) {
                 voice_pool_base = D_0013E550;
                 voice_owner = *(char **)(voice_pool_base + voice_slot_index * 0x70 + 0x88);
@@ -71,16 +71,16 @@ void electric_gate_update(char *gate_moby) {
                                     goto after;
                             }
                             voice_position_base = voice_pool_base + 0x90;
-                            *(char **)(voice_pool_base + *electric_gate_vars->unk4 * 0x70 + 0x88) =
+                            *(char **)(voice_pool_base + *electric_gate_vars->voice * 0x70 + 0x88) =
                                 gate_moby;
-                            qcopy(*electric_gate_vars->unk4 * 0x70 + voice_position_base,
+                            qcopy(*electric_gate_vars->voice * 0x70 + voice_position_base,
                                   gate_position);
                         }
                         goto after;
                     }
                 }
             }
-            *electric_gate_vars->unk4 = allocate_voice_for_target_entry(0, 4, gate_moby);
+            *electric_gate_vars->voice = allocate_voice_for_target_entry(0, 4, gate_moby);
         }
     after:
         if (*(int *)electric_gate_vars >= 0) {

@@ -37,7 +37,7 @@ void taxi_update(struct Moby *moby) __asm__("FUN_L05_00318c78");
 
 typedef struct TaxiVars {
     u8    pad_0[0x20];
-    u8    unk20;
+    u8    carry; /* carried-object state for update_entity_matrix (FUN_L00_00260738) */
     u8    pad_21[0x3F];
     f32   pose_position[4];
     f32   pose_rotation[4];
@@ -54,7 +54,7 @@ typedef struct TaxiVars {
     s16   stop_index;
     s16   destination_stop;
     s32   branch_mission;
-    s32   unkBC;
+    s32   second_mission; /* checked with branch_mission */
     f32   blend_t;
     s32   blend_speed;
     u8    pad_C8[0xC];
@@ -210,7 +210,7 @@ void taxi_update(struct Moby *moby) {
         break;
     case TAXI_WAIT_FOR_ACTIVATION:
         if (D_0014C050[current_level_index][taxi_data->branch_mission] == 0xFF ||
-            D_0014C050[current_level_index][taxi_data->unkBC] == 0xFF) {
+            D_0014C050[current_level_index][taxi_data->second_mission] == 0xFF) {
             char          *model = moby->pclass;
             unsigned short flags = moby->flags;
             int            class_collision = *(int *)(model + 0x10);
@@ -242,7 +242,7 @@ void taxi_update(struct Moby *moby) {
         taxi_data->voice = -1;
     }
     fast_vec_sub(position_delta, &moby->pos, old_position);
-    FUN_L00_00260738(&taxi_data->unk20, position_delta, old_rotation, &moby->rot);
+    FUN_L00_00260738(&taxi_data->carry, position_delta, old_rotation, &moby->rot);
 }
 
 /* Taxi stop selection shared by route helpers. */
@@ -271,7 +271,7 @@ void initialize_taxi_stop_state(void *moby_v) {
     case TAXI_BRANCHING_STOP: {
         int k = current_level_index << 4;
         if (visited52[taxi_stop_vars->branch_mission + k] != 0xFF &&
-            visited52[taxi_stop_vars->unkBC + k] != 0xFF) {
+            visited52[taxi_stop_vars->second_mission + k] != 0xFF) {
             moby[0x20] = 6;
             MOBY(moby)->flags = MOBY(moby)->flags | 1;
             moby[0x31] = 0;

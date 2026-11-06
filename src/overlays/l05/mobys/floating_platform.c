@@ -31,11 +31,11 @@ void       floating_platform_update(unsigned char *moby) __asm__("FUN_L05_0030bd
 
 typedef struct FloatingPlatformVars {
     u8  pad_0[0x20];
-    f32 unk20[4];
+    f32 carry[4]; /* carried-object state for update_entity_matrix */
     u8  pad_30[0x30];
-    f32 unk60;
+    f32 rotation_y_phase;
     u8  pad_64[0x8];
-    f32 unk6C;
+    f32 rotation_x_phase;
     u8  pad_70[0x8];
     s32 timer_78;
 } FloatingPlatformVars;
@@ -60,8 +60,8 @@ void floating_platform_update(unsigned char *moby) {
         floating_platform_vars->timer_78 = truncate_float_to_s32(
             scale_time(random_float_between((float)floating_platform_voice_interval_min_gp,
                                             (float)floating_platform_voice_interval_max_gp)));
-        floating_platform_vars->unk60 = random_angle_radians();
-        floating_platform_vars->unk6C = random_angle_radians();
+        floating_platform_vars->rotation_y_phase = random_angle_radians();
+        floating_platform_vars->rotation_x_phase = random_angle_radians();
         MOBY(moby)->state = FLOATING_PLATFORM_UPDATE_ROCKING;
         break;
     case FLOATING_PLATFORM_UPDATE_ROCKING:
@@ -76,19 +76,20 @@ void floating_platform_update(unsigned char *moby) {
         previous_rotation_ptr = previous_rotation;
         current_rotation = (char *)moby + 0x40;
         qcopy(previous_rotation_ptr, current_rotation);
-        rotation_y_phase = fast_add_rotations(floating_platform_vars->unk60,
+        rotation_y_phase = fast_add_rotations(floating_platform_vars->rotation_y_phase,
                                               floating_platform_rotation_y_phase_rate_degrees_gp *
                                                   DEG_TO_RAD * frame_time);
         k = floating_platform_rotation_x_phase_rate_degrees_gp * DEG_TO_RAD * frame_time;
-        floating_platform_vars->unk60 = rotation_y_phase;
-        floating_platform_vars->unk6C = fast_add_rotations(floating_platform_vars->unk6C, k);
+        floating_platform_vars->rotation_y_phase = rotation_y_phase;
+        floating_platform_vars->rotation_x_phase =
+            fast_add_rotations(floating_platform_vars->rotation_x_phase, k);
         MOBY(moby)->rot.y = floating_platform_rotation_y_amplitude_degrees_gp * DEG_TO_RAD *
-                            fast_sin(floating_platform_vars->unk60);
+                            fast_sin(floating_platform_vars->rotation_y_phase);
         MOBY(moby)->rot.x = floating_platform_rotation_x_amplitude_degrees_gp * DEG_TO_RAD *
-                            fast_sin(floating_platform_vars->unk6C);
+                            fast_sin(floating_platform_vars->rotation_x_phase);
         fast_vec_sub(position_delta, position, previous_position);
         update_entity_matrix(
-            floating_platform_vars->unk20, position_delta, previous_rotation_ptr, current_rotation);
+            floating_platform_vars->carry, position_delta, previous_rotation_ptr, current_rotation);
         break;
     }
 }

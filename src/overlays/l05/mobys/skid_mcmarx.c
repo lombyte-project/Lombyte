@@ -148,7 +148,7 @@ typedef struct SkidMcmarxVars {
     f32   jump_target_node[4];
     s32   path_220;
     u8    pad_224[0x20];
-    char *unk244;
+    char *active_path; /* path being followed (path_220 or a branch) */
     u8    pad_248[0x4];
     f32   racer_vertical_speed;
     u8    pad_250[0x8];
@@ -161,7 +161,7 @@ typedef struct SkidMcmarxVars {
 
 void start_racer_branch_jump(char *moby) {
     SkidMcmarxVars *moby_data = (SkidMcmarxVars *)MOBY(moby)->pvars;
-    char           *active_path = moby_data->unk244;
+    char           *active_path = moby_data->active_path;
     int             path_node_index;
     int             path_node_byte_offset;
     if (active_path != ((char *)l05_paths[moby_data->path_220])) {
@@ -171,11 +171,12 @@ void start_racer_branch_jump(char *moby) {
             if (*(float *)(active_path + path_node_byte_offset + 0x1C) == 1.0f) {
                 while (*(float *)(active_path + path_node_byte_offset + 0x1C) != 2.0f) {
                     path_node_index = offset_path_index(active_path, path_node_index, 1, 1);
-                    active_path = moby_data->unk244;
+                    active_path = moby_data->active_path;
                     path_node_byte_offset = path_node_index * 16;
                 }
                 moby_data->jump_landing_node_index = path_node_index;
-                qcopy(moby_data->jump_target_node, moby_data->unk244 + path_node_index * 16 + 0x10);
+                qcopy(moby_data->jump_target_node,
+                      moby_data->active_path + path_node_index * 16 + 0x10);
                 moby_data->jump_elapsed_frames = 1;
             }
         }
