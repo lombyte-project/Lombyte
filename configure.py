@@ -1186,6 +1186,7 @@ DATA_OVERLAYS = {
     "rendering/texture/initialize_alpha_lookup_table": (0x18E740, 0x8F6C0, 1024),
     "mobys/resolve_moby_hit_response": (0x1CC080, 0xCD000, 200),
     "ui/map/copy_level_object_positions": (0x1E03B8, 0xE1338, 80),
+    "ui/menus/item_preview/update_item_preview_binding": (0x1E0408, 0xE1388, 1152),
     "rendering/debug/print_debug_text_centered": (0x189DC0, 0x8AD40, 384),
     "rendering/effects/draw_light_quads": (0x18CAA0, 0x8DA20, 64),
     "runtime/callbacks/add_draw_callback": (0x18DB40, 0x8EAC0, 512),
