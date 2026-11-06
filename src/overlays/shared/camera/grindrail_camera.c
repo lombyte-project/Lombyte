@@ -50,12 +50,13 @@ typedef struct {
     u8   pad44[0xC];
 } CameraTrack;
 
+/* The camera's place on its path (Data.c in the update). */
 typedef struct {
-    s32 unk0;
-    s32 unk4;
+    s32 segment;  /* 0x150 */
+    s32 fraction; /* 0x154: f32 0 when reset */
     s32 unk8;
     s32 unkC;
-    s32 unk10;
+    s32 hero_range_node; /* 0x160 */
 } CameraBlend;
 
 typedef struct {
@@ -170,11 +171,11 @@ void reset_camera_state_and_prepare_preset_paths(Camera *destination_camera) {
     track->unk38 = 0.2f;
     track->unk3C = 0;
     blend = &destination_camera->orbit->blend;
-    blend->unk0 = 0;
-    blend->unk4 = 0;
+    blend->segment = 0;
+    blend->fraction = 0;
     blend->unk8 = 0;
     blend->unkC = 0;
-    blend->unk10 = 1;
+    blend->hero_range_node = 1;
     if (preset->kind == CAMERA_PRESET_KIND_MAPPED_PATHS && preset->ready == 0) {
         track_path = ((CameraPath *)l01_paths[preset->track_path]);
         target_path = (CameraPath *)l01_splines[preset->target].path;

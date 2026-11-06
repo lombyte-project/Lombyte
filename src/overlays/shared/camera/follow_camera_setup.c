@@ -1,5 +1,6 @@
 /* Follow camera: setup, per-frame approach and overrides, pose rebuild, and the collision probes that keep it clear of the level. */
 #include "types.h"
+#include "rnc/camera/update_cam.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/overlay/shared/camera/camera.h"
 #include "rnc/overlay/shared/world/level_globals.h"
@@ -565,7 +566,7 @@ void reset_follow_camera_state_from_position(char *camera_moby) {
     char *orbit_state;
     char *target_position;
 
-    if (MOBY(camera_moby)->unk86 == 0) {
+    if (((struct UpdateCam *)camera_moby)->camera_class == 0) {
         camera_target_state = *(char **)(camera_moby + 0x70);
         camera_state = camera_target_state;
         orbit_state = camera_target_state + 0x130;
@@ -884,7 +885,7 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     if (camera_moby->b7D == 2) {
         reset_follow_camera_state_from_position(camera_moby);
         qcopy(camera_moby->v40, camera_moby->v0);
-        if (D_L00_00166E04->unk86 == 7 && D_0013F450_2E8210.h30C == 0) {
+        if (D_L00_00166E04->camera_class == 7 && D_0013F450_2E8210.h30C == 0) {
             e->e.h0 = 0;
         } else {
             camera_height_state->h0 = scale_game_frames(D_L00_00161D24_gp);

@@ -40,7 +40,7 @@ typedef struct {
     s16 type;         /* 0x2C: 1..11, picks timing and easing */
     s16 timer;        /* 0x2E: frames since the camera started, 0 when off */
     f32 offset_scale; /* 0x30: follow_camera_set_offset_scale; follow.look_height on a type 5 snap */
-    s16 keep_unk10;   /* 0x34: 0 clears FollowCamState.unk10 each frame */
+    s16 keep_leash;   /* 0x34: 0 clears FollowCamState.leash each frame */
     s16 check_yaw; /* 0x36: nonzero ends the camera when D_L00_00166DD8 is 80 degrees or more off `yaw` */
     f32 lateral_stiffness; /* 0x38: eased in over 120 frames from start_lateral_stiffness */
     f32 lateral_damping;   /* 0x3C: likewise from start_lateral_damping */
@@ -49,9 +49,9 @@ typedef struct {
     s16 l_buttons_end; /* 0x48: type 5 ends on L1 or L2; with `done` set it does not restart */
     s16 done;          /* 0x4A: set when the camera ends */
     s32 clip_volume2;  /* 0x4C: second clip volume, -1 none */
-    f32 unk50;         /* 0x50: degrees, passed to FUN_L00_002e8540 */
-    s16 set_flag1;     /* 0x54: sets tail.ctl.flags bit 1 each frame */
-    s16 set_flag0;     /* 0x56: sets tail.ctl.flags bit 0 each frame */
+    f32 script_pitch; /* 0x50: degrees, FollowCamState.tail.script_pitch through FUN_L00_002e8540 */
+    s16 set_flag1;    /* 0x54: sets tail.ctl.flags bit 1 each frame */
+    s16 set_flag0;    /* 0x56: sets tail.ctl.flags bit 0 each frame */
 } SwingCameraParams;
 
 extern void follow_camera_set_distance(int, float, float) __asm__("FUN_L00_002e8450");
@@ -232,15 +232,15 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
         qcopy(state->position, pos);
         qcopy(state->tail.snap.shot_pos, pos);
         snap->eye_distance_error = tail->eye_distance - fast_vec_length(tail->eye_offset);
-        *(s32 *)&reset->unk34 = 0;
+        *(s32 *)&reset->pitch_bias = 0;
         reset->look_height = follow->look_height;
         {
-            f32 zero = reset->unk34;
+            f32 zero = reset->pitch_bias;
             f32 distance = tail->distance;
             reset->distance = distance;
-            reset->unk38 = zero;
-            reset->unk30 = zero;
-            reset->unk2C = zero;
+            reset->pitch_bias_vel = zero;
+            reset->distance_vel = zero;
+            reset->look_height_vel = zero;
         }
     }
     at_end = 0;
@@ -334,8 +334,8 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
             follow_camera_set_offset_scale(0, params->offset_scale, 0.005f);
         }
     }
-    if (params->unk50 != 0.0f) {
-        FUN_L00_002e8540(params->unk50 * 0.017453292f);
+    if (params->script_pitch != 0.0f) {
+        FUN_L00_002e8540(params->script_pitch * 0.017453292f);
     }
     if (params->set_flag1 != 0) {
         {
@@ -349,7 +349,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
             ctl->flags |= 1;
         }
     }
-    if (params->keep_unk10 == 0) {
+    if (params->keep_leash == 0) {
         set_follow_camera_orbit_clamp_mode(0);
     }
     if (params->lateral_stiffness != 0.0f || params->lateral_damping != 0.0f) {

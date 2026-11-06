@@ -1,6 +1,7 @@
 /* Camera type 18, the moby-controlled camera: takes over while the hero is inside its moby's volume, and the release a moby calls to hand it back for a frame. */
 
 #include "types.h"
+#include "rnc/camera/update_cam.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
 #include "rnc/math_consts.h"
@@ -443,7 +444,7 @@ extern char *target_reference_table __asm__("D_L06_0015EF50");
 void release_moby_camera_control(char *moby) __asm__("FUN_L06_00316330");
 
 void release_moby_camera_control(char *moby) {
-    if (MOBY(moby)->unk86 == 0x12) {
+    if (((struct UpdateCam *)moby)->camera_class == 0x12) {
         *(int *)(*(char **)(target_reference_table + *(short *)(moby + 0x84) * 32 + 0x1C) + 0x50) =
             1;
     }
