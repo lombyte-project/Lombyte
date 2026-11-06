@@ -54,7 +54,7 @@ struct L14RacerVars {
     s32  end_point;   /* 0x84: D_L14_001B0BB0 entry the run ends at */
     s32  start_point; /* 0x88: D_L14_001B0BB0 entry the run starts from (-1: none) */
     u8   pad8C[0x64];
-    s32  unkF0;
+    s32  light_slot; /* 0xF0: point light slot (-1: none) */
     s32  unkF4;
     u8   padF8[8];
     u8   manips[3][0x40]; /* 0x100: attached as manipulators 2..4 */
@@ -138,7 +138,7 @@ void level14_racer_update(struct Moby *racer_moby) {
         racer_moby->flags = (racer_moby->flags & 0xEFFF) | 0x41;
         racer_moby->collision = 0;
         racer_vars->unkF4 = -1;
-        racer_vars->unkF0 = -1;
+        racer_vars->light_slot = -1;
         fill_transfer_words(racer_vars->manips[0], 0, 0x40);
         attach_manipulator(racer_moby, 2, racer_vars->manips[0]);
         fill_transfer_words(racer_vars->manips[1], 0, 0x40);

@@ -69,17 +69,15 @@ extern int allocate_colored_effect_slot(float *, float, float, float, float, flo
 void flying_debris_update(struct Moby *moby) __asm__("FUN_L14_002bac78");
 
 typedef struct FlyingDebrisVars {
-    f32          unk0;
-    f32          unk4;
-    f32          unk8;
+    f32          velocity[3];
     u8           pad_C[0x4];
     u8           timer_10;
     u8           pad_11[0x1];
     s16          point_light_slot_index;
-    f32          unk14;
-    f32          unk18;
-    f32          unk1C;
-    struct Moby *unk20;
+    f32          spin_x;
+    f32          spin_y;
+    f32          spin_z;
+    struct Moby *owner; /* its class picks the impact sound */
 } FlyingDebrisVars;
 
 /* Moby class 81 */
@@ -107,18 +105,18 @@ void flying_debris_update(struct Moby *moby) {
         return;
     }
     fast_vec_add(&moby->pos, &moby->pos, debris_vars);
-    if (absolute_float(debris_vars->unk0) >
+    if (absolute_float(debris_vars->velocity[0]) >
         flying_debris_horizontal_drag_speed_threshold_gp * frame_scale)
-        debris_vars->unk0 *=
+        debris_vars->velocity[0] *=
             (flying_debris_velocity_retention_factor_gp - 1.0f) * frame_scale + 1.0f;
-    if (absolute_float(debris_vars->unk4) >
+    if (absolute_float(debris_vars->velocity[1]) >
         flying_debris_horizontal_drag_speed_threshold_gp * frame_scale)
-        debris_vars->unk4 *=
+        debris_vars->velocity[1] *=
             (flying_debris_velocity_retention_factor_gp - 1.0f) * frame_scale + 1.0f;
-    if (debris_vars->unk8 > 0.0f)
-        debris_vars->unk8 *=
+    if (debris_vars->velocity[2] > 0.0f)
+        debris_vars->velocity[2] *=
             (flying_debris_velocity_retention_factor_gp - 1.0f) * frame_scale + 1.0f;
-    debris_vars->unk8 -= flying_debris_gravity_gp * frame_scale_sq;
+    debris_vars->velocity[2] -= flying_debris_gravity_gp * frame_scale_sq;
     if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f ||
         moby->pos.y > 1021.0f || moby->pos.z < 2.0f || moby->pos.z > 1021.0f) {
         remove_flying_debris((u8 *)moby);
@@ -128,7 +126,7 @@ void flying_debris_update(struct Moby *moby) {
         (absolute_float(moby->pos.x - hero.motion.pos.f[0]) < 10.0f &&
          absolute_float(moby->pos.y - hero.motion.pos.f[1]) < 10.0f)) {
         clear_u64_value(joint);
-        trooper_play_sound(1, 0, moby, debris_vars->unk20->oclass);
+        trooper_play_sound(1, 0, moby, debris_vars->owner->oclass);
         e450_b78(moby,
                  joint,
                  &moby->pos,
@@ -150,9 +148,9 @@ void flying_debris_update(struct Moby *moby) {
         remove_flying_debris((u8 *)moby);
         return;
     }
-    moby->rot.x = fast_add_rotations(moby->rot.x, debris_vars->unk14);
-    moby->rot.y = fast_add_rotations(moby->rot.y, debris_vars->unk18);
-    moby->rot.z = fast_add_rotations(moby->rot.z, debris_vars->unk1C);
+    moby->rot.x = fast_add_rotations(moby->rot.x, debris_vars->spin_x);
+    moby->rot.y = fast_add_rotations(moby->rot.y, debris_vars->spin_y);
+    moby->rot.z = fast_add_rotations(moby->rot.z, debris_vars->spin_z);
     moby_point_position(moby, 0, joint);
     size = randf_sym(0.01f, 0.5f);
     fast_vec_scale(ofs, (char *)moby + 0xC0, size);

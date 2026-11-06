@@ -1,6 +1,7 @@
 /* Level 14 bolt thief moby class and its path movement. */
 #include "types.h"
 #include "rnc/overlay/shared/mobys/hit_color_flash.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -31,31 +32,22 @@ enum {
 };
 
 typedef struct {
-    char                 pad00[0x60];
-    struct HitColorFlash hit_flash;
-    float                knock[4];      /* 0x70: record func_L00_0025D5B0 fills (velocity first) */
-    float                knock_drag;    /* 0x80 */
-    float                knock_gravity; /* 0x84 */
-    float                knock_speed;   /* 0x88 */
-    float                knock_rise;    /* 0x8C */
-    int                  unknown90;
-    int                  knock_flags; /* 0x94 */
-    char                 pad98[0x15];
-    unsigned char        knock_bAD; /* 0xAD */
-    char                 padAE[0x22];
-    int                  counter;    /* 0xD0 */
-    float                timer;      /* 0xD4 */
-    int                  path;       /* 0xD8: index into D_L14_001B0BB0 */
-    int                  other_path; /* 0xDC */
-    int                  trigger;    /* 0xE0 */
-    float                vx;         /* 0xE4 */
-    float                vy;         /* 0xE8 */
-    float                vz;         /* 0xEC */
-    float                turn;       /* 0xF0 */
-    char                *child;      /* 0xF4 */
-    int                  unknownF8;
-    int                  mode; /* 0xFC */
-} L16CrateData;
+    char                   pad00[0x60];
+    struct HitColorFlash   hit_flash;
+    struct KnockbackMotion knockback;
+    int                    path_segment;   /* 0xD0 */
+    float                  path_segment_t; /* 0xD4 */
+    int                    path;           /* 0xD8: index into D_L14_001B0BB0 */
+    int                    other_path;     /* 0xDC */
+    int                    trigger;        /* 0xE0 */
+    float                  vx;             /* 0xE4 */
+    float                  vy;             /* 0xE8 */
+    float                  vz;             /* 0xEC */
+    float                  turn;           /* 0xF0 */
+    char                  *child;          /* 0xF4 */
+    float                  path_speed;     /* 0xF8: 0 uses the default rate */
+    int                    mode;           /* 0xFC */
+} BoltThiefVars;
 
 typedef struct {
     char pad00[0x10];
@@ -80,7 +72,7 @@ typedef struct {
     char           pad54[0x1C];
     unsigned char  status; /* 0x70 */
     char           pad71[7];
-    L16CrateData  *data; /* 0x78 */
+    BoltThiefVars *data; /* 0x78 */
     char           pad7C[0x18];
     int            bounds; /* 0x94 */
     char           pad98[0xC];
@@ -130,8 +122,8 @@ void bolt_thief_update(L16CrateMoby *moby) {
         BOLT_THIEF_MODE_PRIMARY_PATH_THEN_FACE_HERO = 1,
         BOLT_THIEF_MODE_FACE_HERO_FROM_START = 2
     };
-    L16CrateData *moby_data = moby->data;
-    char         *hit;
+    BoltThiefVars *moby_data = moby->data;
+    char          *hit;
 
     if ((moby->status & 2) && moby->frame == moby->animation && moby->frame == 1)
         blend_moby_animation(moby, 4, 0, scale_game_frames(5));
@@ -141,14 +133,14 @@ void bolt_thief_update(L16CrateMoby *moby) {
     if (hit && moby->state != BOLT_THIEF_STATE_KNOCKBACK) {
         struct Hero *player = &hero;
 
-        moby_data->knock_drag = 0.008f;
-        moby_data->knock_gravity = 0.0005f;
-        moby_data->knock_speed = frame_time * 24.0f;
-        moby_data->knock_rise = frame_time * 12.0f;
-        moby_data->knock_flags = 1;
-        moby_data->knock_bAD = 0;
+        moby_data->knockback.gravity = 0.008f;
+        moby_data->knockback.speed_approach_step = 0.0005f;
+        moby_data->knockback.speed = frame_time * 24.0f;
+        moby_data->knockback.vertical_speed = frame_time * 12.0f;
+        moby_data->knockback.flags = 1;
+        moby_data->knockback.unk3D = 0;
         trooper_start_knockback(moby,
-                                moby_data->knock,
+                                &moby_data->knockback,
                                 1,
                                 1,
                                 0,
@@ -238,10 +230,10 @@ void bolt_thief_update(L16CrateMoby *moby) {
         emit_moby_offset_particles(moby);
         break;
     case BOLT_THIEF_STATE_SETTLE_AT_PATH_END: {
-        L16CrateData *settle_data = moby->data;
-        char         *path = ((char *)l14_paths[settle_data->path]);
-        float         target[4];
-        float         zero;
+        BoltThiefVars *settle_data = moby->data;
+        char          *path = ((char *)l14_paths[settle_data->path]);
+        float          target[4];
+        float          zero;
 
         if (settle_data->mode == BOLT_THIEF_MODE_PATH_LOOP_WITH_LINKED_CHILD)
             update_linked_moby_position(moby);
@@ -277,8 +269,8 @@ void bolt_thief_update(L16CrateMoby *moby) {
                 }
                 moby->state = BOLT_THIEF_STATE_FOLLOW_SECONDARY_PATH;
                 blend_moby_animation(moby, 0, 0, 20);
-                settle_data->timer = zero;
-                settle_data->counter = 0;
+                settle_data->path_segment_t = zero;
+                settle_data->path_segment = 0;
             }
         }
         emit_moby_offset_particles(moby);
@@ -291,9 +283,10 @@ void bolt_thief_update(L16CrateMoby *moby) {
             moby->state = BOLT_THIEF_STATE_WAIT_FOR_TRIGGER;
             moby->bounds = 0;
             moby->flags |= 0x41;
-            moby_data->timer = 0.0f;
-            moby_data->counter = 0;
-            moby_data->turn = moby_data->vx = moby_data->vy = moby_data->vz = moby_data->timer;
+            moby_data->path_segment_t = 0.0f;
+            moby_data->path_segment = 0;
+            moby_data->turn = moby_data->vx = moby_data->vy = moby_data->vz =
+                moby_data->path_segment_t;
             path = ((char *)l14_paths[moby_data->path]);
             qcopy(moby->position, path + 0x10);
             moby->rotation[2] = fast_arc_tan(*(float *)(path + 0x20) - *(float *)(path + 0x10),
@@ -303,7 +296,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         }
         break;
     case BOLT_THIEF_STATE_KNOCKBACK:
-        if (step_moby_motion(moby, moby_data->knock) & 3) {
+        if (step_moby_motion(moby, &moby_data->knockback) & 3) {
             cart_burst(moby, moby->position, -1, 1.0f, 13.0f);
             mark_moby_for_removal(moby);
             return;
@@ -317,26 +310,11 @@ void bolt_thief_update(L16CrateMoby *moby) {
     update_hit_color_flash(moby, &moby_data->hit_flash);
 }
 
-extern int sample_path(char *, float *, float *, float *, int, float) __asm__("FUN_L00_0025d808");
+extern int sample_path(char *, float *, int *, float *, int, float) __asm__("FUN_L00_0025d808");
 
 float bolt_thief_default_path_sample_rate_gp __asm__("D_L14_00161FB8") = 25.0f;
 
 extern void FUN_L00_00258278(char *, float, float *, float, float, float);
-
-typedef struct BoltThiefVars {
-    u8  pad_0[0xD0];
-    f32 unkD0;
-    f32 unkD4;
-    s32 path_D8;
-    s32 path_DC;
-    u8  pad_E0[0x4];
-    f32 unkE4;
-    f32 unkE8;
-    f32 unkEC;
-    f32 unkF0;
-    u8  pad_F4[0x4];
-    f32 unkF8;
-} BoltThiefVars;
 
 int update_bolt_thief_path_movement(struct Moby *moby) {
     float          pos[4];
@@ -347,28 +325,32 @@ int update_bolt_thief_path_movement(struct Moby *moby) {
     char          *path;
     if (current_level_index == LEVEL_KALEBO3)
         path_sample_step = frame_time * 20.0f;
-    if (bolt_thief_state->unkF8 != 0.0f)
-        path_sample_step = bolt_thief_state->unkF8 * frame_time;
+    if (bolt_thief_state->path_speed != 0.0f)
+        path_sample_step = bolt_thief_state->path_speed * frame_time;
     if (moby->state == BOLT_THIEF_STATE_FOLLOW_SECONDARY_PATH)
-        path = ((char *)l14_paths[bolt_thief_state->path_DC]);
+        path = ((char *)l14_paths[bolt_thief_state->other_path]);
     else
-        path = ((char *)l14_paths[bolt_thief_state->path_D8]);
-    path_sample_result = sample_path(
-        path, pos, &bolt_thief_state->unkD0, &bolt_thief_state->unkD4, 0, path_sample_step);
+        path = ((char *)l14_paths[bolt_thief_state->path]);
+    path_sample_result = sample_path(path,
+                                     pos,
+                                     &bolt_thief_state->path_segment,
+                                     &bolt_thief_state->path_segment_t,
+                                     0,
+                                     path_sample_step);
     vendor_spring(&moby->pos.x,
-                  &bolt_thief_state->unkE4,
+                  &bolt_thief_state->vx,
                   pos[0],
                   bolt_thief_path_spring_gain_gp,
                   bolt_thief_path_spring_damping_gp,
                   0.0f);
     vendor_spring(&moby->pos.y,
-                  &bolt_thief_state->unkE8,
+                  &bolt_thief_state->vy,
                   pos[1],
                   bolt_thief_path_spring_gain_gp,
                   bolt_thief_path_spring_damping_gp,
                   0.0f);
     vendor_spring(&moby->pos.z,
-                  &bolt_thief_state->unkEC,
+                  &bolt_thief_state->vz,
                   pos[2],
                   bolt_thief_path_spring_gain_gp,
                   bolt_thief_path_spring_damping_gp,
@@ -378,7 +360,7 @@ int update_bolt_thief_path_movement(struct Moby *moby) {
         if (absolute_float(delta[1]) > 0.01f) {
             FUN_L00_00258278(moby,
                              fast_arc_tan(delta[0], delta[1]),
-                             &bolt_thief_state->unkF0,
+                             &bolt_thief_state->turn,
                              bolt_thief_path_spring_gain_gp,
                              bolt_thief_path_spring_damping_gp,
                              0.0f);

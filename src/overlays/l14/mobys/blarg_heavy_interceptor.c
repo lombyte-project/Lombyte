@@ -227,16 +227,26 @@ typedef struct BlargHeavyInterceptorVars {
     u8                   pad_100[0x20];
     f32                  manipulator1[4];
     f32                  manipulator1_rotation[4];
-    f32                  unk140[4];
+    f32                  manipulator1_scale[4];
     u8                   pad_150[0x10];
     f32                  beam_rotation_blink_and_aim_path_state[4];
     f32                  aim_point_position[4];
-    f32                  unk180[4];
-    f32                  unk190[4];
+    f32                  aim_point_velocity[3];
+    struct Moby         *target; /* the hero (or class 0xCB / 0x10E moby) the scan beam found */
+    f32                  spawn_path_length;
+    f32                  position_velocity[3];
     f32                  oscillation_state[4];
-    f32                  unk1B0[4];
-    f32                  unk1C0[4];
-    f32                  unk1D0[4];
+    f32                  patrol_heading;
+    s16                  patrol_heading_timer;
+    s16                  is_group_effects_controller;
+    f32                  patrol_heading_velocity;
+    f32                  manipulator0_angle; /* yaw toward the aim point (axis 2) */
+    f32                  manipulator1_angle; /* pitch toward the aim point (axis 1) */
+    f32                  manipulator0_angle_velocity;
+    f32                  manipulator1_angle_velocity;
+    f32                  aim_path_segment_distance;
+    s32                  voice;
+    f32                  beam_origin[3];
     f32                  death_velocity[4];
     s16                  timer_1F0;
     s16                  timer_1F2;
@@ -303,7 +313,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
     switch (moby->state) {
     case INTERCEPTOR_STATE_INITIALIZE:
         get_moby_target_info(moby)[0xE] = 1;
-        if (*(s16 *)((u8 *)moby_vars + 0x1B6) == 1) {
+        if (moby_vars->is_group_effects_controller == 1) {
             moby->flags = (moby->flags | 0x41) & 0xEFFF;
             moby->collision = 0;
             moby->update_dist = 0xFF;
@@ -329,8 +339,10 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         initialize_blarg_heavy_interceptor_paths(moby);
         moby_vars->unk88 = 1;
         moby_vars->unk21C = -1.0f;
-        moby_vars->unk180[0] = moby_vars->unk180[1] = moby_vars->unk180[2] = 0.0f;
-        moby_vars->unk190[1] = moby_vars->unk190[2] = moby_vars->unk190[3] = 0.0f;
+        moby_vars->aim_point_velocity[0] = moby_vars->aim_point_velocity[1] =
+            moby_vars->aim_point_velocity[2] = 0.0f;
+        moby_vars->position_velocity[0] = moby_vars->position_velocity[1] =
+            moby_vars->position_velocity[2] = 0.0f;
         moby_vars->beam_rotation_blink_and_aim_path_state[0] = 0.0f;
         moby_vars->flags = 0;
         moby_vars->beam_rotation_blink_and_aim_path_state[1] = 0.0f;
@@ -338,15 +350,15 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         moby_vars->oscillation_state[1] = 0.0f;
         moby_vars->oscillation_state[2] = 0.0f;
         moby_vars->oscillation_state[3] = 0.0f;
-        moby_vars->unk1B0[0] = moby->rot.z;
-        *(s16 *)&moby_vars->unk1B0[1] = 0;
-        moby_vars->unk1B0[2] = 0.0f;
+        moby_vars->patrol_heading = moby->rot.z;
+        moby_vars->patrol_heading_timer = 0;
+        moby_vars->patrol_heading_velocity = 0.0f;
         fill_transfer_words(moby_vars->manipulator0, 0, 0x40);
         fill_transfer_words(moby_vars->manipulator1, 0, 0x40);
         attach_manipulator_c618(moby, 0, moby_vars->manipulator0);
         attach_manipulator_c618(moby, 1, moby_vars->manipulator1);
-        moby_vars->unk1C0[2] = moby_vars->unk1C0[1] = 0.0f;
-        *(int *)&moby_vars->unk180[3] = 0;
+        moby_vars->manipulator1_angle_velocity = moby_vars->manipulator0_angle_velocity = 0.0f;
+        moby_vars->target = 0;
         moby->state = INTERCEPTOR_STATE_PATROL_AND_SCAN;
         moby->command = 0;
         break;
@@ -390,7 +402,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
                 if ((char *)t == D_001413D0_lui ||
                     (t != 0 && (t->oclass == 0xCB || t->oclass == 0x10E))) {
                     found = 1;
-                    *(struct Moby **)(&moby_vars->unk180[3]) = D_L14_00174540.target;
+                    moby_vars->target = D_L14_00174540.target;
                 }
             }
         }
@@ -399,7 +411,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         }
     }
     case INTERCEPTOR_STATE_ALERT_GROUP: {
-        s32 voice = *(s32 *)&moby_vars->unk1D0[0];
+        s32 voice = moby_vars->voice;
 
         if (voice != -1) {
             VoicePoolWindow *slot = (VoicePoolWindow *)((u8 *)&voice_pool + voice * 0x70);
@@ -408,7 +420,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
                 release_voice_slot(voice);
             }
         }
-        *(s32 *)&moby_vars->unk1D0[0] = -1;
+        moby_vars->voice = -1;
         activate_waiting_turrets_in_group(moby_vars->turret_group);
         moby->state = INTERCEPTOR_STATE_TRACK_TARGET;
         moby_vars->timer_1F2 =
@@ -420,11 +432,11 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
                            (blarg_heavy_interceptor_tracking_and_group_wait_glow_blue_gp << 16) |
                            (blarg_heavy_interceptor_tracking_and_group_wait_glow_green_gp << 8) |
                            blarg_heavy_interceptor_tracking_and_group_wait_glow_red_gp;
-        if (*(struct Moby **)(&moby_vars->unk180[3]) != 0) {
+        if (moby_vars->target != 0) {
             moby_vars->unk200 = 1;
             moby_vars->red_light_tint_enabled = 1;
             update_blarg_heavy_interceptor_aim_transforms(moby, 1);
-            qcopy(vector_scratch, &(*(struct Moby **)(&moby_vars->unk180[3]))->pos);
+            qcopy(vector_scratch, &moby_vars->target->pos);
             vector_scratch[2] += 0.5f;
             qcopy(secondary_vector_scratch, vector_scratch);
             secondary_vector_scratch[2] -= 4.0f;
@@ -435,25 +447,24 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
             }
             ease_c618(moby_vars->aim_point_position,
                       vector_scratch[0],
-                      moby_vars->unk180,
+                      moby_vars->aim_point_velocity,
                       0.003f,
                       0.2f,
                       0.0f);
             ease_c618(&moby_vars->aim_point_position[1],
                       vector_scratch[1],
-                      &moby_vars->unk180[1],
+                      &moby_vars->aim_point_velocity[1],
                       0.003f,
                       0.2f,
                       0.0f);
             ease_c618(&moby_vars->aim_point_position[2],
                       vector_scratch[2],
-                      &moby_vars->unk180[2],
+                      &moby_vars->aim_point_velocity[2],
                       0.003f,
                       0.2f,
                       0.0f);
             update_blarg_heavy_interceptor_patrol_path_position(moby);
-            if ((s8)(*(struct Moby **)(&moby_vars->unk180[3]))->state < 0 ||
-                fast_dec_timer_s16(&moby_vars->timer_1F2)) {
+            if ((s8)moby_vars->target->state < 0 || fast_dec_timer_s16(&moby_vars->timer_1F2)) {
                 moby_vars->path_point_segment_distance = 0.0f;
                 moby_vars->path_point = 0;
                 moby_vars->return_path_complete = 0;
@@ -477,7 +488,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
             float *p;
 
             moby_point_position(moby, 2, secondary_vector_scratch);
-            p = &moby_vars->unk1D0[1];
+            p = moby_vars->beam_origin;
             p[0] = secondary_vector_scratch[0];
             p[1] = secondary_vector_scratch[1];
             p[2] = secondary_vector_scratch[2];
@@ -493,19 +504,29 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
                 blarg_heavy_interceptor_group_wait_return_path_position_easing_factor_gp,
                 blarg_heavy_interceptor_group_wait_return_path_traversal_speed_gp,
                 1.0f);
-            if (moby_vars->unk1C0[0] != 0.0f || moby_vars->unk1B0[3] != 0.0f) {
-                ease_c618(moby_vars->unk1C0, 0.0f, &moby_vars->unk1C0[2], 0.004f, 0.2f, 0.0f);
-                ease_c618(&moby_vars->unk1B0[3], 0.0f, &moby_vars->unk1C0[1], 0.004f, 0.2f, 0.0f);
-                if (absolute_float(moby_vars->unk1C0[0]) < 0.0001f) {
-                    moby_vars->unk1C0[0] = 0.0f;
+            if (moby_vars->manipulator1_angle != 0.0f || moby_vars->manipulator0_angle != 0.0f) {
+                ease_c618(&moby_vars->manipulator1_angle,
+                          0.0f,
+                          &moby_vars->manipulator1_angle_velocity,
+                          0.004f,
+                          0.2f,
+                          0.0f);
+                ease_c618(&moby_vars->manipulator0_angle,
+                          0.0f,
+                          &moby_vars->manipulator0_angle_velocity,
+                          0.004f,
+                          0.2f,
+                          0.0f);
+                if (absolute_float(moby_vars->manipulator1_angle) < 0.0001f) {
+                    moby_vars->manipulator1_angle = 0.0f;
                 }
-                if (absolute_float(moby_vars->unk1B0[3]) < 0.0001f) {
-                    moby_vars->unk1B0[3] = 0.0f;
+                if (absolute_float(moby_vars->manipulator0_angle) < 0.0001f) {
+                    moby_vars->manipulator0_angle = 0.0f;
                 }
                 build_axis_rotation_quaternion(
-                    moby_vars->manipulator0_rotation, 2, moby_vars->unk1B0[3]);
+                    moby_vars->manipulator0_rotation, 2, moby_vars->manipulator0_angle);
                 build_axis_rotation_quaternion(
-                    moby_vars->manipulator1_rotation, 1, moby_vars->unk1C0[0]);
+                    moby_vars->manipulator1_rotation, 1, moby_vars->manipulator1_angle);
             }
             if (try_retract_turret_group(moby_vars->turret_group)) {
                 LevelPath *p = l14_paths[moby_vars->patrol_path];
@@ -530,7 +551,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
             FUN_L00_0025df68_c618(
                 tab, &moby->pos, vector_scratch, &near_seg, &near_t, 0, 40.0f, 5.0f, 0.0f);
             moby_vars->path_segment = near_seg;
-            moby_vars->unk1C0[3] = near_t;
+            moby_vars->aim_path_segment_distance = near_t;
             moby_vars->unk200 = 0;
             moby->state = INTERCEPTOR_STATE_REJOIN_PATROL;
         }
@@ -551,29 +572,29 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         for (i = 0; i < source_segment_index; i++) {
             source_path_distance += *(float *)(seg + i * 16 + 0x1C);
         }
-        source_path_distance += moby_vars->unk1C0[3];
+        source_path_distance += moby_vars->aim_path_segment_distance;
         tab = ((int *)l14_paths[moby_vars->spawn_path]);
         t = source_path_distance / moby_vars->beam_rotation_blink_and_aim_path_state[3] *
-            moby_vars->unk190[0];
+            moby_vars->spawn_path_length;
         rejoin_path_loop_enabled = moby_vars->rejoin_path_loop;
         path_seg = 0;
         path_t = 0.0f;
         FUN_L00_0025d808_c618(tab, vector_scratch, &path_seg, &path_t, rejoin_path_loop_enabled, t);
         ease_c618(&moby->pos.x,
                   vector_scratch[0],
-                  &moby_vars->unk190[1],
+                  &moby_vars->position_velocity[0],
                   0.005f,
                   l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                   0.0f);
         ease_c618(&moby->pos.y,
                   vector_scratch[1],
-                  &moby_vars->unk190[2],
+                  &moby_vars->position_velocity[1],
                   0.005f,
                   l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                   0.0f);
         ease_c618(&moby->pos.z,
                   vector_scratch[2],
-                  &moby_vars->unk190[3],
+                  &moby_vars->position_velocity[2],
                   0.005f,
                   l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                   0.0f);
@@ -584,24 +605,24 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         FUN_L00_0025d808_c618(((int *)l14_paths[moby_vars->path_index]),
                               vector_scratch,
                               &moby_vars->path_segment,
-                              &moby_vars->unk1C0[3],
+                              &moby_vars->aim_path_segment_distance,
                               moby_vars->rejoin_path_loop,
                               0.0f);
         ease_c618(moby_vars->aim_point_position,
                   vector_scratch[0],
-                  moby_vars->unk180,
+                  moby_vars->aim_point_velocity,
                   l14_blarg_heavy_interceptor_path_easing_error_gain,
                   l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                   0.0f);
         ease_c618(&moby_vars->aim_point_position[1],
                   vector_scratch[1],
-                  &moby_vars->unk180[1],
+                  &moby_vars->aim_point_velocity[1],
                   l14_blarg_heavy_interceptor_path_easing_error_gain,
                   l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                   0.0f);
         ease_c618(&moby_vars->aim_point_position[2],
                   vector_scratch[2],
-                  &moby_vars->unk180[2],
+                  &moby_vars->aim_point_velocity[2],
                   l14_blarg_heavy_interceptor_path_easing_error_gain,
                   l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                   0.0f);
@@ -614,7 +635,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         moby_vars->timer_1F0 =
             scale_game_frames(blarg_heavy_interceptor_death_fall_duration_frames_gp);
         activate_waiting_turrets_in_group(moby_vars->turret_group);
-        voice = *(s32 *)&moby_vars->unk1D0[0];
+        voice = moby_vars->voice;
         if (voice != -1) {
             VoicePoolWindow *slot = (VoicePoolWindow *)((u8 *)&voice_pool + voice * 0x70);
 
@@ -622,7 +643,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
                 release_voice_slot(voice);
             }
         }
-        *(s32 *)&moby_vars->unk1D0[0] = -1;
+        moby_vars->voice = -1;
         FUN_L00_0025e450_c618(moby,
                               moby_vars->unk40,
                               &moby->pos,
@@ -657,9 +678,9 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
             blarg_heavy_interceptor_death_launch_vertical_velocity_range_start_gp * frame_scale,
             blarg_heavy_interceptor_death_launch_vertical_velocity_range_end_gp * frame_scale);
         moby->scale *= 0.1f;
-        moby_vars->unk140[0] = 10.0f;
-        moby_vars->unk140[1] = 10.0f;
-        moby_vars->unk140[2] = 10.0f;
+        moby_vars->manipulator1_scale[0] = 10.0f;
+        moby_vars->manipulator1_scale[1] = 10.0f;
+        moby_vars->manipulator1_scale[2] = 10.0f;
         moby_vars->unk1F4 = randf_sym(0.0f, 0.08726646f);
         moby_vars->unk1F8 = randf_sym(0.0f, 0.08726646f);
         moby_vars->yaw_drift = randf_sym(0.0f, 0.08726646f);
@@ -696,9 +717,9 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         moby_vars->death_velocity[2] -=
             blarg_heavy_interceptor_death_fall_gravity_gp * frame_scale_sq;
         moby->rot.z = fast_add_rotations(moby->rot.z, moby_vars->yaw_drift);
-        moby_vars->unk140[0] = 10.0f;
-        moby_vars->unk140[1] = 10.0f;
-        moby_vars->unk140[2] = 10.0f;
+        moby_vars->manipulator1_scale[0] = 10.0f;
+        moby_vars->manipulator1_scale[1] = 10.0f;
+        moby_vars->manipulator1_scale[2] = 10.0f;
         if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f ||
             moby->pos.y > 1021.0f || moby->pos.z < 2.0f || moby->pos.z > 1021.0f) {
             FUN_0020c828(moby);
@@ -777,13 +798,13 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         moby->command = 0;
     }
     if (moby->state == INTERCEPTOR_STATE_PATROL_AND_SCAN &&
-        !voice_is_playing(moby, *(s32 *)&moby_vars->unk1D0[0])) {
-        *(s32 *)&moby_vars->unk1D0[0] = allocate_voice_c618(0, 4, moby);
+        !voice_is_playing(moby, moby_vars->voice)) {
+        moby_vars->voice = allocate_voice_c618(0, 4, moby);
     }
     if ((moby->state == INTERCEPTOR_STATE_TRACK_TARGET ||
          moby->state == INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY) &&
-        !voice_is_playing(moby, *(s32 *)&moby_vars->unk1D0[0])) {
-        *(s32 *)&moby_vars->unk1D0[0] = allocate_voice_c618(2, 4, moby);
+        !voice_is_playing(moby, moby_vars->voice)) {
+        moby_vars->voice = allocate_voice_c618(2, 4, moby);
     }
 }
 
@@ -1246,7 +1267,7 @@ void draw_blarg_heavy_interceptor_spinning_beam(struct Moby *moby) {
     int                        i, j;
     float                     *beam_origin;
 
-    beam_origin = &d->unk1D0[1];
+    beam_origin = d->beam_origin;
     beam_placement_scratch[3][0] = beam_origin[0];
     beam_placement_scratch[3][1] = beam_origin[1];
     beam_placement_scratch[3][2] = beam_origin[2] + 0.125f;
@@ -1507,13 +1528,13 @@ void initialize_blarg_heavy_interceptor_paths(struct Moby *moby) {
         }
     }
     path = ((int *)l14_paths[moby_vars->spawn_path]);
-    *(int *)&moby_vars->unk190[0] = 0;
+    *(int *)&moby_vars->spawn_path_length = 0;
     for (i = 0; i < path[0]; i++) {
         segment_length = fast_vec_dist((char *)path + (i * 16 + 0x10),
                                        (char *)path + (((i + 1) % path[0]) * 16 + 0x10));
         *(float *)((char *)path + (i << 4) + 0x1C) = segment_length;
         if (i != path[0] - 1) {
-            moby_vars->unk190[0] += segment_length;
+            moby_vars->spawn_path_length += segment_length;
         }
     }
     path = ((int *)l14_paths[moby_vars->patrol_path]);
@@ -1524,11 +1545,11 @@ void initialize_blarg_heavy_interceptor_paths(struct Moby *moby) {
     if (moby_vars->initial_path_distance_fraction != 0.0f) {
         int *sampling_path = ((int *)l14_paths[moby_vars->path_index]);
         moby_vars->path_segment = 0;
-        moby_vars->unk1C0[3] = 0.0f;
+        moby_vars->aim_path_segment_distance = 0.0f;
         FUN_L00_0025d808_2af688(sampling_path,
                                 &moby->pos,
                                 &moby_vars->path_segment,
-                                &moby_vars->unk1C0[3],
+                                &moby_vars->aim_path_segment_distance,
                                 moby_vars->rejoin_path_loop,
                                 moby_vars->initial_path_distance_fraction *
                                     moby_vars->beam_rotation_blink_and_aim_path_state[3]);
@@ -1539,12 +1560,13 @@ void initialize_blarg_heavy_interceptor_paths(struct Moby *moby) {
                                 &moby_vars->path_point,
                                 &moby_vars->path_point_segment_distance,
                                 moby_vars->rejoin_path_loop,
-                                moby_vars->initial_path_distance_fraction * moby_vars->unk190[0]);
+                                moby_vars->initial_path_distance_fraction *
+                                    moby_vars->spawn_path_length);
     } else {
         moby_vars->path_point = 0;
         moby_vars->path_segment = 0;
         moby_vars->path_point_segment_distance = 0.0f;
-        moby_vars->unk1C0[3] = 0.0f;
+        moby_vars->aim_path_segment_distance = 0.0f;
     }
 }
 
@@ -1555,36 +1577,36 @@ extern int FUN_L00_0025d808_2af918(int *tab, float *out, int *a, float *b, int c
 void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *moby) {
     BlargHeavyInterceptorVars *interceptor_instance_vars = (BlargHeavyInterceptorVars *)moby->pvars;
     float                      path_target_position[4];
-    float                      save = interceptor_instance_vars->unk1C0[3];
+    float                      save = interceptor_instance_vars->aim_path_segment_distance;
     int                        save2 = interceptor_instance_vars->path_segment;
     int                        r = FUN_L00_0025d808_2af918(
         ((int *)l14_paths[interceptor_instance_vars->path_index]),
         path_target_position,
         &interceptor_instance_vars->path_segment,
-        &interceptor_instance_vars->unk1C0[3],
+        &interceptor_instance_vars->aim_path_segment_distance,
         interceptor_instance_vars->rejoin_path_loop,
         interceptor_instance_vars->beam_rotation_blink_and_aim_path_state[2]);
     FUN_L00_0025b8c0_c(interceptor_instance_vars->aim_point_position,
-                       interceptor_instance_vars->unk180,
+                       interceptor_instance_vars->aim_point_velocity,
                        path_target_position[0],
                        *(float *)&l14_blarg_heavy_interceptor_path_easing_error_gain,
                        *(float *)&l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                        0.0f);
     FUN_L00_0025b8c0_c(&interceptor_instance_vars->aim_point_position[1],
-                       &interceptor_instance_vars->unk180[1],
+                       &interceptor_instance_vars->aim_point_velocity[1],
                        path_target_position[1],
                        *(float *)&l14_blarg_heavy_interceptor_path_easing_error_gain,
                        *(float *)&l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                        0.0f);
     FUN_L00_0025b8c0_c(&interceptor_instance_vars->aim_point_position[2],
-                       &interceptor_instance_vars->unk180[2],
+                       &interceptor_instance_vars->aim_point_velocity[2],
                        path_target_position[2],
                        *(float *)&l14_blarg_heavy_interceptor_path_easing_error_gain,
                        *(float *)&l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                        0.0f);
     if (interceptor_instance_vars->rejoin_path_loop == 0) {
         if (r != 0) {
-            interceptor_instance_vars->unk1C0[3] = save;
+            interceptor_instance_vars->aim_path_segment_distance = save;
             interceptor_instance_vars->path_segment = save2;
             interceptor_instance_vars->beam_rotation_blink_and_aim_path_state[2] =
                 -interceptor_instance_vars->beam_rotation_blink_and_aim_path_state[2];
@@ -1608,11 +1630,11 @@ void update_blarg_heavy_interceptor_patrol_path_position(struct Moby *moby) {
     for (i = 0; i < source_segment_index; i++) {
         source_path_distance += *(float *)(seg + i * 16 + 0x1C);
     }
-    source_path_distance += heavy_interceptor_vars->unk1C0[3];
+    source_path_distance += heavy_interceptor_vars->aim_path_segment_distance;
     tab = ((int *)l14_paths[heavy_interceptor_vars->spawn_path]);
     destination_path_distance = source_path_distance /
                                 heavy_interceptor_vars->beam_rotation_blink_and_aim_path_state[3] *
-                                heavy_interceptor_vars->unk190[0];
+                                heavy_interceptor_vars->spawn_path_length;
     destination_path_loop_enabled = heavy_interceptor_vars->rejoin_path_loop;
     destination_segment_index = 0;
     frac = 0.0f;
@@ -1623,19 +1645,19 @@ void update_blarg_heavy_interceptor_patrol_path_position(struct Moby *moby) {
                             destination_path_loop_enabled,
                             destination_path_distance);
     FUN_L00_0025b8c0_c(&moby->pos.x,
-                       &heavy_interceptor_vars->unk190[1],
+                       &heavy_interceptor_vars->position_velocity[0],
                        destination_path_target_position[0],
                        *(float *)&l14_blarg_heavy_interceptor_path_easing_error_gain,
                        *(float *)&l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                        0.0f);
     FUN_L00_0025b8c0_c(&moby->pos.y,
-                       &heavy_interceptor_vars->unk190[2],
+                       &heavy_interceptor_vars->position_velocity[1],
                        destination_path_target_position[1],
                        *(float *)&l14_blarg_heavy_interceptor_path_easing_error_gain,
                        *(float *)&l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
                        0.0f);
     FUN_L00_0025b8c0_c(&moby->pos.z,
-                       &heavy_interceptor_vars->unk190[3],
+                       &heavy_interceptor_vars->position_velocity[2],
                        destination_path_target_position[2],
                        *(float *)&l14_blarg_heavy_interceptor_path_easing_error_gain,
                        *(float *)&l14_blarg_heavy_interceptor_path_easing_damping_coefficient,
@@ -1672,21 +1694,21 @@ void update_blarg_heavy_interceptor_return_path_position(struct Moby *moby,
     }
     FUN_L00_0025b8c0_c(
         &moby->pos.x,
-        &return_path_moby_vars->unk190[1],
+        &return_path_moby_vars->position_velocity[0],
         target_position[0],
         position_easing_factor,
         *(float *)&blarg_heavy_interceptor_return_path_position_damping_coefficient_gp,
         0.0f);
     FUN_L00_0025b8c0_c(
         &moby->pos.y,
-        &return_path_moby_vars->unk190[2],
+        &return_path_moby_vars->position_velocity[1],
         target_position[1],
         position_easing_factor,
         *(float *)&blarg_heavy_interceptor_return_path_position_damping_coefficient_gp,
         0.0f);
     FUN_L00_0025b8c0_c(
         &moby->pos.z,
-        &return_path_moby_vars->unk190[3],
+        &return_path_moby_vars->position_velocity[2],
         target_position[2],
         position_easing_factor,
         *(float *)&blarg_heavy_interceptor_return_path_position_damping_coefficient_gp,
@@ -1751,17 +1773,18 @@ void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(struct Moby *
         blarg_heavy_interceptor_rotation_oscillation_first_phase_increment_gp,
         blarg_heavy_interceptor_rotation_oscillation_second_phase_increment_gp);
     if (moby->state == INTERCEPTOR_STATE_PATROL_AND_SCAN) {
-        if (fast_dec_timer_s16((s16 *)&interceptor_private_vars->unk1B0[1])) {
-            *(s16 *)&interceptor_private_vars->unk1B0[1] =
+        if (fast_dec_timer_s16(&interceptor_private_vars->patrol_heading_timer)) {
+            interceptor_private_vars->patrol_heading_timer =
                 scale_game_frames(blarg_heavy_interceptor_patrol_heading_change_interval_frames_gp);
             heading_offset = blarg_heavy_interceptor_patrol_heading_offset_magnitude_gp;
             if (random_integer_below(2))
                 heading_offset = -heading_offset;
-            interceptor_private_vars->unk1B0[0] = fast_add_rotations(moby->rot.z, heading_offset);
+            interceptor_private_vars->patrol_heading =
+                fast_add_rotations(moby->rot.z, heading_offset);
         }
         vendor_spring((f32 *)&moby->rot.z,
-                      &interceptor_private_vars->unk1B0[2],
-                      interceptor_private_vars->unk1B0[0],
+                      &interceptor_private_vars->patrol_heading_velocity,
+                      interceptor_private_vars->patrol_heading,
                       blarg_heavy_interceptor_patrol_heading_error_gain_gp,
                       blarg_heavy_interceptor_patrol_heading_damping_coefficient_gp,
                       blarg_heavy_interceptor_patrol_heading_snap_threshold_scale_gp);
@@ -1824,11 +1847,11 @@ int update_blarg_heavy_interceptor_aim_transforms(struct Moby *moby, int flag) {
             fast_arc_tan(half_span_vector[0], half_span_vector[1]), moby->rot.z);
         build_axis_rotation_quaternion(
             blarg_heavy_interceptor_private_vars->manipulator0_rotation, 2, rotation_angle);
-        blarg_heavy_interceptor_private_vars->unk1B0[3] = rotation_angle;
+        blarg_heavy_interceptor_private_vars->manipulator0_angle = rotation_angle;
         rotation_angle = -fast_arc_tan(vector_length_xy(half_span_vector), half_span_vector[2]);
         build_axis_rotation_quaternion(
             blarg_heavy_interceptor_private_vars->manipulator1_rotation, 1, rotation_angle);
-        blarg_heavy_interceptor_private_vars->unk1C0[0] = rotation_angle;
+        blarg_heavy_interceptor_private_vars->manipulator1_angle = rotation_angle;
         qcopy(blarg_heavy_interceptor_private_vars->cached_aim_point_position,
               blarg_heavy_interceptor_private_vars->aim_point_position);
         if (flag != 0) {

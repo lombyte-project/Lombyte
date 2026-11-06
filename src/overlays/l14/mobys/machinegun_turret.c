@@ -207,21 +207,21 @@ typedef struct MachinegunTurretVars {
     u8                   pad_41[0x1F];
     struct HitColorFlash hit_flash;
     f32                  base_z;
-    s16                  unk74;
-    s16                  unk76;
-    f32                  unk78;
+    s16                  state_timer;
+    s16                  target_wait_timer;
+    f32                  inverse_state_frames;
     u8                   pad_7C[0x4];
     s32                  aiming_cuboid;
-    f32                  unk84;
-    s16                  unk88;
-    u8                   unk8A;
-    u8                   unk8B;
-    f32                  unk8C;
-    s32                  unk90;
-    s32                  unk94;
+    f32                  base_heading;
+    s16                  activated;
+    u8                   started_deployed;
+    u8                   target_wait_expired;
+    f32                  sweep_angle; /* the retract eases rot.z from here back to base_heading */
+    s32                  target_volume;
+    s32                  activation_delay_frames;
     s32                  timer;
     s16                  timer_9C;
-    s16                  unk9E;
+    s16                  reverse_sweep;
 } MachinegunTurretVars;
 
 void machinegun_turret_update(char *moby) __asm__("FUN_L14_002b3bf0");
@@ -252,54 +252,56 @@ void machinegun_turret_update(char *moby) {
     switch (MOBY(moby)->state) {
     case TURRET_STATE_INITIALIZE:
         machinegun_turret_private_vars->base_z = MOBY(moby)->pos.z;
-        machinegun_turret_private_vars->unk84 = MOBY(moby)->rot.z;
-        *(int *)&machinegun_turret_private_vars->unk8C = 0;
-        machinegun_turret_private_vars->unk74 = 0;
+        machinegun_turret_private_vars->base_heading = MOBY(moby)->rot.z;
+        *(int *)&machinegun_turret_private_vars->sweep_angle = 0;
+        machinegun_turret_private_vars->state_timer = 0;
         if (machinegun_turret_private_vars->aiming_cuboid == -1) {
             debug_print(D_L14_001FBD50, ((short)MOBY(moby)->save_id));
             mark_moby_for_removal(moby);
             return;
         }
-        if (machinegun_turret_private_vars->unk90 == -1) {
+        if (machinegun_turret_private_vars->target_volume == -1) {
             debug_print(D_L14_001FBD78, ((short)MOBY(moby)->save_id));
             mark_moby_for_removal(moby);
             return;
         }
         scaled_wait_frames_or_target_query_status =
             func_001F9850_2B4E40(machinegun_turret_target_wait_timeout_frames_gp);
-        machinegun_turret_private_vars->unk76 = scaled_wait_frames_or_target_query_status;
-        machinegun_turret_private_vars->unk8B = 0;
-        if (machinegun_turret_private_vars->unk88 != 0) {
+        machinegun_turret_private_vars->target_wait_timer =
+            scaled_wait_frames_or_target_query_status;
+        machinegun_turret_private_vars->target_wait_expired = 0;
+        if (machinegun_turret_private_vars->activated != 0) {
             MOBY(moby)->state = TURRET_STATE_WAIT_FOR_TARGET;
-            machinegun_turret_private_vars->unk8A = 1;
+            machinegun_turret_private_vars->started_deployed = 1;
         } else {
             MOBY(moby)->state = TURRET_STATE_WAIT_FOR_ACTIVATION;
             MOBY(moby)->pos.z = MOBY(moby)->pos.z - machinegun_turret_retraction_depth_gp;
             MOBY(moby)->collision = 0;
-            machinegun_turret_private_vars->unk8A = 0;
+            machinegun_turret_private_vars->started_deployed = 0;
             MOBY(moby)->flags = MOBY(moby)->flags & 0xEFFF;
         }
         machinegun_turret_private_vars->timer =
-            func_001F9850_2B4E40(machinegun_turret_private_vars->unk94);
+            func_001F9850_2B4E40(machinegun_turret_private_vars->activation_delay_frames);
         return;
     case TURRET_STATE_WAIT_FOR_ACTIVATION:
-        if (machinegun_turret_private_vars->unk88 == 0) {
+        if (machinegun_turret_private_vars->activated == 0) {
             return;
         }
         if (fast_dec_timer(&machinegun_turret_private_vars->timer) == 0) {
             return;
         }
         MOBY(moby)->state = TURRET_STATE_DEPLOY;
-        machinegun_turret_private_vars->unk74 = func_001F9850_2B4E40(D_L14_0016150C);
-        machinegun_turret_private_vars->unk78 =
-            1.0f / func_001FA888_2B4E40(machinegun_turret_private_vars->unk74);
+        machinegun_turret_private_vars->state_timer = func_001F9850_2B4E40(D_L14_0016150C);
+        machinegun_turret_private_vars->inverse_state_frames =
+            1.0f / func_001FA888_2B4E40(machinegun_turret_private_vars->state_timer);
         set_moby_animation(moby, 1, 0);
         MOBY(moby)->anim_speed =
-            1.0f / (func_001FA888_2B4E40(machinegun_turret_private_vars->unk74) * D_L14_00161510);
+            1.0f /
+            (func_001FA888_2B4E40(machinegun_turret_private_vars->state_timer) * D_L14_00161510);
         return;
     case TURRET_STATE_DEPLOY: {
-        float t =
-            (float)machinegun_turret_private_vars->unk74 * machinegun_turret_private_vars->unk78;
+        float t = (float)machinegun_turret_private_vars->state_timer *
+                  machinegun_turret_private_vars->inverse_state_frames;
         MOBY(moby)->pos.z = machinegun_turret_private_vars->base_z -
                             (0.0f + (machinegun_turret_retraction_depth_gp - 0.0f) * t);
     }
@@ -309,52 +311,53 @@ void machinegun_turret_update(char *moby) {
                 MOBY(moby)->anim_speed = 1.0f;
             }
         }
-        if (machinegun_turret_private_vars->unk74 < func_001F9850_2B4E40(D_L14_0016150C >> 1)) {
+        if (machinegun_turret_private_vars->state_timer <
+            func_001F9850_2B4E40(D_L14_0016150C >> 1)) {
             MOBY(moby)->collision = MOBY(moby)->pclass->collision;
             MOBY(moby)->flags = MOBY(moby)->flags | 0x1000;
         }
-        if (fast_dec_timer_s16(&machinegun_turret_private_vars->unk74) == 0) {
+        if (fast_dec_timer_s16(&machinegun_turret_private_vars->state_timer) == 0) {
             return;
         }
-        machinegun_turret_private_vars->unk76 =
+        machinegun_turret_private_vars->target_wait_timer =
             func_001F9850_2B4E40(machinegun_turret_target_wait_timeout_frames_gp);
         MOBY(moby)->state = TURRET_STATE_WAIT_FOR_TARGET;
-        machinegun_turret_private_vars->unk74 = func_001F9850_2B4E40(60);
+        machinegun_turret_private_vars->state_timer = func_001F9850_2B4E40(60);
         MOBY(moby)->pos.z = machinegun_turret_private_vars->base_z;
-        *(int *)&machinegun_turret_private_vars->unk8C = 0;
+        *(int *)&machinegun_turret_private_vars->sweep_angle = 0;
         return;
     case TURRET_STATE_WAIT_FOR_TARGET:
         scaled_wait_frames_or_target_query_status =
             select_moby_by_xy_distance(moby, (char *)target_point_scratch, 34.0f);
         if (scaled_wait_frames_or_target_query_status != MOBY_SELECTION_NO_TARGET) {
             if (is_point_inside_clip_volume(target_point_scratch,
-                                            machinegun_turret_private_vars->unk90) != 0) {
+                                            machinegun_turret_private_vars->target_volume) != 0) {
                 MOBY(moby)->state = TURRET_STATE_AIM_AND_FIRE;
                 set_moby_animation(moby, 3, 0);
-                machinegun_turret_private_vars->unk74 = func_001F9850_2B4E40(120);
+                machinegun_turret_private_vars->state_timer = func_001F9850_2B4E40(120);
                 machinegun_turret_private_vars->timer_9C = func_001F9850_2B4E40(20);
                 return;
             }
         }
-        if (machinegun_turret_private_vars->unk8A != 0) {
+        if (machinegun_turret_private_vars->started_deployed != 0) {
             return;
         }
-        if (fast_dec_timer_s16(&machinegun_turret_private_vars->unk76) == 0) {
+        if (fast_dec_timer_s16(&machinegun_turret_private_vars->target_wait_timer) == 0) {
             return;
         }
-        machinegun_turret_private_vars->unk8B = 1;
+        machinegun_turret_private_vars->target_wait_expired = 1;
         return;
     case TURRET_STATE_AIM_AND_FIRE:
-        if (machinegun_turret_private_vars->unk9E != 0) {
+        if (machinegun_turret_private_vars->reverse_sweep != 0) {
             signed_phase_increment = -machinegun_turret_aiming_phase_increment_gp;
         } else {
             signed_phase_increment = machinegun_turret_aiming_phase_increment_gp;
         }
         phase_angle =
-            fast_add_rotations(machinegun_turret_private_vars->unk8C, signed_phase_increment);
-        machinegun_turret_private_vars->unk8C = phase_angle;
+            fast_add_rotations(machinegun_turret_private_vars->sweep_angle, signed_phase_increment);
+        machinegun_turret_private_vars->sweep_angle = phase_angle;
         sine_input_angle = fast_add_rotations(
-            phase_angle, machinegun_turret_private_vars->unk84 * 0.01745329238474369f);
+            phase_angle, machinegun_turret_private_vars->base_heading * 0.01745329238474369f);
         aiming_cuboid_index = machinegun_turret_private_vars->aiming_cuboid;
         aiming_offset_vector = (int)l14_cuboids + (aiming_cuboid_index << 7) + 0x10;
         sine_scale = func_001F9FA8_2B4E40(sine_input_angle);
@@ -421,11 +424,11 @@ void machinegun_turret_update(char *moby) {
         target_missing_or_outside_waking_cuboid =
             (scaled_wait_frames_or_target_query_status == MOBY_SELECTION_NO_TARGET ||
              is_point_inside_clip_volume(target_query_result,
-                                         machinegun_turret_private_vars->unk90) == 0);
+                                         machinegun_turret_private_vars->target_volume) == 0);
         if (target_missing_or_outside_waking_cuboid == 0) {
             return;
         }
-        if (fast_dec_timer_s16(&machinegun_turret_private_vars->unk74) == 0) {
+        if (fast_dec_timer_s16(&machinegun_turret_private_vars->state_timer) == 0) {
             return;
         }
         if ((MOBY(moby)->anim_flags & 2) == 0) {
@@ -435,21 +438,22 @@ void machinegun_turret_update(char *moby) {
         if (animation_sequence != 3) {
             return;
         }
-        machinegun_turret_private_vars->unk76 =
+        machinegun_turret_private_vars->target_wait_timer =
             func_001F9850_2B4E40(machinegun_turret_target_wait_timeout_frames_gp);
         MOBY(moby)->state = animation_sequence;
         set_moby_animation(moby, 2, 0);
         MOBY(moby)->anim_speed = 1.0f;
         return;
     case TURRET_STATE_RETRACT: {
-        float t =
-            (float)machinegun_turret_private_vars->unk74 * machinegun_turret_private_vars->unk78;
+        float t = (float)machinegun_turret_private_vars->state_timer *
+                  machinegun_turret_private_vars->inverse_state_frames;
         MOBY(moby)->pos.z = machinegun_turret_private_vars->base_z -
                             (machinegun_turret_retraction_depth_gp +
                              (0.0f - machinegun_turret_retraction_depth_gp) * t);
-        MOBY(moby)->rot.z =
-            machinegun_turret_private_vars->unk84 +
-            (machinegun_turret_private_vars->unk8C - machinegun_turret_private_vars->unk84) * t;
+        MOBY(moby)->rot.z = machinegun_turret_private_vars->base_heading +
+                            (machinegun_turret_private_vars->sweep_angle -
+                             machinegun_turret_private_vars->base_heading) *
+                                t;
     }
         if (MOBY(moby)->anim_flags & 2) {
             if (MOBY(moby)->seq == 4) {
@@ -457,18 +461,19 @@ void machinegun_turret_update(char *moby) {
                 MOBY(moby)->anim_speed = 1.0f;
             }
         }
-        if (machinegun_turret_private_vars->unk74 < func_001F9850_2B4E40(D_L14_0016150C >> 1)) {
+        if (machinegun_turret_private_vars->state_timer <
+            func_001F9850_2B4E40(D_L14_0016150C >> 1)) {
             MOBY(moby)->collision = 0;
         }
-        if (fast_dec_timer_s16(&machinegun_turret_private_vars->unk74) == 0) {
+        if (fast_dec_timer_s16(&machinegun_turret_private_vars->state_timer) == 0) {
             return;
         }
-        MOBY(moby)->rot.z = machinegun_turret_private_vars->unk84;
+        MOBY(moby)->rot.z = machinegun_turret_private_vars->base_heading;
         MOBY(moby)->state = TURRET_STATE_WAIT_FOR_ACTIVATION;
-        machinegun_turret_private_vars->unk74 = func_001F9850_2B4E40(60);
-        machinegun_turret_private_vars->unk88 = 0;
+        machinegun_turret_private_vars->state_timer = func_001F9850_2B4E40(60);
+        machinegun_turret_private_vars->activated = 0;
         machinegun_turret_private_vars->timer =
-            func_001F9850_2B4E40(machinegun_turret_private_vars->unk94);
+            func_001F9850_2B4E40(machinegun_turret_private_vars->activation_delay_frames);
         MOBY(moby)->pos.z =
             machinegun_turret_private_vars->base_z - machinegun_turret_retraction_depth_gp;
         MOBY(moby)->flags = MOBY(moby)->flags & 0xEFFF;
