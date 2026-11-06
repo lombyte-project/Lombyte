@@ -83,7 +83,7 @@ void start_camera_blend(struct UpdateCam *source) {
         qcopy(blend->from_rotation, blend->rotation);
     } else {
         struct CameraOrbit *orbit = &transition->orbit;
-        int                 configured_frame_count = ++orbit->start_count;
+        int                 configured_frame_count = ++orbit->length;
 
         orbit->frames = scale_game_frames(configured_frame_count);
         orbit->frame_step = 1.0f / convert_integer_to_float(orbit->frames);
