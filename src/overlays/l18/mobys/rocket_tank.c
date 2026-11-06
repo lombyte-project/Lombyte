@@ -416,15 +416,15 @@ void update_rocket_tank_path_movement(struct Moby *moby) __asm__("FUN_L18_002f86
 
 typedef struct RocketTankVars {
     u8    pad_0[0x100];
-    s32   unk100;
+    s32   path;
     u8    pad_104[0x1C];
-    s32   unk120;
+    s32   path_node;
     u8    pad_124[0x4];
-    f32   unk128;
+    f32   yaw_velocity;
     f32   path_movement_step_length;
     u8    pad_130[0x8];
-    char *unk138;
-    char *unk13C;
+    char *attached_moby_0;
+    char *attached_moby_1;
 } RocketTankVars;
 
 void update_rocket_tank_path_movement(struct Moby *moby) {
@@ -434,11 +434,11 @@ void update_rocket_tank_path_movement(struct Moby *moby) {
     float           path_target_yaw, target_movement_step, z, sc;
     char           *attached_moby;
     qcopy(path_target_position,
-          (char *)D_L18_001B0EB0[moby_vars->unk100] + moby_vars->unk120 * 16 + 0x10);
+          (char *)D_L18_001B0EB0[moby_vars->path] + moby_vars->path_node * 16 + 0x10);
     path_target_yaw =
         fast_arc_tan(path_target_position[0] - moby->pos.x, path_target_position[1] - moby->pos.y);
     approach_angle(&moby->rot.z,
-                   &moby_vars->unk128,
+                   &moby_vars->yaw_velocity,
                    path_target_yaw,
                    frame_time_sq * 3.1415927f,
                    frame_time_sq * 3.1415927f,
@@ -452,8 +452,8 @@ void update_rocket_tank_path_movement(struct Moby *moby) {
     fast_vec_normalize(movement_step, &moby->rot_row0, moby_vars->path_movement_step_length);
     FUN_L00_00258830((int)moby, (int)movement_step, 0.5f, 0.5f, z, 0);
     if (fast_vec_dist(&moby->pos, path_target_position) < 1.0f) {
-        int k = random_integer_below(*D_L18_001B0EB0[moby_vars->unk100] - 1) + 1;
-        moby_vars->unk120 = (moby_vars->unk120 + k) % *D_L18_001B0EB0[moby_vars->unk100];
+        int k = random_integer_below(*D_L18_001B0EB0[moby_vars->path] - 1) + 1;
+        moby_vars->path_node = (moby_vars->path_node + k) % *D_L18_001B0EB0[moby_vars->path];
     }
     sc = moby_vars->path_movement_step_length /
          (*(float *)&rocket_tank_attached_moby_speed_reference_gp * frame_time);
@@ -461,19 +461,19 @@ void update_rocket_tank_path_movement(struct Moby *moby) {
         sc = 2.0f;
     else if (sc < z)
         sc = z;
-    attached_moby = moby_vars->unk138;
+    attached_moby = moby_vars->attached_moby_0;
     if (attached_moby) {
         char *q;
         MOBY(attached_moby)->anim_speed = sc;
-        q = moby_vars->unk138;
+        q = moby_vars->attached_moby_0;
         qcopy(q + 0x40, &moby->rot);
         qcopy(q + 0x10, &moby->pos);
     }
-    attached_moby = moby_vars->unk13C;
+    attached_moby = moby_vars->attached_moby_1;
     if (attached_moby) {
         char *q;
         MOBY(attached_moby)->anim_speed = sc;
-        q = moby_vars->unk13C;
+        q = moby_vars->attached_moby_1;
         qcopy(q + 0x40, &moby->rot);
         qcopy(q + 0x10, &moby->pos);
     }

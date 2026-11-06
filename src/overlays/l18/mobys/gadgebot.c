@@ -265,19 +265,19 @@ typedef struct {
     unsigned char anim_flags; /* 0x67 */
     char          pad68[8];
     char          fall[0x10]; /* 0x70 */
-    float         unk80;
+    float         knockback_gravity;
     float         death_fall_horizontal_speed_approach_step;
-    float         unk88;
+    float         knockback_speed;
     float         death_fall_initial_vertical_speed;
     int           death_fall_collision_radius_fixed_point;
-    int           unk94;
-    float         unk98;
+    int           knockback_motion_flags;
+    float         knockback_collision_z_offset;
     char          pad9C[0x11];
     unsigned char unkAD; /* 0xAD */
     char          padAE[0xE];
     float         unkBC;
-    float         unkC0;
-    float         unkC4;
+    float         knockback_apex_animation_frame;
+    float         knockback_landing_animation_frame;
     char          padC8[0xB8];
     u128          target; /* 0x180 */
     char          pad190[0x30];
@@ -358,26 +358,27 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
                 fall_setup_value_or_path_slot_address = 0x200;
                 sentry_vars->death_fall_collision_radius_fixed_point =
                     fall_setup_value_or_path_slot_address;
-                sentry_vars->unk98 = 0.5f;
-                sentry_vars->unk80 = gadgebot_death_fall_gravity_gp * frame_time_sq;
+                sentry_vars->knockback_collision_z_offset = 0.5f;
+                sentry_vars->knockback_gravity = gadgebot_death_fall_gravity_gp * frame_time_sq;
                 sentry_vars->death_fall_horizontal_speed_approach_step =
                     gadgebot_death_fall_horizontal_speed_approach_rate_gp * frame_time_sq;
-                sentry_vars->unk88 = gadgebot_death_fall_base_horizontal_speed_gp * frame_time;
+                sentry_vars->knockback_speed =
+                    gadgebot_death_fall_base_horizontal_speed_gp * frame_time;
                 sentry_vars->death_fall_initial_vertical_speed =
                     gadgebot_death_fall_base_vertical_speed_gp * frame_time;
                 reaction_value_or_path_address = 0x29;
-                sentry_vars->unk94 = reaction_value_or_path_address;
+                sentry_vars->knockback_motion_flags = reaction_value_or_path_address;
                 sentry_vars->unkAD = 0;
                 sentry_vars->unkBC = frame_time + frame_time;
                 moby->flags &= ~0x1000;
                 v.q = *(u128 *)(coll + 0x10);
                 trooper_knockback_arc(&v,
                                       &angle,
-                                      &sentry_vars->unk88,
+                                      &sentry_vars->knockback_speed,
                                       &sentry_vars->death_fall_initial_vertical_speed);
                 trooper_start_knockback(moby, sentry_vars->fall, 3, 1, 0, angle);
-                sentry_vars->unkC0 = 7.5f;
-                sentry_vars->unkC4 = 15.0f;
+                sentry_vars->knockback_apex_animation_frame = 7.5f;
+                sentry_vars->knockback_landing_animation_frame = 15.0f;
                 moby->state = GADGEBOT_DEATH_FALL;
                 moby->collision = 0;
                 sentry_vars->anim_flags = 0x78;
