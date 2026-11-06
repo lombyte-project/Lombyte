@@ -40,19 +40,19 @@ enum {
 
 typedef struct DecoyVars {
     u8    pad0[0x10];
-    f32   unk10[4];
+    f32   velocity[4];
     u8    pad20[0x20];
-    char *unk40;
-    s16   unk44;
+    char *holder;
+    s16   timer;
     s16   unk46;
-    f32   unk48;
-    f32   unk4C;
-    f32   unk50;
-    s32   unk54;
-    s32   unk58;
-    s32   unk5C;
+    f32   health;
+    f32   target_rot_x;
+    f32   target_rot_y;
+    s32   frame_count;
+    s32   last_hit_source;
+    s32   same_source_hit_timer;
     u8    pad60[0xc];
-    s16   unk6C;
+    s16   hit_cooldown_timer;
     s8    hit_cooldown_latched;
     s8    collision_voice_cooldown;
 } DecoyVars;
@@ -583,13 +583,14 @@ void decoy_update(char *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    ++decoy_instance_vars->unk54;
+    ++decoy_instance_vars->frame_count;
     if (hero.hidden != 0 && (u8)MOBY(moby)->state < DECOY_THROWN_MOVEMENT)
         MOBY(moby)->flags |= 0x41;
     else
         MOBY(moby)->flags &= 0xffbe;
-    if (*(short *)(decoy_instance_vars->unk40 + 0xa6) == 0x232 && decoy_instance_vars->unk46 == 0 &&
-        FUN_001ff3d8_2c4380(&decoy_instance_vars->unk10) > 0.0f) {
+    if (*(short *)(decoy_instance_vars->holder + 0xa6) == 0x232 &&
+        decoy_instance_vars->unk46 == 0 &&
+        FUN_001ff3d8_2c4380(&decoy_instance_vars->velocity) > 0.0f) {
         if (hero.ground_moby == 0 || !FUN_L00_002603d0((int)hero.ground_moby))
             predict_thrown_moby_landing((ThrowVars *)decoy_instance_vars, (struct Moby *)moby, 1);
         else if (!predict_thrown_moby_landing(
@@ -599,15 +600,15 @@ void decoy_update(char *moby) {
     switch ((u8)MOBY(moby)->state) {
     case DECOY_INITIALIZE:
         MOBY(moby)->state = DECOY_HELD;
-        decoy_instance_vars->unk44 = 0;
+        decoy_instance_vars->timer = 0;
         MOBY(moby)->collision_disable = -1;
-        decoy_instance_vars->unk6C = 0;
+        decoy_instance_vars->hit_cooldown_timer = 0;
         decoy_instance_vars->hit_cooldown_latched = 0;
         break;
     case DECOY_HELD: {
         char *target;
-        decoy_instance_vars->unk44 = 0;
-        target = decoy_instance_vars->unk40;
+        decoy_instance_vars->timer = 0;
+        target = decoy_instance_vars->holder;
         if (target && (((u8)target[0x20] & 0xf0) != 0xf0) && hero.items[0].moby &&
             hero.items[0].moby->oclass == 0x232)
             return;
@@ -619,7 +620,7 @@ void decoy_update(char *moby) {
         if (MOBY(moby)->scale < *(float *)(*(char **)(moby + 0x24) + 0x24))
             MOBY(moby)->scale += frame_scale * 0.02f;
         qcopy(position_effect_and_normal_scratch, &MOBY(moby)->pos);
-        decoy_instance_vars->unk10[2] -= frame_time_sq * 9.0f;
+        decoy_instance_vars->velocity[2] -= frame_time_sq * 9.0f;
         for (i = 1; i <= D_L00_001B0830_lui[0]; ++i) {
             char *target;
             ids = D_L00_001B0830_lui + i;
@@ -633,55 +634,57 @@ void decoy_update(char *moby) {
                 if (len < 1.8f) {
                     FUN_001ff300_2c4380((1.8f - len) * 0.015f, scratch.w, scratch.w);
                     FUN_001ff278_2c4380(
-                        &decoy_instance_vars->unk10, &decoy_instance_vars->unk10, scratch.w);
+                        &decoy_instance_vars->velocity, &decoy_instance_vars->velocity, scratch.w);
                 }
             }
         }
         if (hero.state.current == 0x1e)
             *(int *)((char *)hero.moby + 0x94) = 0;
-        hit = FUN_L00_00258830(moby, &decoy_instance_vars->unk10, 0.2f, 0.2f, 0.0f, 0);
+        hit = FUN_L00_00258830(moby, &decoy_instance_vars->velocity, 0.2f, 0.2f, 0.0f, 0);
         if (hit & 1) {
             qcopy(scratch.w, &MOBY(moby)->pos);
             scratch.w[2] += 0.2f;
             if (coll_sphere(scratch.w, 0.23f, 0, moby)) {
-                if (decoy_instance_vars->unk10[2] < 0.0f) {
+                if (decoy_instance_vars->velocity[2] < 0.0f) {
                     float len;
                     FUN_001ff2a8_2c4380(scratch.x, &MOBY(moby)->pos, &hero.motion.pos);
                     scratch.x[2] = 0.0f;
                     len = FUN_001ff3d8_2c4380(scratch.x);
                     if (len < 1.8f) {
                         FUN_001ff300_2c4380((1.8f - len) * 0.015f, scratch.x, scratch.x);
-                        FUN_001ff278_2c4380(
-                            &decoy_instance_vars->unk10, &decoy_instance_vars->unk10, scratch.x);
+                        FUN_001ff278_2c4380(&decoy_instance_vars->velocity,
+                                            &decoy_instance_vars->velocity,
+                                            scratch.x);
                     }
                 }
-                reflect_vector(
-                    &decoy_instance_vars->unk10, &decoy_instance_vars->unk10, &coll_hit.normal_x);
+                reflect_vector(&decoy_instance_vars->velocity,
+                               &decoy_instance_vars->velocity,
+                               &coll_hit.normal_x);
                 if (coll_hit.moby != 0 && coll_hit.unk1C <= 0)
                     FUN_001ff300_2c4380(
-                        1.05f, &decoy_instance_vars->unk10, &decoy_instance_vars->unk10);
+                        1.05f, &decoy_instance_vars->velocity, &decoy_instance_vars->velocity);
                 else
                     FUN_001ff300_2c4380(
-                        0.2f, &decoy_instance_vars->unk10, &decoy_instance_vars->unk10);
+                        0.2f, &decoy_instance_vars->velocity, &decoy_instance_vars->velocity);
                 rate = 0.01f;
-                len = FUN_001ff3d8_2c4380(&decoy_instance_vars->unk10);
+                len = FUN_001ff3d8_2c4380(&decoy_instance_vars->velocity);
                 if (len < frame_scale * rate ||
                     (hero.ground_moby && FUN_L00_002603d0((int)hero.ground_moby) &&
-                     FUN_001ff3d8_2c4380(&decoy_instance_vars->unk10) <
+                     FUN_001ff3d8_2c4380(&decoy_instance_vars->velocity) <
                          frame_scale * rate + FUN_001ff3d8_2c4380(&hero.motion.displacement))) {
                     angle = FUN_001ff8b0_2c4380(coll_hit.normal_z,
                                                 FUN_001ff408_2c4380(&coll_hit.normal_x));
                     if (angle < 0.61086524f) {
-                        ++decoy_instance_vars->unk44;
+                        ++decoy_instance_vars->timer;
                         if (coll_hit.moby == 0 || coll_hit.unk1C > 0 ||
-                            decoy_instance_vars->unk44 > FUN_001fef20_2c4380(240)) {
+                            decoy_instance_vars->timer > FUN_001fef20_2c4380(240)) {
                             if (((u8 *)moby)[0x53] != 1)
                                 blend_moby_animation(moby, 1, 0, FUN_001fef20_2c4380(10));
                             *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
                             MOBY(moby)->collision_disable = 0;
-                            qzero(&decoy_instance_vars->unk10);
+                            qzero(&decoy_instance_vars->velocity);
                             MOBY(moby)->state = DECOY_SETTLED_MOVEMENT;
-                            decoy_instance_vars->unk44 = FUN_001fef20_2c4380(600);
+                            decoy_instance_vars->timer = FUN_001fef20_2c4380(600);
                             MOBY(moby)->pos.z = coll_hit.point.f[2];
                             qcopy(scratch.x, &coll_hit.normal_x);
                             cos_angle = FUN_001ff7e8_2c4380(MOBY(moby)->rot.z);
@@ -691,20 +694,22 @@ void decoy_update(char *moby) {
                             sin_angle = FUN_001ff800_2c4380(MOBY(moby)->rot.z);
                             rotated_normal[1] = scratch.x[1] * cos_angle - scratch.x[0] * sin_angle;
                             rotated_normal[2] = scratch.x[2];
-                            decoy_instance_vars->unk4C = -FUN_001ff8b0_2c4380(
+                            decoy_instance_vars->target_rot_x = -FUN_001ff8b0_2c4380(
                                 FUN_001ff1e0_2c4380(rotated_normal[0] * rotated_normal[0] +
                                                     rotated_normal[2] * rotated_normal[2]),
                                 rotated_normal[1]);
-                            decoy_instance_vars->unk50 =
+                            decoy_instance_vars->target_rot_y =
                                 FUN_001ff8b0_2c4380(rotated_normal[2], rotated_normal[0]);
                             rate = 0.1f;
                             MOBY(moby)->rot.x = FUN_002000e8_2c4380(
                                 MOBY(moby)->rot.x,
-                                FUN_00200130_2c4380(decoy_instance_vars->unk4C, MOBY(moby)->rot.x) *
+                                FUN_00200130_2c4380(decoy_instance_vars->target_rot_x,
+                                                    MOBY(moby)->rot.x) *
                                     (frame_scale * rate));
                             MOBY(moby)->rot.y = FUN_002000e8_2c4380(
                                 MOBY(moby)->rot.y,
-                                FUN_00200130_2c4380(decoy_instance_vars->unk50, MOBY(moby)->rot.y) *
+                                FUN_00200130_2c4380(decoy_instance_vars->target_rot_y,
+                                                    MOBY(moby)->rot.y) *
                                     (frame_scale * rate));
                         }
                     }
@@ -714,7 +719,7 @@ void decoy_update(char *moby) {
                     allocate_voice_for_target_entry(0, 0, moby),
                         decoy_instance_vars->collision_voice_cooldown = FUN_001fef20_2c4380(20);
                 else
-                    add_random_offset_to_vector_xyz(frame_time, &decoy_instance_vars->unk10);
+                    add_random_offset_to_vector_xyz(frame_time, &decoy_instance_vars->velocity);
             }
         }
         if (hero.state.current == 0x1e) {
@@ -725,31 +730,31 @@ void decoy_update(char *moby) {
     case DECOY_SETTLED_MOVEMENT:
     case DECOY_PRE_REMOVAL_DELAY:
         hit = FUN_L00_0025a420(moby, 0x30001, 0);
-        MOBY(moby)->rot.x =
-            FUN_002000e8_2c4380(MOBY(moby)->rot.x,
-                                FUN_00200130_2c4380(decoy_instance_vars->unk4C, MOBY(moby)->rot.x) *
-                                    (frame_scale * 0.1f));
-        MOBY(moby)->rot.y =
-            FUN_002000e8_2c4380(MOBY(moby)->rot.y,
-                                FUN_00200130_2c4380(decoy_instance_vars->unk50, MOBY(moby)->rot.y) *
-                                    (frame_scale * 0.1f));
+        MOBY(moby)->rot.x = FUN_002000e8_2c4380(
+            MOBY(moby)->rot.x,
+            FUN_00200130_2c4380(decoy_instance_vars->target_rot_x, MOBY(moby)->rot.x) *
+                (frame_scale * 0.1f));
+        MOBY(moby)->rot.y = FUN_002000e8_2c4380(
+            MOBY(moby)->rot.y,
+            FUN_00200130_2c4380(decoy_instance_vars->target_rot_y, MOBY(moby)->rot.y) *
+                (frame_scale * 0.1f));
         update_decoy_proximity_motion((S_2c40a0 *)moby);
-        FUN_001fef68_2c4380(&decoy_instance_vars->unk5C);
-        fast_dec_timer_s16(&decoy_instance_vars->unk6C);
+        FUN_001fef68_2c4380(&decoy_instance_vars->same_source_hit_timer);
+        fast_dec_timer_s16(&decoy_instance_vars->hit_cooldown_timer);
         if (hit) {
             target = (char *)hit;
-            if (*(int *)(target + 0x20) != decoy_instance_vars->unk58 ||
-                decoy_instance_vars->unk5C <= 0) {
-                decoy_instance_vars->unk58 = *(int *)(target + 0x20);
-                decoy_instance_vars->unk5C = FUN_001fef20_2c4380(30);
+            if (*(int *)(target + 0x20) != decoy_instance_vars->last_hit_source ||
+                decoy_instance_vars->same_source_hit_timer <= 0) {
+                decoy_instance_vars->last_hit_source = *(int *)(target + 0x20);
+                decoy_instance_vars->same_source_hit_timer = FUN_001fef20_2c4380(30);
                 /* Fakematch: the empty loop keeps the timer read below the cooldown store. */
                 do {
                 } while (0);
-                if (decoy_instance_vars->unk6C == 0) {
+                if (decoy_instance_vars->hit_cooldown_timer == 0) {
                     if (*(u16 *)(target + 0x28) == 0x101 &&
                         ((*(u64 *)((char *)decoy_instance_vars + 0x68) & 0xffffff00000000ULL) ==
                          0)) {
-                        decoy_instance_vars->unk6C = FUN_001fef20_2c4380(100);
+                        decoy_instance_vars->hit_cooldown_timer = FUN_001fef20_2c4380(100);
                         decoy_instance_vars->hit_cooldown_latched = 1;
                     } else
                         decoy_instance_vars->hit_cooldown_latched = 0;
@@ -757,10 +762,10 @@ void decoy_update(char *moby) {
                     {
                         float len = *(float *)(target + 0x2c);
                         ((u8 *)decoy_instance_vars)[7] = 0xfa;
-                        decoy_instance_vars->unk48 -= len;
+                        decoy_instance_vars->health -= len;
                     }
                     trooper_anim_update(moby, decoy_instance_vars);
-                    if (decoy_instance_vars->unk48 < 0.0f) {
+                    if (decoy_instance_vars->health < 0.0f) {
                         *(OvlQuad *)scratch.w = 0;
                         scratch.w[0] = frame_scale * 0.5f;
                         scratch.w[2] = frame_scale * 0.7f;
@@ -813,13 +818,13 @@ void decoy_update(char *moby) {
             if (len != 0.0f) {
                 destroy_decoy_on_selected_materials(moby);
                 if (len + 0.02f < MOBY(moby)->pos.z) {
-                    decoy_instance_vars->unk10[2] -= frame_time_sq * 9.8f;
+                    decoy_instance_vars->velocity[2] -= frame_time_sq * 9.8f;
                     FUN_001ff278_2c4380(
-                        &MOBY(moby)->pos, &MOBY(moby)->pos, &decoy_instance_vars->unk10);
+                        &MOBY(moby)->pos, &MOBY(moby)->pos, &decoy_instance_vars->velocity);
                     len = probe_ground_height(&MOBY(moby)->pos, 0, 0.5f);
                     if (MOBY(moby)->pos.z < len) {
                         MOBY(moby)->pos.z = len;
-                        qzero(&decoy_instance_vars->unk10);
+                        qzero(&decoy_instance_vars->velocity);
                         qcopy(position_effect_and_normal_scratch, &coll_hit.normal_x);
                         cos_angle = FUN_001ff7e8_2c4380(MOBY(moby)->rot.z);
                         sin_angle = FUN_001ff800_2c4380(MOBY(moby)->rot.z);
@@ -830,15 +835,15 @@ void decoy_update(char *moby) {
                         scratch.w[1] = position_effect_and_normal_scratch[1] * cos_angle -
                                        position_effect_and_normal_scratch[0] * sin_angle;
                         scratch.w[2] = position_effect_and_normal_scratch[2];
-                        decoy_instance_vars->unk4C =
+                        decoy_instance_vars->target_rot_x =
                             -FUN_001ff8b0_2c4380(FUN_001ff1e0_2c4380(scratch.w[0] * scratch.w[0] +
                                                                      scratch.w[2] * scratch.w[2]),
                                                  scratch.w[1]);
-                        decoy_instance_vars->unk50 =
+                        decoy_instance_vars->target_rot_y =
                             FUN_001ff8b0_2c4380(scratch.w[2], scratch.w[0]);
                     }
                 } else
-                    qzero(&decoy_instance_vars->unk10);
+                    qzero(&decoy_instance_vars->velocity);
                 if (coll_hit.moby)
                     FUN_L00_00260400(moby,
                                      coll_hit.moby,
@@ -850,7 +855,7 @@ void decoy_update(char *moby) {
         } else {
             if (MOBY(moby)->scale < *(float *)(*(char **)(moby + 0x24) + 0x24))
                 MOBY(moby)->scale += frame_scale * 0.02f;
-            if (fast_dec_timer_s16(&decoy_instance_vars->unk44)) {
+            if (fast_dec_timer_s16(&decoy_instance_vars->timer)) {
                 if (((u8 *)moby)[0x53])
                     blend_moby_animation(moby, 0, 0, FUN_001fef20_2c4380(60));
                 mine_spawn_drops(moby, D_L00_001B0830_lui);
@@ -865,7 +870,7 @@ void decoy_update(char *moby) {
                 moby, coll_hit.moby, &MOBY(moby)->pos, moby + 0x40, &MOBY(moby)->pos, moby + 0x40);
         if (MOBY(moby)->anim_flags & 2)
             *(int *)(moby + 0x58) = 0;
-        if (fast_dec_timer_s16(&decoy_instance_vars->unk44) || (MOBY(moby)->anim_flags & 2))
+        if (fast_dec_timer_s16(&decoy_instance_vars->timer) || (MOBY(moby)->anim_flags & 2))
             MOBY(moby)->state = DECOY_SHRINK_FOR_REMOVAL;
         break;
     case DECOY_SHRINK_FOR_REMOVAL: {
