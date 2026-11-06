@@ -20,12 +20,12 @@ enum HeroComboKind {
  * 0x70-byte idle fidget entry of idle_fidgets, picked by
  * pick_idle_fidget(&index) with weight 1 / (interval * 60). The hero stores
  * the index, sets duration_frames from duration and then either enters hero
- * state 0x40 or calls set_hero_animation(unk48, 0, ...).
+ * state 0x40 or calls set_hero_animation(anim, 0, ...).
  */
 typedef struct HeroTableEntry70 {
     u8  pad_0[0x44];
     s32 use_state_40; /* nonzero: hero_set_state(0x40, 1) instead of set_hero_animation */
-    s32 unk48;        /* first argument of set_hero_animation */
+    s32 anim;         /* animation id passed to set_hero_animation */
     u8  pad_4C[0x4];
     s32 item_id; /* only while hero_slot_item_id(0) returns it; -1: any */
     u8  pad_54[0x4];
@@ -55,9 +55,9 @@ typedef struct HeroAnimRow {
  * f18 and f1C..f20 are compared with it).
  */
 typedef struct HeroTableRow2C {
-    s32 unk0;
-    s32 kind; /* HeroComboKind; 1 also adds a turn-direction test */
-    s32 unk8;
+    s32 combo_ends; /* 0: the next swing may chain while anim_frame < chain_before_frame; 1: finishing recovery animation */
+    s32 kind;       /* HeroComboKind; 1 also adds a turn-direction test */
+    s32 chain_before_frame; /* frame before which a wrench press chains to the next attack record */
     s32 fC;
     s32 f10; /* frame from which a follow-up move may start */
     s32 f14;
@@ -76,7 +76,7 @@ typedef struct HeroSpeedStep {
     f32 lower;
     f32 upper;
     f32 target_speed;
-    f32 unkC; /* compared with hero.target_speed */
+    f32 step_up_speed; /* target_speed above it moves on to the next step */
 } HeroSpeedStep;
 
 extern HeroSpeedStep hero_speed_steps[] __asm__("D_L00_0017BDB8");

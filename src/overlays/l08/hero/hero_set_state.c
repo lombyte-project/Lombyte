@@ -1514,8 +1514,8 @@ int hero_set_state(int requested_state, int animation_request_mode) {
             e = &D_L08_0017C428[q->attack_record];
             q->saved_item[0] = 0;
             k = 0;
-            if (q->state.prev_control_mode == HERO_MODE_ATTACK && e->unk0 == 0 &&
-                q->anim_frame < (float)e->unk8) {
+            if (q->state.prev_control_mode == HERO_MODE_ATTACK && e->combo_ends == 0 &&
+                q->anim_frame < (float)e->chain_before_frame) {
                 k = (e->kind + 1) % 3;
             }
             {
@@ -1625,7 +1625,7 @@ int hero_set_state(int requested_state, int animation_request_mode) {
             HeroTableRow2C *e = &D_L08_0017C428[p->attack_record];
             int             k = e->kind;
             int             n;
-            if (e->unk0 == 1)
+            if (e->combo_ends == 1)
                 k = 2;
             n = scale_game_frames(5);
             set_hero_animation(k + 0x27, 5, (float)n);

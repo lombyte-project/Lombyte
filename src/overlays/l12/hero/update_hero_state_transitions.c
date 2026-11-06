@@ -289,7 +289,7 @@ void update_hero_state_transitions(void) {
                                 if (rec->use_state_40 != 0) {
                                     hero_set_state(HERO_STATE_FIDGET, 1);
                                 } else {
-                                    set_hero_animation(rec->unk48, 0, scale_game_frames(0xC));
+                                    set_hero_animation(rec->anim, 0, scale_game_frames(0xC));
                                 }
                             }
                         } else if (hero.anim_flags & 2) {

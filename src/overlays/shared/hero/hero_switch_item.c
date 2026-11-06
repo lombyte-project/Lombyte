@@ -2938,7 +2938,7 @@ void update_hero_target_speed_from_stick(void) {
         return;
     }
     if (0.0f < hero.target_speed) {
-        if (hero.target_speed < hero_speed_steps[0].unkC)
+        if (hero.target_speed < hero_speed_steps[0].step_up_speed)
             hero.target_speed = hero_speed_steps[0].target_speed * frame_time;
         else
             hero.target_speed = hero_speed_steps[1].target_speed * frame_time;

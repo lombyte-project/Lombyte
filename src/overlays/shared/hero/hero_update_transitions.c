@@ -347,7 +347,7 @@ void hero_update_transitions(void) {
                                 if (rec->use_state_40 != 0) {
                                     hero_set_state(HERO_STATE_FIDGET, 1);
                                 } else {
-                                    set_hero_animation(rec->unk48, 0, scale_game_frames(0xC));
+                                    set_hero_animation(rec->anim, 0, scale_game_frames(0xC));
                                 }
                             }
                         } else if (hero.anim_flags & 2) {
@@ -874,7 +874,7 @@ void hero_update_transitions(void) {
                                     hero_set_state(HERO_STATE_JUMP, 1);
                                     break;
                                 }
-                                if (hero.target_speed > hero_speed_steps[0].unkC &&
+                                if (hero.target_speed > hero_speed_steps[0].step_up_speed &&
                                     fast_difference_between_rotations(
                                         hero.motion.move_yaw, hero.motion.rot.f[2]) < 1.0471976f &&
                                     hero_speed_steps[1].target_speed * frame_time * 0.85f <
@@ -2062,7 +2062,7 @@ void hero_update_transitions(void) {
                         configure_hero_point_effect_emission(0.016f, 0.002f, 5, 2, 0, 1);
                         break;
                     }
-                    if (hero.target_speed > hero_speed_steps[0].unkC &&
+                    if (hero.target_speed > hero_speed_steps[0].step_up_speed &&
                         fast_difference_between_rotations(hero.motion.move_yaw,
                                                           hero.motion.rot.f[2]) < 1.5707964f) {
                         if (hero.on_ice_ground != 0 || hero.wading != 0) {
@@ -2078,7 +2078,7 @@ void hero_update_transitions(void) {
                         configure_hero_point_effect_emission(0.016f, 0.002f, 5, 2, 1, 0);
                         break;
                     }
-                    if (hero_speed_steps[0].unkC < hero.target_speed) {
+                    if (hero_speed_steps[0].step_up_speed < hero.target_speed) {
                         if (hero.on_ice_ground != 0 || hero.wading != 0) {
                             hero_set_state(HERO_STATE_RUN, 1);
                             break;
@@ -2354,7 +2354,7 @@ void hero_update_transitions(void) {
                         if (hero.on_slip_ground == 0 && hero.move_lock_timer == 0) {
                             if (pad_pressed_within(0x40, scale_game_frames(8), 0)) {
                                 if (hero.air_frames.s < scale_game_frames(4)) {
-                                    if (hero.target_speed > hero_speed_steps[0].unkC &&
+                                    if (hero.target_speed > hero_speed_steps[0].step_up_speed &&
                                         fast_difference_between_rotations(hero.motion.move_yaw,
                                                                           hero.motion.rot.f[2]) <
                                             1.0471976f &&
@@ -2651,7 +2651,7 @@ void hero_update_transitions(void) {
                     if (scale_game_frames(1) < hero.rail_land_frames) {
                         hero.camera_mode = 0;
                         stick_target(0, 1.0f);
-                        if (hero.target_speed > hero_speed_steps[0].unkC &&
+                        if (hero.target_speed > hero_speed_steps[0].step_up_speed &&
                             hero.stick_magnitude > 0.5f && hero.on_slip_ground == 0 &&
                             hero.move_lock_timer == 0 &&
                             fast_difference_between_rotations(hero.motion.move_yaw,
@@ -3056,7 +3056,7 @@ void hero_update_transitions(void) {
                     if (scale_game_frames(1) < hero.rail_land_frames) {
                         hero.camera_mode = 0;
                         stick_target(0, 1.0f);
-                        if (hero.target_speed > hero_speed_steps[0].unkC &&
+                        if (hero.target_speed > hero_speed_steps[0].step_up_speed &&
                             hero.stick_magnitude > 0.5f && hero.move_lock_timer == 0 &&
                             fast_difference_between_rotations(hero.motion.move_yaw,
                                                               hero.motion.rot.f[2]) < 1.5707964f) {
