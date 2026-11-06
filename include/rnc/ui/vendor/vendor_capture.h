@@ -10,7 +10,7 @@ struct VendorItemPricing {
     s32 discounted_purchase_price;
     u16 ammo_price;
     u16 discounted_ammo_price;
-    u16 unk0C;
+    u16 pickup_ammo; /* 0x0C: ammo an ammo pickup of the item gives */
     u16 ammo_capacity;
     u16 unk10;
     u16 unk12;
