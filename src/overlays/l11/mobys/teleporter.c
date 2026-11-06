@@ -46,21 +46,20 @@ float teleporter_parts_max_speed_gp __asm__("D_L11_00161918") = 32.0f;
 void teleporter_update(struct Moby *moby) __asm__("FUN_L11_002f2518");
 
 typedef struct TeleporterVars {
-    u8    pad_0[0x4];
-    s32   unk4;
-    s32   unk8;
-    s32   unkC;
-    s32   unk10;
-    char *unk14;
-    u8    pad_18[0x8];
-    f32   unk20;
-    f32   unk24;
+    s32   destination;
+    s32   alternate_destination;
+    s32   mission;
+    s32   alternate_destination_mission;
+    s32   help_message_index;
+    char *parts[3];
+    f32   part_extension;
+    f32   part_tilt;
     s32   unk28;
     s32   unk2C;
     s32   unk30;
     s32   unk34;
     u8    pad_38[0x4];
-    f32   unk3C;
+    f32   ring_radius;
 } TeleporterVars;
 
 /* Moby class 318 */
@@ -79,7 +78,7 @@ void teleporter_update(struct Moby *moby) {
 
     switch (moby->state) {
     case TELEPORTER_INITIALIZE: {
-        char **slots = &teleporter_instance_vars->unk14;
+        char **slots = teleporter_instance_vars->parts;
         int    i;
         int    j;
         moby->state = TELEPORTER_WAIT_FOR_ACTIVATION;
@@ -97,8 +96,8 @@ void teleporter_update(struct Moby *moby) {
             *(float *)(slots[i] + 0x48) =
                 fast_add_rotations(MOBY(child_moby)->rot.z, (float)i * 2.0943952f);
         }
-        if (teleporter_instance_vars->unk8 >= 0 &&
-            visited52[teleporter_instance_vars->unk8 + current_level_index * 16] != 0xFF) {
+        if (teleporter_instance_vars->mission >= 0 &&
+            visited52[teleporter_instance_vars->mission + current_level_index * 16] != 0xFF) {
             moby->visible = 0;
             moby->flags |= 1;
             moby->collision = 0;
@@ -113,10 +112,10 @@ void teleporter_update(struct Moby *moby) {
     }
     case TELEPORTER_WAIT_FOR_ACTIVATION: {
         struct Hero *g;
-        if (*(int *)teleporter_instance_vars == -1)
+        if (teleporter_instance_vars->destination == -1)
             break;
-        if ((moby->flags & 1) && teleporter_instance_vars->unk8 >= 0 &&
-            visited52[teleporter_instance_vars->unk8 + current_level_index * 16] == 0xFF)
+        if ((moby->flags & 1) && teleporter_instance_vars->mission >= 0 &&
+            visited52[teleporter_instance_vars->mission + current_level_index * 16] == 0xFF)
             FUN_L11_002f3040_2518(moby);
         g = &hero;
         if (((char *)g->ground_moby) != moby)
@@ -138,23 +137,23 @@ void teleporter_update(struct Moby *moby) {
     }
     case TELEPORTER_OPEN_PARTS: {
         int teleport_transition_status = get_hero_target_pose_status();
-        if (teleporter_instance_vars->unk20 < 1.0f) {
-            advance_accelerated_scalar(&teleporter_instance_vars->unk20,
+        if (teleporter_instance_vars->part_extension < 1.0f) {
+            advance_accelerated_scalar(&teleporter_instance_vars->part_extension,
                                        (float *)&teleporter_instance_vars->unk28,
                                        1.0f,
                                        teleporter_parts_acceleration_gp * frame_time_sq,
                                        teleporter_parts_deceleration_gp * frame_time_sq,
                                        teleporter_parts_max_speed_gp * frame_time);
-        } else if (teleporter_instance_vars->unk24 < 1.0f) {
-            advance_accelerated_scalar(&teleporter_instance_vars->unk24,
+        } else if (teleporter_instance_vars->part_tilt < 1.0f) {
+            advance_accelerated_scalar(&teleporter_instance_vars->part_tilt,
                                        (float *)&teleporter_instance_vars->unk2C,
                                        1.0f,
                                        teleporter_parts_acceleration_gp * frame_time_sq,
                                        teleporter_parts_deceleration_gp * frame_time_sq,
                                        teleporter_parts_max_speed_gp * frame_time);
-        } else if (D_L11_0015F594 != 0xB || !(teleporter_instance_vars->unk20 > 0.25f)) {
+        } else if (D_L11_0015F594 != 0xB || !(teleporter_instance_vars->part_extension > 0.25f)) {
             if (teleport_transition_status == 2) {
-                teleporter_instance_vars->unk3C = 1.95f;
+                teleporter_instance_vars->ring_radius = 1.95f;
                 moby->state = TELEPORTER_CONTRACT_RING;
             } else if (teleport_transition_status == HERO_TARGET_POSE_INACTIVE) {
                 moby->state = TELEPORTER_RESET;
@@ -164,16 +163,19 @@ void teleporter_update(struct Moby *moby) {
         break;
     }
     case TELEPORTER_CONTRACT_RING:
-        if (teleporter_instance_vars->unk3C != 0.0f) {
+        if (teleporter_instance_vars->ring_radius != 0.0f) {
             add_draw_callback(FUN_L11_002f2d58_2518, moby);
-            approach_value(&teleporter_instance_vars->unk3C, 0.0f, frame_time * 4.0f);
+            approach_value(&teleporter_instance_vars->ring_radius, 0.0f, frame_time * 4.0f);
         } else {
-            char *destination_moby = D_L11_0015FFD8_2518 + (*(int *)teleporter_instance_vars << 8);
+            char *destination_moby =
+                D_L11_0015FFD8_2518 + (teleporter_instance_vars->destination << 8);
             char *td;
             float destination_position[4];
-            if (teleporter_instance_vars->unk4 != -1 &&
-                visited52[teleporter_instance_vars->unkC + current_level_index * 16] == 0xFF)
-                destination_moby = D_L11_0015FFD8_2518 + (teleporter_instance_vars->unk4 << 8);
+            if (teleporter_instance_vars->alternate_destination != -1 &&
+                visited52[teleporter_instance_vars->alternate_destination_mission +
+                          current_level_index * 16] == 0xFF)
+                destination_moby =
+                    D_L11_0015FFD8_2518 + (teleporter_instance_vars->alternate_destination << 8);
             td = ((char *)MOBY(destination_moby)->pvars);
             qcopy(destination_position, destination_moby + 0x10);
             destination_position[2] += 0.2f;
@@ -192,29 +194,29 @@ void teleporter_update(struct Moby *moby) {
             *(float *)(td + 0x24) = 1.0f;
             allocate_voice_for_target_entry(1, 0, (void *)destination_moby);
             moby->state = TELEPORTER_WAIT_FOR_ACTIVATION;
-            teleporter_instance_vars->unk20 = 0.0f;
-            teleporter_instance_vars->unk24 = 0.0f;
+            teleporter_instance_vars->part_extension = 0.0f;
+            teleporter_instance_vars->part_tilt = 0.0f;
             *(float *)&teleporter_instance_vars->unk28 = 0.0f;
             *(float *)&teleporter_instance_vars->unk2C = 0.0f;
-            teleporter_instance_vars->unk3C = 1.95f;
+            teleporter_instance_vars->ring_radius = 1.95f;
             update_teleporter_child_transforms(moby);
         }
         break;
     case TELEPORTER_RESET:
         if (D_0013F3D8_lui < 138.0f)
             D_0013D3DD = 1;
-        if (teleporter_instance_vars->unk3C < 1.95f) {
+        if (teleporter_instance_vars->ring_radius < 1.95f) {
             add_draw_callback(FUN_L11_002f2d58_2518, moby);
-            approach_value(&teleporter_instance_vars->unk3C, 1.95f, frame_time * 4.0f);
-        } else if (0.0f < teleporter_instance_vars->unk24) {
-            advance_accelerated_scalar(&teleporter_instance_vars->unk24,
+            approach_value(&teleporter_instance_vars->ring_radius, 1.95f, frame_time * 4.0f);
+        } else if (0.0f < teleporter_instance_vars->part_tilt) {
+            advance_accelerated_scalar(&teleporter_instance_vars->part_tilt,
                                        (float *)&teleporter_instance_vars->unk28,
                                        0.0f,
                                        teleporter_parts_acceleration_gp * frame_time_sq,
                                        teleporter_parts_deceleration_gp * frame_time_sq,
                                        teleporter_parts_max_speed_gp * frame_time);
-        } else if (0.0f < teleporter_instance_vars->unk20) {
-            advance_accelerated_scalar(&teleporter_instance_vars->unk20,
+        } else if (0.0f < teleporter_instance_vars->part_extension) {
+            advance_accelerated_scalar(&teleporter_instance_vars->part_extension,
                                        (float *)&teleporter_instance_vars->unk2C,
                                        0.0f,
                                        teleporter_parts_acceleration_gp * frame_time_sq,
@@ -234,7 +236,7 @@ void request_teleporter_help_message(struct Moby *moby) __asm__("FUN_L11_002f2cd
 
 void request_teleporter_help_message(struct Moby *moby) {
     TeleporterVars *teleporter_private_vars = (TeleporterVars *)moby->pvars;
-    switch (teleporter_private_vars->unk10) {
+    switch (teleporter_private_vars->help_message_index) {
     case 0:
         try_set_help_message(0xB, 0x2B0D);
         break;
@@ -310,14 +312,15 @@ void draw_teleporter_ring(struct Moby *moby) {
         } while (k >= 0);
     }
     width = 0.1f;
-    if (teleporter_ring_vars->unk3C < 1.15f) {
-        float v = (1.15f - teleporter_ring_vars->unk3C) + (1.15f - teleporter_ring_vars->unk3C);
+    if (teleporter_ring_vars->ring_radius < 1.15f) {
+        float v = (1.15f - teleporter_ring_vars->ring_radius) +
+                  (1.15f - teleporter_ring_vars->ring_radius);
         if (v > 1.0f)
             v = 1.0f;
         else if (v < 0.0f)
             v = 0.0f;
         width = v + 0.1f;
-        if (teleporter_ring_vars->unk3C < 0.65f)
+        if (teleporter_ring_vars->ring_radius < 0.65f)
             D_001413F5_lui = 1;
         else
             D_001413F5_lui = 0;
@@ -328,8 +331,8 @@ void draw_teleporter_ring(struct Moby *moby) {
         do {
             float *corner = quad.corner[j];
             angle = (float)(i + j / 2) * 6.28318f * 0.03125f - 3.14159f;
-            corner[0] = fast_cos(angle) * teleporter_ring_vars->unk3C;
-            corner[1] = fast_sin(angle) * teleporter_ring_vars->unk3C;
+            corner[0] = fast_cos(angle) * teleporter_ring_vars->ring_radius;
+            corner[1] = fast_sin(angle) * teleporter_ring_vars->ring_radius;
             corner[2] = 0.0f;
             if (j & 1)
                 corner[2] = teleporter_ring_local_z_center_gp + width + 0.0f;
@@ -348,7 +351,7 @@ void restore_teleporter_visibility_and_collision(struct Moby *moby) __asm__("FUN
 
 void restore_teleporter_visibility_and_collision(struct Moby *moby) {
     TeleporterVars *teleporter_vars = (TeleporterVars *)moby->pvars;
-    char          **child = &teleporter_vars->unk14;
+    char          **child = teleporter_vars->parts;
     int             count;
     int             on;
     moby->visible = 1;

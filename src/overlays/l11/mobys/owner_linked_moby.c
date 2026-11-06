@@ -99,9 +99,9 @@ void owner_linked_moby_update(struct Moby *moby) __asm__("FUN_L11_00310028");
 
 typedef struct OwnerLinkedMobyVars {
     u8  pad_0[0x20];
-    u8  unk20;
+    u8  health;
     u8  pad_21[0x4F];
-    u8 *unk70;
+    u8 *owner;
 } OwnerLinkedMobyVars;
 
 /* Moby class 1219 */
@@ -110,8 +110,8 @@ void owner_linked_moby_update(struct Moby *moby) {
         MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
     };
     OwnerLinkedMobyVars *owner_linked_moby_vars = (OwnerLinkedMobyVars *)moby->pvars;
-    char                *health_ptr = &owner_linked_moby_vars->unk20;
-    struct Moby         *owner_moby = owner_linked_moby_vars->unk70;
+    char                *health_ptr = &owner_linked_moby_vars->health;
+    struct Moby         *owner_moby = owner_linked_moby_vars->owner;
     if (owner_moby == 0 || owner_moby->state == MOBY_STATE_MARKED_FOR_REMOVAL ||
         owner_moby->state == 0xFD) {
         if (moby->state < LINKED_MOBY_STATE_FADE_OUT) {

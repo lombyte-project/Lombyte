@@ -79,15 +79,12 @@ void ammocrate_update(struct Moby *m) __asm__("FUN_L11_0030f728");
 
 typedef struct AmmocrateVars {
     u8           pad_0[0x10];
-    u8           unk10;
-    u8           pad_11[0x7];
-    f32          unk18;
-    u8           pad_1C[0x4];
+    f32          velocity[4];
     f32          unk20[4];
-    f32          unk30;
-    struct Moby *unk34;
+    f32          wobble_phase;
+    struct Moby *child;
     u8           pad_38[0x38];
-    char        *unk70;
+    char        *owner;
 } AmmocrateVars;
 
 /* Moby classes 1218, 1220 */
@@ -120,7 +117,7 @@ void ammocrate_update(struct Moby *pickup) {
             taken = 1;
         } else {
             FUN_L00_0025e450_f728(pickup,
-                                  &pickup_vars->unk10,
+                                  pickup_vars->velocity,
                                   &pickup_vector_scratch,
                                   0.0f,
                                   0.0f,
@@ -151,8 +148,8 @@ void ammocrate_update(struct Moby *pickup) {
         }
         if (taken || ship_pickup_distance_metric < 4.0f || mid < 4.0f) {
             pickup->collision = 0;
-            if (pickup_vars->unk34 != 0) {
-                pickup_vars->unk34->collision = 0;
+            if (pickup_vars->child != 0) {
+                pickup_vars->child->collision = 0;
             }
             switch (pickup->oclass) {
             case OCLASS_SHIP_AMMO_PICKUP:
@@ -185,19 +182,19 @@ void ammocrate_update(struct Moby *pickup) {
     }
     switch (pickup->state) {
     case AMMOCRATE_STATE_INITIALIZE:
-        pickup_vars->unk34 = 0;
+        pickup_vars->child = 0;
         sync_ship_pickup_child_pose(pickup, pickup_vars);
-        pickup_vars->unk30 = 0.0f;
+        pickup_vars->wobble_phase = 0.0f;
         pickup->state = AMMOCRATE_STATE_DAMPED_FALL;
         break;
     case AMMOCRATE_STATE_DAMPED_FALL:
-        fast_vec_scale(&pickup_vars->unk10, &pickup_vars->unk10, 0.9f);
-        pickup_vars->unk18 -= frame_time_sq * 9.8f;
-        fast_vec_add(pickup_vars, pickup_vars, &pickup_vars->unk10);
+        fast_vec_scale(pickup_vars->velocity, pickup_vars->velocity, 0.9f);
+        pickup_vars->velocity[2] -= frame_time_sq * 9.8f;
+        fast_vec_add(pickup_vars, pickup_vars, pickup_vars->velocity);
         fast_vec_add(&pickup->pos, pickup_vars, pickup_vars->unk20);
         if (sync_ship_pickup_child_pose(pickup, pickup_vars)) {
-            if (pickup_vars->unk34->seq == 1) {
-                fast_vec_scale(&pickup_vars->unk10, &pickup_vars->unk10, 0.8f);
+            if (pickup_vars->child->seq == 1) {
+                fast_vec_scale(pickup_vars->velocity, pickup_vars->velocity, 0.8f);
                 pickup->state = AMMOCRATE_STATE_ATTRACT_TO_SHIP;
             }
         }
@@ -205,28 +202,29 @@ void ammocrate_update(struct Moby *pickup) {
     case AMMOCRATE_STATE_ATTRACT_TO_SHIP: {
         float k = 0.8f;
         pickup->rot.z = fast_add_rotations(pickup->rot.z, frame_time * 0.034906585f);
-        pickup_vars->unk30 = fast_add_rotations(pickup_vars->unk30, frame_time * 1.5707964f);
-        pickup->rot.y = fast_cos(pickup_vars->unk30) * 0.7853982f;
-        fast_vec_scale(&pickup_vars->unk10, &pickup_vars->unk10, k);
-        pickup_vars->unk18 -= frame_time_sq * 9.8f;
+        pickup_vars->wobble_phase =
+            fast_add_rotations(pickup_vars->wobble_phase, frame_time * 1.5707964f);
+        pickup->rot.y = fast_cos(pickup_vars->wobble_phase) * 0.7853982f;
+        fast_vec_scale(pickup_vars->velocity, pickup_vars->velocity, k);
+        pickup_vars->velocity[2] -= frame_time_sq * 9.8f;
         if (ship_pickup_distance_metric < 40.0f && pickup->visible != 0) {
             k = k / square_root(ship_pickup_distance_metric);
             fast_vec_sub(&pickup_vector_scratch, &ship->pos, &pickup->pos);
             fast_vec_normalize(&pickup_vector_scratch, &pickup_vector_scratch, k);
-            fast_vec_add(&pickup_vars->unk10, &pickup_vars->unk10, &pickup_vector_scratch);
+            fast_vec_add(pickup_vars->velocity, pickup_vars->velocity, &pickup_vector_scratch);
         }
-        fast_vec_add(pickup_vars, pickup_vars, &pickup_vars->unk10);
+        fast_vec_add(pickup_vars, pickup_vars, pickup_vars->velocity);
         fast_vec_add(&pickup->pos, pickup_vars, pickup_vars->unk20);
         if (sync_ship_pickup_child_pose(pickup, pickup_vars)) {
-            if (pickup_vars->unk34->state == 2) {
-                pickup->state = pickup_vars->unk34->state;
+            if (pickup_vars->child->state == 2) {
+                pickup->state = pickup_vars->child->state;
             }
         }
         break;
     }
     case AMMOCRATE_STATE_FREE_FALL:
-        pickup_vars->unk18 -= frame_time_sq * 9.8f;
-        fast_vec_add(&pickup->pos, &pickup->pos, &pickup_vars->unk10);
+        pickup_vars->velocity[2] -= frame_time_sq * 9.8f;
+        fast_vec_add(&pickup->pos, &pickup->pos, pickup_vars->velocity);
         break;
     case AMMOCRATE_STATE_COLLECTED:
         pickup->state = AMMOCRATE_STATE_REMOVE;
@@ -275,7 +273,7 @@ char *spawn_ship_pickup_child(struct Moby *pickup_moby) {
         moby[0xBC] = 0;
         qcopy(moby + 0x10, &pickup_moby->pos);
         qcopy(moby + 0x40, &pickup_moby->rot);
-        child_private_data->unk70 = pickup_moby;
+        child_private_data->owner = pickup_moby;
         if ((unsigned char)moby[0x53] != 2) {
             blend_moby_animation(moby, 2, 0xD, 0);
         }
