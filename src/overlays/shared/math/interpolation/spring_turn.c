@@ -428,23 +428,23 @@ void move_moby_with_collision_integer_radius(int   moby,
 #include "rnc/math/vector.h"
 
 typedef struct {
-    s32 i00;
-    f32 f04;
-    f32 f08;
-    f32 f0C;
-    f32 f10;
-    f32 f14;
-    f32 f18;
-    f32 f1C;
-    f32 f20;
-    f32 f24;
-    f32 f28;
-    f32 f2C;
-    f32 f30;
-    f32 f34;
-    s32 i38;
+    s32 collision_radius_1024ths;
+    f32 step_height;
+    f32 max_drop;
+    f32 max_climb;
+    f32 speed;
+    f32 turn_step;
+    f32 vertical_velocity;
+    f32 acceleration;
+    f32 brake;
+    f32 max_speed;
+    f32 heading_tolerance;
+    f32 arrive_distance;
+    f32 ground_probe_depth;
+    f32 unk34;
+    s32 movement_option_flags;
     u8  pad3C[0x4C - 0x3C];
-    f32 f4C;
+    f32 move_heading;
 } Ctl;
 
 typedef struct {
@@ -493,43 +493,44 @@ s32 move_moby_with_ground_and_collision_checks(Obj  *moby,
     f32   normal_elevation_angle;
     f32   intended_displacement_length_xy;
 
-    sp = movement_control->f1C * f;
-    horizontal_step_cap_or_probe_height_threshold = movement_control->f24 * f;
+    sp = movement_control->acceleration * f;
+    horizontal_step_cap_or_probe_height_threshold = movement_control->max_speed * f;
     fast_vec_sub(&displacement, target_position, &moby->pos);
     target_distance_xy = vector_length_xy(&displacement);
     save.q = moby->pos.q;
     speed_increment = sp * target_distance_xy;
     if (sp < speed_increment)
         speed_increment = sp;
-    movement_control->f10 = movement_control->f10 + speed_increment;
-    if (target_distance_xy < movement_control->f10 * 10.0f)
-        movement_control->f10 =
-            movement_control->f10 - movement_control->f20 * movement_control->f10;
-    if (horizontal_step_cap_or_probe_height_threshold < movement_control->f10)
-        movement_control->f10 = horizontal_step_cap_or_probe_height_threshold;
-    else if (movement_control->f10 < -horizontal_step_cap_or_probe_height_threshold)
-        movement_control->f10 = -horizontal_step_cap_or_probe_height_threshold;
-    if (movement_control->i38 & 4) {
-        displacement.f[0] = fast_cos(movement_control->f4C) * movement_control->f10;
-        displacement.f[1] = fast_sin(movement_control->f4C) * movement_control->f10;
+    movement_control->speed = movement_control->speed + speed_increment;
+    if (target_distance_xy < movement_control->speed * 10.0f)
+        movement_control->speed =
+            movement_control->speed - movement_control->brake * movement_control->speed;
+    if (horizontal_step_cap_or_probe_height_threshold < movement_control->speed)
+        movement_control->speed = horizontal_step_cap_or_probe_height_threshold;
+    else if (movement_control->speed < -horizontal_step_cap_or_probe_height_threshold)
+        movement_control->speed = -horizontal_step_cap_or_probe_height_threshold;
+    if (movement_control->movement_option_flags & 4) {
+        displacement.f[0] = fast_cos(movement_control->move_heading) * movement_control->speed;
+        displacement.f[1] = fast_sin(movement_control->move_heading) * movement_control->speed;
     } else {
-        displacement.f[0] = fast_cos(moby->f48) * movement_control->f10;
-        displacement.f[1] = fast_sin(moby->f48) * movement_control->f10;
+        displacement.f[0] = fast_cos(moby->f48) * movement_control->speed;
+        displacement.f[1] = fast_sin(moby->f48) * movement_control->speed;
     }
-    if (movement_control->i38 & 1) {
+    if (movement_control->movement_option_flags & 1) {
         displacement.f[2] = 0.0f;
     } else {
-        displacement.f[2] = movement_control->f18;
-        movement_control->f18 = movement_control->f18 - frame_time_sq_gp * 9.0f;
+        displacement.f[2] = movement_control->vertical_velocity;
+        movement_control->vertical_velocity =
+            movement_control->vertical_velocity - frame_time_sq_gp * 9.0f;
     }
     horizontal_step_cap_or_probe_height_threshold = moby->pos.f[2] + 0.04f;
     fast_vec_add(&probe_or_direction, &moby->pos, &displacement);
-    probe_or_direction.f[2] = moby->pos.f[2] - movement_control->f30;
+    probe_or_direction.f[2] = moby->pos.f[2] - movement_control->ground_probe_depth;
     if (FUN_L00_002583f0_c(&probe_or_direction,
                            moby,
-                           movement_control->i38 & 0x20,
-                           movement_control->f08,
-                           movement_control->f0C)) {
+                           movement_control->movement_option_flags & 0x20,
+                           movement_control->max_drop,
+                           movement_control->max_climb)) {
         collision_probe_result = &D_L00_00173E40_c;
         normal_elevation_angle = fast_arc_tan(collision_probe_result->v40.f[2],
                                               vector_length_xy(&collision_probe_result->v40));
@@ -538,25 +539,25 @@ s32 move_moby_with_ground_and_collision_checks(Obj  *moby,
             {
                 fast_vec_normalize(&q, &displacement, 0.57f);
                 fast_vec_add(&q, &q, &moby->pos);
-                q.f[2] = moby->pos.f[2] - movement_control->f30;
+                q.f[2] = moby->pos.f[2] - movement_control->ground_probe_depth;
                 if (FUN_L00_002583f0_c(&q,
                                        moby,
-                                       movement_control->i38 & 0x20,
-                                       movement_control->f08,
-                                       movement_control->f0C)) {
+                                       movement_control->movement_option_flags & 0x20,
+                                       movement_control->max_drop,
+                                       movement_control->max_climb)) {
                     lookahead_probe_hit_height = collision_probe_result->f28;
                     if (!(0.5f <= fast_arc_tan(collision_probe_result->v40.f[2],
                                                vector_length_xy(&collision_probe_result->v40))))
                         goto done;
                     mask = 0x22;
-                    if (!(movement_control->i38 & 8))
+                    if (!(movement_control->movement_option_flags & 8))
                         goto done;
                     if (!(lookahead_probe_hit_height <
                           horizontal_step_cap_or_probe_height_threshold))
                         goto done;
                 } else {
                     mask = 0x22;
-                    if (!(movement_control->i38 & 8))
+                    if (!(movement_control->movement_option_flags & 8))
                         goto done;
                 }
                 if (displacement_probe_hit_height < horizontal_step_cap_or_probe_height_threshold)
@@ -564,7 +565,7 @@ s32 move_moby_with_ground_and_collision_checks(Obj  *moby,
             }
         }
     } else {
-        mask = (movement_control->i38 & 8) ? 8 : 0x22;
+        mask = (movement_control->movement_option_flags & 8) ? 8 : 0x22;
     }
 done:
     if (!(mask & 2)) {
@@ -572,12 +573,12 @@ done:
         fast_vec_scale(&probe_or_direction, &displacement, 1.0f / intended_displacement_length_xy);
         movement_collision_flags = FUN_L00_00258ad0_c(moby,
                                                       &displacement,
-                                                      movement_control->f04,
-                                                      movement_control->i00,
-                                                      movement_control->f30,
-                                                      movement_control->i38);
+                                                      movement_control->step_height,
+                                                      movement_control->collision_radius_1024ths,
+                                                      movement_control->ground_probe_depth,
+                                                      movement_control->movement_option_flags);
         if (movement_collision_flags & 2)
-            movement_control->f18 = frame_scale * -0.01f;
+            movement_control->vertical_velocity = frame_scale * -0.01f;
         if (movement_collision_flags & 1) {
             mask |= 1;
             if (displacement.f[0] * probe_or_direction.f[0] +
@@ -585,18 +586,18 @@ done:
                 intended_displacement_length_xy * 0.2f)
                 mask |= 2;
             ground_height = probe_ground_height(&moby->pos, 0, 0.5f);
-            if (movement_control->f08 < save.f[2] - ground_height ||
-                movement_control->f0C < ground_height - save.f[2]) {
+            if (movement_control->max_drop < save.f[2] - ground_height ||
+                movement_control->max_climb < ground_height - save.f[2]) {
                 mask |= 0x22;
                 moby->pos.q = save.q;
             }
         }
         qcopy(movement_displacement_vector_output, &displacement);
     } else {
-        if ((movement_control->i38 ^ 1) & 1)
-            movement_control->f18 = frame_scale * -0.01f;
+        if ((movement_control->movement_option_flags ^ 1) & 1)
+            movement_control->vertical_velocity = frame_scale * -0.01f;
     }
-    if (target_distance_xy < movement_control->f2C)
+    if (target_distance_xy < movement_control->arrive_distance)
         mask |= 4;
     return mask;
 }

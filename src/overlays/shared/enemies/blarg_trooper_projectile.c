@@ -92,8 +92,8 @@ typedef struct {
     s16          time;      /* 0x1C: frames left */
     s16          time_max;  /* 0x1E: lifetime */
     f32          hero_dist; /* 0x20: distance to the hero at spawn */
-    s32          unk24;
-    s32          unk28;
+    s32          approached_hero;
+    s32          flyby_sound_played;
 } ShotVars;
 
 extern void spawn_source_attached_fading_effect_particle(
@@ -140,8 +140,8 @@ struct Moby *spawn_blarg_trooper_projectile(struct Moby *owner, void *pos, void 
         projectile_state->time = life;
         projectile_state->time_max = life;
         projectile_state->hero_dist = fast_vec_dist(&spawned_moby->pos, &hero.motion.pos);
-        projectile_state->unk24 = 0;
-        projectile_state->unk28 = 0;
+        projectile_state->approached_hero = 0;
+        projectile_state->flyby_sound_played = 0;
         if (owner->oclass == 0xFF) {
             spawn_source_attached_fading_effect_particle(
                 spawned_moby, 0x2F7F4F4F, life * 5 / 4, -1, 100000.0f);
@@ -208,12 +208,13 @@ void blarg_trooper_projectile_update(struct Moby *moby) {
     hero_distance = fast_vec_dist(&moby->pos, &hero.motion.pos);
     qcopy(&previous_position, &moby->pos);
     fast_vec_add(&moby->pos, &moby->pos, &v->dir);
-    if (v->unk28 == 0 && v->unk24 != 0 && v->hero_dist < hero_distance && hero_distance < 3.0f) {
+    if (v->flyby_sound_played == 0 && v->approached_hero != 0 && v->hero_dist < hero_distance &&
+        hero_distance < 3.0f) {
         allocate_voice_for_target_entry(0, 0, moby);
-        v->unk28 = 1;
+        v->flyby_sound_played = 1;
     }
     if (hero_distance < v->hero_dist)
-        v->unk24 = 1;
+        v->approached_hero = 1;
     v->hero_dist = hero_distance;
     if (moby->pos.x < 0.0f || moby->pos.y < 0.0f || moby->pos.z < 0.0f ||
         range < vector_distance_xy(&moby->pos, D_L04_00166F40)) {

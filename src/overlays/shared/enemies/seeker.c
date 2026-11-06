@@ -31,7 +31,7 @@ enum {
 
 typedef struct {
     u8           pad0[0x20];
-    f32          unk20;
+    f32          health;
     s16          unk24;
     u8           pad26[2];
     u8           unk28;
@@ -42,17 +42,17 @@ typedef struct {
     u8           pad5B[0x15];
     Vec4         vel;
     u8           pad80[0x50];
-    s32          unkD0;
+    s32          move_control;
     u8           padD4[4];
-    f32          unkD8;
-    f32          unkDC;
+    f32          move_max_drop;
+    f32          move_max_climb;
     u8           padE0[0x14];
     f32          speed;
     u8           padF8[0x68];
     struct Moby *target;
-    s32          unk164;
+    s32          target_selection_status;
     u8           pad168[0x18];
-    s32          unk180;
+    s32          bound_path;
     s32          timer;
     u8           pad188[4];
     f32          heading_speed;
@@ -132,20 +132,20 @@ void seeker_update(struct Moby *moby) {
     }
     switch (moby->state) {
     case SEEKER_STATE_INITIALIZE:
-        seeker_instance_vars->unk20 = 3.0f;
+        seeker_instance_vars->health = 3.0f;
         seeker_instance_vars->unk24 = 3;
         seeker_instance_vars->unk28 = 2;
         seeker_instance_vars->unk5A = 6;
         seeker_instance_vars->unk58 = 8;
-        if (seeker_instance_vars->unk180 == -1) {
+        if (seeker_instance_vars->bound_path == -1) {
             debug_print(seeker_invalid_bound_path_format, moby->save_id);
             mark_moby_for_removal(moby);
             break;
         }
-        FUN_L01_0026d930(&seeker_instance_vars->unkD0);
-        seeker_instance_vars->unkDC = 0.5f;
-        seeker_instance_vars->unkD8 = 0.5f;
-        seeker_instance_vars->unkD0 = truncate_float_to_s32(512.0f);
+        FUN_L01_0026d930(&seeker_instance_vars->move_control);
+        seeker_instance_vars->move_max_climb = 0.5f;
+        seeker_instance_vars->move_max_drop = 0.5f;
+        seeker_instance_vars->move_control = truncate_float_to_s32(512.0f);
         seeker_instance_vars->speed = frame_time * 7.75f;
         moby->state = SEEKER_STATE_IDLE_HOVER;
         if (moby->prev_seq != 1) {
@@ -171,7 +171,7 @@ void seeker_update(struct Moby *moby) {
             }
             moby->anim_speed = random_float_between(0.95f, 1.05f);
         }
-        if (seeker_instance_vars->unk164 != 2) {
+        if (seeker_instance_vars->target_selection_status != 2) {
             if (moby->group != 0xFF) {
                 FUN_L01_0026e090(moby->group, 1);
             }
