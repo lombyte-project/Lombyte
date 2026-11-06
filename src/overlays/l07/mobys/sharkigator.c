@@ -1,5 +1,6 @@
 /* Level 07 moby class 0x423: sharkigator. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"
@@ -185,37 +186,15 @@ extern void spawn_explosion(void *,
                             int,
                             int) __asm__("FUN_L00_0025e450");
 
-/* Knockback/launch parameters handed to trooper_start_knockback. */
-typedef struct {
-    u8  pad0[0x10];
-    f32 gravity;
-    f32 unk14;
-    f32 unk18;
-    f32 unk1C;
-    s32 flags;
-    s32 unk24;
-    f32 unk28;
-    u8  pad2C[4];
-    f32 unk30;
-    f32 unk34;
-    f32 unk38;
-    u8  pad3C;
-    u8  unk3D;
-    u8  pad3E[0xA];
-    f32 unk48;
-    f32 unk4C;
-    f32 unk50;
-    f32 unk54;
-} LaunchParams;
-
 extern void trooper_knockback_arc(Vec4f *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
-extern void trooper_start_knockback(f32, struct Moby *, LaunchParams *, s32, s32, s32) __asm__("FUN_L00_0025c558");
-void start_sharkigator_death_knockback(struct Moby  *moby,
-                                       LaunchParams *knockback_state,
+extern void trooper_start_knockback(
+    f32, struct Moby *, struct KnockbackMotion *, s32, s32, s32) __asm__("FUN_L00_0025c558");
+void start_sharkigator_death_knockback(struct Moby            *moby,
+                                       struct KnockbackMotion *knockback_state,
                                        Vec4f *knockback_direction) __asm__("FUN_L07_0030e720");
-void start_sharkigator_hit_knockback(struct Moby  *moby,
-                                     LaunchParams *knockback_state,
-                                     Vec4f        *knockback_direction) __asm__("FUN_L07_0030e858");
+void start_sharkigator_hit_knockback(struct Moby            *moby,
+                                     struct KnockbackMotion *knockback_state,
+                                     Vec4f *knockback_direction) __asm__("FUN_L07_0030e858");
 
 /* Hit handler: reacts to the hit type, then takes damage and dies (state 0xE) when health runs out. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030FD78), where it is exact; names translated to the US level program. */
@@ -365,63 +344,63 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
 char D_L07_002117F8[] = "Initialization failed for moby 1059 instance #%d. Deleting.\n";
 
-void start_sharkigator_death_knockback(struct Moby  *moby,
-                                       LaunchParams *knockback_state,
+void start_sharkigator_death_knockback(struct Moby            *moby,
+                                       struct KnockbackMotion *knockback_state,
 
                                        Vec4f *knockback_direction) {
     Vec4f knockback_direction_copy;
     f32   knockback_angle;
 
     knockback_state->gravity = frame_time_sq * 29.400002f;
-    knockback_state->unk14 = 0.0005f;
-    knockback_state->unk18 = frame_time * 9.0f;
-    knockback_state->unk1C = frame_time * 7.0f;
-    knockback_state->flags = 0x400;
-    knockback_state->unk24 = 13;
-    knockback_state->unk28 = 1.0f;
-    knockback_state->unk30 = 0.24f;
+    knockback_state->speed_approach_step = 0.0005f;
+    knockback_state->speed = frame_time * 9.0f;
+    knockback_state->vertical_speed = frame_time * 7.0f;
+    knockback_state->collision_radius_1024ths = 0x400;
+    knockback_state->flags = 13;
+    knockback_state->collision_z_offset = 1.0f;
+    knockback_state->restitution = 0.24f;
     knockback_state->unk34 = 0.5f;
     knockback_state->unk38 = 0.65f;
-    knockback_state->unk48 = 0.2f;
-    knockback_state->unk4C = 0.01f;
-    knockback_state->unk50 = 3.0f;
-    knockback_state->unk54 = 9.0f;
+    knockback_state->max_turn_step = 0.2f;
+    knockback_state->target_speed = 0.01f;
+    knockback_state->apex_animation_frame = 3.0f;
+    knockback_state->landing_animation_frame = 9.0f;
     knockback_state->unk3D = 0;
     *(u128 *)&knockback_direction_copy = *(u128 *)knockback_direction;
     trooper_knockback_arc(&knockback_direction_copy,
                           &knockback_angle,
-                          &knockback_state->unk18,
-                          &knockback_state->unk1C);
+                          &knockback_state->speed,
+                          &knockback_state->vertical_speed);
     trooper_start_knockback(knockback_angle, moby, knockback_state, 12, 1, 0);
 }
 
-void start_sharkigator_hit_knockback(struct Moby  *moby,
-                                     LaunchParams *knockback_state,
+void start_sharkigator_hit_knockback(struct Moby            *moby,
+                                     struct KnockbackMotion *knockback_state,
 
                                      Vec4f *knockback_direction) {
     Vec4f knockback_direction_copy;
     f32   knockback_angle;
 
     knockback_state->gravity = frame_time_sq * 29.400002f;
-    knockback_state->unk14 = 0.0005f;
-    knockback_state->unk18 = frame_time * 9.0f;
-    knockback_state->unk1C = frame_time * 7.0f;
-    knockback_state->flags = 0x599;
-    knockback_state->unk24 = 13;
-    knockback_state->unk28 = 1.4f;
-    knockback_state->unk30 = 0.24f;
+    knockback_state->speed_approach_step = 0.0005f;
+    knockback_state->speed = frame_time * 9.0f;
+    knockback_state->vertical_speed = frame_time * 7.0f;
+    knockback_state->collision_radius_1024ths = 0x599;
+    knockback_state->flags = 13;
+    knockback_state->collision_z_offset = 1.4f;
+    knockback_state->restitution = 0.24f;
     knockback_state->unk34 = 0.5f;
     knockback_state->unk38 = 0.65f;
-    knockback_state->unk48 = 0.2f;
-    knockback_state->unk4C = 0.01f;
-    knockback_state->unk50 = 8.0f;
-    knockback_state->unk54 = 19.0f;
+    knockback_state->max_turn_step = 0.2f;
+    knockback_state->target_speed = 0.01f;
+    knockback_state->apex_animation_frame = 8.0f;
+    knockback_state->landing_animation_frame = 19.0f;
     knockback_state->unk3D = 0;
     *(u128 *)&knockback_direction_copy = *(u128 *)knockback_direction;
     trooper_knockback_arc(&knockback_direction_copy,
                           &knockback_angle,
-                          &knockback_state->unk18,
-                          &knockback_state->unk1C);
+                          &knockback_state->speed,
+                          &knockback_state->vertical_speed);
     trooper_start_knockback(knockback_angle, moby, knockback_state, 6, 1, 0);
 }
 
