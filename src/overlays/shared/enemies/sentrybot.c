@@ -88,7 +88,7 @@ typedef struct SentrybotVars {
     u8                   hit_response_class;
     u8                   unk29;
     u8                   pad2A[0xE];
-    s32                  unk38; /* 0x38: set: restart target_countdown */
+    s32                  hurt; /* 0x38: set when the moby is hit; restarts target_countdown */
     u8                   pad3C[0x24];
     struct HitColorFlash hit_flash;
     SentrybotKnockback   knockback; /* 0x70 */
@@ -1735,12 +1735,12 @@ void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, i
     update_hit_color_flash(moby, &sentrybot_data->hit_flash);
     if (flag != 0)
         return;
-    if (sentrybot_data->unk38 != 0) {
+    if (sentrybot_data->hurt != 0) {
         float random_target_countdown_duration;
         int   rounded;
         random_target_countdown_duration = random_float_between(180.0f, 240.0f);
         rounded = truncate_float_to_s32(scale_time(random_target_countdown_duration));
-        sentrybot_data->unk38 = 0;
+        sentrybot_data->hurt = 0;
         sentrybot_data->target_countdown = (float)rounded;
     }
     update_float_countdown(&sentrybot_data->target_countdown);
