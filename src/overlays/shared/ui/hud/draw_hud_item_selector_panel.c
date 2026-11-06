@@ -923,11 +923,12 @@ void initialize_hud_element_with_counters(char *hud_element) {
 /* Updates the health HUD element: advances the wobble counters in its HudCounter (+0x80), clamps the target (+0x78) to +0x08, and steps the two digits (+0x70, +0x71) up or down. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00239FC0), where it is exact; names translated to the US level program. */
 
+/* Wobble of a HUD icon: phase swings 0..0xFFF, its velocity accelerates toward the middle. */
 typedef struct {
-    short unk0;
-    short unk2;
-    short unk4;
-    short unk6;
+    short frame;        /* counts 0..59 */
+    short phase;        /* 0..0xFFF */
+    short velocity;     /* added to phase, clamped to +-60 */
+    short acceleration; /* +1 or -1, flips at the middle of the swing */
 } HudCounter;
 
 extern s32 l00_hud_panel_visibility_counter_limit_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
@@ -945,30 +946,30 @@ void update_health_hud_animation_and_visibility(HudElem *hud_element) {
         unclamped_target_value = *hud_element->value_source;
         hud_element->target_value = unclamped_target_value > -1 ? unclamped_target_value : 0;
         animation_counters = hud_element->animation_counters;
-        animation_counters->unk0 = (animation_counters->unk0 + 1) % 60;
-        animation_counters->unk2 += animation_counters->unk4;
-        animation_counters->unk4 += animation_counters->unk6;
-        if (animation_counters->unk4 > 60) {
-            animation_counters->unk4 = 60;
-        } else if (animation_counters->unk4 < -60) {
-            animation_counters->unk4 = -60;
+        animation_counters->frame = (animation_counters->frame + 1) % 60;
+        animation_counters->phase += animation_counters->velocity;
+        animation_counters->velocity += animation_counters->acceleration;
+        if (animation_counters->velocity > 60) {
+            animation_counters->velocity = 60;
+        } else if (animation_counters->velocity < -60) {
+            animation_counters->velocity = -60;
         }
-        if (animation_counters->unk2 >= 0x800) {
-            if (animation_counters->unk4 > 0) {
-                animation_counters->unk6 = -1;
+        if (animation_counters->phase >= 0x800) {
+            if (animation_counters->velocity > 0) {
+                animation_counters->acceleration = -1;
             }
         }
-        if (animation_counters->unk2 >= 0x1000) {
-            animation_counters->unk2 = 0xFFF;
+        if (animation_counters->phase >= 0x1000) {
+            animation_counters->phase = 0xFFF;
         }
         health_icon_animation_counters = animation_counters;
-        if (health_icon_animation_counters->unk2 < 0x7FF) {
-            if (health_icon_animation_counters->unk4 < 0) {
-                health_icon_animation_counters->unk6 = 1;
+        if (health_icon_animation_counters->phase < 0x7FF) {
+            if (health_icon_animation_counters->velocity < 0) {
+                health_icon_animation_counters->acceleration = 1;
             }
         }
-        if (health_icon_animation_counters->unk2 < 0) {
-            health_icon_animation_counters->unk2 = 0;
+        if (health_icon_animation_counters->phase < 0) {
+            health_icon_animation_counters->phase = 0;
         }
         if (hud_element->target_value > hud_element->max_value) {
             hud_element->target_value = hud_element->max_value;
@@ -1172,13 +1173,13 @@ out:
 extern HudCounter l00_bolt_hud_icon_animation_counters __asm__("D_L00_0015FAB8");
 extern void initialize_numeric_hud_timer_and_base_dimensions(HudElem *) __asm__("FUN_L00_0023a760");
 
-/* Runs FUN_L00_0023a760 on e, points its unk80 at D_L00_0015FAB8 and clears that entry. */
+/* Runs FUN_L00_0023a760 on e, points its animation_counters (+0x80) at D_L00_0015FAB8 and clears its frame. */
 void initialize_bolt_counter_hud(HudElem *hud_element) __asm__("FUN_L00_00239cc8");
 
 void initialize_bolt_counter_hud(HudElem *hud_element) {
     initialize_numeric_hud_timer_and_base_dimensions(hud_element);
     hud_element->animation_counters = &l00_bolt_hud_icon_animation_counters;
-    l00_bolt_hud_icon_animation_counters.unk0 = 0;
+    l00_bolt_hud_icon_animation_counters.frame = 0;
 }
 
 typedef struct T00239d00 {
