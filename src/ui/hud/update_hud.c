@@ -6,7 +6,7 @@
 
 struct HudSlot {
     u8  pad_0[0x18];
-    s32 unk18;
+    s32 update; /* 0x18: called with the slot each frame when set */
 };
 
 extern s32 hud_msg_count __asm__("D_0015F680");
@@ -46,7 +46,7 @@ block_5:
     hud_state.z = 0xFFFFF0;
     remaining = 0xC;
 loop_6:
-    update_fn = ((struct HudSlot *)slot)->unk18;
+    update_fn = ((struct HudSlot *)slot)->update;
 
     if (update_fn == 0) {
         goto block_8;

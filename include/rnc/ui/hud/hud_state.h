@@ -53,11 +53,11 @@ struct HudBank {
     s32 has60;
     s32 has64;
     u8  pad68[0x2C];
-    s32 unk94;
+    s32 bank0_stash; /* 0x94: stash_send_data handle of chunk 1 (bank 0) */
     s32 unk98;
-    s32 unk9C;
-    s32 unkA0;
-    s32 unkA4;
+    s32 bank2_stash; /* 0x9C: of chunk 3 */
+    s32 bank3_stash; /* 0xA0: of chunk 4 */
+    s32 bank4_stash; /* 0xA4: of chunk 5 */
 };
 
 struct HudState {
