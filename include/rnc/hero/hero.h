@@ -386,8 +386,8 @@ struct Hero {
     f32  ledge_top_z;      /* 0x4E0: ledge height (FUN_L00_0020bed0) */
     f32  ledge_normal_yaw; /* 0x4E4 */
     s32  ledge_found;      /* 0x4E8 */
-    f32  unk4EC;           /* 0x4EC */
-    f32  smoothed_air_z;   /* 0x4F0 */
+    f32 ledge_gravity; /* 0x4EC: gravity on ledge-hang entry: jump_gravity after a jump, else 24 * frame_time_sq */
+    f32 smoothed_air_z; /* 0x4F0 */
     u32 ledge_flags; /* 0x4F4: ledge flags, bit 0: no headroom above the ledge (FUN_L00_0020bed0) */
     s32 ledge_moby;  /* 0x4F8: first argument of FUN_L00_00233f80 (FUN_L01_00233de0) */
     u8  pad_4FC[0x4];
@@ -419,25 +419,25 @@ struct Hero {
     union {
         f32 f;
         s32 i;
-    } grind_speed_boost;              /* 0x5AC: float approached toward a speed, zeroed as an int */
-    f32          grind_base_speed;    /* 0x5B0 */
-    s32          rail_swing_target;   /* 0x5B4 */
-    s32          rail_jump_armed;     /* 0x5B8 */
-    s16          rail_jump_trigger;   /* 0x5BC */
-    s16          grind_hit;           /* 0x5BE */
-    s32          rail_jump_queued;    /* 0x5C0 */
-    s32          rail_gap_jump;       /* 0x5C4 */
-    f32          rail_jump_gravity;   /* 0x5C8 */
-    f32          unk5CC;              /* 0x5CC */
-    f32          rail_lean;           /* 0x5D0 */
-    f32          grind_lean_vel;      /* 0x5D4 */
-    struct Moby *grind_look_moby;     /* 0x5D8 */
-    f32          rail_snap_dist;      /* 0x5DC */
-    Vec4         grab_rail_point;     /* 0x5E0 */
-    s32         *follow_path_spline;  /* 0x5F0 */
-    s32          follow_path_segment; /* 0x5F4 */
-    f32          rail_candidate_frac; /* 0x5F8 */
-    s32          grab_rail_found;     /* 0x5FC */
+    } grind_speed_boost;   /* 0x5AC: float approached toward a speed, zeroed as an int */
+    f32 grind_base_speed;  /* 0x5B0 */
+    s32 rail_swing_target; /* 0x5B4 */
+    s32 rail_jump_armed;   /* 0x5B8 */
+    s16 rail_jump_trigger; /* 0x5BC */
+    s16 grind_hit;         /* 0x5BE */
+    s32 rail_jump_queued;  /* 0x5C0 */
+    s32 rail_gap_jump;     /* 0x5C4 */
+    f32 rail_jump_gravity; /* 0x5C8 */
+    f32 grind_recovery_speed; /* 0x5CC: rail speed in HERO_STATE_GRIND_COLLISION_RECOVERY (2.5 * frame_time) */
+    f32          rail_lean;              /* 0x5D0 */
+    f32          grind_lean_vel;         /* 0x5D4 */
+    struct Moby *grind_look_moby;        /* 0x5D8 */
+    f32          rail_snap_dist;         /* 0x5DC */
+    Vec4         grab_rail_point;        /* 0x5E0 */
+    s32         *follow_path_spline;     /* 0x5F0 */
+    s32          follow_path_segment;    /* 0x5F4 */
+    f32          rail_candidate_frac;    /* 0x5F8 */
+    s32          grab_rail_found;        /* 0x5FC */
     s32          follow_path_end_frames; /* 0x600 */
     f32          follow_path_speed;      /* 0x604 */
     u8           pad_608[0x4];
@@ -622,7 +622,7 @@ struct Hero {
     f32   slam_descending;      /* 0xA70 */
     f32   aim_yaw;              /* 0xA74: gadget aim yaw (FUN_L00_00217658) */
     f32   aim_pitch;            /* 0xA78: gadget aim pitch */
-    s32   unkA7C;               /* 0xA7C */
+    s32   crouch_swing_toggle;  /* 0xA7C: flipped 0/1 on every HERO_STATE_CROUCH_SWING entry */
     s32   last_landed_moby;     /* 0xA80 */
     u8   *replacement_moby;     /* 0xA84 */
     u8   *base_moby;            /* 0xA88 */
@@ -705,8 +705,8 @@ struct Hero {
     s16 ship_hud_handle; /* 0x160C */
     u8  unk160E;         /* 0x160E */
     u8 ship_flags; /* 0x160F: 2 = being steered back from the edge or height limit of the space arena (FUN_L11_00313f60) */
-    u8    pad_1610[0x4];
-    s32   unk1614; /* 0x1614 */
+    u8 pad_1610[0x4];
+    s32 fidget_prop_moby; /* 0x1614: moby animated with HERO_STATE_FIDGET_ALT, removed when it ends */
     u8    pad_1618[0x8];
     void *unk1620;    /* 0x1620 */
     void *unk1624;    /* 0x1624 */
@@ -843,9 +843,9 @@ struct Hero {
     s16 quick_swap_tap_window; /* 0x22D6: countdown; nonzero with quick_swap_tap_timer switches pending_item[0] */
     s16 pack_disabled;          /* 0x22D8 */
     s16 path_constrain_pending; /* 0x22DA */
-    s16 unk22DC;                /* 0x22DC */
-    s16 vehicle_toggle_timer;   /* 0x22DE */
-    s16 glow_pulse_level;       /* 0x22E0 */
+    s16 scale_pulse_step; /* 0x22DC: index into the hero/item scale table (D_L00_001797D8), 1 starts it, 0 when the -1 end is reached */
+    s16 vehicle_toggle_timer; /* 0x22DE */
+    s16 glow_pulse_level;     /* 0x22E0 */
     u8  pad_22E2[0x6];
     f32 item4_glow_phase;     /* 0x22E8: phase for the items[4].moby colour */
     f32 item4_alt_glow_phase; /* 0x22EC: phase for the items[4].moby2 colour */

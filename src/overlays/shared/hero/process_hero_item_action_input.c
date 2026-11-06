@@ -544,7 +544,7 @@ s32 process_hero_item_action_input(void) {
                 hero.vehicle_toggle_timer == 0) {
                 allocate_hero_voice_for_entry(0x18, 0);
                 hero.vehicle_toggle_timer = 0x12;
-                hero.unk22DC = 1;
+                hero.scale_pulse_step = 1;
             }
         }
         break;

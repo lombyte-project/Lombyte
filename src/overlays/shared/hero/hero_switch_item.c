@@ -2137,7 +2137,7 @@ void hero_switch_item(int i) {
                 if (g->vehicle_toggle_timer == 0) {
                     allocate_hero_voice_for_entry(0x18, 0);
                     g->vehicle_toggle_timer = 0x12;
-                    g->unk22DC = 1;
+                    g->scale_pulse_step = 1;
                 }
                 changed = 1;
                 g->selected_item[i] = *s;

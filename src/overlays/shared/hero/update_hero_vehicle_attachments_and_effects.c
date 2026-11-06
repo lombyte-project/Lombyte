@@ -352,7 +352,7 @@ void update_hero_vehicle_attachments_and_effects(void) {
                         *(u8 *)(D_0013F350_lui - 0x1e74) && g->vehicle_toggle_timer == 0) {
                         allocate_hero_voice_for_entry(0x19, 0);
                         g->vehicle_toggle_timer = 0x12;
-                        g->unk22DC = 1;
+                        g->scale_pulse_step = 1;
                     }
                 }
             }

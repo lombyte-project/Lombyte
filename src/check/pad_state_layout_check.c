@@ -30,7 +30,7 @@ OFFSET_CHECK(mode, struct PadState, mode, 0x1CC);
 OFFSET_CHECK(no_buttons, struct PadState, no_buttons, 0x1D0);
 OFFSET_CHECK(no_direction, struct PadState, no_direction, 0x1D4);
 OFFSET_CHECK(stick_moved, struct PadState, stick_moved, 0x1D8);
-OFFSET_CHECK(unk1DC, struct PadState, unk1DC, 0x1DC);
+OFFSET_CHECK(pressure_mode_id, struct PadState, pressure_mode_id, 0x1DC);
 OFFSET_CHECK(pressed_history, struct PadState, pressed_history, 0x1E0);
 OFFSET_CHECK(angle_history, struct PadState, angle_history, 0x258);
 OFFSET_CHECK(float_history, struct PadState, float_history, 0x2D0);

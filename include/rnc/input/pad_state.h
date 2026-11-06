@@ -58,10 +58,10 @@ struct PadState {
     u32 pressed_unmasked;  /* 0x1C4: menu handlers test 0xD00 (accept) and 0x10 each frame */
     u32 released_unmasked; /* 0x1C8 */
     s32 mode; /* 0x1CC: 1 masks off 0x5030 and the left stick, 2 keeps only 0x900; reset to 0 */
-    s32 no_buttons;   /* 0x1D0: held == 0 */
-    s32 no_direction; /* 0x1D4: (held & 0xF000) == 0 */
-    s32 stick_moved;  /* 0x1D8: analog[2] or analog[3] nonzero */
-    s32 unk1DC; /* 0x1DC: 0x79 if the button profile is all ones, else 0; l01 picks pressure input on 0x79 */
+    s32 no_buttons;       /* 0x1D0: held == 0 */
+    s32 no_direction;     /* 0x1D4: (held & 0xF000) == 0 */
+    s32 stick_moved;      /* 0x1D8: analog[2] or analog[3] nonzero */
+    s32 pressure_mode_id; /* 0x1DC: 0x79 (DualShock 2 pressure mode) if the button profile is all ones, else 0; l01 picks pressure input on 0x79 */
     u32 pressed_history[30]; /* 0x1E0: ring indexed by hist_idx, searched by pad_pressed_within */
     f32 angle_history[30];   /* 0x258: left-stick direction history */
     f32 float_history[30];   /* 0x2D0: ring indexed by hist_idx, read by read_pad_float_history */

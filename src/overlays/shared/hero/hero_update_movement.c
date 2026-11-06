@@ -503,7 +503,7 @@ void hero_update_movement(void) {
                 if (s < 0.2f) {
                     s = 0.2f;
                 }
-                if (PD.unk1DC != 0x79) {
+                if (PD.pressure_mode_id != 0x79) {
                     hero.cw_turn_frames = 0;
                     hero.swim_square_hold_frames++;
                     s = hero.swim_square_hold_frames * 0.5f / scale_game_frames(20) + 0.5f;
@@ -523,7 +523,7 @@ void hero_update_movement(void) {
                 if (s < 0.2f) {
                     s = 0.2f;
                 }
-                if (PD.unk1DC != 0x79) {
+                if (PD.pressure_mode_id != 0x79) {
                     hero.swim_square_hold_frames = 0;
                     hero.cw_turn_frames++;
                     s = hero.cw_turn_frames * 0.5f / scale_game_frames(20) + 0.5f;
@@ -2009,7 +2009,7 @@ void hero_update_movement(void) {
         }
         r = hero.grind_speed * (f32)hero.grind_direction;
         if (hero.state.current == 0x42) {
-            r = hero.unk5CC * (f32)hero.grind_direction;
+            r = hero.grind_recovery_speed * (f32)hero.grind_direction;
         }
         sample_path((void *)hero.rail_spline,
                     &movement_and_hit_descriptor_scratch,
