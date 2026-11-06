@@ -1,24 +1,25 @@
 #include "types.h"
 #include "rnc/sdk/time.h"
 
+/* sceCdCLOCK in the PS2 SDK <libcdvd.h>. */
 struct BcdClockTime {
-    u8 pad_0;
-    u8 unk1;
-    u8 unk2;
-    u8 unk3;
-    u8 pad_4;
-    u8 unk5;
-    u8 unk6;
-    u8 unk7;
+    u8 stat;
+    u8 second;
+    u8 minute;
+    u8 hour;
+    u8 pad;
+    u8 day;
+    u8 month;
+    u8 year;
 };
 
 void encode_bcd_time_fields(struct BcdClockTime *time) __asm__("FUN_0012d428");
 
 void encode_bcd_time_fields(struct BcdClockTime *time) {
-    time->unk7 = TimeToBcd(time->unk7);
-    time->unk6 = TimeToBcd(time->unk6);
-    time->unk5 = TimeToBcd(time->unk5);
-    time->unk3 = TimeToBcd(time->unk3);
-    time->unk2 = TimeToBcd(time->unk2);
-    time->unk1 = TimeToBcd(time->unk1);
+    time->year = TimeToBcd(time->year);
+    time->month = TimeToBcd(time->month);
+    time->day = TimeToBcd(time->day);
+    time->hour = TimeToBcd(time->hour);
+    time->minute = TimeToBcd(time->minute);
+    time->second = TimeToBcd(time->second);
 }
