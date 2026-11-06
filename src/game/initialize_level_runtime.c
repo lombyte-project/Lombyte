@@ -38,14 +38,14 @@ typedef struct {
     s32 parts;       /* 0x24 */
     s32 pointCount;  /* 0x28 */
     s32 points;      /* 0x2C */
-    s32 unk30;
-    s32 unk34;
-    s32 unk38;
-    s32 unk3C;
-    s32 unk40;
-    s32 unk44;
+    s32 class_data;
+    s32 particle_data;
+    s32 texture_payload;
+    s32 particle_textures;
+    s32 special_texture_base;
+    s32 special_clut_base;
     s32 sky; /* 0x48 */
-    s32 unk4C;
+    s32 level_textures;
     s32 scenes[5]; /* 0x50 */
     s32 sound;     /* 0x64 */
 } LevelHeader;
@@ -202,10 +202,11 @@ void initialize_level_runtime(void) {
     upload_texture_images(
         (s32)header + header->tex, header->texCount, (s32)header + header->texInfo);
     data_base = (s32)header + header->data_offset;
-    class_data_base = data_base + header->unk30;
+    class_data_base = data_base + header->class_data;
     special_material_template[0] =
-        (s32)((gs_texture_allocation_base + header->unk40) >> 8) | 0x1D308000 |
-        ((s64)0xB800 << 19) | ((s64)((gs_texture_allocation_base + header->unk44) >> 8) << 37) |
+        (s32)((gs_texture_allocation_base + header->special_texture_base) >> 8) | 0x1D308000 |
+        ((s64)0xB800 << 19) |
+        ((s64)((gs_texture_allocation_base + header->special_clut_base) >> 8) << 37) |
         0x8000000000000000LL;
     special_material_template[1] = 0x0000FFA0000000E0LL;
     special_material_template[2] = 0x0040000400004000LL;
@@ -226,16 +227,18 @@ void initialize_level_runtime(void) {
                             moby_entry->oclass);
         moby_entry++;
     }
-    level_texture_payload_address = data_base + header->unk38;
+    level_texture_payload_address = data_base + header->texture_payload;
     unpack_point_records((s32)header + header->points, header->pointCount);
     {
-        s32 particle_data_base = data_base + header->unk34;
+        s32 particle_data_base = data_base + header->particle_data;
         s32 particle_entries = (s32)header + header->parts;
 
-        parse_particle_textures(
-            (s32)header + header->unk3C, particle_data_base, particle_entries, header->partCount);
+        parse_particle_textures((s32)header + header->particle_textures,
+                                particle_data_base,
+                                particle_entries,
+                                header->partCount);
     }
-    texture_offsets = (s32 *)(data_base + header->unk4C);
+    texture_offsets = (s32 *)(data_base + header->level_textures);
     language_index = game_language - 1;
     if (language_index < 0) {
         language_index = 0;

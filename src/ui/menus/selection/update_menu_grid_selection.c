@@ -158,7 +158,7 @@ s32 update_menu_grid_selection(struct MenuScreen *grid) {
             } else if (selected_cell->id == 0x18) {
                 if (noop_callback_p(0x18) != 0 && menu_system.state == 3) {
                     next_columns = noop_callback_p(0x18);
-                    hero.unk1FF5 = 1;
+                    hero.launch_drones = 1;
                     total = hero.ammo_capacity + next_columns;
                     if (total > 6) {
                         total = 6;

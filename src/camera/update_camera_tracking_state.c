@@ -90,7 +90,7 @@ void update_camera_tracking_state(void) {
                    1.0f / camera_tracking_state->hero_move_flat_length);
     qcopy(&camera_tracking_state->prev_hero_pos, &hero.motion.pos);
 
-    if (hero.unk2284 != 0x50 || hero.state.current == 0x11) {
+    if (hero.camera_mode != 0x50 || hero.state.current == 0x11) {
         camera_tracking_state->pos.f[0] = hero.motion.pos.f[0];
         camera_tracking_state->pos.f[1] = hero.motion.pos.f[1];
         camera_tracking_state->pos.f[2] = cam_interp_values(&camera_tracking_state->vel,

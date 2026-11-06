@@ -90,7 +90,7 @@ int camera_activation_check_priority(struct UpdateCam *candidate, struct UpdateC
         struct Hero *hero_state = &hero;
         short        listener_group = candidate->unk86;
 
-        if (listener_group != hero_state->unk2284) {
+        if (listener_group != hero_state->camera_mode) {
             return 0;
         }
         if (current->transition_state == CAMERA_TRANSITION_PRIORITY_GATED &&
