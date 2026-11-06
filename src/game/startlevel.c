@@ -31,15 +31,15 @@ typedef struct {
     s32        code;
 } LevelHeader;
 
-extern s32  boot_level_active __asm__("D_0015F5E8") MACRO_ADDR;
-extern u8   level_bss_start[] __asm__("D_00161280");
-extern s32  game_frame_counter_macro __asm__("D_0015F438") MACRO_ADDR;
-extern s32  boot_image_buffer __asm__("D_0015EF5C") MACRO_ADDR;
-extern s32  decode_mode_macro __asm__("D_0015EED8") MACRO_ADDR;
-extern u8   D_24135F[];
-extern s32  boot_intro_movie_ntsc[] __asm__("D_00139378");
-extern s32  boot_intro_movie_pal[] __asm__("D_00139380");
-extern char loading_boot_sound_bank_message[] __asm__("D_001E76C0");
+extern s32        boot_level_active __asm__("D_0015F5E8") MACRO_ADDR;
+extern u8         level_bss_start[] __asm__("D_00161280");
+extern s32        game_frame_counter_macro __asm__("D_0015F438") MACRO_ADDR;
+extern s32        boot_image_buffer __asm__("D_0015EF5C") MACRO_ADDR;
+extern s32        decode_mode_macro __asm__("D_0015EED8") MACRO_ADDR;
+extern u8         D_24135F[];
+extern s32        boot_intro_movie_ntsc[] __asm__("D_00139378");
+extern s32        boot_intro_movie_pal[] __asm__("D_00139380");
+extern const char loading_boot_sound_bank_message[] __asm__("D_001E76C0");
 extern volatile SoundDef *volatile level_sound_defs __asm__("D_0015F634");
 extern volatile s32 level_sound_def_count __asm__("D_0015F630");
 
@@ -230,3 +230,5 @@ volatile SoundDef boot_sound_defs_b[5] = {
 };
 
 s32 boot_image_buffer __asm__("D_0015EF5C") MACRO_ADDR = 0;
+
+const char loading_boot_sound_bank_message[] __asm__("D_001E76C0") = "loading sound bank...\n";

@@ -123,7 +123,7 @@ extern u8                 point_lights[] __asm__("D_0019C1C0");
 extern u8                 D_001AAA40[];
 extern u8                 D_001CD780[];
 extern u8                 object_render_class_slot_by_id[] __asm__("D_001E1A00");
-extern char               too_many_directional_lights_message[] __asm__("D_001E76D8");
+extern const char         too_many_directional_lights_message[] __asm__("D_001E76D8");
 
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern void update_fog(void) __asm__("func_001F2588");
@@ -479,3 +479,6 @@ MobyGrids moby_grids = {0};
 u32 moby_grid_block_bitmap[24] = {0};
 
 ShrubInstance *shrubs = 0;
+
+const char too_many_directional_lights_message[] __asm__("D_001E76D8") =
+    "!!!! Too many directional lights !!!! - Lighting will look bogus as a penalty.\n";

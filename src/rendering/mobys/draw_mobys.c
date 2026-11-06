@@ -5,11 +5,11 @@
 #include "rnc/rendering/mobys/draw_mobys_clean_up.h"
 #include "rnc/sdk/debug.h"
 
-extern u8   vu_chain_overflow_message[] __asm__("D_001E8400");
-extern s32  D_0018A2D8[];
-extern void draw_mobys_setup() __asm__("func_0020D278");
-extern s32  moby_proc() __asm__("func_00211808");
-void        draw_mobys(void) __asm__("FUN_0020d460");
+extern const u8 vu_chain_overflow_message[] __asm__("D_001E8400");
+extern s32      D_0018A2D8[];
+extern void     draw_mobys_setup() __asm__("func_0020D278");
+extern s32      moby_proc() __asm__("func_00211808");
+void            draw_mobys(void) __asm__("FUN_0020d460");
 
 void draw_mobys(void) {
     register s32 flag;
@@ -29,3 +29,5 @@ void draw_mobys(void) {
 }
 
 extern void func_0020D460(void) __attribute__((alias("FUN_0020d460")));
+
+const u8 vu_chain_overflow_message[] __asm__("D_001E8400") = "vu chain overflow - mobys dropped\n";

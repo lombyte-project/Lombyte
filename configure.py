@@ -940,6 +940,14 @@ OVERLAY_SN_UNITS = {
 # link fails when the section is not SIZE bytes.  Both the assembly-backed and
 # the promoted (normalized) unit names resolve to the same retail bytes.
 RODATA_OVERLAYS = {
+    "game/startlevel": (0x1E76C0, 0xE8640, 23),
+    "rendering/frame/initialize_level_render_state": (0x1E76D8, 0xE8658, 80),
+    "rendering/lights/detach_point_light": (0x1E7B50, 0xE8AD0, 105),
+    "mobys/create_moby": (0x1E83C0, 0xE9340, 57),
+    "rendering/mobys/draw_mobys": (0x1E8400, 0xE9380, 35),
+    "rendering/texture/dma_shrub_textures": (0x1E88D0, 0xE9850, 24),
+    "rendering/texture/dma_tfrag_textures": (0x1E89B0, 0xE9930, 24),
+    "rendering/texture/dma_tie_textures": (0x1E8A50, 0xE99D0, 22),
     "ui/text/copy_text_to_shared_buffer": (0x1E7AA8, 0xE8A28, 19),  # "(Message too long)"
     "_dtoa_r": (0x152310, 0x53290, 88),  # Infinity/NaN/0 strings, f64 literals, switch table
     # _getpic's switch emits a 5-entry jump table (0x14 bytes) that retail

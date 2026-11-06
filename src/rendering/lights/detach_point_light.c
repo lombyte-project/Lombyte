@@ -33,10 +33,10 @@ struct PointLightIndexRanges {
     s32 instance_indices_address;
 };
 
-extern u8 tie_point_light_missing_message[] __asm__("D_001E7B50");
-extern u8 tfrag_point_light_missing_message[] __asm__("D_001E7B70");
-extern u8 shrub_point_light_missing_message[] __asm__("D_001E7B98");
-void      detach_point_light(s32 light_index) __asm__("FUN_00201f88");
+extern const u8 tie_point_light_missing_message[] __asm__("D_001E7B50");
+extern const u8 tfrag_point_light_missing_message[] __asm__("D_001E7B70");
+extern const u8 shrub_point_light_missing_message[] __asm__("D_001E7B98");
+void            detach_point_light(s32 light_index) __asm__("FUN_00201f88");
 
 void detach_point_light(s32 light_index) {
     s16                          *tie_index_cursor;
@@ -152,3 +152,10 @@ void detach_point_light(s32 light_index) {
     light_entry->shrub_start = 0;
     light_entry->shrub_count = 0;
 }
+
+const u8
+    tie_point_light_missing_message[] __asm__("D_001E7B50") = "screwed up point light on tie\n";
+const u8
+    tfrag_point_light_missing_message[] __asm__("D_001E7B70") = "screwed up point light on tfrag\n";
+const u8
+    shrub_point_light_missing_message[] __asm__("D_001E7B98") = "screwed up point light on shrub\n";
