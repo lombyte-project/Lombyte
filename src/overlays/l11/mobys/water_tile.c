@@ -24,6 +24,9 @@ void populate_water_tile_neighbor_indices(int selected_tile_index) __asm__("FUN_
 
 void populate_water_tile_neighbor_indices(int arg) __asm__("FUN_L11_0030e730");
 
+/* The water render parameters set up by the first tile: the same grid layout as the pool height
+   grids (HeightGridLayout: size, origin, cell size; 16 x 16 units, origin -8, cell 1), the texture
+   ids and alpha FIX values the grids use, and the light direction. No C code reads it back. */
 typedef struct {
     f32 size_x;            /* 0x00: patch size (16) */
     f32 size_y;            /* 0x04 */
@@ -35,18 +38,18 @@ typedef struct {
     f32 damping_threshold; /* 0x1C: kept from the disc */
     f32 clock_step;        /* 0x20: ripple clock step (0.1) */
     f32 unk24;
-    s32 unk28;
-    s32 unk2C;
+    s32 texture_id;
+    s32 second_texture_id;
     f32 light_dir_x;
     f32 light_dir_y;
     f32 light_dir_z;
-    u8  unk3C;
-    u8  unk3D;
-} Light_e088; /* ripple constants (ReRAC water.rs RippleConsts) */
+    u8  alpha_2_fix;
+    u8  alpha_1_fix;
+} WaterGridRenderParams; /* ripple constants (ReRAC water.rs RippleConsts) */
 
-extern Light_e088 l11_water_tile_light __asm__("D_L11_001CB280");
-int               l11_water_tile_allocation_count __asm__("D_L11_00161F64") = 0;
-char              D_L11_0021B4C0[] =
+extern WaterGridRenderParams l11_water_tile_light __asm__("D_L11_001CB280");
+int                          l11_water_tile_allocation_count __asm__("D_L11_00161F64") = 0;
+char                         D_L11_0021B4C0[] =
     "I'm really sorry, but you can't have more than 128 water tiles in this level";
 /* One fixed-point bounds record (pool_bind_tile: x, y, z, two scale shorts) per water grid;
    the pool reads 20 of them (D_L11_001612D8 = 20 next to their base). */
@@ -95,8 +98,8 @@ void water_tile_update(struct Moby *water_tile_moby) {
         water_tile_moby->flags |= 1;
         water_tile_moby->scale = water_tile_moby->pclass->scale + water_tile_moby->pclass->scale;
         if (water_tile_vars[1] == 0) {
-            Light_e088 *water_tile_light;
-            float       light_direction_angle;
+            WaterGridRenderParams *water_tile_light;
+            float                  light_direction_angle;
             for (i = 19; i >= 0; i--) {
                 l11_water_grids[i].visible_subtiles = 0;
             }
@@ -116,10 +119,10 @@ void water_tile_update(struct Moby *water_tile_moby) {
             water_tile_light->light_dir_x = fast_cos(light_direction_angle) * 0.57735f;
             water_tile_light->light_dir_y = fast_sin(light_direction_angle) * 0.57735f;
             water_tile_light->light_dir_z = -0.57735f;
-            water_tile_light->unk28 = 0x38;
-            water_tile_light->unk2C = 0x39;
-            water_tile_light->unk3C = 0x1C;
-            water_tile_light->unk3D = 0x40;
+            water_tile_light->texture_id = 0x38;
+            water_tile_light->second_texture_id = 0x39;
+            water_tile_light->alpha_2_fix = 0x1C;
+            water_tile_light->alpha_1_fix = 0x40;
             D_L11_001612D0 = l11_water_grids;
             l11_water_tile_binding_record_base = water_tile_binding_records;
             D_L11_001612D8 = 20;

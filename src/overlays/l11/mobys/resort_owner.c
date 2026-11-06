@@ -70,8 +70,8 @@ typedef struct ResortOwnerVars {
     u8    pad_C[0x20];
     f32   talk_range;
     u8    pad_30[0x26];
-    s16   unk56;
-    u8    pad_58[0x28];
+    s16 talk_entry; /* 0x56: talk + 0x36, current dialogue entry of update_npc_dialogue, -1 none */
+    u8  pad_58[0x28];
     void *clearance_path;
     void *supplemental_clearance_path;
     void *penultimate_clearance_path;
@@ -331,28 +331,28 @@ extern float resort_owner_gate_jump_target_local_x_offset_gp __asm__("D_L11_0016
 
 /* Pvars of the path-walking NPC run by resort_owner_update. */
 struct PokKeeperVars {
-    u8    pad00[0x20];
-    u8    talk[0xC];  /* 0x20: talk prompt (initialize_npc_dialogue / update_npc_dialogue) */
-    f32   talk_range; /* 0x2C */
-    u8    pad30[0x26];
-    s16   unk56;
-    u8    pad58[8];
-    s32   leg_paths[3]; /* 0x60: per-leg clearance paths, set from leg_path_ids[] */
-    u8    pad6C[4];
-    s32   leg_path_ids[3];
-    u8    pad7C[0x54];
-    s32   leg_entry_points[4];
-    s32   points[4];  /* 0xE0: path point of each leg */
-    s32   gates[2];   /* 0xF0: gate mobys */
-    s32   volumes[2]; /* 0xF8 */
-    s32   final_leg_trigger_moby;
-    s32   paired_rotation_moby;
-    s32   first_gate_open_mission;
-    s32   path_complete_mission;
-    s32   second_gate_arrival_cuboid_index;
-    s32   final_path_arrival_cuboid_index;
-    s32   post_path_dialogue_condition_index;
-    u8    pad11C[4];
+    u8  pad00[0x20];
+    u8  talk[0xC];  /* 0x20: talk prompt (initialize_npc_dialogue / update_npc_dialogue) */
+    f32 talk_range; /* 0x2C */
+    u8  pad30[0x26];
+    s16 talk_entry; /* 0x56: talk + 0x36, current dialogue entry of update_npc_dialogue, -1 none */
+    u8  pad58[8];
+    s32 leg_paths[3]; /* 0x60: per-leg clearance paths, set from leg_path_ids[] */
+    u8  pad6C[4];
+    s32 leg_path_ids[3];
+    u8  pad7C[0x54];
+    s32 leg_entry_points[4];
+    s32 points[4];  /* 0xE0: path point of each leg */
+    s32 gates[2];   /* 0xF0: gate mobys */
+    s32 volumes[2]; /* 0xF8 */
+    s32 final_leg_trigger_moby;
+    s32 paired_rotation_moby;
+    s32 first_gate_open_mission;
+    s32 path_complete_mission;
+    s32 second_gate_arrival_cuboid_index;
+    s32 final_path_arrival_cuboid_index;
+    s32 post_path_dialogue_condition_index;
+    u8  pad11C[4];
     Vec4f target; /* 0x120 */
     Vec4f velocity;
     Vec4f displacement;
@@ -434,7 +434,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
         FUN_L11_002d2088_c(moby, 1);
         break;
     case RESORT_OWNER_CHECK_INITIAL_DIALOGUE:
-        if (moby_vars->unk56 == 0) {
+        if (moby_vars->talk_entry == 0) {
             if (hero.air_frames.s == 0 && update_npc_dialogue(moby, moby_vars->talk)) {
                 begin_dialogue_camera_transition(moby, 2.5f);
                 FUN_L11_002d2088_c(moby, 2);
@@ -618,7 +618,7 @@ void set_resort_owner_state(struct Moby *moby, unsigned char state) {
             moby_vars->talk_range = 10.0f;
         clear_u64_value(moby_vars->velocity);
         if (moby->state == RESORT_OWNER_CHECK_POST_PATH_DIALOGUE)
-            moby_vars->unk56 = 2;
+            moby_vars->talk_entry = 2;
         break;
     case RESORT_OWNER_FOLLOW_HERO:
         if (moby->prev_seq != 2)
