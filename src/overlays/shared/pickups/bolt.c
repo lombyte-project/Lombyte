@@ -43,14 +43,14 @@ typedef struct {
     u8           pad40[8];
     f32          attraction_angle_y; /* 0x48 */
     f32          attraction_angle_z; /* 0x4C */
-    f32          unk50;              /* 0x50 */
+    f32          spin_x;             /* 0x50: idle spin angle about x */
     u8           landed;             /* 0x54 */
-    u8           unk55;              /* 0x55 */
+    u8           spin_flags;         /* 0x55: bit 0 picks the idle spin direction */
     u8           hop_frames;         /* 0x56 */
     u8           hop_left;           /* 0x57 */
-    f32          unk58;              /* 0x58 */
+    f32          spin_z;             /* 0x58: idle spin angle about z */
     void        *ground_moby;        /* 0x5C */
-    struct Bolt *unk60;              /* 0x60 */
+    struct Bolt *target;             /* 0x60: moby the bolt flies to (the hero's) */
     f32          speed;              /* 0x64 */
     f32          ground_z;           /* 0x68 */
     s16          slot;               /* 0x6C */
@@ -97,7 +97,7 @@ typedef struct {
     u8   pad16[0xA];
 } BoltTrailSlot;
 
-/* What a bolt moby's unkB8 points at: byte 0xB1 is its source's per-level id. */
+/* What a bolt moby's parent points at: byte 0xB1 is its source's per-level id. */
 typedef struct {
     u8 pad_00[0xB1];
     u8 id; /* 0x80 set: no id */
@@ -110,14 +110,14 @@ typedef struct {
     f32 spin[4] __attribute__((aligned(16))); /* 0x30: per-frame rotation (quaternion) */
     u8  counted; /* 0x40: CollectBolt also adds the bolt to D_0015EE2C */
     u8  pad_41[0xF];
-    f32 unk50; /* random angle */
+    f32 spin_x; /* 0x50: random angle */
     u8  pad_54;
-    u8  unk55; /* bit 0 set at random */
+    u8  spin_flags; /* 0x55: bit 0 set at random */
     u8  pad_56[2];
-    f32 unk58; /* random angle */
+    f32 spin_z; /* 0x58: random angle */
     u8  pad_5C[0xC];
-    f32 start_z; /* 0x68 */
-    s16 unk6C;
+    f32 start_z;            /* 0x68 */
+    s16 slot;               /* 0x6C: glint slot, -1 none */
     s16 glint_delay_frames; /* random 0 .. 600 frames */
 } BoltVars_u;
 
@@ -218,7 +218,7 @@ void bolt_update(Bolt *bolt_moby) {
         bolt_moby->update_dist = 0x20;
         bolt_moby->draw_distance = 0x20;
         if (random_integer_below(2) == 0) {
-            v->unk55 |= 1;
+            v->spin_flags |= 1;
         }
         fast_vec_normalize(&geometry_scratch, &bolt_moby->rot_row2, 0.2f);
         fast_vec_add(&geometry_scratch, &geometry_scratch, &bolt_moby->pos);
@@ -240,8 +240,8 @@ void bolt_update(Bolt *bolt_moby) {
             qcopy(&v->pos, &bolt_moby->pos);
             clear_u64_value(&v->rot);
         }
-        v->unk50 = random_angle_radians();
-        v->unk58 = random_angle_radians();
+        v->spin_x = random_angle_radians();
+        v->spin_z = random_angle_radians();
         v->ground_z = bolt_moby->pos.f[2];
         v->slot_timer = FUN_L00_00257b90(0, scale_game_frames(600));
         v->slot = -1;
@@ -392,7 +392,7 @@ void bolt_update(Bolt *bolt_moby) {
         return;
     case BOLT_MOVE_TO_HERO:
         flag = 0;
-        if (v->unk60->oclass == 0) {
+        if (v->target->oclass == 0) {
             fast_vec_sub(&geometry_scratch, &bolt_moby->pos, &hero.ground_point);
             transform_vector(&geometry_scratch, &geometry_scratch, hero.inv_rot_matrix);
             if (geometry_scratch.f[2] < 0.0f) {
@@ -769,7 +769,7 @@ struct Moby *spawn_bolt_by_value(
     if (0 != spawned_bolt) {
         bolt_vars = (BoltVars_u *)spawned_bolt->pvars;
         bolt_vars->counted = counted;
-        /* the bolt source is the root of src's unkB8 chain */
+        /* the bolt source is the root of src's parent chain */
         root = bolt_source;
         if (bolt_source != 0) {
             while (root->parent != 0)
@@ -789,13 +789,13 @@ struct Moby *spawn_bolt_by_value(
         else
             spawned_bolt->spawn_frame = bolt_source->spawn_frame;
         bolt_vars->glint_delay_frames = random_int_between(0, scale_game_frames(600));
-        bolt_vars->unk6C = -1;
+        bolt_vars->slot = -1;
         qcopy(&spawned_bolt->pos, pos);
         qcopy(bolt_vars->vel, vel);
         if (random_integer_below(2))
-            bolt_vars->unk55 |= 1;
-        bolt_vars->unk50 = random_angle_radians();
-        bolt_vars->unk58 = random_angle_radians();
+            bolt_vars->spin_flags |= 1;
+        bolt_vars->spin_x = random_angle_radians();
+        bolt_vars->spin_z = random_angle_radians();
         bolt_vars->start_z = spawned_bolt->pos.z;
         spin = random_float_between(0.0f, bolt_spin_angle_limit_degrees_gp) * 0.017453292f *
                D_0015ED6C;
