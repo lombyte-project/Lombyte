@@ -370,12 +370,6 @@ extern void update_hero_water_height_and_bobbing(void) __asm__("FUN_L00_00227d40
 #define PD controller_state
 extern struct PlayerJointTable D_L14_0017AD80;
 #define AN D_L14_0017AD80
-struct VoiceSlot {
-    u8               pad0[0x74];
-    u8               b74;
-    u8               pad75[0x13];
-    struct MobyView *pm88;
-};
 
 extern void release_voice_slot_cf(s32, struct MobyView *, s32) __asm__("FUN_L00_00216e48");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -1614,9 +1608,10 @@ void update_hero_motion_by_state(void) {
             release_voice_slot_cf(0, MV(hero.moby), 0);
         } else {
             if (hero.grind_voice != -1) {
-                struct VoiceSlot *grind_voice_slot =
-                    (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.grind_voice * 0x70);
-                if (grind_voice_slot->pm88 == MV(hero.moby) && grind_voice_slot->b74 != 0) {
+                VoicePoolWindow *grind_voice_slot =
+                    (VoicePoolWindow *)(((u8 *)&voice_pool) + hero.grind_voice * 0x70);
+                if (grind_voice_slot->voice.owner == (VoiceMoby *)hero.moby &&
+                    grind_voice_slot->voice.state != 0) {
                     release_voice_slot(hero.grind_voice);
                 }
             }
@@ -2201,9 +2196,10 @@ void update_hero_motion_by_state(void) {
         f32 sp;
         if (hero_slot_item_id(3) == 2) {
             if (hero.voice_slot4 != -1) {
-                struct VoiceSlot *landing_voice_slot =
-                    (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.voice_slot4 * 0x70);
-                if (landing_voice_slot->pm88 == MV(hero.moby) && landing_voice_slot->b74 != 0) {
+                VoicePoolWindow *landing_voice_slot =
+                    (VoicePoolWindow *)(((u8 *)&voice_pool) + hero.voice_slot4 * 0x70);
+                if (landing_voice_slot->voice.owner == (VoiceMoby *)hero.moby &&
+                    landing_voice_slot->voice.state != 0) {
                     release_voice_slot(hero.voice_slot4);
                 }
             }
@@ -2211,10 +2207,10 @@ void update_hero_motion_by_state(void) {
             release_voice_slot_cf(3, MV(hero.moby), 2);
         } else {
             if (hero.loop_voice_slot != -1) {
-                struct VoiceSlot *alternate_landing_voice_slot =
-                    (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.loop_voice_slot * 0x70);
-                if (alternate_landing_voice_slot->pm88 == MV(hero.moby) &&
-                    alternate_landing_voice_slot->b74 != 0) {
+                VoicePoolWindow *alternate_landing_voice_slot =
+                    (VoicePoolWindow *)(((u8 *)&voice_pool) + hero.loop_voice_slot * 0x70);
+                if (alternate_landing_voice_slot->voice.owner == (VoiceMoby *)hero.moby &&
+                    alternate_landing_voice_slot->voice.state != 0) {
                     release_voice_slot(hero.loop_voice_slot);
                 }
             }
