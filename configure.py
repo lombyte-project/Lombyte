@@ -1232,6 +1232,7 @@ DATA_OVERLAYS = {
     "ui/map/world_to_map_coords": (0x19E970, 0x9F8F0, 304),
     "ui/text/copy_text_to_shared_buffer": (0x19A440, 0x9B3C0, 80),
     "ui/menus/save_data/run_state_handler": (0x1A0438, 0xA13B8, 100),
+    "save/memcard_restore_game": (0x1A04C0, 0xA1440, 960),  # the save block lists mc_gamedata, mc_leveldata
     "mobys/find_or_allocate_moby_render_slot": (0x1B2BC0, 0xB3B40, 64),
     "mobys/stash_moby_class_dists": (0x1B2E80, 0xB3E00, 896),
     "ui/menus/pause/assign_heli_pack_label_text_table": (0x1D06D0, 0xD1650, 112),
