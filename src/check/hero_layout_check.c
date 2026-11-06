@@ -301,7 +301,7 @@ HERO_OFFSET_CHECK(hoverboard_airborne, 0x8BC);
 HERO_OFFSET_CHECK(board_respawn_delay, 0x8BE);
 HERO_OFFSET_CHECK(boost_pad_timer, 0x8C4);
 HERO_OFFSET_CHECK(race_ammo, 0x8CE);
-HERO_OFFSET_CHECK(unk8E0, 0x8E0);
+HERO_OFFSET_CHECK(swim_entry_frames, 0x8E0);
 HERO_OFFSET_CHECK(swim_lean_vel, 0x8E4);
 HERO_OFFSET_CHECK(swim_roll_velocity, 0x8E8);
 HERO_OFFSET_CHECK(swim_yaw_rate, 0x8EC);

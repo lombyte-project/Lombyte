@@ -243,7 +243,7 @@ int hero_set_state(int requested_state, int animation_request_mode) {
             struct Hero *q = &hero;
             int          n;
             q->rand_timer.range = 0x68;
-            q->unk8E0 = 0;
+            q->swim_entry_frames = 0;
             n = scale_game_frames(0xC);
             if (animation_request_mode)
                 set_hero_animation(0x3B, 0, (float)n);
@@ -261,7 +261,7 @@ int hero_set_state(int requested_state, int animation_request_mode) {
             allocate_hero_voice_for_entry(3, 0);
             p->state.step = 1;
         }
-        p->unk8E0 = 0;
+        p->swim_entry_frames = 0;
         p->rand_timer.range = 0x68;
         n = scale_game_frames(0xB);
         if (p->state.prev == 0x33)
