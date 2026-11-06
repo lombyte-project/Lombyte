@@ -9,10 +9,9 @@
    store its index in the owner moby at +0xA4; find_moby_hit and the hero's
    damage check read it back.
    attack_type / attack_subtype come from bytes 0x18 / 0x19 of the hit
-   descriptor (record_moby_hit). The creature hit resolver (L01 0x26f378, port
-   moby_update/creature/damage.rs) picks the reaction kind from the pair and
-   scales an exact push (w 5627.9248) by the type; without an exact push it
-   treats the hit as type 8. The hero doubles the upward push of type 4. Values
+   descriptor (record_moby_hit). resolve_moby_hit_response picks the reaction
+   kind from the pair and scales an exact push (w 5627.9248) by the type;
+   without an exact push it treats the hit as type 8. The hero doubles the upward push of type 4. Values
    the descriptors use (type / subtype): 0 enemy shots, contact and Ratchet's
    body hits (0/1); 1 blaster, suck cannon shot, turret shot (1/1, 1/3), drone
    (1/2); 2 explosions and bomb glove; 3 rockets, visibomb, the helicopter and

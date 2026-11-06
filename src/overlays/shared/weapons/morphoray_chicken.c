@@ -53,7 +53,7 @@ typedef struct {
 /* Class header view: pclass + 0xE and + 0x10. */
 typedef struct {
     u8  pad00[0xE];
-    u8  unkE;
+    u8  lod_trans; /* 0xE: MobyClass.lod_trans */
     u8  pad0F;
     u32 collision; /* 0x10: the class's default moby collision */
 } Part;
