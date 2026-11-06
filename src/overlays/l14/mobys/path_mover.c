@@ -16,12 +16,12 @@
 
 typedef struct {
     u8  pad0[0x20];
-    s32 unk20;
-    s16 unk24;
+    s32 health;
+    s16 max_health;
     u8  pad26[2];
     u8  hit_weight; /* 0x28: enemy target info at pvars+0x20, see moby_target_info.h */
     u8  pad29[0x15];
-    s16 unk3E;
+    s16 target_flags; /* 0x3E: MobyTargetInfo.flags; target info at pvars+0x20 */
     u8  pad40[0x20];
     u8  carry[0x40]; /* 0x60: carried-object state for update_entity_matrix */
     u8  start_end;   /* 0xA0: 0 starts at the far end */
@@ -121,9 +121,9 @@ void path_mover_update(struct Moby *moby) {
         Vec4 *points;
 
         path_mover_vars->hit_weight = 4;
-        path_mover_vars->unk3E = 5;
-        path_mover_vars->unk20 = 0;
-        path_mover_vars->unk24 = 0;
+        path_mover_vars->target_flags = 5;
+        path_mover_vars->health = 0;
+        path_mover_vars->max_health = 0;
         t = 0.0f;
         if ((moby->command = path_mover_vars->start_end) == 0) {
             t = 1.0f;
