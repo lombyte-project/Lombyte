@@ -18,14 +18,14 @@
 
 /* pvars of the debris moby spawn_debris_chunk spawns */
 typedef struct {
-    Vec4f vel;     /* 0x00 */
-    s32   unk10;   /* 0x10 */
-    f32   scale;   /* 0x14 */
-    f32   spin;    /* 0x18: random spin, random sign */
-    s32   life;    /* 0x1C: frames */
-    s32   unk20;   /* 0x20 */
-    f32   gravity; /* 0x24 */
-    s32   unk28;   /* 0x28 */
+    Vec4f vel;         /* 0x00 */
+    s32   timer;       /* 0x10 */
+    f32   scale;       /* 0x14 */
+    f32   spin;        /* 0x18: random spin, random sign */
+    s32   life;        /* 0x1C: frames */
+    s32   fade_out;    /* 0x20 */
+    f32   gravity;     /* 0x24 */
+    s32   fade_frames; /* 0x28 */
 } DebrisVars;
 
 extern s32 rand(void) __asm__("FUN_001160d8");
@@ -86,12 +86,12 @@ struct Moby *spawn_debris_chunk(Vec4f *pos,
         } else {
             initial_spin = random_spin_magnitude * spin;
         }
-        debris_vars->unk10 = initial_timer;
-        debris_vars->unk28 = initial_timer;
+        debris_vars->timer = initial_timer;
+        debris_vars->fade_frames = initial_timer;
         debris_vars->scale = scale;
         debris_vars->spin = initial_spin;
         debris_vars->life = truncate_float_to_s32(scale_time(seconds * 60.0f));
-        debris_vars->unk20 = fade_out;
+        debris_vars->fade_out = fade_out;
         debris_vars->gravity = gravity * 9.8f * frame_time_sq;
         update_entity(debris_moby);
     }
@@ -99,7 +99,7 @@ struct Moby *spawn_debris_chunk(Vec4f *pos,
 }
 
 /* Debris update: falls and spins, bounces off what it hits with a random kick, bursts into 40 sparks once it
-   comes to rest (or its unk10 timer runs out), or fades out over unk28 frames when unk20 is set. */
+   comes to rest (or its timer runs out), or fades out over fade_frames frames when fade_out is set. */
 void rock_update(struct Moby *m) __asm__("FUN_L01_002f8718");
 
 /* Moby classes 200, 201, 205-207, 210, 696-698, 1806, 1807 */
@@ -151,8 +151,8 @@ void rock_update(struct Moby *debris_moby) {
             debris_vars->spin = spin;
         }
     }
-    if (debris_vars->unk20 == 0) {
-        if (fast_dec_timer(&debris_vars->unk10) == 0) {
+    if (debris_vars->fade_out == 0) {
+        if (fast_dec_timer(&debris_vars->timer) == 0) {
             if (!(fast_vec_length(&debris_vars->vel) < frame_time * 0.5f)) {
                 return;
             }
@@ -187,9 +187,9 @@ void rock_update(struct Moby *debris_moby) {
                                                      scale_game_frames(random_int_between(20, 60)));
         }
         mark_moby_for_removal(debris_moby);
-    } else if (fast_dec_timer(&debris_vars->unk10) != 0) {
+    } else if (fast_dec_timer(&debris_vars->timer) != 0) {
         mark_moby_for_removal(debris_moby);
     } else {
-        debris_moby->alpha = debris_vars->unk10 * 127 / debris_vars->unk28;
+        debris_moby->alpha = debris_vars->timer * 127 / debris_vars->fade_frames;
     }
 }
