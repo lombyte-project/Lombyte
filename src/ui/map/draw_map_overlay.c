@@ -87,7 +87,7 @@ void draw_map_overlay(void) {
     s32               label_x, label_y;
     s32               tile_limit;
 
-    if (level_map_selection.unk24 == 0) {
+    if (level_map_selection.map_ready == 0) {
         char *text = no_map_available_text;
 
         setup_gif_paging(0);
@@ -180,7 +180,7 @@ void draw_map_overlay(void) {
     render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x50);
     vu1_add_g_sregister(0x47, 0x360B);
 
-    if (level_map_selection.unk2C != 0 && level_map_selection.unk8 != 0) {
+    if (level_map_selection.unk2C != 0 && level_map_selection.scratch_data != 0) {
         dx = map_right - map_left;
         dy = map_bottom - map_top;
         for (i = 0; i < 8; i++) {
