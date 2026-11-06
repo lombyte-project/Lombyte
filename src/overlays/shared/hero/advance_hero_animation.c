@@ -132,12 +132,12 @@ void advance_hero_animation(void) {
             (struct VoiceSlot670 *)(((u8 *)&voice_pool) + hero_moby->sound_slot * 0x70);
         if (active_voice_slot->owner != hero_moby) {
             hero_moby->sound_slot = 0xFF;
-        } else if (active_voice_slot->sound != hero_moby->unk7C) {
+        } else if (active_voice_slot->sound != hero_moby->seq_sound) {
             release_voice_slot(hero_moby->sound_slot);
             hero_moby->sound_slot = 0xFF;
         }
-    } else if (hero_moby->unk7C != 0xFF && D_L00_0015F5C4 != 2 && D_L00_0015F5C4 != 6) {
-        hero_moby->sound_slot = allocate_voice_for_target_entry(hero_moby->unk7C, 4, hero_moby);
+    } else if (hero_moby->seq_sound != 0xFF && D_L00_0015F5C4 != 2 && D_L00_0015F5C4 != 6) {
+        hero_moby->sound_slot = allocate_voice_for_target_entry(hero_moby->seq_sound, 4, hero_moby);
     }
     sync_hero_slot3_animation_speed();
     sync_hero_mapped_moby_animation_speed();

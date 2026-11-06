@@ -478,7 +478,7 @@ void update_hero_timers_and_auxiliary_state(void) {
     fast_dec_timer_s16(&hero.unk1B2);
     fast_dec_timer(&hero.long_jump_lockout);
     fast_dec_timer_s16(&hero.jump_lockout_timer);
-    fast_dec_timer_s16(&hero.unk1DE);
+    fast_dec_timer_s16(&hero.dive_lock);
     fast_dec_timer(&hero.wall_jump_window);
     fast_dec_timer_s16(&hero.unk1F0);
     fast_dec_timer_s16(&hero.ledge_probe_cooldown);
@@ -490,10 +490,10 @@ void update_hero_timers_and_auxiliary_state(void) {
     fast_dec_timer(&hero.unk1D0);
     fast_dec_timer(&hero.jump_buffer_lockout);
     fast_dec_timer_s16(&hero.fidget_cooldown);
-    fast_dec_timer_s16(&hero.unk1E0);
-    fast_dec_timer_s16(&hero.unk1EE);
+    fast_dec_timer_s16(&hero.sinking_floor_hold);
+    fast_dec_timer_s16(&hero.hit_flash_timer);
     fast_dec_timer_s16(&hero.unk1EA);
-    fast_dec_timer_s16(&hero.unk1F4);
+    fast_dec_timer_s16(&hero.edge_brake_lock_timer);
     fast_dec_timer_s16(&hero.jump_lock_timer);
     fast_dec_timer_s16(&hero.unk1DC);
     fast_dec_timer_s16(&hero.unk1F6);

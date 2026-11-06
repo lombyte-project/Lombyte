@@ -576,7 +576,7 @@ void gold_bolt_update(struct Moby *moby) {
         if (opt_mirror_anim) {
             moby->flags |= 0x8000;
         }
-        hero.unk20AF = 1;
+        hero.hand_item_hidden = 1;
         cutscene_active = 1;
         moby->state = GOLD_BOLT_PICKUP_CUTSCENE;
         gold_bolt_instance_vars->timer = scale_game_frames(60);

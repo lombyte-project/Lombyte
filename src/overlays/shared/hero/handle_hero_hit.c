@@ -64,7 +64,7 @@ s32 handle_hero_hit(s32 apply_response) {
     G.damage_source_moby = (struct Moby *)hero_moby_entry->target;
     D_0015EEA8++;
     if (G.state.control_mode == HERO_MODE_GRIND) {
-        G.unk5BE = 1;
+        G.grind_hit = 1;
         return 0;
     }
     if (apply_response == 0) {

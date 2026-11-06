@@ -115,7 +115,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
         break;
     case FLEET_TURRET_WAIT_FOR_TARGET: {
         struct Hero *g = &hero;
-        if (g->unk308 != 0) {
+        if (g->magnetic_floor != 0) {
             qcopy(targeting_vector_scratch, &turret_moby->pos);
             targeting_vector_scratch[2] += 10.0f;
             fast_vec_sub(
@@ -137,7 +137,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
         break;
     }
     case FLEET_TURRET_AIM_AND_FIRE_AT_ZONE: {
-        if (hero.unk308 == 0) {
+        if (hero.magnetic_floor == 0) {
             turret_moby->state = FLEET_TURRET_WAIT_FOR_TARGET;
         }
         {

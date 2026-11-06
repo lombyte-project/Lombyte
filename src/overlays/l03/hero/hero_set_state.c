@@ -110,14 +110,14 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         p->state.prev_control_mode = p->state.control_mode;
         p->state.current = requested_state;
         p->state.step = 0;
-        p->unk20A5 = 0;
+        p->hidden = 0;
         p->item_use_locked = 0;
         if (p->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
             MOBY(moby)->collision_disable = 0;
             p->tilt_disabled = 0;
             p->item_select_blocked = 0;
             p->unk20B2 = 0;
-            p->unk20AF = 0;
+            p->hand_item_hidden = 0;
             p->glow_pulse_level = 0;
             clear_moby_transform_history(&p->trail);
         }
@@ -137,8 +137,8 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_IDLE;
-        p->unk2284 = 0;
-        p->unk1010 = random_int_between(scale_game_frames(0x32), scale_game_frames(0x64));
+        p->camera_mode = 0;
+        p->head_look_timer = random_int_between(scale_game_frames(0x32), scale_game_frames(0x64));
         clear_hero_idle_rotation_targets();
         if (p->vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT) {
             request_hero_idle_state_for_vehicle_mode();
@@ -166,7 +166,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_AT_TARGET_POSE: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_IDLE;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         clear_u64_value(&p->motion.momentum);
         p->rand_timer.range = 0x68;
         if (entry_animation_mode) {
@@ -193,7 +193,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_DYING: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_DYING;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         qcopy(&p->motion.momentum, &p->motion.resolved_velocity);
         if (entry_animation_mode)
             set_hero_animation(0x45, 0, (float)scale_game_frames(0xC));
@@ -202,7 +202,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_DYING_SPEED_LIMITED: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_DYING;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         p->health.hp = 0;
         qcopy(&p->motion.momentum, &p->motion.resolved_velocity);
         FUN_L00_0025f730(&p->motion.momentum, frame_time * 3.5f);
@@ -213,15 +213,15 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_SINK: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_DYING;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         p->health.hp = 0;
-        p->unk694 = p->motion.displacement.f[2] * 0.2f;
-        p->unk69C = p->water_surface_z - 0.37f;
-        if (p->unk694 < frame_time * -7.0f)
-            p->unk694 = frame_time * -7.0f;
+        p->swim_bob_velocity = p->motion.displacement.f[2] * 0.2f;
+        p->swim_water_level = p->water_surface_z - 0.37f;
+        if (p->swim_bob_velocity < frame_time * -7.0f)
+            p->swim_bob_velocity = frame_time * -7.0f;
         p->item_select_blocked = 1;
         p->unk6A0 = 0;
-        p->unk690 = p->motion.pos.f[2] - p->unk69C;
+        p->swim_bob_offset = p->motion.pos.f[2] - p->swim_water_level;
         if (entry_animation_mode)
             set_hero_animation(0x74, 0, (float)scale_game_frames(0xB));
         break;
@@ -229,7 +229,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_SWIM: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_SWIM;
-        p->unk2284 = 0xB;
+        p->camera_mode = 0xB;
         p->item_select_blocked = 1;
         *(int *)&p->drown_sink_speed = 0;
         if (p->state.prev_control_mode == HERO_MODE_WATER_SURFACE) {
@@ -253,7 +253,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         struct Hero *p = &hero;
         int          n;
         p->state.control_mode = HERO_MODE_SWIM;
-        p->unk2284 = 0xB;
+        p->camera_mode = 0xB;
         p->item_select_blocked = 1;
         p->unk8F4 = scale_game_frames(0x3C);
         if (p->state.prev_control_mode == HERO_MODE_WATER_SURFACE) {
@@ -274,7 +274,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         int          n;
         int          t;
         p->state.control_mode = HERO_MODE_SWIM;
-        p->unk2284 = 0xB;
+        p->camera_mode = 0xB;
         p->item_select_blocked = 1;
         qcopy(&p->motion.momentum, &p->motion.resolved_velocity);
         p->rand_timer.range = 0x68;
@@ -290,7 +290,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_WATER_SURFACE;
         p->item_select_blocked = 1;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         p->splash_effect_timer = 0;
         if (p->state.prev_control_mode == HERO_MODE_SWIM) {
             emit_hero_surface_effect_burst(3, 0xA, 0);
@@ -322,7 +322,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         }
         {
             struct Hero *q = &hero;
-            q->unk698 = 0;
+            q->swim_stroke_timer = 0;
             if (q->state.prev_control_mode == HERO_MODE_SWIM) {
                 float d = (float)q->underwater_air;
                 if (d < 2500.0f) {
@@ -345,12 +345,12 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         }
         {
             struct Hero *s = &hero;
-            s->unk694 = s->motion.displacement.f[2] * 0.37f;
-            if (s->unk694 < frame_time * -7.0f)
-                s->unk694 = frame_time * -7.0f;
-            s->unk69C = s->water_surface_z;
+            s->swim_bob_velocity = s->motion.displacement.f[2] * 0.37f;
+            if (s->swim_bob_velocity < frame_time * -7.0f)
+                s->swim_bob_velocity = frame_time * -7.0f;
+            s->swim_water_level = s->water_surface_z;
             s->unk6A0 = 0;
-            s->unk690 = s->motion.pos.f[2] - s->unk69C - -0.12f;
+            s->swim_bob_offset = s->motion.pos.f[2] - s->swim_water_level - -0.12f;
             qcopy(&s->motion.momentum, &s->motion.resolved_velocity);
             s->motion.momentum.f[2] = 0.0f;
             FUN_L00_0025f730(&s->motion.momentum, frame_time * 5.5f);
@@ -365,7 +365,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         struct Hero *p = &hero;
         char        *r;
         p->state.control_mode = HERO_MODE_HURT;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         scale_hero_motion(0.5f);
         p->item_select_blocked = 1;
         qcopy(&p->motion.velocity, &p->motion.displacement);
@@ -399,9 +399,9 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_WATER_SURFACE;
         p->item_select_blocked = 1;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         *(int *)&p->drown_sink_speed = 0;
-        p->unk698 = scale_game_frames(0x2D);
+        p->swim_stroke_timer = scale_game_frames(0x2D);
         p->rand_timer.range = 0x68;
         if (entry_animation_mode)
             set_hero_animation(0x65, 0, (float)scale_game_frames(0x11));
@@ -411,7 +411,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_DYING;
         p->item_select_blocked = 1;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         p->health.hp = 0;
         if (p->jump_button_frames > scale_game_frames(0x32)) {
             struct UsageStat *h = usage_stats.stat;
@@ -451,7 +451,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_DYING;
         p->item_select_blocked = 1;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         p->health.hp = 0;
         qcopy(&p->motion.momentum, &p->motion.resolved_velocity);
         if (entry_animation_mode)
@@ -462,9 +462,9 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         struct Hero *p = &hero;
         int          t;
         p->state.control_mode = HERO_MODE_IDLE;
-        p->unk2284 = 4;
+        p->camera_mode = 4;
         *(int *)&D_L03_0015F688 = scale_game_frames(0x3C);
-        if (p->unk20AA == 0) {
+        if (p->weapon_up == 0) {
             t = get_hero_idle_animation_index(1);
             if (p->moby->prev_seq != t && entry_animation_mode) {
                 set_hero_animation(t, 0, (float)scale_game_frames(0x12));
@@ -475,7 +475,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_ITEM_BUTTON_RELEASE_WAIT: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_ITEM_RELEASE_WAIT;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         qcopy(&p->motion.momentum, &p->motion.displacement);
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0xA));
         p->unk1D0 = scale_game_frames(7);
@@ -484,7 +484,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_WAIT_FOR_ITEM_RELEASE_THEN_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_ITEM_RELEASE_WAIT;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         qcopy(&p->motion.momentum, &p->motion.displacement);
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(5));
         p->unk1D0 = scale_game_frames(7);
@@ -493,7 +493,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_WAIT: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_RUN;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         p->ground_speed = vector_length_xy(&p->motion.displacement);
         p->state.step = 0;
         p->unk3B8 = 0;
@@ -506,7 +506,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_SHALLOW_WATER_RUN: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_RUN;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         if (p->state.prev_control_mode != HERO_MODE_JUMP &&
             p->state.prev2_control_mode != HERO_MODE_JUMP) {
             p->ground_speed = vector_length_xy(&p->motion.resolved_velocity);
@@ -515,7 +515,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
             struct Hero *q = &hero;
             if (frame_time * 7.0f < q->ground_speed)
                 q->ground_speed = frame_time * 7.0f;
-            q->unk3BE = 0;
+            q->sharp_turn = 0;
             stick_target(1.0f, 0);
             if (1.5707964f <
                 fast_difference_between_rotations(q->motion.rot.f[2], q->motion.move_yaw)) {
@@ -568,7 +568,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_APPROACH_TARGET_POSE: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_RUN;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         p->ground_speed = vector_length_xy(&p->motion.resolved_velocity);
         p->item_use_locked = 1;
         if (p->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT)
@@ -588,7 +588,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_VOICE_SLOT_CLEANUP_IDLE_EXIT: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x10;
-        p->unk2284 = 3;
+        p->camera_mode = 3;
         p->item_select_blocked = 1;
         fill_transfer_words((char *)p + 0x9D0, 0, 0x20);
         qcopy(&p->motion.momentum, &p->motion.displacement);
@@ -599,7 +599,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_STOP: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_RUN;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         qcopy(&p->motion.momentum, &p->motion.resolved_velocity);
         if (p->on_slip_ground != 0 && p->frames_off_ground.s == 0) {
             hero_set_state(HERO_STATE_SLIP, 1);
@@ -628,7 +628,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         struct Hero *p = &hero;
         char        *v = (char *)&p->motion.resolved_velocity;
         p->state.control_mode = HERO_MODE_RUN;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         p->ground_speed = gravity_length_xy((float *)v);
         qcopy(&p->motion.momentum, v);
         if (entry_animation_mode) {
@@ -643,7 +643,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_CROUCH: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_CROUCH;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         p->ground_speed = vector_length_xy(&p->motion.resolved_velocity);
         if (frame_time * 7.0f < p->ground_speed)
             p->ground_speed = frame_time * 7.0f;
@@ -672,7 +672,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_GRAPPLE_TARGET_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_GRAPPLE;
-        p->unk2284 = 7;
+        p->camera_mode = 7;
         {
             struct UsageStat *h = (struct UsageStat *)item_usage;
             if (h[12].count <= 0xFFFE) {
@@ -694,7 +694,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_APPROACH_TARGET_MOBY: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_GRAPPLE;
-        p->unk2284 = 7;
+        p->camera_mode = 7;
         *(int *)&p->grapple_pull_speed = 0;
         p->grapple_pull_ending = 0;
         p->item_use_locked = 1;
@@ -705,7 +705,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_CONSTRAIN_TO_TARGET_RADIUS: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_GRAPPLE;
-        p->unk2284 = 7;
+        p->camera_mode = 7;
         p->item_use_locked = 1;
         *(int *)&p->grapple_pull_speed = 0;
         p->grapple_pull_ending = 0;
@@ -718,7 +718,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         struct Hero *p = &hero;
         char        *d;
         p->state.control_mode = HERO_MODE_GRAPPLE_SWING;
-        p->unk2284 = 7;
+        p->camera_mode = 7;
         {
             struct UsageStat *h = (struct UsageStat *)item_usage;
             if (h[12].count <= 0xFFFE) {
@@ -733,7 +733,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         p->swing_length_vel = 0.0f;
         p->item_use_locked = 1;
         *(char **)&p->swing_target_moby = ((char *)p->swing_target);
-        p->unk99C = 0;
+        p->swing_hooked = 0;
         p->swing_anim_dir = 0;
         *(int *)&p->swing_push_speed = 0;
         *(int *)&p->swing_yaw_vel = 0;
@@ -759,7 +759,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                 q->swing_rope_max_speed = *(float *)(d + 0x2C);
             q->swing_yaw = fast_arc_tan(q->swing_target_moby->pos.x - q->motion.pos.f[0],
                                         q->swing_target_moby->pos.y - q->motion.pos.f[1]);
-            q->unk9A4 = fast_vec_dist(&q->motion.pos, &q->swing_target_moby->pos);
+            q->swing_rope_length = fast_vec_dist(&q->motion.pos, &q->swing_target_moby->pos);
             q->swing_gravity = frame_time_sq * 27.0f;
             if (q->state.prev_control_mode == HERO_MODE_JUMP) {
                 q->swing_gravity = q->jump_gravity;
@@ -779,7 +779,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_ITEM_RELEASE_FALL: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_FALL;
-        p->unk2284 = 7;
+        p->camera_mode = 7;
         clear_u64_value(&p->motion.rot_spring_vel);
         qcopy(&p->motion.velocity, &p->motion.resolved_velocity);
         if (entry_animation_mode)
@@ -790,7 +790,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         struct Hero *p = &hero;
         p->state.control_mode = 0xB;
         p->rise_fall_target_frame = 39.0f;
-        p->unk2284 = 0x50;
+        p->camera_mode = 0x50;
         *(int *)&p->past_apex = 0;
         p->rise_fall_land_frames = 0;
         p->rise_fall_gravity = frame_time_sq * 100.0f;
@@ -805,7 +805,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         int          seg;
         float        t;
         p->state.control_mode = HERO_MODE_FOLLOW_PATH;
-        p->unk2284 = 3;
+        p->camera_mode = 3;
         p->item_select_blocked = 1;
         p->rand_timer.range = 0x68;
         p->follow_path_end_frames = 0;
@@ -827,7 +827,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_LEDGE_HANG_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_LEDGE;
-        p->unk2284 = 0xD;
+        p->camera_mode = 0xD;
         p->unk4EC = frame_time_sq * 24.0f;
         p->unk4F0 = p->motion.pos.f[2];
         if (p->state.prev_control_mode == HERO_MODE_JUMP) {
@@ -847,7 +847,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_LEDGE_HANG: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_LEDGE;
-        p->unk2284 = 0xD;
+        p->camera_mode = 0xD;
         p->item_select_blocked = 1;
         p->rand_timer.range = 0x68;
         if (entry_animation_mode)
@@ -857,7 +857,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_LEDGE;
-        p->unk2284 = 0xD;
+        p->camera_mode = 0xD;
         p->item_select_blocked = 1;
         if (entry_animation_mode)
             set_hero_animation(0x24, 0, (float)scale_game_frames(6));
@@ -866,7 +866,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_LEDGE;
-        p->unk2284 = 0xD;
+        p->camera_mode = 0xD;
         p->item_select_blocked = 1;
         if (entry_animation_mode)
             set_hero_animation(0x25, 0, (float)scale_game_frames(6));
@@ -875,7 +875,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_SLIP: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_FALL;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         qcopy(&p->motion.velocity, &p->motion.resolved_velocity);
         if (entry_animation_mode)
             set_hero_animation(0xB, 0, (float)scale_game_frames(0xC));
@@ -885,12 +885,12 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_FATAL_FALL: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_FALL;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         p->fall_state_gravity = frame_time_sq * 24.0f;
         p->stickless_decel = frame_time_sq * 7.0f;
         if (p->state.current == 0x77) {
             if (p->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
-                p->health.unk22B2 = allocate_hero_voice_for_entry(0x17, 0x20);
+                p->health.fall_voice_slot = allocate_hero_voice_for_entry(0x17, 0x20);
             }
             p->pivot_rot_x_target = randf_sym(frame_time * 3.1415927f, frame_time * 4.3633232f);
             p->fatal_fall_tumble_target_y =
@@ -920,9 +920,9 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         struct Hero *p = &hero;
         int          animation_timing_value = -2;
         p->state.control_mode = HERO_MODE_RUN;
-        p->unk22CA = 1;
+        p->hover_latch = 1;
         p->rand_timer.range = 0x68;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         if (frame_time * 4.5f < p->motion.speed_xy) {
             scale_hero_motion(frame_time * 4.5f / p->motion.speed_xy);
         }
@@ -937,7 +937,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         int          animation_timing = -2;
         p->state.control_mode = HERO_MODE_LAND;
         p->rand_timer.range = 0x68;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         if (frame_time * 4.5f < p->motion.speed_xy) {
             scale_hero_motion(frame_time * 4.5f / p->motion.speed_xy);
         }
@@ -976,9 +976,9 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         p->state.control_mode = HERO_MODE_JUMP;
         if (requested_state >= HERO_STATE_GRIND_JUMP &&
             requested_state <= HERO_STATE_GRIND_RAIL_TRANSFER) {
-            p->unk2284 = 3;
+            p->camera_mode = 3;
         } else {
-            p->unk2284 = 0x50;
+            p->camera_mode = 0x50;
         }
         {
             char        *v = (char *)&hero.motion.velocity;
@@ -996,7 +996,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
             struct Hero *u = &hero;
             u->smoothed_ground_z = u->motion.pos.f[2];
             u->jump_gravity = frame_time_sq * 29.7f;
-            u->unk3E8 = -1;
+            u->velocity_key_index = -1;
             u->air_speed_step_up = frame_time_sq * 20.0f;
             u->jump_decel = frame_time_sq * 11.0f;
             u->unk4A8 = u->on_ice_ground;
@@ -1019,7 +1019,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
             u->fall_gravity = 0.0f;
             u->unk22B4 = 0;
             if (u->state.current == 7) {
-                u->unk430 = 1.47f;
+                u->jump_height = 1.47f;
                 u->takeoff_frame = scale_game_frames(5);
                 u->unk434 = 0.6f;
                 u->apex_anim_frame = 18.0f;
@@ -1027,13 +1027,13 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                 u->jump_land_anim_frame = 12.0f;
                 u->unk48C = 2.62f;
                 u->jump_height_start = 1.47f;
-                u->unk498 = scale_game_frames(0xF);
+                u->jump_ramp_frames = scale_game_frames(0xF);
                 u->unk4AC = 1;
                 u->can_chain_high_jump = 1;
                 u->can_double_jump = 1;
                 u->fall_gravity = u->jump_gravity * 1.17f;
             } else if (u->state.current == 0x12) {
-                u->unk430 = 0.1f;
+                u->jump_height = 0.1f;
                 u->takeoff_frame = scale_game_frames(2);
                 u->unk434 = 0.6f;
                 u->apex_anim_frame = 18.0f;
@@ -1041,29 +1041,30 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                 u->jump_land_anim_frame = 14.0f;
                 u->unk48C = 0.2f;
                 u->jump_height_start = 0.1f;
-                u->unk498 = scale_game_frames(0xA);
+                u->jump_ramp_frames = scale_game_frames(0xA);
                 if (u->water_depth < 1.25f) {
                     u->takeoff_frame = scale_game_frames(0xF);
                     u->jump_height_start = 1.95f;
                     u->unk48C = 1.98f;
-                    u->unk430 = 1.95f;
+                    u->jump_height = 1.95f;
                 } else {
                     gravity_set_z(
                         (float *)(&u->motion.velocity), (float *)(&u->motion.velocity), 0.0f);
                     u->velocity_keys_active = 1;
-                    u->unk3D0 = scale_game_frames(2);
-                    u->velocity_keys_end_frame = scale_game_frames(0x23) + u->unk3D0;
+                    u->velocity_keys_start_frame = scale_game_frames(2);
+                    u->velocity_keys_end_frame =
+                        scale_game_frames(0x23) + u->velocity_keys_start_frame;
                     u->keyed_move_target_frame = 0.0f;
                     u->unk3DC = 18.0f;
                     u->keyed_anim_target_frame = scale_game_frames(0x28);
-                    u->unk3E4 = level03_hero_water_surface_jump_velocity_keys;
+                    u->velocity_keys = level03_hero_water_surface_jump_velocity_keys;
                 }
                 {
                     struct Hero *w = &hero;
                     w->item_select_blocked = 1;
                 }
             } else if (u->state.current == 9) {
-                u->unk430 = 1.0f;
+                u->jump_height = 1.0f;
                 u->takeoff_frame = scale_game_frames(5);
                 u->unk434 = 0.6f;
                 u->apex_anim_frame = 18.0f;
@@ -1071,13 +1072,13 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                 u->jump_land_anim_frame = 11.0f;
                 u->unk48C = 2.7f;
                 u->jump_height_start = 1.0f;
-                u->unk498 = scale_game_frames(0xF);
+                u->jump_ramp_frames = scale_game_frames(0xF);
                 u->air_stick_speed = frame_time * 5.7f;
                 u->unk4AC = 1;
                 u->can_chain_high_jump = 1;
                 u->can_double_jump = 1;
             } else if (u->state.current == 0xA) {
-                u->unk430 = 1.9f;
+                u->jump_height = 1.9f;
                 u->takeoff_frame = scale_game_frames(5);
                 u->unk434 = 0.6f;
                 u->apex_anim_frame = 18.0f;
@@ -1085,7 +1086,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                 u->jump_land_anim_frame = 10.0f;
                 u->unk48C = 1.95f;
                 u->jump_height_start = 1.9f;
-                u->unk498 = scale_game_frames(0xE);
+                u->jump_ramp_frames = scale_game_frames(0xE);
                 u->can_chain_high_jump = 1;
                 u->jump_gravity = frame_time_sq * 11.0f;
                 u->jump_max_frames = scale_game_frames(0x78);
@@ -1093,7 +1094,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                 u->unk4A6 = scale_game_frames(0x46);
             } else if (u->state.current == 0x10) {
                 char *x = &u->trail.pos[0];
-                u->unk430 = 1.5f;
+                u->jump_height = 1.5f;
                 u->takeoff_frame = scale_game_frames(5);
                 u->unk434 = 0.8f;
                 u->apex_anim_frame = 18.0f;
@@ -1101,8 +1102,8 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                 u->jump_land_anim_frame = 11.0f;
                 u->unk48C = 1.55f;
                 u->jump_height_start = 1.5f;
-                u->unk498 = scale_game_frames(1);
-                u->unk430 = 0.4f;
+                u->jump_ramp_frames = scale_game_frames(1);
+                u->jump_height = 0.4f;
                 u->jump_height_start = 0.4f;
                 u->unk48C = 0.9f;
                 initialize_moby_transform_history(((int)u->moby), x);
@@ -1117,7 +1118,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                 u->air_speed_step_up = frame_time_sq * 44.0f;
                 u->jump_decel = frame_time_sq * 50.0f;
             } else if (u->state.current == 0x1C) {
-                u->unk430 = 2.0f;
+                u->jump_height = 2.0f;
                 u->takeoff_frame = scale_game_frames(0xA);
                 u->unk434 = 0.85f;
                 u->apex_anim_frame = 20.0f;
@@ -1125,14 +1126,14 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                 u->jump_land_anim_frame = 19.0f;
                 u->unk48C = 2.05f;
                 u->jump_height_start = 2.0f;
-                u->unk498 = scale_game_frames(1);
+                u->jump_ramp_frames = scale_game_frames(1);
                 u->jump_anim_retime_scale = 1.0f;
                 u->jump_gravity = frame_time_sq * 25.0f;
                 *(int *)&u->ledge_jump_speed = 0;
                 u->item_select_blocked = 1;
                 u->can_chain_high_jump = 1;
             } else if (u->state.current == 0x11) {
-                u->unk430 = 3.3f;
+                u->jump_height = 3.3f;
                 u->takeoff_frame = scale_game_frames(9);
                 u->unk434 = 0.6f;
                 u->apex_anim_frame = 12.0f;
@@ -1140,16 +1141,16 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                 u->jump_land_anim_frame = 10.0f;
                 u->unk48C = 3.35f;
                 u->jump_height_start = 3.3f;
-                u->unk498 = scale_game_frames(0xC);
+                u->jump_ramp_frames = scale_game_frames(0xC);
                 u->fall_delay_frames = scale_game_frames(0x50);
                 u->jump_gravity = frame_time_sq * 29.0f;
-                qcopy(&u->unk470, &u->unk460);
+                qcopy(&u->wall_jump_normal, &u->unk460);
                 u->unk22B4 = 1;
                 u->item_select_blocked = 1;
                 u->unk4AC = 1;
             } else if (u->state.current == 0xD) {
                 char *x = &u->trail.pos[0];
-                u->unk430 = 0.1f;
+                u->jump_height = 0.1f;
                 u->takeoff_frame = scale_game_frames(9);
                 u->unk434 = 0.6f;
                 u->apex_anim_frame = 26.0f;
@@ -1157,7 +1158,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                 u->jump_land_anim_frame = 18.0f;
                 u->unk48C = 0.2f;
                 u->jump_height_start = 0.1f;
-                u->unk498 = scale_game_frames(0xE);
+                u->jump_ramp_frames = scale_game_frames(0xE);
                 u->fall_start_distance = 4.5f;
                 u->jump_max_frames = scale_game_frames(0x78);
                 u->air_stick_speed = frame_time * 1.9f;
@@ -1165,15 +1166,15 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                 create_moby_transform_history_entry(x, 0x28, 3);
                 create_moby_transform_history_entry(x, 0x14, 5);
                 u->velocity_keys_active = 1;
-                u->unk3D0 = scale_game_frames(9);
-                u->velocity_keys_end_frame = scale_game_frames(0x23) + u->unk3D0;
+                u->velocity_keys_start_frame = scale_game_frames(9);
+                u->velocity_keys_end_frame = scale_game_frames(0x23) + u->velocity_keys_start_frame;
                 u->unk3DC = 26.0f;
                 u->keyed_move_target_frame = 0.0f;
                 u->keyed_anim_target_frame = scale_game_frames(0x2D);
-                u->unk3E4 = level03_hero_trail_jump_velocity_keys;
+                u->velocity_keys = level03_hero_trail_jump_velocity_keys;
                 u->can_chain_high_jump = 1;
             } else if (u->state.current == 0xF) {
-                u->unk430 = 1.9f;
+                u->jump_height = 1.9f;
                 u->takeoff_frame = scale_game_frames(9);
                 u->unk434 = 0.6f;
                 u->apex_anim_frame = 50.0f;
@@ -1181,7 +1182,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                 u->jump_land_anim_frame = 28.0f;
                 u->unk48C = 1.95f;
                 u->jump_height_start = 1.9f;
-                u->unk498 = scale_game_frames(5);
+                u->jump_ramp_frames = scale_game_frames(5);
                 u->fall_start_distance = 4.5f;
                 u->jump_max_frames = scale_game_frames(0x82);
                 u->air_stick_speed = frame_time * 3.3f;
@@ -1189,17 +1190,18 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                 u->ledge_probe_cooldown = scale_game_frames(0x46);
                 u->velocity_keys_active = 1;
                 if (pal_mode != FALSE) {
-                    u->unk3D0 = scale_game_frames(0x22);
+                    u->velocity_keys_start_frame = scale_game_frames(0x22);
                 } else {
-                    u->unk3D0 = scale_game_frames(0x23);
+                    u->velocity_keys_start_frame = scale_game_frames(0x23);
                 }
                 {
                     struct Hero *w = &hero;
-                    w->velocity_keys_end_frame = scale_game_frames(0x24) + w->unk3D0;
+                    w->velocity_keys_end_frame =
+                        scale_game_frames(0x24) + w->velocity_keys_start_frame;
                     w->keyed_move_target_frame = 29.0f;
                     w->unk3DC = 50.0f;
                     w->keyed_anim_target_frame = scale_game_frames(0x56);
-                    w->unk3E4 = D_L03_0015F6E8;
+                    w->velocity_keys = D_L03_0015F6E8;
                     w->can_chain_high_jump = 1;
                 }
             } else if (u->state.current == 0xE) {
@@ -1211,15 +1213,15 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                 u->target_anim_frame = 43.0f;
                 u->jump_land_anim_frame = 19.0f;
                 u->unk48C = v + 0.05f;
-                u->unk430 = v;
+                u->jump_height = v;
                 u->jump_height_start = v;
                 u->takeoff_frame = -1;
-                u->unk498 = scale_game_frames(0xE);
+                u->jump_ramp_frames = scale_game_frames(0xE);
                 u->jump_anim_retime_scale = 1.0f;
                 u->air_stick_speed = frame_time * 3.5f;
                 u->unk4A6 = scale_game_frames(0x1E);
             } else if (u->state.current == 0xB) {
-                u->unk430 = 3.2f;
+                u->jump_height = 3.2f;
                 u->takeoff_frame = scale_game_frames(5);
                 u->unk434 = 0.6f;
                 u->apex_anim_frame = 18.0f;
@@ -1227,7 +1229,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                 u->jump_land_anim_frame = 24.0f;
                 u->unk48C = 3.25f;
                 u->jump_height_start = 3.2f;
-                u->unk498 = scale_game_frames(0xE);
+                u->jump_ramp_frames = scale_game_frames(0xE);
                 u->fall_start_distance = 4.5f;
                 u->fall_delay_frames = scale_game_frames(0x32);
                 u->jump_anim_retime_scale = 1.0f;
@@ -1250,7 +1252,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         {
             struct Hero *q = &hero;
             if (q->fall_start_distance == 0.0f)
-                q->fall_start_distance = q->unk430 * 1.5f;
+                q->fall_start_distance = q->jump_height * 1.5f;
             if (entry_animation_mode) {
                 int s = q->state.current;
                 if (s == 7) {
@@ -1319,10 +1321,10 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_ATTACK;
         p->speed_scale = 1.0f;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         p->heading_locked = 0;
         *(int *)&p->melee_target = 0;
-        p->unkA64 = 0;
+        p->melee_hit = 0;
         switch (p->state.current) {
         case HERO_STATE_WRENCH_SLAM: {
             struct UsageStat *h = usage_stats.stat;
@@ -1335,7 +1337,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
             }
             h[0].level_mask = h[0].level_mask | (1 << current_level_index) | 0x80000000;
             q = &hero;
-            q->unk2284 = 0x50;
+            q->camera_mode = 0x50;
             q->attack_record = 4;
             q->saved_item[0] = 0;
             update_hero_target_heading(8.0f, 1.0471976f, -1.0f);
@@ -1473,7 +1475,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_WAIT_FOR_ANIMATION_THEN_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xA;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         p->ground_speed = frame_time * 9.0f;
         if (entry_animation_mode) {
             char           *m;
@@ -1493,7 +1495,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_WALL_BONK: {
         struct Hero *p = &hero;
         p->state.control_mode = 0xA;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         p->pushback_yaw = fast_add_rotations(p->motion.rot.f[2], 3.1415927f);
         p->ground_speed = frame_time * 9.0f;
         if (entry_animation_mode)
@@ -1504,9 +1506,9 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         struct Hero *p = &hero;
         char        *r;
         p->state.control_mode = HERO_MODE_HURT;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         scale_hero_motion(0.5f);
-        p->unk1EE = scale_game_frames(0x2D);
+        p->hit_flash_timer = scale_game_frames(0x2D);
         qcopy(&p->motion.velocity, &p->motion.resolved_velocity);
         FUN_L00_0025f730(&p->motion.velocity, frame_time * 7.0f);
         r = find_moby_hit(((void *)p->moby), 1, 0);
@@ -1529,7 +1531,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_VEHICLE_MODE_3_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_IDLE;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         if (entry_animation_mode)
             set_hero_animation(0, 0, (float)scale_game_frames(0xE));
         break;
@@ -1537,7 +1539,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_DELAYED_CIRCLE_RELEASE_WAIT: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_IDLE;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         if (entry_animation_mode) {
             set_hero_animation(4, 0, (float)scale_game_frames(7));
             hero_queue_sequence(0xE, 0x22);
@@ -1547,7 +1549,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_VEHICLE_MODE_3_SLIP: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_FALL;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         qcopy(&p->motion.velocity, &p->motion.resolved_velocity);
         if (entry_animation_mode)
             set_hero_animation(6, 0, (float)scale_game_frames(0xC));
@@ -1556,7 +1558,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_VEHICLE_MODE_3_FALL: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_FALL;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         p->fall_state_gravity = frame_time_sq * 24.0f;
         p->stickless_decel = frame_time_sq * 7.0f;
         qcopy(&p->motion.velocity, &p->motion.resolved_velocity);
@@ -1567,7 +1569,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_VEHICLE_MODE_3_RUN: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_RUN;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         {
             char        *v = (char *)&p->motion.resolved_velocity;
             struct Hero *hero_base;
@@ -1585,7 +1587,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_VEHICLE_MODE_3_DYING: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_DYING;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         qcopy(&p->motion.momentum, &p->motion.resolved_velocity);
         if (entry_animation_mode)
             set_hero_animation(3, 0, (float)scale_game_frames(0xC));
@@ -1594,7 +1596,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_VEHICLE_MODE_3_HURT: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_HURT;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         scale_hero_motion(0.5f);
         qcopy(&p->motion.velocity, &p->motion.resolved_velocity);
         FUN_L00_0025f730(&p->motion.velocity, frame_time * 5.0f);
@@ -1610,7 +1612,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_GRIND_COLLISION_RECOVERY: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_GRIND;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         if (p->rail_off_frames == 0)
             hero_change_health(1);
         p->invulnerable_frames = scale_game_frames(0x4D);
@@ -1629,13 +1631,13 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0xA));
         break;
     }
     case HERO_STATE_LOOK_RELEASE_WAIT: {
         struct Hero *p = &hero;
-        p->unk2284 = 0x51;
+        p->camera_mode = 0x51;
         p->state.control_mode = HERO_MODE_IDLE;
         if (return_hero_animation_id_unchanged(p->moby->prev_seq) !=
             get_hero_idle_animation_index(1)) {
@@ -1646,7 +1648,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_IDLE_ANIMATION_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0xA));
         break;
     }
@@ -1654,7 +1656,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
         p->item_use_locked = 1;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         cancel_hero_item_animation();
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0xA));
         break;
@@ -1662,14 +1664,14 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_IDLE_ANIMATION_LONG_BLEND_ENTRY: {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_ITEM_RELEASE_WAIT;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0xA));
         break;
     }
     case HERO_STATE_OPTIONAL_IDLE_ANIMATION: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         p->item_select_blocked = 1;
         p->tilt_disabled = 1;
         p->item_use_locked = 1;
@@ -1680,7 +1682,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     case HERO_STATE_CLEAR_VELOCITY: {
         struct Hero *p = &hero;
         p->state.control_mode = 9;
-        p->unk2284 = 0;
+        p->camera_mode = 0;
         p->item_select_blocked = 1;
         p->item_use_locked = 1;
         clear_u64_value(&p->motion.velocity);
@@ -1721,7 +1723,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
     }
     {
         struct Hero *t = &hero;
-        if (t->unk308 == 0 && t->items[1].item_id == 0x1C && t->saved_item[1] != 0) {
+        if (t->magnetic_floor == 0 && t->items[1].item_id == 0x1C && t->saved_item[1] != 0) {
             t->restore_item[1] = 1;
         }
     }

@@ -612,7 +612,7 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
                     transform_vector_by_basis(
                         &transformed_offset, &transformed_offset, D_L00_00166FD0);
                     fast_vec_add(&tesla_claw_vars->tip, &tesla_claw_vars->pos, &transformed_offset);
-                } else if (hero.unk22C8 == 1) {
+                } else if (hero.weapon_lowered == 1) {
                     moby_point_position(tesla_claw_moby, 0, &tesla_claw_vars->pos);
                     transformed_offset.f.x = 0.0f;
                     transformed_offset.f.y = -tesla_claw_vars->reach;

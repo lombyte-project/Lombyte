@@ -174,7 +174,7 @@ void reset_moby_from_class_defaults(struct Moby *moby) {
     moby->visible = 1;
     update_moby_grids(moby, 0x80807F7F);
     ((struct SpawnMobyView *)moby)->unk36 = 0x7F80;
-    moby->unk72 = 0xFF;
+    moby->lod_dist = 0xFF;
     moby->hit_slot = 0xFF;
     ((struct SpawnMobyView *)moby)->unk71 = 0xFF;
     moby->collision = ((struct SpawnClassView *)moby->pclass)->unk10;

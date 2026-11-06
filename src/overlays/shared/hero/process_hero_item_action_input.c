@@ -293,13 +293,13 @@ void hero_update_hop_velocity(void) {
         build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.momentum, &hero.move_impulse);
     } else if (state == HERO_STATE_REPEATABLE_JUMP) {
-        hero.motion.move_yaw = hero.unk470.f[3];
-        qcopy(&hero.motion.move_dir, &hero.unk470);
+        hero.motion.move_yaw = hero.wall_jump_normal.f[3];
+        qcopy(&hero.motion.move_dir, &hero.wall_jump_normal);
         if (scale_game_frames(9) < hero.state_timer) {
             turn_to(-1, ED64 * 0.042f, ED64 * 0.2f, ED6C * 11.868238f);
         }
         if (scale_game_frames(9) <= hero.state_timer) {
-            if (hero.unk308 == 0) {
+            if (hero.magnetic_floor == 0) {
                 hero.motion.velocity.f[0] = fast_cos(hero.motion.move_yaw) * (ED6C * 4.9f);
                 hero.motion.velocity.f[1] = fast_sin(hero.motion.move_yaw) * (ED6C * 4.9f);
             } else {
@@ -412,7 +412,7 @@ s32 process_hero_item_action_input(void) {
     HeroTableRow2C        *row;
     struct HeldGadgetVars *held_gadget_voice_state;
 
-    if (hero.item_use_locked != 0 && (hero.items[0].item_id != 8 || hero.unk308 != 1)) {
+    if (hero.item_use_locked != 0 && (hero.items[0].item_id != 8 || hero.magnetic_floor != 1)) {
         return 0;
     }
     if (hero.vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT) {
@@ -444,7 +444,7 @@ s32 process_hero_item_action_input(void) {
                         } else {
                             hero_set_state(HERO_STATE_CROUCH_SWING, 1);
                         }
-                    } else if (hero.unk308 == 1) {
+                    } else if (hero.magnetic_floor == 1) {
                         hero_set_state(0x70, 1);
                     } else {
                         hero_set_state(HERO_STATE_WRENCH_COMBO, 1);
@@ -493,7 +493,7 @@ s32 process_hero_item_action_input(void) {
                 if (hero.on_slip_ground == 0 && pad_pressed_within(buttons, frames, NULL) != 0) {
                     if (controller_state.held & 0xA) {
                         hero_set_state(HERO_STATE_CROUCH_SWING, 1);
-                    } else if (hero.unk308 == 1) {
+                    } else if (hero.magnetic_floor == 1) {
                         hero_set_state(0x70, 1);
                     } else {
                         hero_set_state(HERO_STATE_WRENCH_COMBO, 1);
@@ -658,7 +658,7 @@ s32 process_hero_item_action_input(void) {
 
     if (hero.state_timer == saved) {
         if (hero_slot_item_id(3) == 3 && hero.state.current != 0x81 &&
-            (hero.unk308 == 0 || D_0013D4DC[0] == 0) && hero.pack_disabled == 0) {
+            (hero.magnetic_floor == 0 || D_0013D4DC[0] == 0) && hero.pack_disabled == 0) {
             fast_dec_timer(&hero_button_8_double_press_countdown_gp);
             if (hero_button_8_double_press_countdown_gp != 0) {
                 if (hero.state.control_mode == HERO_MODE_IDLE ||
@@ -678,7 +678,7 @@ s32 process_hero_item_action_input(void) {
         } else if (hero.state.current != HERO_STATE_WRENCH_COMBO && hero.state.current != 0x81 &&
                    hero.state.current != HERO_STATE_CROUCH_SWING &&
                    hero.state.current != HERO_STATE_HURT) {
-            hero.unk22CA = 0;
+            hero.hover_latch = 0;
         }
     }
     return hero.state_timer < saved;

@@ -364,7 +364,7 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
             usage_stats.stat[20].level_mask =
                 usage_stats.stat[20].level_mask | (1 << current_level_index) | 0x80000000;
             if (id == 0x18)
-                hero_lui.unk1FF5 = 1;
+                hero_lui.launch_drones = 1;
             else
                 hero_lui.pending_item[0] = id;
             rr = &D_L00_001C40B0[ri];

@@ -114,7 +114,7 @@ struct Moby *respawn_spawner_child(struct Moby *parent_spawner_moby, Vec4 *pos) 
             spawned_moby->flags |= 0x400;
         spawned_moby->occlusion = 0x7f80;
         spawned_moby->unk71 = 0xff;
-        spawned_moby->unk72 = 0xff;
+        spawned_moby->lod_dist = 0xff;
         spawned_moby->hit_slot = 0xff;
         if (owner_vars[0x93] != 0)
             spawned_moby->scale = spawned_moby->pclass->scale * 0.1f;

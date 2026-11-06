@@ -1570,7 +1570,7 @@ void morphoray_update(Moby *moby) {
             func_001FA4A0_2BDAF0(matrix, points);
             direction.z = 1.0f;
             func_001F9EE8_2BDAF0(&direction, &direction, matrix);
-        } else if (((Hero *)((char *)&hero))->unk22C8 == 1) {
+        } else if (((Hero *)((char *)&hero))->weapon_lowered == 1) {
             func_001F9C30_2BDAF0(&direction, &moby->rot_row1, -1.0f);
         } else {
             direction.x = 1.0f;

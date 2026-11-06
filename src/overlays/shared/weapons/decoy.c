@@ -278,7 +278,7 @@ u8 *spawn_decoy(s32 owner_moby, u128 *position, u128 *other_position) {
         *(u16 *)(decoy_vars + 0x0c) = 4;
         *(u16 *)(decoy_vars + 0x0e) = 0xf;
         append_unique_moby_index(spawned_moby, D_L00_001B0830_lui, 0x1f);
-        if (hero.unk20A5 != 0 || hero.unk20AF != 0)
+        if (hero.hidden != 0 || hero.hand_item_hidden != 0)
             MOBY(spawned_moby)->flags |= 0x41;
     }
     return spawned_moby;
@@ -584,7 +584,7 @@ void decoy_update(char *moby) {
         return;
     }
     ++decoy_instance_vars->unk54;
-    if (hero.unk20A5 != 0 && (u8)MOBY(moby)->state < DECOY_THROWN_MOVEMENT)
+    if (hero.hidden != 0 && (u8)MOBY(moby)->state < DECOY_THROWN_MOVEMENT)
         MOBY(moby)->flags |= 0x41;
     else
         MOBY(moby)->flags &= 0xffbe;

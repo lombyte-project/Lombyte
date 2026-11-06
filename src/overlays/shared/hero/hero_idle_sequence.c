@@ -111,10 +111,10 @@ int hero_idle_sequence(int allow_item_idle_sequence) {
         if (idle_sequence_state->item_anim_active == 0) {
             return 0;
         }
-        if (idle_sequence_state->unk20AA == 0) {
+        if (idle_sequence_state->weapon_up == 0) {
             return 0;
         }
-        if (idle_sequence_state->unk22C8 != 0) {
+        if (idle_sequence_state->weapon_lowered != 0) {
             return 0;
         }
     }
@@ -484,18 +484,18 @@ void update_hero_glow_and_extra_manipulators(void) {
     green = green_swing + 0xA0;
     blue_pulse = blue_swing + 0xC;
     blue = blue_swing + 0x4C;
-    if (glow_owner->unk1EE != 0) {
+    if (glow_owner->hit_flash_timer != 0) {
         f32 fade = 1.0f;
         s32 fade_in = scale_game_frames(5);
         s32 fade_out = scale_game_frames(20);
-        s32 remaining = glow_owner->unk1EE;
+        s32 remaining = glow_owner->hit_flash_timer;
 
         if (scale_game_frames(45) - fade_in < remaining) {
-            fade = convert_integer_to_float(scale_game_frames(45) - glow_owner->unk1EE);
+            fade = convert_integer_to_float(scale_game_frames(45) - glow_owner->hit_flash_timer);
             fade = fade / convert_integer_to_float(fade_in);
         }
-        if (glow_owner->unk1EE < fade_out) {
-            fade = convert_integer_to_float(glow_owner->unk1EE);
+        if (glow_owner->hit_flash_timer < fade_out) {
+            fade = convert_integer_to_float(glow_owner->hit_flash_timer);
             fade = fade / convert_integer_to_float(fade_out);
         }
         red = red - truncate_float_to_s32((f32)red_pulse * fade);
@@ -1032,7 +1032,7 @@ void release_and_clear_hero_voice_slots(void) {
     struct Moby **mobys;
 
     hero_state = &hero;
-    mobys = hero_state->unk2238;
+    mobys = hero_state->sound_slot_moby;
     slot = &hero_state->grind_voice;
     expected_owner_byte_offset = 0;
     for (i = 7; i >= 0; i--) {
@@ -1938,7 +1938,7 @@ void update_hero_moby(void) {
     struct Moby *hero_moby;
 
     hero.moby->hit_slot = 0xFF;
-    if (hero.unk20A5) {
+    if (hero.hidden) {
         set_hero_item_moby_flag_bit0();
     } else {
         update_hero_item_moby_flags();
@@ -1993,7 +1993,7 @@ void update_hero_vehicle_moby(void) {
     u128           position_scratch;
     float          second_position_offset;
     unsigned char *hero_moby;
-    if (hero.unk20A5) {
+    if (hero.hidden) {
         set_hero_moby_flag_bit0();
     } else {
         clear_hero_moby_flag_bit0();
@@ -2477,7 +2477,7 @@ void fast_sin_cf(int seed, int limit) {
     int          i;
     struct Hero *hero_state;
 
-    if (limit < ++hero.unk908) {
+    if (limit < ++hero.bow_ring_counter) {
         for (i = 0; i < 2; i++) {
             if (i == 0) {
                 planar_effect_angle_radians = fast_add_rotations(hero.motion.rot.f[2], 0.785398f);
@@ -2506,9 +2506,9 @@ void fast_sin_cf(int seed, int limit) {
                              effect_side_value);
             }
             if (seed) {
-                hero_state->unk908 = random_integer_below(seed);
+                hero_state->bow_ring_counter = random_integer_below(seed);
             } else {
-                hero_state->unk908 = 0;
+                hero_state->bow_ring_counter = 0;
             }
         }
     }
@@ -2526,7 +2526,7 @@ void emit_hero_periodic_surface_particles(int counter_reset_range,
 
                                           int effect_spawn_counter_threshold) {
     struct Hero *P = &hero;
-    if (effect_spawn_counter_threshold < ++P->unk906) {
+    if (effect_spawn_counter_threshold < ++P->spray_counter) {
         V_209848 spawn_position, outgoing_motion;
         float    planar_angle, planar_motion_scale;
         int      k;
@@ -2553,7 +2553,7 @@ void emit_hero_periodic_surface_particles(int counter_reset_range,
         {
             short        h = random_integer_below(counter_reset_range);
             struct Hero *Q = &hero;
-            Q->unk906 = h;
+            Q->spray_counter = h;
         }
     }
 }
@@ -2795,7 +2795,7 @@ void update_hero_collision_ease_target(void) {
     struct Hero     *hit_hero_state_base;
     float probe_z_offset, probe_end_radius, distance_based_ease_value, state_frame_scale_squared,
         frame_scale_squared;
-    hero_state_base->unk22C8 = 0;
+    hero_state_base->weapon_lowered = 0;
     if (hero_state_base->item_slot_anim_count == 0)
         return;
     if (hero_slot_item_id(0) == 0x1A)
@@ -2808,7 +2808,7 @@ void update_hero_collision_ease_target(void) {
         state_ease_table[9].max_speed = state_frame_scale_squared * 0.3f;
     }
     probe_end_radius = 1.29999995f;
-    if (hero_state_base->unk22C8 != 0)
+    if (hero_state_base->weapon_lowered != 0)
         probe_end_radius = 1.5999999f;
     probe_z_offset = 0.569999993f;
     if (hero_state_base->item_anim_active != 0)
@@ -2837,7 +2837,7 @@ void update_hero_collision_ease_target(void) {
     if (distance_based_ease_value < -1.22173047f)
         distance_based_ease_value = -1.22173047f;
     hit_ease_table[9].rot_target.f[1] = distance_based_ease_value;
-    hit_hero_state_base->unk22C8 = 1;
+    hit_hero_state_base->weapon_lowered = 1;
 }
 
 extern char D_0013F350_0020a500[] __asm__("D_0013F350");
@@ -3370,7 +3370,8 @@ void probe_hero_airborne_wall_contact(void) {
     }
     hero_state = &hero;
     if (hero_state->unk22B4 != 0) {
-        f = fast_difference_between_rotations(hero_state->unk470.f[3], hero_state->unk460.f[3]);
+        f = fast_difference_between_rotations(hero_state->wall_jump_normal.f[3],
+                                              hero_state->unk460.f[3]);
         if (f < 2.9670596f) {
             return;
         }
@@ -3597,7 +3598,7 @@ void check_ledge_grab(void) {
     Obj  *moby_info;
     Obj  *moby_props;
 
-    if (((Hero *)D_0013F450_20C568)->unk308 == 2)
+    if (((Hero *)D_0013F450_20C568)->magnetic_floor == 2)
         return;
     ((Hero *)D_0013F450_20C568)->ledge_found = 0;
     if (((Hero *)D_0013F450_20C568)->ledge_probe_cooldown != 0)

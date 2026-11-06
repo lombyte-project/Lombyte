@@ -482,7 +482,7 @@ void set_hero_animation(int requested_animation_id,
     clear_hero_queued_animation();
     hero_animation_dispatch_state = &hero;
     sequence_pointer_byte_offset = requested_animation_id * 4;
-    MOBY(hero_animation_moby)->unk7C =
+    MOBY(hero_animation_moby)->seq_sound =
         *(unsigned char *)(*(int *)(*(int *)(hero_animation_moby + 0x24) +
                                     sequence_pointer_byte_offset + 0x48) +
                            0x11);
@@ -796,7 +796,7 @@ void update_hero_item_moby_flags(void) {
         }
     }
     blk4 = &hero;
-    if ((blk4->unk20AE != 0 && blk4->items[0].item_id == 8) || blk4->unk20AF != 0) {
+    if ((blk4->unk20AE != 0 && blk4->items[0].item_id == 8) || blk4->hand_item_hidden != 0) {
         struct Hero *blk5 = &hero;
 
         hero_flag_target = *(char **)&blk5->items[0].moby;
@@ -918,7 +918,7 @@ int resolve_hero_gravity_mode(void) __asm__("FUN_L00_00233440");
 int resolve_hero_gravity_mode(void) {
     struct Hero *hero_gravity_mode_state = &hero;
     int          state = hero_gravity_mode_state->state.current;
-    int          return_value = hero_gravity_mode_state->unk308;
+    int          return_value = hero_gravity_mode_state->magnetic_floor;
 
     if (state == HERO_STATE_DIRECTION_LIMITED_GROUND_MOVE ||
         state == HERO_STATE_ANIMATION_FRAME_EXIT_WAIT ||

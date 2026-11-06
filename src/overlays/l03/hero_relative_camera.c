@@ -112,7 +112,8 @@ void update_smoothed_hero_relative_camera_position(void *camera_instance) {
     float        gravity_offset[4];
     float        camera_position[4];
     struct Hero *hero_ptr;
-    if (hero_for_height_update->unk2284 != 0x50 || hero_for_height_update->state.current == 0x11) {
+    if (hero_for_height_update->camera_mode != 0x50 ||
+        hero_for_height_update->state.current == 0x11) {
         *(float *)(camera_back_direction_data + 0x34) = hero_for_height_update->motion.pos.f[2];
     }
     fast_vec_normalize(gravity_offset, &hero.gravity_dir, -*(float *)(camera_offset_params + 0x10));
@@ -182,7 +183,7 @@ void rebuild_camera_orientation_axes(void *camera_instance) {
 int FUN_L03_002ebd70(void) {
     struct Hero *hero_ptr = &hero;
 
-    if ((hero_ptr->unk2284 == 0x50 && hero_ptr->state.current != 0x11) ||
+    if ((hero_ptr->camera_mode == 0x50 && hero_ptr->state.current != 0x11) ||
         hero_ptr->state.current == 6) {
         return -1;
     }

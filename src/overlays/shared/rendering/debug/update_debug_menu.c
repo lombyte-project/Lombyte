@@ -208,7 +208,7 @@ void update_debug_camera(void) {
         update_all_cameras();
     if (pad->stick_moved)
         return;
-    free_look = hero.unk308 == 2;
+    free_look = hero.magnetic_floor == 2;
     {
         Vec4 step;
         if ((pad->buttons.held_pressed & 3) != 3) {

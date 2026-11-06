@@ -408,7 +408,7 @@ void swingshot_update(Moby *m) {
         d->spin = d->spin + 0.69813168f;
         d->size = d->size * (frame_scale * -0.600000024f + 1.0f);
         if (d->size < 0.168000013f) {
-            hero.unk99C = 1;
+            hero.swing_hooked = 1;
             m->state = 12;
         }
         break;

@@ -216,7 +216,7 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) {
     if (thrown_moby->pos.x < 2.0f || 1021.0f < thrown_moby->pos.x || thrown_moby->pos.y < 2.0f ||
         1021.0f < thrown_moby->pos.y || thrown_moby->pos.z < 2.0f || 1021.0f < thrown_moby->pos.z)
         goto remove;
-    if (hero.unk20A5 && thrown_moby->state < THROWN_MOBY_STATE_MOVE_WITH_COLLISION)
+    if (hero.hidden && thrown_moby->state < THROWN_MOBY_STATE_MOVE_WITH_COLLISION)
         thrown_moby->flags |= 0x41;
     else
         thrown_moby->flags &= 0xffbe;
@@ -243,7 +243,7 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) {
         }
         if (fast_dec_timer(&spawner_throw_vars->effect_timer)) {
             spawner_throw_vars->effect_timer = scale_game_frames(4);
-            if (!hero.unk20A5)
+            if (!hero.hidden)
                 spawn_moby_bound_effect_particle(thrown_moby);
         }
         if (!hero.vehicle_mode && spawner_throw_vars->holder &&

@@ -875,7 +875,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
     if (snapper_vars->f1AC != 0) {
         snapper_vars->f1A0 = l06_alien_snapper_base_targeting_radius + 6.0f;
     } else if (moby->state == ALIEN_SNAPPER_STATE_WAIT_FOR_ACTIVATION) {
-        if (moby == ((Moby *)hero.unk240) || moby == ((Moby *)hero.coll_hit_moby)) {
+        if (moby == ((Moby *)hero.wall_moby) || moby == ((Moby *)hero.coll_hit_moby)) {
             snapper_vars->f1A0 = 6.0f;
         } else {
             snapper_vars->f1A0 = 0.0f;

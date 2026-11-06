@@ -286,7 +286,7 @@ void blaster_update(struct Moby *moby) {
     base_yaw = yaw;
     base_pitch = pitch;
     if (hero.state.current != 30) {
-        if (hero.unk22C8 == 1) {
+        if (hero.weapon_lowered == 1) {
             yaw = moby->rot.z;
             base_yaw = yaw;
             pitch = D_L00_0017ACF4;

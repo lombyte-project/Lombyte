@@ -154,7 +154,7 @@ void shuttle_update(struct Moby *moby) {
         break;
     case SHUTTLE_STATE_TRAVEL:
         hero.jump_lock_timer = 5;
-        hero.unk1F4 = 5;
+        hero.edge_brake_lock_timer = 5;
         hero.path_constrain_pending = shuttle_vars->stop;
         if (advance_shuttle_path_travel((char *)moby)) {
             select_shuttle_route_for_hero((char *)moby);

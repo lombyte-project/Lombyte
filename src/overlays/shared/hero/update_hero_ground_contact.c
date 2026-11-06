@@ -44,10 +44,10 @@ int FUN_L15_001fe778(int allow_item_lookup) {
         if (status_check_hero->item_anim_active == 0) {
             return 0;
         }
-        if (status_check_hero->unk20AA == 0) {
+        if (status_check_hero->weapon_up == 0) {
             return 0;
         }
-        if (status_check_hero->unk22C8 != 0) {
+        if (status_check_hero->weapon_lowered != 0) {
             return 0;
         }
     }
@@ -223,12 +223,12 @@ d1:
     }
     hero.ground_pitch.i = 0;
     hero.unk2E8.i = 0;
-    hero.unk2D0.i[0] = 0;
-    hero.unk2D0.i[1] = 0;
-    hero.unk2C8.i[0] = 0;
-    hero.unk2C8.i[1] = 0;
-    hero.unk2C0.i[0] = 0;
-    hero.unk2C0.i[1] = 0;
+    hero.side_probe_roll.i[0] = 0;
+    hero.side_probe_roll.i[1] = 0;
+    hero.side_probe_pitch.i[0] = 0;
+    hero.side_probe_pitch.i[1] = 0;
+    hero.side_probe_drop.i[0] = 0;
+    hero.side_probe_drop.i[1] = 0;
     if (hero.state.control_mode == HERO_MODE_GRIND || hero.state.control_mode == 0x15 ||
         hero.state.control_mode == HERO_MODE_ATTACK || hero.state.control_mode == HERO_MODE_JUMP ||
         hero.state.control_mode == HERO_MODE_LAND || hero.state.control_mode == HERO_MODE_LEDGE) {
@@ -257,24 +257,24 @@ d1:
             &unused_probe_vector, 0.2f, surface_probe_angle, -0.45f);
         if (collision_line(&surface_probe_endpoint, &shared_ray_endpoint, 0x22, hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
-            hero.unk2C0.f[i] = f;
+            hero.side_probe_drop.f[i] = f;
             if (0.4f < absolute_float(f)) {
-                hero.unk2C0.f[i] = 0.0f;
+                hero.side_probe_drop.f[i] = 0.0f;
             }
             sceVu0Normalize(&probe_surface_normal, (u8 *)&HH.normal_x);
             compute_rotated_vector_angles(&probe_surface_normal, &probe_surface_angles);
             if (-0.78539819f < probe_surface_angles.f[1] &&
                 probe_surface_angles.f[1] < 0.78539819f) {
-                hero.unk2C8.f[i] = probe_surface_angles.f[1];
+                hero.side_probe_pitch.f[i] = probe_surface_angles.f[1];
             }
             if (-0.78539819f < probe_surface_angles.f[0] &&
                 probe_surface_angles.f[0] < 0.78539819f) {
-                hero.unk2D0.f[i] = probe_surface_angles.f[0];
+                hero.side_probe_roll.f[i] = probe_surface_angles.f[0];
             }
         } else {
-            hero.unk2C0.i[i] = 0;
-            hero.unk2C8.f[i] = hero.ground_pitch.f;
-            hero.unk2D0.f[i] = hero.unk2E8.f;
+            hero.side_probe_drop.i[i] = 0;
+            hero.side_probe_pitch.f[i] = hero.ground_pitch.f;
+            hero.side_probe_roll.f[i] = hero.unk2E8.f;
         }
     }
 }

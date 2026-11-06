@@ -77,7 +77,7 @@ void spawn_next_linked_moby(struct Moby *spawner) {
     spawned_moby->occlusion = 0x7F80;
     spawned_moby->draw_dist = 0xFF;
     spawned_moby->unk71 = 0xFF;
-    spawned_moby->unk72 = 0xFF;
+    spawned_moby->lod_dist = 0xFF;
     spawned_moby->hit_slot = 0xFF;
     spawned_moby->collision = moby_class->collision;
     spawned_moby->spawn_frame = spawner->spawn_frame;

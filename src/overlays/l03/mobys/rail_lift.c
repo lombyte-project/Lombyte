@@ -178,7 +178,7 @@ void rail_lift_update(struct Moby *lift_moby) {
     case LIFT_FOLLOW_PATH:
         if (is_hero_on_moby(lift_moby)) {
             hero.jump_lock_timer = 4;
-            hero.unk1F4 = 4;
+            hero.edge_brake_lock_timer = 4;
         }
         if (advance_moby_along_rail_path(
                 lift_moby, lift_vars->path[lift_moby->command], &lift_vars->snd)) {

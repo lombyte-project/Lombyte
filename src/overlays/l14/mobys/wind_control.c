@@ -129,7 +129,7 @@ void wind_control_update(struct Moby *wind_control_moby) {
         }
         update_wind_sparks(wind_control_moby);
         hero_base = (struct Hero *)(pos - 0x80);
-        if (hero_base->unk308 == 0 && hero_base->unk2284 != 13 &&
+        if (hero_base->magnetic_floor == 0 && hero_base->camera_mode != 13 &&
             (hero_base->on_ice_ground != 0 || hero_base->frames_off_ground.s != 0) &&
             is_point_inside_clip_volume(pos, wind_vars->clip_push) != 0) {
             float t;
@@ -156,7 +156,7 @@ void wind_control_update(struct Moby *wind_control_moby) {
             wind_vars->period_timer = scale_game_frames(wind_vars->period);
             wind_vars->period_inv = 1.0f / convert_integer_to_float(wind_vars->period_timer);
         }
-        if (hero.unk308 != 0 || hero.on_ice_ground == 0) {
+        if (hero.magnetic_floor != 0 || hero.on_ice_ground == 0) {
             if (wind_vars->push_timer > scale_game_frames(15)) {
                 wind_vars->push_timer = scale_game_frames(15);
                 wind_vars->push_inv = 1.0f / (float)wind_vars->push_timer;

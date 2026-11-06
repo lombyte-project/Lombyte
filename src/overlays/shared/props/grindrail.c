@@ -151,8 +151,8 @@ void rail_hero_motion_update(struct Moby *rail_moby) {
         fast_vec_add(&hero.motion.platform_delta, &hero.motion.platform_delta, &pull);
         hero.motion.platform_delta.f[3] = 0.0f;
         qcopy(&hero.motion.momentum, &hero.motion.platform_delta);
-        if (hero.unk1E0 < scale_game_frames(30)) {
-            hero.unk1E0 = scale_game_frames(30);
+        if (hero.sinking_floor_hold < scale_game_frames(30)) {
+            hero.sinking_floor_hold = scale_game_frames(30);
         }
     } else {
         fast_vec_scale(

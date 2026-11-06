@@ -132,13 +132,13 @@ void hero_move_state_velocity(void) {
         build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.momentum, &hero.move_impulse);
     } else if (state == HERO_STATE_REPEATABLE_JUMP) {
-        hero.motion.move_yaw = hero.unk470.f[3];
-        qcopy(&hero.motion.move_dir, &hero.unk470);
+        hero.motion.move_yaw = hero.wall_jump_normal.f[3];
+        qcopy(&hero.motion.move_dir, &hero.wall_jump_normal);
         if (FUN_001f96f8_214658(9) < hero.state_timer) {
             turn_to(-1, ED64 * 0.042f, ED64 * 0.2f, ED6C * 11.868238f);
         }
         if (FUN_001f96f8_214658(9) <= hero.state_timer) {
-            if (hero.unk308 == 0) {
+            if (hero.magnetic_floor == 0) {
                 hero.motion.velocity.f[0] =
                     FUN_001f9dc8_214658(hero.motion.move_yaw) * (ED6C * 4.9f);
                 hero.motion.velocity.f[1] =
@@ -257,7 +257,7 @@ void update_hero_transformed_negative_z_angle_parameters(void) {
     f32         *vector_components = transformed_negative_z_vector.f;
     f32          limit, x, y, pitch, z, lean;
     struct Hero *state = &hero;
-    if (state->unk308 == 0)
+    if (state->magnetic_floor == 0)
         return;
     transformed_negative_z_vector.q = 0;
     vector_components[2] = -1.0f;
@@ -1137,9 +1137,9 @@ void emit_filtered_entry_sparkles(int voice_target, int entry_count) {
     if (entry_count != 0) {
         struct Hero *hero_base = (struct Hero *)(D_0013E533 + 0xE1D);
         int          i;
-        if (hero_base->unkA64 == 0) {
+        if (hero_base->melee_hit == 0) {
             allocate_voice_for_target_entry(1, 0, voice_target);
-            hero_base->unkA64 = 1;
+            hero_base->melee_hit = 1;
         }
         for (i = 0; i < entry_count; i++) {
             int *entry_type_lookup_pointer = D_L00_00177F00[i];

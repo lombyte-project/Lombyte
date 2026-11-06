@@ -98,7 +98,7 @@ void gadgebot_update(unsigned char *moby) {
         else
             MOBY(moby)->flags &= 0x7FFF;
         MOBY(moby)->flags |= 0x100;
-        MOBY(moby)->unk73 = D_L18_00162608;
+        MOBY(moby)->metal_alpha = D_L18_00162608;
         *(void **)(moby_vars + 0x140) = &D_L18_001625F0;
         *(float *)(moby_vars + 0x20) = 1.0f;
         moby_vars[0x58] = 8;

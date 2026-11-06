@@ -1248,7 +1248,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
     if (moby_data->target_range_boost_timer_frames != 0) {
         moby_data->f1A0 = D_L10_00161E40_gp + 6.0f;
     } else if (moby->state == TOXIC_CRAB_STATE_WAIT_FOR_ACTIVATION) {
-        if (moby == ((Moby *)((Hero *)(((char *)&hero)))->unk240) ||
+        if (moby == ((Moby *)((Hero *)(((char *)&hero)))->wall_moby) ||
             moby == ((Moby *)((Hero *)(((char *)&hero)))->coll_hit_moby)) {
             moby_data->f1A0 = 6.0f;
         } else {

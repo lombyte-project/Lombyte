@@ -699,7 +699,7 @@ int process_hero_primary_item_input(void) {
     if ((*(Hero *)((char *)&hero)).item_use_locked != 0 &&
         (*(Hero *)((char *)&hero)).items[0].item_id != 0x24 &&
         ((*(Hero *)((char *)&hero)).items[0].item_id != 8 ||
-         (*(Hero *)((char *)&hero)).unk308 != 1)) {
+         (*(Hero *)((char *)&hero)).magnetic_floor != 1)) {
         return 0;
     }
     if ((*(Hero *)((char *)&hero)).vehicle_mode != 0) {
@@ -749,7 +749,7 @@ int process_hero_primary_item_input(void) {
                 hero_set_state(0x15, 1);
                 break;
             }
-            if ((*(Hero *)((char *)&hero)).unk308 == 1) {
+            if ((*(Hero *)((char *)&hero)).magnetic_floor == 1) {
                 hero_set_state(0x70, 1);
             } else {
                 hero_set_state(0x13, 1);
@@ -841,7 +841,7 @@ int process_hero_primary_item_input(void) {
                 hero_set_state(0x15, 1);
                 break;
             }
-            if ((*(Hero *)((char *)&hero)).unk308 == 1) {
+            if ((*(Hero *)((char *)&hero)).magnetic_floor == 1) {
                 hero_set_state(0x70, 1);
             } else {
                 hero_set_state(0x13, 1);
@@ -1126,7 +1126,7 @@ int process_hero_primary_item_input(void) {
     }
     if ((*(Hero *)((char *)&hero)).state_timer == start_timer) {
         if (FUN_L00_0020d498(3) == 3 && (*(Hero *)((char *)&hero)).state.current != 0x81 &&
-            ((*(Hero *)((char *)&hero)).unk308 == 0 || D_0013D5C8_2523C8[0] == 0) &&
+            ((*(Hero *)((char *)&hero)).magnetic_floor == 0 || D_0013D5C8_2523C8[0] == 0) &&
             (*(Hero *)((char *)&hero)).pack_disabled == 0) {
             fast_dec_timer(&hero_item_input_r1_double_press_timer_gp);
             if (hero_item_input_r1_double_press_timer_gp != 0) {
@@ -1148,7 +1148,7 @@ int process_hero_primary_item_input(void) {
                    (*(Hero *)((char *)&hero)).state.current != 0x81 &&
                    (*(Hero *)((char *)&hero)).state.current != 0x15 &&
                    (*(Hero *)((char *)&hero)).state.current != 0x16) {
-            (*(Hero *)((char *)&hero)).unk22CA = 0;
+            (*(Hero *)((char *)&hero)).hover_latch = 0;
         }
     }
     return (*(Hero *)((char *)&hero)).state_timer < start_timer;

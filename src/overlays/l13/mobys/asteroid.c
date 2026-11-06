@@ -182,7 +182,7 @@ void process_asteroid_hit(struct Moby *moby, char *blob_data, float scale_ratio)
                             -1,
                             0);
     }
-    moby->unk72 = 0;
+    moby->lod_dist = 0;
     if (*(short *)(blob_data + 0x4E) > 0) {
         for (i = 0; i < random_int_between(1, 2); i++) {
             float part = moby->scale * random_float_between(0.25f, 0.75f);
@@ -260,7 +260,7 @@ void asteroid_update(struct Moby *moby) {
         asteroid_vars->start_scale = moby->scale;
         asteroid_vars->pieces = random_int_between(2, 3);
         if (moby->scale < moby->pclass->scale) {
-            moby->unk72 = 0;
+            moby->lod_dist = 0;
         }
         moby->state = ASTEROID_RESET_AT_HOME;
         break;
@@ -352,7 +352,7 @@ void asteroid_update(struct Moby *moby) {
         qzero(&asteroid_vars->vel);
         moby->scale = asteroid_vars->start_scale;
         if (moby->pclass->scale < moby->scale) {
-            moby->unk72 = 100;
+            moby->lod_dist = 100;
         }
         moby->state = ASTEROID_WAIT_TO_LAUNCH;
         break;

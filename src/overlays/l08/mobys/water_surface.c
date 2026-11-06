@@ -54,9 +54,9 @@ void water_surface_update(struct Moby *moby) {
         return;
     if (!(water_entry_plane_data[2] <= hero.motion.pos.f[2] - hero.motion.displacement.f[2]))
         return;
-    if (voice_is_playing(hero.moby, hero.health.unk22B2)) {
-        release_voice_slot(hero.health.unk22B2);
-        hero.health.unk22B2 = -1;
+    if (voice_is_playing(hero.moby, hero.health.fall_voice_slot)) {
+        release_voice_slot(hero.health.fall_voice_slot);
+        hero.health.fall_voice_slot = -1;
     }
     qcopy(&pos, &hero.motion.pos);
     pos.f[2] = water_entry_plane_data[2];

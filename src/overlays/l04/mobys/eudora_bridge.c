@@ -64,7 +64,7 @@ void eudora_bridge_update(struct Moby *moby) {
             moby->unk71 = 0xFF;
             moby->scale = ((MobyClassHeader *)moby->pclass)->scale;
             update_moby_animation_state(moby);
-            moby->unk72 = ((MobyClassHeader *)moby->pclass)->unkE;
+            moby->lod_dist = ((MobyClassHeader *)moby->pclass)->unkE;
             moby->collision = ((MobyClassHeader *)moby->pclass)->unk10;
             refresh_moby_spatial_bounds_from_basis(moby);
         }
@@ -97,7 +97,7 @@ void eudora_bridge_update(struct Moby *moby) {
                     moby->unk71 = 0xFF;
                     moby->scale = ((MobyClassHeader *)moby->pclass)->scale;
                     update_moby_animation_state(moby);
-                    moby->unk72 = ((MobyClassHeader *)moby->pclass)->unkE;
+                    moby->lod_dist = ((MobyClassHeader *)moby->pclass)->unkE;
                     moby->collision = ((MobyClassHeader *)moby->pclass)->unk10;
                     refresh_moby_spatial_bounds_from_basis(moby);
                     moby->state = EUDORA_BRIDGE_STATE_RELEASE_MOVEMENT_VOICE;

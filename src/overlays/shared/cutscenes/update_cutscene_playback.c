@@ -435,7 +435,7 @@ void start_scene(int scene_id) {
     D_L00_0015F5C0_macro[1] = 2;
     D_L00_0015F400 = 0;
     hero_set_state(100, 2);
-    hero.unk20A5 = 1;
+    hero.hidden = 1;
     set_hero_item_moby_flag_bit0();
     if (active_scene_trigger.moby)
         active_scene_trigger.moby->flags |= 1;
@@ -536,7 +536,7 @@ void finish_cutscene(void) {
     hero_candidate_z = probe_ground_height(&hero.motion.pos, 0, 0.5f);
     if (2.0f < hero_candidate_z && absolute_float(hero.motion.pos.f[2] - hero_candidate_z) < 4.5f)
         hero.motion.pos.f[2] = hero_candidate_z;
-    hero.unk20A5 = 0;
+    hero.hidden = 0;
     update_hero_item_moby_flags();
     if (D_L00_0016C860_298b18.x46) {
         f = probe_ground_height(D_L00_0016C860_298b18.v, 0, 0.5f);
