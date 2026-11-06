@@ -49,10 +49,10 @@ void data_processor_linked_effect_update(struct Moby *moby) __asm__("FUN_L10_002
 
 typedef struct DataProcessorLinkedEffectVars {
     u8  pad_0[0x4];
-    s32 unk4;
-    f32 unk8;
-    s32 unkC;
-    u8  unk10;
+    s32 strip_count;
+    f32 strip_height;
+    s32 processor_moby_index;
+    u8  strip_order;
     u8  pad_11[0x1F];
     s32 voice;
     s32 timer_34;
@@ -69,7 +69,7 @@ void data_processor_linked_effect_update(struct Moby *moby) {
     float position1[4];
     int   pass, i, copy_index;
 
-    if (linked_effect_vars->unkC == -1) {
+    if (linked_effect_vars->processor_moby_index == -1) {
         debug_print(l10_data_processor_linked_effect_missing_processor_link_message);
         debug_print(l10_data_processor_linked_effect_deleted_instance_message,
                     *(short *)&moby->save_id);
@@ -90,12 +90,12 @@ void data_processor_linked_effect_update(struct Moby *moby) {
             }
         }
         copy_index = 0;
-        if (linked_effect_vars->unk4 > 0) {
-            char *dest = &linked_effect_vars->unk10;
+        if (linked_effect_vars->strip_count > 0) {
+            char *dest = &linked_effect_vars->strip_order;
             do {
                 dest[copy_index] = scratch.order[copy_index];
                 copy_index++;
-            } while (copy_index < linked_effect_vars->unk4);
+            } while (copy_index < linked_effect_vars->strip_count);
         }
         {
             float timer;
@@ -112,7 +112,8 @@ void data_processor_linked_effect_update(struct Moby *moby) {
         break;
     case MOBY_STATE_ACTIVE_WITH_SOUND: {
         float half_height, half_width, radius_squared;
-        half_height = (float)linked_effect_vars->unk4 * linked_effect_vars->unk8 * 0.5f;
+        half_height =
+            (float)linked_effect_vars->strip_count * linked_effect_vars->strip_height * 0.5f;
         half_width = *(float *)linked_effect_vars * 0.5f;
         *(OvlQuad *)position1 = *(OvlQuad *)&moby->pos;
         radius_squared = half_height * half_height;
@@ -136,7 +137,8 @@ void data_processor_linked_effect_update(struct Moby *moby) {
                 release_voice_slot(voice);
         }
         linked_effect_vars->voice = -1;
-        half_height = (float)linked_effect_vars->unk4 * linked_effect_vars->unk8 * 0.5f;
+        half_height =
+            (float)linked_effect_vars->strip_count * linked_effect_vars->strip_height * 0.5f;
         half_width = *(float *)linked_effect_vars * 0.5f;
         *(OvlQuad *)scratch.position2 = *(OvlQuad *)&moby->pos;
         radius_squared = half_height * half_height;
@@ -187,8 +189,9 @@ void render_data_processor_linked_effect(u8 *moby) {
     DataProcessorLinkedEffectVars *linked_effect_render_vars =
         (DataProcessorLinkedEffectVars *)MOBY(moby)->pvars;
     char *linked_processor_vars =
-        *(char **)((linked_effect_render_vars->unkC << 8) + (int)D_L10_0015FFD8 + 0x78);
-    char strip_transforms[(unsigned int)linked_effect_render_vars->unk4 * 0x40];
+        *(char **)((linked_effect_render_vars->processor_moby_index << 8) + (int)D_L10_0015FFD8 +
+                   0x78);
+    char strip_transforms[(unsigned int)linked_effect_render_vars->strip_count * 0x40];
     struct {
         unsigned char vertices[0x50];
         float         matrix1[16];
@@ -226,7 +229,7 @@ void render_data_processor_linked_effect(u8 *moby) {
     uv2 = matrix2 + 1;
     {
         int transform_index;
-        for (transform_index = 0; transform_index < linked_effect_render_vars->unk4;
+        for (transform_index = 0; transform_index < linked_effect_render_vars->strip_count;
              transform_index++) {
             rotation_matrix(strip_transforms + transform_index * 0x40, moby + 0x40);
             multiply_matrix(strip_transforms + transform_index * 0x40,
@@ -235,7 +238,8 @@ void render_data_processor_linked_effect(u8 *moby) {
             *(u128_c *)(strip_transforms + transform_index * 0x40 + 0x30) =
                 *(u128_c *)(moby + 0x10);
             *(float *)(strip_transforms + transform_index * 0x40 + 0x38) +=
-                convert_integer_to_float(transform_index + 1) * linked_effect_render_vars->unk8;
+                convert_integer_to_float(transform_index + 1) *
+                linked_effect_render_vars->strip_height;
         }
     }
     {
@@ -276,12 +280,12 @@ void render_data_processor_linked_effect(u8 *moby) {
                                                   phase +
                                                   *(float *)(linked_processor_vars + 0x12de0);
             }
-            for (i = 0; i < linked_effect_render_vars->unk4; i = next_strip_index) {
+            for (i = 0; i < linked_effect_render_vars->strip_count; i = next_strip_index) {
                 int          offset;
                 int          age;
                 float        progress;
                 unsigned int color;
-                order = &linked_effect_render_vars->unk10;
+                order = &linked_effect_render_vars->strip_order;
                 group_age = group * 0x78;
                 age_base = linked_processor_vars + 0x10000;
                 ages = age_base + 0x2c00;

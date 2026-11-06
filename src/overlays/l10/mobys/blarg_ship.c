@@ -510,18 +510,18 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) __asm__("F
 
 typedef struct BlargShipVars {
     u8  pad_0[0x20];
-    f32 unk20;
+    f32 health;
     u8  pad_24[0x2];
     s16 unk26;
     u8  pad_28[0x98];
     u8  anim_state;
     u8  pad_C1[0x6];
-    u8  unkC7;
+    u8  damage_secondary_red;
     u8  pad_C8[0x8];
-    u8  unkD0;
+    u8  path_search_point;
     u8  pad_D1[0x3F];
-    s32 unk110;
-    s32 unk114;
+    s32 target;
+    s32 target_selection_status;
     u8  pad_118[0x78];
     s32 path_190;
 } BlargShipVars;
@@ -541,10 +541,10 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
     int            hit_response_code;
     dmg = 0.0f;
     hit_response_code = resolve_moby_hit_response(
-        moby, ship_hit_record, &pvars->unk20, 5, &ship_hit_processing_status, &dmg, 0, 4);
+        moby, ship_hit_record, &pvars->health, 5, &ship_hit_processing_status, &dmg, 0, 4);
     if (ship_hit_record != 0 && ship_hit_processing_status != HIT_STATUS_SKIP_DAMAGE_AND_REACTION &&
         moby->state != BLARG_SHIP_STATE_EXPLODE) {
-        if ((pvars->unk20 -= dmg) <= 0.0f) {
+        if ((pvars->health -= dmg) <= 0.0f) {
             hit_response_code = 1;
         }
         if (*(int *)(ship_hit_record + 0x24) & 0x40000) {
@@ -554,18 +554,18 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
         case COLOR_UPDATE_ONLY_HIT_RESPONSE:
         case COLOR_UPDATE_WITHOUT_STATE_CHANGE_HIT_RESPONSE:
         case COLOR_EFFECT_ONLY_HIT_RESPONSE:
-            pvars->unkC7 = 0xFA;
+            pvars->damage_secondary_red = 0xFA;
             trooper_anim_update(moby, &pvars->anim_state);
             break;
         case LETHAL_HIT_RESPONSE:
-            pvars->unkC7 = 0xFA;
+            pvars->damage_secondary_red = 0xFA;
             trooper_anim_update(moby, &pvars->anim_state);
             moby->state = BLARG_SHIP_STATE_EXPLODE;
             break;
         case NO_REACTION_HIT_RESPONSE:
             break;
         default:
-            pvars->unkC7 = 0xFA;
+            pvars->damage_secondary_red = 0xFA;
             pvars->unk26 = scale_game_frames(0x3C);
             trooper_anim_update(moby, &pvars->anim_state);
             blend_moby_animation(moby, 4, 0, scale_game_frames(6));
@@ -577,27 +577,28 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
     moby->hit_slot = 0xFF;
     trooper_anim_finish(moby, &pvars->anim_state);
     if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
-        select_hero_or_gadgebot_target(101.0f, moby, &pvars->unk110);
-        if (*(char **)&pvars->unk110 == 0) {
-            pvars->unk114 = 2;
+        select_hero_or_gadgebot_target(101.0f, moby, &pvars->target);
+        if (*(char **)&pvars->target == 0) {
+            pvars->target_selection_status = 2;
         } else {
             char *path = ((char *)l10_paths[pvars->path_190]);
-            if (point_in_path_xy(*(char **)&pvars->unk110 + 0x10, path + 0x10, *(int *)path) == 0) {
-                pvars->unk110 = 0;
-                pvars->unk114 = 2;
+            if (point_in_path_xy(*(char **)&pvars->target + 0x10, path + 0x10, *(int *)path) == 0) {
+                pvars->target = 0;
+                pvars->target_selection_status = 2;
             } else {
-                pvars->unk114 = 0;
+                pvars->target_selection_status = 0;
             }
         }
     } else {
         char *path = ((char *)l10_paths[pvars->path_190]);
-        if (follow_5968(101.0f, moby, &pvars->unkD0, 0, 0, path + 0x10, *(int *)path) != 2 &&
+        if (follow_5968(101.0f, moby, &pvars->path_search_point, 0, 0, path + 0x10, *(int *)path) !=
+                2 &&
             moby->visible == 0) {
-            pvars->unk114 = 2;
+            pvars->target_selection_status = 2;
         }
     }
-    if (pvars->unk110 == 0) {
-        pvars->unk110 = (int)hero.moby;
+    if (pvars->target == 0) {
+        pvars->target = (int)hero.moby;
     }
 }
 

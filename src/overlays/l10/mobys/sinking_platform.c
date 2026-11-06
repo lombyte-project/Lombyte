@@ -31,15 +31,15 @@ typedef struct SinkingPlatformVars {
     u8  pad_29[0x15];
     s16 unk3E;
     u8  pad_40[0x20];
-    f32 unk60[4];
+    f32 entity_matrix[4];
     u8  pad_70[0x30];
-    f32 unkA0;
-    f32 unkA4;
-    f32 unkA8;
-    f32 unkAC;
-    f32 unkB0;
-    f32 unkB4;
-    f32 unkB8;
+    f32 home_z;
+    f32 vertical_velocity;
+    f32 bob_phase;
+    f32 bob_offset;
+    f32 bob_phase_step;
+    f32 tilt_phase_1;
+    f32 tilt_phase_2;
     s32 timer_BC;
 } SinkingPlatformVars;
 
@@ -64,35 +64,38 @@ void sinking_platform_update(struct Moby *moby) {
         platform_vars->unk3E = 5;
         platform_vars->unk20 = 0;
         platform_vars->unk24 = 0;
-        platform_vars->unkA0 = moby->pos.z;
-        platform_vars->unkA8 = random_angle_radians();
-        platform_vars->unkB4 = random_angle_radians();
+        platform_vars->home_z = moby->pos.z;
+        platform_vars->bob_phase = random_angle_radians();
+        platform_vars->tilt_phase_1 = random_angle_radians();
         {
             float initial_second_rotation_phase = random_angle_radians();
             float bobbing_phase_jitter_limit = frame_time * 0.13962634f;
-            platform_vars->unkB8 = initial_second_rotation_phase;
-            platform_vars->unkB0 =
+            platform_vars->tilt_phase_2 = initial_second_rotation_phase;
+            platform_vars->bob_phase_step =
                 frame_time * 1.5707964f + randf_sym(0.0f, bobbing_phase_jitter_limit);
         }
         moby->state = PLATFORM_STATE_BOBBING;
     case PLATFORM_STATE_BOBBING:
-        *(int *)&platform_vars->unkA4 = 0;
-        update_moby_vertical_oscillation(
-            0.1f, platform_vars->unkB0, moby, &platform_vars->unkA8, &platform_vars->unkAC);
+        *(int *)&platform_vars->vertical_velocity = 0;
+        update_moby_vertical_oscillation(0.1f,
+                                         platform_vars->bob_phase_step,
+                                         moby,
+                                         &platform_vars->bob_phase,
+                                         &platform_vars->bob_offset);
         update_moby_rotation_oscillation(moby,
-                                         &platform_vars->unkB4,
-                                         &platform_vars->unkB8,
+                                         &platform_vars->tilt_phase_1,
+                                         &platform_vars->tilt_phase_2,
                                          0.047123890f,
                                          frame_time * 0.34906584f,
                                          frame_time * 0.5235988f);
         break;
     case PLATFORM_STATE_SINKING_WITH_HERO: {
-        float a = platform_vars->unkA4 - (frame_time_sq + frame_time_sq);
+        float a = platform_vars->vertical_velocity - (frame_time_sq + frame_time_sq);
         float sinking_step_lower_bound = -(frame_time + frame_time);
-        platform_vars->unkA4 = a;
+        platform_vars->vertical_velocity = a;
         if (a < sinking_step_lower_bound)
-            platform_vars->unkA4 = sinking_step_lower_bound;
-        moby->pos.z += platform_vars->unkA4;
+            platform_vars->vertical_velocity = sinking_step_lower_bound;
+        moby->pos.z += platform_vars->vertical_velocity;
         if (is_hero_on_moby(moby) == 0)
             moby->state = PLATFORM_STATE_RETURN_TO_ORIGINAL_HEIGHT;
         if (platform_vars->timer_BC <= 0) {
@@ -102,33 +105,33 @@ void sinking_platform_update(struct Moby *moby) {
         break;
     }
     case PLATFORM_STATE_RETURN_TO_ORIGINAL_HEIGHT: {
-        float vz = platform_vars->unkA4;
+        float vz = platform_vars->vertical_velocity;
         float return_acceleration = frame_time_sq;
         float remaining_return_height, sq, twice_return_acceleration;
         if (vz < 0.0f || (twice_return_acceleration = return_acceleration + return_acceleration,
-                          remaining_return_height = platform_vars->unkA0 - moby->pos.z,
+                          remaining_return_height = platform_vars->home_z - moby->pos.z,
                           sq = vz * vz,
                           sq / (twice_return_acceleration + twice_return_acceleration) <
                               remaining_return_height)) {
             float a = vz + return_acceleration;
             float mx = frame_time + frame_time;
-            platform_vars->unkA4 = a;
+            platform_vars->vertical_velocity = a;
             if (mx < a)
-                platform_vars->unkA4 = mx;
+                platform_vars->vertical_velocity = mx;
         } else if (0.0f < remaining_return_height) {
             float a = vz - sq / (remaining_return_height + remaining_return_height);
-            platform_vars->unkA4 = a;
+            platform_vars->vertical_velocity = a;
             if (a < 0.0f)
-                platform_vars->unkA4 = 0.0f;
+                platform_vars->vertical_velocity = 0.0f;
         }
-        moby->pos.z += platform_vars->unkA4;
-        if (platform_vars->unkA0 <= moby->pos.z) {
-            moby->pos.z = platform_vars->unkA0;
+        moby->pos.z += platform_vars->vertical_velocity;
+        if (platform_vars->home_z <= moby->pos.z) {
+            moby->pos.z = platform_vars->home_z;
             moby->state = PLATFORM_STATE_BOBBING;
         }
         break;
     }
     }
     fast_vec_sub(position_delta, &moby->pos, previous_position);
-    update_entity_matrix(platform_vars->unk60, position_delta, &moby->rot, &moby->rot);
+    update_entity_matrix(platform_vars->entity_matrix, position_delta, &moby->rot, &moby->rot);
 }

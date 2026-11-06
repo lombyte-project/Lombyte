@@ -26,7 +26,7 @@ typedef struct CyclingPlatformVars {
     u8  pad_29[0x15];
     s16 unk3E;
     u8  pad_40[0x60];
-    f32 unkA0[4];
+    f32 home_position[4];
     s32 timer_B0;
 } CyclingPlatformVars;
 
@@ -53,13 +53,13 @@ void cycling_platform_update(char *platform_moby) {
         platform_vars->unk3E = 5;
         platform_vars->unk20 = 0;
         platform_vars->unk24 = 0;
-        *(OvlQuad *)&platform_vars->unkA0[0] = *(OvlQuad *)&MOBY(platform_moby)->pos;
+        *(OvlQuad *)&platform_vars->home_position[0] = *(OvlQuad *)&MOBY(platform_moby)->pos;
         platform_moby[0x20] = 1;
         break;
     case PLATFORM_STATE_RISING: {
         float lim;
         MOBY(platform_moby)->pos.z = MOBY(platform_moby)->pos.z + 1.5f / scale_time(45.0f);
-        lim = platform_vars->unkA0[2] + 1.5f;
+        lim = platform_vars->home_position[2] + 1.5f;
         if (lim <= MOBY(platform_moby)->pos.z) {
             MOBY(platform_moby)->pos.z = lim;
             platform_moby[0x20] = 2;
@@ -76,7 +76,7 @@ void cycling_platform_update(char *platform_moby) {
     case PLATFORM_STATE_DESCENDING: {
         float lim;
         MOBY(platform_moby)->pos.z = MOBY(platform_moby)->pos.z - 1.5f / scale_time(45.0f);
-        lim = platform_vars->unkA0[2];
+        lim = platform_vars->home_position[2];
         if (MOBY(platform_moby)->pos.z <= lim) {
             MOBY(platform_moby)->pos.z = lim;
             platform_moby[0x20] = 4;
