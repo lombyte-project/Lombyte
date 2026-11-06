@@ -1821,7 +1821,7 @@ void update_hero_motion_for_current_state(void) {
                 &general_vector_or_hit_descriptor_scratch, &v10, 0);
         }
         t = hero.items[0].item_id;
-        has = D_L00_00179AC0_t[t].unk18 != 0;
+        has = D_L00_00179AC0_t[t].slot_anim_count != 0;
         if (t == 0xC) {
             has = 0;
         }

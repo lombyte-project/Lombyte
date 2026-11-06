@@ -1632,7 +1632,7 @@ void update_hero_motion_by_state(void) {
             spawn_color_decaying_effect_particle(&vector_and_descriptor_scratch, &v10, 0);
         }
         t = hero.items[0].item_id;
-        has = D_L14_0017A1C0_t[t].unk18 != 0;
+        has = D_L14_0017A1C0_t[t].slot_anim_count != 0;
         if (t == 0xC) {
             has = 0;
         }

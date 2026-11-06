@@ -43,7 +43,7 @@ typedef struct HeroAnimRow {
     u8  pad_0[0xC];
     s32 joint; /* hero.joint_matrices index the item moby follows */
     u8  pad_10[0x8];
-    s32 unk18; /* tested != 0 */
+    s32 slot_anim_count; /* ItemDef.slot_anim_count, tested != 0 */
     u8  pad_1C[0x8];
     s32 anim; /* animation id, compared with moby+0x53 */
     u8  pad_28[0x24];

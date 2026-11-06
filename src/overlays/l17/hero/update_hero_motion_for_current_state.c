@@ -1879,7 +1879,7 @@ void update_hero_motion_for_current_state(void) {
             spawn_color_decaying_effect_particle(&scratch_vector, &v10, 0);
         }
         t = hero.items[0].item_id;
-        has = D_L00_00179AC0_t[t].unk18 != 0;
+        has = D_L00_00179AC0_t[t].slot_anim_count != 0;
         if (t == 0xC) {
             has = 0;
         }

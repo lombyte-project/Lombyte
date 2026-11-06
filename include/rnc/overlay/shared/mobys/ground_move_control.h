@@ -21,7 +21,7 @@ struct GroundMoveControl {
     f32 heading_tolerance;        /* 0x28: moves only while the heading error is smaller */
     f32 arrive_distance;          /* 0x2C: result flag 4 when the target is closer */
     f32 ground_probe_depth;       /* 0x30: ground probe goes this far below pos.z */
-    f32 unk34;
+    u8  pad_34[0x4];
     s32 movement_option_flags; /* 0x38: 1 no gravity, 4 use move_heading, 0x20 probe flag */
     f32 turn_spring;           /* 0x3C: spring_turn spring strength */
     f32 turn_damping;          /* 0x40 */

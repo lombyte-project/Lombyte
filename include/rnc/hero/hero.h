@@ -43,8 +43,8 @@ struct MobyTrail {
 struct HeroManipulator {
     u8   anim_joint; /* 0x00 */
     u8   attached;   /* 0x01 */
-    u8   unk2;       /* 0x02 */
-    u8   absolute;   /* 0x03 */
+    u8   pad_2;
+    u8   absolute; /* 0x03 */
     u8   pad_4[0x8];
     f32  blend;       /* 0x0C */
     Vec4 quat;        /* 0x10 */

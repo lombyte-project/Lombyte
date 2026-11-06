@@ -193,7 +193,7 @@ void initialize_eight_slot_hud_selector(O00237ae8 *hud_element) {
     item_id_cursor = pause_iop_sprite_lists;
     for (i = 7; i >= 0; i--) {
         slot_entry->command = *item_id_cursor;
-        slot_entry->icon = tab[*item_id_cursor].unk38;
+        slot_entry->icon = tab[*item_id_cursor].icon;
         item_id_cursor++;
         slot_entry++;
     }
