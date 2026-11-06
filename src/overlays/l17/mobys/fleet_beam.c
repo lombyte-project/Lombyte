@@ -86,7 +86,7 @@ typedef struct FleetBeamVars {
     f32 oscillation_step;
     f32 anim_start;
     f32 anim_frames_per_radian;
-    s32 unk60;
+    s32 endpoint_moby; /* moby placed at the far end of the beam (0: none) */
     u8  pad_64[0x4];
     s32 oscillation_moby_index;
 } FleetBeamVars;
@@ -138,7 +138,7 @@ void fleet_beam_update(struct Moby *beam_moby) {
         } else {
             beam_moby->state = BEAM_UPDATE_STATIONARY;
         }
-        beam_vars->unk60 = 0;
+        beam_vars->endpoint_moby = 0;
         beam_vars->beam_width = 0.1f;
         *(OvlQuad *)beam_vector_scratch = 0;
         beam_vector_scratch[0] = 13.0f;
@@ -199,15 +199,15 @@ void fleet_beam_update(struct Moby *beam_moby) {
     transform_vector_by_basis(beam_vector_scratch, beam_vector_scratch, &beam_moby->rot_row0);
     fast_vec_add(beam_geometry_scratch, &beam_moby->pos, beam_vars->beam_offset);
     *(OvlQuad *)beam_endpoint_and_offset_scratch = *(OvlQuad *)beam_geometry_scratch;
-    if (beam_vars->unk60 != 0) {
+    if (beam_vars->endpoint_moby != 0) {
         fast_vec_normalize(beam_vars->beam_end,
                            beam_vector_scratch,
                            -(*(float *)&fleet_beam_endpoint_axis_offset - 0.2f));
-        fast_vec_normalize(*(char **)&beam_vars->unk60 + 0x10,
+        fast_vec_normalize(*(char **)&beam_vars->endpoint_moby + 0x10,
                            beam_vector_scratch,
                            -*(float *)&fleet_beam_endpoint_axis_offset);
         fast_vec_add(beam_geometry_scratch, beam_vars->beam_end, beam_endpoint_and_offset_scratch);
-        beam_endpoint_record = *(char **)&beam_vars->unk60;
+        beam_endpoint_record = *(char **)&beam_vars->endpoint_moby;
         *(OvlQuad *)&beam_vars->beam_end[0] = *(OvlQuad *)beam_geometry_scratch;
         fast_vec_add(
             beam_geometry_scratch, beam_endpoint_record + 0x10, beam_endpoint_and_offset_scratch);
