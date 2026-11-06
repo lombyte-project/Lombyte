@@ -1,5 +1,6 @@
 /* Shared moby class seeker: its update and its damage and target handling. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 #include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/mobys/moby_state.h"
 #include "rnc/globals.h"
@@ -342,36 +343,24 @@ typedef struct {
 } Cls;
 
 typedef struct Data {
-    char                 p0[0x20];
-    float                health;
-    char                 p24[0x14];
-    int                  f38;
-    char                 p3C[0x24];
-    struct HitColorFlash hit_flash;
-    float                f70[4];
-    float                f80;
-    float                f84;
-    float                f88;
-    float                f8C;
-    int                  f90;
-    int                  f94;
-    float                f98;
-    char                 p9C[0x11];
-    unsigned char        bAD;
-    char                 pAE[0x12];
-    float                fC0;
-    float                fC4;
-    char                 pC8[0x58];
-    float                target[4];
-    char                 p130[0x30];
-    Moby                *f160;
-    int                  f164;
-    char                 p168[0x18];
-    int                  path;
-    int                  timer;
-    float                reach;
-    char                 p18C[4];
-    int                  retreat;
+    char                   p0[0x20];
+    float                  health;
+    char                   p24[0x14];
+    int                    f38;
+    char                   p3C[0x24];
+    struct HitColorFlash   hit_flash;
+    struct KnockbackMotion knockback;
+    char                   pad_60[0x50];
+    float                  target[4];
+    char                   p130[0x30];
+    Moby                  *f160;
+    int                    f164;
+    char                   p168[0x18];
+    int                    path;
+    int                    timer;
+    float                  reach;
+    char                   p18C[4];
+    int                    retreat;
 } Data;
 
 typedef struct {
@@ -475,12 +464,12 @@ void update_seeker_damage_and_target(Moby *moby) {
         if (seeker_vars->health <= 0.0f) {
             response = 1;
         }
-        seeker_vars->f90 = truncate_float_to_s32(512.0f);
-        seeker_vars->f80 = seeker_knockback_gravity_scale * D_0015ED70;
-        seeker_vars->f84 = D_0015ED70 * 30.0f;
-        seeker_vars->f98 = 0.0f;
-        seeker_vars->f94 = 1;
-        seeker_vars->bAD = 0;
+        seeker_vars->knockback.collision_radius_1024ths = truncate_float_to_s32(512.0f);
+        seeker_vars->knockback.gravity = seeker_knockback_gravity_scale * D_0015ED70;
+        seeker_vars->knockback.speed_approach_step = D_0015ED70 * 30.0f;
+        seeker_vars->knockback.collision_z_offset = 0.0f;
+        seeker_vars->knockback.flags = 1;
+        seeker_vars->knockback.unk3D = 0;
         allocate_voice_for_target_entry(8, 0, moby);
 
         switch (response) {
@@ -494,15 +483,18 @@ void update_seeker_damage_and_target(Moby *moby) {
         case 6:
         case 7:
         case 8:
-            seeker_vars->fC0 = 3.0f;
-            seeker_vars->fC4 = 6.0f;
-            seeker_vars->f88 = seeker_hurt_knockback_xy_scale * D_0015ED6C;
-            seeker_vars->f8C = 0.0f;
+            seeker_vars->knockback.apex_animation_frame = 3.0f;
+            seeker_vars->knockback.landing_animation_frame = 6.0f;
+            seeker_vars->knockback.speed = seeker_hurt_knockback_xy_scale * D_0015ED6C;
+            seeker_vars->knockback.vertical_speed = 0.0f;
             knock_angle = fast_arc_tan(moby->pos.x - source->owner->pos.x,
                                        moby->pos.y - source->owner->pos.y);
             *(Q_2C73D0 *)hit_pos = source->pos;
-            func_L00_0025BBA0_2C73D0(hit_pos, &knock_angle, &seeker_vars->f88, &seeker_vars->f8C);
-            func_L00_0025D5B0_2C73D0(moby, seeker_vars->f70, knock_angle, 4, 1, 0);
+            func_L00_0025BBA0_2C73D0(hit_pos,
+                                     &knock_angle,
+                                     &seeker_vars->knockback.speed,
+                                     &seeker_vars->knockback.vertical_speed);
+            func_L00_0025D5B0_2C73D0(moby, &seeker_vars->knockback, knock_angle, 4, 1, 0);
             moby->state = SEEKER_STATE_HURT_KNOCKBACK;
             if (moby->group != 0xFF) {
                 func_L01_0026F040_2C73D0(moby->group, 1);
@@ -512,17 +504,19 @@ void update_seeker_damage_and_target(Moby *moby) {
         case RESPONSE_FATAL_KNOCKBACK:
         case 2:
             moby->flags &= 0xEFFF;
-            seeker_vars->f80 = seeker_knockback_gravity_scale * D_0015ED70;
-            seeker_vars->f88 = seeker_fatal_knockback_xy_scale * D_0015ED6C;
-            seeker_vars->f8C = seeker_fatal_knockback_z_scale * D_0015ED6C;
-            seeker_vars->fC0 = 14.0f;
-            seeker_vars->fC4 = 28.0f;
+            seeker_vars->knockback.gravity = seeker_knockback_gravity_scale * D_0015ED70;
+            seeker_vars->knockback.speed = seeker_fatal_knockback_xy_scale * D_0015ED6C;
+            seeker_vars->knockback.vertical_speed = seeker_fatal_knockback_z_scale * D_0015ED6C;
+            seeker_vars->knockback.apex_animation_frame = 14.0f;
+            seeker_vars->knockback.landing_animation_frame = 28.0f;
             knock_angle_fatal = fast_arc_tan(moby->pos.x - source->owner->pos.x,
                                              moby->pos.y - source->owner->pos.y);
             *(Q_2C73D0 *)hit_pos = source->pos;
-            func_L00_0025BBA0_2C73D0(
-                hit_pos, &knock_angle_fatal, &seeker_vars->f88, &seeker_vars->f8C);
-            func_L00_0025D5B0_2C73D0(moby, seeker_vars->f70, knock_angle_fatal, 4, 1, 0);
+            func_L00_0025BBA0_2C73D0(hit_pos,
+                                     &knock_angle_fatal,
+                                     &seeker_vars->knockback.speed,
+                                     &seeker_vars->knockback.vertical_speed);
+            func_L00_0025D5B0_2C73D0(moby, &seeker_vars->knockback, knock_angle_fatal, 4, 1, 0);
             mark_moby_for_removal_cf(moby, 0, -1);
             moby->state = SEEKER_STATE_FATAL_KNOCKBACK;
             seeker_vars->hit_flash.flash_red = 0xF0;

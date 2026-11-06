@@ -1,6 +1,7 @@
 /* Shared moby class gadgebot: comes out of its container, picks targets and fights. */
 
 #include "types.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/mobys/moby_class_id.h"
 #include "rnc/hero/hero.h"
@@ -112,7 +113,7 @@ typedef struct {
     float                    unk18;
     char                     p1C[0x14];
     struct GroundMoveControl ctl;
-    char                     knockback_motion[0x60];
+    struct KnockbackMotion   knockback;
     float                    home_position[4] __attribute__((aligned(16)));
     float                    stall_check_position[4] __attribute__((aligned(16)));
     unsigned char            scale_manipulator;
@@ -949,7 +950,7 @@ void gadgebot_update(GbMoby *moby) {
         return;
     }
     case GADGEBOT_UPDATE_KNOCKBACK:
-        if (step_moby_motion(moby, gadgebot_vars->knockback_motion) & 0x41) {
+        if (step_moby_motion(moby, &gadgebot_vars->knockback) & 0x41) {
             int i;
 
             cart_burst(moby, moby->pos, -1, 0.5f, 13.0f);

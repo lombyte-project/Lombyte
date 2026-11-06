@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "rnc/mobys/moby.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 
 /* Level 12 hoven_anklebiter: its moby and pvars layouts and the target report it shares with the blarg trooper. */
 
@@ -35,49 +36,42 @@ typedef struct AnklebiterMoby {
 } AnklebiterMoby;
 
 struct AnklebiterData {
-    char          p0[0x20];
-    float         health;
-    char          p24[5];
-    unsigned char mode;
-    char          p2A[0x2E];
-    unsigned char blend;
-    char          p59;
-    unsigned char count;
-    char          p5B[0x6D];
-    short         stuck;
-    char          pCA[6];
-    void         *tuning;
-    char          pD4[0x4C];
-    float         fall[4], gravity, zero, launch_speed, launch_time;
-    int           fall_flags, fall_mode;
-    float         damping;
-    char          p14C[0x11];
-    unsigned char falling;
-    char          p15E[0x12];
-    float         fall_a, fall_b;
-    char          p178[8];
-    int           effect_class;
-    char          p184[4];
-    float         effect_size0, effect_size1;
-    char          p190[0x14];
-    float         effect_speed;
-    char          p1A8[0x10];
-    int           effect_flags;
-    char          p1BC[0x14];
-    float         idle_pos[4], spare, idle_speed;
-    char          p1E8[0x18];
-    char          collision_data[0x68];
-    float         look_angle;
-    char          p26C[0x14];
-    float         home[4];
-    char          p290[0x10];
-    float         turn_velocity, circle_angle, circle_rate, range;
-    char          p2B0[8];
-    int           init0, sleep, circle_timer, alert_timer;
-    short         group_timer, pad2CA, idle_timer, pad2CE;
-    int           path, blocked, return_timer, group_enabled;
-    int          *group_count;
-    int           group_check;
+    char                   p0[0x20];
+    float                  health;
+    char                   p24[5];
+    unsigned char          mode;
+    char                   p2A[0x2E];
+    unsigned char          blend;
+    char                   p59;
+    unsigned char          count;
+    char                   p5B[0x6D];
+    short                  stuck;
+    char                   pCA[6];
+    void                  *tuning;
+    char                   pD4[0x4C];
+    struct KnockbackMotion knockback; /* 0x120 */
+    int                    effect_class;
+    char                   p184[4];
+    float                  effect_size0, effect_size1;
+    char                   p190[0x14];
+    float                  effect_speed;
+    char                   p1A8[0x10];
+    int                    effect_flags;
+    char                   p1BC[0x14];
+    float                  idle_pos[4], spare, idle_speed;
+    char                   p1E8[0x18];
+    char                   collision_data[0x68];
+    float                  look_angle;
+    char                   p26C[0x14];
+    float                  home[4];
+    char                   p290[0x10];
+    float                  turn_velocity, circle_angle, circle_rate, range;
+    char                   p2B0[8];
+    int                    init0, sleep, circle_timer, alert_timer;
+    short                  group_timer, pad2CA, idle_timer, pad2CE;
+    int                    path, blocked, return_timer, group_enabled;
+    int                   *group_count;
+    int                    group_check;
 };
 
 /* What the target picker FUN_L01_00274b78 fills in: the anklebiter and the blarg trooper read the chosen moby. */

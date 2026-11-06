@@ -1,5 +1,6 @@
 /* Level 10 moby class toxic_crab: sight, targeting, group approach, particles and hit reactions. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 #include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/mobys/moby_state.h"
 #include "rnc/game/item_state.h"
@@ -1011,43 +1012,31 @@ typedef struct Hero Hero;
 typedef int u128_2E52B0 __attribute__((mode(TI)));
 
 typedef struct D_2E52B0 {
-    char                 p0[0x10];
-    struct Moby         *f10;
-    char                 p14[0xC];
-    float                f20;
-    char                 p24[2];
-    short                hit_reaction_suppression_timer_frames;
-    char                 p28[0x10];
-    int                  target_range_boost_pending;
-    char                 p3C[0x24];
-    struct HitColorFlash hit_flash;
-    float                a70[4];
-    float                f80;
-    char                 p84[4];
-    float                knockback_xy_scale;
-    float                knockback_z_scale;
-    int                  f90;
-    int                  knockback_motion_flags;
-    float                f98;
-    char                 p9C[0x11];
-    unsigned char        bAD;
-    char                 pAE[0x12];
-    float                fC0;
-    float                fC4;
-    char                 pC8[0x58];
-    AlignedVec4f         a120;
-    char                 p130[0x30];
-    struct Moby         *selected_target_moby;
-    int                  target_selection_status;
-    char                 p168[8];
-    AlignedVec4f         a170;
-    char                 p180[0x20];
-    float                f1A0;
-    char                 p1A4[8];
-    int                  target_range_boost_timer_frames;
-    int                  target_path_index;
-    char                 p1B4[0x20];
-    int                  target_loss_frames;
+    char                   p0[0x10];
+    struct Moby           *f10;
+    char                   p14[0xC];
+    float                  f20;
+    char                   p24[2];
+    short                  hit_reaction_suppression_timer_frames;
+    char                   p28[0x10];
+    int                    target_range_boost_pending;
+    char                   p3C[0x24];
+    struct HitColorFlash   hit_flash;
+    struct KnockbackMotion knockback;
+    char                   pad_60[0x50];
+    AlignedVec4f           a120;
+    char                   p130[0x30];
+    struct Moby           *selected_target_moby;
+    int                    target_selection_status;
+    char                   p168[8];
+    AlignedVec4f           a170;
+    char                   p180[0x20];
+    float                  f1A0;
+    char                   p1A4[8];
+    int                    target_range_boost_timer_frames;
+    int                    target_path_index;
+    char                   p1B4[0x20];
+    int                    target_loss_frames;
 } D_2E52B0;
 
 typedef struct Hit_2E52B0 {
@@ -1182,10 +1171,10 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
         if (moby_data->f20 <= 0.0f)
             hit_response_code = 1;
         func_L10_002E14F8_2E52B0(moby);
-        moby_data->f90 = truncate_float_to_s32(768.0f);
-        moby_data->f98 = 0.75f;
-        moby_data->knockback_motion_flags = 9;
-        moby_data->bAD = 0;
+        moby_data->knockback.collision_radius_1024ths = truncate_float_to_s32(768.0f);
+        moby_data->knockback.collision_z_offset = 0.75f;
+        moby_data->knockback.flags = 9;
+        moby_data->knockback.unk3D = 0;
         fx = fast_arc_tan(hit_record->pos.x, hit_record->pos.y);
         switch (hit_response_code) {
         case KNOCKBACK_HIT_RESPONSE:
@@ -1196,14 +1185,14 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
         case ARC_ADJUSTED_KNOCKBACK_HIT_RESPONSE:
             moby->state = TOXIC_CRAB_STATE_HIT_KNOCKBACK;
             moby_data->hit_reaction_suppression_timer_frames = scale_game_frames(60);
-            moby_data->f80 = toxic_crab_hit_knockback_gravity_gp * D_0015ED70;
-            trooper_set_knockback(moby_data->a70, 0.5f, 0.5f);
-            moby_data->fC0 = 8.0f;
-            moby_data->fC4 = 10.0f;
+            moby_data->knockback.gravity = toxic_crab_hit_knockback_gravity_gp * D_0015ED70;
+            trooper_set_knockback(&moby_data->knockback, 0.5f, 0.5f);
+            moby_data->knockback.apex_animation_frame = 8.0f;
+            moby_data->knockback.landing_animation_frame = 10.0f;
             *(u128_2E52B0 *)&vA = *(u128_2E52B0 *)&hit_record->pos;
             trooper_knockback_arc(
-                &vA, &fx, &moby_data->knockback_xy_scale, &moby_data->knockback_z_scale);
-            func_L00_0025D5B0_2E52B0(moby, moby_data->a70, 9, 1, 0, fx);
+                &vA, &fx, &moby_data->knockback.speed, &moby_data->knockback.vertical_speed);
+            func_L00_0025D5B0_2E52B0(moby, &moby_data->knockback, 9, 1, 0, fx);
             moby_data->hit_flash.flash_red = 0xFA;
             start_hit_color_flash(moby, &moby_data->hit_flash);
             break;
@@ -1212,16 +1201,20 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
             float knockback_strength;
             moby->state = TOXIC_CRAB_STATE_HIT_KNOCKBACK;
             moby_data->hit_reaction_suppression_timer_frames = scale_game_frames(60);
-            moby_data->f80 = toxic_crab_hit_knockback_gravity_gp * D_0015ED70;
+            moby_data->knockback.gravity = toxic_crab_hit_knockback_gravity_gp * D_0015ED70;
             knockback_strength = ((Hero *)(((char *)&hero)))->vehicle_mode == 1 ? 1.0f : 3.0f;
-            trooper_set_knockback(moby_data->a70, knockback_strength, 0.5f);
-            moby_data->fC0 = 3.5f;
-            moby_data->fC4 = 7.0f;
+            trooper_set_knockback(&moby_data->knockback, knockback_strength, 0.5f);
+            moby_data->knockback.apex_animation_frame = 3.5f;
+            moby_data->knockback.landing_animation_frame = 7.0f;
             *(u128_2E52B0 *)&vA = *(u128_2E52B0 *)&hit_record->pos;
             trooper_knockback_arc(
-                &vA, &fx, &moby_data->knockback_xy_scale, &moby_data->knockback_z_scale);
-            func_L00_0025D5B0_2E52B0(
-                moby, moby_data->a70, 9, 1, 0, fast_arc_tan(hit_record->pos.x, hit_record->pos.y));
+                &vA, &fx, &moby_data->knockback.speed, &moby_data->knockback.vertical_speed);
+            func_L00_0025D5B0_2E52B0(moby,
+                                     &moby_data->knockback,
+                                     9,
+                                     1,
+                                     0,
+                                     fast_arc_tan(hit_record->pos.x, hit_record->pos.y));
             moby_data->hit_flash.flash_red = 0xFA;
             start_hit_color_flash(moby, &moby_data->hit_flash);
             break;
