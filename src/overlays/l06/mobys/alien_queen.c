@@ -387,10 +387,10 @@ typedef struct AlienQueenVars {
     s32                  frog_list;
     s32                  state18_list;
     s32                  cuboid;
-    s32                  unkFC;
-    s32                  unk100;
+    s32                  post_death_linked_moby; /* links on at the start, off after death */
+    s32                  death_linked_moby;      /* links on at the start, off on death */
     s32                  slider_list;
-    s32                  unk108;
+    s32                  camera; /* written to D_0014162A in states 4-13, -1: none */
     s32                  animation_update;
     s32                  health_sixteenths;
     s32                  saved_path_point_count;
@@ -480,8 +480,8 @@ void alien_queen_update(unsigned char *moby) {
         }
         if (alien_queen_update_vars->timer_12C != 0)
             return;
-        func_L06_002F6818_q(level_mobys_q + (alien_queen_update_vars->unkFC << 8));
-        func_L06_002F6818_q(level_mobys_q + (alien_queen_update_vars->unk100 << 8));
+        func_L06_002F6818_q(level_mobys_q + (alien_queen_update_vars->post_death_linked_moby << 8));
+        func_L06_002F6818_q(level_mobys_q + (alien_queen_update_vars->death_linked_moby << 8));
         set_listed_alien_queen_sliders_state_2_and_data_28_to_one(
             alien_queen_update_vars->slider_list);
         alien_queen_update_vars->intro_or_recovery_delay_active = 0;
@@ -730,7 +730,7 @@ void alien_queen_update(unsigned char *moby) {
         alien_queen_update_vars->health_sixteenths = 0;
         moby[0x30] = 0xFF;
         if (alien_queen_update_vars->death_control_flags == 2) {
-            func_L06_002F6790_q(level_mobys_q + (alien_queen_update_vars->unk100 << 8));
+            func_L06_002F6790_q(level_mobys_q + (alien_queen_update_vars->death_linked_moby << 8));
             set_listed_alien_queen_sliders_state_2_and_clear_data_28(
                 alien_queen_update_vars->slider_list);
             MOBY(moby)->flags |= 1;
@@ -749,7 +749,7 @@ void alien_queen_update(unsigned char *moby) {
         step[2] = step[2] + 1.0f;
         func_L00_00260460_q(moby, step, -1, 2.0f, 20.0f);
         spawn_moby_break_fragments(moby, 0x6A2, 1, 0x6A3, 3, 6, 2);
-        func_L06_002F6790_q(level_mobys_q + (alien_queen_update_vars->unk100 << 8));
+        func_L06_002F6790_q(level_mobys_q + (alien_queen_update_vars->death_linked_moby << 8));
         set_listed_alien_queen_sliders_state_2_and_clear_data_28(
             alien_queen_update_vars->slider_list);
         moby[0x20] = 0xF;
@@ -782,7 +782,8 @@ void alien_queen_update(unsigned char *moby) {
             }
         }
         if (level_game_mode_q == 2) {
-            func_L06_002F6790_q(level_mobys_q + (alien_queen_update_vars->unkFC << 8));
+            func_L06_002F6790_q(level_mobys_q +
+                                (alien_queen_update_vars->post_death_linked_moby << 8));
             mark_moby_for_removal(moby);
         }
         break;
@@ -823,8 +824,8 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
     alien_queen_hit_recovery_vars = ((char *)MOBY(moby)->pvars);
     if (MOBY(moby)->state == ALIEN_QUEEN_STATE_INITIALIZE)
         return;
-    if ((unsigned int)(MOBY(moby)->state - 4) < 10 && alien_queen_hit_recovery_vars->unk108 != -1)
-        D_L06_0014162A = *(short *)&alien_queen_hit_recovery_vars->unk108;
+    if ((unsigned int)(MOBY(moby)->state - 4) < 10 && alien_queen_hit_recovery_vars->camera != -1)
+        D_L06_0014162A = *(short *)&alien_queen_hit_recovery_vars->camera;
     alien_queen_hit_recovery_vars->health_sixteenths =
         truncate_float_to_s32(alien_queen_hit_recovery_vars->health * 16.0f);
     dmg = 0.0f;

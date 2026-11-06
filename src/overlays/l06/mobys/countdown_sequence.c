@@ -167,19 +167,19 @@ void set_moby_list_state_17(int moby_list_index) {
 }
 
 typedef struct CountdownSequenceVars {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
+    s32 state_4_list;  /* moby list held in state 4 until the countdown starts */
+    s32 state_18_list; /* moby lists held in state 18 until the countdown starts */
+    s32 state_18_list2;
     s32 raised_cuboid; /* cuboid moved up by 10 when the countdown starts */
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
+    s32 state_17_list; /* moby list switched to state 17 when the countdown starts */
+    s32 state_15_list; /* moby lists switched to state 15 when the countdown starts */
+    s32 state_15_list2;
     s32 watched_group;
-    s32 unk20;
+    s32 state_3_moby_index; /* moby set to state 3 when the countdown starts */
     s32 path_index;
     s32 cuboid_28;
     s32 red_button_moby_index;
-    s32 unk30;
+    s32 state_5_moby_index; /* moby set to state 5 when the countdown runs out */
     s32 spark_emitter_list;
     u8  pad_38[0x78];
     s32 path_node_counter;
@@ -212,9 +212,9 @@ void countdown_sequence_update(unsigned char *moby) {
             mark_moby_for_removal((struct Obj *)moby);
             return;
         }
-        set_moby_list_state_4(moby_vars->unk0);
-        set_moby_list_state_18(moby_vars->unk4);
-        set_moby_list_state_18(moby_vars->unk8);
+        set_moby_list_state_4(moby_vars->state_4_list);
+        set_moby_list_state_18(moby_vars->state_18_list);
+        set_moby_list_state_18(moby_vars->state_18_list2);
         moby[0x20] = 1;
         moby[0x30] = 0xFF;
         return;
@@ -239,13 +239,13 @@ void countdown_sequence_update(unsigned char *moby) {
         request_music_track(6, 9);
         if (*(short *)dialogue_playback_phase == DIALOGUE_PHASE_READY_TO_CONTINUE)
             continue_audio_stream_if_ready();
-        set_moby_list_state_17(moby_vars->unk10);
-        set_moby_list_state_15(moby_vars->unk14);
-        set_moby_list_state_15(moby_vars->unk18);
-        clear_moby_list_state_4(moby_vars->unk0);
-        clear_moby_list_state_18(moby_vars->unk4);
-        clear_moby_list_state_18(moby_vars->unk8);
-        set_moby_state_3(D_L06_0015FFD8_301b90 + (moby_vars->unk20 << 8));
+        set_moby_list_state_17(moby_vars->state_17_list);
+        set_moby_list_state_15(moby_vars->state_15_list);
+        set_moby_list_state_15(moby_vars->state_15_list2);
+        clear_moby_list_state_4(moby_vars->state_4_list);
+        clear_moby_list_state_18(moby_vars->state_18_list);
+        clear_moby_list_state_18(moby_vars->state_18_list2);
+        set_moby_state_3(D_L06_0015FFD8_301b90 + (moby_vars->state_3_moby_index << 8));
         {
             ((LevelCuboid *)((moby_vars->raised_cuboid << 7) + (int)l06_cuboids))->pos.z += 10.0f;
             p = D_L06_001B0C30_301b90[moby_vars->path_index];
@@ -340,7 +340,7 @@ void countdown_sequence_update(unsigned char *moby) {
             return;
         moby[0x20] = 5;
         x = scale_game_frames(15);
-        q = D_L06_0015FFD8_301b90 + (moby_vars->unk30 << 8);
+        q = D_L06_0015FFD8_301b90 + (moby_vars->state_5_moby_index << 8);
         moby_vars->exit_ramp_progress = 0.0f;
         moby_vars->timer_BC = x;
         set_moby_state_5(q);
