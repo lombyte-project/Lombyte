@@ -23,10 +23,10 @@ struct CameraBlend {
 /* advance_alternate_camera_transition's orbit around the focus, from
    orbit_angles toward the angles compute_camera_angles gives. */
 struct CameraOrbit {
-    f32 angles[3];   /* 0x00: yaw, pitch, distance (compute_camera_angles) */
-    s32 frames;      /* 0x0C */
-    f32 frame_step;  /* 0x10: 1 / frames */
-    s32 start_count; /* 0x14: counted up on each start */
+    f32 angles[3];  /* 0x00: yaw, pitch, distance (compute_camera_angles) */
+    s32 frames;     /* 0x0C */
+    f32 frame_step; /* 0x10: 1 / frames */
+    s32 length; /* 0x14: orbit length from the level; start_camera_blend adds one and scales it into frames */
     u8  pad_18[0x8];
     f32 forward[4];        /* 0x20 */
     f32 up[4];             /* 0x30 */

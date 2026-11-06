@@ -67,8 +67,8 @@ int advance_alternate_camera_transition(char *target_camera, struct CameraOrbit 
     if (orbit->frames <= 0) {
         return 1;
     }
-    step = 1.0f / cosine_interpolate(
-                      1.0f, (f32)orbit->start_count, (f32)orbit->frames * orbit->frame_step);
+    step =
+        1.0f / cosine_interpolate(1.0f, (f32)orbit->length, (f32)orbit->frames * orbit->frame_step);
     if (cam_trans_state.kind == CAMERA_TRANSITION_KIND_STORED_FOCUS_ORBIT) {
         qcopy(&focus_position, D_0013F3D0);
         qcopy(&forward_axis, orbit->forward);
