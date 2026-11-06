@@ -1,5 +1,6 @@
 /* Level 12 moby class hoven_anklebiter: its suck cannon callbacks, pursuit, movement, sparks, damage and alerts. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 #include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
 #include "rnc/hero/hero.h"
@@ -339,12 +340,12 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
                 1; /* loaded ahead of the other constants: it is the last one stored (retail keeps it in $a2 into the call's delay slot) */
             data->alert_timer = 0;
             data->init0 = 0;
-            data->damping = 0.5f;
+            data->knockback.collision_z_offset = 0.5f;
             data->health = 2.0f;
             data->blend = 8;
             data->count = 5;
             data->mode = initial_mode;
-            data->fall_flags = 0x200;
+            data->knockback.collision_radius_1024ths = 0x200;
             func_L01_0026E8E0_2E2EF0((char *)&data->effect_class);
             data->effect_class = 0x38D;
             data->effect_flags |= 0x10;
@@ -464,26 +465,27 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
             if (moby->group != 255)
                 FUN_L01_0026e090(moby->group, 2);
             moby->joints = 0x40;
-            data->zero = 0.0f;
-            data->gravity = hoven_anklebiter_leap_gravity_gp * D_0015ED70;
-            data->launch_speed = hoven_anklebiter_leap_launch_speed_gp * D_0015ED6C;
-            data->launch_time = func_L00_0025BC48_2E2EF0(moby->pos,
-                                                         data->home,
-                                                         &trajectory,
-                                                         data->launch_speed,
-                                                         -hoven_anklebiter_leap_gravity_gp);
-            data->fall_mode = ANKLEBITER_LEAP_TO_HOME_MOTION_FLAGS;
-            data->falling = 0;
-            setup_fall54(moby->rot[2], (char *)moby, data->fall, 8, 1, 0);
-            data->fall_a = 5.0f;
-            data->fall_b = 10.0f;
+            data->knockback.speed_approach_step = 0.0f;
+            data->knockback.gravity = hoven_anklebiter_leap_gravity_gp * D_0015ED70;
+            data->knockback.speed = hoven_anklebiter_leap_launch_speed_gp * D_0015ED6C;
+            data->knockback.vertical_speed =
+                func_L00_0025BC48_2E2EF0(moby->pos,
+                                         data->home,
+                                         &trajectory,
+                                         data->knockback.speed,
+                                         -hoven_anklebiter_leap_gravity_gp);
+            data->knockback.flags = ANKLEBITER_LEAP_TO_HOME_MOTION_FLAGS;
+            data->knockback.unk3D = 0;
+            setup_fall54(moby->rot[2], (char *)moby, &data->knockback, 8, 1, 0);
+            data->knockback.apex_animation_frame = 5.0f;
+            data->knockback.landing_animation_frame = 10.0f;
             moby->state = ANKLEBITER_LEAP_TO_HOME;
             moby->flags |= 0x1000;
             moby->collision = *(int *)(moby->model + 0x10);
         }
         break;
     case ANKLEBITER_LEAP_TO_HOME:
-        if (step_moby_motion(moby, data->fall) & 1) {
+        if (step_moby_motion(moby, &data->knockback) & 1) {
             moby->state = ANKLEBITER_LAND_AFTER_LEAP;
             if (moby->anim != 9)
                 blend_moby_animation(moby, 9, 8, scale_game_frames(7));
@@ -615,7 +617,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
     case ANKLEBITER_KNOCKBACK_FALL:
         if (moby->group != 255)
             FUN_L01_0026e090(moby->group, 1);
-        if (step_moby_motion(moby, data->fall) & 1) {
+        if (step_moby_motion(moby, &data->knockback) & 1) {
             moby->state = ANKLEBITER_RECOVER_AFTER_KNOCKBACK;
             if (moby->anim != 13)
                 blend_moby_animation(moby, 13, 8, scale_game_frames(8));
@@ -627,7 +629,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
         }
         break;
     case ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME:
-        if (func_L00_002DDEA0_2E2EF0(moby, data->fall)) {
+        if (func_L00_002DDEA0_2E2EF0(moby, &data->knockback)) {
             moby->state = ANKLEBITER_RETURN_HOME;
             data->return_timer = 0;
             data->stuck = 0;
@@ -642,7 +644,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
         }
         break;
     case ANKLEBITER_DEATH_FALL:
-        hit = step_moby_motion(moby, data->fall);
+        hit = step_moby_motion(moby, &data->knockback);
         if ((hit & 0x40) ||
             (compute_interpolated_record_value(moby) > 37.0f && moby->anim_end == moby->anim)) {
             moby->anim_rate = 0.0f;
@@ -840,37 +842,22 @@ void spawn_hoven_anklebiter_death_sparks(struct Moby *moby) {
 
 /* Variables of the Hoven anklebiter (moby->pvars); the l00 ElectroidVars damage layout moved by 0xB0. */
 typedef struct {
-    u8                   pad0[0x20];
-    f32                  health; /* 0x20 */
-    u8                   pad24[2];
-    s16                  stun_timer; /* 0x26 */
-    u8                   pad28[0x10];
-    s32                  reset_alert; /* 0x38 */
-    u8                   pad3C[0xD4];
-    struct HitColorFlash hit_flash;  /* 0x110 */
-    u8                   fall[0x10]; /* 0x120 */
-    f32                  unk130;     /* 0x130 */
-    f32                  unk134;     /* 0x134 */
-    f32                  unk138;     /* 0x138 */
-    f32                  unk13C;     /* 0x13C */
-    u8                   pad140[4];
-    s32                  unk144; /* 0x144 */
-    u8                   pad148[8];
-    f32                  unk150; /* 0x150 */
-    f32                  unk154; /* 0x154 */
-    f32                  unk158; /* 0x158 */
-    u8                   pad15C;
-    u8                   unk15D; /* 0x15D */
-    u8                   pad15E[0x12];
-    f32                  knockback_ascent_animation_target;  /* 0x170 */
-    f32                  knockback_descent_animation_target; /* 0x174 */
-    u8                   pad178[0x134];
-    f32                  speed; /* 0x2AC */
-    u8                   pad2B0[0x14];
-    s32                  alert_timer; /* 0x2C4 */
-    u8                   pad2C8[0x20];
-    s16                  call_enabled; /* 0x2E8 */
-    s16                  call_timer;   /* 0x2EA */
+    u8                     pad0[0x20];
+    f32                    health; /* 0x20 */
+    u8                     pad24[2];
+    s16                    stun_timer; /* 0x26 */
+    u8                     pad28[0x10];
+    s32                    reset_alert; /* 0x38 */
+    u8                     pad3C[0xD4];
+    struct HitColorFlash   hit_flash; /* 0x110 */
+    struct KnockbackMotion knockback;
+    u8                     pad_60[0x12C];
+    f32                    speed; /* 0x2AC */
+    u8                     pad2B0[0x14];
+    s32                    alert_timer; /* 0x2C4 */
+    u8                     pad2C8[0x20];
+    s16                    call_enabled; /* 0x2E8 */
+    s16                    call_timer;   /* 0x2EA */
 } AnklebiterVars;
 
 extern s32 D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
@@ -942,27 +929,29 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
         }
         if (dmg != 0.0f) {
             anklebiter_vars->health -= dmg;
-            anklebiter_vars->unk130 = 0.008f;
-            anklebiter_vars->unk134 = 0.0005f;
-            anklebiter_vars->unk138 = hoven_anklebiter_nonlethal_knockback_scale_gp * frame_time;
-            anklebiter_vars->unk13C = hoven_anklebiter_nonlethal_knockback_z_scale_gp * frame_time;
-            anklebiter_vars->unk15D = 0;
-            anklebiter_vars->unk144 = 9;
-            anklebiter_vars->unk150 = 1.0f;
-            anklebiter_vars->unk154 = 1.0f;
-            anklebiter_vars->unk158 = 1.0f;
+            anklebiter_vars->knockback.gravity = 0.008f;
+            anklebiter_vars->knockback.speed_approach_step = 0.0005f;
+            anklebiter_vars->knockback.speed =
+                hoven_anklebiter_nonlethal_knockback_scale_gp * frame_time;
+            anklebiter_vars->knockback.vertical_speed =
+                hoven_anklebiter_nonlethal_knockback_z_scale_gp * frame_time;
+            anklebiter_vars->knockback.unk3D = 0;
+            anklebiter_vars->knockback.flags = 9;
+            anklebiter_vars->knockback.restitution = 1.0f;
+            anklebiter_vars->knockback.unk34 = 1.0f;
+            anklebiter_vars->knockback.unk38 = 1.0f;
             if (anklebiter_vars->health <= 0.0f) {
                 moby->flags &= ~0x1000;
-                anklebiter_vars->unk138 = frame_time * 8.0f;
-                anklebiter_vars->unk13C = frame_time * 10.0f;
+                anklebiter_vars->knockback.speed = frame_time * 8.0f;
+                anklebiter_vars->knockback.vertical_speed = frame_time * 10.0f;
                 help_direction_or_hit_position.q = coll->pos.q;
                 trooper_knockback_arc(&help_direction_or_hit_position,
                                       &angle,
-                                      &anklebiter_vars->unk138,
-                                      &anklebiter_vars->unk13C);
-                start_fall_e3528(moby, anklebiter_vars->fall, 6, 1, 0, angle);
-                anklebiter_vars->knockback_ascent_animation_target = 11.0f;
-                anklebiter_vars->knockback_descent_animation_target = 18.0f;
+                                      &anklebiter_vars->knockback.speed,
+                                      &anklebiter_vars->knockback.vertical_speed);
+                start_fall_e3528(moby, &anklebiter_vars->knockback, 6, 1, 0, angle);
+                anklebiter_vars->knockback.apex_animation_frame = 11.0f;
+                anklebiter_vars->knockback.landing_animation_frame = 18.0f;
                 moby->state = ANKLEBITER_DEATH_FALL;
                 anklebiter_vars->hit_flash.flash_red = 0x78;
                 start_hit_color_flash(moby, &anklebiter_vars->hit_flash);
@@ -970,11 +959,11 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
                 help_direction_or_hit_position.q = coll->pos.q;
                 trooper_knockback_arc(&help_direction_or_hit_position,
                                       &unused,
-                                      &anklebiter_vars->unk138,
-                                      &anklebiter_vars->unk13C);
-                start_fall_e3528(moby, anklebiter_vars->fall, 0xE, 1, 0, unused);
-                anklebiter_vars->knockback_descent_animation_target =
-                    anklebiter_vars->knockback_ascent_animation_target = -1.0f;
+                                      &anklebiter_vars->knockback.speed,
+                                      &anklebiter_vars->knockback.vertical_speed);
+                start_fall_e3528(moby, &anklebiter_vars->knockback, 0xE, 1, 0, unused);
+                anklebiter_vars->knockback.landing_animation_frame =
+                    anklebiter_vars->knockback.apex_animation_frame = -1.0f;
                 moby->state = ANKLEBITER_KNOCKBACK_FALL;
                 anklebiter_vars->hit_flash.flash_red = 0xFA;
                 anklebiter_vars->stun_timer = scale_game_frames(0x3C);
