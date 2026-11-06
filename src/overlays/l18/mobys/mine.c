@@ -44,10 +44,10 @@ void         update_mine_detonation(unsigned char *moby) __asm__("FUN_L18_002d5f
 
 void update_mine_detonation(unsigned char *m) __asm__("FUN_L18_002d5f20");
 
-void moby_568_update(struct Moby *moby) __asm__("FUN_L18_002d5918");
+void drifting_mine_update(struct Moby *moby) __asm__("FUN_L18_002d5918");
 
 /* Moby class 568 */
-void moby_568_update(struct Moby *moby) {
+void drifting_mine_update(struct Moby *moby) {
     char *class_238_update_private_vars = (char *)moby->pvars;
     float settling_displacement_or_steering_increment[4];
     update_mine_detonation(moby);

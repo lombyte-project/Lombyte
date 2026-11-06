@@ -25,7 +25,7 @@ void hidden_deplanetizer_gun_update(struct Moby *) __asm__("FUN_L18_002fa640");
 void inert_moby_update() __asm__("FUN_L18_002f7ab0");
 void lift_update(struct Moby *) __asm__("FUN_L18_002f2310");
 void hide_moby_and_disable_collision(struct Moby *) __asm__("FUN_L18_002d6280");
-void moby_568_update(struct Moby *) __asm__("FUN_L18_002d5918");
+void drifting_mine_update(struct Moby *) __asm__("FUN_L18_002d5918");
 int  moby_hold_state_while_active(struct Moby *) __asm__("FUN_L18_002d6190");
 int  update_moby_state_pause(struct Moby *) __asm__("FUN_L18_002d6108");
 void rocket_moby_update(struct Moby *) __asm__("FUN_L18_002d5050");
