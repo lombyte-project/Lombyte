@@ -69,8 +69,8 @@ void  chomper_update(struct Moby *m) __asm__("FUN_L16_002e5e08");
 
 typedef struct ChomperVars {
     u8  pad_0[0x20];
-    f32 unk20;
-    u16 unk24;
+    f32 health;
+    u16 max_health;
     u8  pad_26[0x2];
     u8  unk28;
     u8  pad_29[0x2F];
@@ -82,15 +82,18 @@ typedef struct ChomperVars {
     u8  pad_CA[0x6];
     s32 unkD0;
     u8  pad_D4[0x4C];
-    u8  unk120;
+    u8  motion;
     u8  pad_121[0x5F];
-    f32 unk180[4];
+    f32 path_search_point[4];
     u8  pad_190[0x34];
     s32 pursuit_target_selection_status;
     u8  pad_1C8[0x8];
-    f32 unk1D0[4];
+    f32 home_position[4];
     u8  pad_1E0[0x10];
-    f32 unk1F0[4];
+    s32 path; /* 0x1F0: index into D_L16_001B0930, -1: none */
+    f32 yaw_velocity;
+    f32 heading_offset;
+    u8  pad_1FC[0x4];
     u8  pad_200[0x4];
     f32 travel_distance_velocity;
     f32 previous_height_drop;
@@ -109,17 +112,17 @@ void chomper_update(struct Moby *chomper_moby) {
     }
     switch (chomper_moby->state) {
     case CHOMPER_INITIALIZE:
-        if (*(int *)&chomper_data->unk1F0[0] == -1) {
+        if (chomper_data->path == -1) {
             mark_moby_for_removal(chomper_moby);
             return;
         }
-        chomper_data->unk24 = 1;
+        chomper_data->max_health = 1;
         chomper_data->unk28 = 0;
-        chomper_data->unk20 = 1.0f;
+        chomper_data->health = 1.0f;
         chomper_data->unkD0 = (int)&D_L16_00161E48;
         if (rand() & 1)
             chomper_moby->flags |= 0x8000;
-        qcopy(chomper_data->unk1D0, &chomper_moby->pos);
+        qcopy(chomper_data->home_position, &chomper_moby->pos);
         chomper_moby->state = CHOMPER_WAIT_TO_APPROACH_TARGET;
         if (chomper_moby->prev_seq != 2)
             blend_moby_animation(chomper_moby, 2, 0, scale_game_frames(20));
@@ -137,7 +140,7 @@ void chomper_update(struct Moby *chomper_moby) {
     case 3:
         break;
     case CHOMPER_APPROACH_TARGET:
-        if (move_chomper_toward_position(chomper_moby, chomper_data->unk180) < 1.25f) {
+        if (move_chomper_toward_position(chomper_moby, chomper_data->path_search_point) < 1.25f) {
             chomper_moby->state = CHOMPER_FACE_TARGET;
             if (chomper_moby->prev_seq != 1)
                 blend_moby_animation(chomper_moby, 1, 0, scale_game_frames(20));
@@ -146,10 +149,10 @@ void chomper_update(struct Moby *chomper_moby) {
         break;
     case CHOMPER_FACE_TARGET: {
         float *yaw = &chomper_moby->rot.z;
-        float  angle = fast_arc_tan(chomper_data->unk180[0] - chomper_moby->pos.x,
-                                   chomper_data->unk180[1] - chomper_moby->pos.y);
+        float  angle = fast_arc_tan(chomper_data->path_search_point[0] - chomper_moby->pos.x,
+                                   chomper_data->path_search_point[1] - chomper_moby->pos.y);
         approach_angle(yaw,
-                       &chomper_data->unk1F0[1],
+                       &chomper_data->yaw_velocity,
                        angle,
                        frame_time_sq * 12.566371f,
                        frame_time_sq * 12.566371f,
@@ -157,7 +160,7 @@ void chomper_update(struct Moby *chomper_moby) {
         if (is_value_within_interpolated_window(chomper_moby, 13.0f)) {
             collect_mobies_in_sphere_at_moby_point(chomper_moby, 0, 1, 0.333f, 1.0f, 1.0f, 0, 1, 0);
         } else if ((chomper_moby->anim_flags & 2) &&
-                   fast_vec_dist(&chomper_moby->pos, chomper_data->unk180) > 1.5f) {
+                   fast_vec_dist(&chomper_moby->pos, chomper_data->path_search_point) > 1.5f) {
             chomper_moby->state = CHOMPER_APPROACH_TARGET;
             if (chomper_moby->prev_seq != 0)
                 blend_moby_animation(chomper_moby, 0, 0, scale_game_frames(20));
@@ -165,7 +168,7 @@ void chomper_update(struct Moby *chomper_moby) {
         break;
     }
     case CHOMPER_RETURN_HOME:
-        if (move_chomper_toward_position(chomper_moby, chomper_data->unk1D0) < 1.0f) {
+        if (move_chomper_toward_position(chomper_moby, chomper_data->home_position) < 1.0f) {
             chomper_moby->state = CHOMPER_WAIT_TO_APPROACH_TARGET;
             if (chomper_moby->prev_seq != 2)
                 blend_moby_animation(chomper_moby, 2, 0, scale_game_frames(20));
@@ -173,13 +176,13 @@ void chomper_update(struct Moby *chomper_moby) {
             chomper_moby->state = CHOMPER_APPROACH_TARGET;
         break;
     case 7:
-        if (FUN_L00_002dc9f0(chomper_moby, &chomper_data->unk120)) {
+        if (FUN_L00_002dc9f0(chomper_moby, &chomper_data->motion)) {
             chomper_moby->state = CHOMPER_WAIT_TO_APPROACH_TARGET;
             chomper_data->unkC8 = 0;
         }
         break;
     case CHOMPER_KNOCKBACK:
-        if (step_moby_motion(chomper_moby, &chomper_data->unk120) & 0x140) {
+        if (step_moby_motion(chomper_moby, &chomper_data->motion) & 0x140) {
             cart_burst(chomper_moby, &chomper_moby->pos, 6, 0.5f, 13.0f);
             FUN_L00_00257470(chomper_moby, 0, -1);
             mark_moby_for_removal(chomper_moby);
@@ -339,12 +342,12 @@ float move_chomper_toward_position(void *m_v, void *t_v) {
     float        oldz;
     float        target_yaw = fast_arc_tan(target_position[0] - MOBY(moby)->pos.x,
                                     target_position[1] - MOBY(moby)->pos.y);
-    target_yaw = fast_add_rotations(target_yaw, moby_data->unk1F0[2]);
+    target_yaw = fast_add_rotations(target_yaw, moby_data->heading_offset);
     oldz = MOBY(moby)->pos.z;
     interpolated_travel_distance = 0.0f;
     distance_to_target = fast_vec_dist(moby + 0x10, target_position);
     approach_angle((float *)&MOBY(moby)->rot.z,
-                   &moby_data->unk1F0[1],
+                   &moby_data->yaw_velocity,
                    target_yaw,
                    frame_time_sq * 12.566371f,
                    frame_time_sq * 12.566371f,
@@ -359,7 +362,7 @@ float move_chomper_toward_position(void *m_v, void *t_v) {
     movement_delta[2] = moby_data->previous_height_drop - frame_time_sq * 10.0f;
     FUN_L00_00258830(moby, movement_delta, 0.5f, 0.5f, 0.0f, 0x10);
     resolve_point_path_segment_xy_clearance(
-        0.333f, *(void **)&moby_data->unk1F0[0], moby + 0x10, moby + 0x10);
+        0.333f, *(void **)&moby_data->path, moby + 0x10, moby + 0x10);
     moby_data->previous_height_drop = oldz - MOBY(moby)->pos.z;
     return distance_to_target;
 }

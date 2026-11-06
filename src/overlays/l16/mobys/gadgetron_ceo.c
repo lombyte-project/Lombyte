@@ -400,20 +400,20 @@ extern void jet_group_state(int, int, int, int) __asm__("FUN_L13_002650a8");
 
 typedef struct GadgetronCeoVars {
     u8  pad_0[0x60];
-    s32 unk60;
+    s32 challenge_groups;
     u8  pad_64[0x3C];
-    s32 unkA0;
+    s32 non_challenge_groups;
 } GadgetronCeoVars;
 
 void activate_gadgetron_ceo_challenge_environment(struct Moby *moby) {
     GadgetronCeoVars *ceo_environment_group_data = (GadgetronCeoVars *)moby->pvars;
-    int              *group_index_entry = &ceo_environment_group_data->unk60;
+    int              *group_index_entry = &ceo_environment_group_data->challenge_groups;
     int               i;
     for (i = 15; i >= 0; i--) {
         jet_group_state(*group_index_entry, 1, 1, 1);
         group_index_entry++;
     }
-    group_index_entry = &ceo_environment_group_data->unkA0;
+    group_index_entry = &ceo_environment_group_data->non_challenge_groups;
     for (i = 7; i >= 0; i--) {
         jet_group_state(*group_index_entry, 0, 0, 0);
         group_index_entry++;
@@ -428,12 +428,12 @@ void restore_gadgetron_ceo_non_challenge_environment(struct Moby *moby) {
     GadgetronCeoVars *ceo_environment_data = (GadgetronCeoVars *)moby->pvars;
     int              *group_index_entry;
     int               i;
-    group_index_entry = &ceo_environment_data->unk60;
+    group_index_entry = &ceo_environment_data->challenge_groups;
     for (i = 15; i >= 0; i--) {
         jet_group_state(group_index_entry[0], 0, 0, 0);
         group_index_entry++;
     }
-    group_index_entry = &ceo_environment_data->unkA0;
+    group_index_entry = &ceo_environment_data->non_challenge_groups;
     for (i = 7; i >= 0; i--) {
         jet_group_state(group_index_entry[0], 1, 1, 0);
         group_index_entry++;
