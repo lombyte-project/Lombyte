@@ -2656,15 +2656,15 @@ void update_hero_motion_for_current_state(void) {
             hero.voice_slot4 = -1;
             release_voice_slot_cf(3, (struct MobyView *)hero.moby, 2);
         } else {
-            if (hero.unk2224 != -1) {
+            if (hero.loop_voice_slot != -1) {
                 struct VoiceSlot *landing_entry4_voice_slot =
-                    (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.unk2224 * 0x70);
+                    (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.loop_voice_slot * 0x70);
                 if (landing_entry4_voice_slot->pm88 == (struct MobyView *)hero.moby &&
                     landing_entry4_voice_slot->b74 != 0) {
-                    release_voice_slot(hero.unk2224);
+                    release_voice_slot(hero.loop_voice_slot);
                 }
             }
-            hero.unk2224 = -1;
+            hero.loop_voice_slot = -1;
             release_voice_slot_cf(4, (struct MobyView *)hero.moby, 0x12);
         }
         sp = D_0015ED6C_c * 3.0f;

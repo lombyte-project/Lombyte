@@ -1046,10 +1046,10 @@ void update_hero_motion_for_current_state(void) {
             if (hero.frames_off_ground.s == 0 && hero.board_jump_frames == 0) {
                 hero.hoverboard_airborne = 0;
             }
-        } else if (hero.unk8B8.f - hero.ground_z.f > 0.3f) {
+        } else if (hero.last_ground_z.f - hero.ground_z.f > 0.3f) {
             hero.hoverboard_airborne = 1;
         }
-        hero.unk8B8.f = hero.ground_z.f;
+        hero.last_ground_z.f = hero.ground_z.f;
         {
             s32 d = 0;
             if (hero.board_boost_active != 0 && hero.boost_speed != frame_time * 11.0f) {
@@ -2837,14 +2837,14 @@ void update_hero_motion_for_current_state(void) {
             hero.voice_slot4 = -1;
             release_voice_slot_cf(3, (struct MobyView *)hero.moby, 2);
         } else {
-            if (hero.unk2224 != -1) {
+            if (hero.loop_voice_slot != -1) {
                 struct VoiceSlot *e =
-                    (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.unk2224 * 0x70);
+                    (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.loop_voice_slot * 0x70);
                 if (e->pm88 == (struct MobyView *)hero.moby && e->b74 != 0) {
-                    release_voice_slot(hero.unk2224);
+                    release_voice_slot(hero.loop_voice_slot);
                 }
             }
-            hero.unk2224 = -1;
+            hero.loop_voice_slot = -1;
             release_voice_slot_cf(4, (struct MobyView *)hero.moby, 0x12);
         }
         sp = frame_time * 3.0f;

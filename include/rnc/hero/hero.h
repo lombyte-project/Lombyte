@@ -529,7 +529,7 @@ struct Hero {
     union {
         f32 f;
         s32 i;
-    } unk8B8;                  /* 0x8B8: read as a float, zeroed as an int */
+    } last_ground_z;           /* 0x8B8: read as a float, zeroed as an int */
     s16  hoverboard_airborne;  /* 0x8BC */
     s16  board_respawn_delay;  /* 0x8BE */
     s32  race_position;        /* 0x8C0: 1..3 picks the HUD rank string (FUN_L05_00266320) */
@@ -805,7 +805,7 @@ struct Hero {
     s32 grind_voice; /* 0x2218: voice of sound slot 0, -1 = none (slots 0-7 run to 0x2234, FUN_L00_00206c08) */
     s32          unk221C;           /* 0x221C: voice of sound slot 1 */
     s32          voice_slot2;       /* 0x2220 */
-    s32          unk2224;           /* 0x2224 */
+    s32          loop_voice_slot;   /* 0x2224: voice of the looping move sound, -1 = none */
     s32          voice_slot4;       /* 0x2228 */
     s32          pack_swim_voice;   /* 0x222C */
     s32          voice_slot6;       /* 0x2230 */
