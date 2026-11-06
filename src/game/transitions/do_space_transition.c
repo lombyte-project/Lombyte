@@ -10,16 +10,11 @@
 #include "rnc/sdk/storage/cdvd.h"
 #include "rnc/ui/loading.h"
 
-struct Globals_0013DD58 {
-    u8 unk0;
-    u8 unk1;
-};
-
 #include "rnc/audio/music/music_stream_state.h"
 
 struct Globals_0015F634 {
     u8  pad_0[0x1C];
-    s32 unk1C;
+    s32 bank_handle; /* 0x1C: VoiceDefinition.bank_handle of sound 0 */
 };
 
 struct Globals_00194100 {
@@ -101,9 +96,9 @@ void do_space_transition(void) {
     music_stop();
     music_stream_state.updates_suspended = 1;
     if (level_sound_defs != 0) {
-        snd_unload_bank(level_sound_defs->unk1C);
+        snd_unload_bank(level_sound_defs->bank_handle);
         snd_resolve_bank_xrefs();
-        DebugPrint(unloaded_sound_bank_format, level_sound_defs->unk1C);
+        DebugPrint(unloaded_sound_bank_format, level_sound_defs->bank_handle);
     }
     sound_bank_handle = 0;
     snd_stream_safe_cd_callback(0);

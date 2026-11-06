@@ -17,20 +17,20 @@
 
 typedef struct {
     u8  pad0[0x14];
-    s32 slot;
+    s32 save_index; /* 0x14: struct MemoryCard save_index */
     u8  pad18[8];
     struct {
-        s32 unk0;
+        s32 id; /* MemoryCardSaveEntry id */
         u8  pad4[0x18];
     } entries[5];
     u8  pad[0xC0 - 0x20 - 5 * 0x1C];
-    s32 unkC0;
+    s32 active_card; /* 0xC0: struct MemoryCardState fields from here */
     u8  padC4[0x18];
-    s32 unkDC;
-    s32 unkE0;
+    s32 pending_state; /* 0xDC */
+    s32 pending_card;  /* 0xE0 */
     u8  padE4[8];
-    s32 unkEC;
-} Checkpoints;
+    s32 buf;   /* 0xEC */
+} Checkpoints; /* the start of struct MemoryCardState (rnc/save/memory_card_state.h) */
 
 extern Checkpoints D_0013D290;
 
@@ -98,14 +98,14 @@ void load_level_zero_preserving_progress(s32 slot) {
     sceCdReadClock(D_0015EE98);
     sceScfGetLocalTimefromRTC(D_0015EE98);
     if (slot >= 0) {
-        D_0013D290.slot = slot;
-        D_0013D290.entries[slot].unk0 = 0;
+        D_0013D290.save_index = slot;
+        D_0013D290.entries[slot].id = 0;
         memcard_make_whole_save(menu_system.save_slot);
-        D_0013D290.unkEC = menu_system.save_slot;
-        D_0013D290.unkC0 = 0;
-        if (D_0013D290.unkDC < 0) {
-            D_0013D290.unkE0 = 0;
-            D_0013D290.unkDC = 0x13;
+        D_0013D290.buf = menu_system.save_slot;
+        D_0013D290.active_card = 0;
+        if (D_0013D290.pending_state < 0) {
+            D_0013D290.pending_card = 0;
+            D_0013D290.pending_state = 0x13;
         }
     }
 }
