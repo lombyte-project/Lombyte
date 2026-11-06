@@ -1114,7 +1114,7 @@ typedef struct {
     V2d8e48      corner[4];
     unsigned int color[4];
     UV2d8e48     uv[4];
-    long         unk70, tex, unk80, unk88;
+    long         clamp, tex, tex1, alpha; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
 } Q2d8e48;
 
 extern unsigned int l15_electric_water_bolt_start_first_quad_color __asm__("D_L15_00161CAC")
@@ -1145,9 +1145,9 @@ void draw_electric_water_bolt_start_quads(void *mv) {
     bolt_start_position = *(V2d8e48 **)((char *)mv + 0x78);
     quad.tex = get_effect_texture(0xB);
     bolt_start_position = (V2d8e48 *)((char *)bolt_start_position + 0xF0);
-    quad.unk88 = 0x8000000048L;
-    quad.unk80 = 0xFF9000000260L;
-    quad.unk70 = 0;
+    quad.alpha = 0x8000000048L;
+    quad.tex1 = 0xFF9000000260L;
+    quad.clamp = 0;
     fast_vec_sub(&quad_transform[3], &D_L15_001673C0, bolt_start_position);
     fast_vec_normalize(&quad_transform[3], &quad_transform[3], 0.3f);
     fast_vec_add(&quad_transform[3], &quad_transform[3], bolt_start_position);

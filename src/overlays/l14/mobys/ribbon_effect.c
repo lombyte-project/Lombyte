@@ -222,10 +222,10 @@ typedef struct {
     V_DF510 v[4];
     int     col[4];
     float   uv[4][2];
-    long    r70;
+    long    clamp;
     long    tex;
-    long    r80;
-    long    r88;
+    long    tex1;
+    long    alpha;
 } Q_DF510;
 
 extern char D_L14_001674C0[];
@@ -249,9 +249,9 @@ void draw_ribbon_effect_path(
     int      i;
 
     layer_quads[0].tex = get_effect_texture(0x2D);
-    layer_quads[0].r88 = 0x8000000048L;
-    layer_quads[0].r80 = 0xFF9000000260L;
-    layer_quads[0].r70 = 0;
+    layer_quads[0].alpha = 0x8000000048L;
+    layer_quads[0].tex1 = 0xFF9000000260L;
+    layer_quads[0].clamp = 0;
     layer_quads[0].col[0] = layer_quads[0].col[1] = layer_quads[0].col[2] = layer_quads[0].col[3] =
         (outer_alpha << 24) | 0x7F7F7F;
     layer_quads[1].tex = get_effect_texture(0x2C);
@@ -260,9 +260,9 @@ void draw_ribbon_effect_path(
     layer_quads[1].col[2] = inner_layer_color;
     layer_quads[1].col[1] = inner_layer_color;
     layer_quads[1].col[0] = inner_layer_color;
-    layer_quads[1].r88 = layer_quads[0].r88;
-    layer_quads[1].r80 = layer_quads[0].r80;
-    layer_quads[1].r70 = layer_quads[0].r70;
+    layer_quads[1].alpha = layer_quads[0].alpha;
+    layer_quads[1].tex1 = layer_quads[0].tex1;
+    layer_quads[1].clamp = layer_quads[0].clamp;
     layer_quads[1].uv[0][0] = 1.0f;
     layer_quads[1].uv[0][1] = 0.0f;
     layer_quads[1].uv[1][0] = 1.0f;

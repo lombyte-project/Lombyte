@@ -142,10 +142,10 @@ typedef struct {
     f32 v[4][4];
     s32 col[4];
     f32 uv[4][2];
-    s64 r70;
+    s64 clamp;
     s64 r78;
-    u64 r80;
-    u64 r88;
+    u64 tex1;
+    u64 alpha;
 } Q_e3388;
 
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -717,9 +717,9 @@ void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
     FUN_001f9bf8_e3388(endpoint_quad_side_axis, endpoint_quad_side_axis, -1.0f);
     FUN_001f9ad8_e3388(endpoint_quad_up_axis, endpoint_quad_side_axis, endpoint_to_camera_axis);
     geometry_quad.r78 = get_effect_texture(0xB);
-    geometry_quad.r88 = 0xFF00000044;
-    geometry_quad.r80 = 0xFF9000000260;
-    geometry_quad.r70 = 5;
+    geometry_quad.alpha = 0xFF00000044;
+    geometry_quad.tex1 = 0xFF9000000260;
+    geometry_quad.clamp = 5;
     geometry_quad.col[3] = -1;
     geometry_quad.col[2] = -1;
     geometry_quad.col[1] = -1;
@@ -742,7 +742,7 @@ void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
         FUN_001f9a10_e3388(geometry_quad.v[i], geometry_quad.v[i], core_quad_jitter_offset);
     }
     draw_geometry_quad(&geometry_quad, 0, 0);
-    geometry_quad.r88 = 0xFF00000048;
+    geometry_quad.alpha = 0xFF00000048;
     geometry_quad.col[3] = 0x607F4040;
     geometry_quad.col[2] = 0x607F4040;
     geometry_quad.col[1] = 0x607F4040;
@@ -760,7 +760,7 @@ void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
     FUN_001f9bf8_e3388(endpoint_quad_side_axis, endpoint_quad_side_axis, -1.0f);
     FUN_001f9ad8_e3388(endpoint_quad_up_axis, endpoint_quad_side_axis, endpoint_to_camera_axis);
     quad_scale = random_float_between(0.2f, 0.225f);
-    geometry_quad.r88 = 0xFF00000044;
+    geometry_quad.alpha = 0xFF00000044;
     geometry_quad.col[3] = -1;
     geometry_quad.col[2] = -1;
     geometry_quad.col[1] = -1;
@@ -771,7 +771,7 @@ void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
         FUN_001f9a10_e3388(geometry_quad.v[i], geometry_quad.v[i], core_quad_jitter_offset);
     }
     draw_geometry_quad(&geometry_quad, 0, 0);
-    geometry_quad.r88 = 0xFF00000048;
+    geometry_quad.alpha = 0xFF00000048;
     geometry_quad.col[3] = 0x607F4040;
     geometry_quad.col[2] = 0x607F4040;
     geometry_quad.col[1] = 0x607F4040;

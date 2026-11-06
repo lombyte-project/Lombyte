@@ -13,9 +13,9 @@ typedef struct {
     float              v[4][4];
     int                col[4];
     float              uv[4][2];
-    long long          r70;
+    long long          clamp;
     long long          texture; /* get_effect_texture */
-    unsigned long long r80;
+    unsigned long long tex1;
     unsigned long long alpha; /* GS ALPHA register value (0x8000000044) */
 } EffectQuad;
 
@@ -207,9 +207,9 @@ void draw_group_moby_effect_quads(unsigned char *moby) {
     int             i, j;
 
     effect_quad.texture = get_effect_texture(8);
-    effect_quad.r80 = 0xff9000000260LL;
+    effect_quad.tex1 = 0xff9000000260LL;
     effect_quad.alpha = 0x8000000044LL;
-    effect_quad.r70 = 0;
+    effect_quad.clamp = 0;
     {
         int    count = 3;
         float *source = group_moby_effect_quad_uvs;

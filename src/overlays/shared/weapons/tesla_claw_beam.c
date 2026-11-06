@@ -59,7 +59,7 @@ typedef struct {
     V_2bb0b0     corner[4];
     unsigned int color[4];
     UV           uv[4];
-    long         unk70, tex, unk80, unk88;
+    long         clamp, tex, tex1, alpha; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
 } Q_2bb0b0;
 
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -1593,9 +1593,9 @@ void draw_beam_anchor_camera_facing_quads(void *mv) {
     float        corner_scale;
     int          i;
     quad.tex = get_effect_texture(0xB);
-    quad.unk88 = 0x8000000048L;
-    quad.unk80 = 0xFF9000000260L;
-    quad.unk70 = 0;
+    quad.alpha = 0x8000000048L;
+    quad.tex1 = 0xFF9000000260L;
+    quad.clamp = 0;
     fast_vec_sub(
         &camera_facing_transform[3], &(*(V_2bb0b0 *)&g_debug_camera), quad_anchor_position);
     fast_vec_normalize(&camera_facing_transform[3], &camera_facing_transform[3], 0.3f);

@@ -269,7 +269,7 @@ typedef struct {
     V_dba20      corner[4];
     unsigned int color[4];
     UV_dba20     uv[4];
-    long         unk70, tex, unk80, unk88;
+    long         clamp, tex, tex1, alpha; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
 } Q_dba20;
 
 typedef struct {
@@ -326,9 +326,9 @@ void draw_expanding_projectile_ring(M_dba20 *moby) {
         float fj;
         float layer_phase, color_fade_weight, rad;
         quad_packets[j].tex = get_effect_texture(0xE);
-        quad_packets[j].unk70 = 0;
-        quad_packets[j].unk80 = 0xFF9000000260L;
-        quad_packets[j].unk88 =
+        quad_packets[j].clamp = 0;
+        quad_packets[j].tex1 = 0xFF9000000260L;
+        quad_packets[j].alpha =
             (long)expanding_projectile_ring_blend_minuend_selector_gp |
             ((long)expanding_projectile_ring_blend_subtrahend_selector_gp << 2) |
             ((long)expanding_projectile_ring_blend_alpha_factor_selector_gp << 4) |

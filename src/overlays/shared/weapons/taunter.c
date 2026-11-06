@@ -82,7 +82,7 @@ typedef struct {
     struct {
         f32 u, v;
     } uv[4];
-    long unk70, tex, unk80, unk88;
+    long clamp, tex, tex1, alpha; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
 } Q_2b7568;
 
 typedef struct {
@@ -645,9 +645,9 @@ void draw_taunter_effect_quads(u8 *source_moby) {
     f32       fade_factor, sz;
     u32       col;
     quad.tex = get_effect_texture(8);
-    quad.unk88 = 0x8000000048L;
-    quad.unk80 = 0xFF9000000260L;
-    quad.unk70 = 0;
+    quad.alpha = 0x8000000048L;
+    quad.tex1 = 0xFF9000000260L;
+    quad.clamp = 0;
     quad.uv[0].u = 0.0f;
     quad.uv[0].v = 0.0f;
     quad.uv[1].u = 0.0f;

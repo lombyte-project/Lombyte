@@ -31,7 +31,7 @@ typedef struct {
     Vec130       corner[4];
     unsigned int color[4];
     UVec130      uv[4];
-    long         unk70, tex, unk80, unk88;
+    long         clamp, tex, tex1, alpha; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
 } Qec130;
 
 extern unsigned int l18_billboard_quad_pair_first_color __asm__("D_L18_001620A0")
@@ -74,9 +74,9 @@ void draw_moby_billboard_quad_pair(void *mv) {
     moby_position = (Vec130 *)mv;
     quad.tex = get_effect_texture(0xB);
     moby_position = (Vec130 *)((char *)moby_position + 0x10);
-    quad.unk88 = 0x8000000048L;
-    quad.unk80 = 0xFF9000000260L;
-    quad.unk70 = 0;
+    quad.alpha = 0x8000000048L;
+    quad.tex1 = 0xFF9000000260L;
+    quad.clamp = 0;
     fast_vec_sub(&quad_transform[3], &D_L18_001677C0, moby_position);
     vscl_ec130(&quad_transform[3], &quad_transform[3], 0.3f);
     fast_vec_add(&quad_transform[3], &quad_transform[3], moby_position);

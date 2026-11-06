@@ -120,7 +120,7 @@ typedef struct {
     V_dc4b8      corner[4];
     unsigned int color[4];
     UV           uv[4];
-    long         unk70, tex, unk80, unk88;
+    long         clamp, tex, tex1, alpha; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
 } Q_dc4b8;
 
 extern int  get_effect_texture(int) __asm__("FUN_001f44b8");
@@ -160,9 +160,9 @@ void draw_class_274_ring_effect(char *moby) {
     for (i = 0; i < 4; i++) {
         quad[i].tex = get_effect_texture(14);
         gi = class_274_ring_layer_radius_offset_gp * (float)i;
-        quad[i].unk70 = 0;
-        quad[i].unk80 = 0xFF9000000260L;
-        quad[i].unk88 = (long)class_274_ring_blend_minuend_selector_gp |
+        quad[i].clamp = 0;
+        quad[i].tex1 = 0xFF9000000260L;
+        quad[i].alpha = (long)class_274_ring_blend_minuend_selector_gp |
                         ((long)class_274_ring_blend_subtrahend_selector_gp << 2) |
                         ((long)class_274_ring_blend_alpha_factor_selector_gp << 4) |
                         ((long)class_274_ring_blend_addend_selector_gp << 6) | 0x8000000000L;
