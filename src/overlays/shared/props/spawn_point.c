@@ -25,7 +25,7 @@ typedef struct {
     s32 spawn_slot; /* 0x18: slot in the level's D_0014C050 row, -1 for none */
 } PickupVars;
 
-/* Per-level pickup state; collected[] is indexed by the moby's unkB2 id. */
+/* Per-level pickup state; collected[] is indexed by the moby's save_id. */
 typedef struct {
     u8 pad0[0x454];
     u8 collected[1];
