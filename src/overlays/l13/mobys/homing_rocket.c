@@ -100,7 +100,7 @@ typedef struct Hit_2C27B0 {
 
 typedef struct Veh_2C27B0 {
     char  pad0[0x64];
-    float f64;
+    float speed;
     char  pad68[0x28];
     float lead_yaw_offset;
     float lead_pitch_offset;
@@ -292,7 +292,7 @@ void level_13_homing_rocket_update(ProjectileMoby *rocket_moby) {
                 fast_add_rotations(hero_state->veh->rot.y, vd->lead_pitch_offset);
             build_spherical_offset_c(&scratch_vector,
                                      fast_vec_dist(&rocket_moby->pos, &hero_state->veh->pos) /
-                                         (rocket_data->speed + 24.0f) * vd->f64,
+                                         (rocket_data->speed + 24.0f) * vd->speed,
                                      vehicle_lead_yaw,
                                      -vehicle_lead_pitch);
             fast_vec_add(&scratch_vector, &scratch_vector, &hero_state->veh->pos);
@@ -425,7 +425,8 @@ void level_13_homing_rocket_update(ProjectileMoby *rocket_moby) {
         }
     }
     if (fast_dec_timer(&rocket_data->timer) != 0 ||
-        (rocket_moby->b31 == 0 && rocket_data->owner != 0 && rocket_data->owner->b31 != 0)) {
+        (rocket_moby->visible == 0 && rocket_data->owner != 0 &&
+         rocket_data->owner->visible != 0)) {
         mark_moby_for_removal(rocket_moby);
     }
 }

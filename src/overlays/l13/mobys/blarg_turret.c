@@ -67,13 +67,13 @@ typedef struct Data {
     Moby_2B5368 *target;
     char         pad44[0xC];
     int          volume;
-    float        f54;
+    float        home_yaw;
     char         pad58[4];
     Moby_2B5368 *gun;
-    float        f60;
+    float        yaw_velocity;
     float        f64;
     float        f68;
-    float        f6C;
+    float        yaw_offset_limit_degrees;
     char         fx[0x10];
 } Data;
 
@@ -130,7 +130,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
     case BLARG_TURRET_STATE_INITIALIZE:
         turret_moby->scale = turret_moby->cls->scale * 1.5f;
         data->gun = FUN_L13_002b4958_2b0e80(turret_moby);
-        data->f54 = turret_moby->rot.z;
+        data->home_yaw = turret_moby->rot.z;
         if (turret_moby->animation_sequence_index != 0) {
             blend_moby_animation(turret_moby, 0, 0, 10);
         }
@@ -140,7 +140,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
         target_yaw_scratch =
             fast_difference_between_rotations(fast_arc_tan(target_moby->pos.x - turret_moby->pos.x,
                                                            target_moby->pos.y - turret_moby->pos.y),
-                                              data->f54);
+                                              data->home_yaw);
         if (target_yaw_scratch < 1.5707964f &&
             vector_distance_xy(&turret_moby->pos, &target_moby->pos) < 20.0f &&
             (data->volume == -1 ||
@@ -154,8 +154,8 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
             turret_moby->state = BLARG_TURRET_STATE_TRACK_TARGET;
         }
         approach_angle(&turret_moby->rot.z,
-                       data->f54,
-                       &data->f60,
+                       data->home_yaw,
+                       &data->yaw_velocity,
                        frame_time_sq * 12.566371f,
                        frame_time_sq * 12.566371f,
                        frame_time * 12.566371f);
@@ -173,7 +173,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
         target_yaw_scratch =
             fast_difference_between_rotations(fast_arc_tan(target_moby->pos.x - turret_moby->pos.x,
                                                            target_moby->pos.y - turret_moby->pos.y),
-                                              data->f54);
+                                              data->home_yaw);
         if (target_yaw_scratch >= 1.5707964f ||
             vector_distance_xy(&turret_moby->pos, &target_moby->pos) > 22.0f ||
             (data->volume != -1 &&
@@ -188,17 +188,17 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
             target_yaw_scratch =
                 fast_subtract_rotations(fast_arc_tan(target_moby->pos.x - turret_moby->pos.x,
                                                      target_moby->pos.y - turret_moby->pos.y),
-                                        data->f54);
-            yaw_offset_limit_radians = data->f6C * 0.017453292f;
+                                        data->home_yaw);
+            yaw_offset_limit_radians = data->yaw_offset_limit_degrees * 0.017453292f;
             if (yaw_offset_limit_radians < target_yaw_scratch) {
                 target_yaw_scratch = yaw_offset_limit_radians;
             } else if (target_yaw_scratch < -yaw_offset_limit_radians) {
                 target_yaw_scratch = -yaw_offset_limit_radians;
             }
-            target_yaw_scratch = fast_add_rotations(target_yaw_scratch, data->f54);
+            target_yaw_scratch = fast_add_rotations(target_yaw_scratch, data->home_yaw);
             approach_angle(&turret_moby->rot.z,
                            target_yaw_scratch,
-                           &data->f60,
+                           &data->yaw_velocity,
                            frame_time_sq * 12.566371f,
                            frame_time_sq * 12.566371f,
                            frame_time * 12.566371f);
@@ -241,8 +241,8 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
     }
     case BLARG_TURRET_STATE_DESTRUCTION_DELAY:
         approach_angle(&turret_moby->rot.z,
-                       data->f54,
-                       &data->f60,
+                       data->home_yaw,
+                       &data->yaw_velocity,
                        frame_time_sq * 12.566371f,
                        frame_time_sq * 12.566371f,
                        frame_time * 25.132742f);
