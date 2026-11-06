@@ -65,7 +65,7 @@ void skids_agent_update(struct Moby *moby) __asm__("FUN_L02_002e0dc0");
 
 typedef struct SkidsAgentVars {
     u8           pad_0[0x4];
-    s16          unk4;
+    s16          dialogue_mode;
     u8           pad_6[0x2];
     u8           any_direction;
     u8           pad_9[0x3];
@@ -178,14 +178,14 @@ void skids_agent_update(struct Moby *moby) {
     case SKIDS_AGENT_CONVERSATION_ACTIVE:
         if (level_game_mode != 2) {
             moby->state = SKIDS_AGENT_IDLE_AND_TALK;
-            if (skids_agent_vars->unk4 == 0) {
+            if (skids_agent_vars->dialogue_mode == 0) {
                 jet_clear_persistent(moby->mission);
                 if (skids_agent_vars->return_camera_cuboid_index != -1) {
                     char *camera_transform_entry =
                         (char *)l02_cuboids + (skids_agent_vars->return_camera_cuboid_index << 7);
                     jet_reset_camera(camera_transform_entry + 0x30, camera_transform_entry + 0x70);
                 }
-            } else if (skids_agent_vars->unk4 == 2) {
+            } else if (skids_agent_vars->dialogue_mode == 2) {
                 moby->visible = 0;
                 moby->collision = 0;
                 moby->flags |= 1;

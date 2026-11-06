@@ -34,9 +34,9 @@ extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 typedef struct {
     /* 0x000 */ char          pad000[0x20];
-    /* 0x020 */ float         f20;
+    /* 0x020 */ float         health;
     /* 0x024 */ char          pad024[4];
-    /* 0x028 */ char          b28;
+    /* 0x028 */ char          hit_response_class;
     /* 0x029 */ char          b29;
     /* 0x02A */ char          pad02A[6];
     /* 0x030 */ float         f30;
@@ -195,14 +195,14 @@ void constructorbot_update(struct Moby *moby) {
         moby->spawn_frame = *(long *)(((char *)hero.moby) + 0x38);
         FUN_L01_0026d930(bot_private_vars->walk);
         step = D_0015ED6C * 4.0f;
-        bot_private_vars->b28 = 2;
+        bot_private_vars->hit_response_class = 2;
         bot_private_vars->walk_10c = 0.03f;
         bot_private_vars->walk_110 = 0.3f;
         bot_private_vars->walk_114 = 0.25f;
         bot_private_vars->walk_step = step;
         bot_private_vars->walk_dc = 2.0f;
         bot_private_vars->walk_d8 = 2.0f;
-        bot_private_vars->f20 = 3.0f;
+        bot_private_vars->health = 3.0f;
         clear_u64_value(bot_private_vars->velocity);
         reset_shot_tracking((char *)bot_private_vars->shots);
         switch (bot_private_vars->start) {
