@@ -49,40 +49,40 @@ typedef struct {
 
 typedef struct {
     u8         pad0[0x60];
-    PathCursor path;  /* 0x60 */
-    QVec       unk80; /* 0x80 */
-    QVec       unk90; /* 0x90 */
-    QVec       unkA0; /* 0xA0 */
-    QVec       unkB0; /* 0xB0 */
-    QVec       unkC0; /* 0xC0 */
-    QVec       unkD0; /* 0xD0 */
-    QVec       unkE0; /* 0xE0 */
-    f32        unkF0;
+    PathCursor path;                  /* 0x60 */
+    QVec       unk80;                 /* 0x80 */
+    QVec       segment_start_tangent; /* 0x90 */
+    QVec       segment_end_tangent;   /* 0xA0 */
+    QVec       segment_start;         /* 0xB0 */
+    QVec       segment_end;           /* 0xC0 */
+    QVec       spline_position;       /* 0xD0 */
+    QVec       prev_spline_position;  /* 0xE0 */
+    f32        segment_t;
     f32        unkF4;
     f32        unkF8;
-    f32        unkFC;
-    f32        unk100;
-    f32        unk104;
-    f32        unk108;
-    f32        unk10C;
-    f32        unk110;
-    f32        unk114;
+    f32        speed;
+    f32        roll_spring_rate_degrees;
+    f32        roll_spring_velocity;
+    f32        pitch_spring_rate_degrees;
+    f32        pitch_spring_velocity;
+    f32        turn_smoothing;
+    f32        turn_to_roll;
     f32        unk118;
-    s16        unk11C;
-    s16        unk11E;
-    u8         unk120;
+    s16        movement_delay_timer;
+    s16        voice;
+    u8         options;
     u8         unk121;
-    s16        unk122;
-    f32        unk124;
-    f32        unk128;
-    f32        unk12C;
+    s16        yaw_offset_degrees;
+    f32        speed_oscillation_amplitude;
+    f32        speed_oscillation_rate_degrees;
+    f32        speed_oscillation_phase;
     f32        unk130;
     f32        unk134;
-    s16        unk138;
+    s16        ambient_sound_timer;
     s16        unk13A;
-    s16        unk13C;
-    s16        unk13E;
-    s32        unk140[4];
+    s16        ambient_sound_min_frames;
+    s16        ambient_sound_extra_frames;
+    s32        attached_mobys[4];
 } Vars;
 
 typedef struct {
@@ -250,7 +250,7 @@ void gunship_update(struct Moby *moby) {
                     Vars *iv = (Vars *)it->pvars;
                     bad = 3;
                     it->state = bad;
-                    iv->unk11C = scale_game_frames(5);
+                    iv->movement_delay_timer = scale_game_frames(5);
                     get_next_moby_in_group(&it, it, 0, 0);
                 }
             }
@@ -259,31 +259,37 @@ void gunship_update(struct Moby *moby) {
     if ((moby->oclass == 0x33 || moby->oclass == 0x46A || moby->oclass == 0x473 ||
          moby->oclass == 0x474) &&
         (level_frame_count & 7) == (((s32)moby >> 8) & 7) && v->unk13A <= 0 &&
-        moby->state != GUNSHIP_PATH_STATE_INITIALIZE && FUN_L00_0028d8c0(moby, v->unk11E) == 0) {
-        v->unk11E = allocate_voice_for_target_entry(0, 4, moby);
+        moby->state != GUNSHIP_PATH_STATE_INITIALIZE && FUN_L00_0028d8c0(moby, v->voice) == 0) {
+        v->voice = allocate_voice_for_target_entry(0, 4, moby);
     }
     switch ((s16)(moby->oclass - 0x33)) {
     case 0:
     case 9:
     case 23:
-        if (v->unk138 != -1) {
-            if (!fast_dec_timer_s16(&v->unk138))
+        if (v->ambient_sound_timer != -1) {
+            if (!fast_dec_timer_s16(&v->ambient_sound_timer))
                 break;
             if (fast_vec_dist(&moby->pos, camera_pos) < 30.0f)
                 allocate_voice_for_target_entry(1, 0, moby);
         }
-        v->unk138 = scale_game_frames(random_int_between(v->unk13C, v->unk13C + v->unk13E));
+        v->ambient_sound_timer = scale_game_frames(
+            random_int_between(v->ambient_sound_min_frames,
+                               v->ambient_sound_min_frames + v->ambient_sound_extra_frames));
         break;
     case 13:
     case 17:
         /* Fakematch: duplicating the reset preserves retail's voice-call argument scheduling. */
-        if (v->unk138 != -1) {
-            if (!fast_dec_timer_s16(&v->unk138))
+        if (v->ambient_sound_timer != -1) {
+            if (!fast_dec_timer_s16(&v->ambient_sound_timer))
                 break;
             FUN_0022da68((FUN_00213260(100) & 1) ? 1 : 2, 0, (char *)moby);
-            v->unk138 = scale_game_frames(random_int_between(v->unk13C, v->unk13C + v->unk13E));
+            v->ambient_sound_timer = scale_game_frames(
+                random_int_between(v->ambient_sound_min_frames,
+                                   v->ambient_sound_min_frames + v->ambient_sound_extra_frames));
         } else {
-            v->unk138 = scale_game_frames(random_int_between(v->unk13C, v->unk13C + v->unk13E));
+            v->ambient_sound_timer = scale_game_frames(
+                random_int_between(v->ambient_sound_min_frames,
+                                   v->ambient_sound_min_frames + v->ambient_sound_extra_frames));
         }
         break;
     }
@@ -300,7 +306,7 @@ void gunship_update(struct Moby *moby) {
                          truncate_float_to_s32((f32)(moby - (struct Moby *)D_L01_0015FFD8)));
         }
         moby->update_dist = 0xFF;
-        v->unk11E = -1;
+        v->voice = -1;
         if (500.0f < v->unk130)
             v->unk130 = FUN_002132a8(-1.0f, 1.0f) * v->unk130 / 1000.0f;
         if (500.0f < v->unk134)
@@ -330,34 +336,36 @@ void gunship_update(struct Moby *moby) {
             path_cursor->unk8 = 0;
             path_cursor->unk1C = 0;
         }
-        v->unkE0.q = (path_cursor->nodes->node + path_cursor->idx)->q;
-        v->unkF0 = 1.0f;
-        compute_path_node_tangent(&v->unkA0, path_cursor, 0, v->unkF4, v->unkF8);
-        v->unkB0.q = v->unkC0.q = (path_cursor->nodes->node + path_cursor->idx)->q;
+        v->prev_spline_position.q = (path_cursor->nodes->node + path_cursor->idx)->q;
+        v->segment_t = 1.0f;
+        compute_path_node_tangent(&v->segment_end_tangent, path_cursor, 0, v->unkF4, v->unkF8);
+        v->segment_start.q = v->segment_end.q = (path_cursor->nodes->node + path_cursor->idx)->q;
         *(s32 *)&moby->rot.x = 0;
-        moby->rot.y = -fast_arc_tan(vector_length_xy(&v->unkA0), v->unkA0.v.z);
-        moby->rot.z = fast_arc_tan(v->unkA0.v.x - zero.v.x, v->unkA0.v.y - zero.v.y);
-        v->unk104 = 0;
-        v->unk10C = 0;
-        *(u128 *)&moby->pos = v->unkE0.q;
+        moby->rot.y =
+            -fast_arc_tan(vector_length_xy(&v->segment_end_tangent), v->segment_end_tangent.v.z);
+        moby->rot.z = fast_arc_tan(v->segment_end_tangent.v.x - zero.v.x,
+                                   v->segment_end_tangent.v.y - zero.v.y);
+        v->roll_spring_velocity = 0;
+        v->pitch_spring_velocity = 0;
+        *(u128 *)&moby->pos = v->prev_spline_position.q;
         apply_gunship_path_position_offsets((char *)moby, (float *)&moby->pos);
         v->unk121 = 7;
-        if (6.2831855f < v->unk12C) {
-            v->unk12C = v->unk12C * 0.017453292f;
-        } else if (v->unk124 != 0.0f && v->unk12C == -1.0f) {
-            v->unk12C = FUN_00213308();
+        if (6.2831855f < v->speed_oscillation_phase) {
+            v->speed_oscillation_phase = v->speed_oscillation_phase * 0.017453292f;
+        } else if (v->speed_oscillation_amplitude != 0.0f && v->speed_oscillation_phase == -1.0f) {
+            v->speed_oscillation_phase = FUN_00213308();
         }
-        v->unkD0.q = v->unkC0.q;
+        v->spline_position.q = v->segment_end.q;
         compute_sampled_spline_path_lengths(
-            v->unkF4, v->unkF8, path_cursor, v->unk120 & 0x20, moby);
-        if ((v->unk120 & 0x1E) && !(v->unk120 & 1)) {
+            v->unkF4, v->unkF8, path_cursor, v->options & 0x20, moby);
+        if ((v->options & 0x1E) && !(v->options & 1)) {
             s32 i;
             for (i = 0; i < 4; i++) {
                 struct Moby *c;
                 ChildVars   *cv;
-                if (!(v->unk120 & (2 << i)) || v->unk140[i] == -1)
+                if (!(v->options & (2 << i)) || v->attached_mobys[i] == -1)
                     continue;
-                c = (struct Moby *)D_L01_0015FFD8 + v->unk140[i];
+                c = (struct Moby *)D_L01_0015FFD8 + v->attached_mobys[i];
                 if (c == 0 || (cv = (ChildVars *)c->pvars) == 0)
                     continue;
                 cv->unk70 |= 0x1000;
@@ -368,7 +376,7 @@ void gunship_update(struct Moby *moby) {
                 cv->unk80.q = dA0.q;
             }
         }
-        if (v->unk11C > 0) {
+        if (v->movement_delay_timer > 0) {
             moby->state = GUNSHIP_PATH_STATE_WAIT_FOR_RESUME_TIMER;
             return;
         }
@@ -381,17 +389,17 @@ void gunship_update(struct Moby *moby) {
         if (path_cursor->path_id == -1)
             return;
         moby->state = GUNSHIP_PATH_STATE_INITIALIZE;
-        if (v->unk11E != -1) {
-            u8 *e = (u8 *)((char *)&voice_pool) + v->unk11E * 0x70;
+        if (v->voice != -1) {
+            u8 *e = (u8 *)((char *)&voice_pool) + v->voice * 0x70;
             if (*(struct Moby **)(e + 0x88) == moby && e[0x74] != 0)
-                FUN_0022d798(v->unk11E);
+                FUN_0022d798(v->voice);
         }
-        v->unk11E = -1;
+        v->voice = -1;
         return;
 
     case GUNSHIP_PATH_STATE_WAIT_FOR_RESUME_TIMER:
-        if (fast_dec_timer_s16(&v->unk11C)) {
-            v->unk11C = 0;
+        if (fast_dec_timer_s16(&v->movement_delay_timer)) {
+            v->movement_delay_timer = 0;
             moby->state = GUNSHIP_PATH_STATE_FOLLOW_PATH;
         }
         return;
@@ -405,90 +413,99 @@ void gunship_update(struct Moby *moby) {
 
     previous_rotation.q = *(u128 *)&moby->rot;
     previous_position.q = *(u128 *)&moby->pos;
-    if (1.0f <= v->unkF0) {
+    if (1.0f <= v->segment_t) {
         s32 advanced_node_index;
-        v->unkF0 -= 1.0f;
+        v->segment_t -= 1.0f;
         advanced_node_index = advance_path_node_index(path_cursor);
-        v->unk90.q = v->unkA0.q;
-        compute_path_node_tangent(&v->unkA0, path_cursor, 1, v->unkF4, v->unkF8);
-        v->unkB0.q = v->unkC0.q;
-        v->unkC0.q = (path_cursor->nodes->node +
-                      resolve_path_node_index(path_cursor, advanced_node_index + 1))
-                         ->q;
+        v->segment_start_tangent.q = v->segment_end_tangent.q;
+        compute_path_node_tangent(&v->segment_end_tangent, path_cursor, 1, v->unkF4, v->unkF8);
+        v->segment_start.q = v->segment_end.q;
+        v->segment_end.q = (path_cursor->nodes->node +
+                            resolve_path_node_index(path_cursor, advanced_node_index + 1))
+                               ->q;
     }
     {
-        f32 speed_modulation_sine = fast_sin(v->unk12C);
-        path_speed = v->unkFC + v->unk124 * D_0015ED60 * speed_modulation_sine * D_0015ED60;
-        segment_progress_step = path_speed / v->unkB0.v.w;
-        v->unk12C = fast_add_rotations(v->unk12C, v->unk128 * D_0015ED60 * 0.017453292f);
+        f32 speed_modulation_sine = fast_sin(v->speed_oscillation_phase);
+        path_speed = v->speed + v->speed_oscillation_amplitude * D_0015ED60 *
+                                    speed_modulation_sine * D_0015ED60;
+        segment_progress_step = path_speed / v->segment_start.v.w;
+        v->speed_oscillation_phase =
+            fast_add_rotations(v->speed_oscillation_phase,
+                               v->speed_oscillation_rate_degrees * D_0015ED60 * 0.017453292f);
     }
-    v->unkE0.q = v->unkD0.q;
-    evaluate_cubic_hermite_segment(
-        v->unkF0 + segment_progress_step, &v->unkD0, &v->unkB0, &v->unkC0, &v->unk90, &v->unkA0);
-    if (!(v->unk120 & 0x40)) {
-        f32 dd = fast_vec_dist(&v->unkE0, &v->unkD0);
+    v->prev_spline_position.q = v->spline_position.q;
+    evaluate_cubic_hermite_segment(v->segment_t + segment_progress_step,
+                                   &v->spline_position,
+                                   &v->segment_start,
+                                   &v->segment_end,
+                                   &v->segment_start_tangent,
+                                   &v->segment_end_tangent);
+    if (!(v->options & 0x40)) {
+        f32 dd = fast_vec_dist(&v->prev_spline_position, &v->spline_position);
         if (dd != 0.0f) {
             segment_progress_step = segment_progress_step * (path_speed / dd);
-            evaluate_cubic_hermite_segment(v->unkF0 + segment_progress_step,
-                                           &v->unkD0,
-                                           &v->unkB0,
-                                           &v->unkC0,
-                                           &v->unk90,
-                                           &v->unkA0);
+            evaluate_cubic_hermite_segment(v->segment_t + segment_progress_step,
+                                           &v->spline_position,
+                                           &v->segment_start,
+                                           &v->segment_end,
+                                           &v->segment_start_tangent,
+                                           &v->segment_end_tangent);
         }
     }
     if (!frozen) {
         f32 k = 0.017453292f;
         f32 steering_angle;
         f32 turn;
-        f32 yaw_offset_radians = (f32)v->unk122 * k;
+        f32 yaw_offset_radians = (f32)v->yaw_offset_degrees * k;
         fast_subtract_rotations(moby->rot.z, yaw_offset_radians);
-        steering_angle = fast_arc_tan(v->unkD0.v.x - v->unkE0.v.x, v->unkD0.v.y - v->unkE0.v.y);
+        steering_angle = fast_arc_tan(v->spline_position.v.x - v->prev_spline_position.v.x,
+                                      v->spline_position.v.y - v->prev_spline_position.v.y);
         steering_angle = fast_add_rotations(steering_angle, yaw_offset_radians);
         steering_angle = fast_subtract_rotations(steering_angle, moby->rot.z);
-        turn = steering_angle * (1.0f / v->unk110 * D_0015ED60);
+        turn = steering_angle * (1.0f / v->turn_smoothing * D_0015ED60);
         moby->rot.z = fast_add_rotations(turn, moby->rot.z);
-        fast_vec_sub(&path_displacement, &v->unkD0, &v->unkE0);
+        fast_vec_sub(&path_displacement, &v->spline_position, &v->prev_spline_position);
         steering_angle = -fast_arc_tan(vector_length_xy(&path_displacement), path_displacement.v.z);
-        moby->rot.y = FUN_L00_00258110(&v->unk10C,
+        moby->rot.y = FUN_L00_00258110(&v->pitch_spring_velocity,
                                        moby->rot.y,
                                        steering_angle,
-                                       v->unk108 * 10.0f * k * D_0015ED70,
-                                       v->unk108 * 5.0f * k * D_0015ED70,
-                                       v->unk108 * k * D_0015ED6C);
-        steering_angle = normalize_angle(turn * v->unk114);
+                                       v->pitch_spring_rate_degrees * 10.0f * k * D_0015ED70,
+                                       v->pitch_spring_rate_degrees * 5.0f * k * D_0015ED70,
+                                       v->pitch_spring_rate_degrees * k * D_0015ED6C);
+        steering_angle = normalize_angle(turn * v->turn_to_roll);
         steering_angle = fast_subtract_rotations(moby->rot.x, steering_angle);
         steering_angle = normalize_angle(steering_angle * v->unk118);
-        moby->rot.x = FUN_L00_00258110(&v->unk104,
+        moby->rot.x = FUN_L00_00258110(&v->roll_spring_velocity,
                                        moby->rot.x,
                                        steering_angle,
-                                       v->unk100 * 10.0f * k * D_0015ED70,
-                                       v->unk100 * 5.0f * k * D_0015ED70,
-                                       v->unk100 * k * D_0015ED6C);
+                                       v->roll_spring_rate_degrees * 10.0f * k * D_0015ED70,
+                                       v->roll_spring_rate_degrees * 5.0f * k * D_0015ED70,
+                                       v->roll_spring_rate_degrees * k * D_0015ED6C);
     } else {
         clear_u64_value(&moby->rot);
-        moby->rot.z = fast_arc_tan(v->unkD0.v.x - v->unkE0.v.x, v->unkD0.v.y - v->unkE0.v.y);
+        moby->rot.z = fast_arc_tan(v->spline_position.v.x - v->prev_spline_position.v.x,
+                                   v->spline_position.v.y - v->prev_spline_position.v.y);
     }
-    v->unkF0 += segment_progress_step;
-    *(u128 *)&moby->pos = v->unkE0.q;
+    v->segment_t += segment_progress_step;
+    *(u128 *)&moby->pos = v->prev_spline_position.q;
     if (!frozen)
         apply_gunship_path_position_offsets((char *)moby, (float *)&moby->pos);
-    if (v->unk120 & 0x1F) {
+    if (v->options & 0x1F) {
         s32 attachment_point_index = 0;
         s32 i;
         for (i = 0; i < 5; i++) {
-            if (!((v->unk120 >> i) & 1))
+            if (!((v->options >> i) & 1))
                 continue;
             moby_point_position(moby, attachment_point_index, &attachment_and_hit_vectors[0]);
             attachment_point_index++;
             fast_vec_sub(
                 &attachment_and_hit_vectors[1], &attachment_and_hit_vectors[0], &moby->pos);
-            if (!(v->unk120 & 1)) {
+            if (!(v->options & 1)) {
                 struct Moby *c;
                 ChildVars   *cv;
-                if (v->unk140[i - 1] == -1)
+                if (v->attached_mobys[i - 1] == -1)
                     continue;
-                c = (struct Moby *)D_L01_0015FFD8 + v->unk140[i - 1];
+                c = (struct Moby *)D_L01_0015FFD8 + v->attached_mobys[i - 1];
                 if (c == 0 || (cv = (ChildVars *)c->pvars) == 0)
                     continue;
                 fast_vec_normalize(
@@ -573,11 +590,11 @@ void gunship_update(struct Moby *moby) {
     }
     moby->collision = 0;
     moby->flags |= 0x41;
-    if (v->unk11E != -1) {
-        u8 *e = (u8 *)((char *)&voice_pool) + v->unk11E * 0x70;
+    if (v->voice != -1) {
+        u8 *e = (u8 *)((char *)&voice_pool) + v->voice * 0x70;
         if (*(struct Moby **)(e + 0x88) == moby && e[0x74] != 0)
-            FUN_0022d798(v->unk11E);
+            FUN_0022d798(v->voice);
     }
-    v->unk11E = -1;
+    v->voice = -1;
     moby->flags &= 0xEFFF;
 }

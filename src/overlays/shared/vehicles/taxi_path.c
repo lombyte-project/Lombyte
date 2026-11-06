@@ -13,17 +13,20 @@
 
 typedef struct TaxiVars {
     u8   pad0[0x60];
-    u8   unk60[0x10];
-    u8   unk70[0x3c];
-    int *unkAC;
+    u8   pose_position[0x10];
+    u8   pose_rotation[0x3c];
+    int *route_path;
     u8   padB0[0x4];
-    s16  unkB4;
-    s16  unkB6;
+    s16  stop_index;
+    s16  destination_stop;
     u8   padB8[0x8];
-    f32  unkC0[4];
-    f32  unkD0;
-    f32  unkD4;
-    f32  unkD8;
+    f32  path_t; /* 0xC0: 0..1 along route_path */
+    f32  path_t_speed;
+    f32  wobble_phase_1;
+    f32  wobble_phase_2;
+    f32  wobble_phase_3;
+    f32  path_speed;
+    f32  path_acceleration;
     s32  unkDC;
 } TaxiVars;
 
@@ -49,21 +52,21 @@ void reset_selected_moby_to_current_placement(void *moby_v) __asm__("FUN_L05_003
 void reset_selected_moby_to_current_placement(void *moby_v) {
     struct Moby *moby = moby_v;
     TaxiVars    *taxi_vars = (TaxiVars *)moby->pvars;
-    char        *spawn = func_L05_0031AAA8_19510(moby, taxi_vars->unkB6);
+    char        *spawn = func_L05_0031AAA8_19510(moby, taxi_vars->destination_stop);
     char        *position;
     if (spawn != 0) {
         int   index;
         char *slot = taxi_vars;
         char *placement_table_base;
         position = spawn + 0x10;
-        slot += taxi_vars->unkB4 << 2;
+        slot += taxi_vars->stop_index << 2;
         index = *(int *)(slot + 0x80) << 7;
         placement_table_base = (char *)l05_cuboids;
         qcopy(position, (void *)(index + (int)placement_table_base + 0x30));
         qcopy(spawn + 0x40, (void *)(index + (int)placement_table_base + 0x70));
         initialize_taxi_stop_state(spawn);
     }
-    taxi_vars->unkB4 = *(unsigned short *)&taxi_vars->unkB6;
+    taxi_vars->stop_index = *(unsigned short *)&taxi_vars->destination_stop;
 }
 
 /* Finds the pool moby in this moby's class list whose data id at 0xB4 matches. */
@@ -97,19 +100,19 @@ int advance_moby_path(char *moby) {
     TaxiVars *moby_vars = (TaxiVars *)MOBY(moby)->pvars;
     int      *path;
     advance_accelerated_scalar(1.0f,
-                               moby_vars->unkD8,
-                               moby_vars->unkD8,
-                               moby_vars->unkD4,
-                               (float *)(&moby_vars->unkC0),
-                               (float *)(&moby_vars->unkC0[1]));
-    path = moby_vars->unkAC;
+                               moby_vars->path_acceleration,
+                               moby_vars->path_acceleration,
+                               moby_vars->path_speed,
+                               (float *)(&moby_vars->path_t),
+                               (float *)(&moby_vars->path_t_speed));
+    path = moby_vars->route_path;
     sample_camera_path(path,
                        0,
-                       &moby_vars->unk60,
-                       (float *)(&moby_vars->unk70),
+                       &moby_vars->pose_position,
+                       (float *)(&moby_vars->pose_rotation),
                        0,
-                       moby_vars->unkC0[0] * (float)(*path - 1));
-    return moby_vars->unkC0[0] >= 1.0f;
+                       moby_vars->path_t * (float)(*path - 1));
+    return moby_vars->path_t >= 1.0f;
 }
 
 /* Plays the sound that goes with the moby's current variant. */
@@ -148,20 +151,20 @@ void apply_moby_position_and_rotation_wobble(char *moby) __asm__("FUN_L05_003197
 void apply_moby_position_and_rotation_wobble(char *moby) {
     TaxiVars *moby_vars = (TaxiVars *)MOBY(moby)->pvars;
     float     wobble_phase, wobble_result, wobble_phase_step;
-    qcopy(&MOBY(moby)->pos, &moby_vars->unk60);
-    qcopy(moby + 0x40, &moby_vars->unk70);
-    wobble_phase = fast_add_rotations(moby_vars->unkC0[2], frame_time * 2.0943951f);
-    moby_vars->unkC0[2] = wobble_phase;
+    qcopy(&MOBY(moby)->pos, &moby_vars->pose_position);
+    qcopy(moby + 0x40, &moby_vars->pose_rotation);
+    wobble_phase = fast_add_rotations(moby_vars->wobble_phase_1, frame_time * 2.0943951f);
+    moby_vars->wobble_phase_1 = wobble_phase;
     wobble_result = fast_sin(wobble_phase);
     wobble_phase_step = frame_time * 1.6929693f;
     MOBY(moby)->pos.z += wobble_result * 0.25f;
-    wobble_phase = fast_add_rotations(moby_vars->unkC0[3], wobble_phase_step);
-    moby_vars->unkC0[3] = wobble_phase;
+    wobble_phase = fast_add_rotations(moby_vars->wobble_phase_2, wobble_phase_step);
+    moby_vars->wobble_phase_2 = wobble_phase;
     wobble_result = fast_add_rotations(MOBY(moby)->rot.y, fast_sin(wobble_phase) * 0.08726646f);
     wobble_phase_step = frame_time * 0.9250245f;
     MOBY(moby)->rot.y = wobble_result;
-    wobble_phase = fast_add_rotations(moby_vars->unkD0, wobble_phase_step);
-    moby_vars->unkD0 = wobble_phase;
+    wobble_phase = fast_add_rotations(moby_vars->wobble_phase_3, wobble_phase_step);
+    moby_vars->wobble_phase_3 = wobble_phase;
     MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, fast_sin(wobble_phase) * 0.08726646f);
     if (MOBY(moby)->rot.x > 0.17453292f)
         MOBY(moby)->rot.x = 0.17453292f;
