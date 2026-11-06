@@ -165,14 +165,14 @@ typedef struct {
         struct {
             f32 x, y, z, w;
         } v;
-    } dir;             /* 0x00: unit direction; z/w overwritten with 1 and a range */
-    struct Moby *self; /* 0x10: moby to ignore */
-    s32          mask; /* 0x14: collision classes */
-    u8           unk18;
-    u8           unk19;
-    s16          oclass;        /* 0x1A */
-    f32          radius;        /* 0x1C */
-    s32          has_direction; /* 0x20: 1 from make_hit_descriptor, which copies dir */
+    } dir;                       /* 0x00: unit direction; z/w overwritten with 1 and a range */
+    struct Moby *self;           /* 0x10: moby to ignore */
+    s32          mask;           /* 0x14: collision classes */
+    u8           attack_type;    /* 0x18: MobyHit.attack_type */
+    u8           attack_subtype; /* 0x19 */
+    s16          oclass;         /* 0x1A */
+    f32          radius;         /* 0x1C */
+    s32          has_direction;  /* 0x20: 1 from make_hit_descriptor, which copies dir */
 } CollisionProbe;
 
 extern f32  D_L04_00166F40[]; /* arena centre */
@@ -238,7 +238,7 @@ void blarg_trooper_projectile_update(struct Moby *moby) {
         probe = &pr;
         pr.dir.v.z = 1.0f;
         pr.dir.v.w = 5627.9248f;
-        pr.unk19 = pr.unk18 = 1;
+        pr.attack_subtype = pr.attack_type = 1;
         pr.oclass = moby->oclass;
     }
     if (fast_dec_timer_s16(&v->time) && moby->command == 0) {

@@ -65,9 +65,9 @@ typedef struct {
     u8    pad59;
     u8    look_height; /* 0x5A */
     u8    pad5B[0x6D];
-    s16   unkC8; /* 0xC8 */
+    s16   suck_state; /* 0xC8 */
     u8    padCA[6];
-    void *unkD0; /* 0xD0 */
+    void *suck_sequences; /* 0xD0 */
     u8    padD4[0x4C];
     struct KnockbackMotion   knockback;    /* 0x120: step_moby_motion / FUN_L00_002dc9f0 state */
     struct GroundMoveControl move_control; /* 0x180 */
@@ -143,7 +143,7 @@ void puffoid_update(struct Moby *moby) {
     int                i;
 
     if (moby->state != PUFFOID_STATE_WAIT_TO_RESUME_COMMAND) {
-        puffoid_vars->unkC8 = 0;
+        puffoid_vars->suck_state = 0;
         update_puffoid_damage_and_path_goal(moby);
     }
     target = puffoid_vars->target;
@@ -161,7 +161,7 @@ void puffoid_update(struct Moby *moby) {
         puffoid_vars->look_range = truncate_float_to_s32(8.0f);
         puffoid_vars->look_height = truncate_float_to_s32(2.0f);
         puffoid_vars->wrench_hit_sound = 1;
-        puffoid_vars->unkD0 = &D_L11_001622C0;
+        puffoid_vars->suck_sequences = &D_L11_001622C0;
         init_ground_move_control(&puffoid_vars->move_control);
         puffoid_vars->move_control.max_climb = 0.5f;
         puffoid_vars->move_control.max_drop = 0.5f;
@@ -632,9 +632,10 @@ void puffoid_update(struct Moby *moby) {
         break;
     }
     case PUFFOID_STATE_WAIT_TO_RESUME_COMMAND:
-        if (puffoid_vars->unkC8 != 0 && FUN_L00_002dc9f0_4318(moby, &puffoid_vars->knockback)) {
+        if (puffoid_vars->suck_state != 0 &&
+            FUN_L00_002dc9f0_4318(moby, &puffoid_vars->knockback)) {
             moby->state = moby->command;
-            puffoid_vars->unkC8 = 0;
+            puffoid_vars->suck_state = 0;
         }
         break;
     }

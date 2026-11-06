@@ -199,9 +199,9 @@ typedef struct {
     /* 0x059 */ char          pad59[3];
     /* 0x05C */ unsigned char unk5C;
     /* 0x05D */ char          pad5D[0x6B];
-    /* 0x0C8 */ short         unkC8;
+    /* 0x0C8 */ short         suck_state;
     /* 0x0CA */ char          padCA[6];
-    /* 0x0D0 */ void         *unkD0;
+    /* 0x0D0 */ void         *suck_sequences;
     /* 0x0D4 */ char          padD4[0x4C];
     /* 0x120 */ char          motion[0x60];
     /* 0x180 */ int           walk_mode;
@@ -352,7 +352,7 @@ void sand_shark_update(struct Moby *moby) {
         if (rand_e50() & 1) {
             moby->flags |= 0x8000;
         }
-        sand_shark_behavior_vars->unkD0 = &D_L02_001619B0;
+        sand_shark_behavior_vars->suck_sequences = &D_L02_001619B0;
         if (sand_shark_behavior_vars->primary_hero_launch_trigger_volume_index >= 0) {
             if (sand_shark_behavior_vars->launch_origin_moby_index == -1) {
                 mark_moby_for_removal(moby);
@@ -819,7 +819,7 @@ void sand_shark_update(struct Moby *moby) {
     case SAND_SHARK_SUCK_CANNON_INTERACTION:
         if (FUN_L00_002dc9f0_e50(moby, sand_shark_behavior_vars->motion)) {
             moby->state = SAND_SHARK_BEGIN_RETURN_HOME_WITH_HEIGHT_OFFSET;
-            sand_shark_behavior_vars->unkC8 = 0;
+            sand_shark_behavior_vars->suck_state = 0;
         }
         break;
     case SAND_SHARK_WAIT_FOR_HERO_LAUNCH_TRIGGER: {

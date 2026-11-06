@@ -38,7 +38,7 @@ typedef struct ScoutbotVars {
     u8    pad24[0x1C];
     f32   velocity[4];
     u8    pad50[0x78];
-    s16   unkC8;
+    s16   suck_state; /* suck cannon record (pvars + 0x60) + 0x68: its suck state */
     u8    padCA[0xa6];
     f32   tracked_target_position[4];
     u8    pad180[0x30];
@@ -665,7 +665,7 @@ void *enter_scoutbot_return_home_state(struct Moby *moby) {
     if ((unsigned char)((char)moby->prev_seq) != 2) {
         blend_moby_animation(moby, 2, 0, 3);
     }
-    scoutbot_data->unkC8 = 0;
+    scoutbot_data->suck_state = 0;
     return suction_cancel_status;
 }
 

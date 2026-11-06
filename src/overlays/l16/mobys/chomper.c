@@ -79,9 +79,9 @@ typedef struct ChomperVars {
     u8  pad_59[0x1];
     u8  look_height;
     u8  pad_5B[0x6D];
-    u16 unkC8;
+    u16 suck_state;
     u8  pad_CA[0x6];
-    s32 unkD0;
+    s32 suck_sequences;
     u8  pad_D4[0x4C];
     u8  motion;
     u8  pad_121[0x5F];
@@ -120,7 +120,7 @@ void chomper_update(struct Moby *chomper_moby) {
         chomper_data->max_health = 1;
         chomper_data->hit_response_class = 0;
         chomper_data->health = 1.0f;
-        chomper_data->unkD0 = (int)&D_L16_00161E48;
+        chomper_data->suck_sequences = (int)&D_L16_00161E48;
         if (rand() & 1)
             chomper_moby->flags |= 0x8000;
         qcopy(chomper_data->home_position, &chomper_moby->pos);
@@ -179,7 +179,7 @@ void chomper_update(struct Moby *chomper_moby) {
     case 7:
         if (FUN_L00_002dc9f0(chomper_moby, &chomper_data->motion)) {
             chomper_moby->state = CHOMPER_WAIT_TO_APPROACH_TARGET;
-            chomper_data->unkC8 = 0;
+            chomper_data->suck_state = 0;
         }
         break;
     case CHOMPER_KNOCKBACK:

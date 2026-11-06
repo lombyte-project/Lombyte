@@ -114,7 +114,7 @@ typedef struct PlasmabotVars {
     f32                  path_traversal_direction;
     s32                  aim_pitch_angle;
     s32                  aim_pitch_angular_velocity;
-    s32                  unk288;
+    s32 giant_clank_only; /* set: hidden and without collision unless the hero body (D_001413F4) is Giant Clank (2) */
 } PlasmabotVars;
 
 extern char D_0013E533[];
@@ -377,7 +377,7 @@ void plasmabot_update(char *moby) {
     plasmabot_update_private_vars = (PlasmabotVars *)MOBY(moby)->pvars;
     plasmabot_aim_target_moby = 0;
     FUN_L00_00263ac8(2.5f, moby, 2, &plasmabot_update_private_vars->aim_joint_manipulator);
-    if (plasmabot_update_private_vars->unk288 != 0) {
+    if (plasmabot_update_private_vars->giant_clank_only != 0) {
         if (((unsigned char *)D_001413F4)[0] != 2) {
             MOBY(moby)->flags |= 0x41;
             MOBY(moby)->collision = 0;

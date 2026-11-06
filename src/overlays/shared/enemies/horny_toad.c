@@ -59,9 +59,9 @@ typedef struct {
     u8      look_height;
     u8      pad5B[0x70 - 0x5B];
     u8      motion[0x138 - 0x70];
-    s16     unk138;
+    s16     suck_state; /* suck cannon record (pvars + 0xD0) + 0x68: its suck state */
     u8      pad13A[0x140 - 0x13A];
-    void   *unk140;
+    void   *suck_sequences; /* suck record + 0x70: the class's sequence table */
     u8      pad144[0x180 - 0x144];
     ToadVec approach_position;
     u8      pad190[0x1C0 - 0x190];
@@ -224,7 +224,7 @@ void horny_toad_update(Moby *moby) {
         if (moby->prev_seq != 1)
             blend_moby_animation(moby, 1, 0, 0);
         horny_toad_vars->wrench_hit_sound = 1;
-        horny_toad_vars->unk140 = &D_L00_00161960;
+        horny_toad_vars->suck_sequences = &D_L00_00161960;
         qcopy(horny_toad_vars->wander_center, (*(ToadVec *)&moby->pos));
         k = frame_time;
         horny_toad_vars->wander_radius = 1.5f;
@@ -264,7 +264,7 @@ void horny_toad_update(Moby *moby) {
     case HORNY_TOAD_RUN_MOVEMENT_SEQUENCE:
         if (FUN_L00_002dc9f0_2d4610(moby, horny_toad_vars->motion) != 0) {
             moby->state = HORNY_TOAD_ROAM;
-            horny_toad_vars->unk138 = 0;
+            horny_toad_vars->suck_state = 0;
         }
         break;
     case HORNY_TOAD_FACE_FOLLOW_MOBY: {

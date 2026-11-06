@@ -47,9 +47,9 @@ typedef struct FrogVars {
     u8     pad59[0x1];
     s8     look_height;
     u8     pad5B[0x6d];
-    s16    unkC8;
+    s16    suck_state; /* suck cannon record (pvars + 0x60) + 0x68: its suck state */
     u8     padCA[0x6];
-    short *unkD0;
+    short *suck_sequences; /* suck record + 0x70: the class's sequence table */
     u8     padD4[0x4c];
     struct KnockbackMotion knockback; /* 0x120 */
     u8                     pad180[0x40];
@@ -62,25 +62,25 @@ typedef struct FrogVars {
     f32                    movement_speed;
     s16                    blink_countdown;
     s16                    hidden;
-    s32                    unk1EC;
-    u8                     pad1F0[0x8];
-    s32                    path_index;
-    s32                    wander_destination_timer;
-    s16                    spawns_child;
-    s16                    initialize_in_respawn;
-    u8                     pad204[0x4];
-    s16                    path_point;
-    s16                    target_selection_frame_slot;
-    char                  *child;
-    f32                    home_position[4];
-    u8                     home_rotation[0x10];
-    u8                     wander_destination[0x10];
-    s16                    bolt_divisor;
-    s16                    unk242;
-    f32                    approach_stop_distance;
-    f32                    glow_animation_phase;
-    f32                    path_activation_distance_xy;
-    u8                     big_head_manipulator[0x4];
+    s32   boundary_path; /* path index: path_8808 stops the approach where it crosses this path */
+    u8    pad1F0[0x8];
+    s32   path_index;
+    s32   wander_destination_timer;
+    s16   spawns_child;
+    s16   initialize_in_respawn;
+    u8    pad204[0x4];
+    s16   path_point;
+    s16   target_selection_frame_slot;
+    char *child;
+    f32   home_position[4];
+    u8    home_rotation[0x10];
+    u8    wander_destination[0x10];
+    s16   bolt_divisor;
+    s16 needs_l06_flag; /* outside the suck cannon it updates only while D_L06_0015FDF8 is set (1) or clear (0) */
+    f32 approach_stop_distance;
+    f32 glow_animation_phase;
+    f32 path_activation_distance_xy;
+    u8  big_head_manipulator[0x4];
 } FrogVars;
 
 struct MobyHit {
@@ -279,10 +279,10 @@ void frog_update(unsigned char *moby) {
     }
     if (MOBY(moby)->state != FROG_STATE_SUCK_CANNON_HELD) {
         if (*(int *)&D_L06_0015FDF8 != 0) {
-            if (frog_instance_vars->unk242 == 0)
+            if (frog_instance_vars->needs_l06_flag == 0)
                 return;
         } else {
-            if (frog_instance_vars->unk242 != 0)
+            if (frog_instance_vars->needs_l06_flag != 0)
                 return;
         }
     }
@@ -318,7 +318,7 @@ void frog_update(unsigned char *moby) {
         frog_instance_vars->knockback.collision_radius_1024ths = 0x200;
         frog_instance_vars->approach_stop_distance = wait;
         frog_instance_vars->glow_animation_phase = random_angle_radians();
-        frog_instance_vars->unkD0 = D_L06_00161BF0;
+        frog_instance_vars->suck_sequences = D_L06_00161BF0;
         frog_instance_vars->wrench_hit_sound = 1;
         if (frog_instance_vars->spawns_child != 0) {
             char *child;
@@ -535,7 +535,7 @@ void frog_update(unsigned char *moby) {
         blend_frog_rotation_to_facing_frame((char *)moby, (float *)D_L06_00174600, B);
         fast_vec_normalize(A, moby + 0xC0, frog_instance_vars->movement_speed * D_0015ED6C_gp);
         FUN_L06_002e9b60_c(moby, A, 1, 0.3f, 0.3f);
-        if (path_8808(frog_instance_vars->unk1EC, &MOBY(moby)->pos, target + 0x10, D) != 0 &&
+        if (path_8808(frog_instance_vars->boundary_path, &MOBY(moby)->pos, target + 0x10, D) != 0 &&
             fast_vec_dist(&MOBY(moby)->pos, D) < frog_instance_vars->approach_stop_distance) {
             near = 1;
         }
@@ -608,7 +608,7 @@ void frog_update(unsigned char *moby) {
             MOBY(moby)->state = FROG_STATE_WANDER;
             if (MOBY(moby)->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
-            frog_instance_vars->unkC8 = 0;
+            frog_instance_vars->suck_state = 0;
         }
         break;
     }

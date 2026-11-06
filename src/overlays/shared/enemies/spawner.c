@@ -5,6 +5,7 @@
 #include "sda.h"
 #include "qcopy.h"
 #include "rnc/mobys/moby.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
@@ -27,12 +28,11 @@ enum {
 };
 
 typedef struct SpawnerVars {
-    u8    pad0[0x20];
-    f32   unk20;
-    u8    pad24[0x3c];
-    u8    unk60[0x7];
-    s8    unk67;
-    u8    pad68[0x8];
+    u8  pad0[0x20];
+    f32 health; /* 0x20: target info (moby_target_info.h); hits subtract their damage */
+    u8  pad24[0x3c];
+    struct HitColorFlash
+          hit_flash; /* 0x60: flash_red (0x67) is set to 0x5A on a hit, 0x78 on the last */
     u8    unk70[0x10];
     f32   target_search_radius;
     s32   excluded_moby;

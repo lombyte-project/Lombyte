@@ -57,12 +57,12 @@ typedef struct LargeAmoeboidVars {
     u8  pad59[0x1];
     s8  look_height; /* 0x5A */
     u8  pad5B[0x5];
-    struct KnockbackMotion   knockback; /* 0x60 */
-    u8                       padC0[0x68];
-    u16                      unk128;
-    u8                       pad12A[0x6];
-    void                    *unk130;
-    u8                       pad134[0x3c];
+    struct KnockbackMotion knockback; /* 0x60 */
+    u8                     padC0[0x68];
+    u16   suck_state; /* suck cannon record (pvars + 0xC0) + 0x68: its suck state */
+    u8    pad12A[0x6];
+    void *suck_sequences; /* suck record + 0x70: the class's sequence table */
+    u8    pad134[0x3c];
     struct GroundMoveControl move_control; /* 0x170 */
     f32                      path_search_point[4];
     u8                       pad1D0[0x30];
@@ -281,9 +281,9 @@ void large_amoeboid_update(unsigned char *moby) {
         large_amoeboid_vars->aim_height = large_amoeboid_vars->size_scale;
         large_amoeboid_vars->glow_cycle_phase = FUN_00213308();
         if (MOBY(moby)->oclass == 0x362)
-            large_amoeboid_vars->unk130 = &D_L01_00161A50;
+            large_amoeboid_vars->suck_sequences = &D_L01_00161A50;
         else
-            large_amoeboid_vars->unk130 = &D_L01_00161A40;
+            large_amoeboid_vars->suck_sequences = &D_L01_00161A40;
         large_amoeboid_vars->wrench_hit_sound = 1;
         if (large_amoeboid_vars->removal_height_table_index != 0) {
             large_amoeboid_vars->health = 1.0f;
@@ -661,7 +661,7 @@ void large_amoeboid_update(unsigned char *moby) {
     case LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION:
         if (FUN_L00_002dc9f0(moby, &large_amoeboid_vars->knockback)) {
             MOBY(moby)->state = LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH;
-            large_amoeboid_vars->unk128 = 0;
+            large_amoeboid_vars->suck_state = 0;
         }
         break;
     }
