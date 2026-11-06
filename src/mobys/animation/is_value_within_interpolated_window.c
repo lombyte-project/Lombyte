@@ -2,8 +2,8 @@
 
 struct InterpolatedAnim {
     u8  pad_0[0x58];
-    f32 unk58;
-    f32 unk5C;
+    f32 anim_speed; /* 0x58: struct Moby anim_speed */
+    f32 anim_rate;  /* 0x5C: struct Moby anim_rate */
 };
 
 extern f32 compute_interpolated_record_value() __asm__("func_0020C9E0");
@@ -19,7 +19,7 @@ s32 is_value_within_interpolated_window(struct InterpolatedAnim *anim, f32 thres
 
     interp_value = compute_interpolated_record_value();
     rounded_value_overshoot = round_float_to_decimal_places(4, interp_value - threshold);
-    window = round_float_to_decimal_places(4, anim->unk58 * anim->unk5C);
+    window = round_float_to_decimal_places(4, anim->anim_speed * anim->anim_rate);
     threshold_within_window = 0;
     if (threshold <= interp_value) {
         threshold_within_window = 1;
