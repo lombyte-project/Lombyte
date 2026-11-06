@@ -323,7 +323,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
             if (s->swim_bob_velocity < frame_time * -7.0f)
                 s->swim_bob_velocity = frame_time * -7.0f;
             s->swim_water_level = s->water_surface_z;
-            s->unk6A0 = 0;
+            s->swim_water_level_velocity = 0;
             s->swim_bob_offset = s->motion.pos.f[2] - s->swim_water_level - -0.12f;
             qcopy(&s->motion.momentum, &s->motion.resolved_velocity);
             s->motion.momentum.f[2] = 0.0f;

@@ -164,7 +164,7 @@ void update_trick_combo_hud(HudCounter *element) {
         {
             int k;
             for (k = 2; k >= 0; k--) {
-                hero.unk700[k] = 0;
+                hero.flips_per_axis[k] = 0;
             }
         }
         if (hero.state.current == 0x6B) {

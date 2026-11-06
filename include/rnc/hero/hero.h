@@ -362,8 +362,8 @@ struct Hero {
     f32  jump_anim_retime_scale; /* 0x494 */
     s16  jump_ramp_frames;       /* 0x498 */
     s16  jump_max_frames;        /* 0x49A */
-    s16  unk49C;                 /* 0x49C */
-    s16  unk49E;                 /* 0x49E */
+    s16  fire_ring_timer;        /* 0x49C: frames to the next fire-ring puff while rising */
+    s16  side_spark_timer;       /* 0x49E: frames to the next side spark while rising */
     f32  jump_gravity;           /* 0x4A0 */
     s16  jump_blocked_ahead;     /* 0x4A4 */
     s16  pack_glide_delay;       /* 0x4A6 */
@@ -453,16 +453,16 @@ struct Hero {
     f32          basis_pitch;   /* 0x684 */
     f32          held_pose_yaw; /* 0x688 */
     u8           pad_68C[0x4];
-    f32          swim_bob_offset;   /* 0x690 */
-    f32          swim_bob_velocity; /* 0x694 */
-    s32          swim_stroke_timer; /* 0x698 */
-    f32          swim_water_level;  /* 0x69C */
-    s32          unk6A0;            /* 0x6A0 */
-    struct Moby *sink_effect_moby;  /* 0x6A4 */
-    f32          bob_phase;         /* 0x6A8 */
-    f32          bob_offset;        /* 0x6AC */
-    f32          sway_phase;        /* 0x6B0 */
-    f32          sway_axis_phase;   /* 0x6B4 */
+    f32          swim_bob_offset;           /* 0x690 */
+    f32          swim_bob_velocity;         /* 0x694 */
+    s32          swim_stroke_timer;         /* 0x698 */
+    f32          swim_water_level;          /* 0x69C */
+    s32          swim_water_level_velocity; /* 0x6A0: spring velocity of swim_water_level */
+    struct Moby *sink_effect_moby;          /* 0x6A4 */
+    f32          bob_phase;                 /* 0x6A8 */
+    f32          bob_offset;                /* 0x6AC */
+    f32          sway_phase;                /* 0x6B0 */
+    f32          sway_axis_phase;           /* 0x6B4 */
     u8           pad_6B8[0x8];
     Vec4         smoothed_spin_stick; /* 0x6C0: 0x60 bytes cleared by fill_transfer_words */
     f32          pivot_rot_x;         /* 0x6D0 */
@@ -471,8 +471,8 @@ struct Hero {
     s32          tricks_landed[6];    /* 0x6E0: one flag per pose, indexed by air_pose_index */
     s32          tricks_landed_count; /* 0x6F8: counts the flags set in tricks_landed */
     u8           pad_6FC[0x4];
-    s32          unk700
-        [3]; /* 0x700: cleared with tricks_landed when the HUD combo ends (FUN_L05_00262b58) */
+    s32          flips_per_axis
+        [3]; /* 0x700: flips of the jump per axis; cleared with tricks_landed when the HUD combo ends (FUN_L05_00262b58) */
     s32  trick_combo_count; /* 0x70C: combo count the HUD keeps the best of (FUN_L05_00262b58) */
     u8   pad_710[0x10];
     Vec4 smoothed_steer_stick; /* 0x720 */
@@ -509,7 +509,7 @@ struct Hero {
     u8  trick_input;            /* 0x88D */
     u8  vert_ramp_launch;       /* 0x88E */
     u8  air_pose_index;         /* 0x88F */
-    u8 *unk890;                 /* 0x890 */
+    u8 *race_moby;              /* 0x890: the race moby (freeze-menu restart sets its +0xBC to 3) */
     s32 race_time_frames;  /* 0x894: frame counter shown as m:ss.hh on the HUD (FUN_L05_00266710) */
     s16 race_path_node;    /* 0x898 */
     s16 race_lap;          /* 0x89A: shown + 1 (capped at 3) on the HUD (FUN_L05_00266320) */
@@ -646,7 +646,7 @@ struct Hero {
     u8 *face_anim_layer;         /* 0xD10 */
     s32 arm_layer_fade;          /* 0xD14 */
     u8  pad_D18[0x8];
-    f32 unkD20; /* 0xD20 */
+    f32 shadow_pitch; /* 0xD20: pitch of the hero shadow direction, eased toward 0.97 */
     u8  pad_D24[0xC];
     struct HeroManipulator
         manipulators[7]; /* 0xD30: attached by FUN_L00_002056a8 while rand_timer runs */
@@ -658,37 +658,37 @@ struct Hero {
     u8                   pad_100C[0x4];
     s32                  head_look_timer;     /* 0x1010 */
     f32                  idle_look_ease_rate; /* 0x1014 */
-    f32                  unk1018;             /* 0x1018 */
-    u8                   pad_101C[0x8];
-    s32                  unk1024; /* 0x1024: cleared by FUN_L00_0020a500 */
-    s32                  unk1028; /* 0x1028: cleared by FUN_L00_0020a500 */
-    u8                   pad_102C[0x8];
-    s32                  unk1034; /* 0x1034: cleared by FUN_L00_0020a500 */
-    s32                  unk1038; /* 0x1038: cleared by FUN_L00_0020a500 */
-    u8                   pad_103C[0x8];
-    s32                  unk1044; /* 0x1044: cleared by FUN_L00_0020a500 */
-    s32                  unk1048; /* 0x1048: cleared by FUN_L00_0020a500 */
-    u8                   pad_104C[0x8];
-    s32                  unk1054; /* 0x1054: cleared by FUN_L00_0020a500 */
-    s32                  unk1058; /* 0x1058: cleared by FUN_L00_0020a500 */
-    u8                   pad_105C[0x34];
-    struct HeroItemSlot  items[7]; /* 0x1090: item slots; slot 0 is the equipped gadget */
-    u8                   pad_12C0[0x20];
-    s16                  ground_type;        /* 0x12E0 */
-    u8                   on_ice_ground;      /* 0x12E2 */
-    u8                   selector_4;         /* 0x12E3 */
-    u8                   base_condition;     /* 0x12E4 */
-    u8                   selector_1;         /* 0x12E5 */
-    u8                   selector_3;         /* 0x12E6 */
-    u8                   on_magnet_ground;   /* 0x12E7 */
-    u8                   selector_5;         /* 0x12E8 */
-    u8                   selector_6;         /* 0x12E9: set on ground material 6 */
-    u8                   on_slip_ground;     /* 0x12EA */
-    u8                   selector_11;        /* 0x12EB */
-    u8                   selector_13;        /* 0x12EC */
-    u8                   ground_sound_class; /* 0x12ED */
-    u8                   grind_jump_block;   /* 0x12EE */
-    u8                   pad_12EF[0x301];
+    f32 idle_look_damping; /* 0x1018: head look spring damping (idle_look_ease_rate is its k) */
+    u8  pad_101C[0x8];
+    s32 unk1024; /* 0x1024: cleared by FUN_L00_0020a500 */
+    s32 unk1028; /* 0x1028: cleared by FUN_L00_0020a500 */
+    u8  pad_102C[0x8];
+    s32 unk1034; /* 0x1034: cleared by FUN_L00_0020a500 */
+    s32 unk1038; /* 0x1038: cleared by FUN_L00_0020a500 */
+    u8  pad_103C[0x8];
+    s32 unk1044; /* 0x1044: cleared by FUN_L00_0020a500 */
+    s32 unk1048; /* 0x1048: cleared by FUN_L00_0020a500 */
+    u8  pad_104C[0x8];
+    s32 unk1054; /* 0x1054: cleared by FUN_L00_0020a500 */
+    s32 unk1058; /* 0x1058: cleared by FUN_L00_0020a500 */
+    u8  pad_105C[0x34];
+    struct HeroItemSlot items[7]; /* 0x1090: item slots; slot 0 is the equipped gadget */
+    u8                  pad_12C0[0x20];
+    s16                 ground_type;        /* 0x12E0 */
+    u8                  on_ice_ground;      /* 0x12E2 */
+    u8                  selector_4;         /* 0x12E3 */
+    u8                  base_condition;     /* 0x12E4 */
+    u8                  selector_1;         /* 0x12E5 */
+    u8                  selector_3;         /* 0x12E6 */
+    u8                  on_magnet_ground;   /* 0x12E7 */
+    u8                  selector_5;         /* 0x12E8 */
+    u8                  selector_6;         /* 0x12E9: set on ground material 6 */
+    u8                  on_slip_ground;     /* 0x12EA */
+    u8                  selector_11;        /* 0x12EB */
+    u8                  selector_13;        /* 0x12EC */
+    u8                  ground_sound_class; /* 0x12ED */
+    u8                  grind_jump_block;   /* 0x12EE */
+    u8                  pad_12EF[0x301];
     struct Moby *ship_moby;   /* 0x15F0: the ship the hero is flying (l17 fighter_jet_update) */
     s16          ship_oclass; /* 0x15F4: its oclass, -1 when none */
     u8 ship_ammo; /* 0x15F6: shots left in the space levels; firing needs one and takes it (FUN_L11_003126f8) */
@@ -732,8 +732,8 @@ struct Hero {
     u8   pad_1D28[0x68];
     struct HeroEase
         item5_manipulator; /* 0x1D90: manipulator record handed to attach_manipulator (FUN_L00_00234808) */
-    u8  pad_1E40[0x70];
-    s16 unk1EB0;          /* 0x1EB0 */
+    u8 pad_1E40[0x70];
+    s16 glow_point_count; /* 0x1EB0: glow sprite points queued this frame, cleared each hero update */
     s16 glow_draw_queued; /* 0x1EB2: draw_hero_glow_quads queued this frame */
     u8  pad_1EB4[0x1C];
     /* 0x1EC0..0x1F10: a struct GroundMoveControl (ground_move_control.h) that doom

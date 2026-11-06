@@ -1252,7 +1252,7 @@ void coordinate_hero_frame_update(void) {
         return;
     }
     hero_state->glow_draw_queued = 0;
-    hero_state->unk1EB0 = 0;
+    hero_state->glow_point_count = 0;
     if (hero_state->vehicle_mode) {
         update_hero_in_vehicle_mode();
         return;
@@ -2732,7 +2732,7 @@ void emit_hero_timed_effects(void) {
     frame_count = random_int_between(scale_game_frames(3), scale_game_frames(7));
     {
         struct Hero *hero_state = &hero;
-        hero_state->unk49C = frame_count;
+        hero_state->fire_ring_timer = frame_count;
     }
 }
 

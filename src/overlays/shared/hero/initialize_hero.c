@@ -90,6 +90,6 @@ void initialize_hero(void) {
     hero.health.saved_hp = hero.health.hp;
     hero.head_look_timer = random_int_between(scale_game_frames(0xB4), scale_game_frames(0x12C));
     hero.idle_look_ease_rate = 0.007f;
-    hero.unk1018 = 0.3f;
-    hero.unkD20 = 0.97f;
+    hero.idle_look_damping = 0.3f;
+    hero.shadow_pitch = 0.97f;
 }

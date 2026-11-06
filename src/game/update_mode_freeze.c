@@ -218,7 +218,7 @@ void update_mode_freeze(void) {
                     game_mode = GAME_MODE_CONTINUE;
                     if (hero.race_lap >= 3) {
                         hero.race_lap = (s16)(((u16)hero.race_lap) - 1);
-                        hero.unk890[0xBC] = 3;
+                        hero.race_moby[0xBC] = 3;
                     }
                 }
             }

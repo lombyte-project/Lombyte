@@ -256,7 +256,7 @@ int hero_set_state(int requested_state, int b) {
         if (p->swim_bob_velocity < frame_time * -7.0f)
             p->swim_bob_velocity = frame_time * -7.0f;
         p->item_select_blocked = 1;
-        p->unk6A0 = 0;
+        p->swim_water_level_velocity = 0;
         p->swim_bob_offset = p->motion.pos.f[2] - p->swim_water_level;
         if (b)
             set_hero_animation(0x74, 0, (float)scale_game_frames(0xB));
@@ -378,7 +378,7 @@ int hero_set_state(int requested_state, int b) {
             if (s->swim_bob_velocity < frame_time * -7.0f)
                 s->swim_bob_velocity = frame_time * -7.0f;
             s->swim_water_level = s->water_surface_z;
-            s->unk6A0 = 0;
+            s->swim_water_level_velocity = 0;
             s->swim_bob_offset = s->motion.pos.f[2] - s->swim_water_level - -0.12f;
             qcopy(&s->motion.momentum, &s->motion.resolved_velocity);
             s->motion.momentum.f[2] = 0.0f;
@@ -1245,8 +1245,8 @@ int hero_set_state(int requested_state, int b) {
                     struct Hero *w = &hero;
                     w->fall_delay_frames = scale_game_frames(0x96);
                     w->jump_gravity = frame_time_sq * 15.0f;
-                    w->unk49C = scale_game_frames(5);
-                    w->unk49E = scale_game_frames(4);
+                    w->fire_ring_timer = scale_game_frames(5);
+                    w->side_spark_timer = scale_game_frames(4);
                 }
             } else if (u->state.current == 0x69) {
                 float v;

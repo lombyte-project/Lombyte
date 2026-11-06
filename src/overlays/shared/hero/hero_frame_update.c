@@ -254,7 +254,7 @@ void update_hero_frame(void) {
         return;
     }
     hero_state_base->glow_draw_queued = 0;
-    hero_state_base->unk1EB0 = 0;
+    hero_state_base->glow_point_count = 0;
     if (hero_state_base->vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT) {
         hero_frame_update();
         return;

@@ -239,7 +239,7 @@ int hero_set_state(int requested_state, int animation_update_mode) {
         if (p->swim_bob_velocity < frame_time * -7.0f)
             p->swim_bob_velocity = frame_time * -7.0f;
         p->item_select_blocked = 1;
-        p->unk6A0 = 0;
+        p->swim_water_level_velocity = 0;
         p->swim_bob_offset = p->motion.pos.f[2] - p->swim_water_level;
         if (animation_update_mode)
             set_hero_animation(0x74, 0, (float)scale_game_frames(0xB));
@@ -368,7 +368,7 @@ int hero_set_state(int requested_state, int animation_update_mode) {
             if (s->swim_bob_velocity < frame_time * -7.0f)
                 s->swim_bob_velocity = frame_time * -7.0f;
             s->swim_water_level = s->water_surface_z;
-            s->unk6A0 = 0;
+            s->swim_water_level_velocity = 0;
             s->swim_bob_offset = s->motion.pos.f[2] - s->swim_water_level - -0.12f;
             qcopy(&s->motion.momentum, &s->motion.resolved_velocity);
             s->motion.momentum.f[2] = 0.0f;
@@ -527,7 +527,7 @@ int hero_set_state(int requested_state, int animation_update_mode) {
                 m = (char *)q->hoverboard_moby;
                 fill_transfer_words(&q->smoothed_spin_stick, 0, 0x210);
                 q->hoverboard_moby = (u8 *)m;
-                q->unk890 = (u8 *)D_L16_0015FFD8 + (*(int *)(*(char **)(m + 0x78) + 0x28) << 8);
+                q->race_moby = (u8 *)D_L16_0015FFD8 + (*(int *)(*(char **)(m + 0x78) + 0x28) << 8);
                 q->board_gravity = frame_time_sq * 22.0f;
                 q->board_spring_angle = 1.2217305f;
                 q->trick_hud_handle = -1;
@@ -614,7 +614,7 @@ int hero_set_state(int requested_state, int animation_update_mode) {
         if (p->swim_bob_velocity < frame_time * -5.7f)
             p->swim_bob_velocity = frame_time * -5.7f;
         p->swim_water_level = p->board_floor_z;
-        p->unk6A0 = 0;
+        p->swim_water_level_velocity = 0;
         p->swim_bob_offset = p->motion.pos.f[2] - p->swim_water_level - -0.12f;
         if (0.2f < p->swim_bob_offset) {
             p->swim_bob_offset = 0.2f;

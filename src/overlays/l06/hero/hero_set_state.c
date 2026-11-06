@@ -226,7 +226,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         if (p->swim_bob_velocity < frame_time * -7.0f)
             p->swim_bob_velocity = frame_time * -7.0f;
         p->item_select_blocked = 1;
-        p->unk6A0 = 0;
+        p->swim_water_level_velocity = 0;
         p->swim_bob_offset = p->motion.pos.f[2] - p->swim_water_level;
         if (entry_animation_mode)
             set_hero_animation(0x74, 0, (float)scale_game_frames(0xB));
@@ -856,8 +856,8 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                     struct Hero *w = &hero;
                     w->fall_delay_frames = scale_game_frames(0x96);
                     w->jump_gravity = frame_time_sq * 15.0f;
-                    w->unk49C = scale_game_frames(5);
-                    w->unk49E = scale_game_frames(4);
+                    w->fire_ring_timer = scale_game_frames(5);
+                    w->side_spark_timer = scale_game_frames(4);
                 }
             } else if (u->state.current == 0x29) {
                 u->jump_height = 2.4f;

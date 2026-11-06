@@ -1756,7 +1756,7 @@ void update_hero_hoverboard_race_progress(void) {
         if (*(alternate_item_available_lui) == 0 && hero.race_position == 1) {
             D_L05_0015FFD8_macro[race_pvars->f28].command = 1;
         } else {
-            hero.unk890 = (u8 *)(&D_L05_0015FFD8_macro[race_pvars->f28]);
+            hero.race_moby = (u8 *)(&D_L05_0015FFD8_macro[race_pvars->f28]);
             mode_freeze_init(0, 0);
         }
         if (freeze_stats_time_ref_macro[0] == 0) {
@@ -1783,7 +1783,7 @@ void update_hero_hoverboard_race_progress(void) {
         if (D_0013D4DF_lui == 0 && hero.race_position == 1) {
             D_L05_0015FFD8_macro[race_pvars->f28].command = 1;
         } else {
-            hero.unk890 = (u8 *)(&D_L05_0015FFD8_macro[race_pvars->f28]);
+            hero.race_moby = (u8 *)(&D_L05_0015FFD8_macro[race_pvars->f28]);
             mode_freeze_init(0, 0);
         }
         if (freeze_stats_time_ref_macro[1] == 0) {
