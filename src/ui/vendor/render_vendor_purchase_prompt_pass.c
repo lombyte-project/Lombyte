@@ -1,15 +1,6 @@
 #include "types.h"
 #include "rnc/globals.h"
-
-struct Goal {
-    s32 bolts;
-    s32 boltsHard;
-    u16 cost;
-    u16 costHard;
-    u16 pad0C;
-    u16 need;
-    u8  pad10[8];
-};
+#include "rnc/ui/vendor/vendor_capture.h"
 
 struct Slot {
     s32 id;
@@ -28,7 +19,6 @@ struct Shop {
 };
 
 extern struct Shop D_001E63C0;
-extern struct Goal D_001DFFB0[];
 
 #include "rnc/game/item_state.h"
 
@@ -48,15 +38,16 @@ void render_vendor_purchase_prompt_pass(void) {
     if (vendor_shop->open != 0) {
         if (vendor_shop->slots[vendor_shop->cur].kind == 1) {
             if (weapon_ammo_counts[vendor_shop->slots[vendor_shop->cur].id] >=
-                D_001DFFB0[vendor_shop->slots[vendor_shop->cur].id].need) {
+                vendor_item_prices[vendor_shop->slots[vendor_shop->cur].id].ammo_capacity) {
                 return;
             }
         }
         if (vendor_shop->slots[vendor_shop->cur].kind == 1) {
             if (vendor_shop->hard != 0) {
-                cost = D_001DFFB0[vendor_shop->slots[vendor_shop->cur].id].costHard;
+                cost = vendor_item_prices[vendor_shop->slots[vendor_shop->cur].id]
+                           .discounted_ammo_price;
             } else {
-                cost = D_001DFFB0[vendor_shop->slots[vendor_shop->cur].id].cost;
+                cost = vendor_item_prices[vendor_shop->slots[vendor_shop->cur].id].ammo_price;
             }
             if (current_bolt_count < cost) {
                 return;
@@ -64,9 +55,10 @@ void render_vendor_purchase_prompt_pass(void) {
             id = 0x4EE0;
         } else {
             if (item_available[ITEM_VENDOR_DISCOUNT] != 0) {
-                cost = D_001DFFB0[vendor_shop->slots[vendor_shop->cur].id].boltsHard;
+                cost = vendor_item_prices[vendor_shop->slots[vendor_shop->cur].id]
+                           .discounted_purchase_price;
             } else {
-                cost = D_001DFFB0[vendor_shop->slots[vendor_shop->cur].id].bolts;
+                cost = vendor_item_prices[vendor_shop->slots[vendor_shop->cur].id].purchase_price;
             }
             if (current_bolt_count < cost) {
                 return;
