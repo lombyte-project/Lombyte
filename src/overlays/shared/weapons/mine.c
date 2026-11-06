@@ -36,12 +36,12 @@ typedef struct MineVars {
     s32 owner;
     u8  pad34[0x2];
     s16 prediction_done;
-    f32 unk38;
-    f32 unk3C;
+    f32 spin_rate_a; /* 0x38: random 60..180 degrees per second */
+    f32 spin_rate_b; /* 0x3C */
     u8  pad40[0x1c];
-    s32 spawn_frame; /* game frame at spawn; with 8 mines out the oldest gets -1 */
-    f32 unk60;
-    f32 unk64;
+    s32 spawn_frame;    /* game frame at spawn; with 8 mines out the oldest gets -1 */
+    f32 wobble_phase_a; /* 0x60 */
+    f32 wobble_phase_b; /* 0x64 */
     s32 voice;
     f32 bob_amplitude;
     f32 bob_phase;
@@ -430,14 +430,14 @@ unsigned char *spawn_mine(int mine_owner_moby, OvlQuad *spawn_position) {
             float frame_scaled_random_sample;
             int   x;
             float z;
-            mine_vars->unk38 = a;
+            mine_vars->spin_rate_a = a;
             frame_scaled_random_sample =
                 random_float_between(frame_rate_scale * 1.0471976f, frame_rate_scale * 3.1415927f);
             x = D_L00_0015F5CC_2a9ed0;
             z = 0.0f;
-            mine_vars->unk3C = frame_scaled_random_sample;
-            mine_vars->unk64 = z;
-            mine_vars->unk60 = z;
+            mine_vars->spin_rate_b = frame_scaled_random_sample;
+            mine_vars->wobble_phase_b = z;
+            mine_vars->wobble_phase_a = z;
             mine_vars->bob_phase = z;
             mine_vars->bob_amplitude = z;
             mine_vars->spawn_frame = x;

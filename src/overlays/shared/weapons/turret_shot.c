@@ -35,9 +35,9 @@ typedef struct {
     s32          mask; /* 0x14: collision classes */
     u8           unk18;
     u8           unk19;
-    s16          oclass; /* 0x1A */
-    f32          radius; /* 0x1C */
-    s32          unk20;
+    s16          oclass;        /* 0x1A */
+    f32          radius;        /* 0x1C */
+    s32          has_direction; /* 0x20: MobyHit.has_direction */
 } CollisionProbe;
 
 extern u8 *spawn_source_attached_fading_effect_particle(f32, struct Moby *, u32, s32, s32) __asm__("FUN_L00_0026daa0");
@@ -160,7 +160,7 @@ void turret_shot_update(struct Moby *projectile_moby) {
         pr.mask = 0x70001;
         pr.radius = 3.0f;
         pr.self = projectile_moby;
-        pr.unk20 = 1;
+        pr.has_direction = 1;
         qcopy(&pr.dir, &projectile_vars->vel);
         fast_vec_sub(&pr.dir, &projectile_moby->pos, &D_0013F3D0_307d68);
         set_vector_length_xy(&pr.dir, &pr.dir, 1.0f);
