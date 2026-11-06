@@ -12,7 +12,7 @@ CHECK(MapState, mask, mask, 0xC);
 CHECK(MapState, markers, markers, 0x1C);
 CHECK(MapState, icons, icons, 0x20);
 CHECK(MapState, unk24, unk24, 0x24);
-CHECK(MapState, unk30, unk30, 0x30);
+CHECK(MapState, highlighted_cells, highlighted_cells, 0x30);
 CHECK(MapState, marker_count, marker_count, 0xB0);
 CHECK(MapState, zoom, zoom, 0xB4);
 CHECK(MapState, pan_x, pan_x, 0x104);

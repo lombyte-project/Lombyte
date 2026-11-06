@@ -191,8 +191,9 @@ void initialize_level_runtime(void) {
     init_view_context();
     update_view_context();
     vu1_init_chain();
-    submit_audio_stream_io_request(
-        D_001940C0.buffer + 0x400000, disc_table.unk13B8.sector, disc_table.unk13B8.size);
+    submit_audio_stream_io_request(D_001940C0.buffer + 0x400000,
+                                   disc_table.space_transition_archive.sector,
+                                   disc_table.space_transition_archive.size);
     fade_to_black(scale_game_frames(0xC));
     sceCdSync(0);
     FlushCache(0);
