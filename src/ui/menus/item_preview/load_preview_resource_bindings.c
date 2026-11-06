@@ -39,7 +39,7 @@ void load_preview_resource_bindings(s32 first_resource, s32 resource_count) {
        its zero, so its live range is not doubled. */
     if (resource_index < count) {
         resource_offset = first_resource * 4;
-        binding = ((PreviewResourceBinding *)preview_resource_bindings) + first_resource;
+        binding = preview_resource_bindings + first_resource;
         do {
             buffer_skip = 0;
             class_slot = resident_class_slot_by_id[binding->class_id];

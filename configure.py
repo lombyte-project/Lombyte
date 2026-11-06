@@ -1253,6 +1253,7 @@ DATA_OVERLAYS = {
     "ui/map/draw_map_overlay": (0x1E8068, 0xE8FE8, 17),  # no map text
     "ui/map/update_map_icons": (0x1A08C0, 0xA1840, 9036),  # mission and map icon lists of each level
     "ui/menus/item_preview/draw_menu_preview_objects": (0x1D5020, 0xD5FA0, 96),  # slot draw flags
+    "ui/menus/item_preview/clear_preview_resource_bindings": (0x1D59D8, 0xD6958, 136),
 }
 
 # Uninitialised variables a unit defines.  `.sbss` (small ones) sits in the

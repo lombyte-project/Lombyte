@@ -26,11 +26,11 @@ typedef struct MenuItemInfo {
     u8  pad4[4];
     s32 slot; /* 0x08: equip slot the item goes in */
     u8  padC[0x2C];
-    u16 icon;         /* 0x38: copied into the pause item list */
+    u16 icon;          /* 0x38: copied into the pause item list */
     s16 preview_class; /* 0x3A: preview moby class, -1 for none */
     u8  pad3C[4];
-    s16 name_text; /* 0x40: pause list value for the plain text */
-    s16 alt_name_text; /* 0x42: pause list value when item_text_variant is set */
+    s16 name_text;        /* 0x40: pause list value for the plain text */
+    s16 alt_name_text;    /* 0x42: pause list value when item_text_variant is set */
     s16 description_text; /* 0x44: copied into the filtered item list */
     u8  pad46[6];
 } MenuItemInfo;
@@ -70,6 +70,5 @@ struct Moby;
 extern struct Moby *menu_action_messages[] __asm__("D_00199478");
 extern s32          help_msg_count[] __asm__("D_001996FC");
 extern s32          selected_level_index[] __asm__("D_001A0314");
-extern u8           preview_resource_bindings[] __asm__("D_001D59D8");
 
 #endif /* LOMBYTE_RNC_UI_MENUS_MENU_GLOBALS_H */
