@@ -62,7 +62,7 @@ typedef struct {
     V3003f0      corner[4];
     unsigned int color[4];
     UV3003f0     uv[4];
-    long         unk70, tex, unk80, unk88;
+    long         clamp, tex, tex1, alpha; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
 } Q3003f0;
 
 typedef struct {
@@ -783,13 +783,13 @@ void draw_backdrop_mesh(void) {
     I3003f0     *quad_corner_index_pair;
 
     quad.tex = get_effect_texture(backdrop_mesh_effect_texture_index_gp);
-    quad.unk88 = (long)backdrop_mesh_blend_color_a_selector_gp |
+    quad.alpha = (long)backdrop_mesh_blend_color_a_selector_gp |
                  ((long)backdrop_mesh_blend_color_b_selector_gp << 2) |
                  ((long)backdrop_mesh_blend_alpha_c_selector_gp << 4) |
                  ((long)backdrop_mesh_blend_color_d_selector_gp << 6) |
                  ((long)backdrop_mesh_blend_fixed_alpha_gp << 32);
-    quad.unk80 = 0xFF9000000260L;
-    quad.unk70 = 0;
+    quad.tex1 = 0xFF9000000260L;
+    quad.clamp = 0;
     set_identity_matrix(&backdrop_draw_transform);
     shared_quad_vertex_color = l06_backdrop_mesh_vertex_color;
     backdrop_draw_transform.translation_z = moby_breakup_z_offset_gp;

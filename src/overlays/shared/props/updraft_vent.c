@@ -68,7 +68,7 @@ typedef struct {
     QuadCorner corner[4];
     int        color[4];
     float      uv[4][2];
-    long       unk70, tex, unk80, alpha;
+    long       clamp, tex, tex1, alpha; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
 } TrailQuad;
 
 extern QuadCorner l10_animated_quad_second_base_corners[] __asm__("D_L10_001DA310");
@@ -109,11 +109,11 @@ void draw_moby_animated_quad_layers(unsigned char *moby) {
     qcopy(position, &MOBY(moby)->pos);
     position[3] = 1.0f;
     uniform_color_quad.tex = get_effect_texture(0x2C);
-    uniform_color_quad.unk80 = 0xFF9000000260L;
-    uniform_color_quad.unk70 = 0;
+    uniform_color_quad.tex1 = 0xFF9000000260L;
+    uniform_color_quad.clamp = 0;
     alternating_color_quad.tex = get_effect_texture(0x2C);
-    alternating_color_quad.unk80 = 0xFF9000000260L;
-    alternating_color_quad.unk70 = 0;
+    alternating_color_quad.tex1 = 0xFF9000000260L;
+    alternating_color_quad.clamp = 0;
     alternating_color_quad.color[3] = 0;
     alternating_color_quad.color[1] = 0;
     second_quad = &alternating_color_quad;

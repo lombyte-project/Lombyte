@@ -16,7 +16,7 @@ typedef struct {
     u128  v[4];
     int   color[4];
     float uv[4][2];
-    long  unk70, tex, unk80, unk88;
+    long  clamp, tex, tex1, alpha; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
 } Packet_2fd1a0;
 
 #include "rnc/overlay/l06/mobys/dual_texture_meshes_data/draw_dual_texture_50_quad_mesh.h"
@@ -498,7 +498,7 @@ typedef struct {
     u128  v[4];
     int   color[4];
     float uv[4][2];
-    long  unk70, tex, unk80, unk88;
+    long  clamp, tex, tex1, alpha; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
 } Packet;
 
 short D_L06_001EF310[58][4][2] = {
@@ -955,7 +955,7 @@ typedef struct {
     u128  v[4];
     int   color[4];
     float uv[4][2];
-    long  unk70, tex, unk80, unk88;
+    long  clamp, tex, tex1, alpha; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
 } Packet_2fd748;
 
 short D_L06_001DF6F0[864][4][2] = {
@@ -5429,17 +5429,17 @@ void draw_dual_texture_50_quad_mesh(void) {
     long tex = get_effect_texture(dual_texture_mesh_first_pass_texture_index_gp);
     first_pass_quad_packet.tex = tex;
     second_pass_quad_packet.tex = get_effect_texture(0x2a);
-    second_pass_quad_packet.unk80 = 0xFF9000000260L;
-    first_pass_quad_packet.unk80 = 0xFF9000000260L;
+    second_pass_quad_packet.tex1 = 0xFF9000000260L;
+    first_pass_quad_packet.tex1 = 0xFF9000000260L;
     flags = (long)dual_texture_mesh_blend_color_a_selector_gp;
     flags |= (long)dual_texture_mesh_blend_color_b_selector_gp << 2;
     flags |= (long)dual_texture_mesh_blend_alpha_c_selector_gp << 4;
     flags |= (long)dual_texture_mesh_blend_color_d_selector_gp << 6;
     flags |= (long)dual_texture_mesh_blend_fixed_alpha_gp << 32;
-    second_pass_quad_packet.unk88 = flags;
-    first_pass_quad_packet.unk88 = flags;
-    second_pass_quad_packet.unk70 = 0;
-    first_pass_quad_packet.unk70 = 0;
+    second_pass_quad_packet.alpha = flags;
+    first_pass_quad_packet.alpha = flags;
+    second_pass_quad_packet.clamp = 0;
+    first_pass_quad_packet.clamp = 0;
     matrix_ptr = matrix;
     set_identity_matrix(matrix);
     first_pass_quad_packet.color[0] = first_pass_quad_packet.color[1] =
@@ -5503,12 +5503,12 @@ void draw_dual_texture_58_quad_mesh(void) {
             (long)dual_texture_mesh_blend_alpha_c_selector_gp << 4 |
             (long)dual_texture_mesh_blend_color_d_selector_gp << 6 |
             (long)dual_texture_mesh_blend_fixed_alpha_gp << 32;
-    mesh_second_pass_quad_packet.unk88 = flags;
-    mesh_first_pass_quad_packet.unk88 = flags;
-    mesh_second_pass_quad_packet.unk80 = 0xFF9000000260L;
-    mesh_first_pass_quad_packet.unk80 = 0xFF9000000260L;
-    mesh_second_pass_quad_packet.unk70 = 0;
-    mesh_first_pass_quad_packet.unk70 = 0;
+    mesh_second_pass_quad_packet.alpha = flags;
+    mesh_first_pass_quad_packet.alpha = flags;
+    mesh_second_pass_quad_packet.tex1 = 0xFF9000000260L;
+    mesh_first_pass_quad_packet.tex1 = 0xFF9000000260L;
+    mesh_second_pass_quad_packet.clamp = 0;
+    mesh_first_pass_quad_packet.clamp = 0;
     set_identity_matrix(matrix_ptr);
     mesh_first_pass_quad_packet.color[3] = l06_dual_texture_mesh_first_pass_vertex_color;
     mesh_first_pass_quad_packet.color[2] = l06_dual_texture_mesh_first_pass_vertex_color;
@@ -5576,12 +5576,12 @@ void draw_dual_texture_864_quad_mesh(void) {
             (long)dual_texture_mesh_blend_alpha_c_selector_gp << 4 |
             (long)dual_texture_mesh_blend_color_d_selector_gp << 6 |
             (long)dual_texture_mesh_blend_fixed_alpha_gp << 32;
-    second_texture_pass_quad_packet.unk88 = flags;
-    first_texture_pass_quad_packet.unk88 = flags;
-    second_texture_pass_quad_packet.unk80 = 0xFF9000000260L;
-    first_texture_pass_quad_packet.unk80 = 0xFF9000000260L;
-    second_texture_pass_quad_packet.unk70 = 0;
-    first_texture_pass_quad_packet.unk70 = 0;
+    second_texture_pass_quad_packet.alpha = flags;
+    first_texture_pass_quad_packet.alpha = flags;
+    second_texture_pass_quad_packet.tex1 = 0xFF9000000260L;
+    first_texture_pass_quad_packet.tex1 = 0xFF9000000260L;
+    second_texture_pass_quad_packet.clamp = 0;
+    first_texture_pass_quad_packet.clamp = 0;
     set_identity_matrix(matrix_ptr);
     first_texture_pass_quad_packet.color[3] = l06_dual_texture_mesh_first_pass_vertex_color;
     first_texture_pass_quad_packet.color[2] = l06_dual_texture_mesh_first_pass_vertex_color;
