@@ -122,7 +122,7 @@ s32 saving_data_menu2(struct MenuScreen *w) {
         if (*(s32 *)((u8 *)&memory_card_state + cursor * 0x1C + 0x20) != -1) {
             menu_system.next =
                 (w->data.save.flags & 0x2000) ? &challenge_confirm_page : &new_game_confirm_page;
-            menu_system.unkD4 = (w->data.save.flags & 0x2000) ? 2 : 1;
+            menu_system.save_prompt_variant = (w->data.save.flags & 0x2000) ? 2 : 1;
             D_001D2640[0] = w->data.save.slot;
         } else {
             w->data.save.step = 1;

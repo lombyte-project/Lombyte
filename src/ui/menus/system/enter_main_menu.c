@@ -7,7 +7,7 @@ void enter_main_menu(void) {
         GAME_MODE_MAIN_MENU = 3
     };
     menu_system.close_request = 0;
-    menu_system.unk10 = 0;
+    menu_system.graphics_workspace = 0;
     game_mode = GAME_MODE_MAIN_MENU;
     menu_system.state = 0x2D;
     menu_system.update_count = 0;

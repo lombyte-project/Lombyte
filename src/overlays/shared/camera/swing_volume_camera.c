@@ -215,23 +215,23 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
         /* A second pointer to the same state: retail keeps both. */
         state = rig;
         reset = &state->reset;
-        fast_vec_normalize(tail->unk130, tail->unk130, params->distance);
-        tail->unk15C = params->distance;
+        fast_vec_normalize(tail->eye_offset, tail->eye_offset, params->distance);
+        tail->eye_distance = params->distance;
         tail->distance = params->height;
         follow->look_height = params->offset_scale;
-        qcopy(state->tail.unk140, tail->unk130);
+        qcopy(state->tail.saved_eye_offset, tail->eye_offset);
         fast_vec_scale(gravity_offset_or_yaw_direction, &hero.gravity_dir, -tail->distance);
         pos = &current_follow_camera_record->pos;
         fast_vec_add(state->follow.eye, &hero.motion.pos, gravity_offset_or_yaw_direction);
-        fast_vec_add(pos, state->follow.eye, tail->unk130);
+        fast_vec_add(pos, state->follow.eye, tail->eye_offset);
         fast_vec_scale(gravity_offset_or_yaw_direction, &hero.gravity_dir, -follow->look_height);
         fast_vec_add(state->follow.look_target, &hero.motion.pos, gravity_offset_or_yaw_direction);
-        qcopy(state->follow.unkD0, state->follow.look_target);
+        qcopy(state->follow.snap_look_target, state->follow.look_target);
         qcopy(follow->focus, &hero.motion.pos);
         qcopy(state->follow.offset, follow->focus);
         qcopy(state->position, pos);
-        qcopy(state->tail.snap.unk1F0, pos);
-        snap->unk200 = tail->unk15C - fast_vec_length(tail->unk130);
+        qcopy(state->tail.snap.shot_pos, pos);
+        snap->eye_distance_error = tail->eye_distance - fast_vec_length(tail->eye_offset);
         *(s32 *)&reset->unk34 = 0;
         reset->look_height = follow->look_height;
         {

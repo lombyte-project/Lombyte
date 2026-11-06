@@ -76,10 +76,10 @@ void initialize_menu_preview_scene(void) {
     menu_system.unkFC = help_text_buffer_start + 0xC1000;
     menu_system.unk100 = graphics_buffer_start + 0x11800;
     current_vu_chain = 0xA0000;
-    menu_system.unk104 = preview_workspace_start;
-    menu_system.unk10 = graphics_workspace_base;
+    menu_system.preview_workspace = preview_workspace_start;
+    menu_system.graphics_workspace = graphics_workspace_base;
     menu_system.help_text_buffer = help_text_buffer_start;
-    menu_system.unk10C = graphics_buffer_start;
+    menu_system.stream_buffer_base = graphics_buffer_start;
     initialize_menu_stream_buffers(1);
     vu1_init_chain();
     menu_system.saved_texture_start = gs_texture_allocation_start;

@@ -32,13 +32,13 @@ int build_pause_item_list(void) {
             MenuItemInfo *menu_item_definition = &menu_item_info[id];
             unsigned char b = item_text_variant[id];
             int           has_text_variant = b != 0;
-            pause_item_entry->a = menu_item_definition->unk38;
+            pause_item_entry->a = menu_item_definition->icon;
             pause_item_entry->b = has_text_variant << 2;
             pause_item_entry->c = 0;
             pause_item_entry->id = id;
             pause_item_entry->idx = i;
             pause_item_variant_values[item_count] =
-                b ? menu_item_definition->unk42 : menu_item_definition->unk40;
+                b ? menu_item_definition->alt_name_text : menu_item_definition->name_text;
             item_count++;
         }
     }

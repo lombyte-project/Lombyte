@@ -25,10 +25,10 @@ void load_scene_chunks_with_fade(s32 i) {
     s32 *offset_entry;
     if (pal_mode == PAL_MODE_DISABLED) {
         start_audio_stream_read(
-            D_L00_0016C860.buf, disc_table.unk1530[i].sector, disc_table.unk1530[i].size);
+            D_L00_0016C860.buf, disc_table.scene_chunk_archives[i].sector, disc_table.scene_chunk_archives[i].size);
     } else {
         start_audio_stream_read(
-            D_L00_0016C860.buf, disc_table.unk15A0[i].sector, disc_table.unk15A0[i].size);
+            D_L00_0016C860.buf, disc_table.scene_chunk_archives_alt[i].sector, disc_table.scene_chunk_archives_alt[i].size);
     }
     update_audio_stream_until_idle(0);
     fade_to_black(4);
@@ -61,10 +61,10 @@ void load_chunks_with_optional_fade(s32 i, s32 fade_frame_count) {
     s32 *offset_entry;
     if (pal_mode == PAL_MODE_DISABLED) {
         start_audio_stream_read(
-            H245610.buf, disc_table.unk12E8[i].sector, disc_table.unk12E8[i].size);
+            H245610.buf, disc_table.chunk_archives[i].sector, disc_table.chunk_archives[i].size);
     } else {
         start_audio_stream_read(
-            H245610.buf, disc_table.unk1338[i].sector, disc_table.unk1338[i].size);
+            H245610.buf, disc_table.chunk_archives_alt[i].sector, disc_table.chunk_archives_alt[i].size);
     }
     if (fade_frame_count != 0) {
         update_audio_stream_until_idle(0);

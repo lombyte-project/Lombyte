@@ -14,14 +14,14 @@ struct MapHdr;
  *
  * - level: update_menu_mission_list steps it to the next/previous level with missions;
  *   update_mission_list reads D_001A2B70[level]; draw_map_screen shows that
- *   map and passes it as menu_system.unkE4.
+ *   map and passes it as menu_system.travel_level.
  * - zoom/pan_x/pan_y are indexed by `loaded`; slot[] caches five decoded
  *   maps (find_map_entry_slot).
  * - mask: compose_bitmap_from_mask input when the shown level is the
  *   current one; save_map_coverage / downsample_map_coverage pack it into the level's
- *   0x800-byte save page (cleared instead when unk28 is zero).
- * - unk22C / unk234: stash_receive_data arguments when the next map is the
- *   current level's (draw_map_screen); unk234 is stored as slot_size.
+ *   0x800-byte save page (cleared instead when coverage_enabled is zero).
+ * - current_map_data / current_map_size: stash_receive_data arguments when the next map is the
+ *   current level's (draw_map_screen); current_map_size is stored as slot_size.
  * - The *_vram words are GS memory byte addresses (>> 8 = block) passed to
  *   register_8bit_texture as CBP (arg 5) and TBP0 (arg 6). tex0..tex2 are the TEX0
  *   values of the 128x128 images at hdr +0x10/+0x14/+0x18 (CLUT +0x20,
@@ -38,7 +38,7 @@ struct MapState {
     struct MapMarker *markers; /* 0x01C: drawn by draw_map_markers, may be null */
     struct MapIcon   *icons;   /* 0x020: icon list of the shown level */
     s32 unk24; /* 0x024: zero: update_map_zoom_and_pan and draw_map_overlay return early */
-    s32 unk28; /* 0x028: zero: the save page is cleared, not packed */
+    s32 coverage_enabled; /* 0x028: zero: the save page is cleared, not packed */
     s32 unk2C; /* 0x02C: see unk8 */
     struct {
         s32 unk0; /* draw_map_overlay draft: <0 skipped */
@@ -51,9 +51,9 @@ struct MapState {
     u8             pad1A4[0x80];
     s32            level;  /* 0x224: selected level 0..19 */
     s32            loaded; /* 0x228: index of the loaded map, -1 none */
-    s32            unk22C; /* 0x22C: stash_receive_data argument */
+    s32            current_map_data; /* 0x22C: stash_receive_data argument */
     s32            unk230; /* 0x230: compared with -current_level_index (draw_map_screen) */
-    s32            unk234; /* 0x234: stash_receive_data byte count */
+    s32            current_map_size; /* 0x234: stash_receive_data byte count */
     u8             pad238[0x4];
     struct MapHdr *hdr;            /* 0x23C */
     s32            map_image_vram; /* 0x240: TBP0 of the 512x512 composed map */

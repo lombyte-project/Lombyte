@@ -69,9 +69,9 @@ void update_menu_system(void) {
         update_fog();
         space_load_in_progress = 1;
         menu_system.help_text_buffer = 0;
-        menu_system.unk10C = 0;
-        menu_system.unk104 = 0;
-        menu_system.unk10 = 0;
+        menu_system.stream_buffer_base = 0;
+        menu_system.preview_workspace = 0;
+        menu_system.graphics_workspace = 0;
         game_mode = 0;
         return;
     }

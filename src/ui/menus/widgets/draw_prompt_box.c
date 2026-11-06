@@ -24,7 +24,7 @@ int draw_prompt_box(struct MenuScreen *prompt) {
     vu1_add_g_sregister(0x47, 0x2004B);
     setup_gif_paging(0);
     text = fallback_prompt_text;
-    prompt_text_selector = menu_system.unkD4;
+    prompt_text_selector = menu_system.save_prompt_variant;
     switch (prompt_text_selector) {
     case 0:
     case 1:

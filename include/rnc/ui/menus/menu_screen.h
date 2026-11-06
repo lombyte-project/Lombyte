@@ -350,7 +350,7 @@ struct MenuScreen {
     s32 (*draw)(struct MenuScreen *);        /* 0x04 */
     void (*enter)(struct MenuScreen *, s32); /* 0x08 */
     void (*leave)(struct MenuScreen *, s32); /* 0x0C */
-    s32 unk10;                               /* 0x10: bit 2 set by enter_menu_help_text */
+    s32 flags;                               /* 0x10: MENU_SCREEN_HIDDEN while the help text loads */
     s32 moby;   /* 0x14: its menu moby D_001D5D90[i]; menu sounds play on it */
     s32 x;      /* 0x18: left edge */
     s32 y;      /* 0x1C: top edge */

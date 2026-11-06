@@ -16,11 +16,11 @@ void start_indexed_disc_stream(s32 i) {
     if (i < 0)
         return;
     if (pal_mode) {
-        sector = disc_table.unk1A10[i].sector;
-        stream_size = disc_table.unk1A10[i].size;
+        sector = disc_table.streams_alt[i].sector;
+        stream_size = disc_table.streams_alt[i].size;
     } else {
-        sector = disc_table.unk19F8[i].sector;
-        stream_size = disc_table.unk19F8[i].size;
+        sector = disc_table.streams[i].sector;
+        stream_size = disc_table.streams[i].size;
     }
     hero_ptr = &hero;
     if (hero_ptr->health.hp == 0) {

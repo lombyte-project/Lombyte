@@ -29,7 +29,7 @@ s32 release_menu_preview_objects(s32 preview_address) {
     resources->loaded_animation[1] = 0xFF;
     resources->read_buffer_index = 0;
     clear_preview_resource_bindings();
-    resource_slot = resources->unkB0;
+    resource_slot = resources->preview_resource_buffers;
     do {
         resources_remaining -= 1;
         *resource_slot = release_menu_stream_buffer(*resource_slot);

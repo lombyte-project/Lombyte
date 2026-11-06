@@ -105,37 +105,37 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
             /* This action passes the low halfword; the other indexed actions pass the full word. */
             message_index = menu->data.list.items[menu->data.list.selected].param.half.hi;
             if (message_index != 0) {
-                menu_system.unkEC = (s32)menu_action_messages[message_index];
+                menu_system.action_message = (s32)menu_action_messages[message_index];
             }
             menu_system.close_request = 5;
-            menu_system.unkF0 = menu_system.current;
+            menu_system.travel_page = menu_system.current;
             menu_system.unkF4 = 0;
-            menu_system.unkE4 = menu->data.list.items[menu->data.list.selected].param.half.lo;
+            menu_system.travel_level = menu->data.list.items[menu->data.list.selected].param.half.lo;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
             return 0;
         case MENU_ACTION_REQUEST_CLOSE_WITH_WORD_PAYLOAD:
             menu_system.unkF4 = 2;
-            menu_system.unkF0 = menu_system.current;
+            menu_system.travel_page = menu_system.current;
             menu_system.close_request = 3;
-            menu_system.unkE4 = menu->data.list.items[menu->data.list.selected].param.value;
+            menu_system.travel_level = menu->data.list.items[menu->data.list.selected].param.value;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
             return 0;
         case MENU_ACTION_REQUEST_CLOSE_4_WITH_WORD_PAYLOAD:
             menu_system.unkF4 = 2;
-            menu_system.unkF0 = menu_system.current;
+            menu_system.travel_page = menu_system.current;
             menu_system.close_request = 4;
-            menu_system.unkE4 = menu->data.list.items[menu->data.list.selected].param.value;
+            menu_system.travel_level = menu->data.list.items[menu->data.list.selected].param.value;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
             return 0;
         case MENU_ACTION_REQUEST_CLOSE_6_WITH_WORD_PAYLOAD:
             menu_system.unkF4 = 2;
-            menu_system.unkF0 = menu_system.current;
+            menu_system.travel_page = menu_system.current;
             menu_system.close_request = 6;
-            menu_system.unkE4 = menu->data.list.items[menu->data.list.selected].param.value;
+            menu_system.travel_level = menu->data.list.items[menu->data.list.selected].param.value;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
             return 0;
         case MENU_ACTION_REQUEST_CLOSE_PRESERVING_PAYLOAD:
-            menu_system.unkF0 = menu_system.current;
+            menu_system.travel_page = menu_system.current;
             menu_system.unkF4 = 2;
             menu_system.close_request = 7;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);

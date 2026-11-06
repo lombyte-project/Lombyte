@@ -14,7 +14,7 @@ void save_map_coverage(s32 map_coverage_buffer) {
     s32 coverage_save_result;
 
     noop_memory_callback();
-    if (level_map_selection.unk28 == 0) {
+    if (level_map_selection.coverage_enabled == 0) {
         fill_transfer_words(map_coverage_buffer, 0, 0x800);
         return;
     }

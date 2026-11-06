@@ -41,7 +41,7 @@ s32 process_global_state_flags(void) {
         for (i = 0; i < 4; i++) {
             backup[i] = (&gold_bolts_collected[LEVEL_VELDIN2 * 4])[i];
         }
-        memcard_restore_game(menu_system.unkE0);
+        memcard_restore_game(menu_system.save_slot);
         item_unlocked[0x1D] = old_value;
         for (i = 0; i < 4; i++) {
             (&gold_bolts_collected[LEVEL_VELDIN2 * 4])[i] = backup[i];

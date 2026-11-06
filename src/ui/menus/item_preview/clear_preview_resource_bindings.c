@@ -17,8 +17,8 @@ void clear_preview_resource_bindings(void) {
     register s32            resource_count;
     register s32            resource_end;
 
-    resource_index = menu_system.unkA8;
-    if (resource_index < (resource_index + menu_system.unkAC)) {
+    resource_index = menu_system.preview_resource_first;
+    if (resource_index < (resource_index + menu_system.preview_resource_count)) {
         u8 *class_slots = resident_class_slot_by_id;
         u8 *class_resources = (u8 *)moby_class_resources;
         u8 *bindings = preview_resource_bindings;
@@ -32,10 +32,10 @@ void clear_preview_resource_bindings(void) {
             animation_address = class_resource_address + (binding->animation_index * 4);
             *(s32 *)(animation_address + 0x48) = 0;
             binding += 1;
-            resource_first = menu_system.unkA8;
-            resource_count = menu_system.unkAC;
+            resource_first = menu_system.preview_resource_first;
+            resource_count = menu_system.preview_resource_count;
             resource_end = resource_first + resource_count;
         } while (resource_index < resource_end);
     }
-    menu_system.unkAC = 0;
+    menu_system.preview_resource_count = 0;
 }
