@@ -45,10 +45,10 @@ struct DiscTable {
        known field, not a proven count of valid archives. */
     struct DiscFile render_archives[201];
     s32             music_50000[40][6]; /* 0xF00, tracks 50000.., one location per language */
-    struct DiscFile unk12C0;            /* 0x12C0 */
+    struct DiscFile startup_archive;            /* 0x12C0 */
     struct DiscFile level_archives[4];  /* 0x12C8, by level index */
-    struct DiscFile unk12E8[10];       /* 0x12E8, overlays: x of an x/y pair picked by D_0015ED80 */
-    struct DiscFile unk1338[10];       /* 0x1338, the y half of the 0x12E8 pair */
+    struct DiscFile chunk_archives[10];       /* 0x12E8, overlays: x of an x/y pair picked by D_0015ED80 */
+    struct DiscFile chunk_archives_alt[10];       /* 0x1338, the y half of chunk_archives */
     struct DiscFile loading_slides[6]; /* 0x1388, one per language */
     struct DiscFile unk13B8;           /* 0x13B8 */
     struct DiscFile music_40000[36];   /* 0x13C0, music tracks 40000.. */
@@ -58,18 +58,18 @@ struct DiscTable {
     u8              pad_14F0[0x8];
     struct DiscFile wad_chunks[6]; /* 0x14F8, level wad chunks */
     struct DiscFile help_text; /* 0x1528, per-language archive read by update_menu_help_text_load */
-    struct DiscFile unk1530[14];     /* 0x1530, overlays: x of an x/y pair picked by D_0015ED80 */
-    struct DiscFile unk15A0[14];     /* 0x15A0, the y half of the 0x1530 pair */
+    struct DiscFile scene_chunk_archives[14];     /* 0x1530, overlays: x of an x/y pair picked by D_0015ED80 */
+    struct DiscFile scene_chunk_archives_alt[14];     /* 0x15A0, the y half of scene_chunk_archives */
     struct DiscFile animation_table; /* 0x1610, read with animation_asset_read_active set */
     struct DiscFile music_60000[62]; /* 0x1618, music tracks 60000.. */
-    struct DiscFile unk1808[19];     /* 0x1808, overlays: x of an x/y pair picked by D_0015ED80 */
-    struct DiscFile unk18A0[19];     /* 0x18A0, the y half of the 0x1808 pair */
+    struct DiscFile scene_movies[19];     /* 0x1808, overlays: x of an x/y pair picked by D_0015ED80 */
+    struct DiscFile scene_movies_alt[19];     /* 0x18A0, the y half of scene_movies */
     struct DiscFile movies[12];      /* 0x1938, level transition movies */
     struct DiscFile movies_alt[12];  /* 0x1998, picked by the video mode flag */
-    struct DiscFile unk19F8[3];      /* 0x19F8, overlays: x/y pair picked by D_0015ED80 */
-    struct DiscFile unk1A10[3];      /* 0x1A10, the y half of the 0x19F8 pair */
-    struct DiscFile unk1A28[5];      /* 0x1A28, overlays: x/y pair picked by D_0015ED80 */
-    struct DiscFile unk1A50[5];      /* 0x1A50, the y half of the 0x1A28 pair */
+    struct DiscFile streams[3];      /* 0x19F8, overlays: x/y pair picked by D_0015ED80 */
+    struct DiscFile streams_alt[3];      /* 0x1A10, the y half of streams */
+    struct DiscFile queued_movies[5]; /* 0x1A28, overlays: x/y pair picked by D_0015ED80 */
+    struct DiscFile queued_movies_alt[5]; /* 0x1A50, the y half of queued_movies */
     struct DiscFile start_movies[4]; /* 0x1A78, played by start_level */
     struct DiscFile start_movies_alt[4]; /* 0x1A98, while D_0015ED80 is set */
     u8              pad_1AB8[0xEB0];

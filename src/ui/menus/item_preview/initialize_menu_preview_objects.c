@@ -31,14 +31,14 @@ int initialize_menu_preview_objects(struct MenuScreen *preview) {
         struct MenuSystem *g = &menu_system;
 
         active_class_resource_index = -1;
-        g->unk11C = -1;
-        g->unk120 = -1;
+        g->preview_requested_class = -1;
+        g->preview_loaded_class = -1;
         g->stream_buffer[0] = acquire_menu_stream_buffer(1);
         g->stream_buffer[1] = acquire_menu_stream_buffer(1);
         g->loaded_animation[0] = 0xFF;
         g->loaded_animation[1] = 0xFF;
         g->read_buffer_index = 0;
-        resource_buffer_slot = g->unkB0;
+        resource_buffer_slot = g->preview_resource_buffers;
         for (i = 2; i >= 0; i--) {
             *resource_buffer_slot = acquire_menu_stream_buffer(0);
             resource_buffer_slot++;

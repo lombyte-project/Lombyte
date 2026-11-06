@@ -26,12 +26,12 @@ typedef struct MenuItemInfo {
     u8  pad4[4];
     s32 slot; /* 0x08: equip slot the item goes in */
     u8  padC[0x2C];
-    u16 unk38;         /* 0x38: copied into the pause item list */
+    u16 icon;         /* 0x38: copied into the pause item list */
     s16 preview_class; /* 0x3A: preview moby class, -1 for none */
     u8  pad3C[4];
-    s16 unk40; /* 0x40: pause list value for the plain text */
-    s16 unk42; /* 0x42: pause list value when item_text_variant is set */
-    s16 unk44; /* 0x44: copied into the filtered item list */
+    s16 name_text; /* 0x40: pause list value for the plain text */
+    s16 alt_name_text; /* 0x42: pause list value when item_text_variant is set */
+    s16 description_text; /* 0x44: copied into the filtered item list */
     u8  pad46[6];
 } MenuItemInfo;
 

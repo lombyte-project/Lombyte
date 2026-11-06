@@ -35,12 +35,12 @@ s32 build_filtered_menu_item_list(void) {
         }
         if (item_available[id] != 0) {
             item_info = &menu_item_info[id];
-            filtered_menu_item_records[filtered_item_count].icon = item_info->unk38;
+            filtered_menu_item_records[filtered_item_count].icon = item_info->icon;
             filtered_menu_item_records[filtered_item_count].unk2 = 0;
             filtered_menu_item_records[filtered_item_count].unk4 = 0;
             filtered_menu_item_records[filtered_item_count].id = id;
-            gadget_help_name_text_ids[filtered_item_count] = item_info->unk40;
-            gadget_help_text_ids[filtered_item_count] = item_info->unk44;
+            gadget_help_name_text_ids[filtered_item_count] = item_info->name_text;
+            gadget_help_text_ids[filtered_item_count] = item_info->description_text;
             filtered_menu_item_records[filtered_item_count].index = i;
             filtered_item_count++;
         }

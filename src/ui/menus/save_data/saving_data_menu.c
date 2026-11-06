@@ -115,7 +115,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
             if ((pad_buttons & 0x40) && (memory_card_state.card[0].type == 2)) {
                 new_var = (((u8 *)&memory_card_state) + (selected_slot * 0x1C)) + 0x20;
                 if ((*((s32 *)new_var)) != (-1)) {
-                    menu_system.unkD4 = 0;
+                    menu_system.save_prompt_variant = 0;
                     menu_system.next = (new_var = (u8 *)&save_confirm_page);
                     D_001D2640[0] = menu->data.save.slot;
                 } else {

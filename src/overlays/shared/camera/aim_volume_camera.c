@@ -151,21 +151,21 @@ run:
         state = rig;
         reset = &state->reset;
         qcopy(rec_pos, pos);
-        tail->unk15C = params->distance;
+        tail->eye_distance = params->distance;
         tail->distance = params->height;
         follow->look_height = params->offset_scale;
         fast_vec_scale(gravity_offset, &hero.gravity_dir, -tail->distance);
         fast_vec_add(state->follow.eye, &hero.motion.pos, gravity_offset);
-        fast_vec_sub(tail->unk130, pos, state->follow.eye);
-        qcopy(state->tail.unk140, tail->unk130);
+        fast_vec_sub(tail->eye_offset, pos, state->follow.eye);
+        qcopy(state->tail.saved_eye_offset, tail->eye_offset);
         fast_vec_scale(gravity_offset, &hero.gravity_dir, -follow->look_height);
         fast_vec_add(state->follow.look_target, &hero.motion.pos, gravity_offset);
-        qcopy(state->follow.unkD0, state->follow.look_target);
+        qcopy(state->follow.snap_look_target, state->follow.look_target);
         qcopy(follow->focus, &hero.motion.pos);
         qcopy(state->follow.offset, follow->focus);
         qcopy(state->position, rec_pos);
-        qcopy(state->tail.snap.unk1F0, rec_pos);
-        *(s32 *)&snap->unk200 = 0;
+        qcopy(state->tail.snap.shot_pos, rec_pos);
+        *(s32 *)&snap->eye_distance_error = 0;
         *(s32 *)&reset->unk34 = 0;
         reset->look_height = follow->look_height;
         {

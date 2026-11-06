@@ -137,11 +137,11 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
             if (hero.items[0].item_id != 0 && oclass != hero.items[0].item_id) {
                 noop_callback_q(0, 0);
             }
-            if (oclass != menu_system.unk11C) {
+            if (oclass != menu_system.preview_requested_class) {
                 select_world_object_resource_tables(oclass, menu_system.resource_table_toggle == 0);
                 menu_system.last_resource_table_toggle = active_decode_buffer;
-                menu_system.unk140 = oclass;
-                menu_system.unk120 = oclass;
+                menu_system.resource_table_class = oclass;
+                menu_system.preview_loaded_class = oclass;
                 ((struct PreviewClassResource *)
                      moby_class_resources[resident_class_slot_by_id[oclass]])
                     ->state_0d = 0;

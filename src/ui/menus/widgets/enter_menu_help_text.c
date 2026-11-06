@@ -29,7 +29,7 @@ s32 enter_menu_help_text(struct MenuScreen *menu) {
     menu_system_state = &menu_system;
     for (i = 0; i < 5; i++) {
         if (menu_stream_buffers[i].address != 0 &&
-            (u32)menu_stream_buffers[i].address < (u32)menu_system_state->unk10C) {
+            (u32)menu_stream_buffers[i].address < (u32)menu_system_state->stream_buffer_base) {
             menu_stream_buffers[i].flags |= MENU_STREAM_BUFFER_ALLOCATED;
         }
     }
@@ -43,7 +43,7 @@ s32 enter_menu_help_text(struct MenuScreen *menu) {
             menu->data.help.load_state = 3;
         }
     }
-    menu->unk10 |= MENU_SCREEN_HIDDEN;
+    menu->flags |= MENU_SCREEN_HIDDEN;
     return 0;
 }
 

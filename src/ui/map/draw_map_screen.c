@@ -98,10 +98,10 @@ s32 draw_map_screen(struct MenuScreen *screen) {
             menu_system.next = (struct MenuPage *)map_cross_destination_page;
         }
         if ((controller_state.pressed_unmasked & PAD_CIRCLE) && level_map_selection.level != 0) {
-            menu_system.unkF0 = (struct MenuPage *)map_circle_destination_page;
+            menu_system.travel_page = (struct MenuPage *)map_circle_destination_page;
             menu_system.unkF4 = 0xB;
             menu_system.close_request = 3;
-            menu_system.unkE4 = level_map_selection.level;
+            menu_system.travel_level = level_map_selection.level;
             allocate_voice_for_target_entry(0, 0x11, screen->moby);
             return 0;
         }
@@ -213,11 +213,11 @@ s32 draw_map_screen(struct MenuScreen *screen) {
                 k = (current_level_index + level_map_selection.unk230 == 0) ? 0 : 0x100;
                 if (k == next) {
                     stash_receive_data(level_map_selection.slot[pick],
-                                       level_map_selection.unk22C,
+                                       level_map_selection.current_map_data,
                                        0,
-                                       level_map_selection.unk234,
+                                       level_map_selection.current_map_size,
                                        0);
-                    level_map_selection.slot_size[pick] = level_map_selection.unk234;
+                    level_map_selection.slot_size[pick] = level_map_selection.current_map_size;
                 } else {
                     if (next & 0x100) {
                         map_read_entry = &D_00138438[next ^ 0x100];

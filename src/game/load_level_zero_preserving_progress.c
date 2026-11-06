@@ -100,8 +100,8 @@ void load_level_zero_preserving_progress(s32 slot) {
     if (slot >= 0) {
         D_0013D290.slot = slot;
         D_0013D290.entries[slot].unk0 = 0;
-        memcard_make_whole_save(menu_system.unkE0);
-        D_0013D290.unkEC = menu_system.unkE0;
+        memcard_make_whole_save(menu_system.save_slot);
+        D_0013D290.unkEC = menu_system.save_slot;
         D_0013D290.unkC0 = 0;
         if (D_0013D290.unkDC < 0) {
             D_0013D290.unkE0 = 0;

@@ -831,11 +831,11 @@ void queue_scene_movie_with_game_language(s32 i) {
     if (i < 0)
         return;
     if (D_0015ED80) {
-        scene_movie_sector = disc_table.unk18A0[i].sector;
-        scene_movie_size = disc_table.unk18A0[i].size;
+        scene_movie_sector = disc_table.scene_movies_alt[i].sector;
+        scene_movie_size = disc_table.scene_movies_alt[i].size;
     } else {
-        scene_movie_sector = disc_table.unk1808[i].sector;
-        scene_movie_size = disc_table.unk1808[i].size;
+        scene_movie_sector = disc_table.scene_movies[i].sector;
+        scene_movie_size = disc_table.scene_movies[i].size;
     }
     hero_ptr = &hero;
     if (hero_ptr->health.hp == 0) {
@@ -853,11 +853,11 @@ void queue_language_zero_movie(s32 i) {
     if (i < 0)
         return;
     if (D_0015ED80) {
-        queued_movie_sector = disc_table.unk1A50[i].sector;
-        queued_movie_size = disc_table.unk1A50[i].size;
+        queued_movie_sector = disc_table.queued_movies_alt[i].sector;
+        queued_movie_size = disc_table.queued_movies_alt[i].size;
     } else {
-        queued_movie_sector = disc_table.unk1A28[i].sector;
-        queued_movie_size = disc_table.unk1A28[i].size;
+        queued_movie_sector = disc_table.queued_movies[i].sector;
+        queued_movie_size = disc_table.queued_movies[i].size;
     }
     prepare_movie_playback(queued_movie_sector, queued_movie_size, 0);
 }

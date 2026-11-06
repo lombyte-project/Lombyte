@@ -33,8 +33,8 @@ void load_preview_resource_bindings(s32 first_resource, s32 resource_count) {
 
     count = resource_count;
     resource_index = 0;
-    menu_system.unkA8 = first_resource;
-    menu_system.unkAC = count;
+    menu_system.preview_resource_first = first_resource;
+    menu_system.preview_resource_count = count;
     /* Testing the index, not count, lets combine drop the constant note on
        its zero, so its live range is not doubled. */
     if (resource_index < count) {
@@ -62,7 +62,7 @@ void load_preview_resource_bindings(s32 first_resource, s32 resource_count) {
             compressed_size = stash_get_reserved_qwords(resource_id) * 0x10;
             buffer_offset = (resource_index + buffer_skip) * 4;
             resource_index += 1;
-            buffer_address = *((s32 *)((u8 *)menu_system.unkB0 + buffer_offset));
+            buffer_address = *((s32 *)((u8 *)menu_system.preview_resource_buffers + buffer_offset));
             read_address =
                 (buffer_address + get_menu_stream_buffer_size(buffer_address)) - compressed_size;
             stash_receive_data(read_address, resource_id, 0, -1, 0);

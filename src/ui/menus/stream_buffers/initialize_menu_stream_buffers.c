@@ -24,7 +24,7 @@ void initialize_menu_stream_buffers(s32 mode) {
     struct MenuStreamBuffer *descriptor;
 
     primary_address = menu_system.help_text_buffer;
-    secondary_address = menu_system.unk10C;
+    secondary_address = menu_system.stream_buffer_base;
     if (mode == MENU_STREAM_MODE_SINGLE_PRIMARY_BUFFER) {
         primary_count = 1;
         secondary_count = 0;

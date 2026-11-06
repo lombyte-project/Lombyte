@@ -116,7 +116,7 @@ void render_level_effects_and_screen_sprites(void) {
     update_camera_view_matrices();
     for (effect_slot_index = 0; effect_slot_index < slot_count; effect_slot_index++) {
         if (panel_slot_enabled[effect_slot_index] != 0 && panel_slots[effect_slot_index] != 0 &&
-            (effect_slot_index != 6 || menu_system.unkD8 != 0)) {
+            (effect_slot_index != 6 || menu_system.goodies_tab_shown != 0)) {
             draw_moby_list(panel_slots[effect_slot_index], 1);
         }
     }
@@ -125,7 +125,7 @@ void render_level_effects_and_screen_sprites(void) {
     for (projection_slot_index = 0; projection_slot_index < slot_count; projection_slot_index++) {
         projected_slot = panel_slots[projection_slot_index];
         if (projected_slot == 0 || panel_slot_enabled[projection_slot_index] == 0 ||
-            (projection_slot_index == 6 && menu_system.unkD8 == 0)) {
+            (projection_slot_index == 6 && menu_system.goodies_tab_shown == 0)) {
             continue;
         }
         projected_frame = projected_slot->frame;
@@ -179,7 +179,7 @@ void render_level_effects_and_screen_sprites(void) {
             if (panel_slot_enabled[draw_slot_index] == 0 || panel->draw == 0) {
                 continue;
             }
-            if (draw_slot_index == 6 && menu_system.unkD8 == 0) {
+            if (draw_slot_index == 6 && menu_system.goodies_tab_shown == 0) {
                 continue;
             }
             if (pass == 0 && !(projected_width_or_panel_flags & 2)) {
@@ -274,7 +274,7 @@ void render_level_effects_and_screen_sprites(void) {
     setup_gif_paging(0);
     for (final_slot_index = 0; final_slot_index < slot_count; final_slot_index++) {
         if (panel_slot_enabled[final_slot_index] != 0 &&
-            (final_slot_index != 6 || menu_system.unkD8 != 0)) {
+            (final_slot_index != 6 || menu_system.goodies_tab_shown != 0)) {
             draw_menu_flashing_panel(panel_slots[final_slot_index]);
         }
     }
