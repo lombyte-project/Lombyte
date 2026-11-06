@@ -309,7 +309,7 @@ void frog_update(unsigned char *moby) {
         frog_instance_vars->target_selection_frame_slot = spawn_count % 8;
         l06_frog_frame_slot_assignment_count = spawn_count + 1;
         if (divisor != 0) {
-            MOBY(moby)->unkB4 = MOBY(moby)->unkB4 / divisor;
+            MOBY(moby)->bolts = MOBY(moby)->bolts / divisor;
         }
         MOBY(moby)->flags |= 0x100;
         frog_instance_vars->unk58 = truncate_float_to_s32(8.0f);

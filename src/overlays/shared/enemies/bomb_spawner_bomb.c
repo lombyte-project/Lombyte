@@ -157,15 +157,15 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
             target->unk68 = 0;
             target->unk6C = 0;
         }
-        if (spawner_moby->unkB4 < current_moby->unkB4) {
-            current_moby->unkB4 = spawner_moby->unkB4;
+        if (spawner_moby->bolts < current_moby->bolts) {
+            current_moby->bolts = spawner_moby->bolts;
         }
-        if (current_moby->unkB4 <= 0) {
-            current_moby->unkB4 = 1;
+        if (current_moby->bolts <= 0) {
+            current_moby->bolts = 1;
         }
-        spawner_moby->unkB4 -= current_moby->unkB4;
-        if (spawner_moby->unkB4 < 0) {
-            spawner_moby->unkB4 = 1;
+        spawner_moby->bolts -= current_moby->bolts;
+        if (spawner_moby->bolts < 0) {
+            spawner_moby->bolts = 1;
         }
         current_moby->collision = ((SpawnClass *)current_moby->pclass)->collision;
         copy_hero_moby_field_38(current_moby);

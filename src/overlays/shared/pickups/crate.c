@@ -386,11 +386,11 @@ void crate_update(struct Moby *moby) {
             s16 hit_moby_class_id = hit_contact->hit.s.moby->oclass;
 
             if (hit_moby_class_id == 0x2CD || hit_moby_class_id == 0x22C) {
-                s16 saved = moby->unkB4;
+                s16 saved = moby->bolts;
 
-                moby->unkB4 = 0;
+                moby->bolts = 0;
                 crate_drop_bolts(moby);
-                moby->unkB4 = saved;
+                moby->bolts = saved;
                 break;
             }
         }
@@ -429,8 +429,8 @@ void crate_update(struct Moby *moby) {
             moby->collision = 0;
             moby->flags &= ~0x1000;
             moby->visible = 0;
-            if (moby->unkB4 >= 2) {
-                moby->unkB4 = 1;
+            if (moby->bolts >= 2) {
+                moby->bolts = 1;
             }
             moby->state = CRATE_STATE_WAIT_RESPAWN;
             if (D_0015ED84 == 0x12) {
@@ -1004,8 +1004,8 @@ void crate_drop_bolts(u8 *crate_moby) {
             }
         }
     }
-    if (MOBY(crate_moby)->unkB4)
-        MOBY(crate_moby)->unkB4 = 0;
+    if (MOBY(crate_moby)->bolts)
+        MOBY(crate_moby)->bolts = 0;
     mark_moby_for_removal_cf(crate_moby, 0x100, -1);
 }
 

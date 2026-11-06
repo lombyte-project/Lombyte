@@ -87,7 +87,7 @@ struct Moby {
     u8  mission;        /* 0xB0: index into the level's D_0014C050 row (0xFF: not spawned) */
     u8  padB1;
     u16 save_id; /* index into the level collected[]/killed[] tables and save bits D_0014C190[level][id >> 5] */
-    s16 unkB4;
+    s16 bolts; /* bolts it drops; spawners split theirs across the mobys they spawn */
     u8  padB6[2];
     void *
         parent; /* 0xB8: spawner (bolt source record); its byte 0xB1 is a per-level id (FUN_L00_002a6b70) */

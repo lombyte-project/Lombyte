@@ -695,7 +695,7 @@ typedef struct {
 } Level12VendorData;
 
 void remove_blarg_trooper_and_attachment(struct Moby *moby) {
-    moby->unkB4 = 0;
+    moby->bolts = 0;
     FUN_L00_00257470(moby, 0, -1);
     if (((Level12VendorData *)moby->pvars)->child != 0) {
         mark_moby_for_removal(((Level12VendorData *)moby->pvars)->child);

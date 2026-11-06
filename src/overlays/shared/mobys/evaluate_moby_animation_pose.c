@@ -121,11 +121,11 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_inde
     int            cnt;
     unsigned char *g;
 
-    amt = MOBY(moby)->unkB4;
+    amt = MOBY(moby)->bolts;
     debug_print(D_L00_001E8F00,
                 MOBY(moby)->oclass,
                 ((short)MOBY(moby)->save_id),
-                MOBY(moby)->unkB4,
+                MOBY(moby)->bolts,
                 *(short *)(moby + 0xB6));
     if (moby[0xB1] == 0xFE) {
         return;
