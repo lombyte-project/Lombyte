@@ -22,9 +22,9 @@ typedef struct {
 } VendorList;
 
 typedef struct {
-    s32 sound;
-    u8  pad4[0xC];
-    s32 message;
+    s32 sound;   /* 0x00: copied to the item's vendor row */
+    f32 unk4[3]; /* 0x04 */
+    s32 message; /* 0x10: help text shown for the item */
 } VendorSound;
 
 typedef struct {
