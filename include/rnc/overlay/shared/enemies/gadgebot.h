@@ -3,6 +3,14 @@
 
 #include "types.h"
 
+/* What the hero's four-slot HUD selector tells the gadgebots in range to do (D_00141610). */
+enum GadgebotCommand {
+    GADGEBOT_COMMAND_FOLLOW_HERO = 1,
+    GADGEBOT_COMMAND_STAND_AND_FACE_HERO = 2,
+    GADGEBOT_COMMAND_SEEK_AND_ATTACK_TARGET = 3,
+    GADGEBOT_COMMAND_SEEK_INTERACTION_TARGET = 4
+};
+
 void gadgebot_update() __asm__("FUN_L06_002f0040");
 
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_GADGEBOT_H */
