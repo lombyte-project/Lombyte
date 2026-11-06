@@ -14,7 +14,7 @@ s32                       pause_menu_entry_input(s32 object_address) __asm__("FU
 
 s32 pause_menu_entry_input(s32 object_address) {
     s32 flags_snapshot = ((s32)((volatile struct PadState *)&controller_state)->pressed_unmasked);
-    s32 owner_unk38_address;
+    s32 back_page_address;
     struct GameState *game_state;
     if (flags_snapshot & 0xD00) {
         if (*(s32 *)(object_address + 0x30) & 0x20) {
@@ -27,10 +27,10 @@ s32 pause_menu_entry_input(s32 object_address) {
             D_L00_00184414 = current_level_index;
         }
         game_state = &D_L00_001B9CF0;
-        owner_unk38_address = (s32)game_state->owner->unk38;
-        if (owner_unk38_address != 0) {
-            game_state->unk8 = (struct Own *)owner_unk38_address;
-        } else if (game_state->unk124 == 0) {
+        back_page_address = (s32)game_state->owner->back;
+        if (back_page_address != 0) {
+            game_state->next = (struct Own *)back_page_address;
+        } else if (game_state->close_locked == 0) {
             return -1;
         }
     }

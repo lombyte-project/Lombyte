@@ -233,7 +233,7 @@ void run_level_main_loop(void) {
         run_state_handler();
         if (memory_card_state.state >= MEMCARD_REQUEST_FORMAT ||
             memory_card_state.pending_state >= MEMCARD_QUERY_INFO) {
-            if (D_L00_001B9CF0.unk13C == 0) {
+            if (D_L00_001B9CF0.memcard_icon_hidden == 0) {
                 int   rotation_period_frames = 55;
                 float size;
                 float sprite_rotation_radians;
@@ -257,7 +257,7 @@ void run_level_main_loop(void) {
                 do_gif_paging();
             }
         }
-        D_L00_001B9CF0.unk13C = 0;
+        D_L00_001B9CF0.memcard_icon_hidden = 0;
         flush_debug_text_queue();
         noop_main_callback(level_frame_callback_args, 0x10);
         noop_main_callback(level_frame_callback_args, 0x10);
@@ -341,13 +341,13 @@ typedef struct {
     s32          second_raw;
     u8           pad18[0xc];
     s32          active;
-    s32          unk28;
+    s32          coverage_enabled; /* 0x28: set while the level has a map archive */
     u8           pad2c[4];
     MapChunkSlot slots[8];
     u8           padB0[4];
-    f32          unkB4[20];
-    s32          unk104[20];
-    s32          map_parameter_pair_second_values[20];
+    f32          zoom[20];  /* 0xB4: per map, the level copy of struct MapState */
+    s32          pan_x[20]; /* 0x104 */
+    s32          pan_y[20]; /* 0x154 */
     u8           pad1a4[0x80];
     s32          archive_index;
     s32          load_state;
@@ -408,10 +408,9 @@ void initialize_level_map_archive(void) {
     {
         int i;
         for (i = 0; i < 20; i++) {
-            D_L00_001841F0.unk104[i] = map_parameter_pair_defaults[i * 2];
-            D_L00_001841F0.unkB4[i] = 0.65f;
-            D_L00_001841F0.map_parameter_pair_second_values[i] =
-                map_parameter_pair_defaults[i * 2 + 1];
+            D_L00_001841F0.pan_x[i] = map_parameter_pair_defaults[i * 2];
+            D_L00_001841F0.zoom[i] = 0.65f;
+            D_L00_001841F0.pan_y[i] = map_parameter_pair_defaults[i * 2 + 1];
         }
     }
     level = current_level_index;
@@ -442,7 +441,7 @@ void initialize_level_map_archive(void) {
     }
     if (file->size != 0) {
         state = &D_L00_001841F0;
-        state->unk28 = 1;
+        state->coverage_enabled = 1;
         heap_tag = (int)render_archive_source_file;
         archive_base = ((int **)&D_L00_00173E08)[0];
         archive = (int *)((int)archive_base + 0x9A800);
@@ -492,7 +491,7 @@ void initialize_level_map_archive(void) {
         D_L00_001841F0.scratch_data = 0;
         D_L00_001841F0.mask_data = 0;
         D_L00_001841F0.second_data = 0;
-        D_L00_001841F0.unk28 = 0;
+        D_L00_001841F0.coverage_enabled = 0;
     }
 }
 
