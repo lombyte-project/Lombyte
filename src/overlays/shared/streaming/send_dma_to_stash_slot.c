@@ -4,11 +4,12 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/stash_00295010.c: func_L00_00295010), where it is exact; names translated to the US level program. */
 
+/* The level copy of struct StashEntry (rnc/streaming/stash/stash.h). */
 typedef struct {
-    char *base;
-    int   limit;
-    int   unk8;
-    int   unkC;
+    char *base;  /* iop_address */
+    int   limit; /* reserved_qwords */
+    int   tag;
+    int   pad_0C;
 } StashSlot;
 
 extern StashSlot l00_stash_slots[] __asm__("D_L00_001C12D8");
