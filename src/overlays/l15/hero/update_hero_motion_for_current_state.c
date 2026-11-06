@@ -423,12 +423,6 @@ extern void update_hero_water_height_and_bobbing(void) __asm__("FUN_L00_00227d40
 #define PD controller_state
 extern struct PlayerJointTable D_L15_0017AC80;
 #define AN D_L15_0017AC80
-struct VoiceSlot {
-    u8               pad0[0x74];
-    u8               b74;
-    u8               pad75[0x13];
-    struct MobyView *pm88;
-};
 
 extern s32 D_L15_001612D0;
 extern s32 D_L15_001612D8;
@@ -704,9 +698,9 @@ void update_hero_motion_for_current_state(void) {
         } else {
             s32 voice_slot_index = hero.pack_swim_voice;
             if (voice_slot_index != -1) {
-                struct VoiceSlot *e =
-                    (struct VoiceSlot *)(((u8 *)&voice_pool) + voice_slot_index * 0x70);
-                if (e->pm88 == (struct MobyView *)hero.moby && e->b74 != 0) {
+                VoicePoolWindow *e =
+                    (VoicePoolWindow *)(((u8 *)&voice_pool) + voice_slot_index * 0x70);
+                if (e->voice.owner == (VoiceMoby *)hero.moby && e->voice.state != 0) {
                     release_voice_slot(voice_slot_index);
                 }
             }
@@ -2202,9 +2196,9 @@ void update_hero_motion_for_current_state(void) {
         f32 sp;
         if (hero_slot_item_id(3) == 2) {
             if (hero.voice_slot4 != -1) {
-                struct VoiceSlot *e =
-                    (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.voice_slot4 * 0x70);
-                if (e->pm88 == (struct MobyView *)hero.moby && e->b74 != 0) {
+                VoicePoolWindow *e =
+                    (VoicePoolWindow *)(((u8 *)&voice_pool) + hero.voice_slot4 * 0x70);
+                if (e->voice.owner == (VoiceMoby *)hero.moby && e->voice.state != 0) {
                     release_voice_slot(hero.voice_slot4);
                 }
             }
@@ -2212,9 +2206,9 @@ void update_hero_motion_for_current_state(void) {
             release_voice_slot_cf(3, (struct MobyView *)hero.moby, 2);
         } else {
             if (hero.loop_voice_slot != -1) {
-                struct VoiceSlot *e =
-                    (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.loop_voice_slot * 0x70);
-                if (e->pm88 == (struct MobyView *)hero.moby && e->b74 != 0) {
+                VoicePoolWindow *e =
+                    (VoicePoolWindow *)(((u8 *)&voice_pool) + hero.loop_voice_slot * 0x70);
+                if (e->voice.owner == (VoiceMoby *)hero.moby && e->voice.state != 0) {
                     release_voice_slot(hero.loop_voice_slot);
                 }
             }
