@@ -10,7 +10,9 @@ struct VendorItemPricing {
     u16 discounted_ammo_price;
     u16 pad0C;
     u16 ammo_capacity;
-    u8  pad10[8];
+    u8  pad10[4];
+    u16 gold_weapon_price; /* bolts; a gold weapon also costs 4 gold bolts (process_menu_entry) */
+    u8  pad16[2];
 };
 
 struct CaptureBoundsAdjustment {

@@ -5,13 +5,13 @@
 
 struct McGetInfoRequest {
     u8  pad_0[0x4];
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
+    s32 port;
+    s32 slot;
+    s32 want_format;
+    s32 want_free_blocks;
+    s32 want_type;
     u8  pad_18[0x4];
-    s32 unk1C;
+    s32 result;
 };
 
 extern u8                      D_00123D10[];
@@ -33,23 +33,23 @@ s32 sceMcGetInfo(s32 port, s32 slot, s32 type, s32 free_blocks, s32 format) {
     if (PollSema(mc_sema) < 0) {
         return -0xC8;
     }
-    D_00159A80.unk4 = port;
-    D_00159A80.unk8 = slot;
-    D_00159A80.unk1C = D_00159F00;
+    D_00159A80.port = port;
+    D_00159A80.slot = slot;
+    D_00159A80.result = D_00159F00;
     if (type != NULL) {
-        D_00159A80.unk14 = 1;
+        D_00159A80.want_type = 1;
     } else {
-        D_00159A80.unk14 = 0;
+        D_00159A80.want_type = 0;
     }
     if (free_blocks != 0) {
-        D_00159A80.unk10 = 1;
+        D_00159A80.want_free_blocks = 1;
     } else {
-        D_00159A80.unk10 = 0;
+        D_00159A80.want_free_blocks = 0;
     }
     if (format != 0) {
-        D_00159A80.unkC = 1;
+        D_00159A80.want_format = 1;
     } else {
-        D_00159A80.unkC = 0;
+        D_00159A80.want_format = 0;
     }
     D_00159A28[0] = type;
     D_00159A2C[0] = free_blocks;

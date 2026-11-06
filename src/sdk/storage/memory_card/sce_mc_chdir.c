@@ -5,13 +5,13 @@
 #include "rnc/sdk/rpc/rpc.h"
 #include "rnc/sdk/storage/memory_card.h"
 
+/* RPC parameters of a name call (mcNameParam in the open-source PS2 SDK). */
 struct McChdirRequest {
-    s32 unk0;
-    s32 unk4;
+    s32 port;
+    s32 slot;
     u8  pad_8[0x8];
-    s32 unk10;
-    u8  pad_14[0x3FF];
-    s32 unk413;
+    s32 buffer;
+    s8  name[0x400];
 };
 
 extern struct McChdirRequest D_00159AB0;
@@ -36,11 +36,11 @@ s32 sceMcChdir(s32 port, s32 slot, s8 *path, s32 pwd) {
             SignalSema(mc_sema);
             return -0xD2;
         }
-        D_00159AB0.unk0 = port;
-        D_00159AB0.unk10 = D_00159FC0;
-        D_00159AB0.unk4 = slot;
-        strncpy((s8 *)((u8 *)&D_00159AB0 + 0x14), path, 0x3FF);
-        *(u8 *)((u8 *)&D_00159AB0 + 0x413) = 0;
+        D_00159AB0.port = port;
+        D_00159AB0.buffer = D_00159FC0;
+        D_00159AB0.slot = slot;
+        strncpy(D_00159AB0.name, path, 0x3FF);
+        D_00159AB0.name[0x3FF] = 0;
         sceSifWriteBackDCache(D_00159FC0, 0x400);
         rpc_dispatch_status = sceSifCallRpc(&mc_rpc_client,
                                             MC_FUNC_CHDIR,

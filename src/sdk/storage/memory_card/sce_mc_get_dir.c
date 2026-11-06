@@ -4,14 +4,14 @@
 #include "rnc/sdk/libmc.h"
 #include "rnc/sdk/rpc/rpc.h"
 
+/* RPC parameters of a name call (mcNameParam in the open-source PS2 SDK). */
 struct McGetDirRequest {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    u8  pad_14[0x3FF];
-    s32 unk413;
+    s32 port;
+    s32 slot;
+    s32 mode;
+    s32 maxent;
+    s32 table;
+    s8  name[0x400];
 };
 
 extern struct McGetDirRequest D_00159AB0;
@@ -37,13 +37,13 @@ s32 sceMcGetDir(s32 port, s32 slot, s8 *name, s32 mode, s32 maxent, s32 table) {
             SignalSema(mc_sema);
             return -0xD2;
         }
-        D_00159AB0.unk0 = port;
-        D_00159AB0.unk4 = path_arg;
-        D_00159AB0.unk8 = mode;
-        D_00159AB0.unkC = maxent;
-        D_00159AB0.unk10 = table;
-        strncpy((s8 *)((u8 *)&D_00159AB0 + 0x14), name, 0x3FF);
-        *(u8 *)((u8 *)&D_00159AB0 + 0x413) = 0;
+        D_00159AB0.port = port;
+        D_00159AB0.slot = path_arg;
+        D_00159AB0.mode = mode;
+        D_00159AB0.maxent = maxent;
+        D_00159AB0.table = table;
+        strncpy(D_00159AB0.name, name, 0x3FF);
+        D_00159AB0.name[0x3FF] = 0;
         if (maxent >= 0) {
             sceSifWriteBackDCache(table, maxent << 6);
         }
