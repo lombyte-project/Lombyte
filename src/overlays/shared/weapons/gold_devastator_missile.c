@@ -24,23 +24,23 @@
 
 typedef struct GoldDevastatorMissileVars {
     u8             pad0[0x8];
-    f32            unk8;
+    f32            previous_target_z; /* 0x08: z of previous_target (Missile1688) */
     u8             padC[0x4];
-    unsigned char *unk10;
-    s32            unk14;
-    unsigned char *unk18;
-    f32            unk1C;
-    f32            unk20;
-    s32            unk24;
-    s32            unk28;
-    f32            unk2C;
-    f32            unk30;
-    f32            unk34;
-    s32            unk38;
-    s16            unk3C;
-    s16            unk3E;
+    unsigned char *owner;          /* 0x10 */
+    s32            life;           /* 0x14 */
+    unsigned char *target;         /* 0x18 */
+    f32            target_height;  /* 0x1C */
+    f32            speed;          /* 0x20 */
+    s32            yaw_velocity;   /* 0x24 */
+    s32            pitch_velocity; /* 0x28 */
+    f32            yaw;            /* 0x2C */
+    f32            pitch;          /* 0x30 */
+    f32            desired_speed;  /* 0x34 */
+    s32            track_velocity; /* 0x38 */
+    s16            turn_time;      /* 0x3C */
+    s16            turn_period;    /* 0x3E */
     u8             pad40[0x8];
-    f32            unk48;
+    f32            limit; /* 0x48 */
 } GoldDevastatorMissileVars;
 
 typedef struct {
@@ -69,15 +69,15 @@ typedef struct {
     VU    v;
     s32   w10;
     s32   w14;
-    char *owner;
-    f32   f1C;
-    s32   w20;
-    s32   w24;
-    s32   w28;
-    f32   f2C;
-    f32   f30;
+    char *target; /* 0x18: same layout as Missile1688 */
+    f32   target_height;
+    s32   speed;
+    s32   yaw_velocity;
+    s32   pitch_velocity;
+    f32   yaw;
+    f32   pitch;
     s32   w34;
-    s32   w38;
+    s32   track_velocity;
 } O;
 
 typedef u32 VQ1688 __attribute__((mode(TI), aligned(16)));
@@ -434,43 +434,43 @@ unsigned char *spawn_devastator_missile(unsigned char *missile_source_moby,
         MOBY(missile_moby)->rot.z = initial_yaw;
         MOBY(missile_moby)->rot.y = initial_pitch;
         MOBY(missile_moby)->state = DEVASTATOR_MISSILE_STATE_FLYING;
-        missile_data->unk10 = missile_source_moby;
+        missile_data->owner = missile_source_moby;
         qcopy(&MOBY(missile_moby)->pos, spawn_position);
         default_desired_speed = frame_time * 20.0f;
-        missile_data->unk38 = 1;
-        missile_data->unk48 = 70.0f;
-        missile_data->unk34 = default_desired_speed;
-        missile_data->unk24 = 0;
-        missile_data->unk28 = 0;
-        missile_data->unk18 = target_moby;
-        missile_data->unk20 = default_desired_speed / 3.0f;
+        missile_data->track_velocity = 1;
+        missile_data->limit = 70.0f;
+        missile_data->desired_speed = default_desired_speed;
+        missile_data->yaw_velocity = 0;
+        missile_data->pitch_velocity = 0;
+        missile_data->target = target_moby;
+        missile_data->speed = default_desired_speed / 3.0f;
         if (target_moby != 0) {
             target_aim_record = get_moby_target_info(target_moby);
             if (target_aim_record != 0) {
                 *(unsigned short *)(target_aim_record + 0x1E) |= 0x80;
                 if (target_aim_record[0xB]) {
-                    missile_data->unk38 = 0;
+                    missile_data->track_velocity = 0;
                 }
                 if (target_aim_record[0xC]) {
-                    missile_data->unk34 = (float)target_aim_record[0xC] * frame_time;
+                    missile_data->desired_speed = (float)target_aim_record[0xC] * frame_time;
                 }
-                if (frame_time * 20.0f < missile_data->unk34) {
-                    missile_data->unk48 = 140.0f;
+                if (frame_time * 20.0f < missile_data->desired_speed) {
+                    missile_data->limit = 140.0f;
                 }
             }
         }
-        missile_data->unk2C = guidance_yaw;
-        missile_data->unk30 = guidance_pitch;
-        missile_data->unk14 = FUN_001f96f8_2afc70(300);
+        missile_data->yaw = guidance_yaw;
+        missile_data->pitch = guidance_pitch;
+        missile_data->life = FUN_001f96f8_2afc70(300);
         if (target_moby != 0) {
             qcopy(missile_data, &MOBY(target_moby)->pos);
-            missile_data->unk1C = target_height_offset;
-            missile_data->unk8 += target_height_offset;
+            missile_data->target_height = target_height_offset;
+            missile_data->previous_target_z += target_height_offset;
         }
         x = FUN_001f9af0_2afc70(D_0013F490_lui);
         turn_period = FUN_001f96f8_2afc70(frame_time * 0.1f < x ? 0x3C : 0xF);
-        missile_data->unk3E = turn_period;
-        missile_data->unk3C = turn_period;
+        missile_data->turn_period = turn_period;
+        missile_data->turn_time = turn_period;
         if (missile_source_moby != 0 && MOBY(missile_source_moby)->state != 0xFE &&
             MOBY(missile_source_moby)->state != 0xFD) {
             collision_start.q = ((V_2afc70 *)&MOBY(missile_source_moby)->pos)->q;
@@ -592,17 +592,17 @@ void select_gold_devastator_missile_target(char *gold_missile_moby,
             if (find_listed_moby_by_data_id(candidate_moby) != 0)
                 goto next;
             z = 0.5f;
-            gold_missile_data->owner = candidate_moby;
+            gold_missile_data->target = candidate_moby;
             if (candidate_aim_record_address != 0)
                 z = *(f32 *)(candidate_aim_record_address + 0x10);
-            gold_missile_data->f2C = angh;
-            gold_missile_data->w38 = flag;
-            gold_missile_data->f30 = pitch;
-            gold_missile_data->w24 = 0;
-            gold_missile_data->w28 = 0;
-            gold_missile_data->w20 = 0;
+            gold_missile_data->yaw = angh;
+            gold_missile_data->track_velocity = flag;
+            gold_missile_data->pitch = pitch;
+            gold_missile_data->yaw_velocity = 0;
+            gold_missile_data->pitch_velocity = 0;
+            gold_missile_data->speed = 0;
             qcopy(gold_missile_data, opos);
-            gold_missile_data->f1C = z;
+            gold_missile_data->target_height = z;
         }
     next:
         i++;
