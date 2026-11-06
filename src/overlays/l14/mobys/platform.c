@@ -44,7 +44,7 @@ typedef struct TiltingPlatformVars {
     u8  pad_0[0x20];
     f32 carry[4]; /* carried-object state for update_entity_matrix */
     u8  pad_30[0x2C];
-    s32 unk5C;
+    s32 carry_flags; /* 0x5C: flags word of the carry record at pvars+0x20 (bit 4 read by transform_attachment_pose) */
     f32 up_vector_x_velocity;
     f32 up_vector_y_velocity;
     f32 up_vector_z_velocity;
@@ -68,7 +68,7 @@ void tilting_platform_update(struct Moby *moby) {
         moby->command = 0;
         moby->flags |= 0x100;
         moby->pos.z += 0.35f;
-        tilting_platform_state->unk5C = 1;
+        tilting_platform_state->carry_flags = 1;
         tilting_platform_state->timer_70 = 0;
         qzero(&tilting_platform_state->up_vector_x_velocity);
         qzero(&moby->rot);
