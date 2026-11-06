@@ -42,10 +42,10 @@ typedef struct {
 typedef struct {
     V_2bc1a0     corner[4];
     unsigned int color[4];
-    int          u0, v0, u1; /* texture coordinates of the four corners */
-    float        v1, u2;
-    int          v2;
-    float        u3, v3;
+    int          corner0_u, corner0_v, corner1_u; /* texture coordinates of the four corners */
+    float        corner1_v, corner2_u;
+    int          corner2_v;
+    float        corner3_u, corner3_v;
     long         clamp, tex, tex1, alpha; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
 } Q_2bc1a0;
 
@@ -1050,14 +1050,14 @@ void draw_walloper_camera_facing_quad(void *mv) {
     quad.alpha = 0x8000000048L;
     quad.tex1 = 0xFF9000000260L;
     quad.clamp = 0;
-    quad.u0 = 0;
-    quad.v0 = 0;
-    quad.u1 = 0;
-    quad.v1 = 1.0f;
-    quad.u2 = 1.0f;
-    quad.v2 = 0;
-    quad.u3 = 1.0f;
-    quad.v3 = 1.0f;
+    quad.corner0_u = 0;
+    quad.corner0_v = 0;
+    quad.corner1_u = 0;
+    quad.corner1_v = 1.0f;
+    quad.corner2_u = 1.0f;
+    quad.corner2_v = 0;
+    quad.corner3_u = 1.0f;
+    quad.corner3_v = 1.0f;
     if (!random_integer_below(4))
         uniform_vertex_color = l00_walloper_quad_rare_base_vertex_color;
     else

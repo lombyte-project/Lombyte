@@ -614,14 +614,14 @@ typedef union {
 typedef struct {
     GlowVec corner[4];
     u32     color[4];
-    s32     u0; /* texture coordinates of the four corners */
-    s32     v0;
-    s32     u1;
-    f32     v1;
-    f32     u2;
-    s32     v2;
-    f32     u3;
-    f32     v3;
+    s32     corner0_u; /* texture coordinates of the four corners */
+    s32     corner0_v;
+    s32     corner1_u;
+    f32     corner1_v;
+    f32     corner2_u;
+    s32     corner2_v;
+    f32     corner3_u;
+    f32     corner3_v;
     s64     clamp; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
     s64     tex;
     s64     tex1;
@@ -669,15 +669,15 @@ void draw_veldin_robot_effect_quad(GlowMoby *moby) {
     quad.color[3] = 0x80FFFFFF;
     quad.color[2] = 0x80FFFFFF;
     quad.color[1] = 0x80FFFFFF;
-    quad.u0 = 0;
-    quad.v0 = 0;
-    quad.u1 = 0;
-    quad.v1 = one;
-    quad.u2 = one;
+    quad.corner0_u = 0;
+    quad.corner0_v = 0;
+    quad.corner1_u = 0;
+    quad.corner1_v = one;
+    quad.corner2_u = one;
     quad.color[0] = 0x80FFFFFF;
-    quad.v2 = 0;
-    quad.u3 = one;
-    quad.v3 = one;
+    quad.corner2_v = 0;
+    quad.corner3_u = one;
+    quad.corner3_v = one;
     template_corner = l00_veldin_robot_effect_quad_template_corners;
     quad_corner = quad.corner;
     for (i = 0; i < 4; i++) {

@@ -776,7 +776,7 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     Cam240 *p240;
     int     r;
     float   orbit_distance_shortfall;
-    float   v0[4];
+    float   orbit_offset_projection[4];
     float   orbit_offset_remainder[4];
 
     D_L00_00161D8C = 0;
@@ -898,8 +898,9 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     qcopy(b->v10, b->v0);
     qcopy(camera_state->pos, camera_moby->v30);
     qcopy(g->v20, camera_moby->v30);
-    fast_vec_scale(v0, D_0013F6E0_2E8210, fast_vec_dot(b->v0, D_0013F6E0_2E8210));
-    fast_vec_sub(orbit_offset_remainder, b->v0, v0);
+    fast_vec_scale(
+        orbit_offset_projection, D_0013F6E0_2E8210, fast_vec_dot(b->v0, D_0013F6E0_2E8210));
+    fast_vec_sub(orbit_offset_remainder, b->v0, orbit_offset_projection);
     orbit_distance_shortfall = b->target_orbit_distance - fast_vec_length(orbit_offset_remainder);
     g->f30 = orbit_distance_shortfall;
     if (orbit_distance_shortfall < -0.1f) {

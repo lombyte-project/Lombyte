@@ -129,10 +129,10 @@ typedef struct {
 typedef struct {
     V_2be890 corner[4];
     int      color[4];
-    int      u0, v0, u1; /* texture coordinates of the four corners */
-    float    v1, u2;
-    int      v2;
-    float    u3, v3;
+    int      corner0_u, corner0_v, corner1_u; /* texture coordinates of the four corners */
+    float    corner1_v, corner2_u;
+    int      corner2_v;
+    float    corner3_u, corner3_v;
     long     clamp, tex, tex1, alpha; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
 } Q_2be890;
 
@@ -2353,18 +2353,18 @@ void draw_beam_origin_camera_facing_quads(void *mv) {
     quad.alpha = 0x8000000048L;
     quad.tex1 = 0xFF9000000260L;
     quad.clamp = 0;
-    quad.u0 = 0;
-    quad.v0 = 0;
+    quad.corner0_u = 0;
+    quad.corner0_v = 0;
     quad.color[3] = first_pass_vertex_color;
     quad.color[2] = first_pass_vertex_color;
     quad.color[1] = first_pass_vertex_color;
     quad.color[0] = first_pass_vertex_color;
-    quad.u1 = 0;
-    quad.v1 = 1.0f;
-    quad.u2 = 1.0f;
-    quad.v2 = 0;
-    quad.u3 = 1.0f;
-    quad.v3 = 1.0f;
+    quad.corner1_u = 0;
+    quad.corner1_v = 1.0f;
+    quad.corner2_u = 1.0f;
+    quad.corner2_v = 0;
+    quad.corner3_u = 1.0f;
+    quad.corner3_v = 1.0f;
     FUN_001f9bf8_2be890(&offset_vector, moby_bytes + 0xD0, beam_origin_quad_basis_offset_length_gp);
     FUN_001f9a10_2be890(&camera_facing_transform[3], &beam_nodes[0], &offset_vector);
     FUN_001f9a28_2be890(

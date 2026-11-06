@@ -107,7 +107,9 @@ void init_once(void) {
     aligned_memory_base = (u32)D_24135F & 0xFFFFC000;
     boot_archive = (struct BootArchive *)(aligned_memory_base + 0x2C0000);
     compressed_archive_buffer = (s32 *)(D_1FF8000 - (disc_table.startup_archive.size << 0xB));
-    wad_get_sectors(disc_table.startup_archive.sector, disc_table.startup_archive.size, compressed_archive_buffer);
+    wad_get_sectors(disc_table.startup_archive.sector,
+                    disc_table.startup_archive.size,
+                    compressed_archive_buffer);
     FlushCache(0);
     decompress_wad(compressed_archive_buffer, boot_archive);
     FlushCache(0);

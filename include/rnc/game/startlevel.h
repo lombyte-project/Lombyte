@@ -6,13 +6,13 @@
 /* A sound definition, 0x20 bytes (MobyClass.sound_defs entries); startlevel
    fills in the bank loaded from disc_table.sound_bank. */
 typedef struct {
-    s32 min_range;   /* 0x00 */
-    f32 max_range;   /* 0x04: 128.0f in every boot definition */
-    s32 far_volume;  /* 0x08: calculate_voice_distance_volume */
-    s32 near_volume; /* 0x0C */
-    s32 min_pitch; /* 0x10 */
-    s32 max_pitch; /* 0x14 */
-    u8  loop;      /* 0x18 */
+    s32 min_range;         /* 0x00 */
+    f32 max_range;         /* 0x04: 128.0f in every boot definition */
+    s32 far_volume;        /* 0x08: calculate_voice_distance_volume */
+    s32 near_volume;       /* 0x0C */
+    s32 min_pitch;         /* 0x10 */
+    s32 max_pitch;         /* 0x14 */
+    u8  loop;              /* 0x18 */
     u8  attenuation_flags; /* 0x19: bit 0 = quadratic distance falloff, else linear */
     s16 sound;             /* 0x1A: sound index (sound_update) */
     s32 bank;              /* 0x1C: bank handle */

@@ -212,10 +212,10 @@ typedef struct {
 typedef struct {
     GlowVec_bfa8 corner[4];
     u32          color[4];
-    s32          u0, v0, u1; /* texture coordinates of the four corners */
-    f32          v1, u2;
+    s32          corner0_u, corner0_v, corner1_u; /* texture coordinates of the four corners */
+    f32          corner1_v, corner2_u;
     s32          corner_2_texture_t;
-    f32          u3, v3;
+    f32          corner3_u, corner3_v;
     s64          clamp, tex, tex1, alpha; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
 } GlowQuad_bfa8;
 
@@ -259,14 +259,14 @@ void draw_moby_offset_textured_quad(char *moby) {
     local.quad.alpha = 0x8000000048L;
     local.quad.tex1 = 0xFF9000000260L;
     local.quad.clamp = 5;
-    local.quad.u0 = 0;
-    local.quad.v0 = 0;
-    local.quad.u1 = 0;
-    local.quad.v1 = one;
-    local.quad.u2 = one;
+    local.quad.corner0_u = 0;
+    local.quad.corner0_v = 0;
+    local.quad.corner1_u = 0;
+    local.quad.corner1_v = one;
+    local.quad.corner2_u = one;
     local.quad.corner_2_texture_t = 0;
-    local.quad.u3 = one;
-    local.quad.v3 = one;
+    local.quad.corner3_u = one;
+    local.quad.corner3_v = one;
 
     fast_vec_scale(&local.basis.offset, moby + 0xc0, moby_quad_c0_offset_scale_gp);
     fast_vec_scale(&local.basis.partial, moby + 0xe0, moby_quad_e0_offset_scale_gp);
