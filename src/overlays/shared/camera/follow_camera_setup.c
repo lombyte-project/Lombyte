@@ -42,7 +42,7 @@ typedef struct {
     char  pad44[8];
     int   distance_target; /* 0x17C */
     char  pad50[8];
-    float unk58;
+    float base_distance; /* 0x188 */
 } CamOrbit;
 
 /* FollowCamBlock (rnc/camera/follow_cam.h), from saved state + 0x40 */
@@ -61,24 +61,24 @@ typedef struct {
 
 typedef struct {
     char  pad0[0x10];
-    short unk10;
+    short leash; /* 0x10: FollowCamState.leash */
     char  pad12[0x10];
     short unk22;
 } Cam_2e5e38;
 
 typedef struct {
     char  pad0[0x3C];
-    float unk3C;
-    float unk40;
-    float unk44;
-    int   unk48;
+    float probe_scale;       /* 0x20C: collision probe sphere scale */
+    float probe_count;       /* 0x210 */
+    float probe_step_growth; /* 0x214 */
+    int   probe_flags;       /* 0x218 */
 } CamSpring;
 
 typedef struct {
     char  pad0[0x6];
-    short unk6;
+    short run_toward_lock; /* 0x226: FollowCamState.tail.run_toward_lock */
     char  pad8[4];
-    float unkC;
+    float pull_back_max; /* 0x22C: FollowCamState.tail.pull_back_max */
 } CamEnd;
 
 float cam_interp_values(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
@@ -156,10 +156,10 @@ void follow_camera_approach(unsigned char *moby) {
     ((CamOrbit *)orbit)->distance_override = 0;
     ((CamOrbit *)orbit)->eye_distance_target = 0;
     ((CamOrbit *)orbit)->distance_target = 0;
-    ((CamOrbit *)orbit)->unk58 = ((CamOrbit *)default_orbit)->eye_distance;
+    ((CamOrbit *)orbit)->base_distance = ((CamOrbit *)default_orbit)->eye_distance;
     ((CamTarget *)target)->target_height_override_pending = 0;
     ((CamTarget *)target)->look_height_target = 0;
-    (*(Cam_2e5e38 **)(moby + 0x70))->unk10 = 1;
+    (*(Cam_2e5e38 **)(moby + 0x70))->leash = 1;
     (*(Cam_2e5e38 **)(moby + 0x70))->unk22 = 0;
     ((CamTarget *)target)->lateral_stiffness = D_L00_00161CA0_gp;
     ((CamTarget *)target)->up_stiffness = D_L00_00161CA0_gp;
@@ -167,13 +167,13 @@ void follow_camera_approach(unsigned char *moby) {
     ((CamTarget *)target)->up_damping = 0.2f;
     ((CamTarget *)target)->blending_in = 0;
     spring_reset = (CamSpring *)(*(unsigned char **)(moby + 0x70) + 0x1D0);
-    spring_reset->unk44 = l00_follow_camera_collision_probe_step_growth_factor;
-    spring_reset->unk3C = l00_follow_camera_collision_probe_scale;
-    spring_reset->unk40 = l00_follow_camera_collision_probe_count;
-    spring_reset->unk48 = D_L00_0015EF60_macro;
+    spring_reset->probe_step_growth = l00_follow_camera_collision_probe_step_growth_factor;
+    spring_reset->probe_scale = l00_follow_camera_collision_probe_scale;
+    spring_reset->probe_count = l00_follow_camera_collision_probe_count;
+    spring_reset->probe_flags = D_L00_0015EF60_macro;
     reset = *(unsigned char **)(moby + 0x70) + 0x220;
-    ((CamEnd *)reset)->unkC = D_L00_00161D1C_gp;
-    ((CamEnd *)reset)->unk6 = 0;
+    ((CamEnd *)reset)->pull_back_max = D_L00_00161D1C_gp;
+    ((CamEnd *)reset)->run_toward_lock = 0;
 }
 
 typedef struct {
@@ -448,10 +448,10 @@ void rebuild_follow_camera_pose(int snap) __asm__("FUN_L00_002e66b8");
 void rebuild_follow_camera_pose(int snap) {
     LevelCamera *cams = &l00_camera;
     char        *camera_moby = ((char *)cams->current_camera);
-    char        *track = &cams->unk190; /* the followed player: position at 0, up vector at 0x30 */
-    char        *follow_camera_state = *(char **)(camera_moby + 0x70);
-    char        *orbit = follow_camera_state + 0x130; /* distance at 0x2C, height at 0x30 */
-    char        *target =
+    char *track = &cams->smoothed_hero; /* the followed player: position at 0, up vector at 0x30 */
+    char *follow_camera_state = *(char **)(camera_moby + 0x70);
+    char *orbit = follow_camera_state + 0x130; /* distance at 0x2C, height at 0x30 */
+    char *target =
         follow_camera_state + 0x40; /* point looked at; eye height at 0xB0, moby at 0xC0 */
     float  up[4], rise[4], look[4], eye[4];
     int    mask;

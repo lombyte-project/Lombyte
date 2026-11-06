@@ -30,11 +30,13 @@ typedef struct LevelCamera {
     struct UpdateCam *current_camera;    /* 0x180: the record the view follows */
     struct UpdateCam *previous_camera;   /* 0x184 */
     u8                pad188[0x8];
-    u8                unk190[0x30];
-    f32               unk1C0[4]; /* 0x1C0 */
-    u8                unk1D0[0x84];
-    s32               unk254; /* 0x254 */
-    u8                pad258[0x4];
+    u8                smoothed_hero
+        [0x30]; /* 0x190: hero position with its z springed, +0x10 the spring step, +0x20 the smoothed up */
+    f32 gravity_up[4]; /* 0x1C0: minus the hero's gravity direction */
+    u8  tracking
+        [0x84]; /* 0x1D0: previous gravity_up, +0x10 up spring steps, +0x20 previous hero position */
+    s32 camera_moby; /* 0x254: moby handle_camera_collision_with_hero spawns while the follow camera is current */
+    u8 pad258[0x4];
     struct Moby *
         focus_moby; /* 0x25C: a moby that takes the camera's attention (blarg helicopter); 0: none */
     s32 focus_time; /* 0x260: reset to 0 when focus_moby is set */
