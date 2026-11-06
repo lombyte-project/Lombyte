@@ -724,12 +724,12 @@ void set_hero_item_moby_flag_bit0(void) {
         }
     }
     tail = &hero;
-    hero_flag_target = ((char *)tail->items[3].unk0C);
+    hero_flag_target = ((char *)tail->items[3].moby3);
     if (hero_flag_target != 0) {
         *(unsigned short *)(hero_flag_target + 0x34) |= 1;
     }
     if (tail->vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
-        hero_flag_target = ((char *)tail->unk1624);
+        hero_flag_target = ((char *)tail->clank_antenna_glow_moby);
         if (hero_flag_target != 0) {
             *(unsigned short *)(hero_flag_target + 0x34) |= 1;
         }
@@ -772,12 +772,12 @@ void update_hero_item_moby_flags(void) {
         }
     }
     blk2 = &hero;
-    hero_flag_target = *(char **)&blk2->items[3].unk0C;
+    hero_flag_target = *(char **)&blk2->items[3].moby3;
     if (hero_flag_target != 0) {
         *(unsigned short *)(hero_flag_target + 0x34) &= ~1;
     }
     if (blk2->vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
-        hero_flag_target = *(char **)&blk2->unk1624;
+        hero_flag_target = *(char **)&blk2->clank_antenna_glow_moby;
         if (hero_flag_target != 0) {
             *(unsigned short *)(hero_flag_target + 0x34) &= ~1;
         }
@@ -792,13 +792,14 @@ void update_hero_item_moby_flags(void) {
         if (hero_flag_target != 0) {
             *(unsigned short *)(hero_flag_target + 0x34) |= 0x41;
         }
-        hero_flag_target = *(char **)&blk3->items[3].unk0C;
+        hero_flag_target = *(char **)&blk3->items[3].moby3;
         if (hero_flag_target != 0) {
             *(unsigned short *)(hero_flag_target + 0x34) |= 0x41;
         }
     }
     blk4 = &hero;
-    if ((blk4->unk20AE != 0 && blk4->items[0].item_id == 8) || blk4->hand_item_hidden != 0) {
+    if ((blk4->wrench_hidden_by_state != 0 && blk4->items[0].item_id == 8) ||
+        blk4->hand_item_hidden != 0) {
         struct Hero *blk5 = &hero;
 
         hero_flag_target = *(char **)&blk5->items[0].moby;
@@ -819,7 +820,7 @@ void set_hero_moby_flag_bit0(void) {
     char        *optional_hero_flag_target;
 
     hero_flag_state->moby->flags |= 1;
-    optional_hero_flag_target = ((char *)hero_flag_state->unk1620);
+    optional_hero_flag_target = ((char *)hero_flag_state->clank_rotor_moby);
     if (optional_hero_flag_target != 0) {
         *(unsigned short *)(optional_hero_flag_target + 0x34) |= 1;
     }
@@ -836,7 +837,7 @@ void clear_hero_moby_flag_bit0(void) {
     char        *optional_hero_flag_target;
 
     hero_flag_clear_state->moby->flags &= ~1;
-    optional_hero_flag_target = ((char *)hero_flag_clear_state->unk1620);
+    optional_hero_flag_target = ((char *)hero_flag_clear_state->clank_rotor_moby);
     if (optional_hero_flag_target != 0) {
         *(unsigned short *)(optional_hero_flag_target + 0x34) &= ~1;
     }
@@ -863,12 +864,12 @@ void configure_hero_point_effect_emission(float         random_value_base,
                                           unsigned char flags_to_clear) {
     struct Hero *hero_point_effect_state = &hero;
 
-    hero_point_effect_state->items[6].unk38 = remaining_updates;
-    hero_point_effect_state->items[6].unk3C = count_per_point;
-    hero_point_effect_state->items[6].unk3E =
-        (hero_point_effect_state->items[6].unk3E & ~flags_to_clear) | flags_to_set;
-    hero_point_effect_state->items[6].unk30 = random_value_base;
-    hero_point_effect_state->items[6].unk34 = random_value_half_range;
+    hero_point_effect_state->items[6].effect_updates_left = remaining_updates;
+    hero_point_effect_state->items[6].effect_count_per_point = count_per_point;
+    hero_point_effect_state->items[6].effect_flags =
+        (hero_point_effect_state->items[6].effect_flags & ~flags_to_clear) | flags_to_set;
+    hero_point_effect_state->items[6].effect_random_base = random_value_base;
+    hero_point_effect_state->items[6].effect_random_half_range = random_value_half_range;
 }
 
 typedef unsigned int u128_2332d0 __attribute__((mode(TI), aligned(16)));
@@ -1774,10 +1775,11 @@ void animate_hero_slot4_and_slot5_visuals(void) {
         MOBY(slot5_moby)->glow_color =
             fast_tween_color(0xAAC8AA, 0x965050, fast_sin(hero.item5_glow_phase) * 0.5f + 0.5f);
         if (slot5_moby) {
-            if (!hero.unk1D90.attached)
-                attach_manipulator(slot5_moby, 0, &hero.unk1D90);
+            if (!hero.item5_manipulator.attached)
+                attach_manipulator(slot5_moby, 0, &hero.item5_manipulator);
             else
-                build_axis_rotation_quaternion(&hero.unk1D90.quat, 0, hero.item5_glow_phase);
+                build_axis_rotation_quaternion(
+                    &hero.item5_manipulator.quat, 0, hero.item5_glow_phase);
         }
     }
 }
