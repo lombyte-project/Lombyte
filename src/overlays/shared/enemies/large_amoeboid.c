@@ -43,20 +43,20 @@ enum {
 };
 
 typedef struct LargeAmoeboidVars {
-    u8                       pad0[0x20];
-    f32                      health;
-    u8                       pad24[0x5];
-    s8                       unk29;
-    u8                       pad2A[0x6];
-    f32                      unk30;
-    u8                       pad34[0x4];
-    s32                      hurt; /* 0x38: set when the moby is hit, cleared once handled */
-    u8                       pad3C[0x4];
-    u8                       move_displacement[0x18];
-    s8                       unk58;
-    u8                       pad59[0x1];
-    s8                       unk5A;
-    u8                       pad5B[0x5];
+    u8  pad0[0x20];
+    f32 health;
+    u8  pad24[0x5];
+    s8  wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8  pad2A[0x6];
+    f32 aim_height; /* 0x30 */
+    u8  pad34[0x4];
+    s32 hurt; /* 0x38: set when the moby is hit, cleared once handled */
+    u8  pad3C[0x4];
+    u8  move_displacement[0x18];
+    s8  look_range; /* 0x58 */
+    u8  pad59[0x1];
+    s8  look_height; /* 0x5A */
+    u8  pad5B[0x5];
     struct KnockbackMotion   knockback; /* 0x60 */
     u8                       padC0[0x68];
     u16                      unk128;
@@ -263,28 +263,28 @@ void large_amoeboid_update(unsigned char *moby) {
         qcopy(&large_amoeboid_vars->home_pos, &MOBY(moby)->pos);
         switch (MOBY(moby)->oclass) {
         case LARGE_AMOEBOID_LARGE_VARIANT:
-            large_amoeboid_vars->unk58 = truncate_float_to_s32(14.0f);
-            large_amoeboid_vars->unk5A = truncate_float_to_s32(10.4f);
+            large_amoeboid_vars->look_range = truncate_float_to_s32(14.0f);
+            large_amoeboid_vars->look_height = truncate_float_to_s32(10.4f);
             large_amoeboid_vars->size_scale = 1.0f;
             break;
         case LARGE_AMOEBOID_MEDIUM_VARIANT:
-            large_amoeboid_vars->unk58 = truncate_float_to_s32(14.0f);
-            large_amoeboid_vars->unk5A = truncate_float_to_s32(5.6f);
+            large_amoeboid_vars->look_range = truncate_float_to_s32(14.0f);
+            large_amoeboid_vars->look_height = truncate_float_to_s32(5.6f);
             large_amoeboid_vars->size_scale = 0.7f;
             break;
         case LARGE_AMOEBOID_SMALL_VARIANT:
-            large_amoeboid_vars->unk58 = truncate_float_to_s32(14.0f);
-            large_amoeboid_vars->unk5A = truncate_float_to_s32(4.0f);
+            large_amoeboid_vars->look_range = truncate_float_to_s32(14.0f);
+            large_amoeboid_vars->look_height = truncate_float_to_s32(4.0f);
             large_amoeboid_vars->size_scale = 0.49f;
             break;
         }
-        large_amoeboid_vars->unk30 = large_amoeboid_vars->size_scale;
+        large_amoeboid_vars->aim_height = large_amoeboid_vars->size_scale;
         large_amoeboid_vars->glow_cycle_phase = FUN_00213308();
         if (MOBY(moby)->oclass == 0x362)
             large_amoeboid_vars->unk130 = &D_L01_00161A50;
         else
             large_amoeboid_vars->unk130 = &D_L01_00161A40;
-        large_amoeboid_vars->unk29 = 1;
+        large_amoeboid_vars->wrench_hit_sound = 1;
         if (large_amoeboid_vars->removal_height_table_index != 0) {
             large_amoeboid_vars->health = 1.0f;
             large_amoeboid_vars->starts_active = 1;
