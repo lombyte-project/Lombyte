@@ -44,32 +44,32 @@ void fleet_camera_box_watcher_update(struct Moby *moby) __asm__("FUN_L17_002f26d
 
 typedef struct CameraBoxWatcherVars {
     u8  pad_0[0xC];
-    s32 unkC;
+    s32 dwell_frames;
     s32 moby_indices;
     u8  pad_14[0xC];
     s32 clip_volumes;
     u8  pad_24[0x8];
-    s32 unk2C;
-    s32 unk30;
+    s32 special_state_dwell_frames;
+    s32 last_help_clip_volume;
     u8  pad_34[0x4];
-    s32 unk38;
-    s32 unk3C;
-    s32 unk40;
-    s32 unk44;
+    s32 dwell_help_delay;
+    s32 camera_sequence_clip_volume;
+    s32 second_camera_target_cuboid;
+    s32 first_camera_target_cuboid;
     s32 unk48;
-    u8  unk4C;
+    u8  camera_sequence_done;
     u8  pad_4D[0x3];
     s32 unk50;
     u8  pad_54[0x4];
-    s32 unk58;
-    s32 unk5C;
-    s32 unk60;
+    s32 mission;
+    s32 camera_timer;
+    s32 sequence_entry_clip_volume;
     s32 first_followup_clip_volume_index;
-    s32 unk68;
-    s32 unk6C;
-    s32 unk70;
-    s32 unk74;
-    s32 unk78;
+    s32 second_followup_clip_volume_index;
+    s32 clip_volume_sequence_state;
+    s32 scan_moby_index;
+    s32 scan_outside_count;
+    s32 scan_clip_volume;
 } CameraBoxWatcherVars;
 
 /* Moby class 1470 */
@@ -101,13 +101,13 @@ void fleet_camera_box_watcher_update(struct Moby *moby) {
     unsigned char        *sk;
     int                   wrap;
 
-    clip_volume_sequence_state = pvars->unk6C;
+    clip_volume_sequence_state = pvars->clip_volume_sequence_state;
     switch (clip_volume_sequence_state) {
     case CLIP_VOLUME_SEQUENCE_WAIT_FOR_ENTRY: {
         char *h = (char *)&hero.motion.pos;
-        if (is_point_inside_clip_volume(h, pvars->unk60)) {
+        if (is_point_inside_clip_volume(h, pvars->sequence_entry_clip_volume)) {
             if (*(int *)(h + 0x200C) == 0x11) {
-                pvars->unk6C = 1;
+                pvars->clip_volume_sequence_state = 1;
             }
         }
         break;
@@ -117,10 +117,11 @@ void fleet_camera_box_watcher_update(struct Moby *moby) {
         int          hero_current_state = h->state.current;
         if (hero_current_state == HERO_STATE_HURT_WITH_DISPLACEMENT_VELOCITY ||
             hero_current_state == HERO_STATE_OPTIONAL_IDLE_ANIMATION) {
-            pvars->unk6C = 0;
+            pvars->clip_volume_sequence_state = 0;
         } else if (is_point_inside_clip_volume(&h->motion.pos,
                                                pvars->first_followup_clip_volume_index) ||
-                   is_point_inside_clip_volume(&h->motion.pos, pvars->unk68)) {
+                   is_point_inside_clip_volume(&h->motion.pos,
+                                               pvars->second_followup_clip_volume_index)) {
             if (D_0013D408[0x1C] == 0) {
                 D_0013D408[0x1C] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);
@@ -135,23 +136,23 @@ void fleet_camera_box_watcher_update(struct Moby *moby) {
         for (j = 0; j < 30; j++) {
             char *mb;
             sk = D_0013D408;
-            mb = D_L17_0015FFD8 + (pvars->unk70 << 8);
+            mb = D_L17_0015FFD8 + (pvars->scan_moby_index << 8);
             if ((*(short *)(mb + 0xA6) == 0x2C || *(short *)(mb + 0xA6) == 0x566) &&
                 *(signed char *)(mb + 0x20) >= 0 &&
-                !is_point_inside_clip_volume(mb + 0x10, pvars->unk78)) {
-                pvars->unk74 += 1;
+                !is_point_inside_clip_volume(mb + 0x10, pvars->scan_clip_volume)) {
+                pvars->scan_outside_count += 1;
             }
-            next_moby_index = pvars->unk70 + 1;
+            next_moby_index = pvars->scan_moby_index + 1;
             wrap = D_L17_0015FFD8 + (next_moby_index << 8) < fleet_moby_array_end;
-            pvars->unk70 = next_moby_index;
+            pvars->scan_moby_index = next_moby_index;
             if (!wrap) {
-                if (pvars->unk74 == 0 && sk[0x1B] == 0) {
+                if (pvars->scan_outside_count == 0 && sk[0x1B] == 0) {
                     sk[0x1B] = 1;
                     allocate_voice_for_bank_entry(1, 0, 0);
                     queue_dialogue_message(0x53D6, -1);
                 }
-                pvars->unk70 = 0;
-                pvars->unk74 = 0;
+                pvars->scan_moby_index = 0;
+                pvars->scan_outside_count = 0;
             }
         }
     }
@@ -159,15 +160,16 @@ void fleet_camera_box_watcher_update(struct Moby *moby) {
     switch (moby->state) {
     case CAMERA_BOX_WATCHER_INITIALIZE:
         moby->update_dist = 0xFF;
-        pvars->unk38 = scale_game_frames(600);
-        pvars->unk4C = 0;
-        if (pvars->unk44 == -1 || pvars->unk40 == -1 || pvars->unk3C == -1 || pvars->unk48 == -1) {
+        pvars->dwell_help_delay = scale_game_frames(600);
+        pvars->camera_sequence_done = 0;
+        if (pvars->first_camera_target_cuboid == -1 || pvars->second_camera_target_cuboid == -1 ||
+            pvars->camera_sequence_clip_volume == -1 || pvars->unk48 == -1) {
             DebugPrint(fleet_camera_box_configuration_error_format,
-                       pvars->unk3C,
+                       pvars->camera_sequence_clip_volume,
                        pvars->unk48,
-                       pvars->unk40,
-                       pvars->unk44);
-            pvars->unk4C = 1;
+                       pvars->second_camera_target_cuboid,
+                       pvars->first_camera_target_cuboid);
+            pvars->camera_sequence_done = 1;
         }
         moby->state = CAMERA_BOX_WATCHER_MONITOR;
         break;
@@ -180,7 +182,8 @@ void fleet_camera_box_watcher_update(struct Moby *moby) {
             if (is_point_inside_clip_volume(
                     &hero.motion.pos, *(int *)((u8 *)pvars + clip_volume_entry_byte_offset))) {
                 found = 1;
-                if (pvars->unk30 != *(int *)((u8 *)pvars + clip_volume_entry_byte_offset)) {
+                if (pvars->last_help_clip_volume !=
+                    *(int *)((u8 *)pvars + clip_volume_entry_byte_offset)) {
                     pending_help_clip_volume_index =
                         *(int *)((u8 *)pvars + clip_volume_entry_byte_offset);
                     moby_indices = &pvars->moby_indices;
@@ -190,10 +193,10 @@ void fleet_camera_box_watcher_update(struct Moby *moby) {
             }
         }
         if (found) {
-            pvars->unkC += 1;
+            pvars->dwell_frames += 1;
         } else {
-            pvars->unkC = 0;
-            pvars->unk30 = -1;
+            pvars->dwell_frames = 0;
+            pvars->last_help_clip_volume = -1;
         }
         if (checked_moby_index != -1) {
             checked_moby = D_L17_0015FFD8 + (checked_moby_index << 8);
@@ -208,16 +211,16 @@ void fleet_camera_box_watcher_update(struct Moby *moby) {
             if (MOBY(checked_moby)->state == 3)
                 goto skip1;
         }
-        if (pvars->unkC > pvars->unk38 && pending_help_clip_volume_index != -1 &&
+        if (pvars->dwell_frames > pvars->dwell_help_delay && pending_help_clip_volume_index != -1 &&
             ((unsigned int)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
             fleet_help_request_gate_state[0] == 0 && fleet_help_request_gate_state[9] == -1 &&
             D_0013D4DF != 0) {
-            pvars->unk38 = scale_game_frames(0x708);
+            pvars->dwell_help_delay = scale_game_frames(0x708);
             if (*(int *)(((char *)&fleet_dwell_help_gate_value)) >= 0) {
                 help_request(0x3A9A, 0x7D);
             }
-            pvars->unk30 = pending_help_clip_volume_index;
-            pvars->unkC = 0;
+            pvars->last_help_clip_volume = pending_help_clip_volume_index;
+            pvars->dwell_frames = 0;
         }
     skip1:
         if (is_point_inside_clip_volume(&hero.motion.pos, pvars->clip_volumes) &&
@@ -236,27 +239,30 @@ void fleet_camera_box_watcher_update(struct Moby *moby) {
             clip_volume_index_ptr = (int *)((u8 *)pvars + 0x20 + clip_volume_entry_byte_offset);
             if (is_point_inside_clip_volume(&hero.motion.pos, *clip_volume_index_ptr)) {
                 found = 1;
-                if (pvars->unk30 != *clip_volume_index_ptr) {
+                if (pvars->last_help_clip_volume != *clip_volume_index_ptr) {
                     pending_help_clip_volume_index = *clip_volume_index_ptr;
                 }
                 break;
             }
         }
-        if (!found || (pvars->unk2C += 1, hero.state.current == 0x35)) {
-            pvars->unk2C = 0;
-            pvars->unk30 = -1;
+        if (!found || (pvars->special_state_dwell_frames += 1, hero.state.current == 0x35)) {
+            pvars->special_state_dwell_frames = 0;
+            pvars->last_help_clip_volume = -1;
         }
-        if (scale_game_frames(0xE10) < pvars->unk2C && pending_help_clip_volume_index != -1 &&
-            hero_is_in_special_state() && fleet_help_request_gate_state[0] == 0 &&
-            fleet_help_request_gate_state[9] == -1 && item_unlocked[0xBC] != 0) {
+        if (scale_game_frames(0xE10) < pvars->special_state_dwell_frames &&
+            pending_help_clip_volume_index != -1 && hero_is_in_special_state() &&
+            fleet_help_request_gate_state[0] == 0 && fleet_help_request_gate_state[9] == -1 &&
+            item_unlocked[0xBC] != 0) {
             help_request(0x4E2E, 0x78);
-            pvars->unk30 = pending_help_clip_volume_index;
-            pvars->unk2C = 0;
+            pvars->last_help_clip_volume = pending_help_clip_volume_index;
+            pvars->special_state_dwell_frames = 0;
         }
-        if (pvars->unk58 != 0xFF && visited52[pvars->unk58 + (current_level_index << 4)] == 0xFF) {
-            pvars->unk4C = 1;
+        if (pvars->mission != 0xFF &&
+            visited52[pvars->mission + (current_level_index << 4)] == 0xFF) {
+            pvars->camera_sequence_done = 1;
         }
-        if (pvars->unk4C == 0 && is_point_inside_clip_volume(&hero.motion.pos, pvars->unk3C)) {
+        if (pvars->camera_sequence_done == 0 &&
+            is_point_inside_clip_volume(&hero.motion.pos, pvars->camera_sequence_clip_volume)) {
             clear_active_help_record();
             if (*(int *)(((char *)&D_00141DC4)) >= 0) {
                 help_request(0x4268, 0x8B);
@@ -264,7 +270,7 @@ void fleet_camera_box_watcher_update(struct Moby *moby) {
             if (fleet_help_request_gate_state[0] != 0 || fleet_help_request_gate_state[9] != -1) {
                 pvars->unk50 = 0;
                 moby->state = CAMERA_BOX_WATCHER_ALIGN_FIRST_TARGET;
-                pvars->unk5C = scale_game_frames(0xB4);
+                pvars->camera_timer = scale_game_frames(0xB4);
                 hero_set_state(0x72, 0);
             }
         }
@@ -273,33 +279,40 @@ void fleet_camera_box_watcher_update(struct Moby *moby) {
         char *cam;
         set_follow_camera_blend_output_flags();
         set_follow_camera_angle_blend_from_position(
-            (int)(D_L17_001600EC + (pvars->unk44 << 7) + 0x30), 0.02617994f, 0.0f);
+            (int)(D_L17_001600EC + (pvars->first_camera_target_cuboid << 7) + 0x30),
+            0.02617994f,
+            0.0f);
         cam = (char *)&l17_camera;
         target_heading = fast_arc_tan(
-            *(float *)(D_L17_001600EC + ((pvars->unk44 << 7) + 0x30)) - *(float *)(cam + 0x140),
-            *(float *)(D_L17_001600EC + ((pvars->unk44 << 7) + 0x34)) - *(float *)(cam + 0x144));
+            *(float *)(D_L17_001600EC + ((pvars->first_camera_target_cuboid << 7) + 0x30)) -
+                *(float *)(cam + 0x140),
+            *(float *)(D_L17_001600EC + ((pvars->first_camera_target_cuboid << 7) + 0x34)) -
+                *(float *)(cam + 0x144));
         if (fast_difference_between_rotations(*(float *)(cam + 0x158), target_heading) <
             0.034906585f) {
             moby->state = CAMERA_BOX_WATCHER_WAIT_AND_ALIGN_SECOND_TARGET;
-            pvars->unk5C = scale_game_frames(0x3C);
+            pvars->camera_timer = scale_game_frames(0x3C);
         }
         break;
     }
     case CAMERA_BOX_WATCHER_WAIT_AND_ALIGN_SECOND_TARGET:
         set_follow_camera_blend_output_flags();
-        if (fast_dec_timer(&pvars->unk5C)) {
+        if (fast_dec_timer(&pvars->camera_timer)) {
             char *cam;
             set_follow_camera_angle_blend_from_position(
-                (int)(D_L17_001600EC + (pvars->unk40 << 7) + 0x30), 0.02617994f, 0.0f);
+                (int)(D_L17_001600EC + (pvars->second_camera_target_cuboid << 7) + 0x30),
+                0.02617994f,
+                0.0f);
             cam = (char *)&l17_camera;
             target_heading = fast_arc_tan(
-                *(float *)(D_L17_001600EC + ((pvars->unk40 << 7) + 0x30)) - *(float *)(cam + 0x140),
-                *(float *)(D_L17_001600EC + ((pvars->unk40 << 7) + 0x34)) -
+                *(float *)(D_L17_001600EC + ((pvars->second_camera_target_cuboid << 7) + 0x30)) -
+                    *(float *)(cam + 0x140),
+                *(float *)(D_L17_001600EC + ((pvars->second_camera_target_cuboid << 7) + 0x34)) -
                     *(float *)(cam + 0x144));
             if (fast_difference_between_rotations(*(float *)(cam + 0x158), target_heading) <
                 0.034906585f) {
                 enter_hero_idle_state_for_current_vehicle_mode();
-                pvars->unk4C = 1;
+                pvars->camera_sequence_done = 1;
                 moby->state = CAMERA_BOX_WATCHER_MONITOR;
             }
         }

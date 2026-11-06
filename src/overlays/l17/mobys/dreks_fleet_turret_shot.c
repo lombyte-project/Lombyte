@@ -125,12 +125,12 @@ void        fleet_turret_shot_update(struct Moby *moby) __asm__("FUN_L17_002e8e0
 
 typedef struct FleetTurretShotVars {
     u8  pad_0[0x10];
-    f32 unk10;
-    f32 unk14;
+    f32 target_x;
+    f32 target_y;
     u8  pad_18[0x20];
     s32 timer_38;
-    s32 unk3C;
-    f32 unk40;
+    s32 source_moby;
+    f32 speed;
 } FleetTurretShotVars;
 
 /* Moby class 1368 */
@@ -158,19 +158,19 @@ void fleet_turret_shot_update(struct Moby *moby) {
     case DRONE_STATE_FLIGHT:
         moby->draw_dist = 0;
         moby->visible = 0;
-        target_position = &drone_vars->unk10;
+        target_position = &drone_vars->target_x;
         *(OvlQuad *)lowered_hero_position = *(OvlQuad *)(&hero.motion.body_center);
         lowered_hero_position[2] = lowered_hero_position[2] - 0.5f;
         if (vector_distance_xy(lowered_hero_position, target_position) < 8.0f) {
             lerp_vector(target_position, lowered_hero_position, target_position, 0.99f);
         }
         if (vector_distance_xy(&moby->pos, target_position) > 4.0f) {
-            if (fast_difference_between_rotations(moby->rot.z,
-                                                  fast_arc_tan(drone_vars->unk10 - moby->pos.x,
-                                                               drone_vars->unk14 - moby->pos.y)) <
-                0.7853982f) {
+            if (fast_difference_between_rotations(
+                    moby->rot.z,
+                    fast_arc_tan(drone_vars->target_x - moby->pos.x,
+                                 drone_vars->target_y - moby->pos.y)) < 0.7853982f) {
                 fast_vec_sub(flight_offset_scratch, target_position, &moby->pos);
-                fast_vec_normalize(drone_vars, flight_offset_scratch, drone_vars->unk40);
+                fast_vec_normalize(drone_vars, flight_offset_scratch, drone_vars->speed);
             }
         }
         fast_vec_scale(flight_offset_scratch, drone_vars, -20.0f);
@@ -194,7 +194,7 @@ void fleet_turret_shot_update(struct Moby *moby) {
             FUN_L00_001f0d60_q(0.5f, &moby->pos, 0, moby) != 0) {
             hit = *(int *)(r + 0x18);
             if (hit != 0) {
-                if (hit != drone_vars->unk3C) {
+                if (hit != drone_vars->source_moby) {
                     g = &hero;
                     if (g->magnetic_floor != 0 && hit == ((int)g->moby)) {
                         unsigned char *rec = D_00141968_x_q;
@@ -230,7 +230,7 @@ void fleet_turret_shot_update(struct Moby *moby) {
                     moby->state = DRONE_STATE_SPARKS_UNTIL_REMOVAL;
                     return;
                 }
-            } else if (vector_distance_xy(&moby->pos, *(char **)&drone_vars->unk3C + 0x10) >
+            } else if (vector_distance_xy(&moby->pos, *(char **)&drone_vars->source_moby + 0x10) >
                        10.0f) {
                 qcopy(&moby->pos, r + 0x20);
                 drone_vars->timer_38 = scale_game_frames(0x1E);
