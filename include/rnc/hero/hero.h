@@ -492,41 +492,41 @@ struct Hero {
     s16  race_rank[8];                  /* 0x7C0 */
     f32  ground_distance_history[0x20]; /* 0x7D0 */
     u8   pad_850[0x4];
-    f32  board_vertical_speed;   /* 0x854 */
-    f32  unk858;                 /* 0x858 */
-    f32  hoverboard_speed;       /* 0x85C */
-    f32  board_gravity;          /* 0x860 */
-    s32  boost_frames;           /* 0x864 */
-    f32  boost_speed;            /* 0x868 */
-    u8  *hoverboard_moby;        /* 0x86C */
-    s32  unk870;                 /* 0x870 */
-    f32  board_air_yaw;          /* 0x874 */
-    f32  air_yaw_spring_vel;     /* 0x878 */
-    f32  unk87C;                 /* 0x87C */
-    s32  trick_hud_handle;       /* 0x880 */
-    s16  board_boost_active;     /* 0x884 */
-    s16  landing_turn_delay;     /* 0x886 */
-    s16  board_jump_land_frames; /* 0x888 */
-    s16  prev_air_frames;        /* 0x88A */
-    u8   steep_jump;             /* 0x88C */
-    u8   trick_input;            /* 0x88D */
-    u8   vert_ramp_launch;       /* 0x88E */
-    u8   air_pose_index;         /* 0x88F */
-    u8  *unk890;                 /* 0x890 */
-    s32  race_time_frames; /* 0x894: frame counter shown as m:ss.hh on the HUD (FUN_L05_00266710) */
-    s16  race_path_node;   /* 0x898 */
-    s16  race_lap;         /* 0x89A: shown + 1 (capped at 3) on the HUD (FUN_L05_00266320) */
-    s16  board_jump_frames;             /* 0x89C */
-    s16  board_jump_cooldown;           /* 0x89E */
-    f32  board_floor_z;                 /* 0x8A0 */
-    f32  wall_face_yaw;                 /* 0x8A4 */
-    s32  race_score;                    /* 0x8A8: count shown on the HUD (FUN_L05_00266710) */
-    s16  high_jump_window;              /* 0x8AC */
-    u8   off_course_frames;             /* 0x8AE */
-    u8   off_course_reset_pending;      /* 0x8AF */
-    s16  height_ring_count;             /* 0x8B0 */
-    s16  ground_distance_history_index; /* 0x8B2 */
-    void *race_path;                    /* 0x8B4 */
+    f32  board_vertical_speed;        /* 0x854 */
+    f32  board_spring_angle_velocity; /* 0x858: vendor_spring velocity of board_spring_angle */
+    f32  hoverboard_speed;            /* 0x85C */
+    f32  board_gravity;               /* 0x860 */
+    s32  boost_frames;                /* 0x864 */
+    f32  boost_speed;                 /* 0x868 */
+    u8  *hoverboard_moby;             /* 0x86C */
+    s32  unk870;                      /* 0x870 */
+    f32  board_air_yaw;               /* 0x874 */
+    f32  air_yaw_spring_vel;          /* 0x878 */
+    f32 board_spring_angle; /* 0x87C: sprung toward 70 degrees on the board, faster while boosting */
+    s32 trick_hud_handle;   /* 0x880 */
+    s16 board_boost_active;     /* 0x884 */
+    s16 landing_turn_delay;     /* 0x886 */
+    s16 board_jump_land_frames; /* 0x888 */
+    s16 prev_air_frames;        /* 0x88A */
+    u8  steep_jump;             /* 0x88C */
+    u8  trick_input;            /* 0x88D */
+    u8  vert_ramp_launch;       /* 0x88E */
+    u8  air_pose_index;         /* 0x88F */
+    u8 *unk890;                 /* 0x890 */
+    s32 race_time_frames;  /* 0x894: frame counter shown as m:ss.hh on the HUD (FUN_L05_00266710) */
+    s16 race_path_node;    /* 0x898 */
+    s16 race_lap;          /* 0x89A: shown + 1 (capped at 3) on the HUD (FUN_L05_00266320) */
+    s16 board_jump_frames; /* 0x89C */
+    s16 board_jump_cooldown;           /* 0x89E */
+    f32 board_floor_z;                 /* 0x8A0 */
+    f32 wall_face_yaw;                 /* 0x8A4 */
+    s32 race_score;                    /* 0x8A8: count shown on the HUD (FUN_L05_00266710) */
+    s16 high_jump_window;              /* 0x8AC */
+    u8  off_course_frames;             /* 0x8AE */
+    u8  off_course_reset_pending;      /* 0x8AF */
+    s16 height_ring_count;             /* 0x8B0 */
+    s16 ground_distance_history_index; /* 0x8B2 */
+    void *race_path;                   /* 0x8B4 */
     union {
         f32 f;
         s32 i;
@@ -737,23 +737,25 @@ struct Hero {
     s16 unk1EB0; /* 0x1EB0 */
     s16 unk1EB2; /* 0x1EB2: once flag for queueing FUN_L00_00207d40 */
     u8  pad_1EB4[0x1C];
-    /* 0x1EC0..0x1F44: the moby walk and hop parameters doom bots copy in and out
-       (save_state_fields_to_hero, initialize_moby_hop_trajectory) */
-    f32  move_turn_velocity; /* 0x1ED0: DoomBotVars.turn_velocity */
-    f32  move_speed;         /* 0x1ED4: DoomBotVars.movement_speed */
-    f32  unk1ED8;            /* 0x1ED8 */
+    /* 0x1EC0..0x1F10: a struct GroundMoveControl (ground_move_control.h) that doom
+       bots hand to step_mover; 0x1F10..0x1F50: the hop arc state update_arc_motion
+       steps. Doom bots copy their own copies of the fields in and out
+       (save_state_fields_to_hero, save_state_vector_and_fields_to_hero). */
+    f32  move_speed;             /* 0x1ED0: GroundMoveControl.speed */
+    f32  move_turn_velocity;     /* 0x1ED4: GroundMoveControl.turn_velocity */
+    f32  move_vertical_velocity; /* 0x1ED8: GroundMoveControl.vertical_velocity */
     u8   pad_1EDC[0x8];
-    f32  move_turn_rate; /* 0x1EE4: DoomBotVars.turn_rate */
+    f32  move_max_speed; /* 0x1EE4: GroundMoveControl.max_speed */
     u8   pad_1EE8[0x20];
-    s32  unk1F08; /* 0x1F08 */
+    s32  move_timer; /* 0x1F08: GroundMoveControl.move_timer */
     u8   pad_1F0C[0x4];
     Vec4 hop_target;           /* 0x1F10: landing point */
     f32  hop_vertical_speed;   /* 0x1F20: launch speed, capped at 7 * frame_time */
     f32  hop_horizontal_speed; /* 0x1F24 */
     f32  hop_heading;          /* 0x1F28: atan2 toward hop_target */
     u8   pad_1F2C[0x13];
-    s8   hop_mode; /* 0x1F3F: cleared when a hop starts */
-    f32  unk1F40;  /* 0x1F40 */
+    s8   hop_mode;          /* 0x1F3F: cleared when a hop starts */
+    f32  hop_turn_velocity; /* 0x1F40: spring turn velocity toward hop_heading */
     u8   pad_1F44[0x1C];
     u8   unk1F60[0x40];    /* 0x1F60: 0x40-byte buffer cleared by FUN_L00_002b58d8 */
     u8   unk1FA0[0x40];    /* 0x1FA0: 0x40-byte buffer cleared by FUN_L00_002b58d8 */

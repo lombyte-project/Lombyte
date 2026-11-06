@@ -1047,8 +1047,8 @@ void update_hero_motion_for_current_state(void) {
                 hero.boost_min_frames = scale_game_frames(20);
             }
             hero.board_boost_active = 1;
-            vendor_spring(&hero.unk87C,
-                          &hero.unk858,
+            vendor_spring(&hero.board_spring_angle,
+                          &hero.board_spring_angle_velocity,
                           1.2217305f,
                           frame_scale_sq * 0.01f,
                           frame_scale_sq * 0.3f,
@@ -1064,8 +1064,8 @@ void update_hero_motion_for_current_state(void) {
             }
         } else {
             hero.board_boost_active = 0;
-            vendor_spring(&hero.unk87C,
-                          &hero.unk858,
+            vendor_spring(&hero.board_spring_angle,
+                          &hero.board_spring_angle_velocity,
                           1.2217305f,
                           frame_scale_sq * 0.007f,
                           frame_scale_sq * 0.3f,

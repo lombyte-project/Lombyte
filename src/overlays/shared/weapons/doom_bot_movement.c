@@ -170,30 +170,30 @@ int probe_moby_raised_sphere_collision(char *moby, int b, Vx *position_override)
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFE98), where it is exact; names translated to the US level program. */
 
-/* Saves the doom bot turn velocity, speed, words 0x48/0x4C and turn rate into the hero move parameters. */
+/* Saves the doom bot speed, turn velocity, vertical velocity, move timer and max speed into the hero GroundMoveControl. */
 void save_state_fields_to_hero(char *source_state) __asm__("FUN_L00_002beb90");
 
 void save_state_fields_to_hero(char *source_state) {
     struct Hero *hero_state = &hero;
-    hero_state->move_turn_velocity = *(float *)(source_state + 0x40);
-    hero_state->move_speed = *(float *)(source_state + 0x44);
-    hero_state->unk1ED8 = *(float *)(source_state + 0x48);
-    hero_state->unk1F08 = *(int *)(source_state + 0x4C);
-    hero_state->move_turn_rate = *(float *)(source_state + 0x5C);
+    hero_state->move_speed = *(float *)(source_state + 0x40);
+    hero_state->move_turn_velocity = *(float *)(source_state + 0x44);
+    hero_state->move_vertical_velocity = *(float *)(source_state + 0x48);
+    hero_state->move_timer = *(int *)(source_state + 0x4C);
+    hero_state->move_max_speed = *(float *)(source_state + 0x5C);
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFED0), where it is exact; names translated to the US level program. */
 
-/* Restores the doom bot turn velocity, speed, words 0x48/0x4C and turn rate from the hero move parameters. */
+/* Restores the doom bot speed, turn velocity, vertical velocity, move timer and max speed from the hero GroundMoveControl. */
 void restore_state_fields_from_hero(char *destination_state) __asm__("FUN_L00_002bebc8");
 
 void restore_state_fields_from_hero(char *destination_state) {
     struct Hero *hero_state = &hero;
-    *(float *)(destination_state + 0x40) = hero_state->move_turn_velocity;
-    *(float *)(destination_state + 0x44) = hero_state->move_speed;
-    *(float *)(destination_state + 0x48) = hero_state->unk1ED8;
-    *(int *)(destination_state + 0x4C) = hero_state->unk1F08;
-    *(float *)(destination_state + 0x5C) = hero_state->move_turn_rate;
+    *(float *)(destination_state + 0x40) = hero_state->move_speed;
+    *(float *)(destination_state + 0x44) = hero_state->move_turn_velocity;
+    *(float *)(destination_state + 0x48) = hero_state->move_vertical_velocity;
+    *(int *)(destination_state + 0x4C) = hero_state->move_timer;
+    *(float *)(destination_state + 0x5C) = hero_state->move_max_speed;
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFF08), where it is exact; names translated to the US level program. */
@@ -207,7 +207,7 @@ void save_state_vector_and_fields_to_hero(char *source_state) {
     hero_state->hop_horizontal_speed = *(float *)(source_state + 0x54);
     hero_state->hop_heading = *(float *)(source_state + 0x58);
     hero_state->hop_mode = *(char *)(source_state + 0x68);
-    hero_state->unk1F40 = *(float *)(source_state + 0x44);
+    hero_state->hop_turn_velocity = *(float *)(source_state + 0x44);
     qcopy(&hero_state->hop_target, source_state);
 }
 
@@ -222,7 +222,7 @@ void restore_saved_state_fields_from_hero(char *destination_state) {
     *(float *)(destination_state + 0x54) = hero_state->hop_horizontal_speed;
     *(float *)(destination_state + 0x58) = hero_state->hop_heading;
     *(char *)(destination_state + 0x68) = hero_state->hop_mode;
-    *(float *)(destination_state + 0x44) = hero_state->unk1F40;
+    *(float *)(destination_state + 0x44) = hero_state->hop_turn_velocity;
 }
 
 float probe_moby_landing_height(Vec4_2bec80 *probe_position,
