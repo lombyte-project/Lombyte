@@ -362,15 +362,15 @@ typedef struct AlienQueenVars {
     s16                  max_health;
     u8                   pad_26[0x2];
     u8                   hit_response_class;
-    u8                   unk29;
+    u8                   wrench_hit_sound;
     u8                   pad_2A[0x4];
     u8                   death_control_flags;
     u8                   pad_2F[0x19];
     f32                  z_velocity;
     u8                   pad_4C[0xC];
-    u8                   unk58;
+    u8                   look_range;
     u8                   pad_59[0x1];
-    u8                   unk5A;
+    u8                   look_height;
     u8                   pad_5B[0x5];
     struct HitColorFlash hit_flash;
     u8                   goal; /* target record (FUN_L00_0025ff38): target at +0x40 */
@@ -437,11 +437,11 @@ void alien_queen_update(unsigned char *moby) {
         int *path;
         alien_queen_update_vars->health = 30.0f;
         alien_queen_update_vars->max_health = 0x1E;
-        alien_queen_update_vars->unk29 = 1;
+        alien_queen_update_vars->wrench_hit_sound = 1;
         alien_queen_update_vars->hit_response_class = 3;
         alien_queen_update_vars->death_control_flags = 1;
-        alien_queen_update_vars->unk58 = truncate_float_to_s32(14.0f);
-        alien_queen_update_vars->unk5A = truncate_float_to_s32(18.4f);
+        alien_queen_update_vars->look_range = truncate_float_to_s32(14.0f);
+        alien_queen_update_vars->look_height = truncate_float_to_s32(18.4f);
         alien_queen_update_vars->timer_120 = scale_game_frames(0x4B0);
         alien_queen_update_vars->suppress_death_dialogue = 0;
         qcopy(alien_queen_update_vars->home_position, moby + 0x10);
