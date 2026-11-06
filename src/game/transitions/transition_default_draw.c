@@ -9,7 +9,7 @@
 
 struct Globals_0016045C {
     u8  pad_0[0x4];
-    s16 unk4;
+    s16 clear_screen; /* 0x04: sky header frame-clear gate (set to 1 by relocate_sky_definition) */
     u8  pad_6[0x2];
 };
 
@@ -59,7 +59,7 @@ void transition_default_draw(s32 *unused_parameter) {
     };
     s32 language_overlay_index;
 
-    if (level_sky_effect_data == 0 || level_sky_effect_data->unk4 != 0) {
+    if (level_sky_effect_data == 0 || level_sky_effect_data->clear_screen != 0) {
         append_gif_transfer_packet();
     }
     fill_transfer_words(occl_visibility, -1, 0x80);
