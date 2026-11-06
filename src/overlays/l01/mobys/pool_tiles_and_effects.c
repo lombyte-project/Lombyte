@@ -28,8 +28,8 @@ typedef struct {
         [8]; /* 0x0C: index of the tile 16 units away in each direction, 0xFF: none (WaterGrid layout) */
     u32 texture_id;        /* 0x14 */
     u32 second_texture_id; /* 0x18 */
-    u8  unk1C;             /* 0x1C */
-    u8  unk1D;             /* 0x1D */
+    u8  alpha_2_fix;       /* 0x1C */
+    u8  alpha_1_fix;       /* 0x1D */
     u16 color;             /* 0x1E */
     f32 f20;
     f32 f24;

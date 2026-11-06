@@ -21,7 +21,7 @@
  * (prev control mode 0x12, now 4 or 5) the push is damped instead.
  */
 typedef struct {
-    Vec4 vel; /* 0x00: path velocity, copied to the hero push (motion.unkF0) */
+    Vec4 vel; /* 0x00: path velocity, copied to the hero push (motion.platform_delta) */
     u8   pad_10[0x10];
     s32  path;      /* 0x20: index into D_L01_001B0930, -1 none */
     f32  max_speed; /* 0x24 */
