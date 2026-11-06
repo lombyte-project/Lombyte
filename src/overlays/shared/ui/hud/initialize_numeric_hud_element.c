@@ -11,9 +11,9 @@
 void initialize_numeric_hud_element(HudElem *hud_element) __asm__("FUN_L00_00237190");
 
 void initialize_numeric_hud_element(HudElem *hud_element) {
-    hud_element->unk7C = scale_game_frames(0xA) + 0x1E;
-    hud_element->unk48 = 0;
-    hud_element->unk4A = 0;
+    hud_element->visible_timer = scale_game_frames(0xA) + 0x1E;
+    hud_element->offset_x = 0;
+    hud_element->offset_y = 0;
     hud_element->w = 0x20;
     hud_element->h = 0x20;
     initialize_numeric_hud_values_and_dimensions(hud_element);

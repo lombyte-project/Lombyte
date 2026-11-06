@@ -18,11 +18,11 @@
 void initialize_hud_element_defaults(HudElem *hud_element) __asm__("FUN_L05_002661a0");
 
 void initialize_hud_element_defaults(HudElem *hud_element) {
-    hud_element->unk7C = scale_game_frames(0xB4) + 0x1E;
+    hud_element->visible_timer = scale_game_frames(0xB4) + 0x1E;
     hud_element->w = 0x80;
-    hud_element->unk48 = 0;
+    hud_element->offset_x = 0;
     hud_element->h = 0x80;
-    hud_element->unk4A = 0;
+    hud_element->offset_y = 0;
 }
 /* Ported from rac1-decomp (src/overlays/shared/hud_00263490.c: func_L05_00266BD8), where it is exact; names translated to the US level program. */
 
@@ -91,7 +91,7 @@ int draw_hud_progress_and_rank(HudElem *hud_element) {
     char       small_buf[16];
     int        x, y, count;
 
-    if (hud_element->unk6C <= 0) {
+    if (hud_element->slide <= 0) {
         return 0;
     }
     {
@@ -137,7 +137,7 @@ int draw_hud_progress_and_rank(HudElem *hud_element) {
         sprintf(small_buf, D_L05_0015F860, hero.race_ammo);
         /* Fakematch: the dead early copy of the default row gives retail's register order. */
         y2 = pal_mode ? 10 : 18;
-        x2 = hud_element->unk50;
+        x2 = hud_element->x;
         if (alternate_item_available[0] == 0) {
             y2 = pal_mode ? 10 : 18;
         } else {
@@ -165,7 +165,7 @@ int draw_hud_timer(HudElem *hud_element) {
     int  min, sec, hund;
     int  x;
 
-    if (hud_element->unk6C <= 0) {
+    if (hud_element->slide <= 0) {
         return 0;
     }
     /* written as -(row) + height: the plain `height - row` form folds the +10/+18 into the subtraction */
