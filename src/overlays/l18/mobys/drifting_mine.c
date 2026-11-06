@@ -177,11 +177,11 @@ typedef struct {
     unsigned char seq;       /* 0x52 */
     unsigned char prevSeq;   /* 0x53 */
     char          _pad54[0x5C - 0x54];
-    float         unk5C; /* 0x5C */
+    float         anim_rate; /* 0x5C: as in struct Moby */
     char          _pad60[0x68 - 0x60];
     float        *frameData; /* 0x68 */
     char          _pad6C[4];
-    unsigned char unk70; /* 0x70 */
+    unsigned char anim_flags; /* 0x70 */
 } MobyAnim_q;
 
 extern float FUN_L00_0025abf0_q(float *a, float *b, float *out, float speed, float g) __asm__("FUN_L00_0025abf0");
