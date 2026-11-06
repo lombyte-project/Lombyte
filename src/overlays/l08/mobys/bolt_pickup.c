@@ -33,7 +33,7 @@ typedef struct MobyData {
     float   f8;
     float   fC;
     float   vel[4];
-    int     f20;
+    int     bolt_value; /* bolts credited on pickup */
     Target *target;
     int     ticks;
     int     f2C;
@@ -203,8 +203,8 @@ void bolt_pickup_update(Moby_2B94B0 *moby) {
             break;
         if (moby_data->target != 0)
             moby_data->target->fA = 0;
-        current_bolt_count = current_bolt_count + moby_data->f20;
-        ((int *)level_bolts)[D_0015ED84] = ((int *)level_bolts)[D_0015ED84] + moby_data->f20;
+        current_bolt_count = current_bolt_count + moby_data->bolt_value;
+        ((int *)level_bolts)[D_0015ED84] = ((int *)level_bolts)[D_0015ED84] + moby_data->bolt_value;
         allocate_voice_for_target_entry(0, 0, moby);
         queue_animation_update(2,
                                0x754E,

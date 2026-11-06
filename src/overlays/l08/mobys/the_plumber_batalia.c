@@ -81,15 +81,15 @@ typedef struct {
 
 typedef struct {
     char  pad00[4];
-    short sub;
+    short dialogue_mode; /* 0x04: 3 when the talk is done */
     char  pad06[0x1A];
-    void *p20;
+    void *name_text;
     char  pad24[0x12];
-    short h36;
+    short dialogue_entry; /* 0x36 */
     char  pad38[0x10];
-    int   i48;
+    int   camera_cuboid; /* 0x48: D_L08_001600EC row */
     char  pad4C[4];
-    int   i50;
+    int   cannon_moby; /* 0x50: index of the cannon moby */
     char  pad54[0xC];
     char  body[0x64];
     float pitch;
@@ -182,26 +182,26 @@ void the_plumber_batalia_update(L14WatchMoby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        watch_data->p20 = (void *)batalia_plumber_name_text;
+        watch_data->name_text = (void *)batalia_plumber_name_text;
         moby->state = PLUMBER_UPDATE_DIALOGUE;
         initialize_npc_dialogue(moby, watch_data);
         break;
     case PLUMBER_UPDATE_DIALOGUE:
         if (update_npc_dialogue(moby, watch_data))
             begin_dialogue_camera_transition(moby, 2.7f);
-        if (watch_data->h36 == 2) {
-            char *camera_record = D_L08_001600EC + watch_data->i48 * 128;
+        if (watch_data->dialogue_entry == 2) {
+            char *camera_record = D_L08_001600EC + watch_data->camera_cuboid * 128;
             jet_reset_camera(camera_record + 0x30, camera_record + 0x70);
             moby->state = PLUMBER_SCRIPTED_HANDOFF;
-            request_batalia_cannon_mount(D_L08_0015FFD8 + watch_data->i50 * 256);
+            request_batalia_cannon_mount(D_L08_0015FFD8 + watch_data->cannon_moby * 256);
         }
-        if (watch_data->sub == 3) {
+        if (watch_data->dialogue_mode == 3) {
             FUN_L08_002a1880(1);
             moby->state = PLUMBER_SAVE_AND_REMOVE;
         }
-        if (watch_data->sub == 4) {
+        if (watch_data->dialogue_mode == 4) {
             hero_respawn();
-            watch_data->sub = -1;
+            watch_data->dialogue_mode = -1;
         }
         break;
     case PLUMBER_SCRIPTED_HANDOFF:
