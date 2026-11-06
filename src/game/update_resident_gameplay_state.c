@@ -333,35 +333,35 @@ void update_resident_gameplay_state(void) {
             if (playback_object->class_id == 0) {
                 if (level_render_state.state == LEVEL_RENDER_STATE_PLAYBACK_TO_MENU) {
                     if (current_level_index == LEVEL_ORXON && item_available[ITEM_O2_MASK] == 0) {
-                        playback_object->unk7F = 0;
+                        playback_object->shadow_range = 0;
                     } else if (render_sequence.time <= scale_game_frames(0x3E)) {
-                        playback_object->unk7F = 0x18;
+                        playback_object->shadow_range = 0x18;
                     } else {
-                        playback_object->unk7F = 0;
+                        playback_object->shadow_range = 0;
                     }
                 } else if (scale_game_frames(360) < render_sequence.time) {
                     if (current_level_index == LEVEL_ORXON && item_available[ITEM_O2_MASK] == 0) {
-                        playback_object->unk7F = 0;
+                        playback_object->shadow_range = 0;
                     } else {
-                        playback_object->unk7F = 0x18;
+                        playback_object->shadow_range = 0x18;
                     }
                 } else {
-                    playback_object->unk7F = 0;
+                    playback_object->shadow_range = 0;
                 }
             } else if (playback_object->class_id == 10) {
                 if (level_render_state.state == LEVEL_RENDER_STATE_PLAYBACK_TO_MENU) {
                     if (render_sequence.time <= scale_game_frames(350)) {
-                        playback_object->unk7F = 0x18;
+                        playback_object->shadow_range = 0x18;
                     } else {
-                        playback_object->unk7F = 0;
+                        playback_object->shadow_range = 0;
                     }
                 } else if (render_sequence.time <= scale_game_frames(524)) {
-                    playback_object->unk7F = 0;
+                    playback_object->shadow_range = 0;
                 } else {
-                    playback_object->unk7F = 0x18;
+                    playback_object->shadow_range = 0x18;
                 }
             }
-            if (playback_object->unk7F != 0) {
+            if (playback_object->shadow_range != 0) {
                 update_moby_shadow_range(playback_object);
             }
             if (playback_object->class_id == 10) {
@@ -375,10 +375,9 @@ void update_resident_gameplay_state(void) {
                         level_render_state.attachment = create_moby(0x509);
                         level_render_state.attachment->selected_index = 0x40;
                         level_render_state.attachment->flags |= 0x806;
-                        level_render_state.attachment->lifetime_stamp =
-                            playback_object->lifetime_stamp;
-                        if (level_render_state.attachment->model->unk6 != 0) {
-                            level_render_state.attachment->unk73 = 0x18;
+                        level_render_state.attachment->lights = playback_object->lights;
+                        if (level_render_state.attachment->model->metal_count != 0) {
+                            level_render_state.attachment->metal_alpha = 0x18;
                         }
                     }
                     noop_callback_m(playback_object, level_render_state.attachment);
@@ -396,11 +395,11 @@ void update_resident_gameplay_state(void) {
                                   80.0f) +
                             120;
                         if (playback_object->class_id == 0x215) {
-                            playback_object->color = (color_intensity >> 1) |
-                                                     (color_intensity << 8) |
-                                                     (color_intensity << 16);
+                            playback_object->glow_color = (color_intensity >> 1) |
+                                                          (color_intensity << 8) |
+                                                          (color_intensity << 16);
                         } else {
-                            playback_object->color =
+                            playback_object->glow_color =
                                 color_intensity | (color_intensity << 8) | (color_intensity << 16);
                         }
                     } else if (render_sequence.time < scale_game_frames(0x1F8)) {
@@ -411,10 +410,10 @@ void update_resident_gameplay_state(void) {
                             color_intensity = 255;
                         }
                         if (playback_object->class_id == 0x215) {
-                            playback_object->color =
+                            playback_object->glow_color =
                                 (color_intensity << 8) | (color_intensity << 16);
                         } else {
-                            playback_object->color =
+                            playback_object->glow_color =
                                 color_intensity | (color_intensity << 8) | (color_intensity << 16);
                         }
                         if (scale_game_frames(0x1A4) < render_sequence.time) {
@@ -432,7 +431,7 @@ void update_resident_gameplay_state(void) {
                             }
                         }
                     } else {
-                        playback_object->color = 0xA0A0A0;
+                        playback_object->glow_color = 0xA0A0A0;
                         D_0015F440 -= 0.025f;
                         if (D_0015F440 < 0.0f) {
                             D_0015F440 = 0.0f;
@@ -450,10 +449,11 @@ void update_resident_gameplay_state(void) {
                                             80.0f) +
                                       120;
                     if (playback_object->class_id == 0x215) {
-                        playback_object->color = (color_intensity >> 1) | (color_intensity << 8) |
-                                                 (color_intensity << 16);
+                        playback_object->glow_color = (color_intensity >> 1) |
+                                                      (color_intensity << 8) |
+                                                      (color_intensity << 16);
                     } else {
-                        playback_object->color =
+                        playback_object->glow_color =
                             color_intensity | (color_intensity << 8) | (color_intensity << 16);
                     }
                     playback_object->quad_alpha = 0x32;
@@ -472,9 +472,10 @@ void update_resident_gameplay_state(void) {
                         (s32)((multiply_global_scale(360.0f) - (f32)render_sequence.time) *
                               (frame_scale * 1.25f));
                     if (playback_object->class_id == 0x215) {
-                        playback_object->color = (color_intensity << 8) | (color_intensity << 16);
+                        playback_object->glow_color =
+                            (color_intensity << 8) | (color_intensity << 16);
                     } else {
-                        playback_object->color =
+                        playback_object->glow_color =
                             color_intensity | (color_intensity << 8) | (color_intensity << 16);
                     }
                 } else {
@@ -484,10 +485,11 @@ void update_resident_gameplay_state(void) {
                                                 80.0f) +
                                           120;
                     if (playback_object->class_id == 0x215) {
-                        playback_object->color = (color_intensity >> 1) | (color_intensity << 8) |
-                                                 (color_intensity << 16);
+                        playback_object->glow_color = (color_intensity >> 1) |
+                                                      (color_intensity << 8) |
+                                                      (color_intensity << 16);
                     } else {
-                        playback_object->color =
+                        playback_object->glow_color =
                             color_intensity | (color_intensity << 8) | (color_intensity << 16);
                     }
                 }
@@ -519,23 +521,23 @@ void update_resident_gameplay_state(void) {
             level_render_state.player->selected_b = 2;
             level_render_state.player->blend = 0.0f;
             update_moby_animation_state(level_render_state.player);
-            level_render_state.player->opacity = 0xFF;
-            level_render_state.player->unk94 = 0;
+            level_render_state.player->lod_dist = 0xFF;
+            level_render_state.player->collision = 0;
             if (level_render_state.path >= 0) {
                 level_render_state.companion_a = create_moby(0);
                 level_render_state.companion_a->selected_index = 0x1FF;
-                level_render_state.companion_a->opacity = 0xFF;
-                level_render_state.companion_a->unk94 = 0;
+                level_render_state.companion_a->lod_dist = 0xFF;
+                level_render_state.companion_a->collision = 0;
                 level_render_state.companion_a->flags |= 6;
-                level_render_state.companion_a->lifetime_stamp =
-                    ((ResidentRenderObject *)hero.moby)->lifetime_stamp;
+                level_render_state.companion_a->lights =
+                    ((ResidentRenderObject *)hero.moby)->lights;
                 level_render_state.companion_b = create_moby(10);
                 level_render_state.companion_b->selected_index = 0x1FF;
-                level_render_state.companion_b->opacity = 0xFF;
-                level_render_state.companion_b->unk94 = 0;
+                level_render_state.companion_b->lod_dist = 0xFF;
+                level_render_state.companion_b->collision = 0;
                 level_render_state.companion_b->flags |= 6;
-                level_render_state.companion_b->lifetime_stamp =
-                    ((ResidentRenderObject *)hero.moby)->lifetime_stamp;
+                level_render_state.companion_b->lights =
+                    ((ResidentRenderObject *)hero.moby)->lights;
             }
             noop_callback_a(&game_camera.position, &game_camera.rotation, 1, 0, 0);
             level_render_state.blend = 0.0f;

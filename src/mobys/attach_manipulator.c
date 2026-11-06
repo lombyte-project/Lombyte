@@ -4,22 +4,22 @@ typedef struct Manipulator Manipulator;
 
 typedef struct MobyAttachOwner {
     u8           pad0[0x24];
-    void        *unk24;
+    void        *pclass;
     u8           pad28[0x3C];
     Manipulator *manipulator_head;
 } MobyAttachOwner;
 
 struct Manipulator {
-    u8    unk0;
-    u8    unk1;
+    u8    joint_list; /* index into the class joint lists */
+    u8    attached;
     u8    pad2[2];
-    void *unk4;
-    void *unk8;
+    void *target; /* scratchpad matrix of the list's joint */
+    void *next;
     u8    padC[0x10];
-    f32   unk1C;
-    f32   unk20;
-    f32   unk24;
-    f32   unk28;
+    f32   rotation_w; /* the rotation quaternion's w */
+    f32   scale_x;
+    f32   scale_y;
+    f32   scale_z;
 };
 
 void attach_manipulator(MobyAttachOwner *owner,
@@ -27,23 +27,23 @@ void attach_manipulator(MobyAttachOwner *owner,
                         Manipulator     *manip) __asm__("FUN_0020cb10");
 
 void attach_manipulator(MobyAttachOwner *source_moby, s32 slot_index, Manipulator *manip) {
-    if (manip->unk1 == 0) {
+    if (manip->attached == 0) {
         u8 *slot_record;
 
-        manip->unk0 = slot_index;
-        manip->unk1 = 1;
-        manip->unk1C = 1.0f;
-        manip->unk20 = 1.0f;
-        manip->unk24 = 1.0f;
-        manip->unk28 = 1.0f;
+        manip->joint_list = slot_index;
+        manip->attached = 1;
+        manip->rotation_w = 1.0f;
+        manip->scale_x = 1.0f;
+        manip->scale_y = 1.0f;
+        manip->scale_z = 1.0f;
 
-        slot_record =
-            *(u8 **)((u8 *)(*(s32 *)((u8 *)source_moby->unk24 + 0x1C) + manip->unk0 * 4) + 4);
+        slot_record = *(
+            u8 **)((u8 *)(*(s32 *)((u8 *)source_moby->pclass + 0x1C) + manip->joint_list * 4) + 4);
         {
             u8 record_byte_offset = *slot_record;
-            manip->unk4 = (void *)((slot_record[record_byte_offset + 4] << 6) + 0x70000000);
+            manip->target = (void *)((slot_record[record_byte_offset + 4] << 6) + 0x70000000);
         }
-        manip->unk8 = source_moby->manipulator_head;
+        manip->next = source_moby->manipulator_head;
         source_moby->manipulator_head = manip;
     }
 }
