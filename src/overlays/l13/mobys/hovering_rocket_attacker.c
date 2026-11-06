@@ -82,9 +82,9 @@ typedef struct HoveringRocketAttackerVars {
     u8                   pad_26[0x2];
     u8                   hit_response_class;
     u8                   pad_29[0x2F];
-    u8                   unk58;
+    u8                   look_range;
     u8                   pad_59[0x1];
-    u8                   unk5A;
+    u8                   look_height;
     u8                   pad_5B[0x5];
     struct HitColorFlash hit_flash;
     f32                  path_search_point[4];
@@ -136,8 +136,8 @@ void hovering_rocket_attacker_update(unsigned char *moby) {
         moby_data->max_health = 4;
         moby_data->hit_response_class = 3;
         moby_data->rocket_max_travel_distance = 15.0f;
-        moby_data->unk58 = 50;
-        moby_data->unk5A = 0;
+        moby_data->look_range = 50;
+        moby_data->look_height = 0;
         MOBY(moby)->draw_dist = 255;
         MOBY(moby)->pos.z += 1.0f;
         if (MOBY(moby)->prev_seq != 0)

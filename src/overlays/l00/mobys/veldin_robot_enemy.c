@@ -58,13 +58,13 @@ typedef struct {
     s16                    max_health;
     s16                    unk26;
     u8                     hit_response_class;
-    u8                     unk29;
+    u8                     wrench_hit_sound;
     u8                     pad2A[0x38 - 0x2A];
     s32                    retimer;
     u8                     pad3C[0x58 - 0x3C];
-    u8                     unk58;
+    u8                     look_range;
     u8                     pad59;
-    u8                     unk5A;
+    u8                     look_height;
     u8                     pad5B[0x60 - 0x5B];
     u8                     move[7];
     u8                     damage_secondary_red;
@@ -199,12 +199,12 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
     switch (moby->state) {
     case VELDIN_ROBOT_STATE_INITIALIZE:
         qcopy(&vars->spawnPos, &moby->pos);
-        vars->unk29 = 0;
+        vars->wrench_hit_sound = 0;
         vars->health = 2.0f;
         vars->hit_response_class = 1;
         vars->max_health = 2;
-        vars->unk58 = truncate_float_to_s32(14.0f);
-        vars->unk5A = truncate_float_to_s32(8.0f);
+        vars->look_range = truncate_float_to_s32(14.0f);
+        vars->look_height = truncate_float_to_s32(8.0f);
         vars->pathPt = 1;
         if (random_integer_below(2) != 0) {
             moby->flags |= 0x8000;
