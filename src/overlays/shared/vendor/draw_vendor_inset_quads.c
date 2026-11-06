@@ -337,28 +337,28 @@ void draw_vendor_screen(void) {
         return;
     }
     append_gif_transfer_packet();
-    switch (p->unk08) {
+    switch (p->capture_state) {
     case 0:
-        if (p->unk0C != 0) {
+        if (p->capture_request != 0) {
             *(u16 *)(((u8 *)p->vendor_moby) + 0x34) |= 1;
         }
         D_L00_0015F3F4 = 0x100FF;
-        if (p->unk0C != 0 || *(s32 *)p == 3) {
+        if (p->capture_request != 0 || *(s32 *)p == 3) {
             D_L00_0015F3F4 = 0x7F;
         }
         draw_debug_profiler();
-        if (p->unk0C == 0) {
+        if (p->capture_request == 0) {
             return;
         }
-        p->unk08 = 1;
-        p->unk0C = 0;
+        p->capture_state = 1;
+        p->capture_request = 0;
         vu1_sync_chain(1);
         sce_gs_sync_v(0);
         D_L00_0015F3F8_s = D_L00_0015F3F8_v[0] + 1;
         vu1_send_chain_render_buffer();
         swap_render_buffer_chain();
         D_L00_001611CC = 0x60000;
-        capture_draw_buffer(p->unk10);
+        capture_draw_buffer(p->capture_buffer);
         *(u16 *)(((u8 *)p->vendor_moby) + 0x34) &= 0xFFFE;
         *(f32 *)(((u8 *)p->vendor_moby) + 0x2C) = 0.14190800487995148f;
         if (p->mode != 0) {
@@ -395,9 +395,9 @@ void draw_vendor_screen(void) {
         initialize_vendor_selected_item_mobys();
         p->unk2C = (s32)p->moby_buffer + 0x1400;
         fast_mem_zero16(p->unk2C, 0x400);
-        p->unk18 = p->unk2C + 0x400;
+        p->animation_data = p->unk2C + 0x400;
         if (cd_read_active[0] == 0) {
-            if (start_audio_stream_read(p->unk18 + 0x80000,
+            if (start_audio_stream_read(p->animation_data + 0x80000,
                                         disc_table.vendor_animation.sector,
                                         disc_table.vendor_animation.size) != 0) {
                 D_L00_0016118C = 1;
@@ -413,7 +413,7 @@ void draw_vendor_screen(void) {
     default:
         return;
     }
-    append_draw_buffer_upload_packets(p->unk10, draw_buffer_address, frame_size[0] << 11);
+    append_draw_buffer_upload_packets(p->capture_buffer, draw_buffer_address, frame_size[0] << 11);
     setup_gif_paging(0);
     update_camera_view_matrices();
     reset_gs_registers();
