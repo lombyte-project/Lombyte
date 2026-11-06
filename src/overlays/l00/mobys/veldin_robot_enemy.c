@@ -25,6 +25,7 @@
 #include "qcopy.h"
 #include "rnc/overlay/shared/world/collision.h"
 #include "rnc/overlay/l00/mobys/veldin_robot_enemy_globals.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 
 enum {
     VELDIN_ROBOT_STATE_INITIALIZE = 0,
@@ -52,54 +53,40 @@ typedef struct {
 typedef struct ElectroidMoby ElectroidMoby;
 
 typedef struct {
-    u8             pad0[0x20];
-    f32            health;
-    s16            unk24;
-    s16            unk26;
-    u8             hit_response_class;
-    u8             unk29;
-    u8             pad2A[0x38 - 0x2A];
-    s32            retimer;
-    u8             pad3C[0x58 - 0x3C];
-    u8             unk58;
-    u8             pad59;
-    u8             unk5A;
-    u8             pad5B[0x60 - 0x5B];
-    u8             move[7];
-    u8             damage_secondary_red;
-    u8             pad68[8];
-    u8             motion[0x10];
-    f32            knockback_gravity;
-    f32            knockback_xy_speed_step;
-    f32            knockback_speed;
-    f32            knockback_vertical_speed;
-    s32            knockback_collision_radius;
-    s32            unk94;
-    f32            knockback_collision_z_offset;
-    u8             pad9C[0xAD - 0x9C];
-    u8             unkAD;
-    u8             padAE[0xBC - 0xAE];
-    f32            unkBC;
-    f32            knockback_apex_animation_frame;
-    f32            knockback_landing_animation_frame;
-    u8             padC8[8];
-    ElectroidVec   targetPos;
-    u8             padE0[0x110 - 0xE0];
-    ElectroidMoby *target;
-    s32            target_selection_status;
-    u8             pad118[0x120 - 0x118];
-    u8             manipulator[0x1A0 - 0x120];
-    u128           spawnPos;
-    u8             pad1B0[4];
-    s32            targeting_path_index;
-    s32            pathIdx;
-    s32            candidate_target_moby_index;
-    u8             pad1C0[0x1D0 - 0x1C0];
-    f32            turnVel;
-    f32            speed;
-    s16            timer;
-    s16            extended_range_timer;
-    s32            pathPt;
+    u8                     pad0[0x20];
+    f32                    health;
+    s16                    unk24;
+    s16                    unk26;
+    u8                     hit_response_class;
+    u8                     unk29;
+    u8                     pad2A[0x38 - 0x2A];
+    s32                    retimer;
+    u8                     pad3C[0x58 - 0x3C];
+    u8                     unk58;
+    u8                     pad59;
+    u8                     unk5A;
+    u8                     pad5B[0x60 - 0x5B];
+    u8                     move[7];
+    u8                     damage_secondary_red;
+    u8                     pad68[8];
+    struct KnockbackMotion knockback; /* 0x70 */
+    ElectroidVec           targetPos;
+    u8                     padE0[0x110 - 0xE0];
+    ElectroidMoby         *target;
+    s32                    target_selection_status;
+    u8                     pad118[0x120 - 0x118];
+    u8                     manipulator[0x1A0 - 0x120];
+    u128                   spawnPos;
+    u8                     pad1B0[4];
+    s32                    targeting_path_index;
+    s32                    pathIdx;
+    s32                    candidate_target_moby_index;
+    u8                     pad1C0[0x1D0 - 0x1C0];
+    f32                    turnVel;
+    f32                    speed;
+    s16                    timer;
+    s16                    extended_range_timer;
+    s32                    pathPt;
 } ElectroidVars;
 
 struct ElectroidMoby {
@@ -375,13 +362,13 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         }
         break;
     case VELDIN_ROBOT_STATE_DAMAGE_KNOCKBACK:
-        if (step_moby_motion(moby, vars->motion) & 0x140) {
+        if (step_moby_motion(moby, &vars->knockback) & 0x140) {
             moby->state = VELDIN_ROBOT_STATE_FACE_TARGET;
             ELECTROID_ANIM(moby, 1, scale_game_frames_s32(10));
         }
         break;
     case VELDIN_ROBOT_STATE_DEATH_KNOCKBACK:
-        if (step_moby_motion(moby, vars->motion) & 0x140) {
+        if (step_moby_motion(moby, &vars->knockback) & 0x140) {
             cart_burst(moby, &moby->pos, -1, 0.75f, 13.0f);
             spawn_moby_break_fragments(moby, 0x7AB, 1, 0x7AB, 1, 4, 0);
             FUN_L00_00263fd8(moby,
@@ -476,38 +463,39 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
     hit_reaction(moby, coll, &vars->health, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && moby->state != VELDIN_ROBOT_STATE_DEATH_KNOCKBACK && dmg != 0.0f) {
         vars->health -= dmg;
-        vars->knockback_collision_radius = 0x200;
-        vars->knockback_gravity = veldin_robot_knockback_gravity_gp * frame_time_sq;
-        vars->knockback_xy_speed_step = veldin_robot_knockback_xy_speed_step_gp * frame_time_sq;
-        vars->knockback_speed = veldin_robot_knockback_xy_scale_gp * frame_time;
-        vars->knockback_vertical_speed = veldin_robot_knockback_z_scale_gp * frame_time;
-        vars->unkAD = 0;
-        vars->unk94 = 9;
-        vars->unkBC = frame_time + frame_time;
-        vars->knockback_collision_z_offset = 0.5f;
+        vars->knockback.collision_radius_1024ths = 0x200;
+        vars->knockback.gravity = veldin_robot_knockback_gravity_gp * frame_time_sq;
+        vars->knockback.speed_approach_step =
+            veldin_robot_knockback_xy_speed_step_gp * frame_time_sq;
+        vars->knockback.speed = veldin_robot_knockback_xy_scale_gp * frame_time;
+        vars->knockback.vertical_speed = veldin_robot_knockback_z_scale_gp * frame_time;
+        vars->knockback.unk3D = 0;
+        vars->knockback.flags = 9;
+        vars->knockback.target_speed = frame_time + frame_time;
+        vars->knockback.collision_z_offset = 0.5f;
         if (vars->health <= 0.0f) {
-            vars->unk94 = 0x29;
+            vars->knockback.flags = 0x29;
             moby->flags &= ~0x1000;
             hit_position.q = coll->pos.q;
             trooper_knockback_arc(
-                &hit_position, &angle, &vars->knockback_speed, &vars->knockback_vertical_speed);
-            trooper_start_knockback(moby, vars->motion, 0xB, 1, 0, angle);
-            vars->knockback_apex_animation_frame = 7.0f;
-            vars->knockback_landing_animation_frame = 16.0f;
+                &hit_position, &angle, &vars->knockback.speed, &vars->knockback.vertical_speed);
+            trooper_start_knockback(moby, &vars->knockback, 0xB, 1, 0, angle);
+            vars->knockback.apex_animation_frame = 7.0f;
+            vars->knockback.landing_animation_frame = 16.0f;
             moby->state = VELDIN_ROBOT_STATE_DEATH_KNOCKBACK;
             moby->collision = 0;
             vars->damage_secondary_red = 0x78;
             trooper_anim_update(moby, anim);
             FUN_L00_00257470(moby, 0, -1);
         } else {
-            vars->knockback_speed = veldin_robot_knockback_xy_scale_gp * frame_time * 0.35f;
-            vars->knockback_vertical_speed = veldin_robot_knockback_z_scale_gp * frame_time * 0.5f;
+            vars->knockback.speed = veldin_robot_knockback_xy_scale_gp * frame_time * 0.35f;
+            vars->knockback.vertical_speed = veldin_robot_knockback_z_scale_gp * frame_time * 0.5f;
             hit_position.q = coll->pos.q;
             trooper_knockback_arc(
-                &hit_position, &unused, &vars->knockback_speed, &vars->knockback_vertical_speed);
+                &hit_position, &unused, &vars->knockback.speed, &vars->knockback.vertical_speed);
             trooper_start_knockback(
-                moby, vars->motion, 8, 1, 0, fast_arc_tan(coll->pos.f[0], coll->pos.f[1]));
-            vars->knockback_landing_animation_frame = vars->knockback_apex_animation_frame = -1.0f;
+                moby, &vars->knockback, 8, 1, 0, fast_arc_tan(coll->pos.f[0], coll->pos.f[1]));
+            vars->knockback.landing_animation_frame = vars->knockback.apex_animation_frame = -1.0f;
             moby->state = VELDIN_ROBOT_STATE_DAMAGE_KNOCKBACK;
             vars->damage_secondary_red = 0xFA;
             vars->unk26 = scale_game_frames(0x3C);

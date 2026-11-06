@@ -10,6 +10,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 
 enum {
     PSYTCOPUS_STATE_INITIALIZE = 0,
@@ -28,53 +29,40 @@ extern int   resolve_moby_hit_response(void *, void *, float *, int, int *, int,
 
 /* pvars of the moby run by psytcopus_update (FUN_L11_00310698 does its hit handling) */
 struct PokiPathVars {
-    u8           pad_00[0x20];
-    f32          health; /* 0x20 */
-    s16          unk24;  /* 0x24 */
-    u8           pad_26[2];
-    u8           hit_response_class; /* 0x28 */
-    u8           pad_29;
-    u8           unk2A; /* 0x2A */
-    u8           pad_2B[0x2D];
-    u8           unk58; /* 0x58 */
-    u8           pad_59;
-    u8           unk5A; /* 0x5A */
-    u8           pad_5B[5];
-    u8           move[7]; /* 0x60: passed to trooper_anim_update / trooper_anim_finish */
-    u8           hit_reaction_channel_target; /* 0x67 */
-    u8           pad_68[8];
-    u8           motion[0x10];      /* 0x70: passed to trooper_start_knockback / step_moby_motion */
-    f32          knockback_gravity; /* 0x80 */
-    f32          knockback_speed_approach_step; /* 0x84 */
-    f32          knockback_speed;               /* 0x88 */
-    f32          knockback_vertical_speed;      /* 0x8C */
-    s32          knockback_collision_radius;    /* 0x90 */
-    s32          unk94;                         /* 0x94 */
-    f32          knockback_collision_z_offset;  /* 0x98 */
-    u8           pad_9C[0x11];
-    u8           unkAD; /* 0xAD */
-    u8           pad_AE[0x12];
-    f32          knockback_apex_animation_frame;    /* 0xC0 */
-    f32          knockback_landing_animation_frame; /* 0xC4 */
-    u8           pad_C8[8];
-    Vec4f        goal; /* 0xD0 */
-    u8           pad_E0[0x30];
-    struct Moby *target; /* 0x110 */
-    s32          unk114; /* 0x114 */
-    u8           pad_118[0x18];
-    s32          unk130;     /* 0x130 */
-    s32          start_path; /* 0x134 */
-    u8           pad_138[4];
-    s32          path_index; /* 0x13C */
-    f32          reach;      /* 0x140 */
-    u8           pad_144[8];
-    f32          yaw_turn_velocity; /* 0x14C */
-    u8           pad_150[8];
-    s32          knockback_extension_timer; /* 0x158 */
-    u8           pad_15C[4];
-    void        *held_projectile; /* 0x160 */
-    u8           pad_164[0x7C];
-    u8           manipulator[0x10]; /* 0x1E0 */
+    u8                     pad_00[0x20];
+    f32                    health; /* 0x20 */
+    s16                    unk24;  /* 0x24 */
+    u8                     pad_26[2];
+    u8                     hit_response_class; /* 0x28 */
+    u8                     pad_29;
+    u8                     unk2A; /* 0x2A */
+    u8                     pad_2B[0x2D];
+    u8                     unk58; /* 0x58 */
+    u8                     pad_59;
+    u8                     unk5A; /* 0x5A */
+    u8                     pad_5B[5];
+    u8                     move[7]; /* 0x60: passed to trooper_anim_update / trooper_anim_finish */
+    u8                     hit_reaction_channel_target; /* 0x67 */
+    u8                     pad_68[8];
+    struct KnockbackMotion knockback; /* 0x70 */
+    Vec4f                  goal;      /* 0xD0 */
+    u8                     pad_E0[0x30];
+    struct Moby           *target; /* 0x110 */
+    s32                    unk114; /* 0x114 */
+    u8                     pad_118[0x18];
+    s32                    unk130;     /* 0x130 */
+    s32                    start_path; /* 0x134 */
+    u8                     pad_138[4];
+    s32                    path_index; /* 0x13C */
+    f32                    reach;      /* 0x140 */
+    u8                     pad_144[8];
+    f32                    yaw_turn_velocity; /* 0x14C */
+    u8                     pad_150[8];
+    s32                    knockback_extension_timer; /* 0x158 */
+    u8                     pad_15C[4];
+    void                  *held_projectile; /* 0x160 */
+    u8                     pad_164[0x7C];
+    u8                     manipulator[0x10]; /* 0x1E0 */
 };
 
 extern struct Moby *D_001413D0 NOT_SDA;
@@ -234,7 +222,7 @@ void psytcopus_update(struct Moby *psytcopus) {
         }
         break;
     case PSYTCOPUS_STATE_KNOCKBACK:
-        knockback_result_flags = FUN_L00_0025c698_p(psytcopus, psytcopus_vars->motion);
+        knockback_result_flags = FUN_L00_0025c698_p(psytcopus, &psytcopus_vars->knockback);
         if (knockback_result_flags & 0x41) {
             path = (s32 *)l11_paths[psytcopus_vars->path_index];
             if (FUN_L00_00259740_p(&psytcopus->pos, path + 4, *path) != 0) {
@@ -253,7 +241,7 @@ void psytcopus_update(struct Moby *psytcopus) {
         }
         break;
     case PSYTCOPUS_STATE_DEATH_KNOCKBACK:
-        if (FUN_L00_0025c698_p(psytcopus, psytcopus_vars->motion) & 0x160) {
+        if (FUN_L00_0025c698_p(psytcopus, &psytcopus_vars->knockback) & 0x160) {
             FUN_L00_0025f3e8_p(psytcopus, &psytcopus->pos, -1, 1.0f, 10.0f);
             FUN_L00_00257470_p(psytcopus, 0, -1);
             mark_moby_for_removal(psytcopus);
@@ -311,12 +299,12 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
         if (psytcopus_vars->health <= 0.0f) {
             hit_reaction = 1;
         }
-        psytcopus_vars->knockback_collision_radius = truncate_float_to_s32(512.0f);
-        psytcopus_vars->knockback_collision_z_offset = 0.5f;
-        psytcopus_vars->knockback_gravity = psytcopus_knockback_base_gravity_gp * frame_time_sq;
-        psytcopus_vars->knockback_speed_approach_step = 0.0005f;
-        psytcopus_vars->unk94 = 9;
-        psytcopus_vars->unkAD = 0;
+        psytcopus_vars->knockback.collision_radius_1024ths = truncate_float_to_s32(512.0f);
+        psytcopus_vars->knockback.collision_z_offset = 0.5f;
+        psytcopus_vars->knockback.gravity = psytcopus_knockback_base_gravity_gp * frame_time_sq;
+        psytcopus_vars->knockback.speed_approach_step = 0.0005f;
+        psytcopus_vars->knockback.flags = 9;
+        psytcopus_vars->knockback.unk3D = 0;
         switch (hit_reaction) {
         case HIT_REACTION_NONE:
         case HIT_REACTION_NO_RESPONSE:
@@ -331,12 +319,12 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
         case HIT_REACTION_KNOCKBACK_WITH_PROJECTILE_CANCELLATION_AND_TIMER_EXTENSION:
         case HIT_REACTION_KNOCKBACK_WITH_SOURCE_RELATIVE_HEADING:
         case HIT_REACTION_KNOCKBACK_WITH_SOURCE_RELATIVE_HEADING_AND_TIMER_EXTENSION:
-            psytcopus_vars->knockback_speed =
+            psytcopus_vars->knockback.speed =
                 psytcopus_hurt_knockback_base_horizontal_speed_gp * frame_time;
-            psytcopus_vars->knockback_vertical_speed =
+            psytcopus_vars->knockback.vertical_speed =
                 psytcopus_hurt_knockback_base_vertical_speed_gp * frame_time;
-            psytcopus_vars->knockback_apex_animation_frame = 3.0f;
-            psytcopus_vars->knockback_landing_animation_frame = 6.0f;
+            psytcopus_vars->knockback.apex_animation_frame = 3.0f;
+            psytcopus_vars->knockback.landing_animation_frame = 6.0f;
             source_to_psytcopus_heading = fast_arc_tan(
                 psytcopus->pos.x - (*(struct Moby **)(psytcopus_hit_record + 0x20))->pos.x,
                 psytcopus->pos.y - (*(struct Moby **)(psytcopus_hit_record + 0x20))->pos.y);
@@ -344,9 +332,9 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
             angle1 = source_to_psytcopus_heading;
             FUN_L00_0025ab48_p(&projectile_and_hit_vector_scratch,
                                &angle1,
-                               &psytcopus_vars->knockback_speed,
-                               &psytcopus_vars->knockback_vertical_speed);
-            FUN_L00_0025c558_p(psytcopus, psytcopus_vars->motion, 5, 1, 0, angle1);
+                               &psytcopus_vars->knockback.speed,
+                               &psytcopus_vars->knockback.vertical_speed);
+            FUN_L00_0025c558_p(psytcopus, &psytcopus_vars->knockback, 5, 1, 0, angle1);
             psytcopus->state = PSYTCOPUS_STATE_KNOCKBACK;
             psytcopus_vars->hit_reaction_channel_target = 0x78;
             if (psytcopus_vars->held_projectile != 0) {
@@ -358,13 +346,13 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
         case HIT_REACTION_DEATH:
         case HIT_REACTION_DEATH_KNOCKBACK:
             psytcopus->flags &= 0xEFFF;
-            psytcopus_vars->knockback_gravity = psytcopus_knockback_base_gravity_gp * frame_time_sq;
-            psytcopus_vars->knockback_speed =
+            psytcopus_vars->knockback.gravity = psytcopus_knockback_base_gravity_gp * frame_time_sq;
+            psytcopus_vars->knockback.speed =
                 psytcopus_death_knockback_base_horizontal_speed_gp * frame_time;
-            psytcopus_vars->knockback_vertical_speed =
+            psytcopus_vars->knockback.vertical_speed =
                 psytcopus_death_knockback_base_vertical_speed_gp * frame_time;
-            psytcopus_vars->knockback_apex_animation_frame = 4.0f;
-            psytcopus_vars->knockback_landing_animation_frame = 10.0f;
+            psytcopus_vars->knockback.apex_animation_frame = 4.0f;
+            psytcopus_vars->knockback.landing_animation_frame = 10.0f;
             source_to_psytcopus_heading = fast_arc_tan(
                 psytcopus->pos.x - (*(struct Moby **)(psytcopus_hit_record + 0x20))->pos.x,
                 psytcopus->pos.y - (*(struct Moby **)(psytcopus_hit_record + 0x20))->pos.y);
@@ -372,9 +360,9 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
             angle2 = source_to_psytcopus_heading;
             FUN_L00_0025ab48_p(&projectile_and_hit_vector_scratch,
                                &angle2,
-                               &psytcopus_vars->knockback_speed,
-                               &psytcopus_vars->knockback_vertical_speed);
-            FUN_L00_0025c558_p(psytcopus, psytcopus_vars->motion, 6, 1, 0, angle2);
+                               &psytcopus_vars->knockback.speed,
+                               &psytcopus_vars->knockback.vertical_speed);
+            FUN_L00_0025c558_p(psytcopus, &psytcopus_vars->knockback, 6, 1, 0, angle2);
             psytcopus->state = PSYTCOPUS_STATE_DEATH_KNOCKBACK;
             psytcopus_vars->hit_reaction_channel_target = 0xF0;
             if (psytcopus_vars->held_projectile != 0) {
