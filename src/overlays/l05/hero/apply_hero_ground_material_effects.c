@@ -78,7 +78,7 @@ void apply_hero_ground_material_effects(void) {
     if (saved_ground_type == 5)
         hero.selector_5 = 1;
     if (saved_ground_type == 6)
-        hero.unk12E9 = 1;
+        hero.selector_6 = 1;
     if (saved_ground_type == 4)
         hero.selector_4 = 1;
     if (saved_ground_type == GROUND_MATERIAL_SINK_TRIGGER)

@@ -172,9 +172,6 @@ struct HeroHealth {
  * code in src/ or src/overlays uses are listed; unkXXX = meaning not known yet,
  * pad_XXX = no named access. Some level overlays read the item-slot mobys and
  * 0x2080 as raw bytes, and one view reads 0x560 as an int *.
- * Notes on unknown fields:
- *   unk458 / unk45C - speeds eased in and scaled into velocity (hero_update_hop_velocity)
- *   unk22DA         - nonzero makes FUN_L00_002133a8 call FUN_L00_002347c0
  * Item switching (hero_switch_item): a nonzero pending_item[i] that differs
  * moves into selected_item[i] and changes slot i; saved_item[i] keeps the
  * slot's item while 0x1C, 0x1D, 6 or 4 is forced in (0x26 when it was empty).
@@ -480,7 +477,7 @@ struct Hero {
     u8   pad_710[0x10];
     Vec4 smoothed_steer_stick; /* 0x720 */
     u8   pad_730[0x10];
-    Vec4 unk740;               /* 0x740 */
+    Vec4 grounded_normal;      /* 0x740: copy of ground_normal while grounded (l16 board update) */
     Vec4 landing_displacement; /* 0x750 */
     Vec4 board_ground_pos;     /* 0x760 */
     Vec4
@@ -530,37 +527,38 @@ struct Hero {
     union {
         f32 f;
         s32 i;
-    } last_ground_z;           /* 0x8B8: read as a float, zeroed as an int */
-    s16  hoverboard_airborne;  /* 0x8BC */
-    s16  board_respawn_delay;  /* 0x8BE */
-    s32  race_position;        /* 0x8C0: 1..3 picks the HUD rank string (FUN_L05_00266320) */
-    s32  boost_pad_timer;      /* 0x8C4 */
-    s16  wrong_way_path_point; /* 0x8C8 */
-    s16  help_hint_frames;     /* 0x8CA */
-    s16  boost_min_frames;     /* 0x8CC */
-    u8   race_ammo;            /* 0x8CE */
-    u8   shot_cooldown;        /* 0x8CF */
-    Vec4 unk8D0;               /* 0x8D0 */
-    s32  swim_entry_frames;    /* 0x8E0: frames in the swim entry splash step */
-    f32  swim_lean_vel;        /* 0x8E4 */
-    f32  swim_roll_velocity;   /* 0x8E8 */
-    f32  swim_yaw_rate;        /* 0x8EC */
-    s32  puff_timer;           /* 0x8F0 */
-    s32  swim_thrust_timer;    /* 0x8F4 */
-    s16  pack_particle_timer;  /* 0x8F8 */
-    u8   pad_8FA[0x2];
-    f32  drown_sink_speed;        /* 0x8FC */
-    s16  cw_turn_frames;          /* 0x900 */
-    s16  swim_square_hold_frames; /* 0x902 */
-    s16  wake_ring_counter;       /* 0x904 */
-    s16  spray_counter;           /* 0x906 */
-    s16  bow_ring_counter;        /* 0x908 */
-    s16  splash_effect_timer;     /* 0x90A */
-    s16  swim_hard_press_frames;  /* 0x90C */
-    s16  jump_button_frames;      /* 0x90E */
-    s32  swim_cross_tap_count;    /* 0x910 */
-    s32  last_cross_press_frame;  /* 0x914 */
-    u8   pad_918[0x8];
+    } last_ground_z;          /* 0x8B8: read as a float, zeroed as an int */
+    s16 hoverboard_airborne;  /* 0x8BC */
+    s16 board_respawn_delay;  /* 0x8BE */
+    s32 race_position;        /* 0x8C0: 1..3 picks the HUD rank string (FUN_L05_00266320) */
+    s32 boost_pad_timer;      /* 0x8C4 */
+    s16 wrong_way_path_point; /* 0x8C8 */
+    s16 help_hint_frames;     /* 0x8CA */
+    s16 boost_min_frames;     /* 0x8CC */
+    u8  race_ammo;            /* 0x8CE */
+    u8  shot_cooldown;        /* 0x8CF */
+    Vec4
+        smoothed_board_stick; /* 0x8D0: board stick smoothed by smooth_and_clamp_value_pair (l16), like smoothed_steer_stick */
+    s32 swim_entry_frames;   /* 0x8E0: frames in the swim entry splash step */
+    f32 swim_lean_vel;       /* 0x8E4 */
+    f32 swim_roll_velocity;  /* 0x8E8 */
+    f32 swim_yaw_rate;       /* 0x8EC */
+    s32 puff_timer;          /* 0x8F0 */
+    s32 swim_thrust_timer;   /* 0x8F4 */
+    s16 pack_particle_timer; /* 0x8F8 */
+    u8  pad_8FA[0x2];
+    f32 drown_sink_speed;        /* 0x8FC */
+    s16 cw_turn_frames;          /* 0x900 */
+    s16 swim_square_hold_frames; /* 0x902 */
+    s16 wake_ring_counter;       /* 0x904 */
+    s16 spray_counter;           /* 0x906 */
+    s16 bow_ring_counter;        /* 0x908 */
+    s16 splash_effect_timer;     /* 0x90A */
+    s16 swim_hard_press_frames;  /* 0x90C */
+    s16 jump_button_frames;      /* 0x90E */
+    s32 swim_cross_tap_count;    /* 0x910 */
+    s32 last_cross_press_frame;  /* 0x914 */
+    u8  pad_918[0x8];
     Vec4
         move_impulse; /* 0x920: one-frame displacement; the hero update adds it to motion.pos and clears it (some states; zero while running) */
     f32 push_length; /* 0x930: length of the move_impulse that build_scaled_hero_move_impulse builds; > 0 enables it */
@@ -684,7 +682,7 @@ struct Hero {
     u8                   selector_3;         /* 0x12E6 */
     u8                   on_magnet_ground;   /* 0x12E7 */
     u8                   selector_5;         /* 0x12E8 */
-    u8                   unk12E9;            /* 0x12E9 */
+    u8                   selector_6;         /* 0x12E9: set on ground material 6 */
     u8                   on_slip_ground;     /* 0x12EA */
     u8                   selector_11;        /* 0x12EB */
     u8                   selector_13;        /* 0x12EC */
@@ -811,7 +809,7 @@ struct Hero {
     s16 delayed_voices
         [8][4]; /* 0x21D8: delayed voice queue (help_queue_add): busy, entry, timer, argument */
     s32 grind_voice; /* 0x2218: voice of sound slot 0, -1 = none (slots 0-7 run to 0x2234, FUN_L00_00206c08) */
-    s32          unk221C;           /* 0x221C: voice of sound slot 1 */
+    s32          voice_slot1;       /* 0x221C: voice of sound slot 1 */
     s32          voice_slot2;       /* 0x2220 */
     s32          loop_voice_slot;   /* 0x2224: voice of the looping move sound, -1 = none */
     s32          voice_slot4;       /* 0x2228 */
