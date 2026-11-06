@@ -103,7 +103,7 @@ s32 volume_camera_swing_active(struct UpdateCam *swing_camera_record) {
     u16                type;
 
     params = camera_descriptors[swing_camera_record->descriptor_index].params;
-    if (current_follow_cam->unk86 != 0) {
+    if (current_follow_cam->camera_class != 0) {
         return 0;
     }
     type = *(u16 *)&params->type;

@@ -88,7 +88,7 @@ int camera_activation_check_priority(struct UpdateCam *candidate, struct UpdateC
     }
     case CAMERA_ACTIVATION_MATCH_LISTENER_GROUP: {
         struct Hero *hero_state = &hero;
-        short        listener_group = candidate->unk86;
+        short        listener_group = candidate->camera_class;
 
         if (listener_group != hero_state->camera_mode) {
             return 0;

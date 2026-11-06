@@ -23,7 +23,7 @@ void apply_camera_shake(struct CameraShake *shake, s32 axis_index) {
     f32 applied_shake_offset;
     s32 remaining_frames;
 
-    if (cur_cam[0] != 0 && cur_cam[0]->unk86 == 6) {
+    if (cur_cam[0] != 0 && cur_cam[0]->camera_class == 6) {
         shake->frames = 0;
         shake->frames_max = 0;
     } else {
