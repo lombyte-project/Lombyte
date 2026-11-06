@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/hero/hero_state.h"
 #include "rnc/hero/hero.h"
+#include "rnc/overlay/shared/hero/jump_velocity_keys.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
@@ -66,8 +67,10 @@ extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_0024
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
-extern int  hero_set_state(int, int) __asm__("FUN_L02_0022b728");
-extern char level02_hero_transform_trail_jump_velocity_keys[] __asm__("D_L02_0017C520");
+extern int             hero_set_state(int, int) __asm__("FUN_L02_0022b728");
+struct HeroVelocityKey level02_hero_transform_trail_jump_velocity_keys
+    [HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS_COUNT] __asm__("D_L02_0017C520") =
+        HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS;
 
 int hero_set_state(int requested_state, int entry_animation_mode) {
     int   saved_state_step;
@@ -907,7 +910,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                 u->unk3DC = 26.0f;
                 u->keyed_move_target_frame = 0.0f;
                 u->keyed_anim_target_frame = scale_game_frames(0x2D);
-                *(char **)&u->velocity_keys = level02_hero_transform_trail_jump_velocity_keys;
+                u->velocity_keys = level02_hero_transform_trail_jump_velocity_keys;
                 u->can_chain_high_jump = 1;
             } else if (u->state.current == 0xF) {
                 u->jump_height = 1.9f;
@@ -3695,3 +3698,7 @@ void enter_hero_idle_or_stop(void) {
         hero_set_state(HERO_STATE_STOP, 1);
     }
 }
+
+/* This level's water surface jump uses D_L02_0015F6E8 instead; the copy stays unread. */
+struct HeroVelocityKey D_L02_0017C560[HERO_WATER_SURFACE_JUMP_VELOCITY_KEYS_COUNT] =
+    HERO_WATER_SURFACE_JUMP_VELOCITY_KEYS;

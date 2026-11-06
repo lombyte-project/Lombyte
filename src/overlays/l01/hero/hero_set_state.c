@@ -4,6 +4,7 @@
 #include "rnc/hero/hero_state.h"
 #include "rnc/weapons/item_id.h"
 #include "rnc/hero/hero.h"
+#include "rnc/overlay/shared/hero/jump_velocity_keys.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
@@ -64,9 +65,12 @@ extern void pool_splash(int, int, int, float, float, float, float) __asm__("FUN_
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
-extern int  l01_hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
-extern char level_01_transform_trail_jump_velocity_keys[] __asm__("D_L01_0017C3A0");
-extern char level_01_water_surface_jump_velocity_keys[] __asm__("D_L01_0017C3E0");
+extern int             l01_hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
+struct HeroVelocityKey level_01_transform_trail_jump_velocity_keys
+    [HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS_COUNT] __asm__("D_L01_0017C3A0") =
+        HERO_TRANSFORM_TRAIL_JUMP_VELOCITY_KEYS;
+struct HeroVelocityKey
+    level_01_water_surface_jump_velocity_keys[HERO_WATER_SURFACE_JUMP_VELOCITY_KEYS_COUNT] __asm__("D_L01_0017C3E0") = HERO_WATER_SURFACE_JUMP_VELOCITY_KEYS;
 
 int l01_hero_set_state(int requested_state, int animation_setup_mode) {
     int   saved_state_step;
