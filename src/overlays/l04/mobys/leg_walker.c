@@ -93,7 +93,7 @@ void initialize_leg_rig(struct Moby *moby, LegRig *rig) {
                               rig->anims[i]->phase[0].from[j];
             }
             rig->anims[i]->rate =
-                rig->anims[i]->unk4 / FUN_L04_001f1978(rig->anims[i]->len + rig->anims[i]->len);
+                rig->anims[i]->stride / FUN_L04_001f1978(rig->anims[i]->len + rig->anims[i]->len);
         }
     }
     joints[0] = rig->legs[0].joint;
@@ -114,7 +114,7 @@ void initialize_leg_rig(struct Moby *moby, LegRig *rig) {
             attach_manipulator(moby, rig->legs[k].slot_a, &rig->legs[k].manip_a);
     }
     rig->control_flags = 0;
-    rig->unkB7 = 0;
+    rig->gait = 0;
     rig->pitch_target = 0;
     rig->pitch_velocity = 0;
     rig->speed = 0.0f;
@@ -309,7 +309,7 @@ void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
             fast_add_rotations(fast_subtract_rotations(leg->yaw, heading), leg->upper_turn),
             leg->lower_turn);
         base_yaw = fast_subtract_rotations(heading, twist);
-        if (rig->unkB7 == 0 || (flags & mask) == 0) {
+        if (rig->gait == 0 || (flags & mask) == 0) {
             leg->upper_turn = rig_turn_2d48(leg->upper_turn,
                                             0.0f,
                                             &rig->legs[i].upper_turn_speed,
@@ -323,7 +323,7 @@ void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
                                             0.1f,
                                             frame_scale * 0.034906585f);
         } else {
-            if (rig->unkB7 == 13)
+            if (rig->gait == 13)
                 leg->upper_turn = rig_turn_2d48(leg->upper_turn,
                                                 0.0f,
                                                 &rig->legs[i].upper_turn_speed,
@@ -532,10 +532,10 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
     local.joints[4] = rig->jointB4;
     local.joints[5] = rig->jointB5;
     transform_scaled_vertex_batch(moby, 6, local.joints, rig);
-    if (rig->unkB7 == 0x12 && moby->seq == rig->anims[12]->id)
+    if (rig->gait == 0x12 && moby->seq == rig->anims[12]->id)
         return flags;
     moby->anim_speed = 1.0f;
-    if (rig->unkB7 != 0) {
+    if (rig->gait != 0) {
         LegRigAnim **fallback = rig->anims;
         LegRigAnim **animation_record_cursor;
         s32          seq = moby->seq;
@@ -617,12 +617,12 @@ void reset_leg_rig_from_animation(struct Moby *moby, LegRig *rig) {
     }
     rig->mode = LEG_RIG_FALLBACK_GAIT_MASK;
     rig->speed = 0.0f;
-    rig->unkB7 = 0;
+    rig->gait = 0;
     animation_cursor = rig->anims;
     for (j = 12; j >= 0; j--, animation_cursor++) {
         if ((*animation_cursor)->id == moby->prev_seq) {
             rig->speed = absolute_float(moby->anim_speed * (*animation_cursor)->rate);
-            rig->unkB7 = D_L04_001CA938[12 - j][0];
+            rig->gait = D_L04_001CA938[12 - j][0];
         }
     }
     rig->mode = rig_pick_mode(moby, rig, animation_time);

@@ -43,11 +43,11 @@ typedef struct {
 
 /* Per-animation-sequence entry (FUN_L04_002923b8 fills the timing). */
 typedef struct {
-    /* 0x00 */ s32         id; /* animation sequence id */
-    /* 0x04 */ f32         unk4;
-    /* 0x08 */ f32         rate;  /* unk4 / multiply_global_factor_ed64(len * 2) */
-    /* 0x0C */ f32         start; /* animation_start(class slot, id) */
-    /* 0x10 */ f32         len;   /* animation_end(class slot, id) - start */
+    /* 0x00 */ s32         id;     /* animation sequence id */
+    /* 0x04 */ f32         stride; /* distance covered per animation cycle */
+    /* 0x08 */ f32         rate;   /* stride / multiply_global_factor_ed64(len * 2) */
+    /* 0x0C */ f32         start;  /* animation_start(class slot, id) */
+    /* 0x10 */ f32         len;    /* animation_end(class slot, id) - start */
     /* 0x14 */ u8          pad14[0xC];
     /* 0x20 */ LegRigPhase phase[2];
 } LegRigAnim;
@@ -65,7 +65,7 @@ typedef struct {
     /* 0x0B4 */ u8          jointB4;
     /* 0x0B5 */ u8          jointB5;
     /* 0x0B6 */ u8          mode;
-    /* 0x0B7 */ u8          unkB7;
+    /* 0x0B7 */ u8          gait; /* D_L04_001CA938 gait id of the current animation, 0 for none */
     /* 0x0B8 */ s32         pitch_target;   /* f32 bits: spring_turn target for rot.y */
     /* 0x0BC */ s32         pitch_velocity; /* f32 bits */
     /* 0x0C0 */ f32         speed;

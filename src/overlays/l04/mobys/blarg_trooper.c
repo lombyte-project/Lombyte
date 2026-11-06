@@ -26,7 +26,7 @@ typedef struct BlargTrooperVars {
     u8  hit_response_class;
     u8  wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
     u8  pad_2A[0x4];
-    u8  unk2E;
+    u8  removal_status; /* 0x2E: anything but 1 removes the trooper and its gun */
     u8  pad_2F[0x9];
     s32 retimer;
     u8  pad_3C[0x1C];
@@ -242,7 +242,7 @@ void blarg_trooper_update(struct Moby *moby) {
     target_distance = vector_distance_xy(pos, update_scratch.tgt);
     dmg = 0.0f;
     alive = compute_interpolated_record_value(moby);
-    if (moby->state != BLARG_TROOPER_STATE_INITIALIZE && blarg_trooper_pvars->unk2E != 1) {
+    if (moby->state != BLARG_TROOPER_STATE_INITIALIZE && blarg_trooper_pvars->removal_status != 1) {
         char *o = blarg_trooper_pvars->gun_moby;
         if (o != 0) {
             mark_moby_for_removal(o);
@@ -393,7 +393,7 @@ void blarg_trooper_update(struct Moby *moby) {
         blarg_trooper_pvars->health = 2.0f;
         blarg_trooper_pvars->max_health = 2;
         blarg_trooper_pvars->hit_response_class = 1;
-        blarg_trooper_pvars->unk2E = 1;
+        blarg_trooper_pvars->removal_status = 1;
         blarg_trooper_pvars->wrench_hit_sound = 1;
         blarg_trooper_pvars->timer_F0 = 0;
         blarg_trooper_pvars->alert_timer = 0;
