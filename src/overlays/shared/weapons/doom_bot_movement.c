@@ -170,30 +170,30 @@ int probe_moby_raised_sphere_collision(char *moby, int b, Vx *position_override)
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFE98), where it is exact; names translated to the US level program. */
 
-/* Saves the moby's position, word 0x4C and float 0x5C into ((char *)&hero) at 0x1ED0. */
+/* Saves the doom bot turn velocity, speed, words 0x48/0x4C and turn rate into the hero move parameters. */
 void save_state_fields_to_hero(char *source_state) __asm__("FUN_L00_002beb90");
 
 void save_state_fields_to_hero(char *source_state) {
     struct Hero *hero_state = &hero;
-    hero_state->unk1ED0 = *(float *)(source_state + 0x40);
-    hero_state->unk1ED4 = *(float *)(source_state + 0x44);
+    hero_state->move_turn_velocity = *(float *)(source_state + 0x40);
+    hero_state->move_speed = *(float *)(source_state + 0x44);
     hero_state->unk1ED8 = *(float *)(source_state + 0x48);
     hero_state->unk1F08 = *(int *)(source_state + 0x4C);
-    hero_state->unk1EE4 = *(float *)(source_state + 0x5C);
+    hero_state->move_turn_rate = *(float *)(source_state + 0x5C);
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFED0), where it is exact; names translated to the US level program. */
 
-/* Restores the moby's position, word 0x4C and float 0x5C from ((char *)&hero) at 0x1ED0. */
+/* Restores the doom bot turn velocity, speed, words 0x48/0x4C and turn rate from the hero move parameters. */
 void restore_state_fields_from_hero(char *destination_state) __asm__("FUN_L00_002bebc8");
 
 void restore_state_fields_from_hero(char *destination_state) {
     struct Hero *hero_state = &hero;
-    *(float *)(destination_state + 0x40) = hero_state->unk1ED0;
-    *(float *)(destination_state + 0x44) = hero_state->unk1ED4;
+    *(float *)(destination_state + 0x40) = hero_state->move_turn_velocity;
+    *(float *)(destination_state + 0x44) = hero_state->move_speed;
     *(float *)(destination_state + 0x48) = hero_state->unk1ED8;
     *(int *)(destination_state + 0x4C) = hero_state->unk1F08;
-    *(float *)(destination_state + 0x5C) = hero_state->unk1EE4;
+    *(float *)(destination_state + 0x5C) = hero_state->move_turn_rate;
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFF08), where it is exact; names translated to the US level program. */
@@ -203,12 +203,12 @@ void save_state_vector_and_fields_to_hero(char *source_state) __asm__("FUN_L00_0
 
 void save_state_vector_and_fields_to_hero(char *source_state) {
     struct Hero *hero_state = &hero;
-    hero_state->unk1F20 = *(float *)(source_state + 0x50);
-    hero_state->unk1F24 = *(float *)(source_state + 0x54);
-    hero_state->unk1F28 = *(float *)(source_state + 0x58);
-    hero_state->unk1F3F = *(char *)(source_state + 0x68);
+    hero_state->hop_vertical_speed = *(float *)(source_state + 0x50);
+    hero_state->hop_horizontal_speed = *(float *)(source_state + 0x54);
+    hero_state->hop_heading = *(float *)(source_state + 0x58);
+    hero_state->hop_mode = *(char *)(source_state + 0x68);
     hero_state->unk1F40 = *(float *)(source_state + 0x44);
-    qcopy(&hero_state->unk1F10, source_state);
+    qcopy(&hero_state->hop_target, source_state);
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFF50), where it is exact; names translated to the US level program. */
@@ -218,10 +218,10 @@ void restore_saved_state_fields_from_hero(char *destination_state) __asm__("FUN_
 
 void restore_saved_state_fields_from_hero(char *destination_state) {
     struct Hero *hero_state = &hero;
-    *(float *)(destination_state + 0x50) = hero_state->unk1F20;
-    *(float *)(destination_state + 0x54) = hero_state->unk1F24;
-    *(float *)(destination_state + 0x58) = hero_state->unk1F28;
-    *(char *)(destination_state + 0x68) = hero_state->unk1F3F;
+    *(float *)(destination_state + 0x50) = hero_state->hop_vertical_speed;
+    *(float *)(destination_state + 0x54) = hero_state->hop_horizontal_speed;
+    *(float *)(destination_state + 0x58) = hero_state->hop_heading;
+    *(char *)(destination_state + 0x68) = hero_state->hop_mode;
     *(float *)(destination_state + 0x44) = hero_state->unk1F40;
 }
 
