@@ -265,12 +265,12 @@ void doom_bot_update(struct Moby *moby) {
         fast_dec_timer(&doom_bot_vars->timer);
         qcopy(&doom_bot_vars->previous_position, &moby->pos);
         if (probe_moby_raised_sphere_collision((char *)moby, 5, 0)) {
-            if (coll_hit.moby && coll_hit.unk1C < 0 &&
+            if (coll_hit.moby && coll_hit.surface_type < 0 &&
                 (((struct Moby *)coll_hit.moby)->flags & 0x1000) &&
                 ((struct Moby *)coll_hit.moby)->pclass &&
                 ((struct Moby *)coll_hit.moby)->pclass->type == 5) {
                 moby->state = DOOM_BOT_DETONATE;
-            } else if (!coll_hit.moby || coll_hit.unk1C < 0) {
+            } else if (!coll_hit.moby || coll_hit.surface_type < 0) {
                 z = moby->pos.z;
                 qcopy_nc(&moby->pos, coll_hit.pad30);
                 if (absolute_float(moby->pos.z - z) > 0.6f)

@@ -250,7 +250,7 @@ void steer_child_moby(
         ray_start.z = ray_start.z + 1.5f;
         ray_end.z = 0.01f;
         if (collision_line(&ray_start, &ray_end, 2, moby, 0) != 0) {
-            if (coll_hit.unk1C > 0 && coll_hit.point.f[2] > moby->pos.z) {
+            if (coll_hit.surface_type > 0 && coll_hit.point.f[2] > moby->pos.z) {
                 qcopy(&surface_normal, &coll_hit.normal_x);
                 length = fast_arc_tan(coll_hit.normal_z, vector_length_xy(&coll_hit.normal_x));
                 set_vector_length_xy(&surface_normal, &surface_normal, 1.0f);

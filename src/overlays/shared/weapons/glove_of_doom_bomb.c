@@ -124,7 +124,7 @@ s32 predict_doom_bot_spawner_landing(ThrowVars *throw_vars, struct Moby *thrown_
     q.f[2] = simulated_position.f[2];
     if (collision_line_2c8440(&q, &simulated_position, 0x10, hero.moby, 0) &&
         (FUN_001f0b58_2c8440() || 0.0f < simulated_velocity.f[2])) {
-        if (coll_hit.moby != 0 && coll_hit.unk1C <= 0) {
+        if (coll_hit.moby != 0 && coll_hit.surface_type <= 0) {
             if (((struct Moby *)coll_hit.moby != hero.moby &&
                  (struct Moby *)coll_hit.moby != throw_vars->holder) ||
                 prediction_timer < scale_game_frames(300) - scale_game_frames(10)) {
@@ -136,7 +136,7 @@ s32 predict_doom_bot_spawner_landing(ThrowVars *throw_vars, struct Moby *thrown_
                     &landing_probe_position, &landing_probe_position, &throw_vars->landing);
                 probe_ground_height(&landing_probe_position, 0, 0.5f);
             }
-        } else if (coll_hit.unk1C > 0) {
+        } else if (coll_hit.surface_type > 0) {
             qcopy(&throw_vars->landing, &coll_hit.point);
             found = 1;
         }
@@ -151,7 +151,7 @@ s32 predict_doom_bot_spawner_landing(ThrowVars *throw_vars, struct Moby *thrown_
             continue;
         if (!FUN_001f0b58_2c8440() && 0.0f < simulated_velocity.f[2])
             continue;
-        if (coll_hit.moby != 0 && coll_hit.unk1C <= 0) {
+        if (coll_hit.moby != 0 && coll_hit.surface_type <= 0) {
             if (((struct Moby *)coll_hit.moby == hero.moby ||
                  (struct Moby *)coll_hit.moby == throw_vars->holder) &&
                 !(prediction_timer < scale_game_frames(300) - scale_game_frames(10)))
@@ -163,7 +163,7 @@ s32 predict_doom_bot_spawner_landing(ThrowVars *throw_vars, struct Moby *thrown_
                 &landing_probe_position, &landing_probe_position, &throw_vars->landing);
             probe_ground_height(&landing_probe_position, 0, 0.5f);
             break;
-        } else if (coll_hit.unk1C > 0) {
+        } else if (coll_hit.surface_type > 0) {
             qcopy(&throw_vars->landing, &coll_hit.point);
             break;
         }
@@ -315,7 +315,7 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) {
                 settle:
                     settled = (u16)spawner_throw_vars->timer + 1;
                     spawner_throw_vars->timer = settled;
-                    if (!coll_hit.moby || coll_hit.unk1C > 0 ||
+                    if (!coll_hit.moby || coll_hit.surface_type > 0 ||
                         (settled_frames = (s16)settled, scale_game_frames(240) < settled_frames)) {
                         thrown_moby->state = THROWN_MOBY_STATE_SPAWN_SEQUENCE;
                         spawner_throw_vars->timer = 0;

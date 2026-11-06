@@ -285,7 +285,7 @@ void update_hero_ground_contact(void) {
             hero.on_flagged_ground_moby = 1;
         }
     }
-    if (HH.unk1C > 0) {
+    if (HH.surface_type > 0) {
         qcopy((u8 *)&hero.ground_point, &HH.point);
         hero.ground_z.f = HH.point.f[2];
         hero.ground_distance = fast_vec_dist((u8 *)&hero.motion.pos, (u8 *)&hero.ground_point);

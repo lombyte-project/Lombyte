@@ -503,7 +503,7 @@ void update_hero_ground_contact(void) {
             hero_lui.on_flagged_ground_moby = 1;
         }
     }
-    if (HH.unk1C > 0) {
+    if (HH.surface_type > 0) {
         qcopy((u8 *)&hero_lui + 0x2A0, &HH.point);
         hero_lui.ground_z.f = HH.point.f[2];
         hero_lui.ground_distance = fast_vec_dist((u8 *)&hero_lui + 0x80, ((u8 *)&hero_lui + 0x2A0));
