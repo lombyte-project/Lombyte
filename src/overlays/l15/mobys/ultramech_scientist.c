@@ -76,21 +76,21 @@ typedef struct UltramechScientistVars {
     s16 unk36;
     u8  pad_38[0x108];
     s32 unk140;
-    s32 unk144;
+    s32 first_pre_scene_moby_group_index;
     s32 pre_scene_moby_group_index;
     s32 scene_animation_moby_index;
-    s32 unk150;
+    s32 camera_reset_cuboid;
     s32 pre_scene_camera_transform_index;
     s32 moby_to_remove_index;
     s32 timer_15C;
     u8  primary_gaze_joint_animation;
     u8  pad_161[0x63];
     f32 primary_gaze_pitch_target;
-    f32 unk1C8;
+    f32 primary_gaze_yaw_target;
     u8  pad_1CC[0x4];
-    f32 unk1D0;
+    f32 head_scale;
     u8  pad_1D4[0xC];
-    u8  unk1E0;
+    u8  secondary_gaze_joint_animation;
     u8  pad_1E1[0x67];
     f32 secondary_gaze_yaw_target;
     u8  pad_24C[0x14];
@@ -249,10 +249,11 @@ void ultramech_scientist_update(struct Moby *moby) {
         }
         moby->anim_speed = 1.0f;
         if (ultramech_scientist_private_data->unk4 == 0) {
-            if (ultramech_scientist_private_data->unk150 != -1) {
+            if (ultramech_scientist_private_data->camera_reset_cuboid != -1) {
                 char *paths = D_L15_001600EC;
-                FUN_L00_00284e50(paths + (ultramech_scientist_private_data->unk150 << 7) + 0x30,
-                                 paths + (ultramech_scientist_private_data->unk150 << 7) + 0x70);
+                FUN_L00_00284e50(
+                    paths + (ultramech_scientist_private_data->camera_reset_cuboid << 7) + 0x30,
+                    paths + (ultramech_scientist_private_data->camera_reset_cuboid << 7) + 0x70);
             }
             moby->state = ULTRAMECH_SCIENTIST_WAIT_FOR_PRE_SCENE_CONDITIONS;
         } else {
@@ -278,7 +279,8 @@ void ultramech_scientist_update(struct Moby *moby) {
                 }
             }
         }
-        if (count_active_moby_group_members(ultramech_scientist_private_data->unk144, 0x40) != 0) {
+        if (count_active_moby_group_members(
+                ultramech_scientist_private_data->first_pre_scene_moby_group_index, 0x40) != 0) {
             break;
         }
         if (count_active_moby_group_members(
@@ -435,12 +437,12 @@ void ultramech_scientist_update(struct Moby *moby) {
             } else if (pitch < -0.5235988f) {
                 pitch = -0.5235988f;
             }
-            ultramech_scientist_private_data->unk1C8 = yaw * 0.5f;
+            ultramech_scientist_private_data->primary_gaze_yaw_target = yaw * 0.5f;
             ultramech_scientist_private_data->primary_gaze_pitch_target = pitch * 1.25f;
             ultramech_scientist_private_data->secondary_gaze_yaw_target = yaw * 0.5f;
         }
         if (big_head_cheat_enabled_macro[0] != 0) {
-            ultramech_scientist_private_data->unk1D0 = 2.75f;
+            ultramech_scientist_private_data->head_scale = 2.75f;
         }
         update_joint_animation(moby,
                                &ultramech_scientist_private_data->primary_gaze_joint_animation,
@@ -448,7 +450,7 @@ void ultramech_scientist_update(struct Moby *moby) {
                                ease_rate * frame_scale_sq_gp,
                                ease_limit * frame_scale_sq_gp);
         update_joint_animation(moby,
-                               &ultramech_scientist_private_data->unk1E0,
+                               &ultramech_scientist_private_data->secondary_gaze_joint_animation,
                                0,
                                ease_rate * frame_scale_sq_gp,
                                ease_limit * frame_scale_sq_gp);
