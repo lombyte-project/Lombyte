@@ -410,7 +410,7 @@ s32 predict_thrown_moby_landing(ThrowVars *throw_vars, struct Moby *thrown_moby,
     q.f[2] = predicted_position.f[2];
     if (collision_line(&q, &predicted_position, 0x10, hero.moby, 0) &&
         (collision_hit_material() || 0.0f < predicted_velocity.f[2])) {
-        if (coll_hit.moby != 0 && coll_hit.unk1C <= 0) {
+        if (coll_hit.moby != 0 && coll_hit.surface_type <= 0) {
             if (((struct Moby *)coll_hit.moby != hero.moby &&
                  (struct Moby *)coll_hit.moby != throw_vars->holder) ||
                 prediction_countdown < scale_game_frames(300) - scale_game_frames(10)) {
@@ -421,7 +421,7 @@ s32 predict_thrown_moby_landing(ThrowVars *throw_vars, struct Moby *thrown_moby,
                 fast_vec_add(&ground_probe_position, &ground_probe_position, &throw_vars->landing);
                 probe_ground_height(&ground_probe_position, 0, 0.5f);
             }
-        } else if (coll_hit.unk1C > 0) {
+        } else if (coll_hit.surface_type > 0) {
             qcopy(&throw_vars->landing, &coll_hit.point);
             found = 1;
         }
@@ -436,7 +436,7 @@ s32 predict_thrown_moby_landing(ThrowVars *throw_vars, struct Moby *thrown_moby,
             continue;
         if (!collision_hit_material() && 0.0f < predicted_velocity.f[2])
             continue;
-        if (coll_hit.moby != 0 && coll_hit.unk1C <= 0) {
+        if (coll_hit.moby != 0 && coll_hit.surface_type <= 0) {
             if (((struct Moby *)coll_hit.moby == hero.moby ||
                  (struct Moby *)coll_hit.moby == throw_vars->holder) &&
                 !(prediction_countdown < scale_game_frames(300) - scale_game_frames(10)))
@@ -447,7 +447,7 @@ s32 predict_thrown_moby_landing(ThrowVars *throw_vars, struct Moby *thrown_moby,
             fast_vec_add(&ground_probe_position, &ground_probe_position, &throw_vars->landing);
             probe_ground_height(&ground_probe_position, 0, 0.5f);
             break;
-        } else if (coll_hit.unk1C > 0) {
+        } else if (coll_hit.surface_type > 0) {
             qcopy(&throw_vars->landing, &coll_hit.point);
             break;
         }
@@ -660,7 +660,7 @@ void decoy_update(char *moby) {
                 reflect_vector(&decoy_instance_vars->velocity,
                                &decoy_instance_vars->velocity,
                                &coll_hit.normal_x);
-                if (coll_hit.moby != 0 && coll_hit.unk1C <= 0)
+                if (coll_hit.moby != 0 && coll_hit.surface_type <= 0)
                     FUN_001ff300_2c4380(
                         1.05f, &decoy_instance_vars->velocity, &decoy_instance_vars->velocity);
                 else
@@ -676,7 +676,7 @@ void decoy_update(char *moby) {
                                                 FUN_001ff408_2c4380(&coll_hit.normal_x));
                     if (angle < 0.61086524f) {
                         ++decoy_instance_vars->timer;
-                        if (coll_hit.moby == 0 || coll_hit.unk1C > 0 ||
+                        if (coll_hit.moby == 0 || coll_hit.surface_type > 0 ||
                             decoy_instance_vars->timer > FUN_001fef20_2c4380(240)) {
                             if (((u8 *)moby)[0x53] != 1)
                                 blend_moby_animation(moby, 1, 0, FUN_001fef20_2c4380(10));

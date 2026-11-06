@@ -1856,7 +1856,7 @@ int hero_pick_help_mode(void) {
         velocity[2] = 0.0f;
         fast_vec_add(end, start, velocity);
         if (collision_line(start, end, 2, 0, 0) && D_L05_00174240.moby == 0 &&
-            D_L05_00174240.unk1C != 0) {
+            D_L05_00174240.surface_type != 0) {
             CollisionHit *wall = &D_L05_00174240;
             if (1.2217305f < fast_arc_tan(wall->normal_z, vector_length_xy(&wall->normal_x))) {
                 player->wall_face_yaw =
