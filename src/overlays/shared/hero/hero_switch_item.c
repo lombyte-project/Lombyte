@@ -2591,7 +2591,7 @@ s32 hero_check_damage(s32 apply_damage_response) {
         }
         hero_knockback(
             &knockback_vector, flag, horizontal_knockback_strength, vertical_knockback_strength);
-        if (flag != 0 && hero_hit_entry->unk28 == 4) {
+        if (flag != 0 && hero_hit_entry->attack_type == 4) {
             knockback_vector.f[2] += knockback_vector.f[2];
         }
         break;

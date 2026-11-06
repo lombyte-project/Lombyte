@@ -47,8 +47,8 @@ typedef struct {
     float          v[4];
     struct Moby   *attacker;
     int            flags;
-    unsigned char  unk18;
-    unsigned char  unk19;
+    unsigned char  attack_type;    /* 0x18: MobyHit.attack_type */
+    unsigned char  attack_subtype; /* 0x19: MobyHit.attack_subtype */
     unsigned short attacker_class;
     float          damage;
     char           reserved[16];
@@ -372,11 +372,11 @@ void electric_water_update(struct Moby *moby) {
             hit.v[1] = fast_sin(moby->rot.z) * 0.2f;
             hit.v[2] = 0.0f;
             set_vector_length_xy(hit.v, hit.v, 1.0f);
-            hit.unk19 = 1;
+            hit.attack_subtype = 1;
             hit.attacker_class = moby->oclass;
             hit.v[2] = 1.0f;
             hit.v[3] = 5627.9248f;
-            hit.unk18 = 0;
+            hit.attack_type = 0;
             record_moby_hit(hero.moby, &hit);
             if (moby->state == ELECTRIC_WATER_OFF) {
                 D_L15_0015F448 = electric_water_controller_vars->saved_fog[0];

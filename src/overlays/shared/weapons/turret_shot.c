@@ -30,14 +30,14 @@ typedef struct {
 
 /* Optional query block for collision_line: a swept probe along dir. */
 typedef struct {
-    OvlVec4      dir;  /* 0x00: unit direction; z/w overwritten with 1 and a range */
-    struct Moby *self; /* 0x10: moby to ignore */
-    s32          mask; /* 0x14: collision classes */
-    u8           unk18;
-    u8           unk19;
-    s16          oclass;        /* 0x1A */
-    f32          radius;        /* 0x1C */
-    s32          has_direction; /* 0x20: MobyHit.has_direction */
+    OvlVec4      dir;            /* 0x00: unit direction; z/w overwritten with 1 and a range */
+    struct Moby *self;           /* 0x10: moby to ignore */
+    s32          mask;           /* 0x14: collision classes */
+    u8           attack_type;    /* 0x18: MobyHit.attack_type */
+    u8           attack_subtype; /* 0x19: MobyHit.attack_subtype */
+    s16          oclass;         /* 0x1A */
+    f32          radius;         /* 0x1C */
+    s32          has_direction;  /* 0x20: MobyHit.has_direction */
 } CollisionProbe;
 
 extern u8 *spawn_source_attached_fading_effect_particle(f32, struct Moby *, u32, s32, s32) __asm__("FUN_L00_0026daa0");
@@ -167,8 +167,8 @@ void turret_shot_update(struct Moby *projectile_moby) {
         probe = &pr;
         pr.dir.f[2] = 1.0f;
         pr.dir.f[3] = 5627.9248f;
-        pr.unk18 = 1;
-        pr.unk19 = 3;
+        pr.attack_type = 1;
+        pr.attack_subtype = 3;
         pr.oclass = projectile_moby->oclass;
     }
     if (fast_dec_timer_s16(&projectile_vars->life) && projectile_moby->command == 0) {
