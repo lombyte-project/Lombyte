@@ -41,12 +41,12 @@ void  conveyor_belt_update(struct Moby *m) __asm__("FUN_L16_002c9878");
 typedef struct ConveyorBeltVars {
     u8  pad_0[0x5C];
     s32 unk5C;
-    s32 unk60;
+    s32 belt_cuboid;
     s32 clip_volume_64;
     s32 clip_volume_68;
-    f32 unk6C;
-    f32 unk70;
-    s32 unk74;
+    f32 belt_speed;
+    f32 uv_scroll;
+    s32 voice;
 } ConveyorBeltVars;
 
 /* Moby class 471 */
@@ -65,18 +65,18 @@ void conveyor_belt_update(struct Moby *moby) {
         conveyor_data->unk5C |= 4;
         moby->visible = 0;
         moby->flags |= one;
-        if (conveyor_data->unk60 == -1) {
+        if (conveyor_data->belt_cuboid == -1) {
             moby->flags |= 2;
         } else {
             moby->state = CONVEYOR_BELT_STATE_APPROACH_NEGATED_SPEED;
         }
-        conveyor_data->unk74 = -1;
+        conveyor_data->voice = -1;
         break;
     case CONVEYOR_BELT_STATE_APPROACH_NEGATED_SPEED:
         target = -(conveyor_belt_base_speed_gp * D_0015ED6C);
-        if (conveyor_data->unk6C != target) {
-            approach_value(&conveyor_data->unk6C, target, frame_time_sq * 12.0f);
-            fast_vec_normalize(conveyor_motion_vector, &moby->rot_row0, conveyor_data->unk6C);
+        if (conveyor_data->belt_speed != target) {
+            approach_value(&conveyor_data->belt_speed, target, frame_time_sq * 12.0f);
+            fast_vec_normalize(conveyor_motion_vector, &moby->rot_row0, conveyor_data->belt_speed);
             update_conveyor_group_motion_transforms(moby->group, conveyor_motion_vector);
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, conveyor_data->clip_volume_68))
@@ -85,9 +85,9 @@ void conveyor_belt_update(struct Moby *moby) {
         break;
     case CONVEYOR_BELT_STATE_APPROACH_BASE_SPEED:
         target = conveyor_belt_base_speed_gp * D_0015ED6C;
-        if (conveyor_data->unk6C != target) {
-            approach_value(&conveyor_data->unk6C, target, frame_time_sq * 12.0f);
-            fast_vec_normalize(conveyor_motion_vector, &moby->rot_row0, conveyor_data->unk6C);
+        if (conveyor_data->belt_speed != target) {
+            approach_value(&conveyor_data->belt_speed, target, frame_time_sq * 12.0f);
+            fast_vec_normalize(conveyor_motion_vector, &moby->rot_row0, conveyor_data->belt_speed);
             update_conveyor_group_motion_transforms(moby->group, conveyor_motion_vector);
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, conveyor_data->clip_volume_64))
@@ -125,7 +125,7 @@ void update_conveyor_group_voice(struct Moby *moby) {
         }
     } while (*group_entry++ >= 0);
     if (fast_vec_dist(nearest + 0x10, D_L16_001671C0) < 64.0f) {
-        int   voice_slot_index = moby_data->unk74;
+        int   voice_slot_index = moby_data->voice;
         char *slot;
         if (voice_slot_index >= 0) {
             char *target;
@@ -133,18 +133,18 @@ void update_conveyor_group_voice(struct Moby *moby) {
             target = *(char **)(slot + 0x88);
             if (target && *(short *)(target + 0xA6) == 0x1D7) {
                 fast_vec_normalize(voice_position_offset, nearest + 0xE0, 2.5f);
-                fast_vec_add((char *)&voice_pool + 0x90 + moby_data->unk74 * 0x70,
+                fast_vec_add((char *)&voice_pool + 0x90 + moby_data->voice * 0x70,
                              voice_position_offset,
                              nearest + 0x10);
-                *(char **)((char *)&voice_pool + 0x88 + moby_data->unk74 * 0x70) = nearest;
+                *(char **)((char *)&voice_pool + 0x88 + moby_data->voice * 0x70) = nearest;
                 return;
             }
         }
         voice_slot_index = allocate_voice_for_target_entry(0, 13, nearest);
-        moby_data->unk74 = voice_slot_index;
+        moby_data->voice = voice_slot_index;
         if (voice_slot_index >= 0) {
             fast_vec_normalize(voice_position_offset, &moby->rot_row2, 2.5f);
-            fast_vec_add((char *)&voice_pool + 0x90 + moby_data->unk74 * 0x70,
+            fast_vec_add((char *)&voice_pool + 0x90 + moby_data->voice * 0x70,
                          voice_position_offset,
                          &moby->pos);
         }
@@ -206,17 +206,17 @@ extern void draw_geometry_quad_u(void *, void *, int) __asm__("draw_geometry_qua
 void draw_conveyor_belt_strips(struct Moby *moby) {
     L16RibbonPacket_u packets[2];
     ConveyorBeltVars *conveyor_data = (ConveyorBeltVars *)moby->pvars;
-    float scale = fast_vec_length(D_L16_001600EC_m + ((conveyor_data->unk60) << 7)) * 2.001f;
+    float scale = fast_vec_length(D_L16_001600EC_m + ((conveyor_data->belt_cuboid) << 7)) * 2.001f;
     int   count = truncate_float_to_s32(scale);
     float step = 2.0f / scale;
     int   period, tint, color, limit, j;
     float phase;
     long  modebits, flags;
-    (conveyor_data->unk70) = (conveyor_data->unk70) + (conveyor_data->unk6C);
-    if ((conveyor_data->unk70) > 1.0f)
-        (conveyor_data->unk70) -= 1.0f;
-    else if ((conveyor_data->unk70) < 0.0f)
-        (conveyor_data->unk70) += 1.0f;
+    (conveyor_data->uv_scroll) = (conveyor_data->uv_scroll) + (conveyor_data->belt_speed);
+    if ((conveyor_data->uv_scroll) > 1.0f)
+        (conveyor_data->uv_scroll) -= 1.0f;
+    else if ((conveyor_data->uv_scroll) < 0.0f)
+        (conveyor_data->uv_scroll) += 1.0f;
     modebits = 0x8000000000L;
     period = scale_game_frames(120);
     flags = 0xFF9000000260L;
@@ -246,7 +246,7 @@ void draw_conveyor_belt_strips(struct Moby *moby) {
         for (vertex = 0; vertex < 4; vertex++) {
             packets[0].uv[vertex].u = D_L16_001D2FF0[vertex][0];
             packets[0].uv[vertex].v = D_L16_001D2FF0[vertex][1];
-            packets[1].uv[vertex].u = D_L16_001D3010[vertex][0] - (conveyor_data->unk70);
+            packets[1].uv[vertex].u = D_L16_001D3010[vertex][0] - (conveyor_data->uv_scroll);
             packets[1].uv[vertex].v = D_L16_001D3010[vertex][1];
             packets[0].color[vertex] = tint;
             packets[1].color[vertex] = color;
@@ -279,8 +279,10 @@ void draw_conveyor_belt_strips(struct Moby *moby) {
                 packets[1].color[1] = color;
                 packets[1].color[0] = color;
             }
-            draw_geometry_quad_u(&packets[0], D_L16_001600EC_m + ((conveyor_data->unk60) << 7), 0);
-            draw_geometry_quad_u(&packets[1], D_L16_001600EC_m + ((conveyor_data->unk60) << 7), 0);
+            draw_geometry_quad_u(
+                &packets[0], D_L16_001600EC_m + ((conveyor_data->belt_cuboid) << 7), 0);
+            draw_geometry_quad_u(
+                &packets[1], D_L16_001600EC_m + ((conveyor_data->belt_cuboid) << 7), 0);
             {
                 float *point = packets[0].point[0];
                 for (j = 3; j >= 0; j--) {

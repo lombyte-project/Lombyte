@@ -78,8 +78,8 @@ void         reposition_moby_with_collision_check(struct Moby *moby,
 
 typedef struct ChickenRelocatorVars {
     u8  pad_0[0x4];
-    s32 unk4;
-    s32 unk8;
+    s32 target_moby_index;
+    s32 clip_volume;
     s32 timer_C;
     u8  pad_10[0x56];
     s16 reposition_timer;
@@ -212,9 +212,9 @@ void chicken_relocator_update(struct Moby *moby) {
     char                 *target;
     int                   target_status;
     float                 pos[4];
-    if (!is_point_inside_clip_volume(hero_position, target_cycle_data->unk8))
+    if (!is_point_inside_clip_volume(hero_position, target_cycle_data->clip_volume))
         return;
-    target = D_L16_0015FFD8 + (target_cycle_data->unk4 << 8);
+    target = D_L16_0015FFD8 + (target_cycle_data->target_moby_index << 8);
     switch (moby->state) {
     case TARGET_CYCLE_INITIALIZE_DELAY:
         moby->state = TARGET_CYCLE_WAIT_TO_TRIGGER;

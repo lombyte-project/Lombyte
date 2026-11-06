@@ -34,10 +34,10 @@ void path_following_rocket_update(struct Moby *moby) __asm__("FUN_L16_002c3d38")
 
 typedef struct PathFollowingRocketVars {
     u8  pad_0[0x4];
-    s32 unk4;
-    f32 unk8;
-    f32 unkC;
-    f32 unk10;
+    s32 path;
+    f32 speed;
+    f32 path_step;
+    f32 path_progress;
     s16 voice;
     s16 proximity_voice_requested;
 } PathFollowingRocketVars;
@@ -51,15 +51,15 @@ void path_following_rocket_update(struct Moby *moby) {
         ROCKET_STATE_WAIT_FOR_RESET = 3
     };
     PathFollowingRocketVars *rocket_path_data = (PathFollowingRocketVars *)moby->pvars;
-    char                    *path = D_L16_001B0930[rocket_path_data->unk4];
+    char                    *path = D_L16_001B0930[rocket_path_data->path];
     switch (moby->state) {
     case ROCKET_STATE_INITIALIZE:
-        if (*(int *)rocket_path_data == -1 || rocket_path_data->unk4 == -1) {
+        if (*(int *)rocket_path_data == -1 || rocket_path_data->path == -1) {
             mark_moby_for_removal(moby);
             break;
         }
-        rocket_path_data->unkC =
-            rocket_path_data->unk8 * D_0015ED6C / fast_vec_dist(path + 0x10, path + 0x20);
+        rocket_path_data->path_step =
+            rocket_path_data->speed * D_0015ED6C / fast_vec_dist(path + 0x10, path + 0x20);
         moby->state = ROCKET_STATE_WAIT_FOR_TRIGGER;
         moby->update_dist = 100;
         moby->command = 0;
@@ -75,13 +75,13 @@ void path_following_rocket_update(struct Moby *moby) {
         break;
     }
     case ROCKET_STATE_FOLLOW_PATH:
-        rocket_path_data->unk10 += rocket_path_data->unkC;
-        if ((float)(*(int *)path - 1) <= rocket_path_data->unk10) {
+        rocket_path_data->path_progress += rocket_path_data->path_step;
+        if ((float)(*(int *)path - 1) <= rocket_path_data->path_progress) {
             moby->update_dist = 0xFF;
             moby->state = ROCKET_STATE_WAIT_FOR_RESET;
         } else {
             sample_camera_path(
-                (int *)path, 0, &moby->pos, &moby->rot.x, 0, rocket_path_data->unk10);
+                (int *)path, 0, &moby->pos, &moby->rot.x, 0, rocket_path_data->path_progress);
         }
         if (moby->command)
             moby->collision = 0;
@@ -106,9 +106,9 @@ void path_following_rocket_update(struct Moby *moby) {
             pos[3] = 3.0f;
             if (fast_bsphere_check((char *)pos, 64.0f) == -1) {
                 moby->command = 0;
-                *(int *)&rocket_path_data->unk10 = 0;
+                *(int *)&rocket_path_data->path_progress = 0;
                 sample_camera_path(
-                    (int *)path, 0, &moby->pos, &moby->rot.x, 0, rocket_path_data->unk10);
+                    (int *)path, 0, &moby->pos, &moby->rot.x, 0, rocket_path_data->path_progress);
                 moby->visible = 1;
                 moby->flags &= ~1;
                 moby->collision = moby->pclass->collision;
