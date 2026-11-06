@@ -30,30 +30,32 @@ extern float l00_follow_camera_collision_probe_count __asm__("D_L00_00161CE0") _
 extern float l00_follow_camera_collision_probe_scale __asm__("D_L00_00161CE4") __attribute__((sda));
 extern float D_L00_00161D1C_gp __asm__("D_L00_00161D1C") __attribute__((sda));
 
+/* FollowCamTail (rnc/camera/follow_cam.h), from saved state + 0x130 */
 typedef struct {
     char  pad0[0x2C];
-    float unk2C;
+    float eye_distance; /* 0x15C */
     char  pad30[0xC];
-    short unk3C;
-    short unk3E;
-    int   unk40;
+    short eye_distance_override; /* 0x16C: eye_distance eases to eye_distance_target */
+    short distance_override;     /* 0x16E: distance eases to distance_target */
+    int   eye_distance_target;   /* 0x170 */
     char  pad44[8];
-    int   unk4C;
+    int   distance_target; /* 0x17C */
     char  pad50[8];
     float unk58;
 } CamOrbit;
 
+/* FollowCamBlock (rnc/camera/follow_cam.h), from saved state + 0x40 */
 typedef struct {
-    char          pad0[0xB4];
-    int           unkB4;
-    char          padB8[0x1E];
-    unsigned char unkD6;
+    char pad0[0xB4];
+    int  look_height_target; /* 0xF4: look_height eases to it while the override is pending */
+    char padB8[0x1E];
+    unsigned char blending_in; /* 0x116 */
     char          padD7[3];
     short         target_height_override_pending;
-    float         unkDC;
-    float         unkE0;
-    float         unkE4;
-    float         unkE8;
+    float         lateral_stiffness; /* 0x11C */
+    float         lateral_damping;   /* 0x120 */
+    float         up_stiffness;      /* 0x124 */
+    float         up_damping;        /* 0x128 */
 } CamTarget;
 
 typedef struct {
@@ -149,20 +151,20 @@ void follow_camera_approach(unsigned char *moby) {
                                                       0.2f,
                                                       0.0f);
     }
-    ((CamOrbit *)orbit)->unk3C = 0;
-    ((CamOrbit *)orbit)->unk3E = 0;
-    ((CamOrbit *)orbit)->unk40 = 0;
-    ((CamOrbit *)orbit)->unk4C = 0;
-    ((CamOrbit *)orbit)->unk58 = ((CamOrbit *)default_orbit)->unk2C;
+    ((CamOrbit *)orbit)->eye_distance_override = 0;
+    ((CamOrbit *)orbit)->distance_override = 0;
+    ((CamOrbit *)orbit)->eye_distance_target = 0;
+    ((CamOrbit *)orbit)->distance_target = 0;
+    ((CamOrbit *)orbit)->unk58 = ((CamOrbit *)default_orbit)->eye_distance;
     ((CamTarget *)target)->target_height_override_pending = 0;
-    ((CamTarget *)target)->unkB4 = 0;
+    ((CamTarget *)target)->look_height_target = 0;
     (*(Cam_2e5e38 **)(moby + 0x70))->unk10 = 1;
     (*(Cam_2e5e38 **)(moby + 0x70))->unk22 = 0;
-    ((CamTarget *)target)->unkDC = D_L00_00161CA0_gp;
-    ((CamTarget *)target)->unkE4 = D_L00_00161CA0_gp;
-    ((CamTarget *)target)->unkE0 = 0.2f;
-    ((CamTarget *)target)->unkE8 = 0.2f;
-    ((CamTarget *)target)->unkD6 = 0;
+    ((CamTarget *)target)->lateral_stiffness = D_L00_00161CA0_gp;
+    ((CamTarget *)target)->up_stiffness = D_L00_00161CA0_gp;
+    ((CamTarget *)target)->lateral_damping = 0.2f;
+    ((CamTarget *)target)->up_damping = 0.2f;
+    ((CamTarget *)target)->blending_in = 0;
     spring_reset = (CamSpring *)(*(unsigned char **)(moby + 0x70) + 0x1D0);
     spring_reset->unk44 = l00_follow_camera_collision_probe_step_growth_factor;
     spring_reset->unk3C = l00_follow_camera_collision_probe_scale;
