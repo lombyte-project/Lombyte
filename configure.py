@@ -1170,7 +1170,7 @@ DATA_OVERLAYS = {
     "rendering/effects/render_level_effects_and_screen_sprites": (0x1CE2C0, 0xCF240, 56),
     "weapons/load_hand_gadget": (0x1D52E8, 0xD6268, 1776),
     "ui/menus/item_preview/update_preview_animation_and_attachments": (0x1D6080, 0xD7000, 56),
-    "rendering/shrubs/register_shrub_render_class": (0x1D7F30, 0xD8EB0, 384),
+    "rendering/shrubs/register_shrub_render_class": (0x1D7F30, 0xD8EB0, 1408),
     "rendering/effects/build_variant_effect_quads": (0x1D9890, 0xDA810, 384),
     "rendering/effects/build_resident_indexed_texture_warp_meshes": (0x1D9A10, 0xDA990, 56),
     "rendering/effects/draw_light_flare": (0x1D97B0, 0xDA730, 224),
