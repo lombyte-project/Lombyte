@@ -540,7 +540,7 @@ struct Hero {
     u8   race_ammo;            /* 0x8CE */
     u8   shot_cooldown;        /* 0x8CF */
     Vec4 unk8D0;               /* 0x8D0 */
-    s32  unk8E0;               /* 0x8E0 */
+    s32  swim_entry_frames;    /* 0x8E0: frames in the swim entry splash step */
     f32  swim_lean_vel;        /* 0x8E4 */
     f32  swim_roll_velocity;   /* 0x8E8 */
     f32  swim_yaw_rate;        /* 0x8EC */

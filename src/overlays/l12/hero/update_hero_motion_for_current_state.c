@@ -848,7 +848,7 @@ void update_hero_motion_for_current_state(void) {
                 }
                 hero.splash_effect_timer = scale_game_frames(70);
             }
-            if (++hero.unk8E0 > scale_game_frames(40)) {
+            if (++hero.swim_entry_frames > scale_game_frames(40)) {
                 hero.state.step = 0;
             }
         }
