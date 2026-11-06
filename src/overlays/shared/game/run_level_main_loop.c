@@ -326,10 +326,10 @@ void run_level_main_loop(void) {
 #include "rnc/streaming/disc_table.h"
 
 typedef struct {
-    s32 unk0;
+    s32 cell; /* MapState.highlighted_cells[].cell: grid cell, <0 unused */
     s32 unk4;
     s32 buffer;
-    s32 unkC;
+    s32 padC;
 } MapChunkSlot;
 
 typedef struct {
@@ -462,7 +462,7 @@ void initialize_level_map_archive(void) {
         fast_mem_copy((void *)state->coverage_runs, (char *)archive + archive[1], second_size);
         state->scratch_data = hud_heap_alloc(0x1000, 0, (char *)heap_tag, 0x2F3);
         for (i = 0; i < 8; i++) {
-            D_L00_001841F0.slots[i].unk0 = -1;
+            D_L00_001841F0.slots[i].cell = -1;
             D_L00_001841F0.slots[i].unk4 = -1;
             D_L00_001841F0.slots[i].buffer = D_L00_001841F0.scratch_data + i * 0x200;
         }

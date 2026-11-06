@@ -127,12 +127,12 @@ typedef struct {
     u8  pad0[0xB0];
     f32 tan_half_fov;
     u8  padB4[0x164];
-    s32 fog_start_distance;
-    f32 unk21C;
+    s32 fog_near_dist;
+    f32 fog_far_dist;
     u8  pad220[8];
-    f32 unk228;
-    s32 unk22C;
-} ViewSettings;
+    f32 fog_near_int;
+    s32 fog_far_int;
+} ViewSettings; /* the level copy of struct View (rnc/rendering/view.h) */
 
 extern Ent  *l00_pause_menu_page_mobys[] __asm__("D_L00_001B9E90");
 extern s32   D_L00_0015F5D8;
@@ -287,15 +287,15 @@ void initialize_pause_menu(void) {
     qcopy(&D_L00_001B9CF0.saved_camera_position, &g_debug_camera.position);
     qcopy(&D_L00_001B9CF0.saved_camera_angles, &g_debug_camera.angles);
     {
-        f32 unk21C = 524288.0f;
-        f32 unk228 = 255.0f;
+        f32 fog_far_dist = 524288.0f;
+        f32 fog_near_int = 255.0f;
         f32 tan_half_fov = 0.63f;
         D_L00_001B9CF0.saved_tan_half_fov = ((ViewSettings *)D_L00_0016CA40)->tan_half_fov;
         ((ViewSettings *)D_L00_0016CA40)->tan_half_fov = tan_half_fov;
-        ((ViewSettings *)D_L00_0016CA40)->unk21C = unk21C;
-        ((ViewSettings *)D_L00_0016CA40)->unk228 = unk228;
-        ((ViewSettings *)D_L00_0016CA40)->unk22C = 0;
-        ((ViewSettings *)D_L00_0016CA40)->fog_start_distance = 0;
+        ((ViewSettings *)D_L00_0016CA40)->fog_far_dist = fog_far_dist;
+        ((ViewSettings *)D_L00_0016CA40)->fog_near_int = fog_near_int;
+        ((ViewSettings *)D_L00_0016CA40)->fog_far_int = 0;
+        ((ViewSettings *)D_L00_0016CA40)->fog_near_dist = 0;
     }
     update_view_context();
     reset_active_camera_position_and_basis();
