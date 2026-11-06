@@ -17,26 +17,26 @@
 
 typedef struct MobyCameraControl {
     u8    pad0[0xc];
-    s32   unkC;
-    s32   unk10;
-    s32   unk14;
+    s32   activation_clip_volume;
+    s32   activation_cylinder;
+    s32   activation_path;
     u8    pad18[0x8];
-    s16   unk20;
-    u8    unk22;
+    s16   active_frames;
+    u8    activation_by_distance;
     u8    pad23[0x1];
-    f32   unk24;
+    f32   activation_distance;
     s32   target_moby_index; /* 0x28 */
-    f32   unk2C;
-    f32   unk30;
-    f32   unk34;
-    f32   unk38;
-    s16   unk3C;
+    f32   axis_angle_limit_degrees;
+    f32   residual_angle_limit_degrees;
+    f32   camera_distance;
+    f32   camera_height;
+    s16   mode;
     s16   unk3E;
-    f32   unk40;
-    s32   unk44;
+    f32   heading;
+    s32   target_group;
     char *target; /* 0x48: moby the camera follows */
-    f32   unk4C;
-    s32   unk50;
+    f32   camera_offset_scale;
+    s32   disabled;
 } MobyCameraControl;
 
 extern int  test_point_in_transformed_unit_sphere(void *, int) __asm__("FUN_L00_0025faf0");
@@ -81,23 +81,24 @@ int test_moby_camera_control_activation(char *moby) {
     if (special != 0 && special == target) {
         return 1;
     }
-    if (camera_control_entry->unk3C == 6) {
+    if (camera_control_entry->mode == 6) {
         return (char *)hero.ground_moby == target;
     }
-    if (camera_control_entry->unk22 == 1) {
-        return fast_vec_dist(&hero.motion.pos, target + 0x10) < camera_control_entry->unk24;
+    if (camera_control_entry->activation_by_distance == 1) {
+        return fast_vec_dist(&hero.motion.pos, target + 0x10) <
+               camera_control_entry->activation_distance;
     }
-    if (camera_control_entry->unkC >= 0) {
-        hero_containment_result =
-            is_point_inside_clip_volume(&hero.motion.pos, camera_control_entry->unkC);
+    if (camera_control_entry->activation_clip_volume >= 0) {
+        hero_containment_result = is_point_inside_clip_volume(
+            &hero.motion.pos, camera_control_entry->activation_clip_volume);
         if (hero_containment_result == 0) {
             goto rejected;
         }
         return 1;
     }
-    if (camera_control_entry->unk10 >= 0) {
-        hero_containment_result =
-            test_point_in_transformed_unit_cylinder(&hero.motion.pos, camera_control_entry->unk10);
+    if (camera_control_entry->activation_cylinder >= 0) {
+        hero_containment_result = test_point_in_transformed_unit_cylinder(
+            &hero.motion.pos, camera_control_entry->activation_cylinder);
         if (hero_containment_result == 0) {
             goto rejected;
         }
@@ -111,10 +112,10 @@ int test_moby_camera_control_activation(char *moby) {
         }
         return 1;
     }
-    if (camera_control_entry->unk14 < 0) {
+    if (camera_control_entry->activation_path < 0) {
         goto rejected;
     }
-    activation_path_record = (int *)D_L02_001B0AB0[camera_control_entry->unk14];
+    activation_path_record = (int *)D_L02_001B0AB0[camera_control_entry->activation_path];
     hero_containment_result =
         point_in_path_xy(&hero.motion.pos, activation_path_record + 4, *activation_path_record);
     if (hero_containment_result == 0) {
@@ -209,16 +210,16 @@ void apply_moby_camera_control(char *moby) {
     float              amount;
     float              heading_vector[3];
 
-    if (moby_camera_control_record->unk50 != 0) {
-        moby_camera_control_record->unk20 = 0;
+    if (moby_camera_control_record->disabled != 0) {
+        moby_camera_control_record->active_frames = 0;
         clear_follow_camera_volume_if_current(moby);
         return;
     }
-    index = moby_camera_control_record->unk44;
+    index = moby_camera_control_record->target_group;
     if (index >= 0) {
         group = (unsigned short *)D_L02_001ABE40[index];
         if (group == 0) {
-            moby_camera_control_record->unk20 = -1;
+            moby_camera_control_record->active_frames = -1;
             clear_follow_camera_volume_if_current(moby);
             return;
         }
@@ -235,7 +236,7 @@ void apply_moby_camera_control(char *moby) {
             if (*(signed char *)(first_group_target + 0x20) < 0) {
                 do {
                     if ((id << 16) < 0) {
-                        moby_camera_control_record->unk20 = -1;
+                        moby_camera_control_record->active_frames = -1;
                         clear_follow_camera_volume_if_current(moby);
                         return;
                     }
@@ -255,49 +256,49 @@ void apply_moby_camera_control(char *moby) {
     } else {
         target = (char *)(D_L02_0015FFD8 + (moby_camera_control_record->target_moby_index << 8));
         if (*(signed char *)(target + 0x20) < 0) {
-            moby_camera_control_record->unk20 = -1;
+            moby_camera_control_record->active_frames = -1;
             clear_follow_camera_volume_if_current(moby);
             return;
         }
     }
     moby_camera_control_record->target = target;
-    if (moby_camera_control_record->unk3C == 6 && (char *)hero_lui.ground_moby != target) {
-        moby_camera_control_record->unk20 = 0;
+    if (moby_camera_control_record->mode == 6 && (char *)hero_lui.ground_moby != target) {
+        moby_camera_control_record->active_frames = 0;
         clear_follow_camera_volume_if_current(moby);
         return;
     }
     if (try_select_follow_camera_volume(moby) <= 0) {
-        moby_camera_control_record->unk20 = 0;
+        moby_camera_control_record->active_frames = 0;
         return;
     }
     if (test_moby_camera_control_activation(moby) == 0) {
-        moby_camera_control_record->unk20 = 0;
+        moby_camera_control_record->active_frames = 0;
         clear_follow_camera_volume_if_current(moby);
         return;
     }
-    if (moby_camera_control_record->unk3C == 5) {
+    if (moby_camera_control_record->mode == 5) {
         angle = fast_arc_tan(*(float *)D_L02_00167400_d, *(float *)(D_L02_00167400_d + 4));
-        if (moby_camera_control_record->unk20 < 2)
-            moby_camera_control_record->unk40 =
+        if (moby_camera_control_record->active_frames < 2)
+            moby_camera_control_record->heading =
                 *(float *)(l02_moby_record_table + *(short *)(moby + 0x84) * 32 + 0x18);
         else if (absolute_float(controller_state.analog[0]) >= 0.3f ||
                  absolute_float(controller_state.analog[1]) >= 0.3f)
-            moby_camera_control_record->unk40 = angle;
-        heading = moby_camera_control_record->unk40;
+            moby_camera_control_record->heading = angle;
+        heading = moby_camera_control_record->heading;
         if (fast_difference_between_rotations(heading, angle) > 1.5707964f)
             fast_add_rotations(heading, 3.1415927f);
     }
-    if (moby_camera_control_record->unk3C == 4) {
+    if (moby_camera_control_record->mode == 4) {
         heading = *(float *)(l02_moby_record_table + *(short *)(moby + 0x84) * 32 + 0x18);
         angle = fast_arc_tan(*(float *)D_L02_00167400_d, *(float *)(D_L02_00167400_d + 4));
         if (fast_difference_between_rotations(heading, angle) > 1.5707964f)
             heading = fast_add_rotations(heading, 3.1415927f);
-        moby_camera_control_record->unk40 = heading;
+        moby_camera_control_record->heading = heading;
     }
     active = 1;
     scale = 1.0f;
-    moby_camera_control_record->unk20 += 1;
-    if (moby_camera_control_record->unk3C == 1) {
+    moby_camera_control_record->active_frames += 1;
+    if (moby_camera_control_record->mode == 1) {
         duration = scale_game_frames(300);
         count = scale_game_frames(400);
         end = scale_game_frames(560);
@@ -308,10 +309,10 @@ void apply_moby_camera_control(char *moby) {
         end = scale_game_frames(400);
         frames = scale_game_frames(200);
     }
-    if (moby_camera_control_record->unk3C == 7) {
+    if (moby_camera_control_record->mode == 7) {
         if (controller_state.analog[0] != 0.0f)
-            moby_camera_control_record->unk20 = duration;
-        count = moby_camera_control_record->unk20;
+            moby_camera_control_record->active_frames = duration;
+        count = moby_camera_control_record->active_frames;
         if (count >= duration) {
             active = 0;
             moby_camera_control_record->unk3E += 1;
@@ -320,62 +321,64 @@ void apply_moby_camera_control(char *moby) {
                 active = 1;
             }
         }
-        if (moby_camera_control_record->unk20 >= end) {
+        if (moby_camera_control_record->active_frames >= end) {
             active = 1;
             moby_camera_control_record->unk3E = 0;
-            moby_camera_control_record->unk20 = 1;
+            moby_camera_control_record->active_frames = 1;
         }
-        if (frames < moby_camera_control_record->unk20 &&
-            moby_camera_control_record->unk20 < duration) {
+        if (frames < moby_camera_control_record->active_frames &&
+            moby_camera_control_record->active_frames < duration) {
             moby_camera_control_record->unk3E = duration;
-            moby_camera_control_record->unk20 = frames;
+            moby_camera_control_record->active_frames = frames;
         }
-    } else if ((unsigned short)(moby_camera_control_record->unk3C - 1) < 2) {
+    } else if ((unsigned short)(moby_camera_control_record->mode - 1) < 2) {
         set_follow_camera_control_word(176);
         set_nonzero_follow_camera_parameters(1.0f, 12.0f, 0.11f);
         if (controller_state.analog[0] != 0.0f || controller_state.analog[1] != 0.0f)
-            moby_camera_control_record->unk20 = duration;
-        if (moby_camera_control_record->unk20 >= duration) {
+            moby_camera_control_record->active_frames = duration;
+        if (moby_camera_control_record->active_frames >= duration) {
             int waited = (unsigned short)moby_camera_control_record->unk3E + 1;
             moby_camera_control_record->unk3E = waited;
             if ((short)waited >= count) {
                 if (test_moby_camera_target_angle_limits(moby, 30.0f, 0.0f) != 0)
-                    moby_camera_control_record->unk20 = end;
+                    moby_camera_control_record->active_frames = end;
                 else
                     active = 0;
             } else {
                 active = 0;
             }
         }
-        if (moby_camera_control_record->unk20 >= end) {
+        if (moby_camera_control_record->active_frames >= end) {
             active = 1;
             moby_camera_control_record->unk3E = 0;
-            moby_camera_control_record->unk20 = 1;
+            moby_camera_control_record->active_frames = 1;
         }
-        if (frames < moby_camera_control_record->unk20 &&
-            moby_camera_control_record->unk20 < duration) {
+        if (frames < moby_camera_control_record->active_frames &&
+            moby_camera_control_record->active_frames < duration) {
             moby_camera_control_record->unk3E = duration;
-            moby_camera_control_record->unk20 = frames;
+            moby_camera_control_record->active_frames = frames;
         }
-    } else if (frames < moby_camera_control_record->unk20) {
-        moby_camera_control_record->unk20 = frames;
+    } else if (frames < moby_camera_control_record->active_frames) {
+        moby_camera_control_record->active_frames = frames;
     }
     hit = 0;
     amount = *(float *)moby_camera_control_record * scale * 0.017453292f *
-             ((float)moby_camera_control_record->unk20 / convert_integer_to_float(frames));
+             ((float)moby_camera_control_record->active_frames / convert_integer_to_float(frames));
     if (active) {
         if (test_moby_camera_target_angle_limits(
-                moby, moby_camera_control_record->unk30, moby_camera_control_record->unk2C) != 0) {
+                moby,
+                moby_camera_control_record->residual_angle_limit_degrees,
+                moby_camera_control_record->axis_angle_limit_degrees) != 0) {
             hit = 1;
-            if ((unsigned short)(moby_camera_control_record->unk3C - 4) < 2) {
-                heading_vector[0] = fast_cos(moby_camera_control_record->unk40);
-                heading_vector[1] = fast_sin(moby_camera_control_record->unk40);
+            if ((unsigned short)(moby_camera_control_record->mode - 4) < 2) {
+                heading_vector[0] = fast_cos(moby_camera_control_record->heading);
+                heading_vector[1] = fast_sin(moby_camera_control_record->heading);
                 heading_vector[2] = 0.0f;
                 set_follow_camera_angle_blend_from_direction(amount, 0.0f, heading_vector);
-            } else if (moby_camera_control_record->unk3C == 3) {
+            } else if (moby_camera_control_record->mode == 3) {
                 float speed;
-                if (moby_camera_control_record->unk20 < scale_game_frames(90))
-                    speed = (amount - 0.0f) * ((float)moby_camera_control_record->unk20 /
+                if (moby_camera_control_record->active_frames < scale_game_frames(90))
+                    speed = (amount - 0.0f) * ((float)moby_camera_control_record->active_frames /
                                                convert_integer_to_float(scale_game_frames(90))) +
                             0.0f;
                 else
@@ -386,44 +389,44 @@ void apply_moby_camera_control(char *moby) {
             }
         }
     }
-    if (moby_camera_control_record->unk34 != 0.0f) {
-        follow_camera_set_distance(0, moby_camera_control_record->unk34, 0.003f);
+    if (moby_camera_control_record->camera_distance != 0.0f) {
+        follow_camera_set_distance(0, moby_camera_control_record->camera_distance, 0.003f);
         FUN_L00_002e8620();
     }
-    if (moby_camera_control_record->unk38 != 0.0f)
-        follow_camera_set_height(moby_camera_control_record->unk38, 0.003f);
-    if (moby_camera_control_record->unk4C != 0.0f)
-        follow_camera_set_offset_scale(0, moby_camera_control_record->unk4C, 0.005f);
-    if (moby_camera_control_record->unk3C == 3) {
+    if (moby_camera_control_record->camera_height != 0.0f)
+        follow_camera_set_height(moby_camera_control_record->camera_height, 0.003f);
+    if (moby_camera_control_record->camera_offset_scale != 0.0f)
+        follow_camera_set_offset_scale(0, moby_camera_control_record->camera_offset_scale, 0.005f);
+    if (moby_camera_control_record->mode == 3) {
         float heading;
         set_follow_camera_orbit_clamp_mode(0);
         FUN_L00_002e8620();
         follow_camera_start_slide();
         follow_camera_set_up_spring(0.01f, 0.2f);
-        if (moby_camera_control_record->unk20 >= scale_game_frames(120))
+        if (moby_camera_control_record->active_frames >= scale_game_frames(120))
             heading = 0.03f;
         else
-            heading = ((float)moby_camera_control_record->unk20 /
+            heading = ((float)moby_camera_control_record->active_frames /
                        convert_integer_to_float(scale_game_frames(120))) *
                           0.02f +
                       0.01f;
         follow_camera_set_lateral_spring(heading, 0.2f);
     }
-    if ((unsigned short)(moby_camera_control_record->unk3C - 4) < 2) {
+    if ((unsigned short)(moby_camera_control_record->mode - 4) < 2) {
         set_follow_camera_orbit_clamp_mode(0);
         FUN_L00_002e8620();
         follow_camera_start_slide();
         follow_camera_set_up_spring(0.02f, 0.2f);
         follow_camera_set_distance(0, 5.84f, 0.003f);
-        if (moby_camera_control_record->unk3C == 4) {
+        if (moby_camera_control_record->mode == 4) {
             float angle;
             fast_vec_sub(heading_vector, target + 0x10, &hero.motion.pos);
             angle = fast_arc_tan(heading_vector[0], heading_vector[1]);
-            if (hit && fast_difference_between_rotations(angle, moby_camera_control_record->unk40) >
-                           1.9198622f) {
-                if (moby_camera_control_record->unk34 != 0.0f)
+            if (hit && fast_difference_between_rotations(
+                           angle, moby_camera_control_record->heading) > 1.9198622f) {
+                if (moby_camera_control_record->camera_distance != 0.0f)
                     follow_camera_set_distance(
-                        0, moby_camera_control_record->unk34 + 3.36f, 0.003f);
+                        0, moby_camera_control_record->camera_distance + 3.36f, 0.003f);
                 else
                     follow_camera_set_distance(0, 8.0f, 0.003f);
             }
