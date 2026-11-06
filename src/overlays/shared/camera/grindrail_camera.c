@@ -31,10 +31,10 @@ typedef struct {
 typedef struct {
     Vec4 vel; /* 0x00 */
     u8   pad10[0x10];
-    f32  unk20; /* 0x20 */
-    f32  unk24; /* 0x24 */
-    f32  unk28; /* 0x28 */
-    s16  unk2C; /* 0x2C */
+    f32  pitch_rate; /* 0x20: eased toward the path rate */
+    f32  unk24;      /* 0x24 */
+    f32  unk28;      /* 0x28 */
+    s16  unk2C;      /* 0x2C */
     u8   pad2E[0x22];
 } CameraView;
 
@@ -59,11 +59,11 @@ typedef struct {
 } CameraBlend;
 
 typedef struct {
-    Vec4         axis;  /* 0x00 */
-    f32          unk10; /* 0x10 */
-    f32          unk14; /* 0x14 */
-    s32          unk18; /* 0x18 */
-    s16          mode;  /* 0x1C */
+    Vec4         axis;          /* 0x00 */
+    f32          position_rate; /* 0x10: eased toward the path node speed */
+    f32          unk14;         /* 0x14 */
+    s32          unk18;         /* 0x18 */
+    s16          mode;          /* 0x1C */
     u8           pad1E[2];
     f32          unk20; /* 0x20 */
     s32          unk24; /* 0x24 */
@@ -98,14 +98,14 @@ typedef struct {
 typedef struct {
     f32 lead; /* 0x00 */
     u8  pad4[0x1C];
-    s32 track_path; /* 0x20: D_L01_001B0930 path the first path is measured along */
-    s32 target;     /* 0x24: row of l01_splines */
-    s32 path;       /* 0x28: D_L01_001B0930 path */
-    s32 look_path;  /* 0x2C: D_L01_001B0930 path measured along the target's path */
-    s32 kind;       /* 0x30 */
-    s16 ready;      /* 0x34: paths prepared */
-    s16 unk36;      /* 0x36: 1 when the camera starts on the far side of a kind 3 path */
-    f32 unk38;      /* 0x38 */
+    s32 track_path;    /* 0x20: D_L01_001B0930 path the first path is measured along */
+    s32 target;        /* 0x24: row of l01_splines */
+    s32 path;          /* 0x28: D_L01_001B0930 path */
+    s32 look_path;     /* 0x2C: D_L01_001B0930 path measured along the target's path */
+    s32 kind;          /* 0x30 */
+    s16 ready;         /* 0x34: paths prepared */
+    s16 far_side;      /* 0x36: 1 when the camera starts on the far side of a kind 3 path */
+    f32 position_lead; /* 0x38: distance the camera position is sampled ahead along its path */
 } CameraPreset;
 
 typedef struct {
@@ -148,7 +148,7 @@ void reset_camera_state_and_prepare_preset_paths(Camera *destination_camera) {
     spring->unk4 = 0.5f;
     spring->height = 2.0f;
     orbit = destination_camera->orbit;
-    orbit->unk10 = 0.01f;
+    orbit->position_rate = 0.01f;
     orbit->unk14 = 0.175f;
     orbit->unk18 = 0;
     orbit->mode = 0;
@@ -156,7 +156,7 @@ void reset_camera_state_and_prepare_preset_paths(Camera *destination_camera) {
     orbit->unk24 = 0;
     clear_u64_value(orbit);
     view = &destination_camera->orbit->view;
-    view->unk20 = 0.01f;
+    view->pitch_rate = 0.01f;
     view->unk24 = 0.3f;
     view->unk28 = 0.2f;
     view->unk2C = 0;
@@ -261,16 +261,16 @@ typedef struct {
 
 typedef struct {
     char  p00[0x20];
-    float unk20;
+    float pitch_rate;
     char  p24[0x10];
-    float unk34;
+    float pitch_velocity;
     char  p38[0x18];
 } SubA;
 
 typedef struct {
     float pos[4];
     char  p10[0x3C];
-    float unk4C;
+    float dist;
     char  p50[0x80];
 } SubB;
 
@@ -278,13 +278,13 @@ typedef struct {
     int   idx;
     float t;
     int   p08[2];
-    int   unk10;
+    int   hero_range_node; /* path node whose segment range holds the hero */
 } SubC;
 
 typedef struct {
     float vel[3];
     float unk0C;
-    float unk10;
+    float position_rate;
     char  p14[0x1C];
     SubA  a;
     SubB  b;
@@ -292,15 +292,15 @@ typedef struct {
 } Data;
 
 typedef struct {
-    float unk0[4];
-    float unk10[4];
-    float unk20[4];
+    float forward[4];
+    float right[4];
+    float up[4];
     float pos[4];
-    float unk40[4];
+    float prev_forward[4];
     char  p50[0x20];
     Data *data;
     char  p74[0x10];
-    short unk84;
+    short preset;
 } Cam;
 
 extern CameraPresetRow *l01_camera_preset_rows_macro __asm__("D_L01_0015EF50") MACRO_ADDR;
@@ -326,14 +326,15 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
     SubA         *look = &data->a;
     SubB         *follow = &data->b;
     SubC         *progress = &data->c;
-    CameraPreset *camera_path_preset = l01_camera_preset_rows_macro[camera_to_update->unk84].preset;
-    float         rate = 0.01f;
-    int           mode = camera_path_preset->kind;
-    int           path_index = camera_path_preset->track_path;
-    float         lead = camera_path_preset->lead;
-    float         pitch_error;
-    float         look_length;
-    float         pitch_step;
+    CameraPreset *camera_path_preset =
+        l01_camera_preset_rows_macro[camera_to_update->preset].preset;
+    float rate = 0.01f;
+    int   mode = camera_path_preset->kind;
+    int   path_index = camera_path_preset->track_path;
+    float lead = camera_path_preset->lead;
+    float pitch_error;
+    float look_length;
+    float pitch_step;
 
     if (mode == CAMERA_PRESET_KIND_RAIL_SEGMENT_SYNC) {
         Path *path;
@@ -396,7 +397,7 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
             }
             previous_path_node_index = i;
         }
-        progress->unk10 = i;
+        progress->hero_range_node = i;
         sum = 0.0f;
         j = (i - 1 + pathB->n) % pathB->n;
         hero_length = pathB->nodes[i].y;
@@ -424,19 +425,31 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
             rate *= speed_scale;
             speed_scale *= 0.01f;
         }
-        if (absolute_float(data->unk10 - speed_scale) < 0.00015f) {
-            data->unk10 = speed_scale;
-        } else if (data->unk10 < speed_scale) {
-            data->unk10 = data->unk10 + 0.00015f;
+        if (absolute_float(data->position_rate - speed_scale) < 0.00015f) {
+            data->position_rate = speed_scale;
+        } else if (data->position_rate < speed_scale) {
+            data->position_rate = data->position_rate + 0.00015f;
         } else {
-            data->unk10 = data->unk10 - 0.00015f;
+            data->position_rate = data->position_rate - 0.00015f;
         }
-        camera_to_update->pos[0] = cam_interp_values(
-            camera_to_update->pos[0], look_target[0], &data->vel[0], data->unk10, 0.175f, 0.0f);
-        camera_to_update->pos[1] = cam_interp_values(
-            camera_to_update->pos[1], look_target[1], &data->vel[1], data->unk10, 0.175f, 0.0f);
-        camera_to_update->pos[2] = cam_interp_values(
-            camera_to_update->pos[2], look_target[2], &data->vel[2], data->unk10, 0.175f, 0.0f);
+        camera_to_update->pos[0] = cam_interp_values(camera_to_update->pos[0],
+                                                     look_target[0],
+                                                     &data->vel[0],
+                                                     data->position_rate,
+                                                     0.175f,
+                                                     0.0f);
+        camera_to_update->pos[1] = cam_interp_values(camera_to_update->pos[1],
+                                                     look_target[1],
+                                                     &data->vel[1],
+                                                     data->position_rate,
+                                                     0.175f,
+                                                     0.0f);
+        camera_to_update->pos[2] = cam_interp_values(camera_to_update->pos[2],
+                                                     look_target[2],
+                                                     &data->vel[2],
+                                                     data->position_rate,
+                                                     0.175f,
+                                                     0.0f);
     } else {
         Path *path = ((Path *)l01_paths[path_index]);
 
@@ -452,10 +465,10 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
                              20.0f,
                              1.0f,
                              0.0f);
-            if (camera_path_preset->unk36 == 1) {
-                lead_offset = -(camera_path_preset->unk38 * 4.0f);
+            if (camera_path_preset->far_side == 1) {
+                lead_offset = -(camera_path_preset->position_lead * 4.0f);
             } else {
-                lead_offset = camera_path_preset->unk38;
+                lead_offset = camera_path_preset->position_lead;
             }
             sample_path(path, path_point, &segment, &fraction, lead_offset, 1);
             qcopy(camera_goal, path_point);
@@ -469,7 +482,7 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
                         path_point,
                         &hero_segment,
                         &hero_fraction,
-                        camera_path_preset->unk38,
+                        camera_path_preset->position_lead,
                         1);
             FUN_L00_0025df68(
                 path, path_point, camera_goal, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
@@ -514,32 +527,34 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
                     lead,
                     1);
     }
-    fast_vec_normalize(look_offset, camera_basis_reference_direction, follow->unk4C);
+    fast_vec_normalize(look_offset, camera_basis_reference_direction, follow->dist);
     fast_vec_add(path_point, look_offset, look_target);
     fast_vec_sub(look_dir, path_point, camera_to_update->pos);
     look_length = fast_vec_length(look_dir);
     if (look_length != 0.0f) {
         fast_vec_scale(look_dir, look_dir, 1.0f / look_length);
-        pitch_error = 1.5707964f - fast_arc_sin(fast_vec_dot(look_dir, camera_to_update->unk0));
+        pitch_error = 1.5707964f - fast_arc_sin(fast_vec_dot(look_dir, camera_to_update->forward));
     } else {
         pitch_error = 0.0f;
     }
-    if (absolute_float(look->unk20 - rate) < 0.00015f) {
-        look->unk20 = rate;
-    } else if (look->unk20 < rate) {
-        look->unk20 = look->unk20 + 0.00015f;
+    if (absolute_float(look->pitch_rate - rate) < 0.00015f) {
+        look->pitch_rate = rate;
+    } else if (look->pitch_rate < rate) {
+        look->pitch_rate = look->pitch_rate + 0.00015f;
     } else {
-        look->unk20 = look->unk20 - 0.00015f;
+        look->pitch_rate = look->pitch_rate - 0.00015f;
     }
-    pitch_step = rope_spring_turn(&look->unk34, 0.0f, pitch_error, look->unk20, 0.175f, 0.0f);
-    fast_vec_cross(delta, look_dir, camera_to_update->unk40);
-    build_look_at_matrix(camera_to_update->unk0, camera_to_update->unk40, delta, pitch_step);
-    fast_vec_normalize(camera_to_update->unk40, camera_to_update->unk0, 1.0f);
-    fast_vec_normalize(camera_to_update->unk0, camera_to_update->unk0, 1.0f);
+    pitch_step =
+        rope_spring_turn(&look->pitch_velocity, 0.0f, pitch_error, look->pitch_rate, 0.175f, 0.0f);
+    fast_vec_cross(delta, look_dir, camera_to_update->prev_forward);
+    build_look_at_matrix(
+        camera_to_update->forward, camera_to_update->prev_forward, delta, pitch_step);
+    fast_vec_normalize(camera_to_update->prev_forward, camera_to_update->forward, 1.0f);
+    fast_vec_normalize(camera_to_update->forward, camera_to_update->forward, 1.0f);
     fast_vec_cross(
-        camera_to_update->unk10, camera_to_update->unk0, camera_basis_reference_direction);
-    fast_vec_normalize(camera_to_update->unk10, camera_to_update->unk10, 1.0f);
-    fast_vec_cross(camera_to_update->unk20, camera_to_update->unk10, camera_to_update->unk0);
+        camera_to_update->right, camera_to_update->forward, camera_basis_reference_direction);
+    fast_vec_normalize(camera_to_update->right, camera_to_update->right, 1.0f);
+    fast_vec_cross(camera_to_update->up, camera_to_update->right, camera_to_update->forward);
 }
 
 extern Camera *D_L01_00167284 NOT_SDA;
@@ -572,7 +587,7 @@ void initialize_camera_transform_and_paths(Camera *destination_camera) {
         }
     }
 
-    camera_preset->unk36 = 0;
+    camera_preset->far_side = 0;
     if (camera_preset->kind == CAMERA_PRESET_KIND_GRINDRAIL_PATH) {
         CameraPath *path;
         s32         next;
@@ -590,7 +605,7 @@ void initialize_camera_transform_and_paths(Camera *destination_camera) {
                 fast_vec_normalize(&delta, &delta, 1.0f);
                 fast_vec_sub(&to_camera, (char *)destination_camera + 0x30, &D_0013F3D0_315de0);
                 if (0.0f < fast_vec_dot(&to_camera, &delta))
-                    camera_preset->unk36 = 1;
+                    camera_preset->far_side = 1;
             }
         }
     }
