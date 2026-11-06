@@ -6,6 +6,7 @@
 #include "rnc/sdk/libc/stdio.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/ui/menus/menu_screen.h"
+#include "rnc/world/level_id.h"
 
 extern void        setup_gif_paging(int) __asm__("func_001F4280");
 extern void        do_gif_paging(void) __asm__("func_001F4398");
@@ -13,7 +14,8 @@ extern void        draw_moby_list(void *, int) __asm__("func_0020D330");
 extern void       *get_help_message_text(int) __asm__("func_001FDD10");
 extern const float setup_menu_moby_camera_y_offset __asm__("D_001602A4") __attribute__((sda));
 extern char        setup_menu_text_format[] __asm__("D_001602A8");
-extern int         menu_display_value_by_level[] __asm__("D_001E0888");
+/* The number of gold bolts each level holds. */
+extern int gold_bolts_per_level[LEVEL_COUNT] __asm__("D_001E0888");
 
 #include "rnc/rendering/screen.h"
 
@@ -47,7 +49,7 @@ int setup_menu_display_text(struct MenuScreen *menu) {
             get_help_message_text(0x4F4F),
             count,
             get_help_message_text(0x4F53),
-            menu_display_value_by_level[level_map_selection.level]);
+            gold_bolts_per_level[level_map_selection.level]);
     font_print_right(
         menu->width - 0x10, (screen_extent.height >> 1) - 8, 0x80000000L, formatted_menu_text, -1);
     font_print_right(
@@ -61,3 +63,25 @@ extern __typeof__(setup_menu_display_text) func_0021EF78 __attribute__((alias("F
 /* Small data reached with lui/addiu. */
 char setup_menu_text_format[] __asm__("D_001602A8")
     __attribute__((section(".sdata"))) = "%s %d %s %d";
+
+int gold_bolts_per_level[LEVEL_COUNT] __asm__("D_001E0888") = {
+    0, /* LEVEL_VELDIN1 */
+    3, /* LEVEL_NOVALIS */
+    4, /* LEVEL_ARIDIA */
+    3, /* LEVEL_KERWAN */
+    1, /* LEVEL_EUDORA */
+    2, /* LEVEL_RILGAR */
+    2, /* LEVEL_NEBULA_G34 */
+    2, /* LEVEL_UMBRIS */
+    2, /* LEVEL_BATALIA */
+    2, /* LEVEL_GASPAR */
+    2, /* LEVEL_ORXON */
+    1, /* LEVEL_POKITARU */
+    2, /* LEVEL_HOVEN */
+    1, /* LEVEL_OLTANIS_ORBIT */
+    4, /* LEVEL_OLTANIS */
+    2, /* LEVEL_QUARTU */
+    2, /* LEVEL_KALEBO3 */
+    2, /* LEVEL_VELDIN_ORBIT */
+    3, /* LEVEL_VELDIN2 */
+};
