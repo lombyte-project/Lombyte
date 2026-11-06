@@ -66,8 +66,8 @@ struct TransferState {
     unsigned char    pad46[2];
     unsigned short   unk48; /* 0x48 */
     unsigned char    pad4A[2];
-    int              subs;       /* 0x4C: subtitle table (draw_subtitles) */
-    int              unk50;      /* 0x50 */
+    int              subs; /* 0x4C: subtitle table (draw_subtitles) */
+    unsigned char    pad50[4];
     int              frames;     /* 0x54: camera keys */
     struct ModelRec *rec;        /* 0x58 */
     int              source_end; /* 0x5C: compressed chunk */

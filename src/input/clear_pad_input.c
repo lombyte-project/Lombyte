@@ -1,8 +1,9 @@
 #include "types.h"
 #include "rnc/input/pad_state.h"
 
+/* One PadState.analog_prev entry, cleared as a word. */
 struct WordCell {
-    s32 unk0;
+    s32 bits;
 };
 
 void clear_pad_input(struct PadState *pad_state) __asm__("FUN_002172c0");
@@ -28,7 +29,7 @@ void clear_pad_input(struct PadState *pad_state) {
     do {
         *(s32 *)((u8 *)slot - 0x40) = 0;
         remaining -= 1;
-        slot->unk0 = 0;
+        slot->bits = 0;
         slot += 1;
     } while (remaining >= 0);
 }

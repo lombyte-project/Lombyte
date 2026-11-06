@@ -75,7 +75,7 @@ typedef struct {
     s32 ring_end;   /* 0x08: memory slot 2 */
     u8  padC[8];
     u8 *buffer;
-    s32 unk18;
+    s32 free_start; /* 0x18: memory slot 6: first free byte past the loaded level archive */
 } MemInfo;
 
 typedef struct {
@@ -253,7 +253,7 @@ void initialize_level_runtime(void) {
     texture_cursor = gs_texture_allocation_cursor + 0x2000;
     allocation_cursor = D_001940C0.buffer + archive_size;
     gs_texture_allocation_cursor = texture_cursor;
-    D_001940C0.unk18 = (s32)allocation_cursor;
+    D_001940C0.free_start = (s32)allocation_cursor;
     gs_texture_allocation_start = texture_cursor;
     D_00160588 = texture_packet[0];
     clear_blocks_16(point_lights, 0x100);
