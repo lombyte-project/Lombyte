@@ -512,7 +512,7 @@ int hero_set_state(int requested_state, int animation_request_mode) {
                 q->hoverboard_moby = (u8 *)m;
                 q->unk890 = (u8 *)moby_pool_4f60 + (*(int *)(*(char **)(m + 0x78) + 0x28) << 8);
                 q->board_gravity = frame_time_sq * 22.0f;
-                q->unk87C = 1.2217305f;
+                q->board_spring_angle = 1.2217305f;
                 q->trick_hud_handle = -1;
                 if (alternate_item_available[0] != 0) {
                     hud_release_held_element();
