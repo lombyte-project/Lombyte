@@ -25,15 +25,15 @@ void populate_water_tile_neighbor_indices(int selected_tile_index) __asm__("FUN_
 void populate_water_tile_neighbor_indices(int arg) __asm__("FUN_L11_0030e730");
 
 typedef struct {
-    f32 unk0;
-    f32 unk4;
-    f32 unk8;
-    f32 unkC;
-    f32 unk10;
-    f32 unk14;
-    f32 unk18;
-    f32 unk1C;
-    f32 unk20;
+    f32 size_x;            /* 0x00: patch size (16) */
+    f32 size_y;            /* 0x04 */
+    f32 origin_x;          /* 0x08: origin offset (-8) */
+    f32 origin_y;          /* 0x0C */
+    f32 cell_x;            /* 0x10: cell size (1) */
+    f32 cell_y;            /* 0x14 */
+    f32 reflection_scale;  /* 0x18: sphere-map scale (0.9) */
+    f32 damping_threshold; /* 0x1C: kept from the disc */
+    f32 clock_step;        /* 0x20: ripple clock step (0.1) */
     f32 unk24;
     s32 unk28;
     s32 unk2C;
@@ -42,7 +42,7 @@ typedef struct {
     f32 light_dir_z;
     u8  unk3C;
     u8  unk3D;
-} Light_e088;
+} Light_e088; /* ripple constants (ReRAC water.rs RippleConsts) */
 
 extern Light_e088 l11_water_tile_light __asm__("D_L11_001CB280");
 int               l11_water_tile_allocation_count __asm__("D_L11_00161F64") = 0;
@@ -103,14 +103,14 @@ void water_tile_update(struct Moby *water_tile_moby) {
             pool_init_tiles(l11_water_grids, 20);
             pool_set_scale(1.0f);
             water_tile_light = &l11_water_tile_light;
-            water_tile_light->unk0 = 16.0f;
-            water_tile_light->unk4 = 16.0f;
-            water_tile_light->unk8 = -8.0f;
-            water_tile_light->unkC = -8.0f;
-            water_tile_light->unk10 = 1.0f;
-            water_tile_light->unk14 = 1.0f;
-            water_tile_light->unk18 = 0.9f;
-            water_tile_light->unk20 = 0.1f;
+            water_tile_light->size_x = 16.0f;
+            water_tile_light->size_y = 16.0f;
+            water_tile_light->origin_x = -8.0f;
+            water_tile_light->origin_y = -8.0f;
+            water_tile_light->cell_x = 1.0f;
+            water_tile_light->cell_y = 1.0f;
+            water_tile_light->reflection_scale = 0.9f;
+            water_tile_light->clock_step = 0.1f;
             light_direction_angle =
                 fast_arc_tan(water_light_heading_reference[4], water_light_heading_reference[5]);
             water_tile_light->light_dir_x = fast_cos(light_direction_angle) * 0.57735f;
