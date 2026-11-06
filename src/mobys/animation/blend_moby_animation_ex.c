@@ -34,7 +34,7 @@ void blend_moby_animation_ex(
     unsigned char oldSeq;
     float         scale;
 
-    if (moby->anim_time > 0.025f || moby->unk60 != 0 || moby->manips != 0 || (options & 4)) {
+    if (moby->anim_time > 0.025f || moby->pose_layers != 0 || moby->manips != 0 || (options & 4)) {
         slot = find_or_allocate_moby_render_slot((int)moby);
         if (slot >= 0) {
             flags = (options & 1) ? (slot | 0x100) : slot;
@@ -54,8 +54,8 @@ void blend_moby_animation_ex(
     moby->anim_speed = 1.0f;
     scale = 1.0f / convert_integer_to_float(blend_frames);
     moby->anim_time = 0.0f;
-    moby->unk70 = (unsigned char)(moby->unk70 & 0xFD);
-    moby->unk5C = scale;
+    moby->anim_flags = (unsigned char)(moby->anim_flags & 0xFD);
+    moby->anim_rate = scale;
     moby->seq_sound = moby->pClass->seqs[new_seq]->sound;
 }
 

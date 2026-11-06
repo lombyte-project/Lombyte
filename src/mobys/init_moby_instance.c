@@ -41,7 +41,7 @@ typedef struct {
     unsigned long  lights;    /* 0x38 */
     char           pad40[0x18];
     float          anim_speed; /* 0x58 */
-    float          unk5C;      /* 0x5C */
+    float          anim_rate;  /* 0x5C */
     char           pad60[0x11];
     unsigned char  unk71;       /* 0x71 */
     unsigned char  lod_dist;    /* 0x72 */
@@ -53,8 +53,8 @@ typedef struct {
     unsigned char  anim_trigger_count; /* 0x7E */
     unsigned char  shadow_range;       /* 0x7F */
     char           pad80[4];
-    int            unk84; /* 0x84 */
-    int            unk88; /* 0x88 */
+    int            shadow_slab_lo; /* 0x84 */
+    int            shadow_slab_hi; /* 0x88 */
     char           pad8C[4];
     int            glow_color; /* 0x90 */
     int            collision;  /* 0x94 */
@@ -66,10 +66,10 @@ typedef struct {
     unsigned char  hit_slot; /* 0xA4 */
     char           padA5;
     short          original_class_id; /* 0xA6 */
-    int            unkA8;             /* 0xA8 */
-    int            unkAC;             /* 0xAC */
+    int            change_counter;    /* 0xA8 */
+    int            grid_index;        /* 0xAC */
     char           padB0[0xD];
-    unsigned char  unkBD; /* 0xBD */
+    unsigned char  shadow_dir; /* 0xBD */
     char           padBE[0x42];
 } MobyI;
 
@@ -106,8 +106,8 @@ void init_moby_instance(void *moby_mem, int oClass) {
     moby_instance->lights = 0x40404000000000L;
     moby_instance->occlusion = 0x7F80;
     resident_pool_slot_index = ((char *)moby_instance - (char *)resident_object_pool) >> 8;
-    moby_instance->unkA8 = resident_pool_slot_index << 16;
-    moby_instance->unkAC = resident_pool_slot_index;
+    moby_instance->change_counter = resident_pool_slot_index << 16;
+    moby_instance->grid_index = resident_pool_slot_index;
     moby_instance->anim_trigger_count = 0;
     moby_instance->seq_sound = 0xFF;
     moby_instance->unkA0 = 0x7F;
@@ -129,7 +129,7 @@ void init_moby_instance(void *moby_mem, int oClass) {
         moby_instance->collision = pClass->collision;
         moby_instance->scale = pClass->scale;
         moby_instance->anim_speed = 1.0f;
-        moby_instance->unk5C = 1.0f;
+        moby_instance->anim_rate = 1.0f;
         if (pClass->glow_rgba != 0) {
             moby_instance->flags |= 0x10;
             moby_instance->glow_color = pClass->glow_rgba;
@@ -145,9 +145,9 @@ void init_moby_instance(void *moby_mem, int oClass) {
             if (vm->pClass->shadow_count != 0) {
                 moby_instance->shadow_range = 0x18;
                 moby_instance->flags |= 0x400;
-                moby_instance->unk84 = 0;
-                moby_instance->unk88 = 0;
-                moby_instance->unkBD = 0;
+                moby_instance->shadow_slab_lo = 0;
+                moby_instance->shadow_slab_hi = 0;
+                moby_instance->shadow_dir = 0;
             }
             if (vm->pClass->metal_count != 0) {
                 moby_instance->metal_alpha = 0x18;

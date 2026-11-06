@@ -57,7 +57,8 @@ struct Moby {
     u8    prev_seq;
     f32   anim_time;
     f32   anim_speed;
-    u8    pad5C[8];
+    f32   anim_rate;   /* frame rate of the current frame (AnimSeq rate or the frame's own) */
+    void *pose_layers; /* pose-layer list; a moby with layers always blends */
     struct Manip *manips;
     void         *cur_frame_data;
     void         *prev_frame_data;
@@ -81,16 +82,18 @@ struct Moby {
     u8  hit_slot; /* hit-message slot (0xFF: none) */
     u8  padA5;
     s16 oclass;
-    u8  padA8[8];
-    u8  mission; /* 0xB0: index into the level's D_0014C050 row (0xFF: not spawned) */
+    s32 change_counter; /* bumped by the moby update; key of the collision pose cache */
+    s32 grid_index;     /* moby collision grid cell index */
+    u8  mission;        /* 0xB0: index into the level's D_0014C050 row (0xFF: not spawned) */
     u8  padB1;
     u16 save_id; /* index into the level collected[]/killed[] tables and save bits D_0014C190[level][id >> 5] */
     s16 unkB4;
     u8  padB6[2];
     void *
         parent; /* 0xB8: spawner (bolt source record); its byte 0xB1 is a per-level id (FUN_L00_002a6b70) */
-    u8    command; /* external command byte */
-    u8    padBD[3];
+    u8    command;    /* external command byte */
+    u8    shadow_dir; /* entry of the shadow direction table D_001AF000 */
+    u8    padBE[2];
     Vec4f rot_row0; /* 0xC0: rows of the matrix built from rot (euler_rotation_basis) */
     Vec4f rot_row1;
     Vec4f rot_row2;
