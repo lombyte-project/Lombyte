@@ -11,8 +11,8 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 
-/* 1 when m is the hero's current moby of interest: unk4F8 in control mode 3
-   or state 0x1C, otherwise unk2FC while unk30E is clear. */
+/* 1 when m is the hero's current moby of interest: ledge_moby in control mode 3
+   or state 0x1C, otherwise ground_moby while air_frames is clear. */
 s32 is_hero_on_moby(struct Moby *candidate_moby) __asm__("FUN_L01_00277fb8");
 
 s32 is_hero_on_moby(struct Moby *candidate_moby) {

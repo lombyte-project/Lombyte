@@ -1220,10 +1220,10 @@ void spawn_hero_radial_particle_burst(void) {
 
 typedef struct {
     u8  pad00[0x40];
-    f32 unk40[4]; /* 0x40: launch direction */
-    f32 unk50[4]; /* 0x50 */
-    f32 unk60;    /* 0x60: speed */
-    s32 unk64;
+    f32 direction[4]; /* 0x40: launch direction (WrenchVars in shared/weapons/wrench.c) */
+    f32 target[4];    /* 0x50: aim target position */
+    f32 speed;        /* 0x60 */
+    s32 acceleration; /* 0x64: f32, cleared as an int */
     u8  pad68[0xE];
     s16 near_wall_launch_flag;
     u8  pad78[6];
@@ -1276,7 +1276,7 @@ void launch_hero_wrench(void) {
             if (tpv->has_aim_target_position) {
                 has_target = 1;
                 transform_hero_local_offset_to_world(aim_origin_or_euler_angles, 0.5f, 0.0f, 0.5f);
-                fast_vec_sub(delta, tpv->unk50, aim_origin_or_euler_angles);
+                fast_vec_sub(delta, tpv->target, aim_origin_or_euler_angles);
                 hero.aim_yaw = FUN_001f9e90_c2(delta[0], delta[1]);
                 hero.aim_pitch = FUN_001f9e90_c2(vector_length_xy(delta), delta[2]);
             }
@@ -1300,11 +1300,11 @@ void launch_hero_wrench(void) {
         !hero.wall_probe_moby_in_class_range) {
         launched_item_vars->near_wall_launch_flag = 1;
     }
-    clear_u64_value(launched_item_vars->unk40);
+    clear_u64_value(launched_item_vars->direction);
     if (!aimed) {
-        add_hero_forward_offset(launched_item_vars->unk40, launched_item_vars->unk40, 1.0f);
+        add_hero_forward_offset(launched_item_vars->direction, launched_item_vars->direction, 1.0f);
     } else {
-        build_spherical_offset(launched_item_vars->unk40, 1.0f, hero.aim_yaw, hero.aim_pitch);
+        build_spherical_offset(launched_item_vars->direction, 1.0f, hero.aim_yaw, hero.aim_pitch);
     }
     clear_u64_value(aim_origin_or_euler_angles);
     euler_rotation_basis(item_rotation_matrix, aim_origin_or_euler_angles);
@@ -1319,8 +1319,8 @@ void launch_hero_wrench(void) {
     }
     copy_matrix_rotation(out_mat, item_rotation_matrix);
     matrix_to_euler(out_mat, &equipped_wrench_moby->rot);
-    launched_item_vars->unk64 = 0;
-    launched_item_vars->unk60 = frame_time * 23.0f;
+    launched_item_vars->acceleration = 0;
+    launched_item_vars->speed = frame_time * 23.0f;
     initialize_moby_transform_history(equipped_wrench_moby, hero.wrench_trail);
     create_moby_transform_history_entry(hero.wrench_trail, 0x30, 3);
     create_moby_transform_history_entry(hero.wrench_trail, 0x17, 5);

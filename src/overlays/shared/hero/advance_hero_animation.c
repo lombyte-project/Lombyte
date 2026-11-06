@@ -11,8 +11,8 @@
 
 struct AnimSeq670 {
     u8    pad0[0x10];
-    u8    frame_count; /* 0x10 */
-    u8    unk11;
+    u8    frame_count;   /* 0x10 */
+    u8    sound;         /* 0x11: looping sound (Moby.seq_sound) */
     u8    trigger_count; /* 0x12 */
     u8    pad13[9];
     void *frames[1]; /* 0x1C; the triggers follow the frames */

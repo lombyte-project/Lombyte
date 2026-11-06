@@ -1527,8 +1527,8 @@ typedef struct {
 
 typedef struct {
     char pad0[0x20];
-    int  unk20;
-    int  unk24;
+    int  path_index; /* l05_paths entry of the race course, -1: none */
+    int  pad24;
     int  f28;
     int  f2C[5];
     int  f40;
@@ -1580,10 +1580,10 @@ void update_hero_hoverboard_race_progress(void) {
         return;
     }
     race_pvars = (Data *)((struct Moby *)hero.hoverboard_moby)->pvars;
-    if (race_pvars->unk20 == -1) {
+    if (race_pvars->path_index == -1) {
         return;
     }
-    path = ((Path **)((char **)l05_paths))[race_pvars->unk20];
+    path = ((Path **)((char **)l05_paths))[race_pvars->path_index];
     hero.race_path = (void *)path;
     if (D_0015ED84_lui == 0x10) {
         *(u128_254608 *)world_position_scratch = 0;

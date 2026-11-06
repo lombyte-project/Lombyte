@@ -542,8 +542,8 @@ void spawn_moby_break_fragments(unsigned char *source_moby,
 
 typedef struct {
     char          _pad00[0x11];
-    unsigned char unk11; /* 0x11: copied to a moby's +0x7C */
-    unsigned char unk12; /* 0x12: copied to a moby's +0x7E */
+    unsigned char sound;         /* 0x11: looping sound, copied to a moby's seq_sound (+0x7C) */
+    unsigned char trigger_count; /* 0x12: copied to a moby's anim_trigger_count (+0x7E) */
     char          _pad13[0x1C - 0x13];
     int           frames[1]; /* 0x1C */
 } MobySeq;
@@ -559,7 +559,7 @@ typedef struct {
     char          _pad21[0x24 - 0x21];
     MobyClass    *pClass; /* 0x24 */
     char          _pad28[0x38 - 0x28];
-    unsigned long unk38; /* 0x38 */
+    unsigned long spawn_frame; /* 0x38 */
     char          _pad40[0x50 - 0x40];
     unsigned char frame;     /* 0x50 */
     unsigned char prevFrame; /* 0x51 */
@@ -569,10 +569,10 @@ typedef struct {
     int           frameData;     /* 0x68 */
     int           prevFrameData; /* 0x6C */
     char          _pad70[0x78 - 0x70];
-    char         *pvars; /* 0x78: this moby's 0x80 bytes at D_00160028 */
-    unsigned char unk7C; /* 0x7C: the sound it wants (func_0020D790) */
-    unsigned char unk7D; /* 0x7D: the handle of the one playing, or 0xFF */
-    unsigned char unk7E; /* 0x7E */
+    char         *pvars;              /* 0x78: this moby's 0x80 bytes at D_00160028 */
+    unsigned char seq_sound;          /* 0x7C: the sound it wants (func_0020D790) */
+    unsigned char sound_slot;         /* 0x7D: the handle of the one playing, or 0xFF */
+    unsigned char anim_trigger_count; /* 0x7E */
     char          _pad7F[0x100 - 0x7F];
 } Moby;
 

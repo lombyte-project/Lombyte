@@ -2340,9 +2340,9 @@ void update_hero_world_matrices(s32 moby_override) {
    0x10; scales (4096 = 1.0) and translations follow, each entry tagged with
    its joint index in the top s16 (scales also with 0x8000). */
 typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
+    u16 rate_lo;            /* 0x0: f32 frame rate (t step per tick to the next key), low half */
+    u16 rate_hi;            /* 0x2: high half */
+    u16 time;               /* 0x4: time of this key in 1/8 ticks */
     u16 size;               /* 0x6: quadwords from 0x10 to the end */
     u16 scale_offset;       /* 0x8: bytes from 0x10 to the scale list */
     u16 scale_count;        /* 0xA */
@@ -2431,9 +2431,9 @@ void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 pose_s
     pose->size = ((u8 *)packed_pose_write_cursor - (u8 *)&pose->root_rotation) >> 4;
     pose->scale_count = scale_count;
     pose->translation_offset = (rotation_count + scale_count) << 3;
-    pose->unk2 = 0;
-    pose->unk4 = 0;
-    pose->unk0 = 0;
+    pose->rate_hi = 0;
+    pose->time = 0;
+    pose->rate_lo = 0;
 }
 
 typedef struct {
