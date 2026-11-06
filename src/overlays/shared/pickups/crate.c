@@ -83,14 +83,14 @@ typedef struct {
     s32          frameFC;
 } CrateVars;
 
-/* Fourth argument of collect_mobies_in_sphere. */
+/* Fourth argument of collect_mobies_in_sphere: a hit descriptor (record_moby_hit). */
 typedef struct {
     Vec4f        pos;
     struct Moby *moby;
-    s32          unk14;
+    s32          flags; /* 0x14: hit mask, becomes MobyHit.flags */
     u8           pad18[0x1C - 0x18];
-    f32          unk1C;
-    s32          unk20;
+    f32          damage;        /* 0x1C: MobyHit.damage */
+    s32          has_direction; /* 0x20: MobyHit.has_direction */
 } Burst;
 
 typedef unsigned int Q_2cfcb8 __attribute__((mode(TI)));
@@ -409,17 +409,17 @@ void crate_update(struct Moby *moby) {
             f32 burst_radius_scale;
 
             burst.moby = moby;
-            burst.unk1C = 2.0f;
+            burst.damage = 2.0f;
             clear_u64_value(&burst.pos);
-            burst.unk20 = 0;
+            burst.has_direction = 0;
             fast_vec_normalize(&at, &moby->rot_row2, 0.5f);
             add_vector_xyz(&at, &at, &moby->pos);
             burst_radius_scale =
                 convert_integer_to_float(crate_vars->burst_frame) / scale_time(20.0f);
-            burst.unk14 = 1;
+            burst.flags = 1;
             collect_mobies_in_sphere(
                 burst_radius_scale + burst_radius_scale, &at, 0x10, moby, &burst);
-            burst.unk14 = 0x30000;
+            burst.flags = 0x30000;
             collect_mobies_in_sphere(burst_radius_scale * 3.0f, &at, 0x10, D_001413D0_lui, &burst);
             crate_vars->burst_frame++;
             break;
