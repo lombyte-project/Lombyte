@@ -38,7 +38,7 @@ struct TalkRecord {
     u8  pad0[4];
     s16 mode; /* 0x04: 2 when the talk was accepted */
     u8  pad6[0x30];
-    s16 unk36;
+    s16 entry; /* 0x36: current dialogue entry of update_npc_dialogue, -1 none */
     u8  pad38[8];
 };
 
@@ -121,7 +121,7 @@ void big_al_update(struct Moby *guide_moby) {
         initialize_npc_dialogue(guide_moby, (struct TalkState *)&v->talk);
         initialize_moby_grounding(guide_moby);
         if (D_0013D4C2[0] != 0) {
-            v->talk.unk36 = -1;
+            v->talk.entry = -1;
         }
         break;
     case BIG_AL_UPDATE_DIALOGUE:

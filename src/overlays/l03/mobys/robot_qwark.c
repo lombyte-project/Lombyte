@@ -26,7 +26,7 @@ struct TalkerVars {
     u8  pad0[4];
     s16 mode; /* 0x04: 2 when the talk ends in a warp */
     u8  pad6[0x30];
-    s16 unk36;
+    s16 entry; /* 0x36: current dialogue entry of update_npc_dialogue, -1 none */
     u8  pad38[0x14];
     s32 warp; /* 0x4C: index into l03_cuboids, -1 for none */
 };
@@ -154,7 +154,7 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
         talker_init(robot_qwark_moby, dialogue_state);
         if (alternate_item_available[0x19] != 0) {
             dialogue_state->mode = 1;
-            dialogue_state->unk36 = 2;
+            dialogue_state->entry = 2;
         }
         break;
     case ROBOT_QWARK_UPDATE_DIALOGUE:
