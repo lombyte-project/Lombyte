@@ -1,6 +1,7 @@
 /* Level 04 moby class blarg_trooper. */
 #include "types.h"
 #include "rnc/overlay/shared/mobys/hit_color_flash.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "qcopy.h"
@@ -18,50 +19,50 @@
 #include "rnc/overlay/shared/math/quad.h"
 
 typedef struct BlargTrooperVars {
-    u8                   pad_0[0x20];
-    f32                  health;
-    s16                  max_health;
-    u8                   pad_26[0x2];
-    u8                   hit_response_class;
-    u8                   unk29;
-    u8                   pad_2A[0x4];
-    u8                   unk2E;
-    u8                   pad_2F[0x9];
-    s32                  retimer;
-    u8                   pad_3C[0x1C];
-    u8                   unk58;
-    u8                   pad_59[0x1];
-    u8                   unk5A;
-    u8                   pad_5B[0x5];
-    struct HitColorFlash hit_flash;
-    f32                  motion[4];
-    f32                  unk80[4];
-    u8                   pad_90[0x30];
-    f32                  unkC0[4];
-    f32                  unkD0[4];
-    s32                  path_when_selected;
-    s32                  path_when_unselected;
-    s16                  path_selector;
-    u8                   pad_EA[0x2];
-    f32                  yaw_turn_velocity;
-    s16                  timer_F0;
-    s16                  timer_F2;
-    f32                  recoil_speed;
-    char                *gun_moby;
-    u8                   unkFC;
-    u8                   unkFD;
-    u8                   unkFE;
-    u8                   unkFF;
-    u8                   pad_100[0x8];
-    s32                  timer_108;
-    u8                   pad_10C[0x4];
-    f32                  manipulator0[4];
-    u8                   pad_120[0x58];
-    f32                  unk178;
-    u8                   pad_17C[0x14];
-    f32                  manipulator1[4];
-    u8                   pad_1A0[0x58];
-    f32                  unk1F8;
+    u8                     pad_0[0x20];
+    f32                    health;
+    s16                    max_health;
+    u8                     pad_26[0x2];
+    u8                     hit_response_class;
+    u8                     unk29;
+    u8                     pad_2A[0x4];
+    u8                     unk2E;
+    u8                     pad_2F[0x9];
+    s32                    retimer;
+    u8                     pad_3C[0x1C];
+    u8                     unk58;
+    u8                     pad_59[0x1];
+    u8                     unk5A;
+    u8                     pad_5B[0x5];
+    struct HitColorFlash   hit_flash;
+    struct KnockbackMotion knockback;
+    f32                    fall_speed;
+    f32                    spawn_z; /* removed once it falls 5 below it */
+    f32                    prev_anim_frame;
+    f32                    sight_range; /* doubled while alerted */
+    s32                    path_when_selected;
+    s32                    path_when_unselected;
+    s16                    path_selector;
+    u8                     pad_EA[0x2];
+    f32                    yaw_turn_velocity;
+    s16                    timer_F0;
+    s16                    timer_F2;
+    f32                    recoil_speed;
+    char                  *gun_moby;
+    u8                     starts_aiming;
+    u8                     shots_left;
+    u8                     alert_timer; /* 240 frames after a hit; doubles sight_range */
+    u8                     idle_anim_timer;
+    u8                     pad_100[0x8];
+    s32                    timer_108;
+    u8                     pad_10C[0x4];
+    f32                    manipulator0[4];
+    u8                     pad_120[0x58];
+    f32                    manipulator0_turn; /* rot target z of the joint 5 ease */
+    u8                     pad_17C[0x14];
+    f32                    manipulator1[4];
+    u8                     pad_1A0[0x58];
+    f32                    manipulator1_turn; /* rot target z of the joint 6 ease */
 } BlargTrooperVars;
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C5B88), where it is exact; names translated to the US level program. */
@@ -219,7 +220,7 @@ void blarg_trooper_update(struct Moby *moby) {
 
     flag = 0;
     blarg_trooper_pvars = (char *)moby->pvars;
-    if (blarg_trooper_pvars->retimer != 0 || blarg_trooper_pvars->unkFE != 0) {
+    if (blarg_trooper_pvars->retimer != 0 || blarg_trooper_pvars->alert_timer != 0) {
         flag = 1;
     }
     pos = (float *)&moby->pos;
@@ -231,10 +232,10 @@ void blarg_trooper_update(struct Moby *moby) {
         }
     }
     if (flag) {
-        float x = blarg_trooper_pvars->unkD0[3];
+        float x = blarg_trooper_pvars->sight_range;
         target_selection_distance_limit = x + x;
     } else {
-        target_selection_distance_limit = blarg_trooper_pvars->unkD0[3];
+        target_selection_distance_limit = blarg_trooper_pvars->sight_range;
     }
     select_moby_combat_target(moby, update_scratch.tgt, target_selection_distance_limit);
     target = *(char **)&update_scratch.tgt[16];
@@ -306,7 +307,7 @@ void blarg_trooper_update(struct Moby *moby) {
         if (t <= 0.0f) {
             r = 1;
         }
-        blarg_trooper_pvars->unkFE = scale_game_frames(0xF0);
+        blarg_trooper_pvars->alert_timer = scale_game_frames(0xF0);
         switch (r) {
         case BLARG_TROOPER_HIT_REACTION_NONE:
             break;
@@ -319,20 +320,21 @@ void blarg_trooper_update(struct Moby *moby) {
                 float b = frame_time * 17.0f;
                 float fatal_knockback_horizontal_speed_adjustment = frame_time_sq * 20.0f;
                 float d = frame_time * 13.0f;
-                blarg_trooper_pvars->unk80[0] = a;
-                blarg_trooper_pvars->unk80[2] = b;
-                blarg_trooper_pvars->unk80[1] = fatal_knockback_horizontal_speed_adjustment;
-                blarg_trooper_pvars->unk80[3] = d;
+                blarg_trooper_pvars->knockback.gravity = a;
+                blarg_trooper_pvars->knockback.speed = b;
+                blarg_trooper_pvars->knockback.speed_approach_step =
+                    fatal_knockback_horizontal_speed_adjustment;
+                blarg_trooper_pvars->knockback.vertical_speed = d;
             }
             *(OvlQuad *)update_scratch.w.p.v70 = *(OvlQuad *)(hit + 0x10);
             trooper_knockback_arc(update_scratch.w.p.v70,
                                   &fatal_knockback_yaw,
-                                  &blarg_trooper_pvars->unk80[2],
-                                  &blarg_trooper_pvars->unk80[3]);
+                                  &blarg_trooper_pvars->knockback.speed,
+                                  &blarg_trooper_pvars->knockback.vertical_speed);
             trooper_start_knockback(
-                fatal_knockback_yaw, moby, blarg_trooper_pvars->motion, 0xD, 1, 0);
-            blarg_trooper_pvars->unkC0[0] = 12.0f;
-            blarg_trooper_pvars->unkC0[1] = 25.0f;
+                fatal_knockback_yaw, moby, &blarg_trooper_pvars->knockback, 0xD, 1, 0);
+            blarg_trooper_pvars->knockback.apex_animation_frame = 12.0f;
+            blarg_trooper_pvars->knockback.landing_animation_frame = 25.0f;
             moby->state = BLARG_TROOPER_STATE_DYING;
             FUN_L00_00257470(moby, 0, -1);
             break;
@@ -380,10 +382,10 @@ void blarg_trooper_update(struct Moby *moby) {
     }
     moby->hit_slot = 0xFF;
     if (blarg_trooper_pvars->retimer != 0) {
-        blarg_trooper_pvars->unkFE = scale_game_frames(0xF0);
+        blarg_trooper_pvars->alert_timer = scale_game_frames(0xF0);
     }
     blarg_trooper_pvars->retimer = 0;
-    FUN_L00_001fefc8(&blarg_trooper_pvars->unkFE);
+    FUN_L00_001fefc8(&blarg_trooper_pvars->alert_timer);
     fast_dec_timer(&blarg_trooper_pvars->timer_108);
     switch (moby->state) {
     case BLARG_TROOPER_STATE_INITIALIZE:
@@ -394,19 +396,19 @@ void blarg_trooper_update(struct Moby *moby) {
         blarg_trooper_pvars->unk2E = 1;
         blarg_trooper_pvars->unk29 = 1;
         blarg_trooper_pvars->timer_F0 = 0;
-        blarg_trooper_pvars->unkFE = 0;
-        blarg_trooper_pvars->unkFF = 0;
-        blarg_trooper_pvars->unkD0[0] = 0.0f;
+        blarg_trooper_pvars->alert_timer = 0;
+        blarg_trooper_pvars->idle_anim_timer = 0;
+        blarg_trooper_pvars->fall_speed = 0.0f;
         {
             float z = moby->pos.z;
             blarg_trooper_pvars->unk58 = 8;
-            blarg_trooper_pvars->unkD0[1] = z;
+            blarg_trooper_pvars->spawn_z = z;
             blarg_trooper_pvars->unk5A = 0xA;
         }
         if (rand() & 1) {
             moby->flags |= 0x8000;
         }
-        if (blarg_trooper_pvars->unkFC != 0) {
+        if (blarg_trooper_pvars->starts_aiming != 0) {
             blend_moby_animation(moby, (void *)3, 0, (void *)scale_game_frames(0xA));
             moby->state = BLARG_TROOPER_STATE_AIM;
         } else {
@@ -493,8 +495,8 @@ void blarg_trooper_update(struct Moby *moby) {
             } else if (f < -0.7853982f) {
                 f = -0.7853982f;
             }
-            blarg_trooper_pvars->unk178 = f * 0.7f;
-            blarg_trooper_pvars->unk1F8 = f * 0.4f;
+            blarg_trooper_pvars->manipulator0_turn = f * 0.7f;
+            blarg_trooper_pvars->manipulator1_turn = f * 0.4f;
             update_scratch.w.p.v70[0] = fast_cos(moby->rot.z) * (frame_time * 2.5f);
             update_scratch.w.p.v70[1] = fast_sin(moby->rot.z) * (frame_time * 2.5f);
             update_scratch.w.p.v70[2] = 0.0f;
@@ -539,9 +541,10 @@ void blarg_trooper_update(struct Moby *moby) {
             } else {
                 k = 0;
             }
-            if (FUN_L00_001fefc8(&blarg_trooper_pvars->unkFF) != 0 && k != moby->prev_seq) {
+            if (FUN_L00_001fefc8(&blarg_trooper_pvars->idle_anim_timer) != 0 &&
+                k != moby->prev_seq) {
                 blend_moby_animation(moby, (void *)k, 0, (void *)scale_game_frames(0xA));
-                blarg_trooper_pvars->unkFF = scale_game_frames(0xF);
+                blarg_trooper_pvars->idle_anim_timer = scale_game_frames(0xF);
             }
             if (blarg_trooper_pvars->timer_F2 == 0) {
                 if (target_distance < 1.0f && fast_difference_between_rotations(
@@ -550,11 +553,11 @@ void blarg_trooper_update(struct Moby *moby) {
                                                   moby->rot.z) < 0.2617994f) {
                     moby->state = BLARG_TROOPER_STATE_MELEE_ATTACK;
                     blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(7));
-                    blarg_trooper_pvars->unkFF = 0;
+                    blarg_trooper_pvars->idle_anim_timer = 0;
                 } else if (target_distance < 14.0f) {
                     moby->state = BLARG_TROOPER_STATE_AIM;
                     blend_moby_animation(moby, (void *)3, 0, (void *)scale_game_frames(7));
-                    blarg_trooper_pvars->unkFF = 0;
+                    blarg_trooper_pvars->idle_anim_timer = 0;
                 }
             }
         } else {
@@ -593,7 +596,7 @@ void blarg_trooper_update(struct Moby *moby) {
     case BLARG_TROOPER_STATE_JUMP:
         if (moby->prev_seq != 2) {
             blend_moby_animation(moby, (void *)2, 0, (void *)scale_game_frames(7));
-            blarg_trooper_pvars->unkD0[0] = -(frame_time * 7.668f);
+            blarg_trooper_pvars->fall_speed = -(frame_time * 7.668f);
         } else if (moby->anim_flags & 2) {
             blend_moby_animation(moby, 0, 0, (void *)scale_game_frames(0xA));
             moby->state = BLARG_TROOPER_STATE_IDLE;
@@ -643,7 +646,7 @@ void blarg_trooper_update(struct Moby *moby) {
                 moby->state = BLARG_TROOPER_STATE_FIRE;
                 blend_moby_animation(moby, (void *)5, 0, (void *)scale_game_frames(7));
                 blarg_trooper_pvars->timer_F2 = scale_game_frames(0x1E);
-                blarg_trooper_pvars->unkFD = 3;
+                blarg_trooper_pvars->shots_left = 3;
                 break;
             }
         }
@@ -669,7 +672,7 @@ void blarg_trooper_update(struct Moby *moby) {
             moby->state = BLARG_TROOPER_STATE_MELEE_ATTACK;
             blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(7));
         }
-        if (moby->prev_seq == 5 && blarg_trooper_pvars->unkD0[2] < 2.0f && alive >= 2.0f &&
+        if (moby->prev_seq == 5 && blarg_trooper_pvars->prev_anim_frame < 2.0f && alive >= 2.0f &&
             (o = blarg_trooper_pvars->gun_moby) != 0) {
             float a;
             moby_point_position(o, 0, update_scratch.w.p.v70);
@@ -686,9 +689,9 @@ void blarg_trooper_update(struct Moby *moby) {
                                            update_scratch.w.p.v70,
                                            update_scratch.w.p.v80,
                                            truncate_float_to_s32(14.0f / (frame_time * 10.0f)));
-            FUN_L00_001fefc8(&blarg_trooper_pvars->unkFD);
+            FUN_L00_001fefc8(&blarg_trooper_pvars->shots_left);
         } else if ((moby->anim_flags & 2) && blarg_trooper_pvars->timer_F2 == 0 &&
-                   blarg_trooper_pvars->unkFD == 0) {
+                   blarg_trooper_pvars->shots_left == 0) {
             blarg_trooper_pvars->timer_F2 = scale_game_frames(0xB4);
             moby->state = BLARG_TROOPER_STATE_AIM;
             blend_moby_animation(moby, (void *)4, 0, (void *)scale_game_frames(0xA));
@@ -762,7 +765,7 @@ void blarg_trooper_update(struct Moby *moby) {
         }
         break;
     case BLARG_TROOPER_STATE_DYING:
-        if (step_moby_motion(moby, blarg_trooper_pvars->motion) & 0x60) {
+        if (step_moby_motion(moby, &blarg_trooper_pvars->knockback) & 0x60) {
             destroy_blarg_trooper(moby);
             return;
         }
@@ -788,14 +791,14 @@ void blarg_trooper_update(struct Moby *moby) {
                 } else if (f < -0.9599311f) {
                     f = -0.9599311f;
                 }
-                blarg_trooper_pvars->unk178 = f * 0.5f;
-                blarg_trooper_pvars->unk1F8 = f * 0.5f;
+                blarg_trooper_pvars->manipulator0_turn = f * 0.5f;
+                blarg_trooper_pvars->manipulator1_turn = f * 0.5f;
             }
         }
     }
     if (moby->flags & 0x8000) {
-        blarg_trooper_pvars->unk178 = -blarg_trooper_pvars->unk178;
-        blarg_trooper_pvars->unk1F8 = -blarg_trooper_pvars->unk1F8;
+        blarg_trooper_pvars->manipulator0_turn = -blarg_trooper_pvars->manipulator0_turn;
+        blarg_trooper_pvars->manipulator1_turn = -blarg_trooper_pvars->manipulator1_turn;
     }
     update_joint_animation(
         moby, blarg_trooper_pvars->manipulator0, 5, frame_scale_sq * 0.018f, frame_scale_sq * 0.3f);
@@ -824,20 +827,20 @@ void blarg_trooper_update(struct Moby *moby) {
         moby_point_position(moby, 1, update_scratch.w.m);
         blarg_trooper_pvars->gun_moby = spawn_moby_attachment(moby, update_scratch.w.m);
     }
-    blarg_trooper_pvars->unkD0[0] = blarg_trooper_pvars->unkD0[0] + frame_time_sq * 9.8f;
-    moby->pos.z = moby->pos.z - (blarg_trooper_pvars->unkD0[0] - 2.0f);
+    blarg_trooper_pvars->fall_speed = blarg_trooper_pvars->fall_speed + frame_time_sq * 9.8f;
+    moby->pos.z = moby->pos.z - (blarg_trooper_pvars->fall_speed - 2.0f);
     {
         float g = probe_ground_height(pos, 0, 0.5f);
         moby->pos.z = moby->pos.z - 2.0f;
         if (moby->pos.z < g) {
             moby->pos.z = g;
-            blarg_trooper_pvars->unkD0[0] = 0.0f;
+            blarg_trooper_pvars->fall_speed = 0.0f;
         }
     }
-    if (moby->pos.z < blarg_trooper_pvars->unkD0[1] - 5.0f) {
+    if (moby->pos.z < blarg_trooper_pvars->spawn_z - 5.0f) {
         FUN_L00_00257470(moby, 0, -1);
         destroy_blarg_trooper(moby);
         return;
     }
-    blarg_trooper_pvars->unkD0[2] = alive;
+    blarg_trooper_pvars->prev_anim_frame = alive;
 }
