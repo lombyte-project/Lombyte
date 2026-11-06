@@ -513,7 +513,7 @@ typedef struct BlargShipVars {
     u8                   pad_0[0x20];
     f32                  health;
     u8                   pad_24[0x2];
-    s16                  unk26;
+    s16                  stun_timer;
     u8                   pad_28[0x98];
     struct HitColorFlash hit_flash;
     u8                   path_search_point;
@@ -564,7 +564,7 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
             break;
         default:
             pvars->hit_flash.flash_red = 0xFA;
-            pvars->unk26 = scale_game_frames(0x3C);
+            pvars->stun_timer = scale_game_frames(0x3C);
             start_hit_color_flash(moby, &pvars->hit_flash);
             blend_moby_animation(moby, 4, 0, scale_game_frames(6));
             moby->command = moby->state;

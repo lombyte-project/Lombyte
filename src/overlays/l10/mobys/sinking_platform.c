@@ -24,12 +24,12 @@ void sinking_platform_update(struct Moby *moby) __asm__("FUN_L10_00295c20");
 
 typedef struct SinkingPlatformVars {
     u8  pad_0[0x20];
-    s32 unk20;
-    s16 unk24;
+    s32 health;
+    s16 max_health;
     u8  pad_26[0x2];
-    u8  unk28;
+    u8  hit_weight;
     u8  pad_29[0x15];
-    s16 unk3E;
+    s16 target_flags; /* 0x3E: MobyTargetInfo.flags; target info at pvars+0x20 */
     u8  pad_40[0x20];
     f32 entity_matrix[4];
     u8  pad_70[0x30];
@@ -60,10 +60,10 @@ void sinking_platform_update(struct Moby *moby) {
     fast_dec_timer(&platform_vars->timer_BC);
     switch (moby->state) {
     case PLATFORM_STATE_INITIALIZE:
-        platform_vars->unk28 = 4;
-        platform_vars->unk3E = 5;
-        platform_vars->unk20 = 0;
-        platform_vars->unk24 = 0;
+        platform_vars->hit_weight = 4;
+        platform_vars->target_flags = 5;
+        platform_vars->health = 0;
+        platform_vars->max_health = 0;
         platform_vars->home_z = moby->pos.z;
         platform_vars->bob_phase = random_angle_radians();
         platform_vars->tilt_phase_1 = random_angle_radians();
