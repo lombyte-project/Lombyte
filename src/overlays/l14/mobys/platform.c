@@ -42,12 +42,12 @@ void tilting_platform_update(struct Moby *moby) __asm__("FUN_L14_002de1f8");
 
 typedef struct TiltingPlatformVars {
     u8  pad_0[0x20];
-    f32 unk20[4];
+    f32 carry[4]; /* carried-object state for update_entity_matrix */
     u8  pad_30[0x2C];
     s32 unk5C;
-    f32 unk60;
+    f32 up_vector_x_velocity;
     f32 up_vector_y_velocity;
-    f32 unk68;
+    f32 up_vector_z_velocity;
     u8  pad_6C[0x4];
     s32 timer_70;
 } TiltingPlatformVars;
@@ -70,14 +70,14 @@ void tilting_platform_update(struct Moby *moby) {
         moby->pos.z += 0.35f;
         tilting_platform_state->unk5C = 1;
         tilting_platform_state->timer_70 = 0;
-        qzero(&tilting_platform_state->unk60);
+        qzero(&tilting_platform_state->up_vector_x_velocity);
         qzero(&moby->rot);
         rotation = &moby->rot;
     } else {
         rotation = &moby->rot;
     }
     FUN_L14_002de2b8_call(moby, unused_platform_tilt_argument, 8.0f);
-    update_entity_matrix(tilting_platform_state->unk20, D_L14_0015F580, &old_rotation, rotation);
+    update_entity_matrix(tilting_platform_state->carry, D_L14_0015F580, &old_rotation, rotation);
 }
 
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002ACCC0.c (func_L14_002DF6B8) */
@@ -156,7 +156,7 @@ void update_platform_tilt_basis(char *moby, f32 unused_arg1, f32 unused_arg2) {
     }
 
     vendor_spring((float *)&MOBY(moby)->rot_row2,
-                  &platform_tilt_state->unk60,
+                  &platform_tilt_state->up_vector_x_velocity,
                   target_up_vector[0],
                   0.005f,
                   0.2f,
@@ -168,7 +168,7 @@ void update_platform_tilt_basis(char *moby, f32 unused_arg1, f32 unused_arg2) {
                   0.2f,
                   0.0f);
     vendor_spring((float *)&MOBY(moby)->rot_row2.z,
-                  &platform_tilt_state->unk68,
+                  &platform_tilt_state->up_vector_z_velocity,
                   target_up_vector[2],
                   0.005f,
                   0.2f,
