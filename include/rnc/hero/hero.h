@@ -580,11 +580,11 @@ struct Hero {
     f32          target_arrival_frames;   /* 0x96C */
     f32          grapple_target_dist;     /* 0x970 */
     s32          grapple_pull_ending;     /* 0x974 */
-    s32          unk978;                  /* 0x978 */
-    f32          tether_radius;           /* 0x97C */
-    f32          grapple_target_radius;   /* 0x980 */
-    f32          swing_max_range;         /* 0x984 */
-    s32          swingshot_missed;        /* 0x988 */
+    s32 grapple_target_swings; /* 0x978: target pvars +8; nonzero swings around it (HERO_STATE_CONSTRAIN_TO_TARGET_RADIUS), else pulls to it */
+    f32          tether_radius;         /* 0x97C */
+    f32          grapple_target_radius; /* 0x980 */
+    f32          swing_max_range;       /* 0x984 */
+    s32          swingshot_missed;      /* 0x988 */
     u8           pad_98C[0x4];
     struct Moby *swing_target;             /* 0x990 */
     struct Moby *swing_target_moby;        /* 0x994 */
