@@ -1142,6 +1142,7 @@ SDATA_OVERLAYS = {
     "game/startlevel": (0x15EF5C, 0x5FEDC, 4),  # boot image buffer
     "mobys/update_visible_mobys": (0x15FF24, 0x60EA4, 4),  # visible moby list
     "world/select_world_object_resource_tables": (0x15FF44, 0x60EC4, 8),  # resource tag and count
+    "world/update_world_object_animation": (0x160488, 0x61408, 12),  # cutscene moby class per content variant
     "ui/hud/init_hud": (0x15F6D8, 0x60658, 8),  # allocation tag
     "ui/menus/widgets/format_scaled_display_value": (0x161078, 0x61FF8, 11),  # display value formats
 }
