@@ -195,15 +195,15 @@ struct HoloPacket {
     long  hdr[4];
 };
 
-extern float      vendor_hologram_vertex_offsets[][4] __asm__("D_L00_001CA380");
-extern float      vendor_hologram_vertex_uvs[][2] __asm__("D_L00_001CA410");
-extern int        D_L00_001CA458[] NOT_SDA;
+extern float      vendor_hologram_vertex_offsets[9][4] __asm__("D_L00_001CA380");
+extern float      vendor_hologram_vertex_uvs[9][2] __asm__("D_L00_001CA410");
+extern int        vendor_hologram_vertex_colors[10] __asm__("D_L00_001CA458") NOT_SDA;
 extern VendorMenu vendor_menu_lui __asm__("D_L00_001CA4C0") NOT_SDA;
 
 #include "rnc/overlay/shared/vendor/draw_vendor_inset_quads_globals.h"
 
 float              vendor_hologram_v_scroll_offset_gp __asm__("D_L00_00161184") = 0;
-extern struct Quad D_L00_001CA480[] NOT_SDA;
+extern struct Quad vendor_hologram_quads[4] __asm__("D_L00_001CA480") NOT_SDA;
 extern void        fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
 
 void draw_vendor_hologram_cone(void) __asm__("FUN_L00_0029ff58");
@@ -221,18 +221,18 @@ void draw_vendor_hologram_cone(void) {
     quad_packet.hdr[1] = get_effect_texture(0x18);
     for (i = 0; i < 4; i++) {
         transform_vector_by_basis(transformed_vertex_offsets[0],
-                                  vendor_hologram_vertex_offsets[D_L00_001CA480[i].a],
+                                  vendor_hologram_vertex_offsets[vendor_hologram_quads[i].a],
                                   (char *)vendor_menu_lui.vendor_moby + 0xC0);
         transform_vector_by_basis(
             transformed_vertex_offsets[1],
-            vendor_hologram_vertex_offsets[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)],
+            vendor_hologram_vertex_offsets[*(int *)((char *)vendor_hologram_quads + i * 16 + 4)],
             (char *)vendor_menu_lui.vendor_moby + 0xC0);
         transform_vector_by_basis(
             transformed_vertex_offsets[2],
-            vendor_hologram_vertex_offsets[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)],
+            vendor_hologram_vertex_offsets[*(int *)((char *)vendor_hologram_quads + i * 16 + 8)],
             (char *)vendor_menu_lui.vendor_moby + 0xC0);
         transform_vector_by_basis(transformed_vertex_offsets[3],
-                                  vendor_hologram_vertex_offsets[D_L00_001CA480[i].d],
+                                  vendor_hologram_vertex_offsets[vendor_hologram_quads[i].d],
                                   (char *)vendor_menu_lui.vendor_moby + 0xC0);
         quad_packet.pos[0][0] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x10) +
                                 transformed_vertex_offsets[0][0];
@@ -258,26 +258,28 @@ void draw_vendor_hologram_cone(void) {
                                 transformed_vertex_offsets[3][1];
         quad_packet.pos[3][2] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x18) +
                                 transformed_vertex_offsets[3][2];
-        quad_packet.col[0] = D_L00_001CA458[D_L00_001CA480[i].a];
-        quad_packet.col[1] = D_L00_001CA458[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)];
-        quad_packet.col[2] = D_L00_001CA458[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)];
-        quad_packet.col[3] = D_L00_001CA458[D_L00_001CA480[i].d];
-        quad_packet.uv[0][0] = vendor_hologram_vertex_uvs[D_L00_001CA480[i].a][0];
-        quad_packet.uv[0][1] =
-            vendor_hologram_vertex_uvs[D_L00_001CA480[i].a][1] + vendor_hologram_v_scroll_offset_gp;
+        quad_packet.col[0] = vendor_hologram_vertex_colors[vendor_hologram_quads[i].a];
+        quad_packet.col[1] =
+            vendor_hologram_vertex_colors[*(int *)((char *)vendor_hologram_quads + i * 16 + 4)];
+        quad_packet.col[2] =
+            vendor_hologram_vertex_colors[*(int *)((char *)vendor_hologram_quads + i * 16 + 8)];
+        quad_packet.col[3] = vendor_hologram_vertex_colors[vendor_hologram_quads[i].d];
+        quad_packet.uv[0][0] = vendor_hologram_vertex_uvs[vendor_hologram_quads[i].a][0];
+        quad_packet.uv[0][1] = vendor_hologram_vertex_uvs[vendor_hologram_quads[i].a][1] +
+                               vendor_hologram_v_scroll_offset_gp;
         quad_packet.uv[1][0] =
-            vendor_hologram_vertex_uvs[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)][0];
+            vendor_hologram_vertex_uvs[*(int *)((char *)vendor_hologram_quads + i * 16 + 4)][0];
         quad_packet.uv[1][1] =
-            vendor_hologram_vertex_uvs[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)][1] +
+            vendor_hologram_vertex_uvs[*(int *)((char *)vendor_hologram_quads + i * 16 + 4)][1] +
             vendor_hologram_v_scroll_offset_gp;
         quad_packet.uv[2][0] =
-            vendor_hologram_vertex_uvs[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)][0];
+            vendor_hologram_vertex_uvs[*(int *)((char *)vendor_hologram_quads + i * 16 + 8)][0];
         quad_packet.uv[2][1] =
-            vendor_hologram_vertex_uvs[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)][1] +
+            vendor_hologram_vertex_uvs[*(int *)((char *)vendor_hologram_quads + i * 16 + 8)][1] +
             vendor_hologram_v_scroll_offset_gp;
-        quad_packet.uv[3][0] = vendor_hologram_vertex_uvs[D_L00_001CA480[i].d][0];
-        quad_packet.uv[3][1] =
-            vendor_hologram_vertex_uvs[D_L00_001CA480[i].d][1] + vendor_hologram_v_scroll_offset_gp;
+        quad_packet.uv[3][0] = vendor_hologram_vertex_uvs[vendor_hologram_quads[i].d][0];
+        quad_packet.uv[3][1] = vendor_hologram_vertex_uvs[vendor_hologram_quads[i].d][1] +
+                               vendor_hologram_v_scroll_offset_gp;
         fast_draw_quad_real(&quad_packet, 0, 1);
     }
 }
@@ -446,165 +448,950 @@ void draw_vendor_screen(void) {
     patch_moby_gifs();
 }
 
-s32 D_L01_001CA900[1] __attribute__((section(".data"))) = {0};
-
-s32 D_L02_001CAA80[1] __attribute__((section(".data"))) = {0};
-
 s32 D_L02_001CAAC8[1] __attribute__((section(".data"))) = {0};
-
-s32 D_L03_001CA580[1] __attribute__((section(".data"))) = {0};
 
 s32 D_L03_001CA5C8[1] __attribute__((section(".data"))) = {0};
 
-s32 D_L04_001CA600[1] __attribute__((section(".data"))) = {0};
-
 s32 D_L04_001CA648[1] __attribute__((section(".data"))) = {0};
-
-s32 D_L05_001CA900[1] __attribute__((section(".data"))) = {0};
 
 s32 D_L05_001CA948[1] __attribute__((section(".data"))) = {0};
 
-s32 D_L06_001CAC00[1] __attribute__((section(".data"))) = {0};
-
 s32 D_L06_001CAC48[1] __attribute__((section(".data"))) = {0};
-
-s32 D_L07_001CA500[1] __attribute__((section(".data"))) = {0};
 
 s32 D_L07_001CA548[1] __attribute__((section(".data"))) = {0};
 
-s32 D_L08_001CAC80[1] __attribute__((section(".data"))) = {0};
-
 s32 D_L08_001CACC8[1] __attribute__((section(".data"))) = {0};
-
-s32 D_L09_001CA600[1] __attribute__((section(".data"))) = {0};
 
 s32 D_L09_001CA648[1] __attribute__((section(".data"))) = {0};
 
-s32 D_L10_001CA900[1] __attribute__((section(".data"))) = {0};
-
 s32 D_L10_001CA948[1] __attribute__((section(".data"))) = {0};
-
-s32 D_L11_001CAE80[1] __attribute__((section(".data"))) = {0};
 
 s32 D_L11_001CAEC8[1] __attribute__((section(".data"))) = {0};
 
-s32 D_L12_001CA900[1] __attribute__((section(".data"))) = {0};
-
 s32 D_L12_001CA948[1] __attribute__((section(".data"))) = {0};
-
-s32 D_L13_001CA780[1] __attribute__((section(".data"))) = {0};
 
 s32 D_L13_001CA7C8[1] __attribute__((section(".data"))) = {0};
 
-s32 D_L14_001CAB80[1] __attribute__((section(".data"))) = {0};
-
 s32 D_L14_001CABC8[1] __attribute__((section(".data"))) = {0};
-
-s32 D_L15_001CAA80[1] __attribute__((section(".data"))) = {0};
 
 s32 D_L15_001CAAC8[1] __attribute__((section(".data"))) = {0};
 
-s32 D_L16_001CA900[1] __attribute__((section(".data"))) = {0};
-
 s32 D_L16_001CA948[1] __attribute__((section(".data"))) = {0};
 
-s32 D_L17_001CAD80[1] __attribute__((section(".data"))) = {0};
-
 s32 D_L17_001CADC8[1] __attribute__((section(".data"))) = {0};
-
-s32 D_L18_001CAE80[1] __attribute__((section(".data"))) = {0};
 
 s32 D_L18_001CAEC8[1] __attribute__((section(".data"))) = {0};
 
 I3 D_L01_00161178 = {0, 1, 2};
 
-int D_L01_001CA8D8 NOT_SDA = 0x10808080;
-float              D_L01_00161184 = 0;
-s32                D_L01_0015F3F4 = 0;
-I3                 D_L02_00161178 = {0, 1, 2};
+float D_L01_00161184 = 0;
+s32   D_L01_0015F3F4 = 0;
+I3    D_L02_00161178 = {0, 1, 2};
 
-int D_L02_001CAA58 NOT_SDA = 0x10808080;
-float              D_L02_00161184 = 0;
-s32                D_L02_0015F3F4 = 0;
-I3                 D_L03_00161178 = {0, 1, 2};
+float D_L02_00161184 = 0;
+s32   D_L02_0015F3F4 = 0;
+I3    D_L03_00161178 = {0, 1, 2};
 
-int D_L03_001CA558 NOT_SDA = 0x10808080;
-float              D_L03_00161184 = 0;
-s32                D_L03_0015F3F4 = 0;
-I3                 D_L04_00161178 = {0, 1, 2};
+float D_L03_00161184 = 0;
+s32   D_L03_0015F3F4 = 0;
+I3    D_L04_00161178 = {0, 1, 2};
 
-int D_L04_001CA5D8 NOT_SDA = 0x10808080;
-float              D_L04_00161184 = 0;
-s32                D_L04_0015F3F4 = 0;
-I3                 D_L05_00161178 = {0, 1, 2};
+float D_L04_00161184 = 0;
+s32   D_L04_0015F3F4 = 0;
+I3    D_L05_00161178 = {0, 1, 2};
 
-int D_L05_001CA8D8 NOT_SDA = 0x10808080;
-float              D_L05_00161184 = 0;
-s32                D_L05_0015F3F4 = 0;
-I3                 D_L06_00161178 = {0, 1, 2};
+float D_L05_00161184 = 0;
+s32   D_L05_0015F3F4 = 0;
+I3    D_L06_00161178 = {0, 1, 2};
 
-int D_L06_001CABD8 NOT_SDA = 0x10808080;
-float              D_L06_00161184 = 0;
-s32                D_L06_0015F3F4 = 0;
-I3                 D_L07_00161178 = {0, 1, 2};
+float D_L06_00161184 = 0;
+s32   D_L06_0015F3F4 = 0;
+I3    D_L07_00161178 = {0, 1, 2};
 
-int D_L07_001CA4D8 NOT_SDA = 0x10808080;
-float              D_L07_00161184 = 0;
-s32                D_L07_0015F3F4 = 0;
-I3                 D_L08_00161178 = {0, 1, 2};
+float D_L07_00161184 = 0;
+s32   D_L07_0015F3F4 = 0;
+I3    D_L08_00161178 = {0, 1, 2};
 
-int D_L08_001CAC58 NOT_SDA = 0x10808080;
-float              D_L08_00161184 = 0;
-s32                D_L08_0015F3F4 = 0;
-I3                 D_L09_00161178 = {0, 1, 2};
+float D_L08_00161184 = 0;
+s32   D_L08_0015F3F4 = 0;
+I3    D_L09_00161178 = {0, 1, 2};
 
-int D_L09_001CA5D8 NOT_SDA = 0x10808080;
-float              D_L09_00161184 = 0;
-s32                D_L09_0015F3F4 = 0;
-I3                 D_L10_00161178 = {0, 1, 2};
+float D_L09_00161184 = 0;
+s32   D_L09_0015F3F4 = 0;
+I3    D_L10_00161178 = {0, 1, 2};
 
-int D_L10_001CA8D8 NOT_SDA = 0x10808080;
-float              D_L10_00161184 = 0;
-s32                D_L10_0015F3F4 = 0;
-I3                 D_L11_00161178 = {0, 1, 2};
+float D_L10_00161184 = 0;
+s32   D_L10_0015F3F4 = 0;
+I3    D_L11_00161178 = {0, 1, 2};
 
-int D_L11_001CAE58 NOT_SDA = 0x10808080;
-float              D_L11_00161184 = 0;
-s32                D_L11_0015F3F4 = 0;
-I3                 D_L12_00161178 = {0, 1, 2};
+float D_L11_00161184 = 0;
+s32   D_L11_0015F3F4 = 0;
+I3    D_L12_00161178 = {0, 1, 2};
 
-int D_L12_001CA8D8 NOT_SDA = 0x10808080;
-float              D_L12_00161184 = 0;
-s32                D_L12_0015F3F4 = 0;
-I3                 D_L13_00161178 = {0, 1, 2};
+float D_L12_00161184 = 0;
+s32   D_L12_0015F3F4 = 0;
+I3    D_L13_00161178 = {0, 1, 2};
 
-int D_L13_001CA758 NOT_SDA = 0x10808080;
-float              D_L13_00161184 = 0;
-s32                D_L13_0015F3F4 = 0;
-I3                 D_L14_00161178 = {0, 1, 2};
+float D_L13_00161184 = 0;
+s32   D_L13_0015F3F4 = 0;
+I3    D_L14_00161178 = {0, 1, 2};
 
-int D_L14_001CAB58 NOT_SDA = 0x10808080;
-float              D_L14_00161184 = 0;
-s32                D_L14_0015F3F4 = 0;
-I3                 D_L15_00161178 = {0, 1, 2};
+float D_L14_00161184 = 0;
+s32   D_L14_0015F3F4 = 0;
+I3    D_L15_00161178 = {0, 1, 2};
 
-int D_L15_001CAA58 NOT_SDA = 0x10808080;
-float              D_L15_00161184 = 0;
-s32                D_L15_0015F3F4 = 0;
-I3                 D_L16_00161178 = {0, 1, 2};
+float D_L15_00161184 = 0;
+s32   D_L15_0015F3F4 = 0;
+I3    D_L16_00161178 = {0, 1, 2};
 
-int D_L16_001CA8D8 NOT_SDA = 0x10808080;
-float              D_L16_00161184 = 0;
-s32                D_L16_0015F3F4 = 0;
-I3                 D_L17_00161178 = {0, 1, 2};
+float D_L16_00161184 = 0;
+s32   D_L16_0015F3F4 = 0;
+I3    D_L17_00161178 = {0, 1, 2};
 
-int D_L17_001CAD58 NOT_SDA = 0x10808080;
-float              D_L17_00161184 = 0;
-s32                D_L17_0015F3F4 = 0;
-I3                 D_L18_00161178 = {0, 1, 2};
+float D_L17_00161184 = 0;
+s32   D_L17_0015F3F4 = 0;
+I3    D_L18_00161178 = {0, 1, 2};
 
-int D_L18_001CAE58 NOT_SDA = 0x10808080;
-float              D_L18_00161184 = 0;
-s32                D_L18_0015F3F4 = 0;
+float D_L18_00161184 = 0;
+s32   D_L18_0015F3F4 = 0;
 
 I3 D_L00_00161178 = {0, 1, 2};
+
+/* The vendor hologram cone: a 3x3 grid of vertex offsets, texture
+   coordinates and colours, then its four quads as corner indices. The same
+   in every level. */
+float vendor_hologram_vertex_offsets[9][4] __asm__("D_L00_001CA380") = {
+    {0.0f,  -0.6f,  1.6f, 0.0f},
+    {0.0f,   0.0f,  1.6f, 0.0f},
+    {0.0f,   0.6f,  1.6f, 0.0f},
+    {0.0f,  -0.2f,  0.9f, 0.0f},
+    {0.0f,   0.0f,  1.0f, 0.0f},
+    {0.0f,   0.2f,  0.9f, 0.0f},
+    {0.0f, -0.05f, 0.67f, 0.0f},
+    {0.0f,   0.0f, 0.67f, 0.0f},
+    {0.0f,  0.05f, 0.67f, 0.0f},
+};
+
+float vendor_hologram_vertex_uvs[9][2] __asm__("D_L00_001CA410") = {
+    {0.0f, 0.0f},
+    {0.5f, 0.0f},
+    {1.0f, 0.0f},
+    {0.0f, 0.5f},
+    {0.5f, 0.5f},
+    {1.0f, 0.5f},
+    {0.0f, 1.0f},
+    {0.5f, 1.0f},
+    {1.0f, 1.0f},
+};
+
+int vendor_hologram_vertex_colors[10] __asm__("D_L00_001CA458") NOT_SDA = {
+    0x10808080,
+    0x10808080,
+    0x10808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0,
+};
+
+struct Quad vendor_hologram_quads[4] __asm__("D_L00_001CA480") NOT_SDA = {
+    {0, 1, 3, 4},
+    {1, 2, 4, 5},
+    {3, 4, 6, 7},
+    {4, 5, 7, 8},
+};
+
+float D_L01_001CA800[9][4] = {
+    {0.0f,  -0.6f,  1.6f, 0.0f},
+    {0.0f,   0.0f,  1.6f, 0.0f},
+    {0.0f,   0.6f,  1.6f, 0.0f},
+    {0.0f,  -0.2f,  0.9f, 0.0f},
+    {0.0f,   0.0f,  1.0f, 0.0f},
+    {0.0f,   0.2f,  0.9f, 0.0f},
+    {0.0f, -0.05f, 0.67f, 0.0f},
+    {0.0f,   0.0f, 0.67f, 0.0f},
+    {0.0f,  0.05f, 0.67f, 0.0f},
+};
+
+float D_L01_001CA890[9][2] = {
+    {0.0f, 0.0f},
+    {0.5f, 0.0f},
+    {1.0f, 0.0f},
+    {0.0f, 0.5f},
+    {0.5f, 0.5f},
+    {1.0f, 0.5f},
+    {0.0f, 1.0f},
+    {0.5f, 1.0f},
+    {1.0f, 1.0f},
+};
+
+int D_L01_001CA8D8[10] = {
+    0x10808080,
+    0x10808080,
+    0x10808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0,
+};
+
+struct Quad D_L01_001CA900[4] = {
+    {0, 1, 3, 4},
+    {1, 2, 4, 5},
+    {3, 4, 6, 7},
+    {4, 5, 7, 8},
+};
+
+float D_L02_001CA980[9][4] = {
+    {0.0f,  -0.6f,  1.6f, 0.0f},
+    {0.0f,   0.0f,  1.6f, 0.0f},
+    {0.0f,   0.6f,  1.6f, 0.0f},
+    {0.0f,  -0.2f,  0.9f, 0.0f},
+    {0.0f,   0.0f,  1.0f, 0.0f},
+    {0.0f,   0.2f,  0.9f, 0.0f},
+    {0.0f, -0.05f, 0.67f, 0.0f},
+    {0.0f,   0.0f, 0.67f, 0.0f},
+    {0.0f,  0.05f, 0.67f, 0.0f},
+};
+
+float D_L02_001CAA10[9][2] = {
+    {0.0f, 0.0f},
+    {0.5f, 0.0f},
+    {1.0f, 0.0f},
+    {0.0f, 0.5f},
+    {0.5f, 0.5f},
+    {1.0f, 0.5f},
+    {0.0f, 1.0f},
+    {0.5f, 1.0f},
+    {1.0f, 1.0f},
+};
+
+int D_L02_001CAA58[10] = {
+    0x10808080,
+    0x10808080,
+    0x10808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0,
+};
+
+struct Quad D_L02_001CAA80[4] = {
+    {0, 1, 3, 4},
+    {1, 2, 4, 5},
+    {3, 4, 6, 7},
+    {4, 5, 7, 8},
+};
+
+float D_L03_001CA480[9][4] = {
+    {0.0f,  -0.6f,  1.6f, 0.0f},
+    {0.0f,   0.0f,  1.6f, 0.0f},
+    {0.0f,   0.6f,  1.6f, 0.0f},
+    {0.0f,  -0.2f,  0.9f, 0.0f},
+    {0.0f,   0.0f,  1.0f, 0.0f},
+    {0.0f,   0.2f,  0.9f, 0.0f},
+    {0.0f, -0.05f, 0.67f, 0.0f},
+    {0.0f,   0.0f, 0.67f, 0.0f},
+    {0.0f,  0.05f, 0.67f, 0.0f},
+};
+
+float D_L03_001CA510[9][2] = {
+    {0.0f, 0.0f},
+    {0.5f, 0.0f},
+    {1.0f, 0.0f},
+    {0.0f, 0.5f},
+    {0.5f, 0.5f},
+    {1.0f, 0.5f},
+    {0.0f, 1.0f},
+    {0.5f, 1.0f},
+    {1.0f, 1.0f},
+};
+
+int D_L03_001CA558[10] = {
+    0x10808080,
+    0x10808080,
+    0x10808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0,
+};
+
+struct Quad D_L03_001CA580[4] = {
+    {0, 1, 3, 4},
+    {1, 2, 4, 5},
+    {3, 4, 6, 7},
+    {4, 5, 7, 8},
+};
+
+float D_L04_001CA500[9][4] = {
+    {0.0f,  -0.6f,  1.6f, 0.0f},
+    {0.0f,   0.0f,  1.6f, 0.0f},
+    {0.0f,   0.6f,  1.6f, 0.0f},
+    {0.0f,  -0.2f,  0.9f, 0.0f},
+    {0.0f,   0.0f,  1.0f, 0.0f},
+    {0.0f,   0.2f,  0.9f, 0.0f},
+    {0.0f, -0.05f, 0.67f, 0.0f},
+    {0.0f,   0.0f, 0.67f, 0.0f},
+    {0.0f,  0.05f, 0.67f, 0.0f},
+};
+
+float D_L04_001CA590[9][2] = {
+    {0.0f, 0.0f},
+    {0.5f, 0.0f},
+    {1.0f, 0.0f},
+    {0.0f, 0.5f},
+    {0.5f, 0.5f},
+    {1.0f, 0.5f},
+    {0.0f, 1.0f},
+    {0.5f, 1.0f},
+    {1.0f, 1.0f},
+};
+
+int D_L04_001CA5D8[10] = {
+    0x10808080,
+    0x10808080,
+    0x10808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0,
+};
+
+struct Quad D_L04_001CA600[4] = {
+    {0, 1, 3, 4},
+    {1, 2, 4, 5},
+    {3, 4, 6, 7},
+    {4, 5, 7, 8},
+};
+
+float D_L05_001CA800[9][4] = {
+    {0.0f,  -0.6f,  1.6f, 0.0f},
+    {0.0f,   0.0f,  1.6f, 0.0f},
+    {0.0f,   0.6f,  1.6f, 0.0f},
+    {0.0f,  -0.2f,  0.9f, 0.0f},
+    {0.0f,   0.0f,  1.0f, 0.0f},
+    {0.0f,   0.2f,  0.9f, 0.0f},
+    {0.0f, -0.05f, 0.67f, 0.0f},
+    {0.0f,   0.0f, 0.67f, 0.0f},
+    {0.0f,  0.05f, 0.67f, 0.0f},
+};
+
+float D_L05_001CA890[9][2] = {
+    {0.0f, 0.0f},
+    {0.5f, 0.0f},
+    {1.0f, 0.0f},
+    {0.0f, 0.5f},
+    {0.5f, 0.5f},
+    {1.0f, 0.5f},
+    {0.0f, 1.0f},
+    {0.5f, 1.0f},
+    {1.0f, 1.0f},
+};
+
+int D_L05_001CA8D8[10] = {
+    0x10808080,
+    0x10808080,
+    0x10808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0,
+};
+
+struct Quad D_L05_001CA900[4] = {
+    {0, 1, 3, 4},
+    {1, 2, 4, 5},
+    {3, 4, 6, 7},
+    {4, 5, 7, 8},
+};
+
+float D_L06_001CAB00[9][4] = {
+    {0.0f,  -0.6f,  1.6f, 0.0f},
+    {0.0f,   0.0f,  1.6f, 0.0f},
+    {0.0f,   0.6f,  1.6f, 0.0f},
+    {0.0f,  -0.2f,  0.9f, 0.0f},
+    {0.0f,   0.0f,  1.0f, 0.0f},
+    {0.0f,   0.2f,  0.9f, 0.0f},
+    {0.0f, -0.05f, 0.67f, 0.0f},
+    {0.0f,   0.0f, 0.67f, 0.0f},
+    {0.0f,  0.05f, 0.67f, 0.0f},
+};
+
+float D_L06_001CAB90[9][2] = {
+    {0.0f, 0.0f},
+    {0.5f, 0.0f},
+    {1.0f, 0.0f},
+    {0.0f, 0.5f},
+    {0.5f, 0.5f},
+    {1.0f, 0.5f},
+    {0.0f, 1.0f},
+    {0.5f, 1.0f},
+    {1.0f, 1.0f},
+};
+
+int D_L06_001CABD8[10] = {
+    0x10808080,
+    0x10808080,
+    0x10808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0,
+};
+
+struct Quad D_L06_001CAC00[4] = {
+    {0, 1, 3, 4},
+    {1, 2, 4, 5},
+    {3, 4, 6, 7},
+    {4, 5, 7, 8},
+};
+
+float D_L07_001CA400[9][4] = {
+    {0.0f,  -0.6f,  1.6f, 0.0f},
+    {0.0f,   0.0f,  1.6f, 0.0f},
+    {0.0f,   0.6f,  1.6f, 0.0f},
+    {0.0f,  -0.2f,  0.9f, 0.0f},
+    {0.0f,   0.0f,  1.0f, 0.0f},
+    {0.0f,   0.2f,  0.9f, 0.0f},
+    {0.0f, -0.05f, 0.67f, 0.0f},
+    {0.0f,   0.0f, 0.67f, 0.0f},
+    {0.0f,  0.05f, 0.67f, 0.0f},
+};
+
+float D_L07_001CA490[9][2] = {
+    {0.0f, 0.0f},
+    {0.5f, 0.0f},
+    {1.0f, 0.0f},
+    {0.0f, 0.5f},
+    {0.5f, 0.5f},
+    {1.0f, 0.5f},
+    {0.0f, 1.0f},
+    {0.5f, 1.0f},
+    {1.0f, 1.0f},
+};
+
+int D_L07_001CA4D8[10] = {
+    0x10808080,
+    0x10808080,
+    0x10808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0,
+};
+
+struct Quad D_L07_001CA500[4] = {
+    {0, 1, 3, 4},
+    {1, 2, 4, 5},
+    {3, 4, 6, 7},
+    {4, 5, 7, 8},
+};
+
+float D_L08_001CAB80[9][4] = {
+    {0.0f,  -0.6f,  1.6f, 0.0f},
+    {0.0f,   0.0f,  1.6f, 0.0f},
+    {0.0f,   0.6f,  1.6f, 0.0f},
+    {0.0f,  -0.2f,  0.9f, 0.0f},
+    {0.0f,   0.0f,  1.0f, 0.0f},
+    {0.0f,   0.2f,  0.9f, 0.0f},
+    {0.0f, -0.05f, 0.67f, 0.0f},
+    {0.0f,   0.0f, 0.67f, 0.0f},
+    {0.0f,  0.05f, 0.67f, 0.0f},
+};
+
+float D_L08_001CAC10[9][2] = {
+    {0.0f, 0.0f},
+    {0.5f, 0.0f},
+    {1.0f, 0.0f},
+    {0.0f, 0.5f},
+    {0.5f, 0.5f},
+    {1.0f, 0.5f},
+    {0.0f, 1.0f},
+    {0.5f, 1.0f},
+    {1.0f, 1.0f},
+};
+
+int D_L08_001CAC58[10] = {
+    0x10808080,
+    0x10808080,
+    0x10808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0,
+};
+
+struct Quad D_L08_001CAC80[4] = {
+    {0, 1, 3, 4},
+    {1, 2, 4, 5},
+    {3, 4, 6, 7},
+    {4, 5, 7, 8},
+};
+
+float D_L09_001CA500[9][4] = {
+    {0.0f,  -0.6f,  1.6f, 0.0f},
+    {0.0f,   0.0f,  1.6f, 0.0f},
+    {0.0f,   0.6f,  1.6f, 0.0f},
+    {0.0f,  -0.2f,  0.9f, 0.0f},
+    {0.0f,   0.0f,  1.0f, 0.0f},
+    {0.0f,   0.2f,  0.9f, 0.0f},
+    {0.0f, -0.05f, 0.67f, 0.0f},
+    {0.0f,   0.0f, 0.67f, 0.0f},
+    {0.0f,  0.05f, 0.67f, 0.0f},
+};
+
+float D_L09_001CA590[9][2] = {
+    {0.0f, 0.0f},
+    {0.5f, 0.0f},
+    {1.0f, 0.0f},
+    {0.0f, 0.5f},
+    {0.5f, 0.5f},
+    {1.0f, 0.5f},
+    {0.0f, 1.0f},
+    {0.5f, 1.0f},
+    {1.0f, 1.0f},
+};
+
+int D_L09_001CA5D8[10] = {
+    0x10808080,
+    0x10808080,
+    0x10808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0,
+};
+
+struct Quad D_L09_001CA600[4] = {
+    {0, 1, 3, 4},
+    {1, 2, 4, 5},
+    {3, 4, 6, 7},
+    {4, 5, 7, 8},
+};
+
+float D_L10_001CA800[9][4] = {
+    {0.0f,  -0.6f,  1.6f, 0.0f},
+    {0.0f,   0.0f,  1.6f, 0.0f},
+    {0.0f,   0.6f,  1.6f, 0.0f},
+    {0.0f,  -0.2f,  0.9f, 0.0f},
+    {0.0f,   0.0f,  1.0f, 0.0f},
+    {0.0f,   0.2f,  0.9f, 0.0f},
+    {0.0f, -0.05f, 0.67f, 0.0f},
+    {0.0f,   0.0f, 0.67f, 0.0f},
+    {0.0f,  0.05f, 0.67f, 0.0f},
+};
+
+float D_L10_001CA890[9][2] = {
+    {0.0f, 0.0f},
+    {0.5f, 0.0f},
+    {1.0f, 0.0f},
+    {0.0f, 0.5f},
+    {0.5f, 0.5f},
+    {1.0f, 0.5f},
+    {0.0f, 1.0f},
+    {0.5f, 1.0f},
+    {1.0f, 1.0f},
+};
+
+int D_L10_001CA8D8[10] = {
+    0x10808080,
+    0x10808080,
+    0x10808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0,
+};
+
+struct Quad D_L10_001CA900[4] = {
+    {0, 1, 3, 4},
+    {1, 2, 4, 5},
+    {3, 4, 6, 7},
+    {4, 5, 7, 8},
+};
+
+float D_L11_001CAD80[9][4] = {
+    {0.0f,  -0.6f,  1.6f, 0.0f},
+    {0.0f,   0.0f,  1.6f, 0.0f},
+    {0.0f,   0.6f,  1.6f, 0.0f},
+    {0.0f,  -0.2f,  0.9f, 0.0f},
+    {0.0f,   0.0f,  1.0f, 0.0f},
+    {0.0f,   0.2f,  0.9f, 0.0f},
+    {0.0f, -0.05f, 0.67f, 0.0f},
+    {0.0f,   0.0f, 0.67f, 0.0f},
+    {0.0f,  0.05f, 0.67f, 0.0f},
+};
+
+float D_L11_001CAE10[9][2] = {
+    {0.0f, 0.0f},
+    {0.5f, 0.0f},
+    {1.0f, 0.0f},
+    {0.0f, 0.5f},
+    {0.5f, 0.5f},
+    {1.0f, 0.5f},
+    {0.0f, 1.0f},
+    {0.5f, 1.0f},
+    {1.0f, 1.0f},
+};
+
+int D_L11_001CAE58[10] = {
+    0x10808080,
+    0x10808080,
+    0x10808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0,
+};
+
+struct Quad D_L11_001CAE80[4] = {
+    {0, 1, 3, 4},
+    {1, 2, 4, 5},
+    {3, 4, 6, 7},
+    {4, 5, 7, 8},
+};
+
+float D_L12_001CA800[9][4] = {
+    {0.0f,  -0.6f,  1.6f, 0.0f},
+    {0.0f,   0.0f,  1.6f, 0.0f},
+    {0.0f,   0.6f,  1.6f, 0.0f},
+    {0.0f,  -0.2f,  0.9f, 0.0f},
+    {0.0f,   0.0f,  1.0f, 0.0f},
+    {0.0f,   0.2f,  0.9f, 0.0f},
+    {0.0f, -0.05f, 0.67f, 0.0f},
+    {0.0f,   0.0f, 0.67f, 0.0f},
+    {0.0f,  0.05f, 0.67f, 0.0f},
+};
+
+float D_L12_001CA890[9][2] = {
+    {0.0f, 0.0f},
+    {0.5f, 0.0f},
+    {1.0f, 0.0f},
+    {0.0f, 0.5f},
+    {0.5f, 0.5f},
+    {1.0f, 0.5f},
+    {0.0f, 1.0f},
+    {0.5f, 1.0f},
+    {1.0f, 1.0f},
+};
+
+int D_L12_001CA8D8[10] = {
+    0x10808080,
+    0x10808080,
+    0x10808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0,
+};
+
+struct Quad D_L12_001CA900[4] = {
+    {0, 1, 3, 4},
+    {1, 2, 4, 5},
+    {3, 4, 6, 7},
+    {4, 5, 7, 8},
+};
+
+float D_L13_001CA680[9][4] = {
+    {0.0f,  -0.6f,  1.6f, 0.0f},
+    {0.0f,   0.0f,  1.6f, 0.0f},
+    {0.0f,   0.6f,  1.6f, 0.0f},
+    {0.0f,  -0.2f,  0.9f, 0.0f},
+    {0.0f,   0.0f,  1.0f, 0.0f},
+    {0.0f,   0.2f,  0.9f, 0.0f},
+    {0.0f, -0.05f, 0.67f, 0.0f},
+    {0.0f,   0.0f, 0.67f, 0.0f},
+    {0.0f,  0.05f, 0.67f, 0.0f},
+};
+
+float D_L13_001CA710[9][2] = {
+    {0.0f, 0.0f},
+    {0.5f, 0.0f},
+    {1.0f, 0.0f},
+    {0.0f, 0.5f},
+    {0.5f, 0.5f},
+    {1.0f, 0.5f},
+    {0.0f, 1.0f},
+    {0.5f, 1.0f},
+    {1.0f, 1.0f},
+};
+
+int D_L13_001CA758[10] = {
+    0x10808080,
+    0x10808080,
+    0x10808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0,
+};
+
+struct Quad D_L13_001CA780[4] = {
+    {0, 1, 3, 4},
+    {1, 2, 4, 5},
+    {3, 4, 6, 7},
+    {4, 5, 7, 8},
+};
+
+float D_L14_001CAA80[9][4] = {
+    {0.0f,  -0.6f,  1.6f, 0.0f},
+    {0.0f,   0.0f,  1.6f, 0.0f},
+    {0.0f,   0.6f,  1.6f, 0.0f},
+    {0.0f,  -0.2f,  0.9f, 0.0f},
+    {0.0f,   0.0f,  1.0f, 0.0f},
+    {0.0f,   0.2f,  0.9f, 0.0f},
+    {0.0f, -0.05f, 0.67f, 0.0f},
+    {0.0f,   0.0f, 0.67f, 0.0f},
+    {0.0f,  0.05f, 0.67f, 0.0f},
+};
+
+float D_L14_001CAB10[9][2] = {
+    {0.0f, 0.0f},
+    {0.5f, 0.0f},
+    {1.0f, 0.0f},
+    {0.0f, 0.5f},
+    {0.5f, 0.5f},
+    {1.0f, 0.5f},
+    {0.0f, 1.0f},
+    {0.5f, 1.0f},
+    {1.0f, 1.0f},
+};
+
+int D_L14_001CAB58[10] = {
+    0x10808080,
+    0x10808080,
+    0x10808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0,
+};
+
+struct Quad D_L14_001CAB80[4] = {
+    {0, 1, 3, 4},
+    {1, 2, 4, 5},
+    {3, 4, 6, 7},
+    {4, 5, 7, 8},
+};
+
+float D_L15_001CA980[9][4] = {
+    {0.0f,  -0.6f,  1.6f, 0.0f},
+    {0.0f,   0.0f,  1.6f, 0.0f},
+    {0.0f,   0.6f,  1.6f, 0.0f},
+    {0.0f,  -0.2f,  0.9f, 0.0f},
+    {0.0f,   0.0f,  1.0f, 0.0f},
+    {0.0f,   0.2f,  0.9f, 0.0f},
+    {0.0f, -0.05f, 0.67f, 0.0f},
+    {0.0f,   0.0f, 0.67f, 0.0f},
+    {0.0f,  0.05f, 0.67f, 0.0f},
+};
+
+float D_L15_001CAA10[9][2] = {
+    {0.0f, 0.0f},
+    {0.5f, 0.0f},
+    {1.0f, 0.0f},
+    {0.0f, 0.5f},
+    {0.5f, 0.5f},
+    {1.0f, 0.5f},
+    {0.0f, 1.0f},
+    {0.5f, 1.0f},
+    {1.0f, 1.0f},
+};
+
+int D_L15_001CAA58[10] = {
+    0x10808080,
+    0x10808080,
+    0x10808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0,
+};
+
+struct Quad D_L15_001CAA80[4] = {
+    {0, 1, 3, 4},
+    {1, 2, 4, 5},
+    {3, 4, 6, 7},
+    {4, 5, 7, 8},
+};
+
+float D_L16_001CA800[9][4] = {
+    {0.0f,  -0.6f,  1.6f, 0.0f},
+    {0.0f,   0.0f,  1.6f, 0.0f},
+    {0.0f,   0.6f,  1.6f, 0.0f},
+    {0.0f,  -0.2f,  0.9f, 0.0f},
+    {0.0f,   0.0f,  1.0f, 0.0f},
+    {0.0f,   0.2f,  0.9f, 0.0f},
+    {0.0f, -0.05f, 0.67f, 0.0f},
+    {0.0f,   0.0f, 0.67f, 0.0f},
+    {0.0f,  0.05f, 0.67f, 0.0f},
+};
+
+float D_L16_001CA890[9][2] = {
+    {0.0f, 0.0f},
+    {0.5f, 0.0f},
+    {1.0f, 0.0f},
+    {0.0f, 0.5f},
+    {0.5f, 0.5f},
+    {1.0f, 0.5f},
+    {0.0f, 1.0f},
+    {0.5f, 1.0f},
+    {1.0f, 1.0f},
+};
+
+int D_L16_001CA8D8[10] = {
+    0x10808080,
+    0x10808080,
+    0x10808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0,
+};
+
+struct Quad D_L16_001CA900[4] = {
+    {0, 1, 3, 4},
+    {1, 2, 4, 5},
+    {3, 4, 6, 7},
+    {4, 5, 7, 8},
+};
+
+float D_L17_001CAC80[9][4] = {
+    {0.0f,  -0.6f,  1.6f, 0.0f},
+    {0.0f,   0.0f,  1.6f, 0.0f},
+    {0.0f,   0.6f,  1.6f, 0.0f},
+    {0.0f,  -0.2f,  0.9f, 0.0f},
+    {0.0f,   0.0f,  1.0f, 0.0f},
+    {0.0f,   0.2f,  0.9f, 0.0f},
+    {0.0f, -0.05f, 0.67f, 0.0f},
+    {0.0f,   0.0f, 0.67f, 0.0f},
+    {0.0f,  0.05f, 0.67f, 0.0f},
+};
+
+float D_L17_001CAD10[9][2] = {
+    {0.0f, 0.0f},
+    {0.5f, 0.0f},
+    {1.0f, 0.0f},
+    {0.0f, 0.5f},
+    {0.5f, 0.5f},
+    {1.0f, 0.5f},
+    {0.0f, 1.0f},
+    {0.5f, 1.0f},
+    {1.0f, 1.0f},
+};
+
+int D_L17_001CAD58[10] = {
+    0x10808080,
+    0x10808080,
+    0x10808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0,
+};
+
+struct Quad D_L17_001CAD80[4] = {
+    {0, 1, 3, 4},
+    {1, 2, 4, 5},
+    {3, 4, 6, 7},
+    {4, 5, 7, 8},
+};
+
+float D_L18_001CAD80[9][4] = {
+    {0.0f,  -0.6f,  1.6f, 0.0f},
+    {0.0f,   0.0f,  1.6f, 0.0f},
+    {0.0f,   0.6f,  1.6f, 0.0f},
+    {0.0f,  -0.2f,  0.9f, 0.0f},
+    {0.0f,   0.0f,  1.0f, 0.0f},
+    {0.0f,   0.2f,  0.9f, 0.0f},
+    {0.0f, -0.05f, 0.67f, 0.0f},
+    {0.0f,   0.0f, 0.67f, 0.0f},
+    {0.0f,  0.05f, 0.67f, 0.0f},
+};
+
+float D_L18_001CAE10[9][2] = {
+    {0.0f, 0.0f},
+    {0.5f, 0.0f},
+    {1.0f, 0.0f},
+    {0.0f, 0.5f},
+    {0.5f, 0.5f},
+    {1.0f, 0.5f},
+    {0.0f, 1.0f},
+    {0.5f, 1.0f},
+    {1.0f, 1.0f},
+};
+
+int D_L18_001CAE58[10] = {
+    0x10808080,
+    0x10808080,
+    0x10808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0x60808080,
+    0,
+};
+
+struct Quad D_L18_001CAE80[4] = {
+    {0, 1, 3, 4},
+    {1, 2, 4, 5},
+    {3, 4, 6, 7},
+    {4, 5, 7, 8},
+};
