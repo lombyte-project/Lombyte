@@ -148,8 +148,8 @@ void doom_bot_update(struct Moby *moby) {
         DOOM_BOT_WAIT_FOR_ANIMATION_BEFORE_MOVEMENT = 1,
         DOOM_BOT_SELECT_MOVEMENT_MODE = 2,
         DOOM_BOT_UPDATE_TARGET_AND_MOVEMENT = 3,
-        DOOM_BOT_MOVE_HIGH_TURN_RATE = 4,
-        DOOM_BOT_MOVE_LOW_TURN_RATE = 5,
+        DOOM_BOT_MOVE_FAST = 4,
+        DOOM_BOT_MOVE_SLOW = 5,
         DOOM_BOT_ALIGN_TO_TARGET = 6,
         DOOM_BOT_EXECUTE_JUMP = 7,
         DOOM_BOT_COLLISION_RECOVERY_FALL = 8,
@@ -324,8 +324,8 @@ void doom_bot_update(struct Moby *moby) {
         goto Contact;
     case DOOM_BOT_SELECT_MOVEMENT_MODE:
     case DOOM_BOT_UPDATE_TARGET_AND_MOVEMENT:
-    case DOOM_BOT_MOVE_HIGH_TURN_RATE:
-    case DOOM_BOT_MOVE_LOW_TURN_RATE: {
+    case DOOM_BOT_MOVE_FAST:
+    case DOOM_BOT_MOVE_SLOW: {
         target = doom_bot_vars->target_moby;
         if (target && target->state != MOBY_STATE_PENDING_REMOVAL && target->state != 0xFD) {
             height = target->pos.z;
@@ -359,7 +359,7 @@ void doom_bot_update(struct Moby *moby) {
             doom_bot_vars->target_moby = select_class5_target_or_hero(
                 moby, &movement_and_detonation_vectors[0], &moby->rot, doom_bot_vars->last, 1);
         doom_bot_vars->max_speed = frame_scale * 0.1f * speed;
-        moby->state = DOOM_BOT_MOVE_HIGH_TURN_RATE;
+        moby->state = DOOM_BOT_MOVE_FAST;
         if (!doom_bot_vars->target_moby) {
             angle = random_float_between(-3.1415927f, 3.1415927f);
             if (random_integer_below(4) == 0) {
@@ -394,7 +394,7 @@ void doom_bot_update(struct Moby *moby) {
         }
         old_state = moby->state;
         if (!doom_bot_vars->target_moby) {
-            moby->state = DOOM_BOT_MOVE_LOW_TURN_RATE;
+            moby->state = DOOM_BOT_MOVE_SLOW;
             if (moby->prev_seq != 6)
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             doom_bot_vars->max_speed = frame_scale * 0.0273f * speed;
@@ -412,19 +412,19 @@ void doom_bot_update(struct Moby *moby) {
             {
                 DoomBotParams *hp = (DoomBotParams *)&hero;
                 if (doom_bot_vars->target_moby == hp->moby) {
-                    moby->state = DOOM_BOT_MOVE_LOW_TURN_RATE;
+                    moby->state = DOOM_BOT_MOVE_SLOW;
                     if ((moby->anim_flags & 2) && moby->prev_seq != 6)
                         blend_moby_animation(moby, 6, 0, scale_game_frames(0));
                     doom_bot_vars->max_speed = frame_scale * 0.0273f * speed;
                 }
             }
             if (!(distance < 8.0f) && distance > 20.0f) {
-                moby->state = DOOM_BOT_MOVE_LOW_TURN_RATE;
+                moby->state = DOOM_BOT_MOVE_SLOW;
                 if (moby->prev_seq != 0)
                     blend_moby_animation(moby, 0, 0, scale_game_frames(10));
                 doom_bot_vars->max_speed = frame_scale * 0.0273f * speed;
             } else {
-                moby->state = DOOM_BOT_MOVE_HIGH_TURN_RATE;
+                moby->state = DOOM_BOT_MOVE_FAST;
                 if (moby->prev_seq != 7)
                     blend_moby_animation(moby, 7, 0, scale_game_frames(10));
                 doom_bot_vars->max_speed = frame_scale * 0.1f * speed;
@@ -448,8 +448,7 @@ void doom_bot_update(struct Moby *moby) {
             } else
                 clearance = 5.0f;
         }
-        if (moby->state == DOOM_BOT_MOVE_HIGH_TURN_RATE &&
-            old_state == DOOM_BOT_MOVE_LOW_TURN_RATE) {
+        if (moby->state == DOOM_BOT_MOVE_FAST && old_state == DOOM_BOT_MOVE_SLOW) {
             moby->state = DOOM_BOT_WAIT_FOR_TRANSITION_ANIMATION;
             if (moby->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
@@ -611,7 +610,7 @@ void doom_bot_update(struct Moby *moby) {
         return;
     case DOOM_BOT_WAIT_FOR_TRANSITION_ANIMATION:
         if (moby->anim_flags & 2) {
-            moby->state = DOOM_BOT_MOVE_HIGH_TURN_RATE;
+            moby->state = DOOM_BOT_MOVE_FAST;
             if (moby->prev_seq != 7)
                 blend_moby_animation(moby, 7, 0, scale_game_frames(10));
             doom_bot_vars->max_speed = frame_scale * 0.1f * speed;
