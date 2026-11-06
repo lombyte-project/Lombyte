@@ -117,7 +117,7 @@ s32        l02_alternating_smoke_burst_spawn_options __asm__("D_L02_00162164") =
 void smoke_vent_update(struct Moby *moby) __asm__("FUN_L02_002ef020");
 
 typedef struct SmokeVentVars {
-    s8  unk0;
+    s8  mode; /* placed: the vent starts in state mode + 1 */
     u8  pad_1[0xBF];
     s32 timer_C0;
     s32 timer_C4;
@@ -162,7 +162,7 @@ void smoke_vent_update(struct Moby *moby) {
 
     switch (moby->state) {
     case SMOKE_VENT_STATE_INITIALIZE:
-        moby->state = smoke_vent_vars->unk0 + 1;
+        moby->state = smoke_vent_vars->mode + 1;
         euler_rotation_basis(&moby->rot_row0, &moby->rot);
         break;
     case SMOKE_VENT_STATE_VIEW_GATED_EMISSION:
