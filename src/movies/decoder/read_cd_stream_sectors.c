@@ -3,7 +3,7 @@
 
 struct CdStream {
     u8  pad_0[0x4];
-    s32 unk4;
+    s32 sector; /* next sector to read; advanced after a synchronous read */
 };
 
 s32 read_cd_stream_sectors(struct CdStream *stream,
@@ -25,9 +25,9 @@ s32 read_cd_stream_sectors(struct CdStream *stream,
     readcmd[0] = 0x64;
     readcmd[1] = 0;
     readcmd[2] = 0;
-    sceCdRead(stream->unk4, blocks, sector_read_destination, readcmd);
+    sceCdRead(stream->sector, blocks, sector_read_destination, readcmd);
     if (is_async == 0) {
-        stream->unk4 += blocks;
+        stream->sector += blocks;
         sceCdSync(0);
         returned_byte_count = size;
     }
