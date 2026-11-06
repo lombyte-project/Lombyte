@@ -67,9 +67,9 @@ void update_camera(void) {
             goto frozen;
         }
         qcopy(&camera->position, &target->pos);
-        qcopy(&camera->forward, &target->m0);
-        qcopy(&camera->right, &target->m1);
-        qcopy(&camera->up, &target->m2);
+        qcopy(&camera->forward, &target->forward);
+        qcopy(&camera->right, &target->right);
+        qcopy(&camera->up, &target->up);
     }
     {
         struct OcclCamState *occlusion = &occl_cam_state;

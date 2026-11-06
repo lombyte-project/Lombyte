@@ -109,11 +109,12 @@ void initialize_path_key_camera(struct UpdateCam *path_key_camera_object) {
     fast_vec_sub(hero_look_direction, &hero.motion, &path_key_camera_object->pos);
     fast_vec_scale(up, &hero.gravity_dir, -1.5f);
     fast_vec_add(hero_look_direction, hero_look_direction, up);
-    fast_vec_normalize(&path_key_camera_object->m0, hero_look_direction, 1.0f);
-    fast_vec_cross(&path_key_camera_object->m1, &path_key_camera_object->m0, up);
-    fast_vec_normalize(&path_key_camera_object->m1, &path_key_camera_object->m1, 1.0f);
-    fast_vec_cross(
-        &path_key_camera_object->m2, &path_key_camera_object->m1, &path_key_camera_object->m0);
+    fast_vec_normalize(&path_key_camera_object->forward, hero_look_direction, 1.0f);
+    fast_vec_cross(&path_key_camera_object->right, &path_key_camera_object->forward, up);
+    fast_vec_normalize(&path_key_camera_object->right, &path_key_camera_object->right, 1.0f);
+    fast_vec_cross(&path_key_camera_object->up,
+                   &path_key_camera_object->right,
+                   &path_key_camera_object->forward);
     /* give every key without a duration (+0x44) the default 10000 */
     camera_key_default_cursor = (int *)&D_L14_001F6488_59d8[0x11];
     for (j = 38; j >= 0; j--) {

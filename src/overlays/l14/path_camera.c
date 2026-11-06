@@ -200,10 +200,11 @@ void update_path_camera(struct UpdateCam *path_camera) {
             fast_vec_sub(initial_look_direction_or_previous_position, pb + 0x10, &path_camera->pos);
         }
         fast_vec_scale(t, D_0013F5E0_5290, -1.0f);
-        fast_vec_normalize(&path_camera->m0, initial_look_direction_or_previous_position, 1.0f);
-        fast_vec_cross(&path_camera->m1, &path_camera->m0, t);
-        fast_vec_normalize(&path_camera->m1, &path_camera->m1, 1.0f);
-        fast_vec_cross(&path_camera->m2, &path_camera->m1, &path_camera->m0);
+        fast_vec_normalize(
+            &path_camera->forward, initial_look_direction_or_previous_position, 1.0f);
+        fast_vec_cross(&path_camera->right, &path_camera->forward, t);
+        fast_vec_normalize(&path_camera->right, &path_camera->right, 1.0f);
+        fast_vec_cross(&path_camera->up, &path_camera->right, &path_camera->forward);
         return;
     }
     path = ((char *)l14_paths[*(int *)(path_camera_preset + 0x20)]);
@@ -240,10 +241,10 @@ void update_path_camera(struct UpdateCam *path_camera) {
         FUN_L00_0025d808(hp, u, &seg, &tt, 0, 0.0f);
         u[2] += 1.5f;
         fast_vec_sub(t, u, &path_camera->pos);
-        fast_vec_normalize(&path_camera->m0, t, 1.0f);
-        fast_vec_cross(&path_camera->m1, &path_camera->m0, &hero.gravity_dir);
-        fast_vec_normalize(&path_camera->m1, &path_camera->m1, -1.0f);
-        fast_vec_cross(&path_camera->m2, &path_camera->m1, &path_camera->m0);
+        fast_vec_normalize(&path_camera->forward, t, 1.0f);
+        fast_vec_cross(&path_camera->right, &path_camera->forward, &hero.gravity_dir);
+        fast_vec_normalize(&path_camera->right, &path_camera->right, -1.0f);
+        fast_vec_cross(&path_camera->up, &path_camera->right, &path_camera->forward);
         return;
     }
     for (i = 0; i < 7 && fov_stops->seg[i] >= 0 && fov_stops->seg[i + 1] >= 0; i++) {
@@ -291,10 +292,10 @@ void update_path_camera(struct UpdateCam *path_camera) {
         fast_vec_sub(t, u, &path_camera->pos);
     }
     fast_vec_scale(u, D_0013F5E0_5290, -1.0f);
-    fast_vec_normalize(&path_camera->m0, t, 1.0f);
-    fast_vec_cross(&path_camera->m1, &path_camera->m0, u);
-    fast_vec_normalize(&path_camera->m1, &path_camera->m1, 1.0f);
-    fast_vec_cross(&path_camera->m2, &path_camera->m1, &path_camera->m0);
+    fast_vec_normalize(&path_camera->forward, t, 1.0f);
+    fast_vec_cross(&path_camera->right, &path_camera->forward, u);
+    fast_vec_normalize(&path_camera->right, &path_camera->right, 1.0f);
+    fast_vec_cross(&path_camera->up, &path_camera->right, &path_camera->forward);
 }
 
 int check_path_camera_priority(char *camera,

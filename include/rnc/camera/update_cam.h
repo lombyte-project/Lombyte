@@ -11,11 +11,12 @@
    D_00187410[48]; D_001870C0[0] and [1] point at the current and previous
    one. Size 0xA0 (backup_current_cam copies 0xA0 bytes). */
 struct UpdateCam {
-    u128  m0;
-    u128  m1;
-    u128  m2;
+    u128  forward; /* 0x00: camera basis rows (grindrail camera) */
+    u128  right;   /* 0x10: cross(forward, the level up) */
+    u128  up;      /* 0x20: cross(right, forward) */
     Vec4f pos;
-    u8    pad40[0x24];
+    u128  prev_forward; /* 0x40: copy of forward the pitch rotation starts from */
+    u8    pad50[0x14];
     Vec3  prev_pos;
     void *saved_state;
     u8    state; /* activation rule, see camera_activation_check_priority */

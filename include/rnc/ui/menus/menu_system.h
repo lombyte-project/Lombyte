@@ -2,6 +2,7 @@
 #define LOMBYTE_RNC_UI_MENUS_MENU_SYSTEM_H
 
 #include "types.h"
+#include "rnc/math/vector.h"
 
 struct MenuScreen;
 
@@ -68,25 +69,28 @@ struct MenuPage {
  */
 struct MenuSystem {
     /* Page switching (update_menu_system) */
-    s32              state;         /* 0x000: menu state, from page->state; 0x2D at init */
-    struct MenuPage *current;       /* 0x004: active page */
-    struct MenuPage *next;          /* 0x008: requested page */
-    s32              close_request; /* 0x00C: nonzero closes the menu */
-    s32              graphics_workspace;         /* 0x010: buffer address D_001940C0[2] + 0xA0000 */
-    s32              timer;         /* 0x014: 12 on a switch, 2 on close; counts down */
-    s32 saved_texture_start;        /* 0x018: gs_texture_allocation_start to restore on close */
-    s32 current_gadget;             /* 0x01C: gadget of the queued preview animation, -1 none */
-    u8  pad_20[0x10];
-    s32 equipped[4]; /* 0x030: gadget id held by each slot */
-    u8  pad_40[0x60];
+    s32              state;              /* 0x000: menu state, from page->state; 0x2D at init */
+    struct MenuPage *current;            /* 0x004: active page */
+    struct MenuPage *next;               /* 0x008: requested page */
+    s32              close_request;      /* 0x00C: nonzero closes the menu */
+    s32              graphics_workspace; /* 0x010: buffer address D_001940C0[2] + 0xA0000 */
+    s32              timer;              /* 0x014: 12 on a switch, 2 on close; counts down */
+    s32  saved_texture_start; /* 0x018: gs_texture_allocation_start to restore on close */
+    s32  current_gadget;      /* 0x01C: gadget of the queued preview animation, -1 none */
+    u8   pad_20[0x10];
+    s32  equipped[4];           /* 0x030: gadget id held by each slot */
+    Vec4 saved_camera_position; /* 0x040: debug camera position while paused */
+    Vec4 saved_camera_angles;   /* 0x050 */
+    u8   pad_60[0x40];
 
     /* Preview animation stream */
-    s32 stream_buffer[2]; /* 0x0A0: double buffer */
-    s32 preview_resource_first;            /* 0x0A8: load_preview_resource_bindings first-resource argument */
-    s32 preview_resource_count;            /* 0x0AC: load_preview_resource_bindings count argument */
-    s32 preview_resource_buffers[3];         /* 0x0B0: buffer addresses read by load_preview_resource_bindings */
-    s32 read_offset;      /* 0x0BC: offset of the data in the read buffer */
-    s32 unkC0;            /* 0x0C0: -1 at preview init */
+    s32 stream_buffer[2];       /* 0x0A0: double buffer */
+    s32 preview_resource_first; /* 0x0A8: load_preview_resource_bindings first-resource argument */
+    s32 preview_resource_count; /* 0x0AC: load_preview_resource_bindings count argument */
+    s32 preview_resource_buffers
+        [3];         /* 0x0B0: buffer addresses read by load_preview_resource_bindings */
+    s32 read_offset; /* 0x0BC: offset of the data in the read buffer */
+    s32 unkC0;       /* 0x0C0: -1 at preview init */
     u8  pad_C4[0x4];
     u8  loaded_animation[2];     /* 0x0C8: animation held by each buffer, 0xFF none */
     u8  read_buffer_index;       /* 0x0CA: buffer being read */
@@ -96,39 +100,39 @@ struct MenuSystem {
     struct MenuPage *previous; /* 0x0D0: page left by the last switch */
     s32 save_prompt_variant; /* 0x0D4: 0 saving_data_menu, 1/2 saving_data_menu2; picks draw_prompt_box text */
     s32 goodies_tab_shown; /* 0x0D8: render_level_effects_and_screen_sprites draws slot 6 only while set */
-    s32 unkDC; /* 0x0DC: pause_all_sounds: (mode == 0x23) */
-    s32 save_slot; /* 0x0E0: memcard_make_whole_save / memcard_restore_game argument */
-    s32 travel_level; /* 0x0E4: written with travel_page/unkF4 before close_request 3 */
-    u8  pad_E8[0x4];
-    s32 action_message; /* 0x0EC: menu_action_messages[] entry (update_menu_entry_actions) */
-    struct MenuPage
-        *travel_page; /* 0x0F0: menu_system.current, or map_circle_destination_page (draw_map_screen) */
-    s32  unkF4; /* 0x0F4: 0, 2, 0xB or 0xF */
-    s32  unkF8; /* 0x0F8: read by pause_all_sounds */
+    s32 unkDC;             /* 0x0DC: pause_all_sounds: (mode == 0x23) */
+    s32 save_slot;         /* 0x0E0: memcard_make_whole_save / memcard_restore_game argument */
+    s32 travel_level;       /* 0x0E4: written with travel_page/unkF4 before close_request 3 */
+    f32 saved_tan_half_fov; /* 0x0E8: view tan_half_fov while paused */
+    s32 action_message;     /* 0x0EC: menu_action_messages[] entry (update_menu_entry_actions) */
+    struct MenuPage *
+        travel_page; /* 0x0F0: menu_system.current, or map_circle_destination_page (draw_map_screen) */
+    s32 unkF4;       /* 0x0F4: 0, 2, 0xB or 0xF */
+    s32 unkF8;       /* 0x0F8: read by pause_all_sounds */
 
     /* Buffers carved at init (FUN_00218f98) */
-    s32 unkFC;            /* 0x0FC: from D_001940C0[1] */
-    s32 unk100;           /* 0x100: from D_001940C0[2] */
-    s32 preview_workspace;           /* 0x104: D_001940C0[1] + 0xA0000 */
-    s32 help_text_buffer; /* 0x108: help text read target, D_001940C0[1] + 0xDC000 */
-    s32 stream_buffer_base;           /* 0x10C: D_001940C0[2] + 0x180000 */
+    s32 unkFC;              /* 0x0FC: from D_001940C0[1] */
+    s32 unk100;             /* 0x100: from D_001940C0[2] */
+    s32 preview_workspace;  /* 0x104: D_001940C0[1] + 0xA0000 */
+    s32 help_text_buffer;   /* 0x108: help text read target, D_001940C0[1] + 0xDC000 */
+    s32 stream_buffer_base; /* 0x10C: D_001940C0[2] + 0x180000 */
 
     s32 update_count; /* 0x110: update_menu_system updates */
     u8  pad_114[0x4];
 
     /* Preview moby resources */
-    s32 resource_table_toggle; /* 0x118: alternates per resource table select */
-    s32 preview_requested_class;                /* 0x11C: an oclass, -1 none */
-    s32 preview_loaded_class;                /* 0x120: an oclass, -1 none */
+    s32 resource_table_toggle;   /* 0x118: alternates per resource table select */
+    s32 preview_requested_class; /* 0x11C: an oclass, -1 none */
+    s32 preview_loaded_class;    /* 0x120: an oclass, -1 none */
 
-    s32 close_locked;    /* 0x124: nonzero blocks start/back closing the menu */
-    s32 card_op_pending; /* 0x128: card save/load started, waiting for the card */
-    s32 card_op_text;    /* 0x12C: text shown while pending (0x4FB5 save, 0x4FB6 load) */
-    u8  pad_130[0x4];
-    s32 unk134;                     /* 0x134: hides pages / items with flags 8 */
-    s32 unk138;                     /* 0x138: hides pages / items with flags 4 */
-    s32 unk13C;                     /* 0x13C: written by pause_all_sounds */
-    s32 resource_table_class;                     /* 0x140: oclass at the last resource table select */
+    s32 close_locked;      /* 0x124: nonzero blocks start/back closing the menu */
+    s32 card_op_pending;   /* 0x128: card save/load started, waiting for the card */
+    s32 card_op_text;      /* 0x12C: text shown while pending (0x4FB5 save, 0x4FB6 load) */
+    s32 saved_decode_mode; /* 0x130: decode_mode before a menu movie */
+    s32 unk134;            /* 0x134: hides pages / items with flags 8 */
+    s32 unk138;            /* 0x138: hides pages / items with flags 4 */
+    s32 card_icon_hidden; /* 0x13C: set by pause_all_sounds; the level loop skips the busy card icon while set */
+    s32 resource_table_class;       /* 0x140: oclass at the last resource table select */
     s32 last_resource_table_toggle; /* 0x144: resource_table_toggle at the last select */
 }; /* size 0x148 */
 

@@ -121,9 +121,9 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
                descriptor_kind == CAMERA_DESCRIPTOR_INHERIT_TRANSFORM ||
                descriptor_kind == CAMERA_DESCRIPTOR_INHERIT_TRANSFORM_WITH_RATE_TRANSITION) {
         qcopy(&next_camera->pos, &previous_camera->pos);
-        qcopy(&next_camera->m0, &previous_camera->m0);
-        qcopy(&next_camera->m1, &previous_camera->m1);
-        qcopy(&next_camera->m2, &previous_camera->m2);
+        qcopy(&next_camera->forward, &previous_camera->forward);
+        qcopy(&next_camera->right, &previous_camera->right);
+        qcopy(&next_camera->up, &previous_camera->up);
         next_camera->handoff_state = CAMERA_HANDOFF_INHERITED_TRANSFORM;
         if (previous_camera->transition_state ==
                 CAMERA_TRANSITION_STATE_INHERIT_TRANSFORM_WITH_RATE_TRANSITION ||
