@@ -337,15 +337,15 @@ struct PokKeeperVars {
     u8    pad30[0x26];
     s16   unk56;
     u8    pad58[8];
-    s32   leg_paths[3]; /* 0x60: per-leg clearance paths, set from unk70[] */
+    s32   leg_paths[3]; /* 0x60: per-leg clearance paths, set from leg_path_ids[] */
     u8    pad6C[4];
-    s32   unk70[3];
+    s32   leg_path_ids[3];
     u8    pad7C[0x54];
     s32   leg_entry_points[4];
     s32   points[4];  /* 0xE0: path point of each leg */
     s32   gates[2];   /* 0xF0: gate mobys */
     s32   volumes[2]; /* 0xF8 */
-    s32   unk100;
+    s32   final_leg_trigger_moby;
     s32   paired_rotation_moby;
     s32   first_gate_open_mission;
     s32   path_complete_mission;
@@ -389,9 +389,9 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
     case RESORT_OWNER_INITIALIZE:
         initialize_npc_dialogue(moby, moby_vars->talk);
         moby->update_dist = 0xFF;
-        build_symmetric_adjacency_masks(&moby_vars->leg_paths[0], 1, moby_vars->unk70[0]);
-        build_symmetric_adjacency_masks(&moby_vars->leg_paths[1], 1, moby_vars->unk70[1]);
-        build_symmetric_adjacency_masks(&moby_vars->leg_paths[2], 1, moby_vars->unk70[2]);
+        build_symmetric_adjacency_masks(&moby_vars->leg_paths[0], 1, moby_vars->leg_path_ids[0]);
+        build_symmetric_adjacency_masks(&moby_vars->leg_paths[1], 1, moby_vars->leg_path_ids[1]);
+        build_symmetric_adjacency_masks(&moby_vars->leg_paths[2], 1, moby_vars->leg_path_ids[2]);
         clear_u64_value(&moby_vars->velocity);
         clear_u64_value(&moby_vars->displacement);
         if (D_0013D4EE) {
@@ -570,7 +570,8 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
         }
         break;
     case RESORT_OWNER_WAIT_TO_ADVANCE_FINAL_PATH_LEG:
-        if (is_moby_in_state_five((struct Moby *)(D_L11_0015FFD8 + (moby_vars->unk100 << 8)))) {
+        if (is_moby_in_state_five(
+                (struct Moby *)(D_L11_0015FFD8 + (moby_vars->final_leg_trigger_moby << 8)))) {
             moby_vars->leg += 1;
             FUN_L11_002d2088_c(moby, 3);
         }

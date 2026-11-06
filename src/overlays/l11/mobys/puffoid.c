@@ -74,9 +74,9 @@ typedef struct {
     f32                      goal[4];      /* 0x1D0 */
     u8                       pad1E0[0x30];
     struct Moby             *target; /* 0x210 */
-    s32                      unk214; /* 0x214: 2 = target in range */
-    u8                       pad218[8];
-    f32                      home[4]; /* 0x220 */
+    s32 target_status; /* 0x214: status word of the target record at goal; 2 once the goal is out of reach */
+    u8  pad218[8];
+    f32 home[4];    /* 0x220 */
     s32 path_index; /* 0x230: path index for FUN_L00_00261968 / the landing check */
     s32 path;       /* 0x234: index into l11_paths */
     s32 mode;       /* 0x238: start mode */
@@ -208,7 +208,7 @@ void puffoid_update(struct Moby *moby) {
                        frame_time_sq * 8.726646f,
                        frame_time_sq * 8.726646f,
                        frame_time * 12.566371f);
-        if (puffoid_vars->unk214 != 2 && random_integer_below(9) == 0) {
+        if (puffoid_vars->target_status != 2 && random_integer_below(9) == 0) {
             moby->state = PUFFOID_STATE_JUMP_HOME;
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, 5);
@@ -247,7 +247,7 @@ void puffoid_update(struct Moby *moby) {
         }
         break;
     case PUFFOID_STATE_IDLE:
-        if (puffoid_vars->unk214 != 2) {
+        if (puffoid_vars->target_status != 2) {
             puffoid_vars->chase_heading_offset_radians =
                 random_float_between(-puffoid_chase_heading_offset_limit_degrees_gp,
                                      puffoid_chase_heading_offset_limit_degrees_gp) *
@@ -275,7 +275,7 @@ void puffoid_update(struct Moby *moby) {
     case PUFFOID_STATE_WANDER_NEAR_HOME:
         update_moby_target_heading_and_conditional_movement((char *)moby,
                                                             puffoid_vars->wander_destination);
-        if (puffoid_vars->unk214 != 2) {
+        if (puffoid_vars->target_status != 2) {
             puffoid_vars->chase_heading_offset_radians =
                 random_float_between(-puffoid_chase_heading_offset_limit_degrees_gp,
                                      puffoid_chase_heading_offset_limit_degrees_gp) *
@@ -302,7 +302,7 @@ void puffoid_update(struct Moby *moby) {
             update_moby_target_heading_and_conditional_movement((char *)moby,
                                                                 (float *)&target->pos);
         }
-        if (puffoid_vars->unk214 == 2) {
+        if (puffoid_vars->target_status == 2) {
             moby->state = PUFFOID_STATE_RETURN_HOME;
         }
         break;
@@ -325,7 +325,7 @@ void puffoid_update(struct Moby *moby) {
             update_moby_target_heading_and_conditional_movement((char *)moby, puffoid_vars->goal);
         }
         if (moby->anim_flags & 2) {
-            if (puffoid_vars->unk214 != 2) {
+            if (puffoid_vars->target_status != 2) {
                 moby->state = PUFFOID_STATE_CHASE_TARGET;
             } else if (puffoid_vars->timer == 0) {
                 moby->state = PUFFOID_STATE_RETURN_HOME;
@@ -340,7 +340,7 @@ void puffoid_update(struct Moby *moby) {
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
-        } else if (puffoid_vars->unk214 == 2) {
+        } else if (puffoid_vars->target_status == 2) {
             moby->state = PUFFOID_STATE_RETURN_HOME;
         }
         qcopy(pos, &moby->pos);
@@ -353,7 +353,7 @@ void puffoid_update(struct Moby *moby) {
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             }
-        } else if (puffoid_vars->unk214 != 2) {
+        } else if (puffoid_vars->target_status != 2) {
             puffoid_vars->chase_heading_offset_radians =
                 random_float_between(-puffoid_chase_heading_offset_limit_degrees_gp,
                                      puffoid_chase_heading_offset_limit_degrees_gp) *
@@ -405,7 +405,7 @@ void puffoid_update(struct Moby *moby) {
     case PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP: {
         float basis[16];
         float dest[4];
-        if (puffoid_vars->unk214 != 2 && count_group_puffoids_in_states_13_to_17(moby) < 5) {
+        if (puffoid_vars->target_status != 2 && count_group_puffoids_in_states_13_to_17(moby) < 5) {
             struct Moby *carrier_moby =
                 (struct Moby *)(D_L11_0015FFD8_4318 + (puffoid_vars->carrier << 8));
             transpose_rotation_matrix(basis, &carrier_moby->rot_row0);
@@ -470,7 +470,7 @@ void puffoid_update(struct Moby *moby) {
                             &moby->rot,
                             &moby->pos,
                             &moby->rot);
-        if (puffoid_vars->unk214 != 2) {
+        if (puffoid_vars->target_status != 2) {
             puffoid_vars->chase_heading_offset_radians =
                 random_float_between(-puffoid_chase_heading_offset_limit_degrees_gp,
                                      puffoid_chase_heading_offset_limit_degrees_gp) *
@@ -496,7 +496,7 @@ void puffoid_update(struct Moby *moby) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(10));
             }
         }
-        if (puffoid_vars->unk214 == 2) {
+        if (puffoid_vars->target_status == 2) {
             moby->state = PUFFOID_STATE_CARRIER_IDLE;
         }
         break;
@@ -514,7 +514,7 @@ void puffoid_update(struct Moby *moby) {
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
-        } else if (puffoid_vars->unk214 == 2) {
+        } else if (puffoid_vars->target_status == 2) {
             moby->state = PUFFOID_STATE_CARRIER_IDLE;
         }
         qcopy(pos, &moby->pos);
@@ -695,8 +695,8 @@ struct L11PatrolVars {
     u8                     pad1A8[0x28];
     Vec4f                  goal; /* 0x1D0 */
     u8                     pad1E0[0x30];
-    struct Moby           *target; /* 0x210 */
-    s32                    unk214; /* 0x214 */
+    struct Moby           *target;        /* 0x210 */
+    s32                    target_status; /* 0x214 */
     u8                     pad218[0x18];
     s32                    path_index;  /* 0x230 */
     s32                    path2_index; /* 0x234 */
@@ -904,7 +904,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
         qcopy(&position_scratch, goal_check_position);
         if (vector_distance_xy(position_scratch.f, &patrol_vars->goal.x) > patrol_vars->reach ||
             position_scratch.f[2] - patrol_vars->goal.z > 3.0f) {
-            patrol_vars->unk214 = 2;
+            patrol_vars->target_status = 2;
         }
     }
     if (patrol_vars->target == 0) {

@@ -30,7 +30,7 @@ extern float seesaw_fall_tilt_threshold_degrees_gp __asm__("D_L11_00161F84") __a
 /* Private variables of the tilting platform (seesaw_platform_update). */
 struct L11TiltVars {
     u8  pad0[0x20];
-    u8  unk20[0x3C]; /* 0x20: rider state for update_entity_matrix */
+    u8  carry[0x3C]; /* 0x20: rider state for update_entity_matrix */
     s32 unk5C;       /* 0x5C */
     f32 spin;        /* 0x60: rot.y speed */
 };
@@ -84,5 +84,5 @@ void seesaw_platform_update(struct Moby *platform) {
     }
     platform->rot.y = fast_add_rotations(platform->rot.y, platform_vars->spin);
     fast_vec_add(&platform_translation_delta, &platform_translation_delta, &platform->pos);
-    update_entity_matrix(platform_vars->unk20, &platform_translation_delta, &rot, &platform->rot);
+    update_entity_matrix(platform_vars->carry, &platform_translation_delta, &rot, &platform->rot);
 }
