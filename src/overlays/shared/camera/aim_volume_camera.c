@@ -23,11 +23,11 @@ typedef struct {
     s32 clip_volume;   /* 0x0C: is_point_inside_clip_volume id, -1 none */
     s32 volume_25fa38; /* 0x10: FUN_L00_0025fa38 volume, -1 none */
     u8  pad14[0xC];
-    s32 timer;        /* 0x20: frames since the camera started (capped at 200), 0 when off */
-    s16 keep_leash;   /* 0x24: 0 clears FollowCamState.leash each frame */
-    s16 done;         /* 0x26: set when the camera ends */
-    f32 script_pitch; /* 0x28: degrees, FollowCamState.tail.script_pitch through FUN_L00_002e8540 */
-    f32 angle;        /* 0x2C: radians; with height and distance gives offset_scale */
+    s32 timer;      /* 0x20: frames since the camera started (capped at 200), 0 when off */
+    s16 keep_leash; /* 0x24: 0 clears FollowCamState.leash each frame */
+    s16 done;       /* 0x26: set when the camera ends */
+    f32 script_pitch; /* 0x28: degrees, FollowCamState.tail.script_pitch through set_follow_camera_script_pitch */
+    f32 angle; /* 0x2C: radians; with height and distance gives offset_scale */
     u8  pad30[4];
     s32 need_still; /* 0x34: start only while tail.yaw_step and tail.ctl.pitch_input are (nearly) 0 */
     f32 distance;   /* 0x38: horizontal distance from the hero to the position */
@@ -151,12 +151,12 @@ run:
         state = rig;
         reset = &state->reset;
         qcopy(rec_pos, pos);
-        tail->eye_distance = params->distance;
-        tail->distance = params->height;
+        tail->distance = params->distance;
+        tail->pivot_height = params->height;
         follow->look_height = params->offset_scale;
-        fast_vec_scale(gravity_offset, &hero.gravity_dir, -tail->distance);
-        fast_vec_add(state->follow.eye, &hero.motion.pos, gravity_offset);
-        fast_vec_sub(tail->eye_offset, pos, state->follow.eye);
+        fast_vec_scale(gravity_offset, &hero.gravity_dir, -tail->pivot_height);
+        fast_vec_add(state->follow.pivot, &hero.motion.pos, gravity_offset);
+        fast_vec_sub(tail->eye_offset, pos, state->follow.pivot);
         qcopy(state->tail.saved_eye_offset, tail->eye_offset);
         fast_vec_scale(gravity_offset, &hero.gravity_dir, -follow->look_height);
         fast_vec_add(state->follow.look_target, &hero.motion.pos, gravity_offset);
@@ -165,16 +165,16 @@ run:
         qcopy(state->follow.offset, follow->focus);
         qcopy(state->position, rec_pos);
         qcopy(state->tail.snap.shot_pos, rec_pos);
-        *(s32 *)&snap->eye_distance_error = 0;
+        *(s32 *)&snap->distance_reduction = 0;
         *(s32 *)&reset->pitch_bias = 0;
         reset->look_height = follow->look_height;
         {
             f32 zero = reset->pitch_bias;
-            f32 distance = tail->distance;
-            reset->distance = distance;
+            f32 distance = tail->pivot_height;
+            reset->pivot_height = distance;
             reset->unk22 = 0;
             reset->pitch_bias_vel = zero;
-            reset->distance_vel = zero;
+            reset->pivot_height_vel = zero;
             reset->look_height_vel = zero;
         }
     }
@@ -184,7 +184,7 @@ run:
     }
     if (params->distance != 0.0f) {
         follow_camera_set_distance(0, params->distance, 0.003f);
-        FUN_L00_002e8620();
+        lock_follow_camera_run_toward();
     }
     if (params->height != 0.0f) {
         follow_camera_set_height(params->height, 0.003f);
@@ -193,7 +193,7 @@ run:
         follow_camera_set_offset_scale(0, params->offset_scale, 0.005f);
     }
     if (params->script_pitch != 0.0f) {
-        FUN_L00_002e8540(params->script_pitch * 0.017453292f);
+        set_follow_camera_script_pitch(params->script_pitch * 0.017453292f);
     }
     if (params->keep_leash == 0) {
         set_follow_camera_orbit_clamp_mode(0);

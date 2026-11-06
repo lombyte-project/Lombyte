@@ -184,7 +184,7 @@ void update_moby_follow_camera(char *moby) {
         set_follow_camera_angle_blend_from_position(target_record + 0x30, spin_angle_radians, 0.0f);
     if (*(float *)(slot_data + 0x34) != 0.0f) {
         follow_camera_set_distance(0, *(float *)(slot_data + 0x34), 0.003f);
-        FUN_L00_002e8620();
+        lock_follow_camera_run_toward();
     }
     if (*(float *)(slot_data + 0x38) != 0.0f)
         follow_camera_set_height(*(float *)(slot_data + 0x38), 0.003f);

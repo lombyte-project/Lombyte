@@ -11,8 +11,8 @@ void set_transform_state_three_when_outside_clip_volume(char *) __asm__("FUN_L03
 void try_select_camera_offset_effect_moby(char *) __asm__("FUN_L02_002fa7c8");
 void set_follow_camera_orbit_clamp_mode(int) __asm__("FUN_L00_002e8568");
 void set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e8680");
-void FUN_L00_002e8620(void);
-void FUN_L00_002e8490(float);
+void lock_follow_camera_run_toward(void) __asm__("FUN_L00_002e8620");
+void set_follow_camera_pull_back_max(float) __asm__("FUN_L00_002e8490");
 void follow_camera_setup() __asm__("FUN_L00_002e6d60");
 void reset_follow_camera_state_from_position(char *) __asm__("FUN_L00_002e6bf8");
 void follow_camera_auto_turn(int) __asm__("FUN_L00_002e8f40");
