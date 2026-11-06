@@ -109,26 +109,27 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
             }
             menu_system.close_request = 5;
             menu_system.travel_page = menu_system.current;
-            menu_system.unkF4 = 0;
-            menu_system.travel_level = menu->data.list.items[menu->data.list.selected].param.half.lo;
+            menu_system.travel_state = 0;
+            menu_system.travel_level =
+                menu->data.list.items[menu->data.list.selected].param.half.lo;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
             return 0;
         case MENU_ACTION_REQUEST_CLOSE_WITH_WORD_PAYLOAD:
-            menu_system.unkF4 = 2;
+            menu_system.travel_state = 2;
             menu_system.travel_page = menu_system.current;
             menu_system.close_request = 3;
             menu_system.travel_level = menu->data.list.items[menu->data.list.selected].param.value;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
             return 0;
         case MENU_ACTION_REQUEST_CLOSE_4_WITH_WORD_PAYLOAD:
-            menu_system.unkF4 = 2;
+            menu_system.travel_state = 2;
             menu_system.travel_page = menu_system.current;
             menu_system.close_request = 4;
             menu_system.travel_level = menu->data.list.items[menu->data.list.selected].param.value;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
             return 0;
         case MENU_ACTION_REQUEST_CLOSE_6_WITH_WORD_PAYLOAD:
-            menu_system.unkF4 = 2;
+            menu_system.travel_state = 2;
             menu_system.travel_page = menu_system.current;
             menu_system.close_request = 6;
             menu_system.travel_level = menu->data.list.items[menu->data.list.selected].param.value;
@@ -136,7 +137,7 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
             return 0;
         case MENU_ACTION_REQUEST_CLOSE_PRESERVING_PAYLOAD:
             menu_system.travel_page = menu_system.current;
-            menu_system.unkF4 = 2;
+            menu_system.travel_state = 2;
             menu_system.close_request = 7;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
             return 0;

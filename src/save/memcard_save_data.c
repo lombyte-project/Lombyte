@@ -43,8 +43,8 @@ int memcard_save_data(int slot, int flags) {
         if (active == -1 || card_state->card[active].save_index < 0) {
             return slot == 0;
         }
-        mask = card_state->unkF4 | slot;
-        card_state->unkF4 = mask;
+        mask = card_state->card_save_active | slot;
+        card_state->card_save_active = mask;
         if (mask == 0) {
             goto done;
         }

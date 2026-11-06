@@ -52,7 +52,7 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
                 mode_freeze_init(3, menu_system.current);
                 return 0;
             }
-            memory_card_state.unkF4 = 1;
+            memory_card_state.card_save_active = 1;
             voice_pool.group_0_volume = ((s32)(sound_volume * 8)) / 10;
             voice_pool.group_1_volume = music_volume;
             scaled_volume_70 = ((s32)(sound_volume * 7)) / 10;

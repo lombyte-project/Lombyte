@@ -128,7 +128,7 @@ s32 saving_data_menu2(struct MenuScreen *w) {
             w->data.save.step = 1;
         }
     } else if (pad & 0x20) {
-        memory_card_state.unkF4 = 0;
+        memory_card_state.card_save_active = 0;
         fl = mode_freeze_flags & ~2;
         mode_freeze_flags = fl & ~4;
         load_and_initialize_level_chunk();

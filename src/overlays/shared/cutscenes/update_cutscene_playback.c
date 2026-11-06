@@ -439,8 +439,8 @@ void start_scene(int scene_id) {
     set_hero_item_moby_flag_bit0();
     if (active_scene_trigger.moby)
         active_scene_trigger.moby->flags |= 1;
-    if (D_L00_001B9CF0.unkEC)
-        ((struct Moby *)D_L00_001B9CF0.unkEC)->flags |= 1;
+    if (D_L00_001B9CF0.action_message)
+        ((struct Moby *)D_L00_001B9CF0.action_message)->flags |= 1;
     start_cutscene_chunk_read(0);
     fade_to_black(scale_game_frames(6));
     update_audio_stream_until_idle(1);
@@ -546,9 +546,9 @@ void finish_cutscene(void) {
     }
     if (active_scene_trigger.moby)
         active_scene_trigger.moby->flags &= ~1;
-    if (D_L00_001B9CF0.unkEC) {
-        ((struct Moby *)D_L00_001B9CF0.unkEC)->flags &= ~1;
-        D_L00_001B9CF0.unkEC = 0;
+    if (D_L00_001B9CF0.action_message) {
+        ((struct Moby *)D_L00_001B9CF0.action_message)->flags &= ~1;
+        D_L00_001B9CF0.action_message = 0;
     }
     if (active_scene_trigger.moby) {
         F_298b18 *scene_trigger_moby = active_scene_trigger.moby;
