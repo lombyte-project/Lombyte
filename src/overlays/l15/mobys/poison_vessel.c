@@ -44,10 +44,10 @@ typedef union Vec {
 } Vec;
 
 typedef struct Data {
-    float               f0;
-    float               f4;
-    float               f8;
-    float               fC;
+    float               velocity_x;
+    float               velocity_y;
+    float               velocity_z;
+    float               velocity_w;
     struct Moby_2E9358 *target; /* 0x10 */
 } Data;
 
@@ -56,15 +56,15 @@ typedef struct Moby_2E9358 {
     OvlQuad       pos;   /* 0x10 */
     unsigned char state; /* 0x20 */
     char          pad21[0x1F];
-    OvlQuad       v40; /* 0x40 */
+    OvlQuad       rot; /* 0x40 */
     char          pad50[0x28];
     Data         *data; /* 0x78 */
     char          pad7C[0x28];
-    unsigned char bA4;
+    unsigned char hit_slot;
     char          padA5;
     short         object_class;
     char          padA8[0x14];
-    unsigned char bBC;
+    unsigned char command; /* 0xBC: nonzero makes the vessel burst */
 } Moby_2E9358;
 
 typedef struct Res {
@@ -74,11 +74,11 @@ typedef struct Res {
 
 typedef struct Tb {
     char    pad0[0x18];
-    int     f18;
+    int     hit_moby;
     int     f1C;
-    OvlQuad v20;
+    OvlQuad hit_position;
     OvlQuad v30;
-    OvlQuad v40;
+    OvlQuad hit_normal;
 } Tb;
 
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
@@ -155,34 +155,34 @@ void poison_vessel_update(Moby_2E9358 *moby) {
     clear_u64_value(&collision_scratch_vector);
     if (coll_sphere(0.5f, &moby->pos, 1, moby)) {
         if (D_L15_00174458_lui[0] == 0 || get_moby_pvars_link(D_L15_00174458_lui[0]) == 0) {
-            moby->bBC = 1;
+            moby->command = 1;
         }
     }
     hit_result = find_moby_hit(moby, 0x830000, 0);
     if (hit_result != 0 && hit_result->owner != 0 &&
         hit_result->owner->object_class != moby->object_class) {
-        moby->bBC = 1;
+        moby->command = 1;
     }
-    moby->bA4 = 0xFF;
+    moby->hit_slot = 0xFF;
 
     state = moby->state;
     switch (state) {
     case POISON_VESSEL_FREE_FLIGHT:
-        data->f8 = data->f8 - poison_vessel_gravity_gp * frame_time_sq;
+        data->velocity_z = data->velocity_z - poison_vessel_gravity_gp * frame_time_sq;
         add_vectors(&temporary_vector, &moby->pos, data);
         if (collision_line(&previous_position, &moby->pos, 0x10, moby, 0)) {
-            if (((Tb *)D_L15_001744C0_2E9358)->f18 != 0 &&
-                get_moby_pvars_link(((Tb *)D_L15_001744C0_2E9358)->f18) != 0) {
-                data->target = (Moby_2E9358 *)((Tb *)D_L15_001744C0_2E9358)->f18;
+            if (((Tb *)D_L15_001744C0_2E9358)->hit_moby != 0 &&
+                get_moby_pvars_link(((Tb *)D_L15_001744C0_2E9358)->hit_moby) != 0) {
+                data->target = (Moby_2E9358 *)((Tb *)D_L15_001744C0_2E9358)->hit_moby;
                 moby->state = POISON_VESSEL_FOLLOW_TARGET;
-                data->f8 = 0.0f;
-                moby->pos = ((Tb *)D_L15_001744C0_2E9358)->v20;
-            } else if (((Tb *)D_L15_001744C0_2E9358)->f18 == D_001413D0_lui ||
-                       data->f8 < D_0015ED6C * -9.8f) {
-                moby->bBC = 1;
-                qcopy(&moby->pos, &((Tb *)D_L15_001744C0_2E9358)->v20);
+                data->velocity_z = 0.0f;
+                moby->pos = ((Tb *)D_L15_001744C0_2E9358)->hit_position;
+            } else if (((Tb *)D_L15_001744C0_2E9358)->hit_moby == D_001413D0_lui ||
+                       data->velocity_z < D_0015ED6C * -9.8f) {
+                moby->command = 1;
+                qcopy(&moby->pos, &((Tb *)D_L15_001744C0_2E9358)->hit_position);
                 func_L00_001FF610_2E9358(
-                    &collision_scratch_vector, data, &((Tb *)D_L15_001744C0_2E9358)->v40);
+                    &collision_scratch_vector, data, &((Tb *)D_L15_001744C0_2E9358)->hit_normal);
                 fast_vec_normalize(
                     &collision_scratch_vector, &collision_scratch_vector, D_0015ED6C + D_0015ED6C);
             }
@@ -195,13 +195,13 @@ void poison_vessel_update(Moby_2E9358 *moby) {
 
             if (target_moby->state == MOBY_STATE_MARKED_FOR_REMOVAL ||
                 data->target->state == 0xFD) {
-                moby->bBC = state;
+                moby->command = state;
                 data->target = 0;
             } else if (D_L15_00174458_lui[0] != 0) {
                 follow_context = get_moby_pvars_link(D_L15_00174458_lui[0]);
                 if (follow_context != 0) {
                     FUN_L00_00260400(
-                        moby, data->target, &moby->pos, &moby->v40, &moby->pos, &moby->v40);
+                        moby, data->target, &moby->pos, &moby->rot, &moby->pos, &moby->rot);
                     fast_vec_sub(&temporary_vector, &moby->pos, &previous_position);
                     *(OvlQuad *)data = temporary_vector.q;
                 }
@@ -209,13 +209,13 @@ void poison_vessel_update(Moby_2E9358 *moby) {
         }
         if (follow_context == 0) {
             moby->state = POISON_VESSEL_FREE_FLIGHT;
-            data->f8 = 0.0f;
+            data->velocity_z = 0.0f;
             data->target = 0;
         }
         break;
     }
 
-    if (moby->bBC != 0) {
+    if (moby->command != 0) {
         func_L00_0025F4A8_2E9358(
             moby, data, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, -1, 7.0f, 0, 1, -1, 0);
         trooper_play_sound(0, 0, moby, 0x79);
