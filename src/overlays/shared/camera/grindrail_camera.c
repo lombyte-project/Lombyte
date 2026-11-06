@@ -611,7 +611,7 @@ void update_camera_mode_from_preset(CamUser *camera_user) __asm__("FUN_L01_00316
 void update_camera_mode_from_preset(CamUser *camera_user) {
     CameraPreset *camera_preset = l01_camera_preset_rows[camera_user->slot].preset;
 
-    if (hero.unk2284 == camera_user->unk86) {
+    if (hero.camera_mode == camera_user->unk86) {
         if (camera_preset->target < 0) {
             return;
         }

@@ -55,9 +55,9 @@ int get_hero_idle_animation_index(int item_lookup_enabled) {
         return 0;
     if (hero_state_base->item_anim_active == 0)
         return 0;
-    if (hero_state_base->unk20AA == 0)
+    if (hero_state_base->weapon_up == 0)
         return 0;
-    if (hero_state_base->unk22C8 != 0)
+    if (hero_state_base->weapon_lowered != 0)
         return 0;
     item_id = hero_slot_item_id(0);
     item_record = D_L01_00179F40 - (-(item_id * 0x4C));
@@ -352,7 +352,7 @@ void update_hero_ground_material_effects(void) {
     hero_ptr->ground_sound_class = saved;
     hero_ptr->ground_type = -1;
     hero_ptr->wading = 0;
-    hero_ptr->unk308 = 0;
+    hero_ptr->magnetic_floor = 0;
     if (saved_ground_type == -1)
         return;
     if (saved_ground_type == GROUND_MATERIAL_MAGNETIC) {
@@ -361,7 +361,7 @@ void update_hero_ground_material_effects(void) {
             if (hero_ptr->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                 char *item_slot_1_moby = (char *)hero_ptr->items[1].moby;
                 if (item_slot_1_moby != 0 && MOBY(item_slot_1_moby)->oclass == 0xAD)
-                    hero_ptr->unk308 = 1;
+                    hero_ptr->magnetic_floor = 1;
             }
         }
     }
@@ -461,7 +461,7 @@ void update_hero_ledge_probe(void) {
     u8   *moby_record;
     char *moby_data;
 
-    if (hero.unk308 == 2)
+    if (hero.magnetic_floor == 2)
         return;
     hero.ledge_found = 0;
     if (hero.ledge_probe_cooldown != 0)
@@ -628,7 +628,7 @@ int test_hero_ledge_ahead(Vec4 *ledge_probe_origin, f32 *facing_yaw) {
         inc, limit;
     int found, hit, i, j, material;
 
-    if (hero.unk308 == 2)
+    if (hero.magnetic_floor == 2)
         return 0;
 
     drop = -0.7f;
@@ -1054,7 +1054,7 @@ void clip_hero_horizontal_velocity(int flag) {
     char        *slope_hit, *slide_hit;
     float       *slide_normal;
 
-    if (hero_ptr->unk308 != 0) {
+    if (hero_ptr->magnetic_floor != 0) {
         return;
     }
     if (gravity_length_xy((float *)(&hero_ptr->motion.velocity)) < frame_time * 0.1f) {
@@ -1112,7 +1112,7 @@ void clip_hero_horizontal_velocity(int flag) {
         slide_hit = D_L01_001742C0_lui;
         slide_normal = (float *)(slide_hit + 0x40);
         *(int *)(slide_hit + 0x48) = 0;
-        slide_hero->unk240 = *(int *)(slide_hit + 0x18);
+        slide_hero->wall_moby = *(int *)(slide_hit + 0x18);
         sceVu0Normalize(slide_normal, slide_normal);
         {
             float c = -slide_hero->motion.velocity.f[0] * *(float *)(slide_hit + 0x40) -
@@ -1279,12 +1279,12 @@ d1:
     }
     hero.ground_pitch.i = 0;
     hero.unk2E8.i = 0;
-    hero.unk2D0.i[0] = 0;
-    hero.unk2D0.i[1] = 0;
-    hero.unk2C8.i[0] = 0;
-    hero.unk2C8.i[1] = 0;
-    hero.unk2C0.i[0] = 0;
-    hero.unk2C0.i[1] = 0;
+    hero.side_probe_roll.i[0] = 0;
+    hero.side_probe_roll.i[1] = 0;
+    hero.side_probe_pitch.i[0] = 0;
+    hero.side_probe_pitch.i[1] = 0;
+    hero.side_probe_drop.i[0] = 0;
+    hero.side_probe_drop.i[1] = 0;
     if (hero.state.control_mode == HERO_MODE_GRIND || hero.state.control_mode == 0x15 ||
         hero.state.control_mode == HERO_MODE_ATTACK || hero.state.control_mode == HERO_MODE_JUMP ||
         hero.state.control_mode == HERO_MODE_LAND || hero.state.control_mode == HERO_MODE_LEDGE) {
@@ -1310,22 +1310,22 @@ d1:
             &unused_side_probe_point, 0.2f, side_probe_angle, -0.45f);
         if (FUN_001efa68_c(&side_ray_start, &collision_ray_end, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
-            hero.unk2C0.f[i] = f;
+            hero.side_probe_drop.f[i] = f;
             if (0.4f < absolute_float(f)) {
-                hero.unk2C0.f[i] = 0.0f;
+                hero.side_probe_drop.f[i] = 0.0f;
             }
             FUN_00125180_c(&normalized_side_hit_normal, (u8 *)&HH.normal_x);
             compute_rotated_vector_angles(&normalized_side_hit_normal, &side_hit_angles);
             if (-0.78539819f < side_hit_angles.f[1] && side_hit_angles.f[1] < 0.78539819f) {
-                hero.unk2C8.f[i] = side_hit_angles.f[1];
+                hero.side_probe_pitch.f[i] = side_hit_angles.f[1];
             }
             if (-0.78539819f < side_hit_angles.f[0] && side_hit_angles.f[0] < 0.78539819f) {
-                hero.unk2D0.f[i] = side_hit_angles.f[0];
+                hero.side_probe_roll.f[i] = side_hit_angles.f[0];
             }
         } else {
-            hero.unk2C0.i[i] = 0;
-            hero.unk2C8.f[i] = hero.ground_pitch.f;
-            hero.unk2D0.f[i] = hero.unk2E8.f;
+            hero.side_probe_drop.i[i] = 0;
+            hero.side_probe_pitch.f[i] = hero.ground_pitch.f;
+            hero.side_probe_roll.f[i] = hero.unk2E8.f;
         }
     }
 }
@@ -1474,7 +1474,7 @@ void update_hero_timers_and_vehicle_transitions(void) {
     fast_dec_timer_s16(&hero.unk1B2);
     fast_dec_timer(&hero.long_jump_lockout);
     fast_dec_timer_s16(&hero.jump_lockout_timer);
-    fast_dec_timer_s16(&hero.unk1DE);
+    fast_dec_timer_s16(&hero.dive_lock);
     fast_dec_timer(&hero.wall_jump_window);
     fast_dec_timer_s16(&hero.unk1F0);
     fast_dec_timer_s16(&hero.ledge_probe_cooldown);
@@ -1486,10 +1486,10 @@ void update_hero_timers_and_vehicle_transitions(void) {
     fast_dec_timer(&hero.unk1D0);
     fast_dec_timer(&hero.jump_buffer_lockout);
     fast_dec_timer_s16(&hero.fidget_cooldown);
-    fast_dec_timer_s16(&hero.unk1E0);
-    fast_dec_timer_s16(&hero.unk1EE);
+    fast_dec_timer_s16(&hero.sinking_floor_hold);
+    fast_dec_timer_s16(&hero.hit_flash_timer);
     fast_dec_timer_s16(&hero.unk1EA);
-    fast_dec_timer_s16(&hero.unk1F4);
+    fast_dec_timer_s16(&hero.edge_brake_lock_timer);
     fast_dec_timer_s16(&hero.jump_lock_timer);
     fast_dec_timer_s16(&hero.unk1DC);
     fast_dec_timer_s16(&hero.unk1F6);
@@ -1608,7 +1608,7 @@ void select_hero_locomotion_state(void) {
     struct Hero *hero_ptr, *run_hero, *stop_idle_hero;
     s32          run_frames_or_idle_selector;
     hero_ptr = &hero;
-    hero_ptr->unk2284 = 0;
+    hero_ptr->camera_mode = 0;
     stick_target(0, 1.0f);
     if (pad_held_lui & 0xA) {
         l01_hero_set_state(HERO_STATE_CROUCH, 0);

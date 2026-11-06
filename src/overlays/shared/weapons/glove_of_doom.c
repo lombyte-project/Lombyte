@@ -441,7 +441,7 @@ spawn_glove_of_doom_held_moby(int spawning_moby, u128 *spawn_position, u128 *ini
         *(int *)(moby_vars + 0x34) = 0;
         *(short *)(moby_vars + 0x38) = 0;
         MOBY(spawned_moby)->scale = *(float *)(*(char **)(spawned_moby + 0x24) + 0x24) * 0.01f;
-        if (hero.unk20A5 || hero.unk20AF)
+        if (hero.hidden || hero.hand_item_hidden)
             MOBY(spawned_moby)->flags |= 0x41;
     }
     return spawned_moby;

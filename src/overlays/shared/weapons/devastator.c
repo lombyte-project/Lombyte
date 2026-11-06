@@ -505,7 +505,7 @@ void devastator_update(struct Moby *devastator_moby) {
             if (scale_game_frames(D_0015EEA4) / 600 > stats->longest)
                 stats->longest = scale_game_frames(D_0015EEA4) / 600;
             stats->levels = (stats->levels | (1 << current_level_index)) | 0x80000000;
-            if (hero.unk22C8 == 1 && hero.state.current != 30) {
+            if (hero.weapon_lowered == 1 && hero.state.current != 30) {
                 pitch = D_L00_0017ACF4_lui;
                 yaw = devastator_moby->rot.z;
                 aim_info = get_moby_target_info(devastator_vars->target);

@@ -604,7 +604,7 @@ spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *launch_position, fl
         unsigned char *spawned_moby_vars = ((unsigned char *)MOBY(spawned_moby)->pvars);
         struct Hero   *G = &hero;
         V_2b58d8       collision_start;
-        G->unk1FE0 = spawned_moby;
+        G->visibomb_missile = spawned_moby;
         D_L00_0017E508 = 1;
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;

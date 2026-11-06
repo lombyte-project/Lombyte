@@ -233,7 +233,7 @@ void rail_taxi_update(struct Moby *taxi_moby) {
     case TAXI_FOLLOW_RETURN_PATH:
         if (is_hero_on_moby(taxi_moby)) {
             hero.jump_lock_timer = 4;
-            hero.unk1F4 = 4;
+            hero.edge_brake_lock_timer = 4;
         }
         if (advance_moby_along_rail_path(
                 taxi_moby, taxi_vars->back[taxi_moby->command], &taxi_vars->snd)) {

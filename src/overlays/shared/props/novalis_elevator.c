@@ -126,7 +126,7 @@ void novalis_elevator_update(unsigned char *moby) {
         if (*(int *)(elevator_vars + 0xC8) == 0 && is_hero_on_moby(moby)) {
             struct Hero *player = &hero;
             player->jump_lock_timer = 4;
-            player->unk1F4 = 4;
+            player->edge_brake_lock_timer = 4;
         }
         if (*(short *)(elevator_vars + 0xBA) != 0 ||
             (F(elevator_vars, 0xBC) < 0.0f &&

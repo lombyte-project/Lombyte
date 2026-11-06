@@ -88,7 +88,7 @@ void initialize_hero(void) {
     hero.reach_height = 1.25f;
     hero.health.vehicle_mode_hp = 4;
     hero.health.unk22B0 = hero.health.hp;
-    hero.unk1010 = random_int_between(scale_game_frames(0xB4), scale_game_frames(0x12C));
+    hero.head_look_timer = random_int_between(scale_game_frames(0xB4), scale_game_frames(0x12C));
     hero.idle_look_ease_rate = 0.007f;
     hero.unk1018 = 0.3f;
     hero.unkD20 = 0.97f;

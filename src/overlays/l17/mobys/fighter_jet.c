@@ -1951,7 +1951,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 set_class_mobys_flags_and_collision(0x325, 0, 0, -1);
                 moby->pos[2] += 3.0f;
                 moby->scale = *(float *)(moby->pclass + 0x24) * D_L17_0016209C;
-                g->unk20A5 = 1;
+                g->hidden = 1;
                 if (ship_vars->voice == -1) {
                     ship_vars->voice = allocate_voice_for_target_entry(0, 4, moby);
                 }
@@ -1988,7 +1988,7 @@ void fighter_jet_update(ShipMoby *moby) {
         case FIGHTER_JET_STATE_DISMOUNT: {
             char        *p;
             struct Hero *g = &hero;
-            g->unk20A5 = 0;
+            g->hidden = 0;
             ((ShipCamera *)g->moby)->unk98 = 0;
             FUN_L17_0021e530(0, 1);
             jet_end_mount(0);
@@ -2064,7 +2064,7 @@ void fighter_jet_update(ShipMoby *moby) {
             if (ship_vars->fade >= 1.0f) {
                 char        *p;
                 struct Hero *g = &hero;
-                g->unk20A5 = 0;
+                g->hidden = 0;
                 ((ShipCamera *)g->moby)->unk98 = 0;
                 FUN_L17_0021e530(0, 1);
                 jet_end_mount(0);

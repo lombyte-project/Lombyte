@@ -196,7 +196,7 @@ void fleet_turret_shot_update(struct Moby *moby) {
             if (hit != 0) {
                 if (hit != drone_vars->unk3C) {
                     g = &hero;
-                    if (g->unk308 != 0 && hit == ((int)g->moby)) {
+                    if (g->magnetic_floor != 0 && hit == ((int)g->moby)) {
                         unsigned char *rec = D_00141968_x_q;
                         if (*(unsigned short *)(rec + 0x458) == 0) {
                             (*(unsigned short *)(rec + 0x458))++;
@@ -212,7 +212,7 @@ void fleet_turret_shot_update(struct Moby *moby) {
                     qcopy(&moby->pos, D_L17_00174760_lui);
                     FUN_L00_002598b0_q((int)moby, 0.75f, &moby->pos, 1, 6.0f, 0.0f, 0, 1, 0);
                     hero_state = &hero;
-                    if (hero_state->unk308 != 0 &&
+                    if (hero_state->magnetic_floor != 0 &&
                         *(int *)(D_L17_00174760_lui - 8) == ((int)hero_state->moby)) {
                         unsigned char *rec = D_00141968_x_q;
                         if (*(unsigned short *)(rec + 0x458) == 0) {

@@ -291,7 +291,7 @@ void hoven_turret_update(struct Moby *moby) {
     }
     case HOVEN_TURRET_STATE_MANNED:
         D_L12_00161F00 = 1;
-        ((Hero *)(D_0013E533 + 0xE1D))->unk20A5 = 1;
+        ((Hero *)(D_0013E533 + 0xE1D))->hidden = 1;
         ((Hero *)(D_0013E533 + 0xE1D))->collision_off_frames = scale_game_frames(0x78);
         ((Hero *)(D_0013E533 + 0xE1D))->invulnerable_frames = scale_game_frames(0x78);
         if (D_L12_0015F5C4_macro != 2 && D_L12_001619A0 == 0) {

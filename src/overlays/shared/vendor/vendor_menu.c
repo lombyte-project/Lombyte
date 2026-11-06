@@ -532,7 +532,7 @@ void close_vendor_menu(int exit_cutscene_completed) {
     D_L00_0015F5D8 = 1;
     D_L00_0015F5C4 = 0;
     hero_set_state(HERO_STATE_IDLE, 1);
-    hero.unk20A5 = 0;
+    hero.hidden = 0;
     update_hero_item_moby_flags();
     if (*(int *)(vendor_state_base + 0x40) == 0) {
         transform_vector_by_basis(&world_position,
@@ -652,7 +652,7 @@ void restore_hero_after_vendor_exit_cutscene(void) {
     D_L00_0015F5D8 = 1;
     D_L00_0015F5C4 = 0;
     hero_set_state(HERO_STATE_IDLE, 1);
-    hero.unk20A5 = 0;
+    hero.hidden = 0;
     update_hero_item_moby_flags();
     vendor_state_base = (char *)&vendor_menu;
     transform_vector_by_basis(&world_position,

@@ -327,7 +327,7 @@ void crate_update(struct Moby *moby) {
 
     case CRATE_STATE_PROCESS_HITS:
         if (moby->oclass == 0x1F9 &&
-            (hero.unk240 == (s32)moby || hero.coll_hit_moby == (u8 *)moby ||
+            (hero.wall_moby == (s32)moby || hero.coll_hit_moby == (u8 *)moby ||
              (hero.ground_moby == moby && hero.air_frames.s == 0) || hero.ledge_moby == (s32)moby ||
              touched)) {
             moby->command = 0;
@@ -372,7 +372,7 @@ void crate_update(struct Moby *moby) {
                 moby->class_slot = D_L00_00197BC0[moby->oclass];
                 moby->pclass = D_L00_00197300[moby->class_slot];
                 update_moby_animation_state(moby);
-                moby->unk72 = ((Part *)moby->pclass)->unkE;
+                moby->lod_dist = ((Part *)moby->pclass)->unkE;
                 moby->state = CRATE_STATE_CLASS_CHANGE_COOLDOWN;
                 moby->command = scale_game_frames(15);
                 doHit = 0;

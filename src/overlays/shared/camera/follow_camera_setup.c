@@ -268,7 +268,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     u8       *aim_height_data;
 
     camera_override_state = (S220 *)((u8 *)camera_moby->m + 0x220);
-    if (hero.unk2284 == 0xD && camera_override_state->i10 != 0x14D) {
+    if (hero.camera_mode == 0xD && camera_override_state->i10 != 0x14D) {
         rotation_or_blend_value = fast_add_rotations(hero.ledge_normal_yaw, 3.14159265f);
         direction_or_rotation_deltas[0] = fast_cos(rotation_or_blend_value);
         direction_or_rotation_deltas[1] = fast_sin(rotation_or_blend_value);
@@ -318,7 +318,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
         camera_spring_state->f3C = follow_camera_vehicle_collision_probe_scale_gp;
         camera_spring_state->f44 = follow_camera_vehicle_collision_probe_step_growth_factor_gp;
     }
-    if (hero.unk20AA != 0 && hero.state.control_mode != HERO_MODE_GRIND) {
+    if (hero.weapon_up != 0 && hero.state.control_mode != HERO_MODE_GRIND) {
         set_follow_camera_orbit_clamp_mode(0);
         follow_camera_start_slide();
         follow_camera_set_lateral_spring(0.04f, 0.2f);

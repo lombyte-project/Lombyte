@@ -650,7 +650,8 @@ void mine_update(M910 *mine_moby) {
     up.f[2] = 1.0f;
     collision_response_velocity.q = mine_pre_motion_position.q;
     v = mine_moby->v;
-    if ((hero.unk20A5 != 0 || hero.unk20AF != 0) && mine_moby->state == MINE_STATE_OWNER_ATTACHED) {
+    if ((hero.hidden != 0 || hero.hand_item_hidden != 0) &&
+        mine_moby->state == MINE_STATE_OWNER_ATTACHED) {
         mine_moby->flags |= 0x41;
     } else {
         mine_moby->flags &= 0xFFBE;

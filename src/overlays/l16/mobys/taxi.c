@@ -227,7 +227,7 @@ void taxi_update(struct Moby *moby) {
     if (moby->state >= TAXI_BLEND_TO_PATH_START && moby->state <= TAXI_BLEND_TO_DESTINATION_POSE) {
         travel_player = &hero;
         travel_player->jump_lock_timer = 2;
-        travel_player->unk1F4 = 2;
+        travel_player->edge_brake_lock_timer = 2;
         transform_moby_table_entry_vectors(moby);
         if (voice_is_playing(moby, *(short *)(taxi_data + 0xAA)) == 0) {
             *(short *)(taxi_data + 0xAA) = allocate_voice_for_target_entry(0, 4, moby);

@@ -145,7 +145,7 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
         }
         current_moby->unk71 = 0xFF;
         current_moby->occlusion = 0x7F80;
-        current_moby->unk72 = 0xFF;
+        current_moby->lod_dist = 0xFF;
         current_moby->hit_slot = 0xFF;
         if (spawner_data->options & 2) {
             current_moby->scale = ((SpawnClass *)current_moby->pclass)->scale * 0.1f;

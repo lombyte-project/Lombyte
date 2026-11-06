@@ -111,7 +111,7 @@ void floating_mine_update(struct Moby *moby) {
         pos[2] = pos[2] + 0.75f;
         hero_contact_context = &hero;
         if (((char *)hero_contact_context->coll_hit_moby) == moby ||
-            ((char *)hero_contact_context->unk240) == moby ||
+            ((char *)hero_contact_context->wall_moby) == moby ||
             func_L00_001F2BE8_alt(1.0f, pos, 0x10, moby, hit_descriptor)) {
             if (D_L17_00174758 != 0 && *(short *)(D_L17_00174758 + 0xA6) != 0x343) {
                 spawn_explosion(moby,

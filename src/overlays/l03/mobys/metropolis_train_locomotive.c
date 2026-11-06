@@ -268,7 +268,7 @@ void update_metropolis_train_idle_motion(struct Moby *moby) {
     char  *motion;
 
     locomotive_pvars = (char *)moby->pvars;
-    moby->unk72 = 0x40;
+    moby->lod_dist = 0x40;
     moby_position = &moby->pos;
     qcopy(old_pos, moby_position);
     moby_rotation = &moby->rot;

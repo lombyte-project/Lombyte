@@ -83,7 +83,7 @@ void initialize_vendor_screen(char *vendor_moby, int lvl) {
     clear_active_help_record();
     l01_hero_set_state(100, 1);
     *(char *)&hero_state->item_use_locked = 1;
-    *(char *)&hero_state->unk20A5 = 1;
+    *(char *)&hero_state->hidden = 1;
     set_hero_item_moby_flag_bit0();
     transform_vector_by_basis(sc, &vendor_camera_local_position_offset, vendor_moby + 0xC0);
     fast_vec_add(sc, sc, &MOBY(vendor_moby)->pos);

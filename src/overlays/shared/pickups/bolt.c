@@ -775,7 +775,7 @@ struct Moby *spawn_bolt_by_value(
                 root = root->parent;
         }
         spawned_bolt->parent = root;
-        spawned_bolt->unk73 = 20;
+        spawned_bolt->metal_alpha = 20;
         spawned_bolt->flags |= 0x100;
         spawned_bolt->update_dist = 0x40;
         spawned_bolt->draw_dist = 0x40;

@@ -393,7 +393,7 @@ s32 volume_camera_swing_check(struct UpdateCam *swing_camera_record) {
         if (hero_data->frames_off_ground.s != 0) {
             if (current_level_index != LEVEL_OLTANIS)
                 return 0;
-            if (hero_data->unk2284 != 13)
+            if (hero_data->camera_mode != 13)
                 return 0;
         }
     }

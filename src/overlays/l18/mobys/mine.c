@@ -316,7 +316,7 @@ void update_mine_detonation(unsigned char *moby) {
     hit = find_moby_hit(moby, 0x330000, 0);
     moby[0xA4] = 0xFF;
     if (((unsigned char *)hero_ptr->coll_hit_moby) == moby ||
-        ((unsigned char *)hero_ptr->unk240) == moby || *(int *)(moby_vars + 0x19C) != 0) {
+        ((unsigned char *)hero_ptr->wall_moby) == moby || *(int *)(moby_vars + 0x19C) != 0) {
         explode_h(moby,
                   D_L18_0015F580_h,
                   0,

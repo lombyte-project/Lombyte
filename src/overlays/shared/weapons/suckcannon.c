@@ -1299,7 +1299,7 @@ void compute_suck_cannon_suction_aim_and_origin(struct Moby *cannon_moby,
         out_suction_origin[2] = suction_origin_offset.z + cannon_moby->pos.z;
         out_suction_origin[0] = suction_origin_offset.x + hero.motion.pos.f[0];
         out_suction_origin[1] = suction_origin_offset.y + hero.motion.pos.f[1];
-    } else if (hero.unk22C8 == 1) {
+    } else if (hero.weapon_lowered == 1) {
         *out_suction_yaw = hero.held_pose_yaw;
         *out_suction_pitch = cannon_moby->rot.y;
     } else {
@@ -2864,7 +2864,7 @@ void suck_beam_build(char *cannon_moby, char *suction_origin) {
         qcopy((char *)beam_initialization_vectors + 0x20, D_L00_00166FD0 + 0x20);
         orientation_up_vector = (char *)beam_initialization_vectors + 0x20;
     } else {
-        if (hero.unk22C8 == 1) {
+        if (hero.weapon_lowered == 1) {
             fast_vec_scale(beam_initialization_vectors, cannon_moby + 0xD0, -1.0f);
             qcopy((char *)beam_initialization_vectors + 0x10, cannon_moby + 0xC0);
             qcopy((char *)beam_initialization_vectors + 0x20, cannon_moby + 0xE0);

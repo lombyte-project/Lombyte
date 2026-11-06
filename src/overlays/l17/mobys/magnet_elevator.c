@@ -303,7 +303,7 @@ void rebuild_magnet_elevator_world_path(struct Moby *moby) __asm__("FUN_L17_002e
 
 void rebuild_magnet_elevator_world_path(struct Moby *moby) {
     char *state = (char *)moby->pvars;
-    if (hero.unk308 && hero.ground_moby == moby) {
+    if (hero.magnetic_floor && hero.ground_moby == moby) {
         char *world_path_point = *(char **)(D_L17_001B0DB0 + *(int *)(state + 0x80) * 4) + 0x10;
         char *point = &moby->rot_row0;
         int   i;

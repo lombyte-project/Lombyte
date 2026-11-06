@@ -221,11 +221,11 @@ state_three: {
                        store for the 2-wide issue and the store takes the jal delay slot;
                        retail has a0 in the slot. Sibling rocket.c FUN_L18_002a7220 gets the
                        same order from a real intermediate call. */
-                hero_actor->unk20A5 = one;
+                hero_actor->hidden = one;
                 hero_actor->motion.pos.f[2] += 20.0f;
             } else {
                 qcopy(&hero_actor->motion.pos, moby + 0x10);
-                hero_actor->unk20A5 = one;
+                hero_actor->hidden = one;
                 hero_actor->motion.pos.f[2] += 20.0f;
             }
             /* Fakematch: a gcse-time set of moby so PRE does not hoist the

@@ -48,10 +48,10 @@ int select_hero_help_value(int allow_slot_item_help) {
         if (hero_for_help_checks->item_anim_active == 0) {
             return 0;
         }
-        if (hero_for_help_checks->unk20AA == 0) {
+        if (hero_for_help_checks->weapon_up == 0) {
             return 0;
         }
-        if (hero_for_help_checks->unk22C8 != 0) {
+        if (hero_for_help_checks->weapon_lowered != 0) {
             return 0;
         }
     }
@@ -116,7 +116,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
     G.damage_source_moby = (struct Moby *)hero_moby_entry->target;
     D_0015EEA8++;
     if (G.state.control_mode == HERO_MODE_GRIND) {
-        G.unk5BE = 1;
+        G.grind_hit = 1;
         return 0;
     }
     if (apply_state_and_motion_response == 0) {

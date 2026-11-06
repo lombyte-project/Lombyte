@@ -128,7 +128,7 @@ void door_update(struct Moby *door_moby) {
             }
         }
         (*(int *)(door_vars + ((0x20)))) = -1;
-        if (absolute_float(door_moby->rot.x) < 0.7853982f || hero.unk308 != 0) {
+        if (absolute_float(door_moby->rot.x) < 0.7853982f || hero.magnetic_floor != 0) {
             if (is_point_inside_clip_volume(&hero.motion.pos, (*(int *)(door_vars + ((0x18))))) ==
                 0) {
                 if ((*(int *)(door_vars + ((0x10)))) == -1)

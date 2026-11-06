@@ -413,7 +413,7 @@ void teleporter_update(struct Moby *moby) {
             qcopy(destination_position, &MOBY(destination_moby)->pos);
             destination_position[2] += 0.2f;
             set_race_camera(destination_position, destination_moby + 0x40, 0, 1);
-            hero.unk20A5 = 1;
+            hero.hidden = 1;
             if (teleporter_vars->unk40 != -1 && teleporter_vars->unk44 != -1) {
                 request_music_track(teleporter_vars->unk40, teleporter_vars->unk44);
             }
