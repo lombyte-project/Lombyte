@@ -48,10 +48,10 @@ typedef struct HeightAdjustedProjectileVars {
     u8           timer_10;
     u8           pad_11[0x1];
     s16          height_adjustment_mode;
-    char        *unk14;
+    char        *impact_flag;
     f32          unk18;
-    f32          unk1C;
-    struct Moby *unk20;
+    f32          height_offset;
+    struct Moby *shooter;
 } HeightAdjustedProjectileVars;
 
 /* Moby class 859 */
@@ -78,21 +78,22 @@ void height_adjusted_projectile_update(struct Moby *moby) {
     case HEIGHT_MODE_SKIP_ADJUSTMENT:
         break;
     case HEIGHT_MODE_APPROACH_FIXED_HEIGHT:
-        approach_moby_height(moby, projectile_vars->unk1C);
+        approach_moby_height(moby, projectile_vars->height_offset);
         break;
     case HEIGHT_MODE_FOLLOW_COLLISION_HEIGHT:
         qcopy(check, &moby->pos);
         qcopy(raised, &moby->pos);
         check[2] += 0.1f;
-        raised[2] -= projectile_vars->unk1C + projectile_vars->unk1C;
+        raised[2] -= projectile_vars->height_offset + projectile_vars->height_offset;
         if (collision_line(check, raised, 2, (int)moby, 0))
-            approach_moby_height(moby, *(float *)(D_L10_001742C0 + 0x28) + projectile_vars->unk1C);
+            approach_moby_height(
+                moby, *(float *)(D_L10_001742C0 + 0x28) + projectile_vars->height_offset);
         else
             approach_moby_height(moby, moby->pos.z - 0.1f);
         break;
     case HEIGHT_MODE_FOLLOW_SELECTED_MOBY_HEIGHT:
         if (*(int *)((char *)found + 0x40) != 0)
-            approach_moby_height(moby, found[2] + projectile_vars->unk1C);
+            approach_moby_height(moby, found[2] + projectile_vars->height_offset);
         break;
     case 4:
         break;
@@ -107,17 +108,17 @@ void height_adjusted_projectile_update(struct Moby *moby) {
         return;
     }
     if (collision_line(
-            movement_start_position, &moby->pos, 0, *(int *)&projectile_vars->unk20, (int)hit)) {
+            movement_start_position, &moby->pos, 0, *(int *)&projectile_vars->shooter, (int)hit)) {
         char        *collision = D_L10_001742C0;
         struct Moby *impacted_moby = *(struct Moby **)(collision + 0x18);
         if (impacted_moby == 0 || impacted_moby->oclass != 0x359) {
             qcopy(&moby->pos, collision + 0x20);
-            if (projectile_vars->unk14 != 0) {
+            if (projectile_vars->impact_flag != 0) {
                 if (impacted_moby != 0) {
-                    if (impacted_moby == D_001413D0_lui && projectile_vars->unk20 != 0 &&
-                        projectile_vars->unk20->state != 0xfe &&
-                        projectile_vars->unk20->state != 0xfd)
-                        *projectile_vars->unk14 = 1;
+                    if (impacted_moby == D_001413D0_lui && projectile_vars->shooter != 0 &&
+                        projectile_vars->shooter->state != 0xfe &&
+                        projectile_vars->shooter->state != 0xfd)
+                        *projectile_vars->impact_flag = 1;
                 }
             }
             for (i = 0; i < 5; i++) {

@@ -25,8 +25,8 @@ extern void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 
 typedef struct TimedEffectEmitterVars {
     u8  pad_0[0x4];
-    s32 unk4;
-    s32 unk8;
+    s32 active_duration;
+    s32 idle_duration;
     s32 timer_C;
     s32 voice;
 } TimedEffectEmitterVars;
@@ -46,7 +46,7 @@ void timed_effect_emitter_update(struct Moby *moby) {
     case MOBY_STATE_WAIT_FOR_ACTIVATION:
         emitter_vars->voice = -1;
         if (fast_dec_timer(&emitter_vars->timer_C)) {
-            emitter_vars->timer_C = emitter_vars->unk4;
+            emitter_vars->timer_C = emitter_vars->active_duration;
             moby->state = MOBY_STATE_ACTIVE_WITH_SOUND;
         }
         break;
@@ -70,7 +70,7 @@ void timed_effect_emitter_update(struct Moby *moby) {
         }
         if (fast_dec_timer(&emitter_vars->timer_C)) {
             int k;
-            emitter_vars->timer_C = emitter_vars->unk8;
+            emitter_vars->timer_C = emitter_vars->idle_duration;
             moby->state = MOBY_STATE_WAIT_FOR_ACTIVATION;
             k = emitter_vars->voice;
             if (k != -1) {
