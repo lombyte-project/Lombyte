@@ -518,8 +518,8 @@ typedef struct RedShip1Vars {
     f32 prev_spline_position[4];
     u8  pad_F0[0x10];
     f32 segment_t;
-    f32 unk104;
-    f32 unk108;
+    f32 spline_tension; /* 0x104: compute_path_node_tangent tension */
+    f32 spline_bias;    /* 0x108: compute_path_node_tangent bias */
     f32 speed;
     u8  pad_110[0x4];
     f32 roll_spring_velocity;
@@ -533,8 +533,8 @@ typedef struct RedShip1Vars {
     f32 speed_oscillation_amplitude;
     f32 speed_oscillation_rate_degrees;
     f32 speed_oscillation_phase;
-    f32 unk140;
-    f32 unk144;
+    f32 lateral_offset; /* 0x140: along the moby's side axis; above 500 it becomes a random +-value/1000 */
+    f32 vertical_offset; /* 0x144: along the moby's up axis, same encoding */
     u8  pad_148[0x2];
     s16 respawn_timer;
     u8  pad_14C[0x4];
@@ -631,13 +631,13 @@ void red_ship_1_update(char *moby) {
         ((unsigned char *)moby)[0x30] = 0xFF;
         spline_moby_pvars->unk2B = 1;
         spline_moby_pvars->unk2C = 0x25;
-        if (spline_moby_pvars->unk140 > 500.0f) {
-            spline_moby_pvars->unk140 =
-                random_float_between(-1.0f, 1.0f) * spline_moby_pvars->unk140 / 1000.0f;
+        if (spline_moby_pvars->lateral_offset > 500.0f) {
+            spline_moby_pvars->lateral_offset =
+                random_float_between(-1.0f, 1.0f) * spline_moby_pvars->lateral_offset / 1000.0f;
         }
-        if (spline_moby_pvars->unk144 > 500.0f) {
-            spline_moby_pvars->unk144 =
-                random_float_between(-1.0f, 1.0f) * spline_moby_pvars->unk144 / 1000.0f;
+        if (spline_moby_pvars->vertical_offset > 500.0f) {
+            spline_moby_pvars->vertical_offset =
+                random_float_between(-1.0f, 1.0f) * spline_moby_pvars->vertical_offset / 1000.0f;
         }
         if (*(int *)(pm + 0x14) == -1) {
             MOBY(moby)->state = RED_SHIP_WAIT_FOR_PATH;
@@ -673,8 +673,8 @@ void red_ship_1_update(char *moby) {
         compute_path_node_tangent(initial_path_tangent,
                                   (int *)pm,
                                   0,
-                                  spline_moby_pvars->unk104,
-                                  spline_moby_pvars->unk108);
+                                  spline_moby_pvars->spline_tension,
+                                  spline_moby_pvars->spline_bias);
         *(OvlQuad *)&spline_moby_pvars->segment_start[0] =
             *(OvlQuad *)&spline_moby_pvars->segment_end[0] =
                 *(OvlQuad *)(*(char **)(pm + 0x10) + *(int *)pm * 0x10 + 0x10);
@@ -699,7 +699,7 @@ void red_ship_1_update(char *moby) {
         *(OvlQuad *)&spline_moby_pvars->spline_position[0] =
             *(OvlQuad *)&spline_moby_pvars->segment_end[0];
         compute_sampled_spline_path_lengths(
-            pm, 0, moby, spline_moby_pvars->unk104, spline_moby_pvars->unk108);
+            pm, 0, moby, spline_moby_pvars->spline_tension, spline_moby_pvars->spline_bias);
         if (spline_moby_pvars->timer_12C > 0) {
             MOBY(moby)->state = RED_SHIP_WAIT_FOR_MOVEMENT_TIMER;
         } else {
@@ -737,8 +737,8 @@ void red_ship_1_update(char *moby) {
             compute_path_node_tangent(path_tangent_or_moby_position,
                                       (int *)pm,
                                       1,
-                                      spline_moby_pvars->unk104,
-                                      spline_moby_pvars->unk108);
+                                      spline_moby_pvars->spline_tension,
+                                      spline_moby_pvars->spline_bias);
             *(OvlQuad *)&spline_moby_pvars->segment_start[0] =
                 *(OvlQuad *)&spline_moby_pvars->segment_end[0];
             *(OvlQuad *)&spline_moby_pvars->segment_end[0] = *(
