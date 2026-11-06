@@ -13,7 +13,7 @@ typedef union {
 
 typedef struct {
     u8  pad0[6];
-    u8  unk6;
+    u8  metal_count;
     u8  pad7[5];
     u8  count; /* 0x0C */
     u8  padD[0x48 - 0xD];
@@ -30,8 +30,8 @@ typedef struct ResidentRenderObject {
     s16          selected_index; /* 0x32 */
     u16          flags;          /* 0x34 */
     u8           pad36[2];
-    s64          lifetime_stamp; /* 0x38 */
-    Vector4      rotation;       /* 0x40 */
+    s64          lights;   /* 0x38: Moby light state, copied from the hero moby */
+    Vector4      rotation; /* 0x40 */
     u8           current_frame;
     u8           next_frame;
     u8           selected_a;
@@ -39,15 +39,15 @@ typedef struct ResidentRenderObject {
     f32          blend; /* 0x54 */
     u8           pad58[0x71 - 0x58];
     u8           cached_selector;
-    u8           opacity;
-    u8           unk73;
+    u8           lod_dist;
+    u8           metal_alpha;
     u8           pad74[4];
     u8          *animation_positions; /* 0x78 */
     u8           pad7C[3];
-    u8           unk7F;
+    u8           shadow_range;
     u8           pad80[0x10];
-    s32          color; /* 0x90 */
-    s32          unk94; /* 0x94 */
+    s32          glow_color; /* 0x90 */
+    s32          collision;  /* 0x94 */
     u8           pad98[0xE];
     s16          class_id; /* 0xA6 */
     u8           padA8[0xA];

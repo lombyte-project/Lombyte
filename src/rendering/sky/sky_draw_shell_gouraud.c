@@ -7,15 +7,16 @@
 #include "rnc/data_labels.h"
 #include "rnc/rendering/vu1_registers.h"
 
+/* A sky cluster header (0x20 bytes). */
 struct SkyTile {
-    u128 bounds; /* 16-byte aligned: tile fields are addressed from the tile base */
-    s32  address;
-    s16  unk4;
-    s16  unk6;
-    s16  unk8;
-    s16  unkA;
-    s16  unkC;
-    s16  unkE;
+    u128 bounds;  /* 16-byte aligned: tile fields are addressed from the tile base */
+    s32  address; /* cluster data */
+    s16  vertex_count;
+    s16  tri_count;
+    s16  vertex_offset;
+    s16  st_offset;
+    s16  tri_offset;
+    s16  data_size;
 };
 
 struct Shell {
@@ -39,8 +40,8 @@ void sky_draw_shell_gouraud(struct Shell *shell) {
     u8  visibility[shell->count];
     s32 i;
     s32 dest;
-    s32 c_dest;
-    s32 a_dest;
+    s32 tri_dest;
+    s32 st_dest;
     s32 next_tile_index;
 
     if (shell->count == 0) {
@@ -58,7 +59,7 @@ void sky_draw_shell_gouraud(struct Shell *shell) {
     D_00160410 = 1 - D_00160410;
     if (visibility[0] == 1) {
         WriteDmaChannelRegisters(
-            shell->tiles[0].address, shell->tiles[0].unkE >> 4, D_00160408[D_00160410]);
+            shell->tiles[0].address, shell->tiles[0].data_size >> 4, D_00160408[D_00160410]);
     }
 
     for (i = 0; i < shell->count; i++) {
@@ -70,19 +71,19 @@ void sky_draw_shell_gouraud(struct Shell *shell) {
         D_00160410 = 1 - D_00160410;
         if (next_tile_index < shell->count && visibility[next_tile_index] == 1) {
             WriteDmaChannelRegisters(shell->tiles[next_tile_index].address,
-                                     shell->tiles[next_tile_index].unkE >> 4,
+                                     shell->tiles[next_tile_index].data_size >> 4,
                                      D_00160408[D_00160410]);
         }
 
         if (visibility[i] == 1) {
             dest = D_00160408[1 - D_00160410];
-            c_dest = dest + shell->tiles[i].unkC;
-            a_dest = dest + shell->tiles[i].unkA;
-            if (sky_transform_vertices(dest + shell->tiles[i].unk8,
+            tri_dest = dest + shell->tiles[i].tri_offset;
+            st_dest = dest + shell->tiles[i].st_offset;
+            if (sky_transform_vertices(dest + shell->tiles[i].vertex_offset,
                                        0x70002000,
-                                       shell->tiles[i].unk4,
-                                       (&shell->tiles[i])->unkC) == 0) {
-                sky_build_gif_gouraud(shell->tiles[i].unk6, c_dest, a_dest, 0x70002000);
+                                       shell->tiles[i].vertex_count,
+                                       (&shell->tiles[i])->tri_offset) == 0) {
+                sky_build_gif_gouraud(shell->tiles[i].tri_count, tri_dest, st_dest, 0x70002000);
             }
         }
     }
