@@ -39,7 +39,7 @@ typedef struct {
     u8   spin_state[0x30]; /* 0xB0 */
     s16  unkE0;            /* 0xE0 */
     u8   padE2[0x1E];
-    s32  unk100; /* 0x100 */
+    s32  route_selection; /* 0x100: route select_shuttle_route_for_hero picked last, -1: none */
     u8   pad104[0xC];
     Vec4 spin;    /* 0x110: x is the wheel angle */
     s32  active;  /* 0x120 */
@@ -128,7 +128,7 @@ void shuttle_update(struct Moby *moby) {
             moby->state = SHUTTLE_STATE_NO_PATH;
             shuttle_vars->ridable = 1;
         } else {
-            shuttle_vars->unk100 = -1;
+            shuttle_vars->route_selection = -1;
             shuttle_vars->unkE0 = -1;
             select_shuttle_route_for_hero((char *)moby);
             moby->state = SHUTTLE_STATE_WAIT_FOR_DEPARTURE;

@@ -65,7 +65,7 @@ char *spawn_bomber_tank_bomb(char *source_moby,
 typedef struct BomberTankBombVars {
     u8    pad_0[0x10];
     s32   lifetime_timer;
-    s32   unk14;
+    s32   can_hit_source; /* nonzero: hitting the source moby detonates it too */
     u8    pad_18[0x4];
     f32   unk1C;
     char *source_moby;
@@ -83,7 +83,7 @@ char *spawn_bomber_tank_bomb(char *source_moby, char *spawn_position, char *init
         projectile_vars->source_moby = source_moby;
         projectile_vars->lifetime_timer = scale_game_frames(0x12C);
         projectile_vars->unk1C = 1.0f;
-        projectile_vars->unk14 = 0;
+        projectile_vars->can_hit_source = 0;
         qcopy(moby + 0x10, spawn_position);
         qcopy(projectile_vars, initial_velocity);
         MOBY(moby)->rot.x = random_float_between(-180.0f, 180.0f) * DEG_TO_RAD;
