@@ -17,15 +17,15 @@
 
 /* pvars of the projectile moby FUN_L09_00307ba8 spawns */
 typedef struct {
-    OvlVec4 vel;      /* 0x00 */
-    f32     spin;     /* 0x10 */
-    s32     unk14;    /* 0x14 */
-    void   *owner;    /* 0x18 */
-    s16     life;     /* 0x1C */
-    s16     life_max; /* 0x1E */
-    f32     dist;     /* 0x20: distance from the hero at spawn */
-    s32     unk24;    /* 0x24 */
-    s32     unk28;    /* 0x28 */
+    OvlVec4 vel;          /* 0x00 */
+    f32     spin;         /* 0x10 */
+    s32     unk14;        /* 0x14 */
+    void   *owner;        /* 0x18 */
+    s16     life;         /* 0x1C */
+    s16     life_max;     /* 0x1E */
+    f32     dist;         /* 0x20: distance from the hero at spawn */
+    s32     approached;   /* 0x24: set once the shot got closer to the hero */
+    s32     sound_played; /* 0x28 */
 } ShotVars;
 
 /* Optional query block for collision_line: a swept probe along dir. */
@@ -102,8 +102,8 @@ struct Moby *spawn_turret_shot(void *owner, OvlVec4 *pos, OvlVec4 *vel, s32 life
         projectile_vars->life = life;
         projectile_vars->life_max = life;
         projectile_vars->dist = fast_vec_dist((OvlVec4 *)&spawned_moby->pos, &D_0013F3D0_307ba8);
-        projectile_vars->unk24 = 0;
-        projectile_vars->unk28 = 0;
+        projectile_vars->approached = 0;
+        projectile_vars->sound_played = 0;
         trail = life * 5 / 4;
         spawned_moby->flags |= 0x200;
         spawned_moby->alpha = 0x40;
@@ -139,13 +139,13 @@ void turret_shot_update(struct Moby *projectile_moby) {
     distance_to_hero = fast_vec_dist(&projectile_moby->pos, &D_0013F3D0_307d68);
     qcopy(&previous_projectile_position, &projectile_moby->pos);
     fast_vec_add(&projectile_moby->pos, &projectile_moby->pos, &projectile_vars->vel);
-    if (projectile_vars->unk28 == 0 && projectile_vars->unk24 != 0 &&
+    if (projectile_vars->sound_played == 0 && projectile_vars->approached != 0 &&
         projectile_vars->dist < distance_to_hero && distance_to_hero < 3.0f) {
         allocate_voice_for_target_entry(0, 0, projectile_moby);
-        projectile_vars->unk28 = 1;
+        projectile_vars->sound_played = 1;
     }
     if (distance_to_hero < projectile_vars->dist)
-        projectile_vars->unk24 = 1;
+        projectile_vars->approached = 1;
     projectile_vars->dist = distance_to_hero;
     if (projectile_moby->pos.x < 2.0f || 1021.0f < projectile_moby->pos.x ||
         projectile_moby->pos.y < 2.0f || 1021.0f < projectile_moby->pos.y ||

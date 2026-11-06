@@ -39,7 +39,7 @@ typedef struct MineVars {
     f32 unk38;
     f32 unk3C;
     u8  pad40[0x1c];
-    s32 unk5C;
+    s32 spawn_frame; /* game frame at spawn; with 8 mines out the oldest gets -1 */
     f32 unk60;
     f32 unk64;
     s32 voice;
@@ -373,7 +373,7 @@ typedef union {
 
 typedef struct {
     u8  pad[0x5C];
-    s32 i5C;
+    s32 spawn_frame;
 } D_2aa008;
 
 typedef struct {
@@ -440,7 +440,7 @@ unsigned char *spawn_mine(int mine_owner_moby, OvlQuad *spawn_position) {
             mine_vars->unk60 = z;
             mine_vars->bob_phase = z;
             mine_vars->bob_amplitude = z;
-            mine_vars->unk5C = x;
+            mine_vars->spawn_frame = x;
             mine_vars->bob_start_frame = 0;
             mine_vars->voice = -1;
             MOBY(mine_moby)->collision = 0;
@@ -494,15 +494,15 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
                 if (scanned_moby->moby_class == initialized_moby->moby_class)
                     if (scanned_moby != initialized_moby) {
                         if (best == 0 ||
-                            ((D_2aa008 *)scanned_moby->moby_private_vars)->i5C < bestv) {
-                            bestv = ((D_2aa008 *)scanned_moby->moby_private_vars)->i5C;
+                            ((D_2aa008 *)scanned_moby->moby_private_vars)->spawn_frame < bestv) {
+                            bestv = ((D_2aa008 *)scanned_moby->moby_private_vars)->spawn_frame;
                             best = scanned_moby;
                         }
                         count++;
                     }
     }
     if (count >= 8)
-        ((D_2aa008 *)best->moby_private_vars)->i5C = -1;
+        ((D_2aa008 *)best->moby_private_vars)->spawn_frame = -1;
     qcopy(&initialized_moby->v10, requested_position);
     vector_scratch.q = ((Q_2aa008 *)hero.moby)->v10.q;
     vector_scratch.f[2] = requested_position->f[2];
@@ -1154,7 +1154,7 @@ void mine_update(M910 *mine_moby) {
                 }
             }
             v->extended_range = 0;
-            if (v->i5C < 0 || *(int *)&mine_force_burst != 0) {
+            if (v->spawn_frame < 0 || *(int *)&mine_force_burst != 0) {
                 cart_burst(mine_moby, &mine_moby->pos, -1, 0.33f, 13.0f);
                 mine_spawn_drops(mine_moby, D_L00_001B07B0);
                 mark_moby_for_removal(mine_moby);

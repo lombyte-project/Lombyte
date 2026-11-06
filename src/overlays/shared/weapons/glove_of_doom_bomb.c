@@ -37,7 +37,7 @@ typedef struct {
     struct Moby *holder;       /* 0x30: moby it was thrown from */
     s32          effect_timer; /* 0x34 */
     s16          timer;        /* 0x38 */
-    s16          unk46;
+    s16          landing_predicted;
     s32          spawn_count; /* 0x3C */
 } ThrowVars;
 
@@ -116,7 +116,7 @@ s32 predict_doom_bot_spawner_landing(ThrowVars *throw_vars, struct Moby *thrown_
 
             prediction_timer = timer;
             if (flag)
-                throw_vars->unk46 = 1;
+                throw_vars->landing_predicted = 1;
         }
     }
     simulated_velocity.f[2] -= D_0015ED6C * 0.5f;
@@ -220,7 +220,7 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) {
         thrown_moby->flags |= 0x41;
     else
         thrown_moby->flags &= 0xffbe;
-    if (spawner_throw_vars->holder->oclass == 0xe5 && spawner_throw_vars->unk46 == 0 &&
+    if (spawner_throw_vars->holder->oclass == 0xe5 && spawner_throw_vars->landing_predicted == 0 &&
         fast_vec_length(spawner_throw_vars) > 0.0f) {
         if (!hero.ground_moby || !get_moby_pvars_link((char *)hero.ground_moby))
             predict_doom_bot_spawner_landing(spawner_throw_vars, thrown_moby, 1);

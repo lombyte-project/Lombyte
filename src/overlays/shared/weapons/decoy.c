@@ -44,7 +44,7 @@ typedef struct DecoyVars {
     u8    pad20[0x20];
     char *holder;
     s16   timer;
-    s16   unk46;
+    s16   landing_predicted;
     f32   health;
     f32   target_rot_x;
     f32   target_rot_y;
@@ -95,7 +95,7 @@ typedef struct {
     Vec4         normal;  /* 0x30: surface normal there */
     struct Moby *holder;  /* 0x40: moby it was thrown from */
     s16          timer;   /* 0x44 */
-    s16          unk46;
+    s16          landing_predicted;
 } ThrowVars;
 
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -402,7 +402,7 @@ s32 predict_thrown_moby_landing(ThrowVars *throw_vars, struct Moby *thrown_moby,
 
             prediction_countdown = timer;
             if (flag)
-                throw_vars->unk46 = 1;
+                throw_vars->landing_predicted = 1;
         }
     }
     predicted_velocity.f[2] -= frame_time * 0.5f;
@@ -589,7 +589,7 @@ void decoy_update(char *moby) {
     else
         MOBY(moby)->flags &= 0xffbe;
     if (*(short *)(decoy_instance_vars->holder + 0xa6) == 0x232 &&
-        decoy_instance_vars->unk46 == 0 &&
+        decoy_instance_vars->landing_predicted == 0 &&
         FUN_001ff3d8_2c4380(&decoy_instance_vars->velocity) > 0.0f) {
         if (hero.ground_moby == 0 || !FUN_L00_002603d0((int)hero.ground_moby))
             predict_thrown_moby_landing((ThrowVars *)decoy_instance_vars, (struct Moby *)moby, 1);

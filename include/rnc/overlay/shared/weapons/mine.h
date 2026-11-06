@@ -32,7 +32,7 @@ struct W910 {
     short homing_phase;       /* 0x52: 1 rise, 2 fall, 0 level */
     M910 *target;             /* 0x54 */
     int   homing_timer;       /* 0x58: the mine explodes when it runs out */
-    int   i5C;
+    int   spawn_frame;
     float f60;
     float f64;
     int   voice;           /* 0x68: -1 none */
