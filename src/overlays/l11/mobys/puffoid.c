@@ -12,6 +12,8 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
+#include "rnc/overlay/shared/mobys/ground_move_control.h"
 
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
@@ -47,54 +49,47 @@ enum {
 };
 
 typedef struct {
-    u8           pad00[0x20];
-    f32          hp;    /* 0x20 */
-    s16          unk24; /* 0x24 */
-    u8           pad26[2];
-    u8           hit_response_class; /* 0x28 */
-    u8           unk29;              /* 0x29 */
-    u8           pad2A[6];
-    f32          unk30; /* 0x30 */
-    u8           pad34[0xC];
-    f32          vel[4]; /* 0x40: jump velocity; [2] falls by D_L11_001622F0 * frame_time_sq */
-    u8           pad50[8];
-    u8           unk58; /* 0x58 */
-    u8           pad59;
-    u8           unk5A; /* 0x5A */
-    u8           pad5B[0x6D];
-    s16          unkC8; /* 0xC8 */
-    u8           padCA[6];
-    void        *unkD0; /* 0xD0 */
-    u8           padD4[0x4C];
-    u8           motion[0x5C]; /* 0x120: step_moby_motion / FUN_L00_002dc9f0 state */
-    f32          smoke;        /* 0x17C: nonzero: dying states give off smoke */
-    s32          unk180;       /* 0x180: block set up by FUN_L01_0026d930 */
-    f32          unk184;       /* 0x184 */
-    f32          unk188;       /* 0x188 */
-    f32          unk18C;       /* 0x18C */
-    u8           pad190[0x28];
-    s32          unk1B8; /* 0x1B8 */
-    u8           pad1BC[0x14];
-    f32          goal[4]; /* 0x1D0 */
-    u8           pad1E0[0x30];
-    struct Moby *target; /* 0x210 */
-    s32          unk214; /* 0x214: 2 = target in range */
-    u8           pad218[8];
-    f32          home[4];    /* 0x220 */
-    s32          path_index; /* 0x230: path index for FUN_L00_00261968 / the landing check */
-    s32          path;       /* 0x234: index into l11_paths */
-    s32          mode;       /* 0x238: start mode */
-    u8           pad23C[8];
-    s32          timer; /* 0x244 */
-    u8           pad248[4];
-    f32          chase_heading_offset_radians;   /* 0x24C: heading offset for FUN_L11_00315f58 */
-    f32          yaw_turn_velocity;              /* 0x250: turn speed */
-    s32          carrier;                        /* 0x254: moby index of the carrier, or < 0 */
-    f32          carrier_jump_local_x_threshold; /* 0x258 */
-    s32          point;                          /* 0x25C: current path point */
-    f32          wander_destination[4];          /* 0x260 */
-    u8           pad270[0x10];
-    u8           manipulator[0x10]; /* 0x280 */
+    u8    pad00[0x20];
+    f32   hp;    /* 0x20 */
+    s16   unk24; /* 0x24 */
+    u8    pad26[2];
+    u8    hit_response_class; /* 0x28 */
+    u8    unk29;              /* 0x29 */
+    u8    pad2A[6];
+    f32   unk30; /* 0x30 */
+    u8    pad34[0xC];
+    f32   vel[4]; /* 0x40: jump velocity; [2] falls by D_L11_001622F0 * frame_time_sq */
+    u8    pad50[8];
+    u8    unk58; /* 0x58 */
+    u8    pad59;
+    u8    unk5A; /* 0x5A */
+    u8    pad5B[0x6D];
+    s16   unkC8; /* 0xC8 */
+    u8    padCA[6];
+    void *unkD0; /* 0xD0 */
+    u8    padD4[0x4C];
+    struct KnockbackMotion   knockback;    /* 0x120: step_moby_motion / FUN_L00_002dc9f0 state */
+    struct GroundMoveControl move_control; /* 0x180 */
+    f32                      goal[4];      /* 0x1D0 */
+    u8                       pad1E0[0x30];
+    struct Moby             *target; /* 0x210 */
+    s32                      unk214; /* 0x214: 2 = target in range */
+    u8                       pad218[8];
+    f32                      home[4]; /* 0x220 */
+    s32 path_index; /* 0x230: path index for FUN_L00_00261968 / the landing check */
+    s32 path;       /* 0x234: index into l11_paths */
+    s32 mode;       /* 0x238: start mode */
+    u8  pad23C[8];
+    s32 timer; /* 0x244 */
+    u8  pad248[4];
+    f32 chase_heading_offset_radians;   /* 0x24C: heading offset for FUN_L11_00315f58 */
+    f32 yaw_turn_velocity;              /* 0x250: turn speed */
+    s32 carrier;                        /* 0x254: moby index of the carrier, or < 0 */
+    f32 carrier_jump_local_x_threshold; /* 0x258 */
+    s32 point;                          /* 0x25C: current path point */
+    f32 wander_destination[4];          /* 0x260 */
+    u8  pad270[0x10];
+    u8  manipulator[0x10]; /* 0x280 */
 } CreatureVars_4318;
 
 extern char *D_L11_0015FFD8_4318 __asm__("D_L11_0015FFD8");
@@ -112,7 +107,6 @@ extern void  update_moby_target_heading_and_conditional_movement(
 extern short count_group_puffoids_in_states_13_to_17(struct Moby *self) __asm__("FUN_L11_00316090");
 extern void  spawn_4318(struct Moby *, int, void *, float) __asm__("FUN_L00_00263ac8");
 extern void  FUN_L00_0025a120_4318(struct Moby *) __asm__("FUN_L00_0025a120");
-extern void  FUN_L01_0026d930_4318(void *) __asm__("FUN_L01_0026d930");
 extern int   rand(void) __asm__("FUN_001160d8");
 extern float FUN_L00_00259710(void *);
 extern int   point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
@@ -167,12 +161,12 @@ void puffoid_update(struct Moby *moby) {
         puffoid_vars->unk5A = truncate_float_to_s32(2.0f);
         puffoid_vars->unk29 = 1;
         puffoid_vars->unkD0 = &D_L11_001622C0;
-        FUN_L01_0026d930_4318(&puffoid_vars->unk180);
-        puffoid_vars->unk18C = 0.5f;
-        puffoid_vars->unk188 = 0.5f;
-        puffoid_vars->unk180 = truncate_float_to_s32(512.0f);
-        puffoid_vars->unk184 = 0.5f;
-        puffoid_vars->unk1B8 |= 0x10;
+        init_ground_move_control(&puffoid_vars->move_control);
+        puffoid_vars->move_control.max_climb = 0.5f;
+        puffoid_vars->move_control.max_drop = 0.5f;
+        puffoid_vars->move_control.collision_radius_1024ths = truncate_float_to_s32(512.0f);
+        puffoid_vars->move_control.step_height = 0.5f;
+        puffoid_vars->move_control.movement_option_flags |= 0x10;
         if (rand() & 1) {
             moby->flags |= 0x8000;
         }
@@ -375,7 +369,7 @@ void puffoid_update(struct Moby *moby) {
         }
         break;
     case PUFFOID_STATE_KNOCKBACK: {
-        int hit = FUN_L00_0025c698_4318(moby, puffoid_vars->motion);
+        int hit = FUN_L00_0025c698_4318(moby, &puffoid_vars->knockback);
         if (hit & 0x40) {
             char *path;
             if (moby->pos.z < 222.0f) {
@@ -400,7 +394,7 @@ void puffoid_update(struct Moby *moby) {
         break;
     }
     case PUFFOID_STATE_DEATH_KNOCKBACK:
-        if (FUN_L00_0025c698_4318(moby, puffoid_vars->motion) & 0x160) {
+        if (FUN_L00_0025c698_4318(moby, &puffoid_vars->knockback) & 0x160) {
             clear_u64_value(pos);
             spawn_color_swapped_explosion_burst(moby, &moby->pos, -1, 0.5f, 10.0f);
             mark_moby_for_removal(moby);
@@ -534,7 +528,7 @@ void puffoid_update(struct Moby *moby) {
                             &moby->rot,
                             &moby->pos,
                             &moby->rot);
-        hit = FUN_L00_0025c698_4318(moby, puffoid_vars->motion);
+        hit = FUN_L00_0025c698_4318(moby, &puffoid_vars->knockback);
         if (hit & 0x40) {
             char *path;
             if (moby->pos.z < 222.0f) {
@@ -565,7 +559,7 @@ void puffoid_update(struct Moby *moby) {
                             &moby->rot,
                             &moby->pos,
                             &moby->rot);
-        if (FUN_L00_0025c698_4318(moby, puffoid_vars->motion) & 0x160) {
+        if (FUN_L00_0025c698_4318(moby, &puffoid_vars->knockback) & 0x160) {
             clear_u64_value(pos);
             spawn_color_swapped_explosion_burst(moby, &moby->pos, -1, 0.5f, 10.0f);
             mark_moby_for_removal(moby);
@@ -637,13 +631,13 @@ void puffoid_update(struct Moby *moby) {
         break;
     }
     case PUFFOID_STATE_WAIT_TO_RESUME_COMMAND:
-        if (puffoid_vars->unkC8 != 0 && FUN_L00_002dc9f0_4318(moby, puffoid_vars->motion)) {
+        if (puffoid_vars->unkC8 != 0 && FUN_L00_002dc9f0_4318(moby, &puffoid_vars->knockback)) {
             moby->state = moby->command;
             puffoid_vars->unkC8 = 0;
         }
         break;
     }
-    if (puffoid_vars->smoke != 0.0f) {
+    if (puffoid_vars->knockback.ground_bounces != 0.0f) {
         if (moby->state == PUFFOID_STATE_KNOCKBACK ||
             moby->state == PUFFOID_STATE_DEATH_KNOCKBACK ||
             moby->state == PUFFOID_STATE_CARRIER_KNOCKBACK ||
@@ -688,44 +682,32 @@ extern float l11_puffoid_horizontal_speed_limit __asm__("D_L11_001622FC") __attr
 
 /* Private variables of the moby FUN_L11_00315968 updates (only the fields it uses). */
 struct L11PatrolVars {
-    u8           pad0[0x20];
-    f32          hp; /* 0x20 */
-    u8           pad24[0x14];
-    s32          retimer; /* 0x38: nonzero restarts the timer at 0x244 */
-    u8           pad3C[0xD4];
-    u8           move[7]; /* 0x110: movement state (trooper_anim_update / trooper_anim_finish) */
-    u8           hit_flash_red_target; /* 0x117 */
-    u8           pad118[8];
-    u8           motion[0x10];                  /* 0x120 */
-    f32          knockback_gravity;             /* 0x130 */
-    f32          knockback_speed_approach_step; /* 0x134 */
-    f32          knockback_speed;               /* 0x138 */
-    f32          knockback_vertical_speed;      /* 0x13C */
-    s32          knockback_collision_radius;    /* 0x140 */
-    s32          unk144;                        /* 0x144 */
-    f32          knockback_collision_z_offset;  /* 0x148 */
-    u8           pad14C[0x11];
-    u8           unk15D; /* 0x15D */
-    u8           pad15E[0x12];
-    f32          knockback_apex_animation_frame;    /* 0x170 */
-    f32          knockback_landing_animation_frame; /* 0x174 */
-    u8           pad178[0x2C];
-    f32          horizontal_movement_step_limit; /* 0x1A4 */
-    u8           pad1A8[0x28];
-    Vec4f        goal; /* 0x1D0 */
-    u8           pad1E0[0x30];
-    struct Moby *target; /* 0x210 */
-    s32          unk214; /* 0x214 */
-    u8           pad218[0x18];
-    s32          path_index;  /* 0x230 */
-    s32          path2_index; /* 0x234 */
-    u8           pad238[4];
-    f32          range; /* 0x23C */
-    u8           pad240[4];
-    s32          timer; /* 0x244 */
-    f32          reach; /* 0x248 */
-    u8           pad24C[8];
-    s32          carrier; /* 0x254: listed moby index, -1: none */
+    u8  pad0[0x20];
+    f32 hp; /* 0x20 */
+    u8  pad24[0x14];
+    s32 retimer; /* 0x38: nonzero restarts the timer at 0x244 */
+    u8  pad3C[0xD4];
+    u8  move[7]; /* 0x110: movement state (trooper_anim_update / trooper_anim_finish) */
+    u8  hit_flash_red_target; /* 0x117 */
+    u8  pad118[8];
+    struct KnockbackMotion knockback; /* 0x120 */
+    u8                     pad180[0x24];
+    f32                    horizontal_movement_step_limit; /* 0x1A4 */
+    u8                     pad1A8[0x28];
+    Vec4f                  goal; /* 0x1D0 */
+    u8                     pad1E0[0x30];
+    struct Moby           *target; /* 0x210 */
+    s32                    unk214; /* 0x214 */
+    u8                     pad218[0x18];
+    s32                    path_index;  /* 0x230 */
+    s32                    path2_index; /* 0x234 */
+    u8                     pad238[4];
+    f32                    range; /* 0x23C */
+    u8                     pad240[4];
+    s32                    timer; /* 0x244 */
+    f32                    reach; /* 0x248 */
+    u8                     pad24C[8];
+    s32                    carrier; /* 0x254: listed moby index, -1: none */
 };
 
 /* What find_moby_hit reports about the moby's last hit. */
@@ -813,13 +795,13 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
             if (patrol_vars->hp <= 0.0f) {
                 kind = HIT_RESPONSE_DEATH;
             }
-            patrol_vars->knockback_collision_radius = truncate_float_to_s32(512.0f);
-            patrol_vars->knockback_collision_z_offset = 0.2f;
-            patrol_vars->knockback_speed_approach_step = 0.0f;
-            patrol_vars->knockback_gravity =
+            patrol_vars->knockback.collision_radius_1024ths = truncate_float_to_s32(512.0f);
+            patrol_vars->knockback.collision_z_offset = 0.2f;
+            patrol_vars->knockback.speed_approach_step = 0.0f;
+            patrol_vars->knockback.gravity =
                 puffoid_hit_motion_time_squared_scale_gp * frame_time_sq;
-            patrol_vars->unk144 = 9;
-            patrol_vars->unk15D = 0;
+            patrol_vars->knockback.flags = 9;
+            patrol_vars->knockback.unk3D = 0;
             switch (kind) {
             case HIT_RESPONSE_NO_ADDITIONAL_REACTION:
                 break;
@@ -834,19 +816,19 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
             case HIT_RESPONSE_KNOCKBACK_ARC:
             case HIT_RESPONSE_KNOCKBACK_MOTION: {
                 float yaw;
-                patrol_vars->knockback_speed =
+                patrol_vars->knockback.speed =
                     puffoid_hit_knockback_horizontal_scale_gp * frame_time;
-                patrol_vars->knockback_vertical_speed =
+                patrol_vars->knockback.vertical_speed =
                     puffoid_hit_knockback_vertical_scale_gp * frame_time;
-                patrol_vars->knockback_apex_animation_frame = 7.5f;
-                patrol_vars->knockback_landing_animation_frame = 11.0f;
+                patrol_vars->knockback.apex_animation_frame = 7.5f;
+                patrol_vars->knockback.landing_animation_frame = 11.0f;
                 yaw = fast_arc_tan(moby->pos.x - hit->moby->pos.x, moby->pos.y - hit->moby->pos.y);
                 position_scratch.q = hit->pos.q;
                 trooper_knockback_arc(&position_scratch,
                                       &yaw,
-                                      &patrol_vars->knockback_speed,
-                                      &patrol_vars->knockback_vertical_speed);
-                trooper_start_knockback(moby, patrol_vars->motion, 3, 1, 0, yaw);
+                                      &patrol_vars->knockback.speed,
+                                      &patrol_vars->knockback.vertical_speed);
+                trooper_start_knockback(moby, &patrol_vars->knockback, 3, 1, 0, yaw);
                 if (moby->state < PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP) {
                     moby->state = PUFFOID_STATE_KNOCKBACK;
                 } else {
@@ -859,21 +841,21 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
             case HIT_RESPONSE_DEATH_KNOCKBACK: {
                 float yaw;
                 moby->flags &= ~0x1000;
-                patrol_vars->knockback_gravity =
+                patrol_vars->knockback.gravity =
                     puffoid_hit_motion_time_squared_scale_gp * frame_time_sq;
-                patrol_vars->knockback_speed =
+                patrol_vars->knockback.speed =
                     puffoid_death_knockback_horizontal_scale_gp * frame_time;
-                patrol_vars->knockback_vertical_speed =
+                patrol_vars->knockback.vertical_speed =
                     puffoid_death_knockback_vertical_scale_gp * frame_time;
-                patrol_vars->knockback_apex_animation_frame = 7.5f;
-                patrol_vars->knockback_landing_animation_frame = 11.0f;
+                patrol_vars->knockback.apex_animation_frame = 7.5f;
+                patrol_vars->knockback.landing_animation_frame = 11.0f;
                 yaw = fast_arc_tan(moby->pos.x - hit->moby->pos.x, moby->pos.y - hit->moby->pos.y);
                 position_scratch.q = hit->pos.q;
                 trooper_knockback_arc(&position_scratch,
                                       &yaw,
-                                      &patrol_vars->knockback_speed,
-                                      &patrol_vars->knockback_vertical_speed);
-                trooper_start_knockback(moby, patrol_vars->motion, 3, 1, 0, yaw);
+                                      &patrol_vars->knockback.speed,
+                                      &patrol_vars->knockback.vertical_speed);
+                trooper_start_knockback(moby, &patrol_vars->knockback, 3, 1, 0, yaw);
                 if (moby->state < PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP) {
                     moby->state = PUFFOID_STATE_DEATH_KNOCKBACK;
                 } else {

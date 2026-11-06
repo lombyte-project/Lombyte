@@ -24,6 +24,7 @@
 #include "rnc/mobys/resolve_moby_hit_response.h"
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/shared/mobys/ground_move_control.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 
 typedef struct Moby Moby;
 
@@ -55,20 +56,7 @@ typedef struct Paratrooper302618 {
     u8                       trooper_anim[0x7];
     u8                       hit_flash_red;
     u8                       pad68[0x8];
-    u8                       motion[0x10];
-    f32                      knockback_gravity;
-    u8                       pad84[0x4];
-    f32                      knockback_speed;
-    f32                      knockback_z_speed;
-    s32                      knockback_collision_radius;
-    s32                      knockback_motion_flags;
-    f32                      knockback_collision_z_offset;
-    u8                       pad9C[0x11];
-    u8                       unkAD;
-    u8                       padAE[0x12];
-    f32                      knockback_apex_animation_frame;
-    f32                      knockback_landing_animation_frame;
-    u8                       padC8[0x8];
+    struct KnockbackMotion   knockback;    /* 0x70 */
     struct GroundMoveControl move_control; /* 0xD0 */
     u8                       path_search_point[0x8];
     f32                      path_search_point_z;
@@ -686,12 +674,12 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
         turn = truncate_float_to_s32(512.0f);
         {
             float pose_scale = D_L08_00162184 * frame_time_sq;
-            paratrooper_instance_state->knockback_collision_radius = turn;
-            paratrooper_instance_state->knockback_collision_z_offset = 0.5f;
-            paratrooper_instance_state->knockback_motion_flags = 9;
-            paratrooper_instance_state->knockback_gravity = pose_scale;
+            paratrooper_instance_state->knockback.collision_radius_1024ths = turn;
+            paratrooper_instance_state->knockback.collision_z_offset = 0.5f;
+            paratrooper_instance_state->knockback.flags = 9;
+            paratrooper_instance_state->knockback.gravity = pose_scale;
         }
-        paratrooper_instance_state->unkAD = 0;
+        paratrooper_instance_state->knockback.unk3D = 0;
 
         if ((unsigned)reaction < 12) {
             switch (reaction) {
@@ -710,10 +698,10 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
             case 8: {
                 float pose_scale = l08_paratrooper_recovery_knockback_xy_speed * frame_time;
                 float timer_scale = frame_time * 3.0f;
-                paratrooper_instance_state->knockback_speed = pose_scale;
-                paratrooper_instance_state->knockback_z_speed = timer_scale;
-                paratrooper_instance_state->knockback_apex_animation_frame = 5.0f;
-                paratrooper_instance_state->knockback_landing_animation_frame = 10.0f;
+                paratrooper_instance_state->knockback.speed = pose_scale;
+                paratrooper_instance_state->knockback.vertical_speed = timer_scale;
+                paratrooper_instance_state->knockback.apex_animation_frame = 5.0f;
+                paratrooper_instance_state->knockback.landing_animation_frame = 10.0f;
             }
                 {
                     char *hit_moby = *(char **)(target + 0x20);
@@ -723,12 +711,13 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
                 angle = fast_arc_tan(dx, dy);
                 *(u128 *)pos = *(u128 *)(target + 0x10);
                 knock_angle = angle;
-                trooper_knockback_arc(pos,
-                                      &knock_angle,
-                                      (float *)(&paratrooper_instance_state->knockback_speed),
-                                      (float *)(&paratrooper_instance_state->knockback_z_speed));
+                trooper_knockback_arc(
+                    pos,
+                    &knock_angle,
+                    (float *)(&paratrooper_instance_state->knockback.speed),
+                    (float *)(&paratrooper_instance_state->knockback.vertical_speed));
                 trooper_start_knockback(
-                    moby, &paratrooper_instance_state->motion, knock_angle, 8, 1, 0);
+                    moby, &paratrooper_instance_state->knockback, knock_angle, 8, 1, 0);
                 MOBY(moby)->state = PARATROOPER_STATE_KNOCKBACK_RECOVERY;
                 paratrooper_instance_state->hit_flash_red = 0x78;
                 break;
@@ -744,13 +733,13 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
                 pose_scale = pose_rate * frame_time_sq;
                 timer_scale = timer_rate * step;
                 angle_scale = angle_rate * step;
-                paratrooper_instance_state->knockback_collision_z_offset = 0.25f;
-                paratrooper_instance_state->knockback_z_speed = angle_scale;
-                paratrooper_instance_state->knockback_gravity = pose_scale;
-                paratrooper_instance_state->knockback_speed = timer_scale;
-                paratrooper_instance_state->knockback_apex_animation_frame = 11.0f;
-                paratrooper_instance_state->knockback_landing_animation_frame = push_limit;
-                paratrooper_instance_state->knockback_collision_radius = 0x200;
+                paratrooper_instance_state->knockback.collision_z_offset = 0.25f;
+                paratrooper_instance_state->knockback.vertical_speed = angle_scale;
+                paratrooper_instance_state->knockback.gravity = pose_scale;
+                paratrooper_instance_state->knockback.speed = timer_scale;
+                paratrooper_instance_state->knockback.apex_animation_frame = 11.0f;
+                paratrooper_instance_state->knockback.landing_animation_frame = push_limit;
+                paratrooper_instance_state->knockback.collision_radius_1024ths = 0x200;
             }
                 {
                     char *hit_moby = *(char **)(target + 0x20);
@@ -760,12 +749,13 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
                 angle = fast_arc_tan(dx, dy);
                 *(u128 *)pos = *(u128 *)(target + 0x10);
                 second_knock_angle = angle;
-                trooper_knockback_arc(pos,
-                                      &second_knock_angle,
-                                      (float *)(&paratrooper_instance_state->knockback_speed),
-                                      (float *)(&paratrooper_instance_state->knockback_z_speed));
+                trooper_knockback_arc(
+                    pos,
+                    &second_knock_angle,
+                    (float *)(&paratrooper_instance_state->knockback.speed),
+                    (float *)(&paratrooper_instance_state->knockback.vertical_speed));
                 trooper_start_knockback(
-                    moby, &paratrooper_instance_state->motion, second_knock_angle, 12, 1, 0);
+                    moby, &paratrooper_instance_state->knockback, second_knock_angle, 12, 1, 0);
                 MOBY(moby)->state = PARATROOPER_STATE_DEATH_EFFECTS_AND_REMOVE;
                 paratrooper_instance_state->hit_flash_red = 0xf0;
                 spawn_randomized_bolt_drop(moby, 2, 3, 0, -1);

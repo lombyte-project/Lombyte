@@ -12,6 +12,7 @@
 #include "qcopy.h"
 #include "rnc/overlay/shared/world/cuboid.h"
 #include "rnc/overlay/l02/mobys/constructorbot_globals.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 
@@ -561,31 +562,16 @@ extern int select_moby_target_goal(char *a, char *o, float best) __asm__("FUN_L0
 
 /* pvars of the class FUN_L02_002d85b8 serves (only the fields it touches). */
 typedef struct {
-    char          pad0[0x20];
-    float         hp; /* 0x20 */
-    char          pad24[0x3C];
-    short         anim[3]; /* 0x60: passed to trooper_anim_update / trooper_anim_finish */
-    unsigned char pad66;
-    unsigned char flash; /* 0x67 */
-    char          pad68[8];
-    char          knock[0x10];            /* 0x70: passed to trooper_start_knockback */
-    float         knockback_gravity_step; /* 0x80 */
-    float         knockback_horizontal_speed_approach_step;
-    float         knockback_initial_horizontal_speed;
-    float         knockback_initial_vertical_speed;
-    int           knockback_collision_radius_fixed; /* 0x90 */
-    int           i94;
-    float         knockback_collision_center_z_offset;
-    char          pad9C[4];
-    float         knockback_collision_restitution; /* 0xA0 */
-    char          padA4[9];
-    unsigned char bAD; /* 0xAD */
-    char          padAE[0xE];
-    float         knockback_horizontal_target_speed; /* 0xBC */
-    float         knockback_ascent_animation_target_frame;
-    float         knockback_descent_animation_target_frame;
-    char          padC8[0x158];
-    char         *target; /* 0x220 */
+    char                   pad0[0x20];
+    float                  hp; /* 0x20 */
+    char                   pad24[0x3C];
+    short                  anim[3]; /* 0x60: passed to trooper_anim_update / trooper_anim_finish */
+    unsigned char          pad66;
+    unsigned char          flash; /* 0x67 */
+    char                   pad68[8];
+    struct KnockbackMotion knockback; /* 0x70 */
+    char                   padD0[0x150];
+    char                  *target; /* 0x220 */
 } Vars85b8;
 
 /* Hit reaction: takes damage, flinches or dies (knocked away from the hero), then retargets. */
@@ -606,26 +592,26 @@ void handle_constructorbot_damage_and_retargeting(void *owner_moby) {
     resolve_moby_hit_response(moby, hit_record, &moby_vars->hp, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && ((unsigned char *)moby)[0x20] != 0x11) {
         moby_vars->hp -= dmg;
-        moby_vars->knockback_collision_radius_fixed = truncate_float_to_s32(614.4f);
-        moby_vars->knockback_collision_center_z_offset = 0.6f;
+        moby_vars->knockback.collision_radius_1024ths = truncate_float_to_s32(614.4f);
+        moby_vars->knockback.collision_z_offset = 0.6f;
         if (0.0f < moby_vars->hp) {
             if (dmg < 1.0f) {
                 moby_vars->flash = 100;
             } else {
-                void *k = moby_vars->knock;
+                void *k = &moby_vars->knockback;
                 moby_vars->flash = 0x78;
-                moby_vars->knockback_gravity_step = constructorbot_gravity_gp * frame_time_sq;
-                moby_vars->knockback_horizontal_speed_approach_step =
+                moby_vars->knockback.gravity = constructorbot_gravity_gp * frame_time_sq;
+                moby_vars->knockback.speed_approach_step =
                     constructorbot_hit_knockback_horizontal_speed_approach_rate_gp * frame_time_sq;
-                moby_vars->knockback_initial_horizontal_speed =
+                moby_vars->knockback.speed =
                     constructorbot_hit_knockback_horizontal_speed_gp * D_0015ED6C;
-                moby_vars->knockback_initial_vertical_speed =
+                moby_vars->knockback.vertical_speed =
                     constructorbot_hit_knockback_vertical_speed_gp * D_0015ED6C;
-                moby_vars->knockback_horizontal_target_speed =
+                moby_vars->knockback.target_speed =
                     constructorbot_knockback_horizontal_target_speed_gp * D_0015ED6C;
-                moby_vars->knockback_collision_restitution = 0.5f;
-                moby_vars->i94 = 25;
-                moby_vars->bAD = 0;
+                moby_vars->knockback.restitution = 0.5f;
+                moby_vars->knockback.flags = 25;
+                moby_vars->knockback.unk3D = 0;
                 trooper_start_knockback(fast_arc_tan(MOBY(moby)->pos.x - hero.motion.pos.f[0],
                                                      MOBY(moby)->pos.y - hero.motion.pos.f[1]),
                                         moby,
@@ -633,23 +619,23 @@ void handle_constructorbot_damage_and_retargeting(void *owner_moby) {
                                         0xB,
                                         1,
                                         0);
-                moby_vars->knockback_ascent_animation_target_frame = 6.5f;
-                moby_vars->knockback_descent_animation_target_frame = 11.0f;
+                moby_vars->knockback.apex_animation_frame = 6.5f;
+                moby_vars->knockback.landing_animation_frame = 11.0f;
                 moby[0x20] = 0x10;
             }
         } else {
-            void *k2 = moby_vars->knock;
-            moby_vars->knockback_gravity_step = constructorbot_gravity_gp * frame_time_sq;
-            moby_vars->knockback_horizontal_speed_approach_step =
+            void *k2 = &moby_vars->knockback;
+            moby_vars->knockback.gravity = constructorbot_gravity_gp * frame_time_sq;
+            moby_vars->knockback.speed_approach_step =
                 constructorbot_death_knockback_horizontal_speed_approach_rate_gp * frame_time_sq;
-            moby_vars->knockback_initial_horizontal_speed =
+            moby_vars->knockback.speed =
                 constructorbot_death_knockback_horizontal_speed_gp * D_0015ED6C;
-            moby_vars->knockback_initial_vertical_speed =
+            moby_vars->knockback.vertical_speed =
                 constructorbot_death_knockback_vertical_speed_gp * D_0015ED6C;
-            moby_vars->knockback_horizontal_target_speed =
+            moby_vars->knockback.target_speed =
                 constructorbot_knockback_horizontal_target_speed_gp * D_0015ED6C;
-            moby_vars->i94 = 9;
-            moby_vars->bAD = 0;
+            moby_vars->knockback.flags = 9;
+            moby_vars->knockback.unk3D = 0;
             trooper_start_knockback(fast_arc_tan(MOBY(moby)->pos.x - hero.motion.pos.f[0],
                                                  MOBY(moby)->pos.y - hero.motion.pos.f[1]),
                                     moby,
@@ -657,8 +643,8 @@ void handle_constructorbot_damage_and_retargeting(void *owner_moby) {
                                     0xE,
                                     1,
                                     0);
-            moby_vars->knockback_ascent_animation_target_frame = 6.5f;
-            moby_vars->knockback_descent_animation_target_frame = 13.0f;
+            moby_vars->knockback.apex_animation_frame = 6.5f;
+            moby_vars->knockback.landing_animation_frame = 13.0f;
             MOBY(moby)->flags &= 0xEFFF;
             moby_vars->flash = 0xFA;
             moby[0x20] = 0x11;

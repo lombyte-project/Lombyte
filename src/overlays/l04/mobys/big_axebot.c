@@ -17,6 +17,7 @@
 #include "rnc/overlay/shared/enemies/trooper_set_knockback.h"
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/overlay/shared/math/quad.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB670), where it is exact; names translated to the US level program. */
 
@@ -120,67 +121,54 @@ typedef struct Manip_B7B0 {
 } Manip_B7B0;
 
 typedef struct D_B7B0 {
-    char           pad00[0x20];
-    float          hp;
-    short          f24;
-    char           pad26[2];
-    unsigned char  f28;
-    unsigned char  f29;
-    char           pad2A[4];
-    unsigned char  f2E;
-    char           pad2F;
-    float          f30;
-    char           pad34[4];
-    int            extended_detection_request;
-    char           pad3C[0x1C];
-    unsigned char  f58;
-    char           pad59;
-    unsigned char  f5A;
-    char           pad5B[0x55];
-    char           hit_transition_state[7];
-    unsigned char  fB7;
-    char           padB8[8];
-    float          fC0[4];
-    float          knockback_gravity_step;
-    float          knockback_horizontal_deceleration;
-    float          knockback_initial_horizontal_displacement;
-    float          knockback_initial_vertical_displacement;
-    int            fE0;
-    int            knockback_motion_flags;
-    float          knockback_collision_height_offset;
-    char           padEC[0x11];
-    unsigned char  fFD;
-    char           padFE[0x12];
-    float          knockback_ascent_target_frame;
-    float          knockback_descent_target_frame;
-    char           pad118[8];
-    Manip_B7B0     recoil_manipulator;
-    Manip_B7B0     aim_manipulator;
-    char           leg_rig_state[0x250];
-    V4_B7B0        home;
-    unsigned char  start_waiting_for_target;
-    unsigned char  last_non_hit_recovery_state;
-    short          idle_action_delay_timer;
-    short          hit_response_cooldown_timer;
-    unsigned char  extended_detection_timer;
-    unsigned char  alert_voice_cooldown_timer;
-    float          recoil_pitch_angle;
-    char           pad40C[4];
-    float          yaw_turn_velocity;
-    float          movement_yaw;
-    float          hit_recovery_displacement;
-    int            movement_boundary_path_index;
-    float          fall_displacement;
-    struct M_B7B0 *attached_axe_moby;
-    float          tracked_aim_yaw;
-    float          recoil_displacement;
-    int            path_trigger_volume_index;
-    int            approach_path_index;
-    short          path_waypoint_index;
-    short          path_follow_started;
-    float          detection_range;
-    char           pad440[8];
-    int            recoil_pose_cooldown_timer;
+    char                   pad00[0x20];
+    float                  hp;
+    short                  f24;
+    char                   pad26[2];
+    unsigned char          f28;
+    unsigned char          f29;
+    char                   pad2A[4];
+    unsigned char          f2E;
+    char                   pad2F;
+    float                  f30;
+    char                   pad34[4];
+    int                    extended_detection_request;
+    char                   pad3C[0x1C];
+    unsigned char          f58;
+    char                   pad59;
+    unsigned char          f5A;
+    char                   pad5B[0x55];
+    char                   hit_transition_state[7];
+    unsigned char          fB7;
+    char                   padB8[8];
+    struct KnockbackMotion knockback; /* 0xC0 */
+    Manip_B7B0             recoil_manipulator;
+    Manip_B7B0             aim_manipulator;
+    char                   leg_rig_state[0x250];
+    V4_B7B0                home;
+    unsigned char          start_waiting_for_target;
+    unsigned char          last_non_hit_recovery_state;
+    short                  idle_action_delay_timer;
+    short                  hit_response_cooldown_timer;
+    unsigned char          extended_detection_timer;
+    unsigned char          alert_voice_cooldown_timer;
+    float                  recoil_pitch_angle;
+    char                   pad40C[4];
+    float                  yaw_turn_velocity;
+    float                  movement_yaw;
+    float                  hit_recovery_displacement;
+    int                    movement_boundary_path_index;
+    float                  fall_displacement;
+    struct M_B7B0         *attached_axe_moby;
+    float                  tracked_aim_yaw;
+    float                  recoil_displacement;
+    int                    path_trigger_volume_index;
+    int                    approach_path_index;
+    short                  path_waypoint_index;
+    short                  path_follow_started;
+    float                  detection_range;
+    char                   pad440[8];
+    int                    recoil_pose_cooldown_timer;
 } D_B7B0;
 
 typedef struct M_B7B0 {
@@ -389,11 +377,11 @@ void big_axebot_update(M_B7B0 *moby) {
                 knockback_yaw = fast_arc_tan(moby->pos[0] - h->motion.pos.f[0],
                                              moby->pos[1] - h->motion.pos.f[1]);
             }
-            data->knockback_horizontal_deceleration = frame_time_sq * 12.0f;
-            data->knockback_gravity_step = frame_time_sq * 35.0f;
-            data->knockback_initial_horizontal_displacement = frame_time * 7.0f;
-            data->knockback_motion_flags = 9;
-            data->fFD = 0;
+            data->knockback.speed_approach_step = frame_time_sq * 12.0f;
+            data->knockback.gravity = frame_time_sq * 35.0f;
+            data->knockback.speed = frame_time * 7.0f;
+            data->knockback.flags = 9;
+            data->knockback.unk3D = 0;
             data->hp -= dmg;
             if (data->hp <= 0.0f) {
                 hit_reaction_result = 1;
@@ -442,9 +430,9 @@ void big_axebot_update(M_B7B0 *moby) {
                         (char *)moby, (void *)5, 0, (void *)scale_game_frames(6));
                     set_big_axebot_and_axe_animation_speed(moby, 2.0f);
                     moby->state = BIG_AXEBOT_STATE_HIT_RECOVERY;
-                    trooper_start_knockback(knockback_yaw, moby, data->fC0, 5, 1, 0);
-                    data->knockback_ascent_target_frame = 5.0f;
-                    data->knockback_descent_target_frame = 10.0f;
+                    trooper_start_knockback(knockback_yaw, moby, &data->knockback, 5, 1, 0);
+                    data->knockback.apex_animation_frame = 5.0f;
+                    data->knockback.landing_animation_frame = 10.0f;
                     data->recoil_displacement = 3.4f / scale_time(7.0f);
                     data->fB7 = 0x78;
                     trooper_anim_update(moby, (short *)data->hit_transition_state);
@@ -465,17 +453,17 @@ void big_axebot_update(M_B7B0 *moby) {
                     data->extended_detection_timer = scale_game_frames(0xF0);
                     break;
                 case BIG_AXEBOT_HIT_REACTION_FATAL:
-                    data->knockback_collision_height_offset = 1.0f;
-                    data->fE0 = 0x400;
-                    trooper_set_knockback(data->fC0, 5.7f, 4.0f);
+                    data->knockback.collision_z_offset = 1.0f;
+                    data->knockback.collision_radius_1024ths = 0x400;
+                    trooper_set_knockback(&data->knockback, 5.7f, 4.0f);
                     *(OvlQuad *)vector_quaternion_scratch = *(OvlQuad *)hit->pos;
                     trooper_knockback_arc(vector_quaternion_scratch,
                                           &knockback_yaw,
-                                          &data->knockback_initial_horizontal_displacement,
-                                          &data->knockback_initial_vertical_displacement);
-                    trooper_start_knockback(knockback_yaw, moby, data->fC0, 7, 1, 0);
-                    data->knockback_ascent_target_frame = 12.0f;
-                    data->knockback_descent_target_frame = 25.0f;
+                                          &data->knockback.speed,
+                                          &data->knockback.vertical_speed);
+                    trooper_start_knockback(knockback_yaw, moby, &data->knockback, 7, 1, 0);
+                    data->knockback.apex_animation_frame = 12.0f;
+                    data->knockback.landing_animation_frame = 25.0f;
                     moby->state = BIG_AXEBOT_STATE_DYING;
                     data->fB7 = 0x78;
                     trooper_anim_update(moby, (short *)data->hit_transition_state);
@@ -874,7 +862,7 @@ void big_axebot_update(M_B7B0 *moby) {
         }
         break;
     case BIG_AXEBOT_STATE_DYING:
-        if ((step_moby_motion(moby, data->fC0) & 0x40) || moby->pos[2] < 1.0f) {
+        if ((step_moby_motion(moby, &data->knockback) & 0x40) || moby->pos[2] < 1.0f) {
             mark_moby_for_removal_cf((char *)moby);
             if (data->attached_axe_moby != 0) {
                 mark_moby_for_removal(data->attached_axe_moby);

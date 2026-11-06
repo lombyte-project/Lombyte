@@ -23,6 +23,7 @@
 #include "rnc/overlay/shared/enemies/large_amoeboid_data/spawn_amoeboid_burst_sparks_2.h"
 #include "rnc/overlay/shared/enemies/large_amoeboid_data/spawn_amoeboid_burst_sparks.h"
 #include "rnc/overlay/shared/mobys/ground_move_control.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 
 enum {
     LARGE_AMOEBOID_INITIALIZE = 0,
@@ -56,15 +57,8 @@ typedef struct LargeAmoeboidVars {
     u8                       pad59[0x1];
     s8                       unk5A;
     u8                       pad5B[0x5];
-    u8                       motion[0x10];
-    f32                      knockback_gravity;
-    u8                       pad74[0xc];
-    s32                      knockback_collision_radius;
-    s32                      knockback_motion_flags;
-    f32                      knockback_collision_z_offset;
-    u8                       pad8C[0x11];
-    s8                       unk9D;
-    u8                       pad9E[0x8a];
+    struct KnockbackMotion   knockback; /* 0x60 */
+    u8                       padC0[0x68];
     u16                      unk128;
     u8                       pad12A[0x6];
     void                    *unk130;
@@ -608,7 +602,7 @@ void large_amoeboid_update(unsigned char *moby) {
         return;
     }
     case LARGE_AMOEBOID_PROCESS_KNOCKBACK:
-        result = step_moby_motion(moby, &large_amoeboid_vars->motion);
+        result = step_moby_motion(moby, &large_amoeboid_vars->knockback);
         if (result & 1) {
             path_hit = follow_path((int *)(&large_amoeboid_vars->path_ids),
                                    1,
@@ -665,7 +659,7 @@ void large_amoeboid_update(unsigned char *moby) {
         }
         return;
     case LARGE_AMOEBOID_PROCESS_SUCK_CANNON_INTERACTION:
-        if (FUN_L00_002dc9f0(moby, &large_amoeboid_vars->motion)) {
+        if (FUN_L00_002dc9f0(moby, &large_amoeboid_vars->knockback)) {
             MOBY(moby)->state = LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH;
             large_amoeboid_vars->unk128 = 0;
         }
@@ -748,12 +742,12 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
         fixed_scale = 1024.0f;
         rate = 0.008f;
         moby_vars->health = moby_vars->health - hit_decrement;
-        moby_vars->unk9D = 0;
-        moby_vars->knockback_gravity = rate;
-        moby_vars->knockback_motion_flags = 8;
-        moby_vars->knockback_collision_radius =
+        moby_vars->knockback.unk3D = 0;
+        moby_vars->knockback.gravity = rate;
+        moby_vars->knockback.flags = 8;
+        moby_vars->knockback.collision_radius_1024ths =
             truncate_float_to_s32(moby_vars->size_scale * size_multiplier * fixed_scale);
-        moby_vars->knockback_collision_z_offset = moby_vars->size_scale * size_multiplier;
+        moby_vars->knockback.collision_z_offset = moby_vars->size_scale * size_multiplier;
         spawn_amoeboid_burst_sparks((unsigned char *)moby, (float *)(hit_record + 0x10));
         if (0.0f < moby_vars->health) {
             spawned = activate_smaller_amoeboid(moby);

@@ -20,6 +20,7 @@
 #include "rnc/overlay/shared/enemies/frog_data/update_frog_health_respawn_and_target.h"
 #include "rnc/overlay/shared/enemies/frog_data/spawn_moby_directional_spark_bursts_2.h"
 #include "rnc/overlay/shared/enemies/frog_data/spawn_moby_directional_spark_bursts.h"
+#include "rnc/overlay/shared/mobys/knockback_motion.h"
 
 enum {
     FROG_STATE_INITIALIZE = 0,
@@ -39,56 +40,47 @@ enum {
 };
 
 typedef struct FrogVars {
-    u8             pad0[0x29];
-    s8             unk29;
-    u8             pad2A[0x2e];
-    s8             unk58;
-    u8             pad59[0x1];
-    s8             unk5A;
-    u8             pad5B[0x6d];
-    s16            unkC8;
-    u8             padCA[0x6];
-    short         *unkD0;
-    u8             padD4[0x4c];
-    u8             motion[0x10];
-    f32            knockback_gravity;
-    s32            knockback_speed_approach_rate;
-    f32            knockback_speed;
-    f32            knockback_vertical_speed;
-    s32            knockback_collision_radius;
-    s32            knockback_motion_flags;
-    s32            motion_collision_height_offset;
-    u8             pad14C[0x11];
-    s8             unk15D;
-    u8             pad15E[0x62];
-    unsigned char *target;
-    s32            pursuit_target_mode;
-    u8             pad1C8[0xc];
-    f32            turn_angle;
-    f32            turn_range_degrees;
-    u8             pad1DC[0x8];
-    f32            movement_speed;
-    s16            blink_countdown;
-    s16            hidden;
-    s32            unk1EC;
-    u8             pad1F0[0x8];
-    s32            path_index;
-    s32            wander_destination_timer;
-    s16            spawns_child;
-    s16            initialize_in_respawn;
-    u8             pad204[0x4];
-    s16            path_point;
-    s16            target_selection_frame_slot;
-    char          *child;
-    f32            home_position[4];
-    u8             home_rotation[0x10];
-    u8             wander_destination[0x10];
-    s16            unk240;
-    s16            unk242;
-    f32            unk244;
-    f32            glow_animation_phase;
-    f32            path_activation_distance_xy;
-    u8             unk250[0x4];
+    u8                     pad0[0x29];
+    s8                     unk29;
+    u8                     pad2A[0x2e];
+    s8                     unk58;
+    u8                     pad59[0x1];
+    s8                     unk5A;
+    u8                     pad5B[0x6d];
+    s16                    unkC8;
+    u8                     padCA[0x6];
+    short                 *unkD0;
+    u8                     padD4[0x4c];
+    struct KnockbackMotion knockback; /* 0x120 */
+    u8                     pad180[0x40];
+    unsigned char         *target;
+    s32                    pursuit_target_mode;
+    u8                     pad1C8[0xc];
+    f32                    turn_angle;
+    f32                    turn_range_degrees;
+    u8                     pad1DC[0x8];
+    f32                    movement_speed;
+    s16                    blink_countdown;
+    s16                    hidden;
+    s32                    unk1EC;
+    u8                     pad1F0[0x8];
+    s32                    path_index;
+    s32                    wander_destination_timer;
+    s16                    spawns_child;
+    s16                    initialize_in_respawn;
+    u8                     pad204[0x4];
+    s16                    path_point;
+    s16                    target_selection_frame_slot;
+    char                  *child;
+    f32                    home_position[4];
+    u8                     home_rotation[0x10];
+    u8                     wander_destination[0x10];
+    s16                    unk240;
+    s16                    unk242;
+    f32                    unk244;
+    f32                    glow_animation_phase;
+    f32                    path_activation_distance_xy;
+    u8                     unk250[0x4];
 } FrogVars;
 
 struct MobyHit {
@@ -319,10 +311,10 @@ void frog_update(unsigned char *moby) {
         qcopy(&frog_instance_vars->home_rotation, moby + 0x40);
         frog_instance_vars->path_point = 0;
         wait = random_float_between(0.5f, 3.0f);
-        frog_instance_vars->knockback_gravity = D_0015ED70 * 20.0f;
-        frog_instance_vars->motion_collision_height_offset = 0;
-        frog_instance_vars->knockback_speed_approach_rate = 0;
-        frog_instance_vars->knockback_collision_radius = 0x200;
+        frog_instance_vars->knockback.gravity = D_0015ED70 * 20.0f;
+        frog_instance_vars->knockback.collision_z_offset = 0;
+        frog_instance_vars->knockback.speed_approach_step = 0;
+        frog_instance_vars->knockback.collision_radius_1024ths = 0x200;
         frog_instance_vars->unk244 = wait;
         frog_instance_vars->glow_animation_phase = random_angle_radians();
         frog_instance_vars->unkD0 = D_L06_00161BF0;
@@ -413,18 +405,18 @@ void frog_update(unsigned char *moby) {
             home_distance_xy =
                 vector_distance_xy(&MOBY(moby)->pos, &frog_instance_vars->home_position);
             return_speed = home_distance_xy / (float)scale_game_frames(30);
-            frog_instance_vars->knockback_speed = return_speed;
-            frog_instance_vars->knockback_vertical_speed =
+            frog_instance_vars->knockback.speed = return_speed;
+            frog_instance_vars->knockback.vertical_speed =
                 FUN_L00_0025abf0(&MOBY(moby)->pos,
                                  &frog_instance_vars->home_position,
                                  0,
                                  return_speed,
-                                 -frog_instance_vars->knockback_gravity);
-            frog_instance_vars->unk15D = 3;
-            frog_instance_vars->knockback_motion_flags = 5;
+                                 -frog_instance_vars->knockback.gravity);
+            frog_instance_vars->knockback.unk3D = 3;
+            frog_instance_vars->knockback.flags = 5;
             trooper_start_knockback(
                 moby,
-                &frog_instance_vars->motion,
+                &frog_instance_vars->knockback,
                 2,
                 1,
                 0,
@@ -437,8 +429,8 @@ void frog_update(unsigned char *moby) {
     case FROG_STATE_JUMP_TO_HOME:
         set_vector_unit_z(A);
         blend_frog_rotation_to_facing_frame(
-            (char *)moby, A, (float *)(&frog_instance_vars->motion));
-        if (step_moby_motion(moby, &frog_instance_vars->motion) & 1) {
+            (char *)moby, A, (float *)(&frog_instance_vars->knockback));
+        if (step_moby_motion(moby, &frog_instance_vars->knockback) & 1) {
             MOBY(moby)->state = FROG_STATE_LANDING_ANIMATION;
             if (MOBY(moby)->prev_seq != 3)
                 blend_moby_animation(moby, 3, 0, 1);
@@ -447,7 +439,7 @@ void frog_update(unsigned char *moby) {
         }
         break;
     case FROG_STATE_AIRBORNE_MOTION: {
-        int hit = step_moby_motion(moby, &frog_instance_vars->motion);
+        int hit = step_moby_motion(moby, &frog_instance_vars->knockback);
         if (hit & 1) {
             MOBY(moby)->state = FROG_STATE_LANDING_ANIMATION;
             if (MOBY(moby)->prev_seq != 3)
@@ -611,7 +603,7 @@ void frog_update(unsigned char *moby) {
         }
         break;
     case FROG_STATE_SUCK_CANNON_HELD:
-        if (FUN_L00_002dc9f0(moby, &frog_instance_vars->motion) != 0) {
+        if (FUN_L00_002dc9f0(moby, &frog_instance_vars->knockback) != 0) {
             MOBY(moby)->state = FROG_STATE_WANDER;
             if (MOBY(moby)->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
