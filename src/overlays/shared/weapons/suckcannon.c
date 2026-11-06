@@ -16,6 +16,7 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/game/interpolated_record.h"
 #include "rnc/mobys/get_moby_target_info.h"
+#include "rnc/overlay/shared/mobys/moby_target_info.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
@@ -248,11 +249,6 @@ typedef struct {
     u8 pad[9];
     u8 gold;
 } SuckItemVariant; /* item 9 (Suck Cannon) is gold */
-
-typedef struct {
-    u8    pad[0x10];
-    float height;
-} SuckAimHeight;
 
 typedef s32 (*Fn_db890)(void *);
 
@@ -1646,12 +1642,12 @@ void suckcannon_update(SuckMoby *suck_cannon_moby) {
                 candidate_target = suck_moby_list;
                 while (candidate_target) {
                     if (candidate_target->state >= 0 && candidate_target != stored) {
-                        float          tyaw, tpitch, dyaw, distance, offangle;
-                        SuckAimHeight *candidate_aim_height;
+                        float           tyaw, tpitch, dyaw, distance, offangle;
+                        MobyTargetInfo *candidate_aim_height;
                         qcopy(&aim_and_fire_scratch.fire.point, &candidate_target->pos);
                         candidate_aim_height = get_moby_target_info(candidate_target);
                         if (candidate_aim_height)
-                            aim_and_fire_scratch.fire.point.f.z += candidate_aim_height->height;
+                            aim_and_fire_scratch.fire.point.f.z += candidate_aim_height->aim_height;
                         else
                             aim_and_fire_scratch.fire.point.f.z += 0.5f;
                         if ((candidate_target->flags & 0x1000) && candidate_target &&

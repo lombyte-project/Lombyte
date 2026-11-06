@@ -46,20 +46,20 @@ extern void spawn_explosion(void *,
                             int) __asm__("FUN_L00_0025e450");
 
 typedef struct {
-    void        *damage_record; /* creature header: points at health */
-    u8           pad4[0x8];
-    void        *hit_flash_record; /* creature header: points at hit_flash */
-    u8           pad10[0x10];
-    f32          health;
-    s16          max_health;
-    u8           pad26[2];
-    u8           hit_response_class;
-    u8           unk29;
-    u8           unk2A;
-    u8           pad2B[5];
-    f32          unk30;
-    u8           pad34[0x2C];
-    u8           hit_flash[0x10];
+    void *damage_record; /* creature header: points at health */
+    u8    pad4[0x8];
+    void *hit_flash_record; /* creature header: points at hit_flash */
+    u8    pad10[0x10];
+    f32   health;
+    s16   max_health;
+    u8    pad26[2];
+    u8    hit_response_class;
+    u8    wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8    size;
+    u8    pad2B[5];
+    f32   aim_height;
+    u8    pad34[0x2C];
+    u8    hit_flash[0x10];
     struct Moby *parent;
 } Vars;
 
@@ -89,10 +89,10 @@ struct Moby *spawn_blarg_turret_child(struct Moby *parent) {
         child_moby->scale = child_moby->pclass->scale * parent->scale / parent->pclass->scale;
         child_vars->health = 1.0f;
         child_vars->max_health = 1;
-        child_vars->unk29 = 1;
-        child_vars->unk2A = 3;
+        child_vars->wrench_hit_sound = 1;
+        child_vars->size = 3;
         child_vars->hit_response_class = 0;
-        child_vars->unk30 = 0.9f;
+        child_vars->aim_height = 0.9f;
         update_entity(child_moby);
         copy_hero_moby_field_38(child_moby);
     }

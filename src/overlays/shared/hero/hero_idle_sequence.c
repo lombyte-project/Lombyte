@@ -16,6 +16,7 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/mobys/get_moby_target_info.h"
+#include "rnc/overlay/shared/mobys/moby_target_info.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/mobys/animation/build_moby_bone_transform.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
@@ -3052,7 +3053,8 @@ void update_hero_target_tracking(void) {
     float            bestPri, bestDist;
     float            aim_position_scratch[8];
     char            *secondary_position;
-    char            *candidate_targeting_metadata, *selected_targeting_metadata, *selected_moby;
+    MobyTargetInfo  *candidate_target_info, *selected_target_info;
+    char            *selected_moby;
     struct HeroEase *manipulator_table;
     float            yaw_delta, pitch, s;
     int              mode = *(int *)(hero_control_mode_owner + 0x208C);
@@ -3068,12 +3070,11 @@ void update_hero_target_tracking(void) {
         bestPri = 0.0f;
         best = 0;
         for (i = 0; (candidate_moby = active_mobies[i]) != 0; i++) {
-            candidate_targeting_metadata = (char *)get_moby_target_info(candidate_moby);
-            if (candidate_targeting_metadata != 0) {
+            candidate_target_info = (MobyTargetInfo *)get_moby_target_info(candidate_moby);
+            if (candidate_target_info != 0) {
                 float candidate_distance, candidate_yaw_difference, sc, pri;
                 candidate_distance = vector_distance_xy(hero_pos + 0x0, &MOBY(candidate_moby)->pos);
-                if ((float)*(unsigned char *)(candidate_targeting_metadata + 0x38) <
-                    candidate_distance)
+                if ((float)candidate_target_info->look_range < candidate_distance)
                     continue;
                 candidate_reference_hero_state = (char *)hero_pos - 0x80;
                 candidate_yaw_difference = fast_difference_between_rotations(
@@ -3096,7 +3097,7 @@ void update_hero_target_tracking(void) {
                     if (sc < 0.0f)
                         sc = 0.0f;
                 }
-                pri = (float)*(unsigned char *)(candidate_targeting_metadata + 0x39);
+                pri = (float)candidate_target_info->look_priority;
                 if (bestPri < pri)
                     goto upd;
                 if (sc < bestDist) {
@@ -3124,10 +3125,9 @@ void update_hero_target_tracking(void) {
     if (selected_moby == 0)
         return;
     qcopy(aim_position_scratch, &MOBY(selected_moby)->pos);
-    selected_targeting_metadata = (char *)get_moby_target_info(selected_moby);
-    if (selected_targeting_metadata != 0)
-        aim_position_scratch[2] +=
-            (float)*(unsigned char *)(selected_targeting_metadata + 0x3A) * 0.125f;
+    selected_target_info = (MobyTargetInfo *)get_moby_target_info(selected_moby);
+    if (selected_target_info != 0)
+        aim_position_scratch[2] += (float)selected_target_info->look_height * 0.125f;
     transform_hero_local_offset_to_world(&aim_position_scratch[4], 0.3f, 0.0f, 0.85f);
     yaw_delta =
         fast_subtract_rotations(fast_arc_tan(aim_position_scratch[0] - aim_position_scratch[4],

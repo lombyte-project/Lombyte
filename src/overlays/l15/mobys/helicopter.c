@@ -319,11 +319,11 @@ typedef struct {
     u8           pad29[5];
     u8           removal_status; /* 0x2E: anything but 1 removes it */
     u8           pad2F;
-    f32          unk30;
+    f32          aim_height; /* 0x30: enemy target info at pvars+0x20, see moby_target_info.h */
     u8           pad34[0x24];
-    u8           unk58;
-    u8           unk59;
-    u8           unk5A;
+    u8           look_range;
+    u8           look_priority;
+    u8           look_height;
     u8           pad5B[0x75];
     u8           turret_yaw_joint[0x40];
     u8           turret_pitch_joint[0x50];
@@ -434,7 +434,7 @@ void helicopter_update(struct Moby *moby) {
         hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK) {
         moby->collision = 0;
         moby->flags = (moby->flags | 0x41) & 0xEFFF;
-        helicopter_instance_vars->unk58 = 0;
+        helicopter_instance_vars->look_range = 0;
         if (helicopter_instance_vars->pilot != 0)
             helicopter_instance_vars->pilot->flags |= 0x41;
         moby->state = HELICOPTER_WAIT_FOR_ACTIVATION;
@@ -476,11 +476,11 @@ void helicopter_update(struct Moby *moby) {
         helicopter_instance_vars->health = 3.0f;
         helicopter_instance_vars->max_health = truncate_float_to_s32(3.0f);
         helicopter_instance_vars->hit_response_class = 2;
-        helicopter_instance_vars->unk58 = 0x19;
-        helicopter_instance_vars->unk30 = 1.0f;
+        helicopter_instance_vars->look_range = 0x19;
+        helicopter_instance_vars->aim_height = 1.0f;
         helicopter_instance_vars->removal_status = 1;
-        helicopter_instance_vars->unk59 = 1;
-        helicopter_instance_vars->unk5A = 6;
+        helicopter_instance_vars->look_priority = 1;
+        helicopter_instance_vars->look_height = 6;
         moby->update_dist = 0xFF;
         moby->draw_dist = 0x80;
         if (helicopter_instance_vars->entry_path != -1) {
@@ -508,7 +508,7 @@ void helicopter_update(struct Moby *moby) {
         }
         moby->collision = 0;
         moby->flags = (moby->flags | 0x41) & 0xEFFF;
-        helicopter_instance_vars->unk58 = 0;
+        helicopter_instance_vars->look_range = 0;
         if (helicopter_instance_vars->pilot != 0)
             helicopter_instance_vars->pilot->flags |= 0x41;
         break;
@@ -517,7 +517,7 @@ void helicopter_update(struct Moby *moby) {
             hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK) {
             moby->collision = 0;
             moby->flags = (moby->flags | 0x41) & 0xEFFF;
-            helicopter_instance_vars->unk58 = 0;
+            helicopter_instance_vars->look_range = 0;
             if (helicopter_instance_vars->pilot != 0)
                 helicopter_instance_vars->pilot->flags |= 0x41;
             return;
@@ -531,7 +531,7 @@ void helicopter_update(struct Moby *moby) {
                 break;
             moby->collision = moby->pclass->collision;
             moby->flags = (moby->flags & 0xFFBE) | 0x1000;
-            helicopter_instance_vars->unk58 = 0x19;
+            helicopter_instance_vars->look_range = 0x19;
             if (helicopter_instance_vars->entry_path != -1)
                 moby->state = HELICOPTER_FOLLOW_ENTRY_PATH;
             else
@@ -543,7 +543,7 @@ void helicopter_update(struct Moby *moby) {
                 break;
             moby->collision = moby->pclass->collision;
             moby->flags = (moby->flags & 0xFFBE) | 0x1000;
-            helicopter_instance_vars->unk58 = 0x19;
+            helicopter_instance_vars->look_range = 0x19;
             if (helicopter_instance_vars->entry_path != -1)
                 moby->state = HELICOPTER_FOLLOW_ENTRY_PATH;
             else
@@ -779,7 +779,7 @@ void helicopter_update(struct Moby *moby) {
     case HELICOPTER_DEAD_WAIT_FOR_RESET:
         moby->collision = 0;
         moby->flags = (moby->flags | 0x41) & 0xEFFF;
-        helicopter_instance_vars->unk58 = 0;
+        helicopter_instance_vars->look_range = 0;
         if (helicopter_instance_vars->pilot != 0)
             helicopter_instance_vars->pilot->flags |= 0x41;
         D_L15_001BABD0.cleared[(short)moby->save_id] = 0;

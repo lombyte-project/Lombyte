@@ -189,13 +189,13 @@ typedef struct {
     /* 0x020 */ float         health;
     /* 0x024 */ short         unk24;
     /* 0x026 */ char          pad26[3];
-    /* 0x029 */ unsigned char unk29;
+    /* 0x029 */ unsigned char wrench_hit_sound;
     /* 0x02A */ char          pad2A[4];
     /* 0x02E */ unsigned char relaunch_request_state;
     /* 0x02F */ char          pad2F[0x11];
     /* 0x040 */ OvlVec4       vel;
     /* 0x050 */ char          pad50[8];
-    /* 0x058 */ unsigned char unk58;
+    /* 0x058 */ unsigned char look_range;
     /* 0x059 */ char          pad59[3];
     /* 0x05C */ unsigned char unk5C;
     /* 0x05D */ char          pad5D[0x6B];
@@ -339,10 +339,10 @@ void sand_shark_update(struct Moby *moby) {
         qcopy(&sand_shark_behavior_vars->spawn_position, &moby->pos);
         sand_shark_behavior_vars->unk24 = 1;
         sand_shark_behavior_vars->health = 1.0f;
-        sand_shark_behavior_vars->unk58 = D_L02_00161900;
+        sand_shark_behavior_vars->look_range = D_L02_00161900;
         sand_shark_behavior_vars->unk5C = 1;
         sand_shark_behavior_vars->relaunch_request_state = 1;
-        sand_shark_behavior_vars->unk29 = 1;
+        sand_shark_behavior_vars->wrench_hit_sound = 1;
         sand_shark_behavior_vars->target_range_extension_timer = 0;
         FUN_L01_0026d930_e50(&sand_shark_behavior_vars->walk_mode);
         sand_shark_behavior_vars->walk_188 = sand_shark_behavior_vars->walk_18C = 2.0f;

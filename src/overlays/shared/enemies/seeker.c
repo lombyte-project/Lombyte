@@ -33,18 +33,18 @@ enum {
 };
 
 typedef struct {
-    u8                       pad0[0x20];
-    f32                      health;
-    s16                      max_health;
-    u8                       pad26[2];
-    u8                       hit_response_class;
-    u8                       pad29[0x2F];
-    u8                       unk58;
-    u8                       pad59;
-    u8                       unk5A;
-    u8                       pad5B[0x15];
-    Vec4                     vel;
-    u8                       pad80[0x50];
+    u8   pad0[0x20];
+    f32  health;
+    s16  max_health;
+    u8   pad26[2];
+    u8   hit_response_class;
+    u8   pad29[0x2F];
+    u8   look_range; /* 0x58: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8   pad59;
+    u8   look_height;
+    u8   pad5B[0x15];
+    Vec4 vel;
+    u8   pad80[0x50];
     struct GroundMoveControl move_control; /* 0xD0 */
     u8                       pad120[0x40];
     struct Moby             *target;
@@ -132,8 +132,8 @@ void seeker_update(struct Moby *moby) {
         seeker_instance_vars->health = 3.0f;
         seeker_instance_vars->max_health = 3;
         seeker_instance_vars->hit_response_class = 2;
-        seeker_instance_vars->unk5A = 6;
-        seeker_instance_vars->unk58 = 8;
+        seeker_instance_vars->look_height = 6;
+        seeker_instance_vars->look_range = 8;
         if (seeker_instance_vars->bound_path == -1) {
             debug_print(seeker_invalid_bound_path_format, moby->save_id);
             mark_moby_for_removal(moby);

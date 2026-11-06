@@ -42,17 +42,17 @@ enum {
 };
 
 typedef struct L16DamageData {
-    u8                   pad0[0x20];
-    float                health;
-    s16                  max_health;
-    u8                   pad26[0x2];
-    s8                   hit_response_class;
-    s8                   unk29;
-    u8                   pad2A[0x6];
-    f32                  unk30;
-    u8                   pad34[0x4];
-    int                  reset_timer;
-    u8                   pad3C[0x24];
+    u8    pad0[0x20];
+    float health;
+    s16   max_health;
+    u8    pad26[0x2];
+    s8    hit_response_class;
+    s8    wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8    pad2A[0x6];
+    f32   aim_height;
+    u8    pad34[0x4];
+    int   reset_timer;
+    u8    pad3C[0x24];
     struct HitColorFlash hit_flash;
     float                knockback[4];
     float                impulse_time;
@@ -242,10 +242,10 @@ void blarg_elite_commando_update(char *commando_moby) {
     switch (((unsigned char *)commando_moby)[0x20]) {
     case COMMANDO_STATE_INITIALIZE:
         *(int *)&commando_data->bobbing_amplitude = 0;
-        commando_data->unk29 = 1;
+        commando_data->wrench_hit_sound = 1;
         commando_data->max_health = 3;
         commando_data->hit_response_class = 2;
-        commando_data->unk30 = 1.5f;
+        commando_data->aim_height = 1.5f;
         commando_data->health = 3.0f;
         commando_data->bobbing_x_phase = random_angle_radians();
         commando_data->bobbing_y_phase = random_angle_radians();

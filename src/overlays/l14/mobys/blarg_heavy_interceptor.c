@@ -196,20 +196,20 @@ extern Vec4 D_L14_00174560;
 void blarg_heavy_interceptor_update(struct Moby *m) __asm__("FUN_L14_002ac618");
 
 typedef struct BlargHeavyInterceptorVars {
-    u8                   pad_0[0x20];
-    f32                  health;
-    s16                  max_health;
-    u8                   pad_26[0x2];
-    u8                   hit_response_class;
-    u8                   pad_29[0x5];
-    u8                   removal_status;
-    u8                   pad_2F[0x11];
-    f32                  unk40[4];
-    u8                   pad_50[0x8];
-    u8                   unk58;
-    u8                   pad_59[0x1];
-    u8                   unk5A;
-    u8                   pad_5B[0x5];
+    u8  pad_0[0x20];
+    f32 health;
+    s16 max_health;
+    u8  pad_26[0x2];
+    u8  hit_response_class;
+    u8  pad_29[0x5];
+    u8  removal_status;
+    u8  pad_2F[0x11];
+    f32 unk40[4];
+    u8  pad_50[0x8];
+    u8  look_range; /* 0x58: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8  pad_59[0x1];
+    u8  look_height;
+    u8  pad_5B[0x5];
     struct HitColorFlash hit_flash;
     s32                  turret_group;
     s32                  spawn_path;
@@ -318,8 +318,8 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
             moby->collision = 0;
             moby->update_dist = 0xFF;
             moby->state = INTERCEPTOR_STATE_GROUP_EFFECTS_CONTROLLER;
-            moby_vars->unk58 = truncate_float_to_s32(17.0f);
-            moby_vars->unk5A = truncate_float_to_s32(6.0f);
+            moby_vars->look_range = truncate_float_to_s32(17.0f);
+            moby_vars->look_height = truncate_float_to_s32(6.0f);
             moby_vars->group_member_count = count_moby_group_members(moby);
             return;
         }

@@ -72,17 +72,17 @@ extern void  draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 
 typedef struct SnagglebeastVars {
-    u8                   pad_0[0x20];
-    f32                  health;
-    s16                  max_health;
-    s16                  unk26;
-    u8                   pad_28[0x1];
-    u8                   unk29;
-    u8                   pad_2A[0x2E];
-    u8                   unk58;
-    u8                   pad_59[0x1];
-    u8                   unk5A;
-    u8                   pad_5B[0x5];
+    u8  pad_0[0x20];
+    f32 health;
+    s16 max_health;
+    s16 unk26;
+    u8  pad_28[0x1];
+    u8  wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8  pad_2A[0x2E];
+    u8  look_range;
+    u8  pad_59[0x1];
+    u8  look_height;
+    u8  pad_5B[0x5];
     struct HitColorFlash hit_flash;
     u8                   pad_70[0x14];
     s32                  unk84;
@@ -1263,9 +1263,9 @@ void snagglebeast_update(unsigned char *moby) {
         MOBY(moby)->scale *= 1.75f;
         snagglebeast_instance_state->hero_capture_attack_enabled = 0;
         snagglebeast_instance_state->turn_start_angle = 1.7453293f;
-        snagglebeast_instance_state->unk29 = 1;
-        snagglebeast_instance_state->unk58 = truncate_float_to_s32(30.0f);
-        snagglebeast_instance_state->unk5A = truncate_float_to_s32(40.0f);
+        snagglebeast_instance_state->wrench_hit_sound = 1;
+        snagglebeast_instance_state->look_range = truncate_float_to_s32(30.0f);
+        snagglebeast_instance_state->look_height = truncate_float_to_s32(40.0f);
         break;
     case SNAGGLEBEAST_IDLE:
         if (MOBY(moby)->anim_flags & 2) {

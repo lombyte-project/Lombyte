@@ -15,17 +15,11 @@
 #include "rnc/overlay/shared/world/collision.h"
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/mobys/get_moby_target_info.h"
+#include "rnc/overlay/shared/mobys/moby_target_info.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/overlay/shared/weapons/doom_bot_movement.h"
-
-typedef struct {
-    char          pad0[10];
-    unsigned char radius;
-    char          padB[5];
-    float         height;
-} AimInfo;
 
 typedef struct {
     OvlVec4       target, velocity, previous_position;
@@ -178,14 +172,14 @@ void doom_bot_update(struct Moby *moby) {
     enum {
         MOBY_STATE_PENDING_REMOVAL = 0xFE
     };
-    OvlVec4       movement_and_detonation_vectors[4];
-    float         clearance;
-    DoomBotVars  *doom_bot_vars;
-    struct Moby  *target;
-    AimInfo      *aim;
-    float         scale, speed, z, height, reach, angle, distance;
-    int           blocked, move_flags, count, arc_motion_result;
-    unsigned char old_state;
+    OvlVec4         movement_and_detonation_vectors[4];
+    float           clearance;
+    DoomBotVars    *doom_bot_vars;
+    struct Moby    *target;
+    MobyTargetInfo *aim;
+    float           scale, speed, z, height, reach, angle, distance;
+    int             blocked, move_flags, count, arc_motion_result;
+    unsigned char   old_state;
     if (!moby || !(doom_bot_vars = (DoomBotVars *)moby->pvars))
         return;
     if (D_L00_0015F5C4 == 2) {
@@ -339,11 +333,11 @@ void doom_bot_update(struct Moby *moby) {
         target = doom_bot_vars->target_moby;
         if (target && target->state != MOBY_STATE_PENDING_REMOVAL && target->state != 0xFD) {
             height = target->pos.z;
-            aim = (AimInfo *)get_moby_target_info((char *)doom_bot_vars->target_moby);
+            aim = (MobyTargetInfo *)get_moby_target_info((char *)doom_bot_vars->target_moby);
             reach = speed;
             if (aim) {
-                reach = speed + convert_integer_to_float(aim->radius) * 0.125f;
-                height += aim->height;
+                reach = speed + convert_integer_to_float(aim->size) * 0.125f;
+                height += aim->aim_height;
             }
             if (fast_vec_dist(&moby->pos, &doom_bot_vars->target_moby->pos) < reach &&
                 coll_sphere(&moby->pos, speed, 1, moby)) {

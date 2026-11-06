@@ -144,7 +144,7 @@ void advance_hoverboard_dummy_path_node(char *patrol_moby) {
 
 typedef struct HoverboardDummyVars {
     u8    pad_0[0x29];
-    u8    unk29;
+    u8    wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
     u8    pad_2A[0x1];
     u8    unk2B;
     u8    pad_2C[0x34];
@@ -610,7 +610,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
             hoverboard_dummy_data->boost_speed_target *= slow;
         }
         hoverboard_dummy_data->bob_phase = random_angle_radians();
-        hoverboard_dummy_data->unk29 = 0;
+        hoverboard_dummy_data->wrench_hit_sound = 0;
         MOBY(moby)->state = HOVERBOARD_DUMMY_STATE_WAIT_FOR_RACE;
         break;
     }

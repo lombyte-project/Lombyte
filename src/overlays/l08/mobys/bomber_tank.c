@@ -103,19 +103,19 @@ typedef struct {
     f32   health; /* 0x20 */
     u8    pad24[4];
     u8    hit_response_class;
-    u8    unk29;
-    u8    unk2A;
+    u8    wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8    size;
     u8    pad2B[3];
     u8    removal_control; /* 0x2E: 2 removes the tank and its parts */
     u8    pad2F;
-    f32   unk30;
+    f32   aim_height;
     u8    pad34[0xA];
     u16   flags; /* 0x3E */
     u64   unk40;
     u8    pad48[0x10];
-    u8    unk58;
+    u8    look_range;
     u8    pad59;
-    u8    unk5A;
+    u8    look_height;
     u8    pad5B[5];
     u8    entity_matrix[0x90];
     Moby *target; /* 0xF0 */
@@ -230,18 +230,18 @@ void bomber_tank_update(Moby *moby) {
                 blend_moby_animation(moby, 1, 0, 0);
         }
         clear_u64_value(&bomber_tank_update_vars->unk40);
-        bomber_tank_update_vars->unk29 = 0;
+        bomber_tank_update_vars->wrench_hit_sound = 0;
         bomber_tank_update_vars->hit_response_class = 3;
-        bomber_tank_update_vars->unk30 = 3.0f;
+        bomber_tank_update_vars->aim_height = 3.0f;
         bomber_tank_update_vars->health = 9.0f;
-        bomber_tank_update_vars->unk2A = 12;
+        bomber_tank_update_vars->size = 12;
         bomber_tank_update_vars->removal_control = 1;
         bomber_tank_update_vars->flags |= 2;
         clear_u64_value(&bomber_tank_update_vars->unk40);
         bomber_tank_update_vars->pitch = 0.0f;
         bomber_tank_update_vars->yaw = moby->rot.z;
-        bomber_tank_update_vars->unk58 = truncate_float_to_s32(D_L08_001618CC);
-        bomber_tank_update_vars->unk5A = truncate_float_to_s32(D_L08_001618D0 * 8.0f);
+        bomber_tank_update_vars->look_range = truncate_float_to_s32(D_L08_001618CC);
+        bomber_tank_update_vars->look_height = truncate_float_to_s32(D_L08_001618D0 * 8.0f);
         break;
     case BOMBER_TANK_STATE_FOLLOW_PATH:
         advance_bomber_tank_along_path(moby, bomber_tank_update_vars->path);

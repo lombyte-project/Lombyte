@@ -37,21 +37,21 @@ typedef struct {
 
 /* Pvars of the l03 trooper. */
 typedef struct {
-    u8                   pad0[0x20];
-    f32                  health; /* 0x20 */
-    s16                  max_health;
-    u8                   pad26[2];
-    u8                   hit_response_class;
-    u8                   unk29;
-    u8                   pad2A[0xE];
-    s32                  alerted; /* 0x38: set when it is hit */
-    u8                   pad3C[4];
-    u8                   effect[0x18]; /* 0x40: debris record (spawn_explosion, FUN_L00_00259028) */
-    u8                   unk58;
-    u8                   pad59;
-    u8                   unk5A;
-    u8                   pad5B[5];
-    struct HitColorFlash hit_flash;
+    u8  pad0[0x20];
+    f32 health; /* 0x20 */
+    s16 max_health;
+    u8  pad26[2];
+    u8  hit_response_class;
+    u8  wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
+    u8  pad2A[0xE];
+    s32 alerted; /* 0x38: set when it is hit */
+    u8  pad3C[4];
+    u8  effect[0x18]; /* 0x40: debris record (spawn_explosion, FUN_L00_00259028) */
+    u8  look_range;
+    u8  pad59;
+    u8  look_height;
+    u8  pad5B[5];
+    struct HitColorFlash     hit_flash;
     struct KnockbackMotion   knockback;
     struct GroundMoveControl walk;   /* 0xD0 */
     TrooperPatrol            patrol; /* 0x120 */
@@ -143,14 +143,14 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         mine_layer_vars->walk.max_turn_step = frame_time * 6.2831855f;
         mine_layer_vars->walk.turn_damping = frame_time_sq * 18.849556f;
         mine_layer_vars->walk.max_speed = frame_time * 5.0f;
-        mine_layer_vars->unk58 = 8;
-        mine_layer_vars->unk5A = 8;
+        mine_layer_vars->look_range = 8;
+        mine_layer_vars->look_height = 8;
         mine_layer_vars->walk.max_climb = 2.0f;
         mine_layer_vars->walk.max_drop = 2.0f;
         mine_layer_vars->health = 2.0f;
         mine_layer_vars->max_health = 2;
         mine_layer_vars->hit_response_class = 1;
-        mine_layer_vars->unk29 = 0;
+        mine_layer_vars->wrench_hit_sound = 0;
         path = l03_paths[mine_layer_vars->patrol.path_index];
         mine_layer_vars->patrol.path = path;
         qcopy(&mine_layer_moby->pos, &path->points[0]);
