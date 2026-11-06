@@ -338,9 +338,9 @@ typedef struct {
     s32          scratch_data;
     s32          mask_data;
     s32          initialized;
-    s32          second_raw;
+    s32          coverage_runs; /* 0x14: MapState.coverage_runs */
     u8           pad18[0xc];
-    s32          active;
+    s32          map_ready;        /* 0x24: MapState.map_ready */
     s32          coverage_enabled; /* 0x28: set while the level has a map archive */
     u8           pad2c[4];
     MapChunkSlot slots[8];
@@ -458,8 +458,8 @@ void initialize_level_map_archive(void) {
         state->first_data += 8;
         state->second_data = state->first_data;
         second_size = archive[2] - archive[1];
-        state->second_raw = hud_heap_alloc(second_size, 0, (char *)heap_tag, 0x2EC);
-        fast_mem_copy((void *)state->second_raw, (char *)archive + archive[1], second_size);
+        state->coverage_runs = hud_heap_alloc(second_size, 0, (char *)heap_tag, 0x2EC);
+        fast_mem_copy((void *)state->coverage_runs, (char *)archive + archive[1], second_size);
         state->scratch_data = hud_heap_alloc(0x1000, 0, (char *)heap_tag, 0x2F3);
         for (i = 0; i < 8; i++) {
             D_L00_001841F0.slots[i].unk0 = -1;
@@ -470,7 +470,8 @@ void initialize_level_map_archive(void) {
         level_data = ((char *)map_coverage_pages) + D_L00_001841F0.archive_index * 0x800;
         D_L00_001841F0.mask_data = mask_buffer;
         if (level_data[0] != 0) {
-            load_map_chunk((void *)D_L00_001841F0.mask_data, level_data, D_L00_001841F0.second_raw);
+            load_map_chunk(
+                (void *)D_L00_001841F0.mask_data, level_data, D_L00_001841F0.coverage_runs);
         } else {
             decode_map_mask((int *)D_L00_001841F0.mask_data,
                             (unsigned char *)D_L00_001841F0.first_data,
@@ -545,7 +546,7 @@ void initialize_render_archive_transfer(void) {
             send_dma_to_stash_slot(state->buffer, state->file_handle, 0, bytes);
             state->level_slot = current_level_index + 0x100;
             state->last_transfer_bytes = bytes;
-            state->active = 1;
+            state->map_ready = 1;
             state->load_state = -2;
             return;
         }
@@ -558,12 +559,12 @@ void initialize_render_archive_transfer(void) {
                                0);
             D_L00_001841F0.level_slot =
                 D_0013D4E1 != 0 ? current_level_index + 0x100 : current_level_index;
-            D_L00_001841F0.active = 1;
+            D_L00_001841F0.map_ready = 1;
             D_L00_001841F0.load_state = -2;
             return;
         }
     }
-    D_L00_001841F0.active = 0;
+    D_L00_001841F0.map_ready = 0;
 }
 
 s32 D_L00_00184420[1] __attribute__((section(".data"))) = {0};

@@ -19,7 +19,7 @@ void save_map_coverage(s32 map_coverage_buffer) {
         return;
     }
     coverage_save_result = func_001FA860(
-        map_coverage_buffer, 0x800, level_map_selection.unk14, level_map_selection.mask);
+        map_coverage_buffer, 0x800, level_map_selection.coverage_runs, level_map_selection.mask);
     if (coverage_save_result == -1) {
         downsample_map_coverage(map_coverage_buffer);
     }

@@ -29,17 +29,17 @@ struct MapHdr;
  *   draw_map_screen_layers and draw_transition_overlay.
  */
 struct MapState {
-    u8                pad0[0x8];
-    s32               unk8; /* 0x008: draw_map_overlay draft tests it with unk2C */
-    u8               *mask; /* 0x00C: 512x512 1-bit explored mask of the current level */
-    u8                pad10[0x4];
-    s32               unk14;   /* 0x014: passed with mask to func_001FA860 */
+    u8 pad0[0x8];
+    s32 scratch_data; /* 0x008: 0x1000-byte heap buffer split into the eight highlighted_cells buffers (level copy); draw_map_overlay draws the cells only while set and unk2C */
+    u8 *mask;         /* 0x00C: 512x512 1-bit explored mask of the current level */
+    u8  pad10[0x4];
+    s32 coverage_runs; /* 0x014: byte-pair run table over the 512x512 mask (map archive chunk 2); func_001FA860 packs mask into the save page with it, load_map_chunk unpacks it */
     s32               z;       /* 0x018: GS Z of the map quads (draw_map_overlay packets) */
     struct MapMarker *markers; /* 0x01C: drawn by draw_map_markers, may be null */
     struct MapIcon   *icons;   /* 0x020: icon list of the shown level */
-    s32 unk24; /* 0x024: zero: update_map_zoom_and_pan and draw_map_overlay return early */
+    s32 map_ready; /* 0x024: set once the level's map archive is loaded or stashed; zero: "no map" text, update_map_zoom_and_pan returns early */
     s32 coverage_enabled; /* 0x028: zero: the save page is cleared, not packed */
-    s32 unk2C;            /* 0x02C: see unk8 */
+    s32 unk2C;            /* 0x02C: see scratch_data */
     struct {
         s32 cell; /* cell of a 16x16 grid over the map, <0 = unused */
         u8  pad4[0xC];
