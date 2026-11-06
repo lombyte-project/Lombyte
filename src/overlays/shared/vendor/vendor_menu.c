@@ -400,8 +400,8 @@ void open_vendor_menu(void *vendor_moby_arg) {
         vendor_moby->state = 3;
         vendor_menu.mode = VENDOR_MENU_MODE_SPAWNED_VENDOR;
     }
-    if ((vendor_menu.timer = game_language_macro - 1) < 0) {
-        vendor_menu.timer = 0;
+    if ((vendor_menu.language = game_language_macro - 1) < 0) {
+        vendor_menu.language = 0;
     }
     vendor_menu.unk44 = 0;
     vendor_menu.purchased_item = vendor_menu.title_text = vendor_menu.item_text = -1;
@@ -1556,7 +1556,7 @@ void update_vendor_menu(void) {
                     mark_moby_for_removal(cutscene_moby_to_remove);
                 }
             }
-            if (vendor_menu.unk28 != 0) {
+            if (vendor_menu.exit_anchor_moby != 0) {
                 restore_hero_after_vendor_exit_cutscene();
             } else {
                 close_vendor_menu(1);

@@ -393,9 +393,9 @@ void draw_vendor_screen(void) {
         update_entity(((u8 *)p->menu_mobys) + 0x500);
         pack_render_command_fields(((u8 *)p->menu_mobys) + 0x500, 0x202020, 0xE, 0xE, 0);
         initialize_vendor_selected_item_mobys();
-        p->unk2C = (s32)p->moby_buffer + 0x1400;
-        fast_mem_zero16(p->unk2C, 0x400);
-        p->animation_data = p->unk2C + 0x400;
+        p->scratch_buffer = (s32)p->moby_buffer + 0x1400;
+        fast_mem_zero16(p->scratch_buffer, 0x400);
+        p->animation_data = p->scratch_buffer + 0x400;
         if (cd_read_active[0] == 0) {
             if (start_audio_stream_read(p->animation_data + 0x80000,
                                         disc_table.vendor_animation.sector,
