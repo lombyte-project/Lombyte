@@ -39,28 +39,27 @@ typedef struct TaxiVars {
     u8    pad_0[0x20];
     u8    unk20;
     u8    pad_21[0x3F];
-    f32   unk60[4];
-    f32   unk70[4];
-    s32   unk80;
-    u8    pad_84[0x10];
+    f32   pose_position[4];
+    f32   pose_rotation[4];
+    s32   stops[5];
     s32   path_94;
     s32   path_98;
     s32   path_9C;
     s32   path_A0;
     s32   path_A4;
     s32   path_A8;
-    char *unkAC;
+    char *route_path;
     s16   unkB0;
     s16   voice;
-    s16   unkB4;
-    s16   unkB6;
-    s32   unkB8;
+    s16   stop_index;
+    s16   destination_stop;
+    s32   branch_mission;
     s32   unkBC;
-    f32   unkC0;
-    s32   unkC4;
+    f32   blend_t;
+    s32   blend_speed;
     u8    pad_C8[0xC];
-    f32   unkD4;
-    f32   unkD8;
+    f32   path_speed;
+    f32   path_acceleration;
 } TaxiVars;
 
 /* Moby class 998 */
@@ -110,7 +109,8 @@ void taxi_update(struct Moby *moby) {
                 request_moby_variant_help_message(moby);
                 if (pad_pressed_words[0] & 0x10) {
                     moby->state = TAXI_BLEND_TO_PATH_START;
-                    destination_stop_moby = find_moby_in_owner_list_by_id(moby, taxi_data->unkB6);
+                    destination_stop_moby =
+                        find_moby_in_owner_list_by_id(moby, taxi_data->destination_stop);
                     if (destination_stop_moby != 0) {
                         destination_stop_moby->state = TAXI_HIDDEN_STOP;
                         destination_stop_moby->flags |= 1;
@@ -128,39 +128,44 @@ void taxi_update(struct Moby *moby) {
             frame_time_sq,
             frame_time_sq,
             frame_time * 0.5f,
-            &taxi_data->unkC0,
-            (float *)&taxi_data->unkC4);
+            &taxi_data->blend_t,
+            (float *)&taxi_data->blend_speed);
         qa = rotation_or_start_position_scratch;
-        s = *(int *)((u8 *)taxi_data + 0x80 - (-(taxi_data->unkB4 * 4)));
+        s = *(int *)((u8 *)taxi_data + 0x80 - (-(taxi_data->stop_index * 4)));
         tab = l05_cuboids;
         qcopy(qa, &tab[s].pos);
         qcopy(interpolation_start_angles, &tab[s].rot);
         z = 0.0f;
         /* Fakematch: retail moves these arguments in another order; the cast keeps it. */
         ((void (*)(float, int *, int, void *, float *, int))sample_camera_path)(
-            z, (int *)taxi_data->unkAC, 0, interpolation_end_position, interpolation_end_angles, 0);
-        lerp_vector(taxi_data->unk60,
+            z,
+            (int *)taxi_data->route_path,
+            0,
+            interpolation_end_position,
+            interpolation_end_angles,
+            0);
+        lerp_vector(taxi_data->pose_position,
                     rotation_or_start_position_scratch,
                     interpolation_end_position,
-                    taxi_data->unkC0);
-        taxi_data->unk70[1] = fast_add_rotations(
+                    taxi_data->blend_t);
+        taxi_data->pose_rotation[1] = fast_add_rotations(
             fast_subtract_rotations(interpolation_end_angles[1], interpolation_start_angles[1]) *
-                taxi_data->unkC0,
+                taxi_data->blend_t,
             interpolation_start_angles[1]);
-        taxi_data->unk70[2] = fast_add_rotations(
+        taxi_data->pose_rotation[2] = fast_add_rotations(
             fast_subtract_rotations(interpolation_end_angles[2], interpolation_start_angles[2]) *
-                taxi_data->unkC0,
+                taxi_data->blend_t,
             interpolation_start_angles[2]);
-        if (1.0f <= taxi_data->unkC0) {
-            taxi_data->unkC0 = z;
-            *(float *)&taxi_data->unkC4 = z;
+        if (1.0f <= taxi_data->blend_t) {
+            taxi_data->blend_t = z;
+            *(float *)&taxi_data->blend_speed = z;
             moby->state = TAXI_FOLLOW_PATH;
         }
         break;
     case TAXI_FOLLOW_PATH:
         if (advance_moby_path(moby)) {
-            *(int *)&taxi_data->unkC0 = 0;
-            taxi_data->unkC4 = 0;
+            *(int *)&taxi_data->blend_t = 0;
+            taxi_data->blend_speed = 0;
             moby->state = TAXI_BLEND_TO_DESTINATION;
         }
         break;
@@ -171,40 +176,40 @@ void taxi_update(struct Moby *moby) {
             frame_time_sq,
             frame_time_sq,
             frame_time * 0.5f,
-            &taxi_data->unkC0,
-            (float *)&taxi_data->unkC4);
+            &taxi_data->blend_t,
+            (float *)&taxi_data->blend_speed);
         qa = interpolation_end_position;
-        s = *(int *)((u8 *)taxi_data + 0x80 - (-(taxi_data->unkB6 * 4)));
+        s = *(int *)((u8 *)taxi_data + 0x80 - (-(taxi_data->destination_stop * 4)));
         tab = l05_cuboids;
         qcopy(qa, &tab[s].pos);
         qcopy(interpolation_end_angles, &tab[s].rot);
-        sample_camera_path((int *)taxi_data->unkAC,
+        sample_camera_path((int *)taxi_data->route_path,
                            0,
                            rotation_or_start_position_scratch,
                            interpolation_start_angles,
                            0,
-                           (float)*(int *)taxi_data->unkAC);
-        lerp_vector(taxi_data->unk60,
+                           (float)*(int *)taxi_data->route_path);
+        lerp_vector(taxi_data->pose_position,
                     rotation_or_start_position_scratch,
                     interpolation_end_position,
-                    taxi_data->unkC0);
-        taxi_data->unk70[1] = fast_add_rotations(
+                    taxi_data->blend_t);
+        taxi_data->pose_rotation[1] = fast_add_rotations(
             fast_subtract_rotations(interpolation_end_angles[1], interpolation_start_angles[1]) *
-                taxi_data->unkC0,
+                taxi_data->blend_t,
             interpolation_start_angles[1]);
-        taxi_data->unk70[2] = fast_add_rotations(
+        taxi_data->pose_rotation[2] = fast_add_rotations(
             fast_subtract_rotations(interpolation_end_angles[2], interpolation_start_angles[2]) *
-                taxi_data->unkC0,
+                taxi_data->blend_t,
             interpolation_start_angles[2]);
-        if (1.0f <= taxi_data->unkC0) {
-            *(int *)&taxi_data->unkC0 = 0;
-            taxi_data->unkC4 = 0;
+        if (1.0f <= taxi_data->blend_t) {
+            *(int *)&taxi_data->blend_t = 0;
+            taxi_data->blend_speed = 0;
             moby->state = TAXI_WAIT_FOR_PICKUP;
             reset_selected_moby_to_current_placement(moby);
         }
         break;
     case TAXI_WAIT_FOR_ACTIVATION:
-        if (D_0014C050[current_level_index][taxi_data->unkB8] == 0xFF ||
+        if (D_0014C050[current_level_index][taxi_data->branch_mission] == 0xFF ||
             D_0014C050[current_level_index][taxi_data->unkBC] == 0xFF) {
             char          *model = moby->pclass;
             unsigned short flags = moby->flags;
@@ -252,20 +257,20 @@ enum TaxiStop {
 void initialize_taxi_stop_state(void *moby_v) {
     char     *moby = moby_v;
     TaxiVars *taxi_stop_vars = (TaxiVars *)MOBY(moby)->pvars;
-    int      *list = &taxi_stop_vars->unk80;
+    int      *list = taxi_stop_vars->stops;
     int       i;
     int       selected_pose_byte_offset;
     char     *pose_table_base;
-    taxi_stop_vars->unkB4 = -1;
+    taxi_stop_vars->stop_index = -1;
     for (i = 0; i < 5; i++) {
         if (fast_vec_dist(moby + 0x10, &l05_cuboids[list[i]].pos) < 1.0f) {
-            taxi_stop_vars->unkB4 = i;
+            taxi_stop_vars->stop_index = i;
         }
     }
-    switch (taxi_stop_vars->unkB4) {
+    switch (taxi_stop_vars->stop_index) {
     case TAXI_BRANCHING_STOP: {
         int k = current_level_index << 4;
-        if (visited52[taxi_stop_vars->unkB8 + k] != 0xFF &&
+        if (visited52[taxi_stop_vars->branch_mission + k] != 0xFF &&
             visited52[taxi_stop_vars->unkBC + k] != 0xFF) {
             moby[0x20] = 6;
             MOBY(moby)->flags = MOBY(moby)->flags | 1;
@@ -295,12 +300,14 @@ void initialize_taxi_stop_state(void *moby_v) {
     }
     {
         int *selected = list;
-        selected += taxi_stop_vars->unkB4;
+        selected += taxi_stop_vars->stop_index;
         selected_pose_byte_offset = *selected << 7;
     }
     pose_table_base = (char *)l05_cuboids;
-    qcopy(taxi_stop_vars->unk60, (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x30));
-    qcopy(taxi_stop_vars->unk70, (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x70));
+    qcopy(taxi_stop_vars->pose_position,
+          (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x30));
+    qcopy(taxi_stop_vars->pose_rotation,
+          (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x70));
 }
 /* Picks the path for the current point (five points, point 2 chosen by the table entry) and sets the travel speeds; same source as FUN_L16_002e4a58. */
 
@@ -308,40 +315,40 @@ void select_taxi_route(struct Moby *moby) {
     TaxiVars *taxi_data = (TaxiVars *)moby->pvars;
     char     *selected_path;
     float     inv, frame_scaled_travel_step, frame_squared_travel_step, first_path_segment_length;
-    switch (taxi_data->unkB4) {
+    switch (taxi_data->stop_index) {
     case TAXI_PAIRED_ROUTE_FIRST_STOP:
-        taxi_data->unkAC = ((char *)l05_paths[taxi_data->path_94]);
-        taxi_data->unkB6 = 1;
+        taxi_data->route_path = ((char *)l05_paths[taxi_data->path_94]);
+        taxi_data->destination_stop = 1;
         break;
     case TAXI_PAIRED_ROUTE_SECOND_STOP:
-        taxi_data->unkAC = ((char *)l05_paths[taxi_data->path_98]);
-        taxi_data->unkB6 = 0;
+        taxi_data->route_path = ((char *)l05_paths[taxi_data->path_98]);
+        taxi_data->destination_stop = 0;
         break;
     case TAXI_BRANCHING_STOP:
-        if (D_0014C050[current_level_index][taxi_data->unkB8] != 0xFF) {
-            taxi_data->unkAC = ((char *)l05_paths[taxi_data->path_9C]);
-            taxi_data->unkB6 = 3;
+        if (D_0014C050[current_level_index][taxi_data->branch_mission] != 0xFF) {
+            taxi_data->route_path = ((char *)l05_paths[taxi_data->path_9C]);
+            taxi_data->destination_stop = 3;
         } else {
-            taxi_data->unkAC = ((char *)l05_paths[taxi_data->path_A4]);
-            taxi_data->unkB6 = 4;
+            taxi_data->route_path = ((char *)l05_paths[taxi_data->path_A4]);
+            taxi_data->destination_stop = 4;
         }
         break;
     case TAXI_PRIMARY_BRANCH_STOP:
-        taxi_data->unkAC = ((char *)l05_paths[taxi_data->path_A0]);
-        taxi_data->unkB6 = 2;
+        taxi_data->route_path = ((char *)l05_paths[taxi_data->path_A0]);
+        taxi_data->destination_stop = 2;
         break;
     case TAXI_FALLBACK_BRANCH_STOP:
-        taxi_data->unkAC = ((char *)l05_paths[taxi_data->path_A8]);
-        taxi_data->unkB6 = 2;
+        taxi_data->route_path = ((char *)l05_paths[taxi_data->path_A8]);
+        taxi_data->destination_stop = 2;
         break;
     }
-    selected_path = taxi_data->unkAC;
+    selected_path = taxi_data->route_path;
     first_path_segment_length = fast_vec_dist(selected_path + 0x10, selected_path + 0x20);
     frame_scaled_travel_step = frame_time * 20.0f;
     frame_squared_travel_step = frame_time_sq * 5.0f;
-    inv = 1.0f / (first_path_segment_length * (float)*(int *)taxi_data->unkAC);
-    taxi_data->unkC4 = 0;
-    *(int *)&taxi_data->unkC0 = 0;
-    taxi_data->unkD4 = frame_scaled_travel_step * inv;
-    taxi_data->unkD8 = frame_squared_travel_step * inv;
+    inv = 1.0f / (first_path_segment_length * (float)*(int *)taxi_data->route_path);
+    taxi_data->blend_speed = 0;
+    *(int *)&taxi_data->blend_t = 0;
+    taxi_data->path_speed = frame_scaled_travel_step * inv;
+    taxi_data->path_acceleration = frame_squared_travel_step * inv;
 }
