@@ -8,8 +8,8 @@ extern void snd_continue_vag_stream(void *) __asm__("func_0012ECA0");
 typedef struct {
     unsigned int handle; /* 0x00: 0 none, 0xFFFFFFFF starting/released */
     short        id;     /* 0x04 */
-    short        unk06;
-    short        unk08;
+    short        volume;
+    short        flags;
     short        state; /* 0x0A: low bits the state, 0x8000 paused */
     short        fade;  /* 0x0C: 0x8000 fading */
     short        fadeT; /* 0x0E */
