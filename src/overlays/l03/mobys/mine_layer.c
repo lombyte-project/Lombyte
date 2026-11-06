@@ -63,14 +63,14 @@ typedef struct {
     f32           kb_max; /* 0xC4 */
     u8            padC8[8];
     u8            walk[8]; /* 0xD0: walk driver (FUN_L01_0026d930, FUN_L00_00259028) */
-    f32           unkD8;
-    f32           unkDC;
+    f32           walk_max_drop;
+    f32           walk_max_climb;
     u8            padE0[8];
     f32           fall_speed; /* 0xE8 */
     u8            padEC[8];
-    f32           unkF4;
+    f32           walk_max_speed;
     u8            padF8[0x14];
-    f32           unk10C;
+    f32           walk_turn_spring;
     f32           patrol_turn_damping_factor;
     f32           patrol_turn_step_limit;
     u8            pad118[8];
@@ -160,14 +160,14 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
     switch (mine_layer_moby->state) {
     case MINE_LAYER_INITIALIZE:
         FUN_L01_0026d930(mine_layer_vars->walk);
-        mine_layer_vars->unk10C = frame_time_sq * 6.2831855f;
+        mine_layer_vars->walk_turn_spring = frame_time_sq * 6.2831855f;
         mine_layer_vars->patrol_turn_step_limit = frame_time * 6.2831855f;
         mine_layer_vars->patrol_turn_damping_factor = frame_time_sq * 18.849556f;
-        mine_layer_vars->unkF4 = frame_time * 5.0f;
+        mine_layer_vars->walk_max_speed = frame_time * 5.0f;
         mine_layer_vars->unk58 = 8;
         mine_layer_vars->unk5A = 8;
-        mine_layer_vars->unkDC = 2.0f;
-        mine_layer_vars->unkD8 = 2.0f;
+        mine_layer_vars->walk_max_climb = 2.0f;
+        mine_layer_vars->walk_max_drop = 2.0f;
         mine_layer_vars->health = 2.0f;
         mine_layer_vars->unk24 = 2;
         mine_layer_vars->unk28 = 1;

@@ -16,10 +16,10 @@ void path_mover_update(struct Moby *path_moby) __asm__("FUN_L03_002db020");
 
 typedef struct PathMoverVars {
     u8    pad_0[0x20];
-    f32   unk20[4];
+    f32   entity_matrix[4];
     u8    pad_30[0x30];
-    char *unk60;
-    f32   unk64;
+    char *path;
+    f32   path_distance;
 } PathMoverVars;
 
 /* Moby class 898 */
@@ -34,25 +34,28 @@ void path_mover_update(struct Moby *path_moby) {
 
     *(OvlQuad *)previous_position = *(OvlQuad *)&path_moby->pos;
     path_moby_vars = (PathMoverVars *)path_moby->pvars;
-    path_moby_vars->unk64 += path_mover_distance_step;
-    movement_scratch[0] = fast_cos(path_moby->rot.z) * path_moby_vars->unk64;
-    movement_scratch[1] = fast_sin(path_moby->rot.z) * path_moby_vars->unk64;
+    path_moby_vars->path_distance += path_mover_distance_step;
+    movement_scratch[0] = fast_cos(path_moby->rot.z) * path_moby_vars->path_distance;
+    movement_scratch[1] = fast_sin(path_moby->rot.z) * path_moby_vars->path_distance;
     *(int *)&movement_scratch[2] = 0;
-    fast_vec_add(movement_scratch, movement_scratch, path_moby_vars->unk60 + 0x10);
-    i = truncate_float_to_s32(path_moby_vars->unk64 / *(float *)(path_moby_vars->unk60 + 0x1C));
+    fast_vec_add(movement_scratch, movement_scratch, path_moby_vars->path + 0x10);
+    i = truncate_float_to_s32(path_moby_vars->path_distance /
+                              *(float *)(path_moby_vars->path + 0x1C));
     segment_fraction = convert_integer_to_float(i);
-    path = path_moby_vars->unk60;
-    segment_fraction = (path_moby_vars->unk64 - segment_fraction * *(float *)(path + 0x1C)) /
-                       *(float *)(path + 0x1C);
+    path = path_moby_vars->path;
+    segment_fraction =
+        (path_moby_vars->path_distance - segment_fraction * *(float *)(path + 0x1C)) /
+        *(float *)(path + 0x1C);
     if (i >= *(int *)path - 2) {
         mark_moby_for_removal(path_moby);
         return;
     }
     fast_vec_sub(segment_offset, ((float(*)[4])path)[i + 2], ((float(*)[4])path)[i + 1]);
     fast_vec_scale(segment_offset, segment_offset, segment_fraction);
-    fast_vec_add(&path_moby->pos, segment_offset, (*(float(**)[4])(&path_moby_vars->unk60))[i + 1]);
+    fast_vec_add(&path_moby->pos, segment_offset, (*(float(**)[4])(&path_moby_vars->path))[i + 1]);
     fast_vec_sub(movement_scratch, &path_moby->pos, previous_position);
-    update_entity_matrix(path_moby_vars->unk20, movement_scratch, &path_moby->rot, &path_moby->rot);
+    update_entity_matrix(
+        path_moby_vars->entity_matrix, movement_scratch, &path_moby->rot, &path_moby->rot);
 }
 
 float path_mover_distance_step = 0;
