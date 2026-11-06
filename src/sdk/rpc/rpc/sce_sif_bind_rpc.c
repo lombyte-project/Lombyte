@@ -6,10 +6,10 @@
 
 struct SifRpcPacket {
     u8  pad_0[0x14];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
+    s32 pkt_addr;
+    s32 rpc_id;
+    s32 client;
+    s32 sid;
 };
 
 extern s32 CreateSema();
@@ -28,11 +28,11 @@ s32 sceSifBindRpc(struct sceSifClientData *client, s32 rpc_number, s32 mode) {
     if (packet == NULL) {
         return -1;
     }
-    client->rpcd.pid = packet->unk18;
+    client->rpcd.pid = packet->rpc_id;
     client->rpcd.paddr = packet;
-    packet->unk20 = rpc_number;
-    packet->unk14 = (s32)packet;
-    packet->unk1C = (s32)client;
+    packet->sid = rpc_number;
+    packet->pkt_addr = (s32)packet;
+    packet->client = (s32)client;
     if (mode & 1) {
         goto block_7;
     }

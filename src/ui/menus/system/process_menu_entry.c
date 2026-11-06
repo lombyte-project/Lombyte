@@ -3,36 +3,30 @@
 #include "rnc/globals.h"
 #include "rnc/ui/hud/remove_hud_item.h"
 #include "rnc/ui/menus/weapons/count_unspent_gold_bolts.h"
+#include "rnc/ui/vendor/vendor_capture.h"
 #include "rnc/sdk/libc/string.h"
 
 typedef struct {
-    s32 unk0;
-    u16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    u16 unk10;
+    s32 help_text;
+    u16 action;
+    s16 link;
+    s16 condition;
+    s16 condition_arg;
+    s16 entry_if_met;
+    s16 entry_if_not_met;
+    u16 flags;
 } MenuItem;
 
 typedef struct {
     u8  pad0[0x4];
-    u16 unk4;
+    u16 previous_entry;
     u8  pad6[0x2];
-    u8  unk8;
+    u8  entry_flag;
     u8  pad9[0x2D];
-    s16 unk36;
-    s32 unk38;
-    u8 *unk3C;
+    s16 current_entry;
+    s32 entry_time;
+    u8 *entries;
 } Menu;
-
-typedef struct {
-    s32 unk0;
-    u8  pad4[0x10];
-    u16 unk14;
-    u8  pad16[0x2];
-} Weapon;
 
 typedef struct {
     char *s[6];
@@ -46,7 +40,6 @@ extern s32      world_update_time_macro __asm__("D_0015F60C") MACRO_ADDR;
 extern Suffixes menu_bolt_threshold_thousands_separators __asm__("D_001E8680");
 extern char     help_text_integer_placeholder[] __asm__("D_00160088");
 extern char     bolt_threshold_number_format[] __asm__("D_00160090");
-extern Weapon   D_001DFFB0[];
 
 #include "rnc/game/item_state.h"
 #include "rnc/game/game_globals.h"
@@ -85,45 +78,45 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
     s16       kind;
     s32       bolt_threshold;
 
-    current_menu_entry = (MenuItem *)(menu->unk3C + menu->unk36 * 0x1C);
-    if (menu->unk3C == 0) {
+    current_menu_entry = (MenuItem *)(menu->entries + menu->current_entry * 0x1C);
+    if (menu->entries == 0) {
         return;
     }
     if (follow_entry_link != 0) {
-        menu->unk4 = menu->unk36;
-        menu->unk38 = world_update_time;
-        linked_entry_index = current_menu_entry->unk6;
-        if (menu->unk36 != linked_entry_index) {
-            flags = current_menu_entry->unk10;
-            menu->unk36 = current_menu_entry->unk6;
-            current_menu_entry = (MenuItem *)(menu->unk3C + linked_entry_index * 0x1C);
-            menu->unk8 = *(u8 *)&current_menu_entry->unk10 & 1;
+        menu->previous_entry = menu->current_entry;
+        menu->entry_time = world_update_time;
+        linked_entry_index = current_menu_entry->link;
+        if (menu->current_entry != linked_entry_index) {
+            flags = current_menu_entry->flags;
+            menu->current_entry = current_menu_entry->link;
+            current_menu_entry = (MenuItem *)(menu->entries + linked_entry_index * 0x1C);
+            menu->entry_flag = *(u8 *)&current_menu_entry->flags & 1;
             if (flags & 4) {
                 menu_entry_context[2] = (s32)callback_context;
                 menu_entry_context[3] = (s32)menu;
-                if (current_menu_entry->unk4 & 0x4000) {
-                    noop_callback_n((s16)(current_menu_entry->unk4 ^ 0x4000));
+                if (current_menu_entry->action & 0x4000) {
+                    noop_callback_n((s16)(current_menu_entry->action ^ 0x4000));
                 } else {
                     remove_hud_item(menu_help_hud_item);
                     menu_help_hud_item = -1;
-                    noop_callback_o((s16)current_menu_entry->unk4);
+                    noop_callback_o((s16)current_menu_entry->action);
                 }
             }
         }
     }
-    if (menu->unk36 == -1) {
+    if (menu->current_entry == -1) {
         return;
     }
-    menu_entry_context[5] = current_menu_entry->unk0;
-    kind = current_menu_entry->unk8;
+    menu_entry_context[5] = current_menu_entry->help_text;
+    kind = current_menu_entry->condition;
     if (kind == MENU_CONDITION_BOLT_THRESHOLD_AND_COUNT_DIFFERENCE_MET) {
         sfx = menu_bolt_threshold_thousands_separators;
-        strcpy(SCRATCH, get_help_message_text(current_menu_entry->unk0));
+        strcpy(SCRATCH, get_help_message_text(current_menu_entry->help_text));
         substring_match = FindSubstring(SCRATCH, help_text_integer_placeholder);
         if (substring_match != 0) {
             substring_match[1] = 's';
         }
-        bolt_threshold = D_001DFFB0[current_menu_entry->unkA].unk14;
+        bolt_threshold = vendor_item_prices[current_menu_entry->condition_arg].gold_weapon_price;
         sprintf(num,
                 bolt_threshold_number_format,
                 bolt_threshold / 1000,
@@ -131,7 +124,7 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
                 bolt_threshold % 1000);
         sprintf(formatted_help_text, SCRATCH, num);
     } else {
-        sprintf(formatted_help_text, get_help_message_text(current_menu_entry->unk0));
+        sprintf(formatted_help_text, get_help_message_text(current_menu_entry->help_text));
     }
     if (menu_entry_context[5] != 0) {
         copy_text_to_shared_buffer(formatted_help_text);
@@ -139,31 +132,33 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
         remove_hud_item(menu_help_hud_item);
         menu_help_hud_item = -1;
     }
-    if (current_menu_entry->unk8 == 0) {
+    if (current_menu_entry->condition == 0) {
         return;
     }
     ok = 0;
-    switch (current_menu_entry->unk8) {
+    switch (current_menu_entry->condition) {
     case MENU_CONDITION_PURCHASE_PRICE_MET:
-        ok = !(current_bolt_count < D_001DFFB0[current_menu_entry->unkA].unk0);
+        ok = !(current_bolt_count <
+               vendor_item_prices[current_menu_entry->condition_arg].purchase_price);
         break;
     case MENU_CONDITION_ITEM_AVAILABLE:
-        ok = item_available[current_menu_entry->unkA] != 0;
+        ok = item_available[current_menu_entry->condition_arg] != 0;
         break;
     case MENU_CONDITION_ITEM_AVAILABLE_NOT_ACQUIRED:
         ok = 0;
-        if (item_available[current_menu_entry->unkA] != 0) {
-            ok = items_acquired[current_menu_entry->unkA] == 0;
+        if (item_available[current_menu_entry->condition_arg] != 0) {
+            ok = items_acquired[current_menu_entry->condition_arg] == 0;
         }
         break;
     case MENU_CONDITION_ALTERNATE_ITEM_AVAILABLE:
-        ok = alternate_item_available[current_menu_entry->unkA] != 0;
+        ok = alternate_item_available[current_menu_entry->condition_arg] != 0;
         break;
     case MENU_CONDITION_COUNT_DIFFERENCE_MET:
-        ok = !(count_unspent_gold_bolts() < current_menu_entry->unkA);
+        ok = !(count_unspent_gold_bolts() < current_menu_entry->condition_arg);
         break;
     case MENU_CONDITION_BOLT_THRESHOLD_AND_COUNT_DIFFERENCE_MET:
-        ok = current_bolt_count >= D_001DFFB0[current_menu_entry->unkA].unk14 &&
+        ok = current_bolt_count >=
+                 vendor_item_prices[current_menu_entry->condition_arg].gold_weapon_price &&
              count_unspent_gold_bolts() >= 4;
         break;
     default:
@@ -171,15 +166,15 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
         break;
     }
     if (ok) {
-        condition_target_entry_index = current_menu_entry->unkC;
+        condition_target_entry_index = current_menu_entry->entry_if_met;
     } else {
-        condition_target_entry_index = current_menu_entry->unkE;
+        condition_target_entry_index = current_menu_entry->entry_if_not_met;
     }
-    if (condition_target_entry_index != menu->unk36) {
-        menu->unk36 = condition_target_entry_index;
-        menu->unk38 = world_update_time_macro;
-        current_menu_entry = (MenuItem *)(menu->unk3C + condition_target_entry_index * 0x1C);
-        menu->unk8 = *(u8 *)&current_menu_entry->unk10 & 1;
+    if (condition_target_entry_index != menu->current_entry) {
+        menu->current_entry = condition_target_entry_index;
+        menu->entry_time = world_update_time_macro;
+        current_menu_entry = (MenuItem *)(menu->entries + condition_target_entry_index * 0x1C);
+        menu->entry_flag = *(u8 *)&current_menu_entry->flags & 1;
         process_menu_entry(callback_context, menu, 0);
     }
 }
