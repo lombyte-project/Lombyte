@@ -13,9 +13,9 @@ struct HudSlot {
     u8  pad_4[0x3C];
     s32 item_id; /* 0x64 of the slot: remove_hud_item's slot_item_id, -1 none */
     u8  pad_44[0x4];
-    s32 unk48;
+    s32 slide; /* 0x6C of the slot */
     u8  pad_4C[0xC];
-    s32 unk58;
+    s32 visible_timer; /* 0x7C of the slot */
 };
 
 #include "rnc/ui/hud/hud_state.h"
@@ -52,8 +52,8 @@ void init_hud(void) {
         *(s32 *)((u8 *)slot - 0x4) = 0x10000;
         queue_animation_update(slot_index, 0xFFFF, 0, 0, 0, 0, 1);
         slot_index += 1;
-        slot->unk58 = 0;
-        slot->unk48 = -6;
+        slot->visible_timer = 0;
+        slot->slide = -6;
         *(s32 *)((u8 *)slot - 0x20) = 0;
         slot->next_mode = 0;
         slot = (struct HudSlot *)((u8 *)slot + 0x90);

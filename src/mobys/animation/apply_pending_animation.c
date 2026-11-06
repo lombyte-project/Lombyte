@@ -4,7 +4,7 @@ struct Anim;
 typedef void (*AnimFn)(struct Anim *);
 
 struct Anim {
-    s32    unk0;
+    s32    id;
     s32    mode;
     s32    b;
     s32    c;

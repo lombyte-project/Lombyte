@@ -195,7 +195,7 @@ s32 hud_keep_visible(s32 key, s32 minimum_visible_frames) {
         if (hud_elements[i].key == key)
             break;
     }
-    if (i < 13 && hud_elements[i].unk68 == 0) {
+    if (i < 13 && hud_elements[i].pending == 0) {
         hud_element = hud_elements + i;
         hud_element->visible_timer = (minimum_visible_frames < hud_element->visible_timer)
                                          ? hud_element->visible_timer

@@ -3,7 +3,7 @@
 #include "rnc/globals.h"
 
 struct Anim {
-    s32 unk0;
+    s32 id;
     s32 flags;
     u8  pad8[0x18];
     s32 next_id;
@@ -17,9 +17,9 @@ struct Anim {
     s32 serial;
     s32 pending;
     u8  pad6c[4];
-    s32 unk70;
+    s32 counter_digits; /* 0x70: HudElem.cnt */
     u8  pad74[8];
-    s32 unk7C;
+    s32 visible_timer;
     u8  pad80[0x10];
 };
 
@@ -54,8 +54,8 @@ s32 queue_animation_update(s32 chan,
         anim->next_e = queued_animation_callback;
         anim->pending = 1;
         anim->next_mode = mode;
-        anim->unk7C = 0;
-        anim->unk70 = 0;
+        anim->visible_timer = 0;
+        anim->counter_digits = 0;
         if (mode & anim->flags & 0x20) {
             apply_pending_animation(anim);
         }

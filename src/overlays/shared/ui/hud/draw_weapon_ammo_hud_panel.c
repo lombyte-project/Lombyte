@@ -212,7 +212,7 @@ int update_hud_elements(int call) {
     hud_element = hud_elements;
     hud_timer_refresh_control = &D_L00_0017E4D8;
     do {
-        if ((hud_element->unk04 & 0x10) || hud_timer_refresh_control->b != 0) {
+        if ((hud_element->mode & 0x10) || hud_timer_refresh_control->b != 0) {
             if (hud_element->visible_timer < scale_game_frames(10)) {
                 hud_element->visible_timer = scale_game_frames(10);
             }
@@ -225,7 +225,7 @@ int update_hud_elements(int call) {
             if (hud_element->slide >= -5)
                 hud_element->slide--;
         }
-        if (hud_element->unk68 && hud_element->slide == -6) {
+        if (hud_element->pending && hud_element->slide == -6) {
             apply_pending_animation(hud_element);
         }
         if (call && hud_element->update) {
