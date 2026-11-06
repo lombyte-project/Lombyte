@@ -28,8 +28,7 @@ extern s32  get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void draw_ui_frame(s32, s32, s32, s32, s32) __asm__("func_001F5F18");
 extern void draw_outlined_rect(s32, s32, s32, s32, s32) __asm__("func_001F6060");
 extern s32  font_print_center(s32, s32, s64, char *, s32) __asm__("func_001F6AF0");
-extern void
-font_print_window(struct TextRegion *, s64, void *, s32, s32, u8 *) __asm__("FUN_001f7090");
+extern void font_print_window(struct TextRegion *, s64, void *, s32, s32, struct Glyph *) __asm__("FUN_001f7090");
 extern void
 font_print_window_regular(struct TextRegion *, s32, char *, s32) __asm__("func_001F7580");
 extern s32   fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
