@@ -25,10 +25,10 @@ void liftcar_platform_update(struct Moby *moby) __asm__("FUN_L02_002e2228");
 
 typedef struct LiftcarPlatformVars {
     u8  pad_0[0x60];
-    f32 unk60[4];
+    f32 entity_matrix[4];
     u8  pad_70[0x30];
-    s32 unkA0;
-    s32 unkA4;
+    s32 driver_moby_index;
+    s32 voice;
 } LiftcarPlatformVars;
 
 /* Moby class 792 */
@@ -43,7 +43,7 @@ void liftcar_platform_update(struct Moby *moby) {
         LIFTCAR_PLATFORM_FOLLOW_DRIVER_ONLY = 6
     };
     LiftcarPlatformVars *platform_vars = (LiftcarPlatformVars *)moby->pvars;
-    struct Moby         *driver = &D_L02_0015FFD8[platform_vars->unkA0];
+    struct Moby         *driver = &D_L02_0015FFD8[platform_vars->driver_moby_index];
     Vec4                 delta;
     Vec4                 old_rot;
     float                joint_mtx[16];
@@ -86,11 +86,11 @@ void liftcar_platform_update(struct Moby *moby) {
                 moby->state == LIFTCAR_PLATFORM_WAIT_FOR_MISSION_GATE) {
                 moby->state = LIFTCAR_PLATFORM_ANIMATE_THEN_WAIT_FOR_RIDER_OR_HERO_ABOVE;
                 set_moby_animation(driver, 0, 0);
-                platform_vars->unkA4 = allocate_voice_for_target_entry(2, 4, driver);
+                platform_vars->voice = allocate_voice_for_target_entry(2, 4, driver);
             } else {
                 moby->state = LIFTCAR_PLATFORM_ANIMATE_THEN_WAIT_FOR_RIDER_OR_HERO_BELOW;
                 set_moby_animation(driver, 2, 0);
-                platform_vars->unkA4 = allocate_voice_for_target_entry(0, 4, driver);
+                platform_vars->voice = allocate_voice_for_target_entry(0, 4, driver);
             }
         } else if (hero.ground_moby != moby) {
             moby->command = 0;
@@ -103,34 +103,34 @@ void liftcar_platform_update(struct Moby *moby) {
         if (vector_distance_xy(&moby->pos, &hero.motion.pos) < 1.5f &&
             hero.motion.pos.f[2] < moby->pos.z - 1.5f) {
             driver->anim_speed = 0.0f;
-            voice = platform_vars->unkA4;
+            voice = platform_vars->voice;
             if (voice != -1) {
                 char *e = ((char *)&voice_pool) + voice * 0x70;
                 if (*(struct Moby **)(e + 0x88) == driver && *(unsigned char *)(e + 0x74) != 0) {
                     release_voice_slot(voice);
                 }
             }
-            platform_vars->unkA4 = -1;
+            platform_vars->voice = -1;
         }
         if (driver->anim_speed == 0.0f &&
             (vector_distance_xy(&moby->pos, &hero.motion.pos) > 2.0f ||
              moby->pos.z - 1.25f < hero.motion.pos.f[2])) {
             driver->anim_speed = 1.0f;
             if (moby->state == LIFTCAR_PLATFORM_ANIMATE_THEN_WAIT_FOR_RIDER_OR_HERO_ABOVE) {
-                platform_vars->unkA4 = allocate_voice_for_target_entry(2, 4, driver);
+                platform_vars->voice = allocate_voice_for_target_entry(2, 4, driver);
             } else {
-                platform_vars->unkA4 = allocate_voice_for_target_entry(0, 4, driver);
+                platform_vars->voice = allocate_voice_for_target_entry(0, 4, driver);
             }
         }
         if (driver->anim_flags & 2) {
-            voice = platform_vars->unkA4;
+            voice = platform_vars->voice;
             if (voice != -1) {
                 char *e = ((char *)&voice_pool) + voice * 0x70;
                 if (*(struct Moby **)(e + 0x88) == driver && *(unsigned char *)(e + 0x74) != 0) {
                     release_voice_slot(voice);
                 }
             }
-            platform_vars->unkA4 = -1;
+            platform_vars->voice = -1;
             if (moby->state == LIFTCAR_PLATFORM_ANIMATE_THEN_WAIT_FOR_RIDER_OR_HERO_ABOVE) {
                 moby->state = LIFTCAR_PLATFORM_WAIT_FOR_RIDER_OR_HERO_ABOVE;
                 blend_moby_animation(driver, 1, 0, 0);
@@ -147,5 +147,5 @@ void liftcar_platform_update(struct Moby *moby) {
         break;
     }
     fast_vec_add(&delta, &delta, &moby->pos);
-    update_entity_matrix(platform_vars->unk60, &delta, &old_rot, &moby->rot);
+    update_entity_matrix(platform_vars->entity_matrix, &delta, &old_rot, &moby->rot);
 }
