@@ -19,10 +19,10 @@ typedef struct {
     V_2acbf0_002acbf0 corner[4];
     u32               color[4];
     f32               uv[8];
-    s64               unk70;
+    s64               clamp; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
     s64               tex;
-    s64               unk80;
-    s64               unk88;
+    s64               tex1;
+    s64               alpha;
 } Q_2acbf0_002acbf0;
 
 typedef struct {
@@ -83,9 +83,9 @@ void draw_moby_oscillating_textured_quads(M_2acbf0_002acbf0 *moby) {
         quad.color[2] = 0x80808080;
         quad.color[3] = 0x80808080;
         quad.tex = get_effect_texture(odd ? 0x12 : 0x11);
-        quad.unk80 = 0xFF9000000260L;
-        quad.unk88 = 0x8000000048L;
-        quad.unk70 = 0;
+        quad.tex1 = 0xFF9000000260L;
+        quad.alpha = 0x8000000048L;
+        quad.clamp = 0;
         quad.corner[0].f[0] = -1.0f;
         quad.corner[0].f[1] = 0.0f;
         quad.corner[0].f[2] = 1.0f;

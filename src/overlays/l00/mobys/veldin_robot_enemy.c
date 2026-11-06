@@ -622,10 +622,10 @@ typedef struct {
     s32     unk64;
     f32     unk68;
     f32     unk6C;
-    s64     unk70;
+    s64     clamp; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
     s64     tex;
-    s64     unk80;
-    s64     unk88;
+    s64     tex1;
+    s64     alpha;
 } GlowQuad;
 
 typedef struct {
@@ -663,9 +663,9 @@ void draw_veldin_robot_effect_quad(GlowMoby *moby) {
     fast_vec_normalize(&quad_transform[1], &quad_transform[1], -1.0f);
     fast_vec_cross(&quad_transform[2], &quad_transform[1], &quad_transform[0]);
     quad.tex = get_effect_texture(0xB);
-    quad.unk88 = 0x8000000048L;
-    quad.unk80 = 0xFF9000000260L;
-    quad.unk70 = 5;
+    quad.alpha = 0x8000000048L;
+    quad.tex1 = 0xFF9000000260L;
+    quad.clamp = 5;
     quad.color[3] = 0x80FFFFFF;
     quad.color[2] = 0x80FFFFFF;
     quad.color[1] = 0x80FFFFFF;

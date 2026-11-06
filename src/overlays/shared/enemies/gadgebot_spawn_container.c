@@ -23,10 +23,10 @@ typedef struct {
     float corner[4][4];
     int   color[4];
     float uv[4][2];
-    long  unk70;
+    long  clamp; /* GS CLAMP_1, TEX0_1, TEX1_1 and ALPHA_1 values */
     long  tex;
-    long  unk80;
-    long  unk88;
+    long  tex1;
+    long  alpha;
 } L06BackdropQuad;
 
 extern unsigned char *spawn_spinning_fade_in_out_effect_particle(
@@ -268,13 +268,13 @@ void draw_gadgebot_spawn_container(char *moby) {
         }
     }
     quad.tex = get_effect_texture(*(int *)&gadgebot_container_texture_index_gp);
-    quad.unk80 = 0xff9000000260L;
-    quad.unk88 = (long)*(int *)&gadgebot_container_blend_minuend_selector_gp |
+    quad.tex1 = 0xff9000000260L;
+    quad.alpha = (long)*(int *)&gadgebot_container_blend_minuend_selector_gp |
                  (long)*(int *)&gadgebot_container_blend_subtrahend_selector_gp << 2 |
                  (long)*(int *)&gadgebot_container_blend_factor_selector_gp << 4 |
                  (long)*(int *)&gadgebot_container_blend_addend_selector_gp << 6 |
                  (long)*(int *)&gadgebot_container_blend_fixed_alpha_gp << 32;
-    quad.unk70 = 0;
+    quad.clamp = 0;
     quad.color[3] = *(int *)&gadgebot_container_quad_color_gp;
     quad.color[2] = *(int *)&gadgebot_container_quad_color_gp;
     quad.color[1] = *(int *)&gadgebot_container_quad_color_gp;
