@@ -164,12 +164,12 @@ void handle_refueling_station_damage(struct Moby *moby,
 
 typedef struct RefuelingStationVars {
     u8  pad_0[0x20];
-    u8  unk20;
+    u8  health;
     u8  pad_21[0x4F];
-    s32 unk70;
+    s32 explosion_linked_moby_index;
     s16 timer_74;
     s16 removal_check_index;
-    s32 unk78;
+    s32 command_relay_moby_index;
     s32 voice;
 } RefuelingStationVars;
 
@@ -178,7 +178,7 @@ void refueling_station_update(struct Moby *moby) {
     RefuelingStationVars *station_vars = (RefuelingStationVars *)moby->pvars;
     float                 explosion_offset[4];
     unsigned char        *removal_check_base;
-    handle_refueling_station_damage(moby, station_vars, &station_vars->unk20);
+    handle_refueling_station_damage(moby, station_vars, &station_vars->health);
     switch (moby->state) {
     case REFUELING_STATION_STATE_INITIALIZE:
         if (station_vars->removal_check_index != -1 &&
@@ -198,9 +198,9 @@ void refueling_station_update(struct Moby *moby) {
             }
         }
         if (moby->command == 1) {
-            if (station_vars->unk78 != -1) {
-                unsigned char *o =
-                    (unsigned char *)((char *)moby_list + (station_vars->unk78 << 8));
+            if (station_vars->command_relay_moby_index != -1) {
+                unsigned char *o = (unsigned char *)((char *)moby_list +
+                                                     (station_vars->command_relay_moby_index << 8));
                 if (o[0x20] == 1)
                     o[0xBC] = o[0x20];
             }
@@ -219,9 +219,10 @@ void refueling_station_update(struct Moby *moby) {
         break;
     case REFUELING_STATION_STATE_EXPLOSION_DELAY:
         if (fast_dec_timer_s16(&station_vars->timer_74)) {
-            if (station_vars->unk70 != -1) {
+            if (station_vars->explosion_linked_moby_index != -1) {
                 unsigned char *o =
-                    (unsigned char *)((char *)moby_list + (station_vars->unk70 << 8));
+                    (unsigned char *)((char *)moby_list +
+                                      (station_vars->explosion_linked_moby_index << 8));
                 if (o != 0 && o[0x20] != 0xFE && o[0x20] != 0xFD &&
                     (*(short *)(o + 0xA6) == 0x494 || *(short *)(o + 0xA6) == 0x49D ||
                      *(short *)(o + 0xA6) == 0x4A0)) {
