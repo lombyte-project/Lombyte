@@ -98,8 +98,8 @@ extern int FUN_L00_001fefc8(void *);
 /* pvars of the class sand_shark_nest_update updates (only the fields it touches). */
 typedef struct {
     char          pad0[0x20];
-    float         f20; /* 0x20 */
-    short         s24; /* 0x24 */
+    float         health;     /* 0x20 */
+    short         max_health; /* 0x24 */
     char          pad26[8];
     unsigned char removal_request_state; /* 0x2E */
     char          pad2F[0x11];
@@ -176,8 +176,8 @@ void sand_shark_nest_update(unsigned char *moby) {
             MOBY(moby)->bolts = 1;
         }
         MOBY(moby)->state = SAND_SHARK_NEST_WAIT_FOR_SPAWN;
-        nest_vars->f20 = 3.0f;
-        nest_vars->s24 = 3;
+        nest_vars->health = 3.0f;
+        nest_vars->max_health = 3;
         nest_vars->removal_request_state = SAND_SHARK_NEST_REMOVAL_REQUEST_IDLE;
         nest_vars->timer = scale_game_frames(nest_vars->delay);
         if (nest_vars->spawner >= 0) {
