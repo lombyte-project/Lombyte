@@ -263,11 +263,12 @@ void update_resident_gameplay_state(void) {
             space_load_in_progress[0] = 1;
             D_001413F5[0] = 0;
             noop_callback_j();
-            if (level_render_state.unk2C != 0) {
+            if (level_render_state.landing != 0) {
                 noop_callback_d();
                 return;
             }
-            noop_callback_k(&level_render_state.unk60, &level_render_state.unk70, 0, 1);
+            noop_callback_k(
+                &level_render_state.hero_start_pos, &level_render_state.hero_start_rot, 0, 1);
             return;
         }
         bank_tick_limit = pal_mode ? 0x50 : 0x60;

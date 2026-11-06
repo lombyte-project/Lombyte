@@ -69,7 +69,7 @@ typedef struct {
     s32         group_3_volume;
     s32         group_4_volume;
     s32         group_5_volume;
-    s32         unk60;
+    s32         reverb_owner; /* 0x060: owner of the reverb request */
     s32         reverb_depth; /* 0x064 */
     u8          reverb_type;
     u8          reverb_delay;

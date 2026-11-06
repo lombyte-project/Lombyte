@@ -204,7 +204,7 @@ void startlevel(void) {
         put_disp_buffer();
     }
     space_load = current_level_index_macro;
-    level_render_state.unk2A = 1;
+    level_render_state.story_trip = 1;
     current_level_index_macro = -1;
     do_space_transition();
 }
