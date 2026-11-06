@@ -373,7 +373,7 @@ typedef struct AlienQueenVars {
     u8                   unk5A;
     u8                   pad_5B[0x5];
     struct HitColorFlash hit_flash;
-    u8                   unk70;
+    u8                   goal; /* target record (FUN_L00_0025ff38): target at +0x40 */
     u8                   pad_71[0x3F];
     char                *target;
     s32                  target_selection_status;
@@ -395,11 +395,11 @@ typedef struct AlienQueenVars {
     s32                  health_sixteenths;
     s32                  saved_path_point_count;
     f32                  camera_blend_fraction;
-    u8                   unk11C;
+    u8                   camera_blend_speed;
     u8                   pad_11D[0x3];
     s32                  timer_120;
     u8                   pad_124[0x4];
-    f32                  unk128;
+    f32                  glow_phase;
     s32                  timer_12C;
     u8                   unk130;
     u8                   pad_131[0x3F];
@@ -454,7 +454,7 @@ void alien_queen_update(unsigned char *moby) {
                     0.5f);
         alien_queen_update_vars->path_midpoint[3] = vector_distance_xy(
             alien_queen_update_vars->home_position, alien_queen_update_vars->path_midpoint);
-        alien_queen_update_vars->unk128 = random_angle_radians();
+        alien_queen_update_vars->glow_phase = random_angle_radians();
         alien_queen_update_vars->timer_12C = scale_game_frames(0x1E);
         MOBY(moby)->collision = 0;
         MOBY(moby)->flags = (MOBY(moby)->flags | 0x4001) & 0xEFFF;
@@ -962,15 +962,15 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
                 1.0f - convert_integer_to_float(++alien_queen_hit_recovery_vars->timer_12C) / 10.0f;
         }
     }
-    alien_queen_hit_recovery_vars->unk128 =
-        fast_add_rotations(alien_queen_hit_recovery_vars->unk128,
+    alien_queen_hit_recovery_vars->glow_phase =
+        fast_add_rotations(alien_queen_hit_recovery_vars->glow_phase,
                            alien_queen_glow_phase_speed_degrees_gp * 0.017453292f * frame_time);
     MOBY(moby)->glow_color =
         fast_tween_color(l06_alien_queen_glow_tween_start_color,
                          l06_alien_queen_glow_tween_end_color,
-                         (fast_sin(alien_queen_hit_recovery_vars->unk128) + 1.0f) * 0.5f);
+                         (fast_sin(alien_queen_hit_recovery_vars->glow_phase) + 1.0f) * 0.5f);
     path = D_L06_001B0C30[alien_queen_hit_recovery_vars->path];
-    FUN_L00_0025ff38(moby, &alien_queen_hit_recovery_vars->unk70, 0, 0, path + 4, *path, 255.0f);
+    FUN_L00_0025ff38(moby, &alien_queen_hit_recovery_vars->goal, 0, 0, path + 4, *path, 255.0f);
     if (*(int *)&alien_queen_hit_recovery_vars->target == 0)
         *(int *)&alien_queen_hit_recovery_vars->target = D_L06_001413D0;
 }
@@ -1028,7 +1028,7 @@ int update_alien_queen_intro_camera(char *moby) {
     } else {
         blend_acceleration_step = *(float *)&frame_time_sq * 3.0f;
         advance_accelerated_scalar(&alien_queen_state->camera_blend_fraction,
-                                   (float *)&alien_queen_state->unk11C,
+                                   (float *)&alien_queen_state->camera_blend_speed,
                                    1.0f,
                                    blend_acceleration_step,
                                    blend_acceleration_step,
