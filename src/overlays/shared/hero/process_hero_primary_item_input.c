@@ -103,9 +103,9 @@ int hero_anim_tilt_lookup(int id, float *out_tilt_radians) {
 /* Applies the wrench/item selection for slot i: resolves pending, queued and requested items and refreshes the slot when it changes. */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210558), where it is exact; names translated to the US level program. */
 
-/* L05 adds to hero_switch_item the state.control_mode / unk8CE test that guards the second
-   unk20A6 set, and a new unguarded statement (the prologue's i!=0 branch lands
-   on it, so it runs for every slot) that sets unk20A6 for items[0].item_id == 0x24 with
+/* L05 adds to hero_switch_item the state.control_mode / race_ammo test that guards the second
+   force_slot0_item8 set, and a new unguarded statement (the prologue's i!=0 branch lands
+   on it, so it runs for every slot) that sets force_slot0_item8 for items[0].item_id == 0x24 with
    state.control_mode != 0x16. The second condition is negated: retail's `beq` skips the
    store when state.control_mode == 0x16, which is what makes this spelling the only one
    that lands `beq` there. */

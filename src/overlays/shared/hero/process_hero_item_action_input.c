@@ -41,15 +41,15 @@ void update_hero_stick_target_magnitude(void) {
 #include "qcopy.h"
 /*
  * Hero movement step (FUN_L01_00233de0 twin; control modes 0xD and 0xE skip the speed cap): clamps the velocity, moves the hero by it (plus the
- * one-frame impulse at unk920 and the push at unkF0), runs collision, then
+ * one-frame impulse move_impulse and the push platform_delta), runs collision, then
  * derives this frame's movement vectors and speeds:
- *   motion.unk100  position change this frame
- *   motion.unk110  movement direction scaled by the velocity along it
- *   motion.unk120  same, without the gravity-up component
- *   motion.unk130  same, gravity-up part only
- *   motion.unk140  displacement caused by the push
- *   motion.unk160  speed, unk164 horizontal speed, unk168 forward speed
- *   motion.unk16C  slope: vertical / horizontal change, clamped to +-0.5
+ *   motion.displacement  position change this frame
+ *   motion.resolved_velocity  movement direction scaled by the velocity along it
+ *   motion.resolved_velocity_z  same, without the gravity-up component
+ *   motion.resolved_velocity_xy  same, gravity-up part only
+ *   motion.platform_carry  displacement caused by the push
+ *   motion.speed_xy  speed, flat_speed horizontal speed, forward_speed forward speed
+ *   motion.move_slope  slope: vertical / horizontal change, clamped to +-0.5
  */
 
 /* The FUN_L00_00233xxx helpers work in the hero's gravity frame (hero byte
@@ -181,7 +181,7 @@ void integrate_hero_movement(void) {
     }
     fast_vec_sub(&hero.motion.platform_carry, &hero.motion.pos, &movement_vector_scratch);
     {
-        /* push w moves to unk140.w; a block-local keeps retail's order */
+        /* push w moves to platform_carry.w; a block-local keeps retail's order */
         f32 push_w = hero.motion.platform_delta.f[3];
 
         hero.motion.platform_delta.f[3] = 0.0f;
