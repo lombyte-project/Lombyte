@@ -1,5 +1,6 @@
-/* Level 05 moby class for a particle spray emitter that runs when triggered. */
+/* Level 05 water spout (class 855): a particle spray emitter that runs once its linked moby gets a command. */
 #include "types.h"
+#include "rnc/overlay/l05.h"
 #include "rnc/globals.h"
 #include "qcopy.h"
 #include "rnc/mobys/moby.h"
@@ -12,12 +13,12 @@ extern char D_0013E550[];
 extern char D_L05_001671C0[];
 extern int  allocate_voice_for_target_entry() __asm__("FUN_0022da68");
 
-/* pvars of the 0x357 emitter: once woken it sprays particles along its facing (unkC0) that fall to the
+/* pvars of the 0x357 emitter: once woken it sprays particles along its facing (rot_row0) that fall to the
    floor height of its D_L05_001612D0 row and splash there, and keeps the shared voice at the emitter nearest D_L05_001671C0. */
 struct EmitterVars {
     s32  unk0;
     s32  floor;   /* row of D_L05_001612D0 */
-    s32  trigger; /* D_L05_0015FFD8 index of the moby whose byte 0xBC wakes it, -1: none */
+    s32  trigger; /* l05_moby_array index of the moby whose byte 0xBC wakes it, -1: none */
     s32 *voice;   /* voice slot shared by the emitters, -1: none */
     s32  age;     /* frames since it started spraying */
 };
@@ -42,16 +43,15 @@ extern void create_particle_with_velocity_and_randomized_parameters(
     float, float, float, void *, void *, int, int) __asm__("FUN_L05_0029be70");
 extern void          spawn_splash(float, float, void *, void *, void *) __asm__("FUN_L00_002718d0");
 extern unsigned char D_0014C050[][16];
-extern struct Moby  *D_L05_0015FFD8;
 extern struct FloorRow *D_L05_001612D0;
 extern char             D_L05_0015F580_macro[] __asm__("D_L05_0015F580") MACRO_ADDR;
 
-#include "rnc/overlay/l05/mobys/triggered_spray_emitter_data/triggered_spray_emitter_update.h"
+#include "rnc/overlay/l05/mobys/triggered_spray_emitter_data/water_spout_update.h"
 
-void triggered_spray_emitter_update(struct Moby *emitter_moby) __asm__("FUN_L05_003150f0");
+void water_spout_update(struct Moby *emitter_moby) __asm__("FUN_L05_003150f0");
 
 /* Moby class 855 */
-void triggered_spray_emitter_update(struct Moby *emitter_moby) {
+void water_spout_update(struct Moby *emitter_moby) {
     enum {
         EMITTER_INITIALIZE = 0,
         EMITTER_WAIT_FOR_TRIGGER = 1,
@@ -85,7 +85,7 @@ void triggered_spray_emitter_update(struct Moby *emitter_moby) {
         }
         break;
     case EMITTER_WAIT_FOR_TRIGGER:
-        if (emitter_vars->trigger >= 0 && D_L05_0015FFD8[emitter_vars->trigger].command != 0) {
+        if (emitter_vars->trigger >= 0 && l05_moby_array[emitter_vars->trigger].command != 0) {
             set_moby_list_state(emitter_moby->group, 2);
         }
         break;

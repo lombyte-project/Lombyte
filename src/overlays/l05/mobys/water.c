@@ -384,7 +384,6 @@ void water_update(struct Moby *moby) {
     }
 }
 
-extern int D_L05_0015FFD8;
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_0030EA88), where it is exact; names translated to the US level program. */
 
 extern short *D_L05_001ABCC0[];
@@ -392,7 +391,7 @@ extern short *D_L05_001ABCC0[];
 void synchronize_group_water_heights(char *moby) {
     char  *source_water_vars = ((char *)MOBY(moby)->pvars);
     short *group_member_list = D_L05_001ABCC0[MOBY(moby)->group];
-    char(*base)[256] = (char(*)[256])D_L05_0015FFD8;
+    char(*base)[256] = (char(*)[256])l05_moby_array;
     do {
         int   group_member_moby_index = *group_member_list & 0x7FFF;
         char *linked_water_moby = (char *)(group_member_moby_index * 256 + (int)base);

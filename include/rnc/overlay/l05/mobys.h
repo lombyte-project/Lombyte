@@ -30,10 +30,10 @@ void skid_mcmarx_update() __asm__("FUN_L05_00307910");
 void taxi_update(struct Moby *) __asm__("FUN_L05_00318c78");
 void initialize_taxi_stop_state(void *) __asm__("FUN_L05_00319208");
 void television_update(struct Moby *) __asm__("FUN_L05_00318b98");
-void triggered_moby_yaw_update(struct Moby *) __asm__("FUN_L05_003166a0");
-void triggered_motion_update(char *) __asm__("FUN_L05_00316258");
-void triggered_slide_update(char *) __asm__("FUN_L05_0030e508");
-void triggered_spray_emitter_update(struct Moby *) __asm__("FUN_L05_003150f0");
+void swinging_flap_update(struct Moby *) __asm__("FUN_L05_003166a0");
+void hinged_hatch_update(char *) __asm__("FUN_L05_00316258");
+void sliding_block_update(char *) __asm__("FUN_L05_0030e508");
+void water_spout_update(struct Moby *) __asm__("FUN_L05_003150f0");
 void water_update(struct Moby *) __asm__("FUN_L05_0030ca80");
 
 #endif /* LOMBYTE_RNC_OVERLAY_L05_MOBYS_H */
