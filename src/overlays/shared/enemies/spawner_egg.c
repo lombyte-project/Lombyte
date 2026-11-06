@@ -125,14 +125,14 @@ struct Moby *respawn_spawner_child(struct Moby *parent_spawner_moby, Vec4 *pos) 
             *(volatile s32 *)((u8 *)child_suck_cannon_record + 0x94) = 0;
             *(volatile s16 *)((u8 *)child_suck_cannon_record + 0x68) = 0;
         }
-        if (parent_spawner_moby->unkB4 < spawned_moby->unkB4)
-            spawned_moby->unkB4 = parent_spawner_moby->unkB4;
-        if (spawned_moby->unkB4 < 1)
-            spawned_moby->unkB4 = 1;
-        left = (u16)parent_spawner_moby->unkB4 - (u16)spawned_moby->unkB4;
-        parent_spawner_moby->unkB4 = left;
+        if (parent_spawner_moby->bolts < spawned_moby->bolts)
+            spawned_moby->bolts = parent_spawner_moby->bolts;
+        if (spawned_moby->bolts < 1)
+            spawned_moby->bolts = 1;
+        left = (u16)parent_spawner_moby->bolts - (u16)spawned_moby->bolts;
+        parent_spawner_moby->bolts = left;
         if ((s16)left < 0)
-            parent_spawner_moby->unkB4 = 1;
+            parent_spawner_moby->bolts = 1;
         {
             struct Moby *target = ((struct Moby *volatile *)&spawned_moby)[0];
             target->collision = target->pclass->collision;

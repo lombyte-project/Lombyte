@@ -165,7 +165,7 @@ void test_dummy_update(unsigned char *moby) {
     case TEST_DUMMY_STATE_INITIALIZE: /* set up: lives, home position, the held child for the variant */
         dummy_data->respawn_request_state = 1;
         if (dummy_data->lives > 0) {
-            MOBY(moby)->unkB4 /= dummy_data->lives;
+            MOBY(moby)->bolts /= dummy_data->lives;
         }
         moby[0x20] = 1;
         moby[0x31] = 0;

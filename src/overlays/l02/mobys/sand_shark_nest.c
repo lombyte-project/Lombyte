@@ -171,9 +171,9 @@ void sand_shark_nest_update(unsigned char *moby) {
     }
     switch (MOBY(moby)->state) {
     case SAND_SHARK_NEST_INITIALIZE:
-        MOBY(moby)->unkB4 -= bolt_source_stats_lui[2][moby[0xB1]].bolts;
-        if (MOBY(moby)->unkB4 <= 0) {
-            MOBY(moby)->unkB4 = 1;
+        MOBY(moby)->bolts -= bolt_source_stats_lui[2][moby[0xB1]].bolts;
+        if (MOBY(moby)->bolts <= 0) {
+            MOBY(moby)->bolts = 1;
         }
         MOBY(moby)->state = SAND_SHARK_NEST_WAIT_FOR_SPAWN;
         nest_vars->f20 = 3.0f;
