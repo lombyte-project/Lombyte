@@ -10,7 +10,7 @@ to the C), each pointer translated to the level the same way.
 from __future__ import annotations
 
 import ast
-from collections import defaultdict
+from collections import Counter, defaultdict
 from functools import lru_cache
 
 import rnc_overlays as ov
@@ -76,9 +76,23 @@ def deltas() -> dict[int, dict[int, set[int]]]:
     return out
 
 
-def _delta(level: int, start: int, size: int) -> int | None:
-    found = {d for a, ds in deltas().get(level, {}).items() if start <= a < start + size for d in ds}
-    return found.pop() if len(found) == 1 else None
+def _candidates(level: int, start: int, size: int) -> list[int]:
+    """The deltas the level's code reads [start, start + size) at, most
+    votes first, then its neighbours': a stale %hi pairs with a later %lo
+    now and then and adds a false one, so each is tried and the bytes decide."""
+    moved = deltas().get(level, {})
+    votes: Counter = Counter()
+    for a, ds in moved.items():
+        if start <= a < start + size:
+            votes.update(ds)
+    out = [d for d, _n in votes.most_common()]
+    # data no copied function reads moves with its neighbours
+    below = [a for a in moved if a < start]
+    above = [a for a in moved if a >= start + size]
+    for near in (max(below, default=None), min(above, default=None)):
+        if near is not None:
+            out += sorted(moved[near] - set(out))
+    return out
 
 
 def proven_copies() -> set[tuple[int, int, int]]:
@@ -88,20 +102,50 @@ def proven_copies() -> set[tuple[int, int, int]]:
     for _unit, vma, size in c_data_entries():
         mine = boot_bytes(vma, size)
         for level in ov.level_ids():
-            d = _delta(level, vma, size)
-            if d is None:
-                continue
-            theirs = ov.level_data_bytes(level, vma + d, size)
-            if theirs is None:
-                continue
-            if theirs == mine or _pointers_match(level, mine, theirs, d, places.get(level, {})):
-                out.add((level, vma + d, size))
+            for d in _candidates(level, vma, size):
+                theirs = ov.level_data_bytes(level, vma + d, size)
+                if theirs is None:
+                    continue
+                if theirs == mine or _pointers_match(level, mine, theirs, d, places.get(level, {})):
+                    out.add((level, vma + d, size))
+                    break
     return out
 
 
+def _moved(level: int, a: int, b: int) -> bool:
+    """The level's code reads the executable's data at A at B, or A lies
+    between two addresses its code moves by the same amount."""
+    moved = deltas().get(level, {})
+    if b - a in moved.get(a, ()):
+        return True
+    below = [x for x in moved if x < a]
+    above = [x for x in moved if x > a]
+    if not below or not above:
+        return False
+    return moved[max(below)] == moved[min(above)] == {b - a}
+
+
+SAME_SHAPE = {0x03, 0x09, 0x0D, 0x0F} | set(range(0x20, 0x40))   # jal, addiu, ori, lui, loads/stores
+
+
+def _same_code(level: int, a: int, b: int, name: str) -> bool:
+    """The level's catalogued function NAME at B is the executable's code at
+    A: the same instructions, only call targets and %hi/%lo halves moved."""
+    size = ov.read_catalogue()[name].size
+    mine, theirs = boot_bytes(a, size), ov.level_text_bytes(level, b, size)
+    for w, v in zip(ov.words(mine), ov.words(theirs)):
+        if w == v:
+            continue
+        if w >> 26 != v >> 26 or w >> 26 not in SAME_SHAPE:
+            return False
+        if w >> 26 != 0x03 and w >> 16 != v >> 16:
+            return False
+    return True
+
+
 def _pointers_match(level: int, mine: bytes, theirs: bytes, d: int, code: dict[int, str]) -> bool:
-    """Every differing word is a pointer the level moved: data by D, a
-    function to its copy in this level."""
+    """Every differing word is a pointer the level moved: data by D (or as
+    its code reads it), a function to its copy in this level."""
     if len(mine) % 4:
         return False
     for i in range(0, len(mine), 4):
@@ -109,10 +153,12 @@ def _pointers_match(level: int, mine: bytes, theirs: bytes, d: int, code: dict[i
         b = int.from_bytes(theirs[i:i + 4], "little")
         if a == b:
             continue
-        if DATA_LOW <= a < DATA_HIGH and b == a + d:
+        if DATA_LOW <= a < DATA_HIGH and (b == a + d or _moved(level, a, b)):
             continue
         row = ov.read_catalogue().get(f"FUN_{a:08x}")
         if row is not None and b in {p for lv, p in row.places if lv == level}:
+            continue
+        if a >= DATA_HIGH and b in code and _same_code(level, a, b, code[b]):
             continue
         return False
     return True
