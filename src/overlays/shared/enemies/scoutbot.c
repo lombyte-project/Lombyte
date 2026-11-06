@@ -46,8 +46,8 @@ typedef struct ScoutbotVars {
     s32   target_selection_status;
     u8    pad1B8[0x8];
     f32   home_position[4];
-    f32   unk1D0[4];
-    f32   unk1E0[4];
+    f32   beam_bend_point_1[4]; /* beam profile point; [3] is its fraction of the beam length */
+    f32   beam_bend_point_2[4]; /* second beam profile point, same layout */
     u8    pad1F0[0x10];
     f32   hover_height_offset;
     f32   vertical_bob_phase;
@@ -507,15 +507,15 @@ void draw_target_beam(struct Moby *moby) {
     clear_u64_value(&pk.vertices[0]);
     pk.vertices[0].v[2] = D_L08_00161894_lui;
     pk.vertices[0].v[3] = 1.0f;
-    qcopy(&pk.vertices[1], &scoutbot_private_vars->unk1D0);
-    pk.vertices[1].v[0] = length * scoutbot_private_vars->unk1D0[3];
+    qcopy(&pk.vertices[1], &scoutbot_private_vars->beam_bend_point_1);
+    pk.vertices[1].v[0] = length * scoutbot_private_vars->beam_bend_point_1[3];
     pk.vertices[1].v[2] += -0.25f;
     pk.vertices[1].v[3] = 1.0f;
     clear_u64_value(&pk.vertices[2]);
     pk.vertices[2].v[2] = 0.0f;
     pk.vertices[2].v[3] = 1.0f;
-    qcopy(&pk.vertices[3], &scoutbot_private_vars->unk1D0);
-    pk.vertices[3].v[0] = length * scoutbot_private_vars->unk1D0[3];
+    qcopy(&pk.vertices[3], &scoutbot_private_vars->beam_bend_point_1);
+    pk.vertices[3].v[0] = length * scoutbot_private_vars->beam_bend_point_1[3];
     pk.vertices[3].v[2] += 0.25f;
     pk.vertices[3].v[3] = 1.0f;
     draw_geometry_quad(pk.vertices, matrix, 1);
@@ -532,20 +532,20 @@ void draw_target_beam(struct Moby *moby) {
     }
     draw_geometry_quad(pk.vertices, matrix, 1);
 
-    qcopy(&pk.vertices[0], &scoutbot_private_vars->unk1D0);
-    pk.vertices[0].v[0] = length * scoutbot_private_vars->unk1D0[3];
+    qcopy(&pk.vertices[0], &scoutbot_private_vars->beam_bend_point_1);
+    pk.vertices[0].v[0] = length * scoutbot_private_vars->beam_bend_point_1[3];
     pk.vertices[0].v[2] += -0.25f;
     pk.vertices[0].v[3] = 1.0f;
-    qcopy(&pk.vertices[1], &scoutbot_private_vars->unk1E0);
-    pk.vertices[1].v[0] = length * scoutbot_private_vars->unk1E0[3];
+    qcopy(&pk.vertices[1], &scoutbot_private_vars->beam_bend_point_2);
+    pk.vertices[1].v[0] = length * scoutbot_private_vars->beam_bend_point_2[3];
     pk.vertices[1].v[2] += -0.25f;
     pk.vertices[1].v[3] = 1.0f;
-    qcopy(&pk.vertices[2], &scoutbot_private_vars->unk1D0);
-    pk.vertices[2].v[0] = length * scoutbot_private_vars->unk1D0[3];
+    qcopy(&pk.vertices[2], &scoutbot_private_vars->beam_bend_point_1);
+    pk.vertices[2].v[0] = length * scoutbot_private_vars->beam_bend_point_1[3];
     pk.vertices[2].v[2] += 0.25f;
     pk.vertices[2].v[3] = 1.0f;
-    qcopy(&pk.vertices[3], &scoutbot_private_vars->unk1E0);
-    pk.vertices[3].v[0] = length * scoutbot_private_vars->unk1E0[3];
+    qcopy(&pk.vertices[3], &scoutbot_private_vars->beam_bend_point_2);
+    pk.vertices[3].v[0] = length * scoutbot_private_vars->beam_bend_point_2[3];
     pk.vertices[3].v[2] += 0.25f;
     pk.vertices[3].v[3] = 1.0f;
     draw_geometry_quad(pk.vertices, matrix, 1);
@@ -563,20 +563,20 @@ void draw_target_beam(struct Moby *moby) {
     }
     draw_geometry_quad(pk.vertices, matrix, 1);
 
-    qcopy(&pk.vertices[0], &scoutbot_private_vars->unk1E0);
-    pk.vertices[0].v[0] = length * scoutbot_private_vars->unk1E0[3];
+    qcopy(&pk.vertices[0], &scoutbot_private_vars->beam_bend_point_2);
+    pk.vertices[0].v[0] = length * scoutbot_private_vars->beam_bend_point_2[3];
     pk.vertices[0].v[2] += -0.25f;
     pk.vertices[0].v[3] = 1.0f;
     clear_u64_value(&pk.vertices[1]);
-    pk.vertices[1].v[0] = length * scoutbot_private_vars->unk1D0[3] * 3.0f;
+    pk.vertices[1].v[0] = length * scoutbot_private_vars->beam_bend_point_1[3] * 3.0f;
     pk.vertices[1].v[2] += D_L08_00161894_lui;
     pk.vertices[1].v[3] = 1.0f;
-    qcopy(&pk.vertices[2], &scoutbot_private_vars->unk1E0);
-    pk.vertices[2].v[0] = length * scoutbot_private_vars->unk1E0[3];
+    qcopy(&pk.vertices[2], &scoutbot_private_vars->beam_bend_point_2);
+    pk.vertices[2].v[0] = length * scoutbot_private_vars->beam_bend_point_2[3];
     pk.vertices[2].v[2] += 0.25f;
     pk.vertices[2].v[3] = 1.0f;
     clear_u64_value(&pk.vertices[3]);
-    pk.vertices[3].v[0] = length * scoutbot_private_vars->unk1D0[3] * 3.0f;
+    pk.vertices[3].v[0] = length * scoutbot_private_vars->beam_bend_point_1[3] * 3.0f;
     pk.vertices[3].v[2] = 0.0f;
     pk.vertices[3].v[3] = 1.0f;
     draw_geometry_quad(pk.vertices, matrix, 1);

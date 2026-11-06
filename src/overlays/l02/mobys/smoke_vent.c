@@ -121,7 +121,7 @@ typedef struct SmokeVentVars {
     u8  pad_1[0xBF];
     s32 timer_C0;
     s32 timer_C4;
-    s32 unkC8;
+    s32 first_puff_interval; /* 0xC8: base frames for the first puff, toggled between 10 and 30 */
 } SmokeVentVars;
 
 /* Moby class 1479 */
@@ -299,10 +299,10 @@ void smoke_vent_update(struct Moby *moby) {
         break;
     case SMOKE_VENT_STATE_ALTERNATING_PUFF_TIMING:
         if (fast_dec_timer(&smoke_vent_vars->timer_C4) != 0) {
-            if (smoke_vent_vars->unkC8 < 21) {
-                smoke_vent_vars->unkC8 = 30;
+            if (smoke_vent_vars->first_puff_interval < 21) {
+                smoke_vent_vars->first_puff_interval = 30;
             } else {
-                smoke_vent_vars->unkC8 = 10;
+                smoke_vent_vars->first_puff_interval = 10;
             }
             smoke_vent_vars->timer_C4 =
                 truncate_float_to_s32(scale_time(random_float_between(120.0f, 180.0f)));
@@ -415,8 +415,9 @@ void smoke_vent_update(struct Moby *moby) {
         color_b2_puff = fast_tween_color(l02_alternating_smoke_puff_second_color_tween_start,
                                          l02_alternating_smoke_puff_second_color_tween_end,
                                          random_float_between(0.0f, 1.0f));
-        time_a2_puff = truncate_float_to_s32(
-            scale_time((f32) * &smoke_vent_vars->unkC8 * random_float_between(0.0f, 1.0f) + 1.0f));
+        time_a2_puff = truncate_float_to_s32(scale_time(
+            (f32) * &smoke_vent_vars->first_puff_interval * random_float_between(0.0f, 1.0f) +
+            1.0f));
         time_b2_puff = truncate_float_to_s32(
             scale_time((f32)alternating_smoke_puff_second_timing_base_gp *
                        (random_float_between(-alternating_smoke_puff_timing_variation_fraction_gp,

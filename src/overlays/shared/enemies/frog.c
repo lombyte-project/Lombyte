@@ -75,9 +75,9 @@ typedef struct FrogVars {
     f32                    home_position[4];
     u8                     home_rotation[0x10];
     u8                     wander_destination[0x10];
-    s16                    unk240;
+    s16                    bolt_divisor;
     s16                    unk242;
-    f32                    unk244;
+    f32                    approach_stop_distance;
     f32                    glow_animation_phase;
     f32                    path_activation_distance_xy;
     u8                     big_head_manipulator[0x4];
@@ -298,7 +298,7 @@ void frog_update(unsigned char *moby) {
     case FROG_STATE_INITIALIZE: {
         float wait;
         int   spawn_count = l06_frog_frame_slot_assignment_count;
-        int   divisor = frog_instance_vars->unk240;
+        int   divisor = frog_instance_vars->bolt_divisor;
         frog_instance_vars->target_selection_frame_slot = spawn_count % 8;
         l06_frog_frame_slot_assignment_count = spawn_count + 1;
         if (divisor != 0) {
@@ -316,7 +316,7 @@ void frog_update(unsigned char *moby) {
         frog_instance_vars->knockback.collision_z_offset = 0;
         frog_instance_vars->knockback.speed_approach_step = 0;
         frog_instance_vars->knockback.collision_radius_1024ths = 0x200;
-        frog_instance_vars->unk244 = wait;
+        frog_instance_vars->approach_stop_distance = wait;
         frog_instance_vars->glow_animation_phase = random_angle_radians();
         frog_instance_vars->unkD0 = D_L06_00161BF0;
         frog_instance_vars->unk29 = 1;
@@ -536,7 +536,7 @@ void frog_update(unsigned char *moby) {
         fast_vec_normalize(A, moby + 0xC0, frog_instance_vars->movement_speed * D_0015ED6C_gp);
         FUN_L06_002e9b60_c(moby, A, 1, 0.3f, 0.3f);
         if (path_8808(frog_instance_vars->unk1EC, &MOBY(moby)->pos, target + 0x10, D) != 0 &&
-            fast_vec_dist(&MOBY(moby)->pos, D) < frog_instance_vars->unk244) {
+            fast_vec_dist(&MOBY(moby)->pos, D) < frog_instance_vars->approach_stop_distance) {
             near = 1;
         }
         if (frog_instance_vars->blink_countdown == 0) {
