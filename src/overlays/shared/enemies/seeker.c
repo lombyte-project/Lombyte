@@ -16,6 +16,7 @@
 #include "rnc/overlay/shared/mobys/step_moby_motion.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/mobys/resolve_moby_hit_response.h"
+#include "rnc/overlay/shared/mobys/ground_move_control.h"
 
 /* Per-instance variables of the oClass 52 moby (moby->pvars). */
 enum {
@@ -30,37 +31,32 @@ enum {
 };
 
 typedef struct {
-    u8           pad0[0x20];
-    f32          health;
-    s16          unk24;
-    u8           pad26[2];
-    u8           unk28;
-    u8           pad29[0x2F];
-    u8           unk58;
-    u8           pad59;
-    u8           unk5A;
-    u8           pad5B[0x15];
-    Vec4         vel;
-    u8           pad80[0x50];
-    s32          move_control;
-    u8           padD4[4];
-    f32          move_max_drop;
-    f32          move_max_climb;
-    u8           padE0[0x14];
-    f32          speed;
-    u8           padF8[0x68];
-    struct Moby *target;
-    s32          target_selection_status;
-    u8           pad168[0x18];
-    s32          bound_path;
-    s32          timer;
-    u8           pad188[4];
-    f32          heading_speed;
-    u8           pad190[4];
-    s32          voice;
-    s32          moving;
-    u8           pad19C[0xE4];
-    u8           unk280[1];
+    u8                       pad0[0x20];
+    f32                      health;
+    s16                      unk24;
+    u8                       pad26[2];
+    u8                       unk28;
+    u8                       pad29[0x2F];
+    u8                       unk58;
+    u8                       pad59;
+    u8                       unk5A;
+    u8                       pad5B[0x15];
+    Vec4                     vel;
+    u8                       pad80[0x50];
+    struct GroundMoveControl move_control; /* 0xD0 */
+    u8                       pad120[0x40];
+    struct Moby             *target;
+    s32                      target_selection_status;
+    u8                       pad168[0x18];
+    s32                      bound_path;
+    s32                      timer;
+    u8                       pad188[4];
+    f32                      heading_speed;
+    u8                       pad190[4];
+    s32                      voice;
+    s32                      moving;
+    u8                       pad19C[0xE4];
+    u8                       unk280[1];
 } Moby52Vars;
 
 #include "rnc/overlay/shared/enemies/seeker_globals.h"
@@ -96,7 +92,6 @@ extern void spawn_explosion(struct Moby *,
                             s32,
                             s32) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_00263ac8(struct Moby *, s32, void *, f32);
-extern void FUN_L01_0026d930(void *);
 extern void FUN_L01_0026e090(s32, s32);
 extern void update_seeker_damage_and_target(struct Moby *) __asm__("FUN_L09_002c6230");
 
@@ -142,11 +137,11 @@ void seeker_update(struct Moby *moby) {
             mark_moby_for_removal(moby);
             break;
         }
-        FUN_L01_0026d930(&seeker_instance_vars->move_control);
-        seeker_instance_vars->move_max_climb = 0.5f;
-        seeker_instance_vars->move_max_drop = 0.5f;
-        seeker_instance_vars->move_control = truncate_float_to_s32(512.0f);
-        seeker_instance_vars->speed = frame_time * 7.75f;
+        init_ground_move_control(&seeker_instance_vars->move_control);
+        seeker_instance_vars->move_control.max_climb = 0.5f;
+        seeker_instance_vars->move_control.max_drop = 0.5f;
+        seeker_instance_vars->move_control.collision_radius_1024ths = truncate_float_to_s32(512.0f);
+        seeker_instance_vars->move_control.max_speed = frame_time * 7.75f;
         moby->state = SEEKER_STATE_IDLE_HOVER;
         if (moby->prev_seq != 1) {
             blend_moby_animation(moby, 1, 0, scale_game_frames(10));
@@ -217,8 +212,8 @@ void seeker_update(struct Moby *moby) {
             seeker_instance_vars->moving = 0;
         }
         if (seeker_instance_vars->moving != 0) {
-            vel.f[0] = fast_cos(moby->rot.z) * seeker_instance_vars->speed;
-            vel.f[1] = fast_sin(moby->rot.z) * seeker_instance_vars->speed;
+            vel.f[0] = fast_cos(moby->rot.z) * seeker_instance_vars->move_control.max_speed;
+            vel.f[1] = fast_sin(moby->rot.z) * seeker_instance_vars->move_control.max_speed;
             vel.f[2] = 0.0f;
             vertical_follow_adjustment = hero.motion.pos.f[2] + 0.8f - z;
             if (moby->pos.z < hero.motion.pos.f[2] + 0.8f) {

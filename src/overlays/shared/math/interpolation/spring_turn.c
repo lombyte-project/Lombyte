@@ -426,26 +426,7 @@ void move_moby_with_collision_integer_radius(int   moby,
 }
 
 #include "rnc/math/vector.h"
-
-typedef struct {
-    s32 collision_radius_1024ths;
-    f32 step_height;
-    f32 max_drop;
-    f32 max_climb;
-    f32 speed;
-    f32 turn_step;
-    f32 vertical_velocity;
-    f32 acceleration;
-    f32 brake;
-    f32 max_speed;
-    f32 heading_tolerance;
-    f32 arrive_distance;
-    f32 ground_probe_depth;
-    f32 unk34;
-    s32 movement_option_flags;
-    u8  pad3C[0x4C - 0x3C];
-    f32 move_heading;
-} Ctl;
+#include "rnc/overlay/shared/mobys/ground_move_control.h"
 
 typedef struct {
     u8   pad00[0x10];
@@ -468,11 +449,12 @@ extern s32 FUN_L00_002583f0_c(void *, void *, s32, f32, f32) __asm__("FUN_L00_00
 extern s32 FUN_L00_00258ad0_c(void *, void *, f32, s32, f32, s32) __asm__("FUN_L00_00258ad0");
 
 extern f32 frame_time_sq_gp __asm__("D_0015ED70") __attribute__((sda));
-s32 move_moby_with_ground_and_collision_checks(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) __asm__("FUN_L00_00258b50");
+s32        move_moby_with_ground_and_collision_checks(
+           Obj *m, struct GroundMoveControl *c, void *v, Vec4 *out, f32 f) __asm__("FUN_L00_00258b50");
 
-s32 move_moby_with_ground_and_collision_checks(Obj  *moby,
-                                               Ctl  *movement_control,
-                                               void *target_position,
+s32 move_moby_with_ground_and_collision_checks(Obj                      *moby,
+                                               struct GroundMoveControl *movement_control,
+                                               void                     *target_position,
                                                Vec4 *movement_displacement_vector_output,
 
                                                f32 f) {
@@ -603,41 +585,44 @@ done:
 }
 
 void approach_w(unsigned char *, float *, float, float, float, float) __asm__("FUN_L00_00258278");
-int  move_w(unsigned char *, char *, float *, void *, float) __asm__("FUN_L00_00258b50");
-int step_mover_2e3f20(unsigned char *m, char *c, float *tgt, void *out) __asm__("FUN_L00_00259028");
-int step_mover_2e3f20(unsigned char *moby,
-                      char          *movement_control,
-                      float         *target_position,
+int  move_w(unsigned char *, struct GroundMoveControl *, float *, void *, float) __asm__("FUN_L00_00258b50");
+int step_mover_2e3f20(unsigned char            *m,
+                      struct GroundMoveControl *c,
+                      float                    *tgt,
+                      void                     *out) __asm__("FUN_L00_00259028");
+int step_mover_2e3f20(unsigned char            *moby,
+                      struct GroundMoveControl *movement_control,
+                      float                    *target_position,
 
                       void *movement_displacement_output) {
     int   navigation_result_flags = 0;
     float target_heading, heading_error;
     clear_u64_value(movement_displacement_output);
-    if (fast_vec_dist(&MOBY(moby)->pos, target_position) < *(float *)(movement_control + 0x2C))
+    if (fast_vec_dist(&MOBY(moby)->pos, target_position) < movement_control->arrive_distance)
         navigation_result_flags = 4;
     target_heading = fast_arc_tan(target_position[0] - MOBY(moby)->pos.x,
                                   target_position[1] - MOBY(moby)->pos.y);
     approach_w(moby,
-               (float *)(movement_control + 0x14),
+               &movement_control->turn_velocity,
                target_heading,
-               *(float *)(movement_control + 0x3C),
-               *(float *)(movement_control + 0x40),
-               *(float *)(movement_control + 0x44));
+               movement_control->turn_spring,
+               movement_control->turn_damping,
+               movement_control->max_turn_step);
     heading_error = fast_difference_between_rotations(target_heading, MOBY(moby)->rot.z);
-    if (*(float *)(movement_control + 0x28) <= heading_error)
+    if (movement_control->heading_tolerance <= heading_error)
         navigation_result_flags |= 0x10;
-    fast_dec_timer(movement_control + 0x48);
-    if (heading_error < *(float *)(movement_control + 0x28) &&
-        *(int *)(movement_control + 0x48) < scale_game_frames(4)) {
-        *(int *)(movement_control + 0x48) = scale_game_frames(4);
+    fast_dec_timer(&movement_control->move_timer);
+    if (heading_error < movement_control->heading_tolerance &&
+        movement_control->move_timer < scale_game_frames(4)) {
+        movement_control->move_timer = scale_game_frames(4);
     }
-    if (*(int *)(movement_control + 0x48) != 0) {
+    if (movement_control->move_timer != 0) {
         navigation_result_flags |= move_w(moby,
                                           movement_control,
                                           target_position,
                                           movement_displacement_output,
-                                          (*(float *)(movement_control + 0x28) - heading_error) /
-                                              *(float *)(movement_control + 0x28));
+                                          (movement_control->heading_tolerance - heading_error) /
+                                              movement_control->heading_tolerance);
         if (0.1f < heading_error)
             navigation_result_flags &= ~2;
     }

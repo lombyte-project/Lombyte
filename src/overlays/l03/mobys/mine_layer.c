@@ -13,6 +13,7 @@
 #include "qcopy.h"
 #include "rnc/overlay/l03/mobys/select_moby_target_with_hero_fallback.h"
 #include "rnc/overlay/l03/mobys/mine_layer_globals.h"
+#include "rnc/overlay/shared/mobys/ground_move_control.h"
 
 /* Patrol state of the l03 trooper: walks back and forth along a rail path. */
 enum {
@@ -34,54 +35,43 @@ typedef struct {
 
 /* Pvars of the l03 trooper. */
 typedef struct {
-    u8            pad0[0x20];
-    f32           health; /* 0x20 */
-    s16           unk24;
-    u8            pad26[2];
-    u8            unk28;
-    u8            unk29;
-    u8            pad2A[0xE];
-    s32           alerted; /* 0x38: set when it is hit */
-    u8            pad3C[4];
-    u8            effect[0x18]; /* 0x40: debris record (spawn_explosion, FUN_L00_00259028) */
-    u8            unk58;
-    u8            pad59;
-    u8            unk5A;
-    u8            pad5B[5];
-    u8            anim[0x10];      /* 0x60: animation driver */
-    u8            knockback[0x10]; /* 0x70 */
-    f32           kb_speed;        /* 0x80 */
-    u8            pad84[4];
-    f32           kb_lift;    /* 0x88 */
-    f32           kb_gravity; /* 0x8C */
-    u8            pad90[4];
-    s32           kb_frames; /* 0x94 */
-    u8            pad98[0x15];
-    u8            kb_landed; /* 0xAD */
-    u8            padAE[0x12];
-    f32           kb_min; /* 0xC0 */
-    f32           kb_max; /* 0xC4 */
-    u8            padC8[8];
-    u8            walk[8]; /* 0xD0: walk driver (FUN_L01_0026d930, FUN_L00_00259028) */
-    f32           walk_max_drop;
-    f32           walk_max_climb;
-    u8            padE0[8];
-    f32           fall_speed; /* 0xE8 */
-    u8            padEC[8];
-    f32           walk_max_speed;
-    u8            padF8[0x14];
-    f32           walk_turn_spring;
-    f32           patrol_turn_damping_factor;
-    f32           patrol_turn_step_limit;
-    u8            pad118[8];
-    TrooperPatrol patrol; /* 0x120 */
-    u8            pad138[0x18];
-    u8            turn[4];      /* 0x150: turn driver (FUN_L00_00258278) */
-    s16           fire_timer;   /* 0x154 */
-    s16           patrol_timer; /* 0x156 */
-    u8            pad158[4];
-    s32           alert_timer;  /* 0x15C */
-    u8            unk160[0x10]; /* 0x160: FUN_L00_00263ac8 record */
+    u8  pad0[0x20];
+    f32 health; /* 0x20 */
+    s16 unk24;
+    u8  pad26[2];
+    u8  unk28;
+    u8  unk29;
+    u8  pad2A[0xE];
+    s32 alerted; /* 0x38: set when it is hit */
+    u8  pad3C[4];
+    u8  effect[0x18]; /* 0x40: debris record (spawn_explosion, FUN_L00_00259028) */
+    u8  unk58;
+    u8  pad59;
+    u8  unk5A;
+    u8  pad5B[5];
+    u8  anim[0x10];      /* 0x60: animation driver */
+    u8  knockback[0x10]; /* 0x70 */
+    f32 kb_speed;        /* 0x80 */
+    u8  pad84[4];
+    f32 kb_lift;    /* 0x88 */
+    f32 kb_gravity; /* 0x8C */
+    u8  pad90[4];
+    s32 kb_frames; /* 0x94 */
+    u8  pad98[0x15];
+    u8  kb_landed; /* 0xAD */
+    u8  padAE[0x12];
+    f32 kb_min; /* 0xC0 */
+    f32 kb_max; /* 0xC4 */
+    u8  padC8[8];
+    struct GroundMoveControl walk;   /* 0xD0 */
+    TrooperPatrol            patrol; /* 0x120 */
+    u8                       pad138[0x18];
+    u8                       turn[4];      /* 0x150: turn driver (FUN_L00_00258278) */
+    s16                      fire_timer;   /* 0x154 */
+    s16                      patrol_timer; /* 0x156 */
+    u8                       pad158[4];
+    s32                      alert_timer;  /* 0x15C */
+    u8                       unk160[0x10]; /* 0x160: FUN_L00_00263ac8 record */
 } TrooperVars;
 
 s32        mine_layer_fire_interval_frames_gp __asm__("D_L03_00161918") = 0x12c;
@@ -98,7 +88,6 @@ extern void FUN_L00_00263ac8(struct Moby *, int, void *, f32);
 void handle_mine_layer_damage(struct Moby *m) __asm__("FUN_L03_002ca808");
 
 char       *spawn_mine_layer_projectile(char *p, void *pos, float *dir) __asm__("FUN_L03_002cc888");
-extern void FUN_L01_0026d930(void *);
 extern void blend_moby_animation(struct Moby *, int, int, int) __asm__("FUN_00212f90");
 extern void FUN_L00_00258278(f32, f32, f32, f32, struct Moby *, void *);
 extern void step_mover_2e3f20(struct Moby *, void *, void *, void *) __asm__("FUN_L00_00259028");
@@ -159,15 +148,15 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
     }
     switch (mine_layer_moby->state) {
     case MINE_LAYER_INITIALIZE:
-        FUN_L01_0026d930(mine_layer_vars->walk);
-        mine_layer_vars->walk_turn_spring = frame_time_sq * 6.2831855f;
-        mine_layer_vars->patrol_turn_step_limit = frame_time * 6.2831855f;
-        mine_layer_vars->patrol_turn_damping_factor = frame_time_sq * 18.849556f;
-        mine_layer_vars->walk_max_speed = frame_time * 5.0f;
+        init_ground_move_control(&mine_layer_vars->walk);
+        mine_layer_vars->walk.turn_spring = frame_time_sq * 6.2831855f;
+        mine_layer_vars->walk.max_turn_step = frame_time * 6.2831855f;
+        mine_layer_vars->walk.turn_damping = frame_time_sq * 18.849556f;
+        mine_layer_vars->walk.max_speed = frame_time * 5.0f;
         mine_layer_vars->unk58 = 8;
         mine_layer_vars->unk5A = 8;
-        mine_layer_vars->walk_max_climb = 2.0f;
-        mine_layer_vars->walk_max_drop = 2.0f;
+        mine_layer_vars->walk.max_climb = 2.0f;
+        mine_layer_vars->walk.max_drop = 2.0f;
         mine_layer_vars->health = 2.0f;
         mine_layer_vars->unk24 = 2;
         mine_layer_vars->unk28 = 1;
@@ -213,7 +202,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         pt = &mine_layer_vars->patrol;
         patrol_point_index = pt->idx;
         step_mover_2e3f20(mine_layer_moby,
-                          mine_layer_vars->walk,
+                          &mine_layer_vars->walk,
                           &pt->path->points[patrol_point_index],
                           mine_layer_vars->effect);
         mine_layer_moby->anim_speed = mine_layer_patrol_animation_speed_gp;
@@ -325,13 +314,13 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         break;
     }
     if (mine_layer_moby->state < MINE_LAYER_KNOCKBACK_AND_RECOVER) {
-        mine_layer_vars->fall_speed += frame_time_sq * 9.8f;
-        mine_layer_moby->pos.z -= mine_layer_vars->fall_speed - 2.0f;
+        mine_layer_vars->walk.vertical_velocity += frame_time_sq * 9.8f;
+        mine_layer_moby->pos.z -= mine_layer_vars->walk.vertical_velocity - 2.0f;
         ground = probe_ground_height(&mine_layer_moby->pos, 0, 0.5f);
         mine_layer_moby->pos.z -= 2.0f;
         if (mine_layer_moby->pos.z < ground) {
             mine_layer_moby->pos.z = ground;
-            mine_layer_vars->fall_speed = 0.0f;
+            mine_layer_vars->walk.vertical_velocity = 0.0f;
         } else if (mine_layer_moby->pos.z < 5.0f) {
             qcopy(muzzle, &mine_layer_moby->pos);
             muzzle[2] += 0.5f;
