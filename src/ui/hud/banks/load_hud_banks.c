@@ -69,7 +69,7 @@ void load_hud_banks(void) {
     if (hud_bank->has54) {
         chunk_1_qword_count = ALIGN64(hud_file->chunk[1].size) >> 4;
         load_compressed_hud_bank(0, vram);
-        hb->header.bank->unk94 =
+        hb->header.bank->bank0_stash =
             stash_send_data((void *)(hud_file->chunk[1].offset + (s32)hud_file),
                             chunk_1_qword_count,
                             chunk_1_qword_count,
@@ -84,7 +84,7 @@ void load_hud_banks(void) {
     }
     if (hb->header.bank->has5C) {
         u32 chunk_3_qword_count = ALIGN64(hud_file->chunk[3].size) >> 4;
-        hb->header.bank->unk9C =
+        hb->header.bank->bank2_stash =
             stash_send_data((void *)(hud_file->chunk[3].offset + (s32)hud_file),
                             chunk_3_qword_count,
                             chunk_3_qword_count,
@@ -92,7 +92,7 @@ void load_hud_banks(void) {
     }
     if (hb->header.bank->has60) {
         u32 chunk_4_qword_count = ALIGN64(hud_file->chunk[4].size) >> 4;
-        hb->header.bank->unkA0 =
+        hb->header.bank->bank3_stash =
             stash_send_data((void *)(hud_file->chunk[4].offset + (s32)hud_file),
                             chunk_4_qword_count,
                             chunk_4_qword_count,
@@ -100,7 +100,7 @@ void load_hud_banks(void) {
     }
     if (hb->header.bank->has64) {
         u32 chunk_5_qword_count = ALIGN64(hud_file->chunk[5].size) >> 4;
-        hb->header.bank->unkA4 =
+        hb->header.bank->bank4_stash =
             stash_send_data((void *)(hud_file->chunk[5].offset + (s32)hud_file),
                             chunk_5_qword_count,
                             chunk_5_qword_count,
