@@ -10,11 +10,11 @@
 
 typedef struct TimedActivationPadVars {
     u8  pad0[0x4];
-    s32 unk4;
-    s32 unk8;
-    s16 unkC;
-    s16 unkE;
-    s32 unk10;
+    s32 tick_sound_timer;
+    s32 pressed;
+    s16 glow_timer;
+    s16 glow_phase;
+    s32 duration_seconds;
 } TimedActivationPadVars;
 
 extern s32  allocate_voice_for_target_entry() __asm__("func_0022DA68");
@@ -70,7 +70,7 @@ void timed_activation_pads_update(unsigned char *moby) {
         }
     }
 
-    if (pad_data->unk8 == 0) {
+    if (pad_data->pressed == 0) {
         activation_reference_data = (char *)D_0013F350_lui;
         if (*(short *)(activation_reference_data + 0x30E) == 0)
             flag = *(unsigned char **)(activation_reference_data + 0x2FC) == moby;
@@ -102,9 +102,9 @@ void timed_activation_pads_update(unsigned char *moby) {
             if (fast_dec_timer((int *)pad_data)) {
                 allocate_voice_for_target_entry(2, 0, (int)moby);
                 set_moby_list_state(MOBY(moby)->group, 8);
-            } else if (fast_dec_timer((int *)(&pad_data->unk4))) {
+            } else if (fast_dec_timer((int *)(&pad_data->tick_sound_timer))) {
                 allocate_voice_for_target_entry(0, 0, (int)moby);
-                pad_data->unk4 =
+                pad_data->tick_sound_timer =
                     func_001F9850_30D370(0x2D) <
                             func_001F9850_30D370(5) + *(int *)pad_data / func_001F9850_30D370(0x28)
                         ? func_001F9850_30D370(0x2D)
@@ -120,16 +120,16 @@ void timed_activation_pads_update(unsigned char *moby) {
         set_moby_list_state(MOBY(moby)->group, 1);
         break;
     case PAD_WAIT_FOR_ACTIVATION:
-        pad_data->unk8 = 0;
+        pad_data->pressed = 0;
         glow_n(moby, 0x80, 0x80, 0x80);
         if (flag) {
-            if (pad_data->unk10 > 0)
-                *(int *)pad_data = func_001F9850_30D370(pad_data->unk10 * 60);
+            if (pad_data->duration_seconds > 0)
+                *(int *)pad_data = func_001F9850_30D370(pad_data->duration_seconds * 60);
             else
                 *(int *)pad_data = func_001F9850_30D370(900);
             on = 1;
             glow_n(moby, 0, 0xFF, 0);
-            pad_data->unk8 = on;
+            pad_data->pressed = on;
             func_L01_0026F040_30D370(MOBY(moby)->group, 0);
             MOBY(moby)->command = on;
             allocate_voice_for_target_entry(3, 0, (int)moby);
@@ -141,7 +141,7 @@ void timed_activation_pads_update(unsigned char *moby) {
         break;
     case PAD_WAIT_TO_ENTER_FLASH_ACTIVATION_WAIT:
         if (flag) {
-            pad_data->unk8 = 1;
+            pad_data->pressed = 1;
             glow_n(moby, 0, 0xFF, 0);
             allocate_voice_for_target_entry(3, 0, (int)moby);
             set_moby_list_state(MOBY(moby)->group, 4);
@@ -152,15 +152,15 @@ void timed_activation_pads_update(unsigned char *moby) {
         break;
     case PAD_WAIT_FOR_FLASH_ACTIVATION:
         if (flag) {
-            pad_data->unk8 = 1;
+            pad_data->pressed = 1;
             glow_n(moby, 0, 0xFF, 0);
             set_moby_list_state(MOBY(moby)->group, 6);
             allocate_voice_for_target_entry(1, 0, (int)moby);
         }
         break;
     case PAD_INITIALIZE_FLASHING:
-        pad_data->unkC = func_001F9850_30D370(0x14);
-        pad_data->unkE = 0;
+        pad_data->glow_timer = func_001F9850_30D370(0x14);
+        pad_data->glow_phase = 0;
         glow_n(moby, 0x80, 0xFF, 0x80);
         MOBY(moby)->state = PAD_UPDATE_FLASHING;
         break;
@@ -169,19 +169,19 @@ void timed_activation_pads_update(unsigned char *moby) {
             if (visited52[MOBY(moby)->mission + (current_level_index << 4)] != 0xFF)
                 jet_clear_persistent(MOBY(moby)->mission);
         }
-        if (fast_dec_timer_s16(&pad_data->unkC)) {
-            pad_data->unkC = func_001F9850_30D370(0x14);
-            switch (pad_data->unkE) {
+        if (fast_dec_timer_s16(&pad_data->glow_timer)) {
+            pad_data->glow_timer = func_001F9850_30D370(0x14);
+            switch (pad_data->glow_phase) {
             case PAD_FLASH_APPLY_GREEN:
                 glow_n(moby, 0, 0xFF, 0);
-                pad_data->unkE = 1;
+                pad_data->glow_phase = 1;
                 break;
             case PAD_FLASH_APPLY_WHITE:
                 glow_n(moby, 0xFF, 0xFF, 0xFF);
-                pad_data->unkE = 0;
+                pad_data->glow_phase = 0;
                 break;
             case 2 ... 5:
-                pad_data->unkE = 0;
+                pad_data->glow_phase = 0;
                 break;
             }
         }
