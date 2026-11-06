@@ -75,7 +75,7 @@ typedef struct SnagglebeastVars {
     u8  pad_0[0x20];
     f32 health;
     s16 max_health;
-    s16 unk26;
+    s16 stun_timer;
     u8  pad_28[0x1];
     u8  wrench_hit_sound; /* 0x29: enemy target info at pvars+0x20, see moby_target_info.h */
     u8  pad_2A[0x2E];
@@ -84,72 +84,73 @@ typedef struct SnagglebeastVars {
     u8  look_height;
     u8  pad_5B[0x5];
     struct HitColorFlash hit_flash;
-    u8                   pad_70[0x14];
-    s32                  unk84;
-    u8                   pad_88[0x10];
-    f32                  turn_start_angle;
-    f32                  unk9C;
-    u8                   pad_A0[0x8];
-    s32                  unkA8;
-    u8                   pad_AC[0x14];
-    f32                  turn_target[4];
-    u8                   pad_D0[0x30];
-    f32                  velocity[4];
-    f32                  rope_start_position[4];
-    f32                  rope_end_position[4];
-    f32                  rope_tip_velocity[4];
-    f32                  rope_tip_position[4];
-    f32                  rope_target[4]; /* 3 above the position of hero.ground_moby */
-    s32                  timer;
-    s32                  substate;
-    s32                  turn_controller_state;
-    f32                  rope_extension_length;
-    s32                  navigation_ids[6];
-    s32                  nav_path;
-    s32                  measured_path;
-    f32                  measured_path_length;
-    s16                  timer_194;
-    s16                  timer_196;
-    s16                  timer_198;
-    s16                  timer_19A;
-    u8                   navigation_mask;
-    u8                   path_select;
-    s16                  ammo_drain_step;
-    s32                  path_1A0;
-    s32                  hero_volume; /* clip volume: updates only while the hero is inside */
-    s32                  target_nav_point;
-    f32                  drop_path_distance;
-    s32                  health_hud_handle;
-    s32                  health_display;
-    f32                  ground_z;
-    u8                   pad_1BC[0x4];
-    s32                  nav_point;
-    u8                   hero_captured;
-    u8                   sphere_fade_direction;
-    u8                   sphere_shade;
-    u8                   hero_capture_attack_enabled;
-    f32                  sphere_fade;
-    s32                  death_effect_moby;
-    s32                  death_raised_moby; /* raised to z 34.6 after the death */
-    u8                   pad_1D4[0x1C];
-    s32                  cuboid;
-    u8                   turn_saved_state;
-    u8                   turn_fixed_target;
-    u8                   turn_resume_animation;
-    u8                   timer_1F7;
-    s32                  voice;
-    f32                  damage_reaction_amount;
-    u8                   joint_animation[0x64];
-    f32                  joint_damage_reaction_target;
-    f32                  target_yaw_offset;
-    u8                   pad_26C[0x14];
-    s16                  point_light;
-    u8                   pad_282[0xE];
-    s32                  chase_path;
-    s32                  capture_turn_done; /* 1 once the capture turn toward the hero ran */
-    s32                  chase_frames;
-    s32                  path_1A0_volume; /* the chase uses path_1A0 while the hero is inside */
-    u8                   manipulator[1];
+    u8                   pad_70
+        [0x14]; /* 0x70: struct GroundMoveControl (step_mover_2e3f20); the move_* fields below are its members */
+    s32 move_turn_velocity;
+    u8  pad_88[0x10];
+    f32 move_heading_tolerance;
+    f32 move_arrive_distance;
+    u8  pad_A0[0x8];
+    s32 move_option_flags;
+    u8  pad_AC[0x14];
+    f32 turn_target[4];
+    u8  pad_D0[0x30];
+    f32 velocity[4];
+    f32 rope_start_position[4];
+    f32 rope_end_position[4];
+    f32 rope_tip_velocity[4];
+    f32 rope_tip_position[4];
+    f32 rope_target[4]; /* 3 above the position of hero.ground_moby */
+    s32 timer;
+    s32 substate;
+    s32 turn_controller_state;
+    f32 rope_extension_length;
+    s32 navigation_ids[6];
+    s32 nav_path;
+    s32 measured_path;
+    f32 measured_path_length;
+    s16 timer_194;
+    s16 timer_196;
+    s16 timer_198;
+    s16 timer_19A;
+    u8  navigation_mask;
+    u8  path_select;
+    s16 ammo_drain_step;
+    s32 path_1A0;
+    s32 hero_volume; /* clip volume: updates only while the hero is inside */
+    s32 target_nav_point;
+    f32 drop_path_distance;
+    s32 health_hud_handle;
+    s32 health_display;
+    f32 ground_z;
+    u8  pad_1BC[0x4];
+    s32 nav_point;
+    u8  hero_captured;
+    u8  sphere_fade_direction;
+    u8  sphere_shade;
+    u8  hero_capture_attack_enabled;
+    f32 sphere_fade;
+    s32 death_effect_moby;
+    s32 death_raised_moby; /* raised to z 34.6 after the death */
+    u8  pad_1D4[0x1C];
+    s32 cuboid;
+    u8  turn_saved_state;
+    u8  turn_fixed_target;
+    u8  turn_resume_animation;
+    u8  timer_1F7;
+    s32 voice;
+    f32 damage_reaction_amount;
+    u8  joint_animation[0x64];
+    f32 joint_damage_reaction_target;
+    f32 target_yaw_offset;
+    u8  pad_26C[0x14];
+    s16 point_light;
+    u8  pad_282[0xE];
+    s32 chase_path;
+    s32 capture_turn_done; /* 1 once the capture turn toward the hero ran */
+    s32 chase_frames;
+    s32 path_1A0_volume; /* the chase uses path_1A0 while the hero is inside */
+    u8  manipulator[1];
 } SnagglebeastVars;
 
 static inline int tint_color(int color) {
@@ -547,7 +548,7 @@ void process_snagglebeast_damage(char             *moby,
                 scratch.threshold *= frame;
                 *health -= *(float *)(hit + 0x2c);
                 snagglebeast_instance_vars->hit_flash.flash_red = 0xfa;
-                snagglebeast_instance_vars->unk26 = scale_game_frames(0);
+                snagglebeast_instance_vars->stun_timer = scale_game_frames(0);
                 start_hit_color_flash(moby, &snagglebeast_instance_vars->hit_flash);
                 if ((u8)moby[0x20] < 10 && *health < scratch.threshold) {
                     int slot;
@@ -800,7 +801,7 @@ int start_snagglebeast_turn_toward_target(unsigned char    *moby,
     };
     float target_heading = fast_arc_tan(target_position[0] - MOBY(moby)->pos.x,
                                         target_position[1] - MOBY(moby)->pos.y);
-    if (moby_vars->turn_start_angle <
+    if (moby_vars->move_heading_tolerance <
         fast_difference_between_rotations(MOBY(moby)->rot.z, target_heading)) {
         moby_vars->turn_controller_state = SNAGGLEBEAST_TURN_CONTROLLER_RESET;
         MOBY(moby)->anim_speed = 1.0f;
@@ -1248,7 +1249,7 @@ void snagglebeast_update(unsigned char *moby) {
                     ((ChaserPathPoints *)snagglebeast_instance_state)->path_points[k] = i;
             }
         }
-        snagglebeast_instance_state->unkA8 &= ~8;
+        snagglebeast_instance_state->move_option_flags &= ~8;
         MOBY(moby)->flags |= 0x1000;
         build_symmetric_adjacency_masks(
             snagglebeast_instance_state->navigation_ids, 3, snagglebeast_instance_state->nav_path);
@@ -1262,7 +1263,7 @@ void snagglebeast_update(unsigned char *moby) {
         suck_reset(moby);
         MOBY(moby)->scale *= 1.75f;
         snagglebeast_instance_state->hero_capture_attack_enabled = 0;
-        snagglebeast_instance_state->turn_start_angle = 1.7453293f;
+        snagglebeast_instance_state->move_heading_tolerance = 1.7453293f;
         snagglebeast_instance_state->wrench_hit_sound = 1;
         snagglebeast_instance_state->look_range = truncate_float_to_s32(30.0f);
         snagglebeast_instance_state->look_height = truncate_float_to_s32(40.0f);
@@ -1534,7 +1535,7 @@ void snagglebeast_update(unsigned char *moby) {
                               16 +
                           0x10);
                 dd = vector_distance_xy(moby + 0x10, &velocity);
-                if (dd < snagglebeast_instance_state->unk9C + 1.0f)
+                if (dd < snagglebeast_instance_state->move_arrive_distance + 1.0f)
                     qcopy(&velocity, &sight);
             }
         } else {
@@ -1555,7 +1556,7 @@ void snagglebeast_update(unsigned char *moby) {
                                                snagglebeast_instance_state->rope_tip_position);
         qcopy(&position, snagglebeast_instance_state->rope_tip_position);
         snagglebeast_instance_state->chase_frames += 1;
-        if (snagglebeast_instance_state->turn_start_angle <
+        if (snagglebeast_instance_state->move_heading_tolerance <
             fast_difference_between_rotations(MOBY(moby)->rot.z,
                                               fast_arc_tan(position.f[0] - MOBY(moby)->pos.x,
                                                            position.f[1] - MOBY(moby)->pos.y))) {
@@ -1716,13 +1717,13 @@ void snagglebeast_update(unsigned char *moby) {
                 FUN_00212f90(moby, 3, 5, random_int_between(0xA, 0xD));
             }
         } else {
-            snagglebeast_instance_state->unk84 = 0;
+            snagglebeast_instance_state->move_turn_velocity = 0;
         }
         if (fast_difference_between_rotations(
                 MOBY(moby)->rot.z,
                 fast_arc_tan(snagglebeast_instance_state->turn_target[0] - MOBY(moby)->pos.x,
                              snagglebeast_instance_state->turn_target[1] - MOBY(moby)->pos.y)) <
-            snagglebeast_instance_state->turn_start_angle * 0.25f) {
+            snagglebeast_instance_state->move_heading_tolerance * 0.25f) {
             qzero(snagglebeast_instance_state->velocity);
             if (MOBY(moby)->prev_seq != snagglebeast_instance_state->turn_resume_animation) {
                 int anim = snagglebeast_instance_state->turn_resume_animation;

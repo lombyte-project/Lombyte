@@ -42,9 +42,9 @@ typedef struct MachinegunTurretVars {
     u8                   pad_0[0x20];
     u8                   health;
     u8                   pad_21[0x5];
-    s16                  unk26;
+    s16                  stun_timer;
     u8                   pad_28[0x1];
-    u8                   unk29;
+    u8                   wrench_hit_sound;
     u8                   pad_2A[0x36];
     struct HitColorFlash hit_flash;
     s32                  sweep_start_moby;
@@ -96,7 +96,7 @@ void machinegun_turret_update(unsigned char *moby) {
         FUN_L00_00257470(moby, 0, -1);
         MOBY(moby)->flags &= 0xefff;
         turret_instance_vars->hit_flash.flash_red = 0xfa;
-        turret_instance_vars->unk26 = scale_game_frames(60);
+        turret_instance_vars->stun_timer = scale_game_frames(60);
         start_hit_color_flash(moby, animation);
         turret_instance_vars->fire_timer = scale_game_frames(60);
         if ((u8)MOBY(moby)->prev_seq != 2)
@@ -135,7 +135,7 @@ void machinegun_turret_update(unsigned char *moby) {
             turret_instance_vars->sweep_end_yaw - turret_instance_vars->sweep_start_yaw;
         MOBY(moby)->rot.z = normalize_angle(turret_instance_vars->sweep_start_yaw);
         turret_instance_vars->base_z = MOBY(moby)->pos.z;
-        turret_instance_vars->unk29 = 0;
+        turret_instance_vars->wrench_hit_sound = 0;
         MOBY(moby)->command = 0;
         turret_instance_vars->burst_timer = turret_instance_vars->burst_length;
         if ((u8)MOBY(moby)->prev_seq != 1)

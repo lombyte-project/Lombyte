@@ -41,12 +41,12 @@ s32        allocate_voice_for_target_entry(s32   entry_index,
 
 typedef struct MissionGatedTaxiPlatformVars {
     u8  pad_0[0x20];
-    s32 unk20;
-    s16 unk24;
+    s32 health; /* 0x20: MobyTargetInfo.health, cleared as an int */
+    s16 max_health;
     u8  pad_26[0x2];
-    u8  unk28;
+    u8  hit_weight;
     u8  pad_29[0x15];
-    s16 unk3E;
+    s16 target_flags; /* 0x3E: MobyTargetInfo.flags; target info at pvars+0x20, see moby_target_info.h */
     u8  pad_40[0x20];
     f32 transform[16];
     u8  command;
@@ -88,10 +88,10 @@ void mission_gated_taxi_platform_update(struct Moby *moby) {
     if (moby->state == TAXI_PLATFORM_STATE_UNINITIALIZED) {
         float f;
         char *pts;
-        mission_gated_taxi_vars->unk28 = 4;
-        mission_gated_taxi_vars->unk3E = 5;
-        mission_gated_taxi_vars->unk20 = 0;
-        mission_gated_taxi_vars->unk24 = 0;
+        mission_gated_taxi_vars->hit_weight = 4;
+        mission_gated_taxi_vars->target_flags = 5;
+        mission_gated_taxi_vars->health = 0;
+        mission_gated_taxi_vars->max_health = 0;
         f = 0.0f;
         if ((moby->command = mission_gated_taxi_vars->command) == 0) {
             f = 1.0f;
