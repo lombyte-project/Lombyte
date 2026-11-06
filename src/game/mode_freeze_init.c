@@ -40,8 +40,8 @@ void mode_freeze_init(u32 mode, s32 freeze_context) {
         freeze_state->line2 = (char *)get_help_message_text(0x5249);
         freeze_state->timer = 0;
         freeze_state->choice = 0;
-        freeze_state->unk20 = 0;
-        freeze_state->unk24 = 0;
+        freeze_state->box_timer = 0;
+        freeze_state->fade_step = 0;
         freeze_state->unk28 = 0;
         break;
     case 2:
@@ -60,13 +60,13 @@ void mode_freeze_init(u32 mode, s32 freeze_context) {
     case FREEZE_PUSH_HELP_HISTORY:
         push_help_history(0x4E2B);
         freeze.timer = scale_game_frames(0x1E);
-        freeze.unk20 = 0;
-        freeze.unk24 = scale_game_frames(0x1E);
+        freeze.box_timer = 0;
+        freeze.fade_step = scale_game_frames(0x1E);
         break;
     case FREEZE_ERROR:
         freeze.timer = scale_game_frames(0x1E);
-        freeze.unk20 = 0;
-        freeze.unk24 = scale_game_frames(0x1E);
+        freeze.box_timer = 0;
+        freeze.fade_step = scale_game_frames(0x1E);
         break;
     case FREEZE_VIDEO_MODE_CHANGE:
         freeze.timer = scale_game_frames(0x1E);
