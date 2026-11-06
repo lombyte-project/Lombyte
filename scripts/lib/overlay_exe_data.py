@@ -10,6 +10,7 @@ to the C), each pointer translated to the level the same way.
 from __future__ import annotations
 
 import ast
+import bisect
 from collections import Counter, defaultdict
 from functools import lru_cache
 
@@ -143,6 +144,24 @@ def _same_code(level: int, a: int, b: int, name: str) -> bool:
     return True
 
 
+@lru_cache(maxsize=None)
+def _exe_functions() -> list[tuple[int, int, tuple]]:
+    """(address, size, places) of every executable function the levels copy, by address."""
+    return sorted((int(r.name[-8:], 16), r.size, tuple(r.places))
+                  for r in ov.read_catalogue().values() if r.kind == "exe")
+
+
+def _inside_copy(level: int, a: int, b: int) -> bool:
+    """A points into an executable function (a switch table's case) and B to
+    the same offset in that function's copy in this level."""
+    rows = _exe_functions()
+    i = bisect.bisect_right(rows, (a, 1 << 32)) - 1
+    if i < 0 or not rows[i][0] <= a < rows[i][0] + rows[i][1]:
+        return False
+    start, _size, places = rows[i]
+    return any(lv == level and p + (a - start) == b for lv, p in places)
+
+
 def _pointers_match(level: int, mine: bytes, theirs: bytes, d: int, code: dict[int, str]) -> bool:
     """Every differing word is a pointer the level moved: data by D (or as
     its code reads it), a function to its copy in this level."""
@@ -159,6 +178,8 @@ def _pointers_match(level: int, mine: bytes, theirs: bytes, d: int, code: dict[i
         if row is not None and b in {p for lv, p in row.places if lv == level}:
             continue
         if a >= DATA_HIGH and b in code and _same_code(level, a, b, code[b]):
+            continue
+        if a >= DATA_HIGH and _inside_copy(level, a, b):
             continue
         return False
     return True
