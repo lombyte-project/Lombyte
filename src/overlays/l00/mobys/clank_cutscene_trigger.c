@@ -272,7 +272,7 @@ typedef struct {
     u8  pad26[6];
     f32 talk_range;
     u8  pad30[0x26];
-    s16 unk56;
+    s16 talk_entry; /* 0x56: talk + 0x36, current dialogue entry of update_npc_dialogue */
     u8  pad58[8];
     s32 talk_volume; /* talk_range is 16 while the hero is inside */
 } DoorVars;
@@ -316,7 +316,7 @@ void clank_cutscene_trigger_update(DoorMoby *moby) {
         D_00141628[0] = 1;
         initialize_npc_dialogue(moby, vars->talk);
         if (alternate_item_available[8] != 0) {
-            vars->unk56 = 1;
+            vars->talk_entry = 1;
             vars->talk_range = 3.0f;
             vars->talk_mode = 0;
         } else {
@@ -327,7 +327,7 @@ void clank_cutscene_trigger_update(DoorMoby *moby) {
         moby->state = CLANK_TRIGGER_POLL_DIALOGUE;
         break;
     case CLANK_TRIGGER_POLL_DIALOGUE:
-        if (vars->unk56 != 0) {
+        if (vars->talk_entry != 0) {
             if (is_point_inside_clip_volume((s32)(&hero.motion.pos), vars->talk_volume) != 0) {
                 vars->talk_range = 16.0f;
             } else {
