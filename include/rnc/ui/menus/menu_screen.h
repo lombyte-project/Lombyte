@@ -15,14 +15,15 @@ struct Moby;
 /* MenuScreen 0x30-0x5F as plain words, for screens not understood yet. */
 struct MenuScreenWords {
     u8  pad_30[0x4];
-    s32 unk34; /* 0x34: flags 0x40 / 0x80 (draw_map_screen) */
-    s32 unk38; /* 0x38: cleared by enter_menu_help_text */
-    s32 unk3C; /* 0x3C */
-    u8  pad_40[0x10];
-    s32 unk50; /* 0x50: 0, 1 or 3 (enter_menu_help_text) */
-    s32 unk54; /* 0x54: cleared by enter_menu_help_text */
-    u8  pad_58[0x8];
+    s32 map_flags; /* 0x34: draw_map_screen: MENU_MAP_* */
+    u8  pad_38[0x28];
 };
+
+/* MenuScreenWords.map_flags (draw_map_screen); the planet select map has both,
+   the planet confirm map only NO_INPUT. */
+#define MENU_MAP_NO_INPUT \
+    0x40 /* skips the start/select close and the triangle, cross and circle input */
+#define MENU_MAP_NO_TEXTURE_REGISTER 0x80 /* skips registering the map textures */
 
 /* Option list screen (update_menu_option_list). */
 struct MenuOption {
@@ -175,7 +176,7 @@ struct MenuCycleData {
  */
 /* MenuTextItem.action: what confirm does (update_menu_entry_actions). The
    REQUEST_CLOSE actions set menu_system.close_request: 6 -> 5, 7 -> 3,
-   8 -> 4, 10 -> 6, 11 -> 7, with param in menu_system.unkE4. */
+   8 -> 4, 10 -> 6, 11 -> 7, with param in menu_system.travel_level. */
 enum MenuTextAction {
     MENU_ACTION_LOCKED = -1,  /* goodies entry not unlocked yet: confirm does nothing */
     MENU_ACTION_DISABLED = 0, /* dimmed and skipped */
@@ -198,7 +199,7 @@ struct MenuTextItem {
     union {
         s32 value; /* page, close value, level or language */
         struct {
-            u16 lo; /* action 6: menu_system.unkE4 */
+            u16 lo; /* action 6: menu_system.travel_level */
             s16 hi; /* action 6: menu_action_messages index, 0 = none */
         } half;
     } param;        /* 0x4 */
@@ -269,7 +270,7 @@ struct MenuLabelData {
     s32 value_variant; /* 0x4C */
 };
 
-/* MenuScreen.unk10: how the page draws the screen (port docs/port/rerac/plan/menus.md). */
+/* MenuScreen.flags: how the page draws the screen (port docs/port/rerac/plan/menus.md). */
 #define MENU_SCREEN_DRAW_DIRECT 0x1
 #define MENU_SCREEN_DRAW_3D     0x2 /* drawn in the first, 3D pass */
 #define MENU_SCREEN_HIDDEN      0x4
@@ -391,7 +392,7 @@ struct MenuScreenHead {
     s32 (*draw)(struct MenuScreen *);        /* 0x04 */
     void (*enter)(struct MenuScreen *, s32); /* 0x08 */
     void (*leave)(struct MenuScreen *, s32); /* 0x0C */
-    s32 unk10;                               /* 0x10 */
+    s32 flags;                               /* 0x10: MENU_SCREEN_* draw flags */
     s32 moby;                                /* 0x14 */
     s32 x;                                   /* 0x18 */
     s32 y;                                   /* 0x1C */

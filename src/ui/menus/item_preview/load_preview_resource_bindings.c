@@ -14,7 +14,7 @@ void load_preview_resource_bindings(s32 first_resource, s32 resource_count) __as
 
 /* Streams each bound resource into its buffer, unpacks it and points the
    class animation slot at it. The buffers are the stream state's
-   unkB0 array; reading them through the struct gives
+   preview_resource_buffers array; reading them through the struct gives
    the state base its own register. */
 void load_preview_resource_bindings(s32 first_resource, s32 resource_count) {
     s32                     count;

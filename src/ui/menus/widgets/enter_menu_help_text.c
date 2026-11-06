@@ -6,10 +6,6 @@
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/ui/menus/menu_screen.h"
 
-struct WordCell {
-    s32 unk0;
-};
-
 extern s32  help_text_read_destination[] __asm__("D_001D5CF8");
 extern void initialize_menu_stream_buffers(s32) __asm__("func_00225AC0");
 extern s32  start_audio_stream_read(s32, s32, s32) __asm__("FUN_00216788");

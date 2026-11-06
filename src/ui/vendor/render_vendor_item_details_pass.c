@@ -9,9 +9,9 @@ typedef struct {
 
 typedef struct {
     u8       pad_0[0x20];
-    s32      unk20;
+    s32      preview_mobys; /* 0x20: moby list drawn by draw_moby_list, two halves 0x100 apart */
     u8       pad_24[0x1C];
-    s32      unk40;
+    s32      discount_ammo_pricing; /* 0x40: as in render_vendor_buy_label_pass */
     u8       pad_44[0x14];
     s32      sel;
     u8       pad_5C[0x74];
@@ -50,8 +50,8 @@ void render_vendor_item_details_pass(void) {
     s32  text_width;
 
     draw_framebuffer_rect(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
-    draw_moby_list(D_001E63C0.unk20 + 0x100, 1);
-    draw_moby_list(D_001E63C0.unk20, 1);
+    draw_moby_list(D_001E63C0.preview_mobys + 0x100, 1);
+    draw_moby_list(D_001E63C0.preview_mobys, 1);
     if (D_001E63C0.items[D_001E63C0.sel].type == 1) {
         font_print_small(
             6,
@@ -62,7 +62,7 @@ void render_vendor_item_details_pass(void) {
         font_print_small(0x18, 0x18, 0x80F0F0F0, get_help_message_text(0x4F5D), -1);
         format_scaled_display_value(text, D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].c);
         font_print_right_small(0x76, 0x65, 0x80F0F0F0, text, -1);
-        if (D_001E63C0.unk40 != 0) {
+        if (D_001E63C0.discount_ammo_pricing != 0) {
             text_width = measure_text_width_regular(text, -1);
             append_screen_rect_packet(0x75 - text_width, 0x6D, 0x7B, 0x70, 0x20959544, 0);
             append_screen_rect_packet(0x76 - text_width, 0x6D, 0x7A, 0x70, 0x30959544, 0);
@@ -72,7 +72,7 @@ void render_vendor_item_details_pass(void) {
             append_screen_rect_packet(0x7A - text_width, 0x6D, 0x76, 0x70, 0x70959544, 0);
             append_screen_rect_packet(0x7B - text_width, 0x6D, 0x75, 0x70, 0x80959544, 0);
             format_scaled_display_value(text,
-                                        D_001E63C0.unk40
+                                        D_001E63C0.discount_ammo_pricing
                                             ? D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].d
                                             : D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].c);
             font_print_right_small(0x76, 0x55, 0x80F0F0F0, text, -1);

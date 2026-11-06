@@ -23,7 +23,7 @@ int draw_menu_side_indicator(struct MenuScreen *menu) {
     Glyph2 indicator_glyph_string;
 
     setup_gif_paging(0);
-    if (menu->data.raw.unk38 != 0) {
+    if (menu->data.cycle.side != 0) {
         indicator_glyph_string = *(Glyph2 *)menu_side_indicator_set_glyph_string;
         font_print_large(4, menu->height / 2 - 8, 0x80FFA888L, &indicator_glyph_string, -1);
         draw_rotated_sprite(640.0f,
