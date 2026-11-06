@@ -334,7 +334,7 @@ void swingshot_update(Moby *m) {
                     m->state = 6;
                 } else {
                     allocate_voice_for_target_entry(2, 0, m);
-                    if (hero.unk978)
+                    if (hero.grapple_target_swings)
                         hero_set_state(0x26, 1);
                     else
                         hero_set_state(0x25, 1);
@@ -659,7 +659,7 @@ child_ready:;
                 m[0x20] = 6;
             } else {
                 allocate_voice_for_target_entry(2, 0, m);
-                if (hero.unk978 != 0)
+                if (hero.grapple_target_swings != 0)
                     hero_set_state(38, 1);
                 else
                     hero_set_state(37, 1);
