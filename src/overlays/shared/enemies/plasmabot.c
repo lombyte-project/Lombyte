@@ -69,27 +69,27 @@ typedef struct PlasmabotVars {
     u8  pad59[0x1];
     s8  unk5A;
     u8  pad5B[0x5];
-    u8  unk60[0x18];
-    f32 unk78;
-    f32 unk7C;
-    s32 unk80;
+    u8  motion[0x18];
+    f32 knockback_speed;
+    f32 knockback_vertical_speed;
+    s32 knockback_collision_radius;
     u8  pad84[0x4];
-    f32 unk88;
+    f32 knockback_collision_z_offset;
     u8  pad8C[0x24];
-    f32 unkB0;
-    f32 unkB4;
+    f32 knockback_apex_animation_frame;
+    f32 knockback_landing_animation_frame;
     u8  padB8[0x8];
-    u8  unkC0[0x10];
-    u8  unkD0[0x40];
+    u8  trooper_anim[0x10];
+    u8  path_search_point[0x40];
     s32 target; /* 0x110: target moby */
     s32 target_selection_status;
     u8  pad118[0x8];
-    u8  unk120[0x10];
-    u8  unk130[0x30];
+    u8  aim_joint_manipulator[0x10];
+    u8  aim_joint_rotation[0x30];
     u8  manipulator_attachment_header[0x10];
     u8  aim_quaternion_storage[0x70];
     u8  unk1E0[0x10];
-    u8  unk1F0[0x10];
+    u8  nozzle_position[0x10];
     u8  unk200[0x10];
     u8  beam_start_position_storage[0x10];
     u8  beam_end_position_storage[0x14];
@@ -107,7 +107,7 @@ typedef struct PlasmabotVars {
     s32 hatch_index;
     f32 aim_yaw_offset;
     s32 aim_yaw_angular_velocity;
-    s32 unk270;
+    s32 aim_joint_angle;
     s32 aim_joint_angular_velocity;
     f32 aim_sweep_center_angle;
     f32 path_traversal_direction;
@@ -128,14 +128,14 @@ void update_plasmabot_target(char *moby) {
     PlasmabotVars *plasmabot_private_vars = (PlasmabotVars *)MOBY(moby)->pvars;
     int *target_filter_record = ((int *)l14_paths[plasmabot_private_vars->target_path_index]);
     if (FUN_L00_0025ff38(moby,
-                         &plasmabot_private_vars->unkD0,
+                         &plasmabot_private_vars->path_search_point,
                          plasmabot_private_vars->target_range,
                          0,
                          0,
                          target_filter_record + 4,
                          *target_filter_record) != 2) {
         if (plasmabot_private_vars->target_range <
-            vector_distance_xy(&MOBY(moby)->pos, &plasmabot_private_vars->unkD0)) {
+            vector_distance_xy(&MOBY(moby)->pos, &plasmabot_private_vars->path_search_point)) {
             plasmabot_private_vars->target_selection_status = PLASMABOT_TARGET_STATUS_REJECTED;
         }
     }
@@ -232,14 +232,15 @@ void update_plasmabot_aim_joint_rotation(char *moby, float x) {
         target_joint_angle = -1.2217304706573486f;
     {
         float k = frame_time_sq * 12.566370964050293f;
-        approach_angle((float *)(&moby_vars->unk270),
+        approach_angle((float *)(&moby_vars->aim_joint_angle),
                        (float *)(&moby_vars->aim_joint_angular_velocity),
                        target_joint_angle,
                        k,
                        k,
                        frame_time * 6.2831854820251465f);
     }
-    build_axis_rotation_quaternion(&moby_vars->unk130, 2, *(float *)&moby_vars->unk270);
+    build_axis_rotation_quaternion(
+        &moby_vars->aim_joint_rotation, 2, *(float *)&moby_vars->aim_joint_angle);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4AE0), where it is exact; names translated to the US level program. */
 
@@ -374,7 +375,7 @@ void plasmabot_update(char *moby) {
 
     plasmabot_update_private_vars = (PlasmabotVars *)MOBY(moby)->pvars;
     plasmabot_aim_target_moby = 0;
-    FUN_L00_00263ac8(2.5f, moby, 2, &plasmabot_update_private_vars->unk120);
+    FUN_L00_00263ac8(2.5f, moby, 2, &plasmabot_update_private_vars->aim_joint_manipulator);
     if (plasmabot_update_private_vars->unk288 != 0) {
         if (((unsigned char *)D_001413F4)[0] != 2) {
             MOBY(moby)->flags |= 0x41;
@@ -474,10 +475,10 @@ void plasmabot_update(char *moby) {
         plasmabot_update_private_vars->aim_yaw_angular_velocity = 0;
         plasmabot_update_private_vars->aim_pitch_angle = 0;
         plasmabot_update_private_vars->aim_pitch_angular_velocity = 0;
-        plasmabot_update_private_vars->unk270 = 0;
+        plasmabot_update_private_vars->aim_joint_angle = 0;
         plasmabot_update_private_vars->aim_joint_angular_velocity = 0;
         if (((unsigned char *)plasmabot_update_private_vars)[0x121] == 0) {
-            attach_manipulator(moby, 2, &plasmabot_update_private_vars->unk120);
+            attach_manipulator(moby, 2, &plasmabot_update_private_vars->aim_joint_manipulator);
         }
         if (((unsigned char *)plasmabot_update_private_vars)[0x161] == 0) {
             attach_manipulator(
@@ -516,7 +517,7 @@ void plasmabot_update(char *moby) {
         *(int *)&plasmabot_update_private_vars->aim_yaw_offset = 0;
         plasmabot_update_private_vars->path_traversal_direction = 1.0f;
         plasmabot_update_private_vars->aim_yaw_angular_velocity = 0;
-        plasmabot_update_private_vars->unk270 = 0;
+        plasmabot_update_private_vars->aim_joint_angle = 0;
         plasmabot_update_private_vars->aim_joint_angular_velocity = 0;
         plasmabot_update_private_vars->path_segment_index = 0;
         *(int *)&plasmabot_update_private_vars->path_offset_and_spring_velocities = 0;
@@ -771,7 +772,7 @@ void plasmabot_update(char *moby) {
         break;
     }
     case PLASMABOT_FALL_THEN_EXPLODE: {
-        if ((step_moby_motion(moby, &plasmabot_update_private_vars->unk60) & 0x160) == 0)
+        if ((step_moby_motion(moby, &plasmabot_update_private_vars->motion) & 0x160) == 0)
             return;
         release_beam_slot_by_id(moby);
         FUN_L00_0024f7c8(moby, 2, bone_transform_scratch);
@@ -994,7 +995,7 @@ void draw_plasmabot_effect_quads(struct Moby *moby) {
     pp = &plasmabot_effect_private_vars->beam_end_position_storage;
     fast_vec_sub(&quad_transform[0], ((char *)&D_L14_001674C0), &quad_transform[3]);
     beam_start_position = &plasmabot_effect_private_vars->beam_start_position_storage;
-    nozzle_position = &plasmabot_effect_private_vars->unk1F0;
+    nozzle_position = &plasmabot_effect_private_vars->nozzle_position;
     fast_vec_normalize(&quad_transform[0], &quad_transform[0], 1.0f);
     fast_vec_cross(&quad_transform[1], &quad_transform[0], D_0013F5E0);
     fast_vec_normalize(&quad_transform[1], &quad_transform[1], -1.0f);
@@ -1121,7 +1122,7 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
     if (((unsigned char *)moby)[0x20] == 0 || ((unsigned char *)moby)[0x20] == 0xB) {
         if (((unsigned char *)moby)[0x20] == 0xB) {
             ((unsigned char *)moby)[0xA4] = 0xFF;
-            trooper_anim_finish(moby, &state->unkC0);
+            trooper_anim_finish(moby, &state->trooper_anim);
         }
         return;
     }
@@ -1146,7 +1147,7 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
         case 8:
         case 9:
         case 10: {
-            char *reaction_motion_state = &state->unk60;
+            char *reaction_motion_state = &state->motion;
             int   stagger_duration_frames;
             float frame_duration, stagger_motion_z, k;
             release_beam_slot_by_id(moby);
@@ -1156,10 +1157,10 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
             stagger_motion_z = plasmabot_stagger_motion_z_scale_gp * frame_duration;
             k = frame_duration * 8.0f;
             state->stagger_reaction_duration_frames = stagger_duration_frames;
-            state->unk78 = k;
-            state->unk7C = stagger_motion_z;
-            state->unkB0 = 11.0f;
-            state->unkB4 = 29.0f;
+            state->knockback_speed = k;
+            state->knockback_vertical_speed = stagger_motion_z;
+            state->knockback_apex_animation_frame = 11.0f;
+            state->knockback_landing_animation_frame = 29.0f;
             func_L00_0025D5B0_i(
                 moby,
                 reaction_motion_state,
@@ -1181,17 +1182,17 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
             moby->flags &= 0xEFFF;
             {
                 int scaled_previous_motion_parameter =
-                    truncate_float_to_s32(state->unk88 * 1024.0f);
+                    truncate_float_to_s32(state->knockback_collision_z_offset * 1024.0f);
                 float k = frame_time * 10.0f;
-                state->unk88 = 0.3f;
-                state->unk78 = k;
-                state->unk7C = k;
-                state->unkB0 = 9.0f;
-                state->unk80 = scaled_previous_motion_parameter;
-                state->unkB4 = 15.0f;
+                state->knockback_collision_z_offset = 0.3f;
+                state->knockback_speed = k;
+                state->knockback_vertical_speed = k;
+                state->knockback_apex_animation_frame = 9.0f;
+                state->knockback_collision_radius = scaled_previous_motion_parameter;
+                state->knockback_landing_animation_frame = 15.0f;
             }
             y = fast_arc_tan(*(float *)(hit_info + 0x10), *(float *)(hit_info + 0x14));
-            func_L00_0025D5B0_i(moby, &state->unk60, y, 8, scale_game_frames(5), 0);
+            func_L00_0025D5B0_i(moby, &state->motion, y, 8, scale_game_frames(5), 0);
             ((unsigned char *)state)[0xC7] = 0xFA;
             if (((unsigned char *)D_0013E533)[0x2EC1] == 2) {
                 FUN_L00_00257470(moby, 0x200, -1);
@@ -1205,10 +1206,10 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
         case HIT_REACTION_NONE:
             break;
         }
-        trooper_anim_update(moby, (short *)(&state->unkC0));
+        trooper_anim_update(moby, (short *)(&state->trooper_anim));
     }
     ((unsigned char *)moby)[0xA4] = 0xFF;
-    trooper_anim_finish(moby, &state->unkC0);
+    trooper_anim_finish(moby, &state->trooper_anim);
 }
 /* steers the moby toward its target: queries the path, eases x/y, then turns to face the heading */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4668), where it is exact; names translated to the US level program. */

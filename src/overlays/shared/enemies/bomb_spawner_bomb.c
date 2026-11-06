@@ -27,12 +27,12 @@ enum {
 typedef struct {
     u8  pad0[0xF];
     u8  always_draw; /* 0x0F */
-    s32 unk10;       /* 0x10 */
+    s32 collision;   /* 0x10 */
     u8  pad14[0x10];
     f32 scale; /* 0x24 */
     u8  pad28[0x18];
-    s32 unk40; /* 0x40 */
-    u16 flags; /* 0x44 */
+    s32 glow_rgba; /* 0x40 */
+    u16 flags;     /* 0x44 */
 } SpawnClass;
 
 /* Spawner pvars. */
@@ -137,7 +137,7 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
         current_moby->update_dist = spawner_moby->update_dist;
         current_moby->draw_dist = spawner_moby->draw_dist;
         current_moby->visible = found;
-        if (spawned_moby_class->unk40 != 0) {
+        if (spawned_moby_class->glow_rgba != 0) {
             current_moby->flags = flags | 0x10;
         }
         if (((SpawnClass *)current_moby->pclass)->always_draw != 0) {
@@ -167,7 +167,7 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
         if (spawner_moby->unkB4 < 0) {
             spawner_moby->unkB4 = 1;
         }
-        current_moby->collision = ((SpawnClass *)current_moby->pclass)->unk10;
+        current_moby->collision = ((SpawnClass *)current_moby->pclass)->collision;
         copy_hero_moby_field_38(current_moby);
         update_entity(current_moby);
         spawned = current_moby;

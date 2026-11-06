@@ -260,16 +260,16 @@ struct HoverVars {
 
 /* steering constants */
 struct HoverTuning {
-    s32          unk0; /* passed to FUN_L00_00258ad0 */
-    f32          unk4, unk8, unkC, unk10;
-    f32          yaw_speed; /* 0x14: turn speed FUN_L00_00258278 keeps (D_L01_001DEB4C) */
-    f32          unk18, unk1C, unk20, unk24, unk28, unk2C;
-    f32          unk30;
-    f32          unk34;
-    s32          unk38;
-    f32          unk3C, unk40, unk44;
-    s32          unk48;
-    s32          unk4C;
+    s32 collision_radius_1024ths; /* passed to FUN_L00_00258ad0 (move_moby_with_collision_integer_radius) */
+    f32 step_height, max_drop, max_climb, speed;
+    f32 yaw_speed; /* 0x14: turn speed FUN_L00_00258278 keeps (D_L01_001DEB4C) */
+    f32 vertical_velocity, acceleration, brake, max_speed, heading_tolerance, arrive_distance;
+    f32 ground_probe_depth;
+    f32 unk34;
+    s32 movement_option_flags;
+    f32 turn_spring, turn_damping, max_turn_step;
+    s32 move_timer;
+    s32 move_heading;
     struct Moby *owner; /* 0x50 */
 };
 
@@ -364,8 +364,12 @@ void update_sandmouse_hover_movement(struct Moby *moby, struct HoverVars *hover_
             clamp_vector_length(&hover_vars->vel, &hover_vars->vel, frame_time * 2.7f);
         }
         hover_tuning = &D_L01_001DEB38;
-        hit = move_moby_with_collision_integer_radius(
-            moby, &hover_vars->vel, 1.0f, hover_tuning->unk30, hover_tuning->unk0, 0);
+        hit = move_moby_with_collision_integer_radius(moby,
+                                                      &hover_vars->vel,
+                                                      1.0f,
+                                                      hover_tuning->ground_probe_depth,
+                                                      hover_tuning->collision_radius_1024ths,
+                                                      0);
         velocity_magnitude = fast_vec_length(&hover_vars->vel);
         if (hit == 0) {
             hover_vars->stuck = 0;
@@ -609,21 +613,21 @@ void sandmouse_update(Moby *sandmouse_moby) {
         qcopy(&sandmouse_vars->a20, &sandmouse_moby->pos);
         qcopy(&sandmouse_vars->a30, &sandmouse_moby->pos);
         FUN_L01_0026d930(&D_L01_001DEB38_lui);
-        D_L01_001DEB38_lui.unk0 = 500;
-        D_L01_001DEB38_lui.unk8 = 0.15f;
-        D_L01_001DEB38_lui.unkC = 0.15f;
+        D_L01_001DEB38_lui.collision_radius_1024ths = 500;
+        D_L01_001DEB38_lui.max_drop = 0.15f;
+        D_L01_001DEB38_lui.max_climb = 0.15f;
         D_L01_001DEB38_lui.yaw_speed = frame_scale * 0.4f;
-        D_L01_001DEB38_lui.unk10 = frame_scale * 0.01f;
-        D_L01_001DEB38_lui.unk24 = frame_time * 2.7f;
-        D_L01_001DEB38_lui.unk1C = frame_scale * 0.01f;
-        D_L01_001DEB38_lui.unk4 = 0.3f;
-        D_L01_001DEB38_lui.unk30 = 0.005f;
-        D_L01_001DEB38_lui.unk38 |= 8;
-        D_L01_001DEB38_lui.unk3C = frame_time_sq * 6.2831855f;
-        D_L01_001DEB38_lui.unk40 = frame_time_sq * 3.1415927f;
-        D_L01_001DEB38_lui.unk44 = frame_time * 11.519173f;
-        D_L01_001DEB38_lui.unk48 = scale_game_frames(4);
-        D_L01_001DEB38_lui.unk28 = 3.1415927f;
+        D_L01_001DEB38_lui.speed = frame_scale * 0.01f;
+        D_L01_001DEB38_lui.max_speed = frame_time * 2.7f;
+        D_L01_001DEB38_lui.acceleration = frame_scale * 0.01f;
+        D_L01_001DEB38_lui.step_height = 0.3f;
+        D_L01_001DEB38_lui.ground_probe_depth = 0.005f;
+        D_L01_001DEB38_lui.movement_option_flags |= 8;
+        D_L01_001DEB38_lui.turn_spring = frame_time_sq * 6.2831855f;
+        D_L01_001DEB38_lui.turn_damping = frame_time_sq * 3.1415927f;
+        D_L01_001DEB38_lui.max_turn_step = frame_time * 11.519173f;
+        D_L01_001DEB38_lui.move_timer = scale_game_frames(4);
+        D_L01_001DEB38_lui.heading_tolerance = 3.1415927f;
         sandmouse_moby->state = SANDMOUSE_STATE_WAIT_FOR_ACTIVATION;
         sandmouse_moby->draw_dist = 0;
         break;
@@ -732,7 +736,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
         }
         if (0.6f < vector_distance_xy(&sandmouse_moby->pos, &sandmouse_vars->a30) &&
             sandmouse_vars->timer == 0) {
-            D_L01_001DEB38_lui.unk4 = 0.7f;
+            D_L01_001DEB38_lui.step_height = 0.7f;
             compute_sandmouse_follow_goal(sandmouse_moby, sandmouse_vars);
             update_sandmouse_hover_movement(sandmouse_moby, (struct HoverVars *)sandmouse_vars);
             movement_result_flags = sandmouse_vars->stuck < 0x15;

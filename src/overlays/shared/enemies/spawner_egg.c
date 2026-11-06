@@ -29,7 +29,7 @@ typedef struct {
     struct Moby *owner; /* 0x10: class 0x75D spawner; its pvars hold the bubble list at 0xB0 */
     struct Moby *held;  /* 0x14: from FUN_L09_0030a778 when the bubble settles */
     s16          life;  /* 0x18 */
-    u8           unk1A;
+    u8           grow_held_moby;
     u8           sound_delay; /* 0x1B */
     u8           slot;        /* 0x1C: index in the owner's bubble list */
 } BubbleVars;
@@ -284,7 +284,7 @@ void spawner_egg_update(struct Moby *moby) {
     case SPAWNER_EGG_STATE_SHRINKING:
         rate = frame_scale * 0.05f;
         moby->scale -= moby->scale * rate;
-        if (bubble_vars->held != NULL && bubble_vars->unk1A != 0) {
+        if (bubble_vars->held != NULL && bubble_vars->grow_held_moby != 0) {
             bubble_vars->held->scale +=
                 (bubble_vars->held->pclass->scale - bubble_vars->held->scale) * rate;
         }
@@ -292,7 +292,7 @@ void spawner_egg_update(struct Moby *moby) {
             moby->scale = 0.0001f;
             held = bubble_vars->held;
             if (held == NULL || held->state == 0xFE || held->state == 0xFD ||
-                bubble_vars->unk1A == 0 || held->pclass->scale - 0.01f <= held->scale) {
+                bubble_vars->grow_held_moby == 0 || held->pclass->scale - 0.01f <= held->scale) {
                 remove_spawner_egg(moby, (char *)bubble_vars);
             }
         }

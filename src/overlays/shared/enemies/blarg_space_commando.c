@@ -34,12 +34,12 @@ enum {
 };
 
 typedef struct {
-    s32 unk0;
-    f32 unk4;
-    f32 unk8;
-    f32 unkC;
+    s32 collision_radius_1024ths;
+    f32 step_height;
+    f32 max_drop;
+    f32 max_climb;
     u8  pad10[0x14];
-    f32 unk24;
+    f32 max_speed;
     u8  pad28[0x10];
     s32 flags; /* 0x38 */
 } MoveCtl;
@@ -74,11 +74,11 @@ typedef struct {
     MoveCtl      ctl; /* 0xC0 */
     u8           padFC[0x64];
     struct Moby *target; /* 0x160 */
-    s32          unk164;
+    s32          target_selection_status;
     u8           pad168[8];
     Vec4         home; /* 0x170 */
     u8           pad180[8];
-    s32          unk188;
+    s32          pursuit_timer;
     f32          turn_speed; /* 0x18C */
     u8           pad190[0xC];
     s32          timer; /* 0x19C */
@@ -87,7 +87,7 @@ typedef struct {
     s32          route;  /* 0x1A8 */
     s32          volume; /* 0x1AC */
     u8           pad1B0[0x50];
-    Vec4         unk200;
+    Vec4         melee_sweep_previous_position;
     u8           pad210[0x210];
     u8           unk420[1];
 } Moby1068Vars;
@@ -178,11 +178,12 @@ void blarg_space_commando_update(struct Moby *moby) {
         blarg_commando_state->unk58 = truncate_float_to_s32(12.0f);
         blarg_commando_state->unk5A = truncate_float_to_s32(13.6f);
         FUN_L01_0026d930(&blarg_commando_state->ctl);
-        blarg_commando_state->ctl.unk8 = 2.0f;
-        blarg_commando_state->ctl.unkC = 0.5f;
-        blarg_commando_state->ctl.unk0 = truncate_float_to_s32(D_L06_00161FA8 * 307.2f);
-        blarg_commando_state->ctl.unk4 = D_L06_00161FA8 * 0.3f;
-        blarg_commando_state->ctl.unk24 = movement_max_horizontal_speed_gp * frame_time;
+        blarg_commando_state->ctl.max_drop = 2.0f;
+        blarg_commando_state->ctl.max_climb = 0.5f;
+        blarg_commando_state->ctl.collision_radius_1024ths =
+            truncate_float_to_s32(D_L06_00161FA8 * 307.2f);
+        blarg_commando_state->ctl.step_height = D_L06_00161FA8 * 0.3f;
+        blarg_commando_state->ctl.max_speed = movement_max_horizontal_speed_gp * frame_time;
         blarg_commando_state->ctl.flags |= 8;
         qcopy(&blarg_commando_state->home, &moby->pos);
         moby->state = BLARG_COMMANDO_STATE_SELECT_ACTION;
@@ -203,7 +204,7 @@ void blarg_space_commando_update(struct Moby *moby) {
                        frame_time_sq * 6.2831855f,
                        frame_time_sq * 6.2831855f,
                        frame_time * 3.1415927f);
-        if (blarg_commando_state->unk164 != 2) {
+        if (blarg_commando_state->target_selection_status != 2) {
             if (melee_attack_distance_threshold_gp < vector_distance_xy(&moby->pos, &target->pos)) {
                 if (fast_difference_between_rotations(
                         moby->rot.z,
@@ -220,7 +221,7 @@ void blarg_space_commando_update(struct Moby *moby) {
                     blend_moby_animation(moby, 6, 0, scale_game_frames(10));
                 }
             }
-        } else if (blarg_commando_state->unk188 != 0) {
+        } else if (blarg_commando_state->pursuit_timer != 0) {
             moby->state = BLARG_COMMANDO_STATE_CHASE_TARGET;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(20));
@@ -290,7 +291,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         break;
     case BLARG_COMMANDO_STATE_RANGED_ATTACK_RECOVERY:
         if (moby->anim_flags & 2) {
-            if (blarg_commando_state->unk164 != 2) {
+            if (blarg_commando_state->target_selection_status != 2) {
                 moby->state = BLARG_COMMANDO_STATE_RANGED_ATTACK_COOLDOWN;
                 if (moby->prev_seq != 4) {
                     blend_moby_animation(moby, 4, 0, scale_game_frames(20));
@@ -323,7 +324,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             }
-        } else if (blarg_commando_state->unk188 != 0) {
+        } else if (blarg_commando_state->pursuit_timer != 0) {
             moby->state = BLARG_COMMANDO_STATE_CHASE_TARGET;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(20));
@@ -355,13 +356,13 @@ void blarg_space_commando_update(struct Moby *moby) {
             shot.oclass = moby->oclass;
             sweep_hit_segment(&position_or_movement_vector,
                               &movement_input_or_output_or_melee_origin,
-                              &blarg_commando_state->unk200,
+                              &blarg_commando_state->melee_sweep_previous_position,
                               &movement_input_or_output_or_melee_origin,
                               moby,
                               &shot,
                               5);
         }
-        qcopy(&blarg_commando_state->unk200, &position_or_movement_vector);
+        qcopy(&blarg_commando_state->melee_sweep_previous_position, &position_or_movement_vector);
         if (moby->anim_flags & 2) {
             moby->state = BLARG_COMMANDO_STATE_MELEE_RECOVERY;
             moby->command = 1;
@@ -403,7 +404,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             fast_vec_dist(&moby->pos, &movement_output_or_hit_vector_or_path_point) < 0.8f) {
             near = 1;
         }
-        if (blarg_commando_state->unk188 == 0) {
+        if (blarg_commando_state->pursuit_timer == 0) {
             moby->state = BLARG_COMMANDO_STATE_RETURN_HOME;
         } else if (near != 0) {
             moby->state = BLARG_COMMANDO_STATE_CHASE_MELEE_ATTACK;
@@ -434,13 +435,13 @@ void blarg_space_commando_update(struct Moby *moby) {
             shot.oclass = moby->oclass;
             sweep_hit_segment(&position_or_movement_vector,
                               &movement_input_or_output_or_melee_origin,
-                              &blarg_commando_state->unk200,
+                              &blarg_commando_state->melee_sweep_previous_position,
                               &movement_input_or_output_or_melee_origin,
                               moby,
                               &shot,
                               5);
         }
-        qcopy(&blarg_commando_state->unk200, &position_or_movement_vector);
+        qcopy(&blarg_commando_state->melee_sweep_previous_position, &position_or_movement_vector);
         if (moby->anim_flags & 2) {
             moby->state = BLARG_COMMANDO_STATE_CHASE_TARGET;
             if (moby->prev_seq != 1) {

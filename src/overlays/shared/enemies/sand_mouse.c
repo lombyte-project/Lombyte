@@ -69,11 +69,12 @@ typedef struct {
 } Data;
 
 typedef struct {
-    int   unk0;
-    float unk4, unk8, unkC, unk10, yaw_speed, unk18, unk1C, unk20, unk24, unk28, unk2C, unk30;
-    int   unk34, unk38;
-    float unk3C, unk40, unk44;
-    int   unk48, unk4C;
+    int   collision_radius_1024ths;
+    float step_height, max_drop, max_climb, speed, yaw_speed, vertical_velocity, acceleration,
+        brake, max_speed, heading_tolerance, arrive_distance, ground_probe_depth;
+    int   unk34, movement_option_flags;
+    float turn_spring, turn_damping, max_turn_step;
+    int   move_timer, move_heading;
     void *owner;
 } Mover;
 
@@ -563,20 +564,21 @@ void sand_mouse_update(struct Moby *moby) {
             int   flag;
             rig_probe_setup(moby, 0, &kind, va, &collision_probe_extent, &flag);
             mover_2e3f20.yaw_speed = frame_scale * 0.4f;
-            mover_2e3f20.unk8 = 0.15f;
-            mover_2e3f20.unkC = 0.15f;
-            mover_2e3f20.unk10 = frame_scale * 0.01f;
-            mover_2e3f20.unk24 = frame_time * 2.7f;
-            mover_2e3f20.unk1C = frame_scale * 0.01f;
-            mover_2e3f20.unk0 = truncate_float_to_s32(collision_probe_extent * 1024.0f) + 1;
-            mover_2e3f20.unk38 |= 8;
-            mover_2e3f20.unk4 = 0.3f;
-            mover_2e3f20.unk30 = 0.005f;
-            mover_2e3f20.unk3C = frame_time_sq * 11.519173f;
-            mover_2e3f20.unk40 = frame_time_sq * 3.1415927f;
-            mover_2e3f20.unk44 = frame_time * 11.519173f;
-            mover_2e3f20.unk48 = scale_game_frames(4);
-            mover_2e3f20.unk28 = 3.1415927f;
+            mover_2e3f20.max_drop = 0.15f;
+            mover_2e3f20.max_climb = 0.15f;
+            mover_2e3f20.speed = frame_scale * 0.01f;
+            mover_2e3f20.max_speed = frame_time * 2.7f;
+            mover_2e3f20.acceleration = frame_scale * 0.01f;
+            mover_2e3f20.collision_radius_1024ths =
+                truncate_float_to_s32(collision_probe_extent * 1024.0f) + 1;
+            mover_2e3f20.movement_option_flags |= 8;
+            mover_2e3f20.step_height = 0.3f;
+            mover_2e3f20.ground_probe_depth = 0.005f;
+            mover_2e3f20.turn_spring = frame_time_sq * 11.519173f;
+            mover_2e3f20.turn_damping = frame_time_sq * 3.1415927f;
+            mover_2e3f20.max_turn_step = frame_time * 11.519173f;
+            mover_2e3f20.move_timer = scale_game_frames(4);
+            mover_2e3f20.heading_tolerance = 3.1415927f;
         }
         moby->state = SAND_MOUSE_WAIT_FOR_HERO_IN_VOLUME;
         moby->draw_dist = 0;
