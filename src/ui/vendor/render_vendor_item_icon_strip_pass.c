@@ -3,18 +3,18 @@
 
 struct HudMenuState {
     u8  pad_0[0x4];
-    s32 unk4;
+    s32 frames;
     u8  pad_8[0x44];
-    s32 unk4C;
+    s32 scroll;
     u8  pad_50[0x8];
-    s32 unk58;
+    s32 cursor;
     u8  pad_5C[0x1B4];
     s32 selection_entry_count;
 };
 
 struct HudItemEntry {
     u8  pad_0[0x38];
-    u16 unk38;
+    u16 icon;
 };
 
 extern struct HudMenuState D_001E63C0;
@@ -43,9 +43,9 @@ void render_vendor_item_icon_strip_pass(void) {
     if (D_001E63C0.selection_entry_count < 8) {
         sprite_x = 0xC;
         item_index = 0;
-        slot_x = D_001E63C0.unk58 * 0x38;
+        slot_x = D_001E63C0.cursor * 0x38;
         fill_color =
-            ((SubtractIntegerWithClamp(((D_001E63C0.unk4 * 4) & 0x3F) - 0x20) + 0x40) * 0x10202) |
+            ((SubtractIntegerWithClamp(((D_001E63C0.frames * 4) & 0x3F) - 0x20) + 0x40) * 0x10202) |
             0x80000000;
         draw_framebuffer_rect(slot_x + 8, 2, slot_x + 0x40, 0x3A, 0x200, 0x80, fill_color);
         draw_framebuffer_rect(slot_x + 0xA, 4, slot_x + 0x3E, 0x38, 0x200, 0x80, 0x80000000);
@@ -56,7 +56,7 @@ void render_vendor_item_icon_strip_pass(void) {
                 item_icon =
                     ((struct HudItemEntry *)(void *)((u8 *)((u8 *)menu_item_info) +
                                                      selection_purchase_kind_ptr[-1] * 0x4C))
-                        ->unk38;
+                        ->icon;
                 if (selection_purchase_kind_ptr[0] == 1) {
                     frame_index = get_icon_frame(item_icon, 2);
                 } else {
@@ -68,10 +68,10 @@ void render_vendor_item_icon_strip_pass(void) {
             } while (item_index < D_001E63C0.selection_entry_count);
         }
     } else {
-        if (D_001E63C0.unk4C < 0) {
-            D_001E63C0.unk4C = (s32)(D_001E63C0.unk4C + 4);
-        } else if (D_001E63C0.unk4C > 0) {
-            D_001E63C0.unk4C = (s32)(D_001E63C0.unk4C - 4);
+        if (D_001E63C0.scroll < 0) {
+            D_001E63C0.scroll = (s32)(D_001E63C0.scroll + 4);
+        } else if (D_001E63C0.scroll > 0) {
+            D_001E63C0.scroll = (s32)(D_001E63C0.scroll - 4);
         } else {
             draw_framebuffer_rect(
                 0xB0,
@@ -80,15 +80,15 @@ void render_vendor_item_icon_strip_pass(void) {
                 0x3A,
                 0x200,
                 0x80,
-                ((SubtractIntegerWithClamp(((D_001E63C0.unk4 * 4) & 0x3F) - 0x20) + 0x40) *
+                ((SubtractIntegerWithClamp(((D_001E63C0.frames * 4) & 0x3F) - 0x20) + 0x40) *
                  0x10202) -
                     (s32)0x80000000);
             draw_framebuffer_rect(0xB2, 4, 0xE6, 0x38, 0x200, 0x80, 0x80000000);
         }
-        strip_x = D_001E63C0.unk4C - 0x64;
+        strip_x = D_001E63C0.scroll - 0x64;
         slot = -2;
         do {
-            first_slot = D_001E63C0.unk58 - 3;
+            first_slot = D_001E63C0.cursor - 3;
             entry_offset = ((s32)((D_001E63C0.selection_entry_count * 2) + slot + first_slot) %
                             (s32)D_001E63C0.selection_entry_count) *
                            0x14;
@@ -96,7 +96,7 @@ void render_vendor_item_icon_strip_pass(void) {
                                                     *(s32 *)(void *)(entry_offset +
                                                                      ((u8 *)&D_001E63C0 + 0xD0)) *
                                                         0x4C))
-                       ->unk38;
+                       ->icon;
             if (*(s32 *)(void *)(entry_offset + ((u8 *)&D_001E63C0 + 0xD4)) == 1) {
                 strip_frame = get_icon_frame(icon, 2);
             } else {

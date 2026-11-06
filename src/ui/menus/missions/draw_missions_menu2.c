@@ -5,25 +5,25 @@
 
 struct MissionsMenu {
     u8  pad_0[0x20];
-    s32 unk20;
-    s32 unk24;
+    s32 width;
+    s32 height;
     u8  pad28[0x8];
     s32 sel[1];
 };
 
 struct Rect {
-    u16 unk00;
+    u16 top;
     u16 bottom;
-    u16 unk04;
+    u16 left;
     u16 right;
-    s16 unk08;
+    s16 anchor_x;
     s16 anchor_y;
-    s16 unk0C;
-    s16 unk0E;
-    u16 unk10;
+    s16 measured_width;
+    s16 rendered_height;
+    u16 line_advance;
     u16 flags;
-    s16 unk14;
-    s16 unk16;
+    s16 subpixel_x_sixteenths;
+    s16 subpixel_y_sixteenths;
 };
 
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
@@ -73,7 +73,7 @@ s32 draw_missions_menu2(struct MissionsMenu *menu) {
             wrapped_text_result =
                 font_print_wrapped_small(0x10,
                                          mission_text_y,
-                                         menu->unk20 - 0x11,
+                                         menu->width - 0x11,
                                          0x3E8,
                                          col,
                                          get_help_message_text(*mission_id_cursor),
@@ -94,11 +94,11 @@ s32 draw_missions_menu2(struct MissionsMenu *menu) {
     }
     if (mask < 0) {
         memset(&text_region_settings, 0, 0x18);
-        text_region_settings.bottom = menu->unk24;
-        text_region_settings.right = menu->unk20;
-        text_region_settings.unk08 = menu->unk24 >> 1;
+        text_region_settings.bottom = menu->height;
+        text_region_settings.right = menu->width;
+        text_region_settings.anchor_x = menu->height >> 1;
         text_region_settings.anchor_y = mission_text_y + 8;
-        text_region_settings.unk10 = 0x10;
+        text_region_settings.line_advance = 0x10;
         text_region_settings.flags = 1;
         trailing_text_region = text_region_settings;
         font_print_window_small(
