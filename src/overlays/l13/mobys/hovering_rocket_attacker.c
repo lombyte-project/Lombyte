@@ -79,7 +79,7 @@ typedef struct HoveringRocketAttackerVars {
     f32 health;
     s16 max_health;
     u8  pad_26[0x2];
-    u8  unk28;
+    u8  hit_response_class;
     u8  pad_29[0x2F];
     u8  unk58;
     u8  pad_59[0x1];
@@ -136,7 +136,7 @@ void hovering_rocket_attacker_update(unsigned char *moby) {
         MOBY(moby)->flags |= 0x5000;
         moby_data->health = 4.0f;
         moby_data->max_health = 4;
-        moby_data->unk28 = 3;
+        moby_data->hit_response_class = 3;
         moby_data->rocket_max_travel_distance = 15.0f;
         moby_data->unk58 = 50;
         moby_data->unk5A = 0;

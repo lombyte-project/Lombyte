@@ -33,9 +33,9 @@ enum {
 typedef struct {
     u8                       pad0[0x20];
     f32                      health;
-    s16                      unk24;
+    s16                      max_health;
     u8                       pad26[2];
-    u8                       unk28;
+    u8                       hit_response_class;
     u8                       pad29[0x2F];
     u8                       unk58;
     u8                       pad59;
@@ -128,8 +128,8 @@ void seeker_update(struct Moby *moby) {
     switch (moby->state) {
     case SEEKER_STATE_INITIALIZE:
         seeker_instance_vars->health = 3.0f;
-        seeker_instance_vars->unk24 = 3;
-        seeker_instance_vars->unk28 = 2;
+        seeker_instance_vars->max_health = 3;
+        seeker_instance_vars->hit_response_class = 2;
         seeker_instance_vars->unk5A = 6;
         seeker_instance_vars->unk58 = 8;
         if (seeker_instance_vars->bound_path == -1) {

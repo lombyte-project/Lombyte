@@ -82,11 +82,11 @@ extern char         D_0013F350[];
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F91A8), where it is exact; names translated to the US level program. */
 typedef struct {
     u8    pad0[0x20];
-    f32   f20; /* 0x20 */
-    s16   f24; /* 0x24 */
+    f32   health;     /* 0x20 */
+    s16   max_health; /* 0x24 */
     u8    pad26[2];
-    u8    f28; /* 0x28 */
-    u8    f29; /* 0x29 */
+    u8    hit_response_class; /* 0x28 */
+    u8    f29;                /* 0x29 */
     u8    pad2A[0x2E];
     u8    f58; /* 0x58 */
     u8    pad59;
@@ -302,10 +302,10 @@ void alien_snapper_update(Moby *moby) {
     moby->scale = moby->pclass->scale * D_L06_00161EB0;
     switch (moby->state) {
     case ALIEN_SNAPPER_STATE_INITIALIZE:
-        snapper_behavior->f28 = 3;
+        snapper_behavior->hit_response_class = 3;
         snapper_behavior->f29 = 1;
-        snapper_behavior->f20 = 4.0f;
-        snapper_behavior->f24 = 4;
+        snapper_behavior->health = 4.0f;
+        snapper_behavior->max_health = 4;
         snapper_behavior->f58 = truncate_float_to_s32(10.0f);
         snapper_behavior->f5A = truncate_float_to_s32(14.0f);
         moby->flags |= 0x5000;

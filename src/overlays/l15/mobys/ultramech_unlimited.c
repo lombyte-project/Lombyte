@@ -170,10 +170,10 @@ struct UMoby {
 
 struct UData {
     char           pad0[0x20];
-    float          f20;
-    short          h24;
+    float          health;
+    short          max_health;
     char           pad26[2];
-    unsigned char  b28;
+    unsigned char  hit_response_class;
     unsigned char  b29;
     char           pad2A[6];
     float          f30;
@@ -326,9 +326,9 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
     FUN_L00_00263ac8(2.5f, (int)ultramech_moby, 6, ultramech_vars->v200);
     switch (ultramech_moby->state) {
     case ULTRAMECH_INITIALIZE:
-        ultramech_vars->f20 = 12.0f;
-        ultramech_vars->h24 = 0xC;
-        ultramech_vars->b28 = 3;
+        ultramech_vars->health = 12.0f;
+        ultramech_vars->max_health = 0xC;
+        ultramech_vars->hit_response_class = 3;
         ultramech_vars->h3E |= 2;
         ultramech_vars->f30 = 6.0f;
         ultramech_vars->b29 = 0;
@@ -1035,17 +1035,17 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
             }
         }
     }
-    code = FUN_00249d60(ultramech_moby, slot, &ultramech_vars->f20, 0, &kind, &impact, 0, 4);
+    code = FUN_00249d60(ultramech_moby, slot, &ultramech_vars->health, 0, &kind, &impact, 0, 4);
     if (slot != 0) {
         if (kind != HIT_CLASSIFICATION_NO_DAMAGE && (state = ultramech_moby->state) != 10 &&
             state != ULTRAMECH_DEAD_WAIT_FOR_RESET &&
             *(short *)(*(char **)(slot + 0x20) + 0xA6) != 0x350) {
-            ultramech_vars->f20 -= impact;
+            ultramech_vars->health -= impact;
             if (*(unsigned short *)(slot + 0x2A) == 0x100)
                 code = 9;
             if (ultramech_moby->state == ULTRAMECH_FOLLOW_ENTRY_PATH)
                 code = 9;
-            if (ultramech_vars->f20 <= 0.0f)
+            if (ultramech_vars->health <= 0.0f)
                 code = 1;
             hit = truncate_float_to_s32(2560.0f);
             {

@@ -30,8 +30,8 @@ extern int   resolve_moby_hit_response(void *, void *, float *, int, int *, int,
 /* pvars of the moby run by psytcopus_update (FUN_L11_00310698 does its hit handling) */
 struct PokiPathVars {
     u8                     pad_00[0x20];
-    f32                    health; /* 0x20 */
-    s16                    unk24;  /* 0x24 */
+    f32                    health;     /* 0x20 */
+    s16                    max_health; /* 0x24 */
     u8                     pad_26[2];
     u8                     hit_response_class; /* 0x28 */
     u8                     pad_29;
@@ -123,7 +123,7 @@ void psytcopus_update(struct Moby *psytcopus) {
     }
     switch (psytcopus->state) {
     case PSYTCOPUS_STATE_INITIALIZE:
-        psytcopus_vars->unk24 = 3;
+        psytcopus_vars->max_health = 3;
         psytcopus_vars->health = 3.0f;
         psytcopus_vars->hit_response_class = 2;
         psytcopus_vars->unk2A = 6;

@@ -37,9 +37,9 @@ typedef struct {
 typedef struct {
     u8  pad0[0x20];
     f32 health; /* 0x20 */
-    s16 unk24;
+    s16 max_health;
     u8  pad26[2];
-    u8  unk28;
+    u8  hit_response_class;
     u8  unk29;
     u8  pad2A[0xE];
     s32 alerted; /* 0x38: set when it is hit */
@@ -158,8 +158,8 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         mine_layer_vars->walk.max_climb = 2.0f;
         mine_layer_vars->walk.max_drop = 2.0f;
         mine_layer_vars->health = 2.0f;
-        mine_layer_vars->unk24 = 2;
-        mine_layer_vars->unk28 = 1;
+        mine_layer_vars->max_health = 2;
+        mine_layer_vars->hit_response_class = 1;
         mine_layer_vars->unk29 = 0;
         path = l03_paths[mine_layer_vars->patrol.path_index];
         mine_layer_vars->patrol.path = path;

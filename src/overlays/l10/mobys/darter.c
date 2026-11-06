@@ -79,10 +79,10 @@ typedef struct Hero Hero_2e01a8;
 
 typedef struct Vars_2e01a8 {
     char          p0[0x20];
-    float         f20;
-    short         h24;
+    float         health;
+    short         max_health;
     char          p26[2];
-    unsigned char b28;
+    unsigned char hit_response_class;
     unsigned char b29;
     char          p2A[6];
     float         f30;
@@ -164,9 +164,9 @@ void darter_update(Moby *moby) {
     switch (moby->state) {
     case DARTER_STATE_INITIALIZE:
         darter_vars->f30 = 0.25f;
-        darter_vars->f20 = 1.0f;
-        darter_vars->h24 = 1;
-        darter_vars->b28 = 0;
+        darter_vars->health = 1.0f;
+        darter_vars->max_health = 1;
+        darter_vars->hit_response_class = 0;
         darter_vars->b29 = 1;
         moby->flags |= 0x1000;
         qcopy(&darter_vars->home, &moby->pos);

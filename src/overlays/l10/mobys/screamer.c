@@ -41,10 +41,10 @@ typedef struct Moby Moby;
 
 typedef struct D_2E0630 {
     char          p0[0x20];
-    float         f20;
-    short         h24;
+    float         health;
+    short         max_health;
     char          p26[2];
-    unsigned char b28;
+    unsigned char hit_response_class;
     unsigned char b29;
     char          p2A[6];
     float         f30;
@@ -118,9 +118,9 @@ void screamer_update(Moby *moby) {
     switch (moby->state) {
     case SCREAMER_STATE_INITIALIZE:
         screamer_data->f30 = 0.5f;
-        screamer_data->f20 = 1.0f;
-        screamer_data->h24 = 1;
-        screamer_data->b28 = 0;
+        screamer_data->health = 1.0f;
+        screamer_data->max_health = 1;
+        screamer_data->hit_response_class = 0;
         screamer_data->b29 = 1;
         moby->flags |= 0x1000;
         qcopy(&screamer_data->home, &moby->pos);

@@ -50,8 +50,8 @@ enum {
 
 typedef struct {
     u8    pad00[0x20];
-    f32   hp;    /* 0x20 */
-    s16   unk24; /* 0x24 */
+    f32   hp;         /* 0x20 */
+    s16   max_health; /* 0x24 */
     u8    pad26[2];
     u8    hit_response_class; /* 0x28 */
     u8    unk29;              /* 0x29 */
@@ -154,7 +154,7 @@ void puffoid_update(struct Moby *moby) {
     switch (moby->state) {
     case PUFFOID_STATE_INITIALIZE:
         puffoid_vars->hp = 2.0f;
-        puffoid_vars->unk24 = 2;
+        puffoid_vars->max_health = 2;
         puffoid_vars->hit_response_class = 1;
         puffoid_vars->unk30 = 0.25f;
         puffoid_vars->unk58 = truncate_float_to_s32(8.0f);

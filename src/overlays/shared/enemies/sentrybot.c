@@ -82,9 +82,9 @@ typedef struct SentrybotKnockback {
 typedef struct SentrybotVars {
     u8                 pad0[0x20];
     f32                health; /* 0x20: hit damage is taken from it */
-    s16                unk24;
+    s16                max_health;
     u8                 pad26[2];
-    u8                 unk28;
+    u8                 hit_response_class;
     u8                 unk29;
     u8                 pad2A[0xE];
     s32                unk38; /* 0x38: set: restart target_countdown */
@@ -356,9 +356,9 @@ void sentrybot_update(unsigned char *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        sentrybot_instance_data->unk24 = 3;
+        sentrybot_instance_data->max_health = 3;
         sentrybot_instance_data->health = 3.0f;
-        sentrybot_instance_data->unk28 = 2;
+        sentrybot_instance_data->hit_response_class = 2;
         sentrybot_instance_data->unk29 = 0;
         qcopy(&sentrybot_instance_data->home_pos, &MOBY(moby)->pos);
         sentrybot_instance_data->home_yaw = MOBY(moby)->rot.z;

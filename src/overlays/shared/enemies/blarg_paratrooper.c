@@ -40,9 +40,9 @@ typedef struct {
 typedef struct Paratrooper302618 {
     u8                       pad0[0x20];
     float                    health; /* 0x20: hit damage is taken from it */
-    short                    f24;
+    short                    max_health;
     u8                       pad26[0x2];
-    unsigned char            f28;
+    unsigned char            hit_response_class;
     unsigned char            f29;
     u8                       pad2A[0x4];
     unsigned char            removal_status;
@@ -210,10 +210,10 @@ void blarg_paratrooper_update(char *moby) {
     case PARATROOPER_STATE_INITIALIZE: {
         float turn_rate;
         paratrooper_private_state->f29 = 0;
-        paratrooper_private_state->f28 = 1;
+        paratrooper_private_state->hit_response_class = 1;
         paratrooper_private_state->removal_status = 1;
         paratrooper_private_state->health = 2.0f;
-        paratrooper_private_state->f24 = 2;
+        paratrooper_private_state->max_health = 2;
         paratrooper_private_state->f58 = truncate_float_to_s32(15.0f);
         paratrooper_private_state->f5A = truncate_float_to_s32(12.0f);
         if (paratrooper_private_state->wake_path_index == -1) {

@@ -103,7 +103,7 @@ typedef struct ExtermibotVars {
     f32          health;
     s16          max_health;
     u8           pad_26[0x2];
-    u8           unk28;
+    u8           hit_response_class;
     u8           unk29;
     u8           pad_2A[0x6];
     f32          unk30;
@@ -186,7 +186,7 @@ void extermibot_update(unsigned char *moby) {
         moby_data->health = 2.0f;
         moby_data->unk29 = 0;
         moby_data->target_pursuit_timer = 0;
-        moby_data->unk28 = 1;
+        moby_data->hit_response_class = 1;
         moby_data->unk30 = 1.0f;
         moby_data->max_health = 2;
         moby_data->unk58 = truncate_float_to_s32(14.0f);
