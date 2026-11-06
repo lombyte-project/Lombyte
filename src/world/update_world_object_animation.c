@@ -156,3 +156,9 @@ void update_world_object_animation(void *unused_arg) {
 
 extern __typeof__(update_world_object_animation) func_00204790
     __attribute__((alias("FUN_00204790")));
+
+/* The moby class that takes the place of class 0x215 as the first part in game mode 6, per
+   content variant (0, 1 or 2). Small data in retail, defined after the function so it keeps
+   reaching the table through lui. */
+int cutscene_moby_ids_by_content_variant[3]
+    __attribute__((section(".sdata"))) = {0x213, 0x214, 0x215};
