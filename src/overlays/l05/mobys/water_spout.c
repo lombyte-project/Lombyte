@@ -46,7 +46,7 @@ extern unsigned char D_0014C050[][16];
 extern struct FloorRow *D_L05_001612D0;
 extern char             D_L05_0015F580_macro[] __asm__("D_L05_0015F580") MACRO_ADDR;
 
-#include "rnc/overlay/l05/mobys/triggered_spray_emitter_data/water_spout_update.h"
+#include "rnc/overlay/l05/mobys/water_spout_data/water_spout_update.h"
 
 void water_spout_update(struct Moby *emitter_moby) __asm__("FUN_L05_003150f0");
 
