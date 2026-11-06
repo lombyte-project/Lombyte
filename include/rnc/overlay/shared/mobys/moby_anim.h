@@ -22,11 +22,11 @@ typedef struct {
     unsigned char seq;       /* 0x52 */
     unsigned char prevSeq;   /* 0x53 */
     char          _pad54[0x5C - 0x54];
-    float         animRate; /* 0x5C: Moby.anim_rate */
+    float         anim_rate; /* 0x5C: Moby.anim_rate */
     char          _pad60[0x68 - 0x60];
     float        *frameData; /* 0x68 */
     char          _pad6C[4];
-    unsigned char animFlags; /* 0x70: Moby.anim_flags */
+    unsigned char anim_flags; /* 0x70: Moby.anim_flags */
 } MobyAnim;
 
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_MOBY_ANIM_H */

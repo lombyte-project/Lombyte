@@ -233,7 +233,7 @@ void run_level_main_loop(void) {
         run_state_handler();
         if (memory_card_state.state >= MEMCARD_REQUEST_FORMAT ||
             memory_card_state.pending_state >= MEMCARD_QUERY_INFO) {
-            if (D_L00_001B9CF0.memcard_icon_hidden == 0) {
+            if (D_L00_001B9CF0.card_icon_hidden == 0) {
                 int   rotation_period_frames = 55;
                 float size;
                 float sprite_rotation_radians;
@@ -257,7 +257,7 @@ void run_level_main_loop(void) {
                 do_gif_paging();
             }
         }
-        D_L00_001B9CF0.memcard_icon_hidden = 0;
+        D_L00_001B9CF0.card_icon_hidden = 0;
         flush_debug_text_queue();
         noop_main_callback(level_frame_callback_args, 0x10);
         noop_main_callback(level_frame_callback_args, 0x10);

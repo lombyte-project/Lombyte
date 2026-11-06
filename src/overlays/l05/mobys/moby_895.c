@@ -1,4 +1,4 @@
-/* Level 05 swinging flap (class 895): turns away from its placed yaw, then swings back once its linked moby gets a command. */
+/* Level 05 moby class 895: starts turned 90 degrees from its placed yaw and turns to 40 degrees from it once its linked moby gets a command. */
 #include "types.h"
 #include "rnc/overlay/l05.h"
 #include "rnc/globals.h"
@@ -8,12 +8,12 @@ extern int allocate_voice_for_target_entry() __asm__("FUN_0022da68");
 extern float
 approach_angle(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 
-void         swinging_flap_update(struct Moby *moby) __asm__("FUN_L05_003166a0");
+void         moby_895_update(struct Moby *moby) __asm__("FUN_L05_003166a0");
 extern float fast_add_rotations(float, float);
 extern float fast_subtract_rotations(float, float);
 
 /* Moby class 895 */
-void swinging_flap_update(struct Moby *moby) {
+void moby_895_update(struct Moby *moby) {
     enum {
         MOBY_INITIALIZE_YAW = 0,
         MOBY_WAIT_FOR_TRIGGER = 1,

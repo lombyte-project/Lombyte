@@ -16,13 +16,13 @@
 
 /* One music channel record (0x1C bytes). */
 struct MusicStreamChannel {
-    s32 handle;     /* 0x00: stream handle from the start callback; -1 while starting */
-    s16 track;      /* 0x04 */
-    s16 volume;     /* 0x06 */
-    s16 flags;      /* 0x08 */
-    s16 state;      /* 0x0A: set 1 on start, 1 -> 2 in the start callback */
-    s16 fade_flags; /* 0x0C: -0x8000 on music_pause, 4 on music_unpause */
-    s16 fade_timer; /* 0x0E: counted down by music_update_stream while fading; cleared by music_pause */
+    s32 handle;      /* 0x00: stream handle from the start callback; -1 while starting */
+    s16 track;       /* 0x04 */
+    s16 volume;      /* 0x06 */
+    s16 flags;       /* 0x08 */
+    s16 state;       /* 0x0A: set 1 on start, 1 -> 2 in the start callback */
+    s16 pause_flags; /* 0x0C: bit 0x8000 pauses the stream (music_pause), 4 resumes it (music_unpause) */
+    s16 pause_timer; /* 0x0E: frames until a timed pause ends; 0 from music_pause pauses until music_unpause */
     s16 crossfade_enabled; /* 0x10: remaining-time callback starts the crossfade */
     u8  pad_12[0x2];
     s32 poll_interval;  /* 0x14 */

@@ -1,4 +1,4 @@
-/* Level 05 sliding block (class 843): slides out along its cuboid and lowers once its linked moby gets a command. */
+/* Level 05 moby class 843: placed out along its cuboid, it slides to its end point and lowers once its linked moby gets a command. */
 #include "types.h"
 #include "rnc/overlay/l05.h"
 #include "rnc/globals.h"
@@ -16,9 +16,9 @@ advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__
 /* Slides the moby out along its pose-table entry's direction: 0 places it,
    1 waits for the trigger byte 0xBC (command) of its l05_moby_array record, 2 eases
    it toward the end point, 3 lowers it to 5.9 below the entry's height. */
-void sliding_block_update(char *moby) __asm__("FUN_L05_0030e508");
+void moby_843_update(char *moby) __asm__("FUN_L05_0030e508");
 
-typedef struct TriggeredSlideVars {
+typedef struct Moby843Vars {
     u8  pad_0[0x8];
     f32 lower_speed; /* z of the slide velocity (pvars 0x0), reused while lowering */
     u8  pad_C[0x4];
@@ -26,10 +26,10 @@ typedef struct TriggeredSlideVars {
     s32 trigger_moby; /* moby index whose command byte triggers it */
     f32 slide_distance;
     s32 reversed; /* nonzero: offset and slide along -axes[1] */
-} TriggeredSlideVars;
+} Moby843Vars;
 
 /* Moby class 843 */
-void sliding_block_update(char *moby) {
+void moby_843_update(char *moby) {
     enum {
         MOBY_PLACE_AT_POSE_OFFSET = 0,
         MOBY_WAIT_FOR_TRIGGER = 1,
@@ -39,13 +39,13 @@ void sliding_block_update(char *moby) {
     enum {
         MOBY_LOWERING_COMPLETE = 4
     };
-    TriggeredSlideVars *slide_and_lowering_vars = (TriggeredSlideVars *)MOBY(moby)->pvars;
-    float               slide_motion_scratch[4];
-    float               slide_step_distance;
-    float               speed;
-    LevelCuboid        *pose_entry;
-    float               remaining_slide_distance;
-    float               reach;
+    Moby843Vars *slide_and_lowering_vars = (Moby843Vars *)MOBY(moby)->pvars;
+    float        slide_motion_scratch[4];
+    float        slide_step_distance;
+    float        speed;
+    LevelCuboid *pose_entry;
+    float        remaining_slide_distance;
+    float        reach;
 
     switch (MOBY(moby)->state) {
     case MOBY_PLACE_AT_POSE_OFFSET: {

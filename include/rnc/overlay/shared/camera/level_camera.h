@@ -49,7 +49,7 @@ typedef struct LevelCamera {
     u8  pad28C[0x8];
     f32 transition_position_rate; /* 0x294: CameraBlend.configured_position_rate */
     u8  pad298[0x5c];
-    s32 transition_orbit_frames; /* 0x2F4: CameraOrbit.length; start_camera_blend adds one */
+    s32 transition_orbit_frames; /* 0x2F4: CameraOrbit.duration_frames; start_camera_blend adds one */
     u8  pad2F8[0x58];
     f32 rows[12]; /* 0x350: forward, right and up; the hero's input direction is turned by them */
     u8  pad380[0x10];

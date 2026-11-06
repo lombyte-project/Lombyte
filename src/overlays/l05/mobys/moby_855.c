@@ -1,4 +1,4 @@
-/* Level 05 water spout (class 855): a particle spray emitter that runs once its linked moby gets a command. */
+/* Level 05 moby class 855: a particle spray emitter that sprays along its facing and splashes on the floor once its linked moby gets a command. */
 #include "types.h"
 #include "rnc/overlay/l05.h"
 #include "rnc/globals.h"
@@ -46,12 +46,12 @@ extern unsigned char D_0014C050[][16];
 extern struct FloorRow *D_L05_001612D0;
 extern char             D_L05_0015F580_macro[] __asm__("D_L05_0015F580") MACRO_ADDR;
 
-#include "rnc/overlay/l05/mobys/water_spout_data/water_spout_update.h"
+#include "rnc/overlay/l05/mobys/moby_855_data/moby_855_update.h"
 
-void water_spout_update(struct Moby *emitter_moby) __asm__("FUN_L05_003150f0");
+void moby_855_update(struct Moby *emitter_moby) __asm__("FUN_L05_003150f0");
 
 /* Moby class 855 */
-void water_spout_update(struct Moby *emitter_moby) {
+void moby_855_update(struct Moby *emitter_moby) {
     enum {
         EMITTER_INITIALIZE = 0,
         EMITTER_WAIT_FOR_TRIGGER = 1,

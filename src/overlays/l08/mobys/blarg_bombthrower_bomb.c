@@ -78,14 +78,14 @@ extern void  spawn_explosion(void *,
                              int) __asm__("FUN_L00_0025e450");
 extern void  spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern float D_L08_0015F580_macro[] __asm__("D_L08_0015F580") MACRO_ADDR;
-void         blarg_bomb_update(char *moby) __asm__("FUN_L08_002d23f0");
+void         blarg_bombthrower_bomb_update(char *moby) __asm__("FUN_L08_002d23f0");
 extern float D_0015ED6C;
 
 blk16 l08_bomb_moving_particle_initial_colors __asm__("D_L08_00161868") = {
     {-1, -1, -1, 0x2f, -1, -1, 0, 0x2f, -1, 0x7f, 0, 0x2f, -1, 0x4f, 0, 0x2f}
 };
 
-typedef struct BlargBombVars {
+typedef struct BlargBombthrowerBombVars {
     u8  pad_0[0x7];
     u8  fuse_flash_target_red;
     u8  pad_8[0x8];
@@ -98,26 +98,26 @@ typedef struct BlargBombVars {
     f32 fuse_flash_step;
     u8  pad_2C[0x4];
     s32 thrower;
-} BlargBombVars;
+} BlargBombthrowerBombVars;
 
 /* Moby class 248 */
-void blarg_bomb_update(char *moby) {
+void blarg_bombthrower_bomb_update(char *moby) {
     enum {
         BOMB_STATE_MOVING = 1,
         BOMB_STATE_STATIONARY_FUSE = 2,
         BOMB_STATE_EXPLODE_AND_REMOVE = 0x62,
         BOMB_STATE_BURST_AND_REMOVE = 0x63
     };
-    union Coll_36F8 c;
-    blk16           table_or_bounce_scratch;
-    float           normalized_direction[4];
-    float           random_direction[4];
-    BlargBombVars  *bomb_vars;
-    int             st;
-    int             two;
-    float           collision_z_offset;
+    union Coll_36F8           c;
+    blk16                     table_or_bounce_scratch;
+    float                     normalized_direction[4];
+    float                     random_direction[4];
+    BlargBombthrowerBombVars *bomb_vars;
+    int                       st;
+    int                       two;
+    float                     collision_z_offset;
 
-    bomb_vars = (BlargBombVars *)MOBY(moby)->pvars;
+    bomb_vars = (BlargBombthrowerBombVars *)MOBY(moby)->pvars;
     if (MOBY(moby)->state != 0x37) {
         if (coll_sphere(0.5f, moby + 0x10, 0x11, moby)) {
             int sphere_hit_moby = D_L08_00174658_lui;

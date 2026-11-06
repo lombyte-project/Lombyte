@@ -457,7 +457,7 @@ struct Hero {
     f32          swim_bob_velocity;         /* 0x694 */
     s32          swim_stroke_timer;         /* 0x698 */
     f32          swim_water_level;          /* 0x69C */
-    s32          swim_water_level_velocity; /* 0x6A0: spring velocity of swim_water_level */
+    f32          swim_water_level_velocity; /* 0x6A0: spring velocity of swim_water_level */
     struct Moby *sink_effect_moby;          /* 0x6A4 */
     f32          bob_phase;                 /* 0x6A8 */
     f32          bob_offset;                /* 0x6AC */

@@ -15,7 +15,8 @@
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 
-extern Vec4           D_0013E090[2] NOT_SDA; /* camera start: position, rotation */
+extern Vec4 D_0013E090
+    [2] NOT_SDA; /* LevelRenderState.hero_start_pos and hero_start_rot: where the landing scene places the hero */
 extern s32 D_00141660 NOT_SDA;
 
 #include "rnc/overlay/shared/world/level_labels.h"

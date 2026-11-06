@@ -157,7 +157,7 @@ struct MobyClassUpdate moby_classes[158] __asm__("D_L18_001F2D00")
         { 511,                       crate_update, default_moby_methods},
         { 562,                 decoy_glove_update, default_moby_methods},
         { 564,                 rocket_moby_update, default_moby_methods},
-        { 568,               drifting_mine_update,       D_L18_001F3498},
+        { 568,              drek_boss_mine_update,       D_L18_001F3498},
         { 582,         grind_rail_junction_update, default_moby_methods},
         { 583,    thruster_pack_lock_green_update, default_moby_methods},
         { 585,              metal_detector_update, default_moby_methods},

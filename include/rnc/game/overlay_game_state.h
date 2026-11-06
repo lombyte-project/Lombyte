@@ -55,7 +55,7 @@ struct GameState {
     u8          pad128[0x130 - 0x128];
     s32         saved_decode_mode; /* 0x130: decode_mode before a menu movie */
     u8          pad134[0x13C - 0x134];
-    s32         memcard_icon_hidden;        /* 0x13C: skips the busy card icon for one frame */
+    s32         card_icon_hidden;           /* 0x13C: skips the busy card icon for one frame */
     s32         resource_table_class;       /* 0x140: oclass at the last resource table select */
     s32         last_resource_table_toggle; /* 0x144 */
     s32         stash_handles[20];          /* 0x148: FUN_L00_00276078 */

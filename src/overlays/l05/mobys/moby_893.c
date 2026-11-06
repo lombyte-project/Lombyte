@@ -1,4 +1,4 @@
-/* Level 05 hinged hatch (class 893): a manipulator turns its lid, which falls shut or swings open and slides once its linked moby gets a command. */
+/* Level 05 moby class 893: once its linked moby gets a command, a manipulator turns joint 0 shut with a bounce, then the moby slides back. */
 #include "types.h"
 #include "rnc/overlay/l05.h"
 #include "rnc/globals.h"
@@ -18,9 +18,9 @@ approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_00
 extern void  build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 extern char *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 
-void hinged_hatch_update(char *moby) __asm__("FUN_L05_00316258");
+void moby_893_update(char *moby) __asm__("FUN_L05_00316258");
 
-typedef struct TriggeredMotionVars {
+typedef struct Moby893Vars {
     u8  pad_0[0x10];
     u8  manipulator_10;
     u8  pad_11[0xF];
@@ -32,10 +32,10 @@ typedef struct TriggeredMotionVars {
     f32 move_speed;
     f32 manipulator_angle;
     f32 manipulator_angular_velocity;
-} TriggeredMotionVars;
+} Moby893Vars;
 
 /* Moby class 893 */
-void hinged_hatch_update(char *moby) {
+void moby_893_update(char *moby) {
     enum {
         MOBY_INITIALIZE = 0,
         MOBY_WAIT_FOR_TRIGGER = 1,
@@ -48,10 +48,10 @@ void hinged_hatch_update(char *moby) {
     enum {
         MOBY_MOTION_SEQUENCE_COMPLETE = 7
     };
-    TriggeredMotionVars *motion_and_manipulator_vars = (TriggeredMotionVars *)MOBY(moby)->pvars;
-    float                target[4];
-    float                delta[4];
-    float                stopped;
+    Moby893Vars *motion_and_manipulator_vars = (Moby893Vars *)MOBY(moby)->pvars;
+    float        target[4];
+    float        delta[4];
+    float        stopped;
 
     switch (MOBY(moby)->state) {
     case MOBY_INITIALIZE:

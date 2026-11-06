@@ -231,7 +231,7 @@ typedef struct BossData {
     char           p28C[8];
     int            scene_camera_node_index;
     int            paired_transition_node_index;
-    int            class_238_launch_group_index;
+    int            mine_launch_group_index;
     int            race_camera_node_index;
     char           p2A4[0xC];
     int            persistent_jet_slot_index;
@@ -299,7 +299,7 @@ extern char    *create_rocket_moby(float *pos,
                                    float  b,
                                    int    frames,
                                    int    kind) __asm__("FUN_L18_002d5348");
-extern char    *launch_class_238_moby_from_list(int    owner,
+extern char    *launch_drek_boss_mine_from_list(int    owner,
                                                 int    idx,
                                                 float *from,
                                                 float *to,
@@ -1384,9 +1384,9 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                     (float)scale_game_frames(0x3C);
                 float w = random_float_between(18.0f, 20.0f);
 
-                launch_class_238_moby_from_list(
+                launch_drek_boss_mine_from_list(
                     (int)moby,
-                    boss_data->class_238_launch_group_index,
+                    boss_data->mine_launch_group_index,
                     position_displacement_direction_and_rotation_scratch,
                     position_direction_and_rotation_scratch,
                     speed,
