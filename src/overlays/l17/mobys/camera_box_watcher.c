@@ -56,7 +56,7 @@ typedef struct CameraBoxWatcherVars {
     s32 camera_sequence_clip_volume;
     s32 second_camera_target_cuboid;
     s32 first_camera_target_cuboid;
-    s32 unk48;
+    s32 hero_cuboid; /* "hero" in the cuboid error message */
     u8  camera_sequence_done;
     u8  pad_4D[0x3];
     s32 unk50;
@@ -163,10 +163,10 @@ void fleet_camera_box_watcher_update(struct Moby *moby) {
         pvars->dwell_help_delay = scale_game_frames(600);
         pvars->camera_sequence_done = 0;
         if (pvars->first_camera_target_cuboid == -1 || pvars->second_camera_target_cuboid == -1 ||
-            pvars->camera_sequence_clip_volume == -1 || pvars->unk48 == -1) {
+            pvars->camera_sequence_clip_volume == -1 || pvars->hero_cuboid == -1) {
             DebugPrint(fleet_camera_box_configuration_error_format,
                        pvars->camera_sequence_clip_volume,
-                       pvars->unk48,
+                       pvars->hero_cuboid,
                        pvars->second_camera_target_cuboid,
                        pvars->first_camera_target_cuboid);
             pvars->camera_sequence_done = 1;

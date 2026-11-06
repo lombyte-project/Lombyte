@@ -78,9 +78,9 @@ typedef struct FleetBackdropAnimationVars {
     f32 endpoint_y;
     f32 endpoint_z;
     u8  pad_1C[0xC];
-    f32 unk28;
+    f32 end_half_width; /* half width of the quad at the endpoint */
     u8  pad_2C[0x18];
-    f32 unk44;
+    f32 endpoint_yaw; /* placed angle of the endpoint offset */
     u8  pad_48[0x4];
     s32 clip_volume_4C;
 } FleetBackdropAnimationVars;
@@ -110,7 +110,7 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
         fast_vec_cross(&vv[0], &vv[0], vb);
         fast_vec_normalize(&vv[0], &vv[0], backdrop_scrolling_quad_start_half_widths[i]);
         fast_vec_cross(&vv[1], &vv[1], vb);
-        fast_vec_normalize(&vv[1], &vv[1], backdrop_pvars->unk28);
+        fast_vec_normalize(&vv[1], &vv[1], backdrop_pvars->end_half_width);
         *(long *)&pkt.q[4] = 0x0000FF9000000260LL;
         *(long *)&pkt.q[6] = 0x0000008000000048LL;
         *(long *)&pkt.q[0] = 0;
@@ -247,7 +247,7 @@ done:
         build_spherical_offset(pvar_angle_offset,
                                backdrop_shared_radius_numerator_gp /
                                    backdrop_offset_radius_divisor_gp,
-                               moby_pvars->unk44,
+                               moby_pvars->endpoint_yaw,
                                0.0f);
         fast_vec_add(vector_sum, offset_accumulator, pvar_angle_offset);
         *(OvlQuad *)offset_accumulator = *(OvlQuad *)vector_sum;
