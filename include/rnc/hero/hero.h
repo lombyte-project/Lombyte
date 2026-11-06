@@ -732,26 +732,28 @@ struct Hero {
     f32  stick_y;             /* 0x1D24 */
     u8   pad_1D28[0x68];
     struct HeroEase
-         unk1D90; /* 0x1D90: manipulator record handed to attach_manipulator (FUN_L00_00234808) */
-    u8   pad_1E40[0x70];
-    s16  unk1EB0; /* 0x1EB0 */
-    s16  unk1EB2; /* 0x1EB2: once flag for queueing FUN_L00_00207d40 */
-    u8   pad_1EB4[0x1C];
-    f32  unk1ED0; /* 0x1ED0 */
-    f32  unk1ED4; /* 0x1ED4 */
-    f32  unk1ED8; /* 0x1ED8 */
+        unk1D90; /* 0x1D90: manipulator record handed to attach_manipulator (FUN_L00_00234808) */
+    u8  pad_1E40[0x70];
+    s16 unk1EB0; /* 0x1EB0 */
+    s16 unk1EB2; /* 0x1EB2: once flag for queueing FUN_L00_00207d40 */
+    u8  pad_1EB4[0x1C];
+    /* 0x1EC0..0x1F44: the moby walk and hop parameters doom bots copy in and out
+       (save_state_fields_to_hero, initialize_moby_hop_trajectory) */
+    f32  move_turn_velocity; /* 0x1ED0: DoomBotVars.turn_velocity */
+    f32  move_speed;         /* 0x1ED4: DoomBotVars.movement_speed */
+    f32  unk1ED8;            /* 0x1ED8 */
     u8   pad_1EDC[0x8];
-    f32  unk1EE4; /* 0x1EE4 */
+    f32  move_turn_rate; /* 0x1EE4: DoomBotVars.turn_rate */
     u8   pad_1EE8[0x20];
     s32  unk1F08; /* 0x1F08 */
     u8   pad_1F0C[0x4];
-    Vec4 unk1F10; /* 0x1F10 */
-    f32  unk1F20; /* 0x1F20 */
-    f32  unk1F24; /* 0x1F24 */
-    f32  unk1F28; /* 0x1F28 */
+    Vec4 hop_target;           /* 0x1F10: landing point */
+    f32  hop_vertical_speed;   /* 0x1F20: launch speed, capped at 7 * frame_time */
+    f32  hop_horizontal_speed; /* 0x1F24 */
+    f32  hop_heading;          /* 0x1F28: atan2 toward hop_target */
     u8   pad_1F2C[0x13];
-    s8   unk1F3F; /* 0x1F3F */
-    f32  unk1F40; /* 0x1F40 */
+    s8   hop_mode; /* 0x1F3F: cleared when a hop starts */
+    f32  unk1F40;  /* 0x1F40 */
     u8   pad_1F44[0x1C];
     u8   unk1F60[0x40];    /* 0x1F60: 0x40-byte buffer cleared by FUN_L00_002b58d8 */
     u8   unk1FA0[0x40];    /* 0x1FA0: 0x40-byte buffer cleared by FUN_L00_002b58d8 */
