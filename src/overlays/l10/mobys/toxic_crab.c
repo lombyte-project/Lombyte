@@ -90,10 +90,10 @@ typedef struct {
 
 typedef struct Crab2E30F8 {
     char          p000[0x20];
-    float         f20;
-    short         s24;
+    float         health;
+    short         max_health;
     char          p26[2];
-    unsigned char b28;
+    unsigned char hit_response_class;
     unsigned char b29;
     char          p2A[6];
     float         f30;
@@ -273,10 +273,10 @@ void toxic_crab_update(Moby2E30F8 *m) {
             return;
         }
         crab_data->f30 = 0.5f;
-        crab_data->s24 = 5;
+        crab_data->max_health = 5;
         crab_data->b29 = 1;
-        crab_data->f20 = 5.0f;
-        crab_data->b28 = 3;
+        crab_data->health = 5.0f;
+        crab_data->hit_response_class = 3;
         crab_data->b58 = truncate_float_to_s32(10.0f);
         crab_data->b5A = truncate_float_to_s32(16.0f);
         m->moby_flags |= 0x5000;

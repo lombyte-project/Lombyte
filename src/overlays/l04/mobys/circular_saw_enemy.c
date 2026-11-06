@@ -321,9 +321,9 @@ typedef float V4_35F0[4] __attribute__((aligned(16)));
 typedef struct D_35F0 {
     char           pad00[0x20];
     float          hp;
-    short          f24;
+    short          max_health;
     char           pad26[2];
-    unsigned char  f28;
+    unsigned char  hit_response_class;
     unsigned char  f29;
     char           pad2A[4];
     unsigned char  f2E;
@@ -680,8 +680,8 @@ void circular_saw_enemy_update(M_35F0 *moby) {
     case CIRCULAR_SAW_STATE_INITIALIZE: {
         float k;
         data->hp = 1.0f;
-        data->f24 = 1;
-        data->f28 = 0;
+        data->max_health = 1;
+        data->hit_response_class = 0;
         data->f2E = 1;
         data->f29 = 0;
         data->f30 = 0.75f;

@@ -92,7 +92,7 @@ typedef struct {
     f32                      health;
     s16                      max_health;
     u8                       pad26[2];
-    u8                       unk28;
+    u8                       hit_response_class;
     u8                       pad29[7];
     f32                      unk30;
     u8                       pad34[0x24];
@@ -201,7 +201,7 @@ void blarg_space_commando_update(struct Moby *moby) {
     switch (moby->state) {
     case BLARG_SPACE_COMMANDO_INITIALIZE:
         blarg_space_commando_vars->health = 2.0f;
-        blarg_space_commando_vars->unk28 = 1;
+        blarg_space_commando_vars->hit_response_class = 1;
         blarg_space_commando_vars->unk58 = 12;
         blarg_space_commando_vars->unk5A = 8;
         blarg_space_commando_vars->max_health = 2;

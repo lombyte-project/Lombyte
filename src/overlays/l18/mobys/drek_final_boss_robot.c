@@ -195,10 +195,10 @@ typedef struct BossMoby {
 
 typedef struct BossData {
     char           p0[0x20];
-    float          f20;
-    short          f24;
+    float          health;
+    short          max_health;
     char           p26[2];
-    unsigned char  f28;
+    unsigned char  hit_response_class;
     char           p29[7];
     float          f30;
     char           p34[0x3C];
@@ -484,10 +484,10 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         moby->f32 = 0x200;
         moby->f34 |= 0x41;
         moby->collision_data = 0;
-        boss_data->f28 = 3;
-        boss_data->f20 = 500.0f;
+        boss_data->hit_response_class = 3;
+        boss_data->health = 500.0f;
         boss_data->f30 = 4.0f;
-        boss_data->f24 = 500;
+        boss_data->max_health = 500;
         boss_data->active_movement_path = D_L18_001B0EB0[boss_data->f260[3]];
         boss_data->platform_target_group_index = boss_data->f204[0];
         boss_data->path_point_index = 1;

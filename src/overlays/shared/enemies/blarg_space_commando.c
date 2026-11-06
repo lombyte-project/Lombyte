@@ -45,10 +45,10 @@ typedef struct {
 /* pvars of blarg_space_commando_update */
 typedef struct {
     u8                       pad0[0x20];
-    f32                      unk20;
-    s16                      unk24;
+    f32                      health;
+    s16                      max_health;
     u8                       pad26[2];
-    u8                       unk28;
+    u8                       hit_response_class;
     u8                       unk29;
     u8                       pad2A[6];
     f32                      unk30;
@@ -159,11 +159,11 @@ void blarg_space_commando_update(struct Moby *moby) {
     moby->anim_speed = 1.0f;
     switch (moby->state) {
     case BLARG_COMMANDO_STATE_INITIALIZE:
-        blarg_commando_state->unk28 = 1;
-        blarg_commando_state->unk20 = 2.0f;
+        blarg_commando_state->hit_response_class = 1;
+        blarg_commando_state->health = 2.0f;
         blarg_commando_state->unk30 = 2.0f;
         blarg_commando_state->unk29 = 1;
-        blarg_commando_state->unk24 = 2;
+        blarg_commando_state->max_health = 2;
         blarg_commando_state->unk58 = truncate_float_to_s32(12.0f);
         blarg_commando_state->unk5A = truncate_float_to_s32(13.6f);
         init_ground_move_control(&blarg_commando_state->ctl);

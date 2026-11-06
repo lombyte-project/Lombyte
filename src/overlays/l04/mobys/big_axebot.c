@@ -123,9 +123,9 @@ typedef struct Manip_B7B0 {
 typedef struct D_B7B0 {
     char                   pad00[0x20];
     float                  hp;
-    short                  f24;
+    short                  max_health;
     char                   pad26[2];
-    unsigned char          f28;
+    unsigned char          hit_response_class;
     unsigned char          f29;
     char                   pad2A[4];
     unsigned char          f2E;
@@ -495,8 +495,8 @@ void big_axebot_update(M_B7B0 *moby) {
     switch (moby->state) {
     case BIG_AXEBOT_STATE_INITIALIZE:
         data->hp = 3.0f;
-        data->f24 = 3;
-        data->f28 = 2;
+        data->max_health = 3;
+        data->hit_response_class = 2;
         data->f2E = 1;
         data->f29 = 0;
         data->f30 = 1.5f;

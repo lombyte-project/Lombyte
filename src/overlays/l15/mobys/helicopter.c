@@ -313,9 +313,9 @@ float compute_helicopter_flocking_steering_point(struct Moby *moby,
 typedef struct {
     u8           pad0[0x20];
     f32          health;
-    s16          unk24;
+    s16          max_health;
     u8           pad26[2];
-    u8           unk28;
+    u8           hit_response_class;
     u8           pad29[5];
     u8           unk2E;
     u8           pad2F;
@@ -474,8 +474,8 @@ void helicopter_update(struct Moby *moby) {
         moby->shadow_range = 0x20;
         helicopter_instance_vars->height = moby->pos.z;
         helicopter_instance_vars->health = 3.0f;
-        helicopter_instance_vars->unk24 = truncate_float_to_s32(3.0f);
-        helicopter_instance_vars->unk28 = 2;
+        helicopter_instance_vars->max_health = truncate_float_to_s32(3.0f);
+        helicopter_instance_vars->hit_response_class = 2;
         helicopter_instance_vars->unk58 = 0x19;
         helicopter_instance_vars->unk30 = 1.0f;
         helicopter_instance_vars->unk2E = 1;

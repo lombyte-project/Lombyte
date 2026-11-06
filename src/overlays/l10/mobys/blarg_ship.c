@@ -103,10 +103,10 @@ typedef struct Ship_5E48 {
 
 typedef struct ShipD_5E48 {
     char          p0[0x20];
-    float         f20;
-    short         s24;
+    float         health;
+    short         max_health;
     char          p26[2];
-    unsigned char b28;
+    unsigned char hit_response_class;
     unsigned char b29;
     char          p2A[0x16];
     char          a40[0xB0];
@@ -218,9 +218,9 @@ void blarg_ship_update(Ship_5E48 *ship) {
     switch (ship->state) {
     case BLARG_SHIP_STATE_INITIALIZE:
         ship->s34 |= 0x1000;
-        d->f20 = 9.0f;
-        d->s24 = truncate_float_to_s32(9.0f);
-        d->b28 = 3;
+        d->health = 9.0f;
+        d->max_health = truncate_float_to_s32(9.0f);
+        d->hit_response_class = 3;
         d->b29 = 0;
         d->pitch_turn_velocity = 0.0f;
         ship->s32 = 0x7F;

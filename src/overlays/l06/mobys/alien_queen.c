@@ -360,7 +360,7 @@ typedef struct AlienQueenVars {
     f32   health;
     s16   max_health;
     u8    pad_26[0x2];
-    u8    unk28;
+    u8    hit_response_class;
     u8    unk29;
     u8    pad_2A[0x4];
     u8    death_control_flags;
@@ -439,7 +439,7 @@ void alien_queen_update(unsigned char *moby) {
         alien_queen_update_vars->health = 30.0f;
         alien_queen_update_vars->max_health = 0x1E;
         alien_queen_update_vars->unk29 = 1;
-        alien_queen_update_vars->unk28 = 3;
+        alien_queen_update_vars->hit_response_class = 3;
         alien_queen_update_vars->death_control_flags = 1;
         alien_queen_update_vars->unk58 = truncate_float_to_s32(14.0f);
         alien_queen_update_vars->unk5A = truncate_float_to_s32(18.4f);
