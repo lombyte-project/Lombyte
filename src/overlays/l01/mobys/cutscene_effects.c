@@ -31,14 +31,14 @@ typedef struct {
     u8  pad0[4];
     s32 unk4;
     u8  pad8[2];
-    u8  unkA;
+    u8  alpha; /* 0x0A: alpha of the spark colour */
     u8  initial_frame_count;
 } FxSparkTail;
 
 typedef struct {
     u8          pad0[9];
     u8          unk9;
-    s16         unkA;
+    s16         life; /* 0x0A: frames left, as EffectParticle */
     u8          padC[0x20 - 0xC];
     FxSparkTail tail;
 } FxSpark;
@@ -185,14 +185,14 @@ void level01_cutscene_effects_update(struct Moby *moby) {
                                     FxSparkTail *spark_tail = &spark->tail;
 
                                     if (fx_cutscene.frame >= scale_game_frames(1100)) {
-                                        spark->unkA = scale_game_frames(30);
+                                        spark->life = scale_game_frames(30);
                                     } else {
-                                        spark->unkA = scale_game_frames(6);
+                                        spark->life = scale_game_frames(6);
                                     }
                                     spark->unk9 = truncate_float_to_s32(4.0f) + 0x40;
                                     spark_tail->unk4 = 2;
-                                    spark_tail->unkA = color >> 24;
-                                    spark_tail->initial_frame_count = spark->unkA;
+                                    spark_tail->alpha = color >> 24;
+                                    spark_tail->initial_frame_count = spark->life;
                                 }
                             }
                         }
