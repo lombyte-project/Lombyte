@@ -46,9 +46,9 @@ typedef struct FogZoneVars {
     u8  pad_26[0x2];
     s32 clip_volume_28;
     s32 clip_volume_2C;
-    s32 unk30;
-    s32 unk34;
-    s32 unk38;
+    s32 saved_blend_color;
+    s32 fog_color;
+    s32 fog_volume; /* the colour tweens from saved_blend_color to fog_color inside it */
 } FogZoneVars;
 
 /* Moby class 841 */
@@ -92,8 +92,8 @@ void fog_zone_update(struct Moby *moby) {
                                            (l05_volume_blended_color_lower_middle_byte << 8) +
                                            (l05_volume_blended_color_upper_middle_byte << 16) +
                                            (l05_volume_blended_color_high_byte << 24);
-            fog_zone_vars->unk34 = 0x40408070;
-            fog_zone_vars->unk30 = saved_volume_blend_color;
+            fog_zone_vars->fog_color = 0x40408070;
+            fog_zone_vars->saved_blend_color = saved_volume_blend_color;
         }
         moby->state = FOG_ZONE_WAIT_TO_APPLY_PRESET;
         break;
@@ -135,16 +135,17 @@ void fog_zone_update(struct Moby *moby) {
         break;
     }
     hero_position = (char *)&hero.motion.pos;
-    if (is_point_inside_clip_volume(hero_position, fog_zone_vars->unk38)) {
+    if (is_point_inside_clip_volume(hero_position, fog_zone_vars->fog_volume)) {
         int c;
-        fast_vec_sub(
-            hero_offset_from_volume_origin, hero_position, &l05_cuboids[fog_zone_vars->unk38].pos);
+        fast_vec_sub(hero_offset_from_volume_origin,
+                     hero_position,
+                     &l05_cuboids[fog_zone_vars->fog_volume].pos);
         hero_offset_from_volume_origin[3] = 0.0f;
         transform_vector_by_basis(hero_position_in_volume_space,
                                   hero_offset_from_volume_origin,
-                                  l05_cuboids[fog_zone_vars->unk38].to_local);
-        c = fast_tween_color(fog_zone_vars->unk30,
-                             fog_zone_vars->unk34,
+                                  l05_cuboids[fog_zone_vars->fog_volume].to_local);
+        c = fast_tween_color(fog_zone_vars->saved_blend_color,
+                             fog_zone_vars->fog_color,
                              (hero_position_in_volume_space[0] + 1.0f) * 0.5f);
         l05_volume_blended_color_lower_middle_byte = c >> 8;
         l05_volume_blended_color_upper_middle_byte = c >> 16;

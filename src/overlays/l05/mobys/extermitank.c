@@ -1,5 +1,7 @@
 /* Level 05 moby class extermitank. */
 #include "types.h"
+#include "rnc/overlay/shared/mobys/ground_move_control.h"
+#include "rnc/overlay/shared/mobys/hit_color_flash.h"
 #include "rnc/overlay/shared/world/level_path.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
@@ -28,7 +30,6 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float fast_cos(float);
 extern float fast_sin(float);
 float        absolute_float(float input) __asm__("func_001F99C0");
-extern void  FUN_L01_0026d930(char *p);
 extern char  D_L05_001671C0[];
 extern float fast_vec_dist(void *, void *);
 extern void  FUN_L00_0024f7c8(void *, int, void *);
@@ -97,64 +98,52 @@ typedef char *(*Spawn_305778)(void *, void *, void *, int, int, long, long, long
 void extermitank_update(unsigned char *m) __asm__("FUN_L05_00304320");
 
 typedef struct ExtermitankVars {
-    u8    pad_0[0x20];
-    f32   health;
-    s16   max_health;
-    u8    pad_26[0x2];
-    u8    hit_response_class;
-    u8    unk29;
-    u8    pad_2A[0x4];
-    u8    lifecycle_state;
-    u8    pad_2F[0x9];
-    s32   retimer;
-    u8    pad_3C[0x2];
-    u16   unk3E;
-    f32   velocity[4];
-    u8    pad_50[0x8];
-    u8    unk58;
-    u8    pad_59[0x1];
-    u8    unk5A;
-    u8    pad_5B[0x5];
-    f32   motion[4];
-    s32   mover;
-    u8    pad_74[0x4];
-    f32   unk78;
-    f32   unk7C;
-    u8    pad_80[0x4];
-    f32   child_animation_speed_bias;
-    u8    pad_88[0xC];
-    f32   unk94;
-    u8    pad_98[0x14];
-    f32   unkAC;
-    f32   unkB0;
-    f32   unkB4;
-    u8    pad_B8[0x8];
-    s32   path_point;
-    u8    pad_C4[0xC];
-    char *path;
-    s32   path_index;
-    u8    pad_D8[0x18];
-    u8    manipulator0;
-    u8    pad_F1[0xF];
-    f32   manipulator0_rotation[4];
-    u8    pad_110[0x20];
-    u8    manipulator1;
-    u8    pad_131[0xF];
-    f32   manipulator1_rotation[4];
-    u8    pad_150[0x24];
-    f32   firing_range_xy;
-    s32   firing_range_timer;
-    u8    pad_17C[0x4];
-    s32   unk180;
-    char *tread_moby0;
-    char *tread_moby1;
-    u8    pad_18C[0x4];
-    s32   path_190;
-    f32   turret_yaw;
-    f32   turret_pitch;
-    u8    pad_19C[0x2];
-    s16   removal_scaled_frames;
-    f32   particle_slots[4];
+    u8                       pad_0[0x20];
+    f32                      health;
+    s16                      max_health;
+    u8                       pad_26[0x2];
+    u8                       hit_response_class;
+    u8                       unk29;
+    u8                       pad_2A[0x4];
+    u8                       lifecycle_state;
+    u8                       pad_2F[0x9];
+    s32                      retimer;
+    u8                       pad_3C[0x2];
+    u16                      unk3E;
+    f32                      velocity[4];
+    u8                       pad_50[0x8];
+    u8                       unk58;
+    u8                       pad_59[0x1];
+    u8                       unk5A;
+    u8                       pad_5B[0x5];
+    struct HitColorFlash     hit_flash;
+    struct GroundMoveControl mover;
+    s32                      path_point;
+    u8                       pad_C4[0xC];
+    char                    *path;
+    s32                      path_index;
+    u8                       pad_D8[0x18];
+    u8                       manipulator0;
+    u8                       pad_F1[0xF];
+    f32                      manipulator0_rotation[4];
+    u8                       pad_110[0x20];
+    u8                       manipulator1;
+    u8                       pad_131[0xF];
+    f32                      manipulator1_rotation[4];
+    u8                       pad_150[0x24];
+    f32                      firing_range_xy;
+    s32                      firing_range_timer;
+    u8                       pad_17C[0x4];
+    s32                      unk180;
+    char                    *tread_moby0;
+    char                    *tread_moby1;
+    u8                       pad_18C[0x4];
+    s32                      path_190;
+    f32                      turret_yaw;
+    f32                      turret_pitch;
+    u8                       pad_19C[0x2];
+    s16                      removal_scaled_frames;
+    f32                      particle_slots[4];
 } ExtermitankVars;
 
 /* Moby class 625 */
@@ -222,20 +211,20 @@ void extermitank_update(unsigned char *moby) {
         MOBY(moby)->flags |= 0x1000;
         g = ((char *)&D_0013F350);
         MOBY(moby)->spawn_frame = *(long *)(*(char **)(g + 0x2080) + 0x38);
-        FUN_L01_0026d930(&extermitank_vars->mover);
-        extermitank_vars->unk7C = 2.0f;
-        extermitank_vars->unk78 = 4.0f;
-        extermitank_vars->mover = 0x38D;
-        extermitank_vars->unkAC = 0.01f;
-        extermitank_vars->unkB0 = 0.3f;
-        extermitank_vars->unkB4 = 0.1f;
+        init_ground_move_control(&extermitank_vars->mover);
+        extermitank_vars->mover.max_climb = 2.0f;
+        extermitank_vars->mover.max_drop = 4.0f;
+        extermitank_vars->mover.collision_radius_1024ths = 0x38D;
+        extermitank_vars->mover.turn_spring = 0.01f;
+        extermitank_vars->mover.turn_damping = 0.3f;
+        extermitank_vars->mover.max_turn_step = 0.1f;
         extermitank_vars->path = ((char *)l05_paths[extermitank_vars->path_index]);
         extermitank_vars->path_point = 1;
         qcopy(moby + 0x10, extermitank_vars->path + 0x10);
         MOBY(moby)->state = EXTERMITANK_FOLLOW_PATH;
         if (MOBY(moby)->prev_seq != 0)
             blend_moby_animation(moby, 0, 0, 0);
-        extermitank_vars->unk94 = D_L05_00161AF8 * D_0015ED6C_gp;
+        extermitank_vars->mover.max_speed = D_L05_00161AF8 * D_0015ED6C_gp;
         clear_u64_value(extermitank_vars->velocity);
         extermitank_vars->unk3E |= 2;
         extermitank_vars->lifecycle_state = 1;
@@ -743,7 +732,7 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
         }
     }
 update_motion:
-    start_hit_color_flash(moby, extermitank_hit_sync_vars->motion);
+    start_hit_color_flash(moby, &extermitank_hit_sync_vars->hit_flash);
 mark_children:
     ((unsigned char *)moby)[0xa4] = 0xff;
     if (extermitank_hit_sync_vars->tread_moby0 != 0)
@@ -772,7 +761,7 @@ mark_children:
         offset_scale = extermitank_child_animation_speed_offset_scale_gp;
         *(float *)(extermitank_hit_sync_vars->tread_moby0 + 0x58) = speed;
         *(float *)(extermitank_hit_sync_vars->tread_moby0 + 0x58) +=
-            extermitank_hit_sync_vars->child_animation_speed_bias * offset_scale;
+            extermitank_hit_sync_vars->mover.turn_velocity * offset_scale;
         first = extermitank_hit_sync_vars->tread_moby0;
         qcopy(first + 0x40, moby + 0x40);
         qcopy(first + 0x10, moby + 0x10);
@@ -785,12 +774,12 @@ mark_children:
         offset_scale = extermitank_child_animation_speed_offset_scale_gp;
         *(float *)(extermitank_hit_sync_vars->tread_moby1 + 0x58) = speed;
         *(float *)(extermitank_hit_sync_vars->tread_moby1 + 0x58) -=
-            extermitank_hit_sync_vars->child_animation_speed_bias * offset_scale;
+            extermitank_hit_sync_vars->mover.turn_velocity * offset_scale;
         second = extermitank_hit_sync_vars->tread_moby1;
         qcopy(second + 0x40, moby + 0x40);
         qcopy(second + 0x10, moby + 0x10);
     }
-    update_hit_color_flash(moby, extermitank_hit_sync_vars->motion);
+    update_hit_color_flash(moby, &extermitank_hit_sync_vars->hit_flash);
 }
 /* Drops stale entries from the moby's 8 slots, then pushes each remaining one away from the hero. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_00306CF0), where it is exact; names translated to the US level program. */
