@@ -56,7 +56,7 @@ typedef struct {
     u8                     pad0[0x20];
     f32                    health;
     s16                    max_health;
-    s16                    unk26;
+    s16                    stun_timer;
     u8                     hit_response_class;
     u8                     wrench_hit_sound;
     u8                     pad2A[0x38 - 0x2A];
@@ -498,7 +498,7 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
             vars->knockback.landing_animation_frame = vars->knockback.apex_animation_frame = -1.0f;
             moby->state = VELDIN_ROBOT_STATE_DAMAGE_KNOCKBACK;
             vars->damage_secondary_red = 0xFA;
-            vars->unk26 = scale_game_frames(0x3C);
+            vars->stun_timer = scale_game_frames(0x3C);
             start_hit_color_flash(moby, anim);
         }
         release_beam_slot_by_id(moby);
