@@ -7,7 +7,7 @@ extern const char shrub_textures_label[] __asm__("D_001603B0");
 extern const char shrub_draw_label[] __asm__("D_001603C0");
 
 struct ShrubDrawState {
-    s32 unk0;
+    s32 enabled; /* draw_config.shrub.enabled (D_0018A2D0 = draw_config + 0x20) */
     s32 pad[2];
 };
 
@@ -30,7 +30,7 @@ void draw_shrubs(void) {
     packet += 0x10;
     render_packet_cursor.addr = packet;
     noop_core_callback_secondary(shrub_textures_label, 1);
-    if (shrub_draw_submission_state.unk0 != 0) {
+    if (shrub_draw_submission_state.enabled != 0) {
         flush_cache(0);
         shrub_proc();
         WriteDmaChannel(D_001D8EB0, 0x3200, 0x40);

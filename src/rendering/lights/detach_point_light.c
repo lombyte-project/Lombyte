@@ -5,7 +5,7 @@
 
 struct ShrubLightLink {
     u8  pad_0[0x1B];
-    u8  unk1B;
+    u8  refresh_pending; /* set once all four light slots are empty, as for tfrags */
     u8  pad_1C[0x2];
     u16 packed_lights;
 };
@@ -18,7 +18,7 @@ struct TfragLightLink {
 
 struct TieLightLink {
     u8  pad_0[0x1B];
-    u8  unk1B;
+    u8  refresh_pending; /* set once all four light slots are empty, as for tfrags */
     u8  pad_1C[0x2];
     u16 packed_lights;
 };
@@ -86,7 +86,7 @@ void detach_point_light(s32 light_index) {
             }
             tie_index_cursor += 1;
             if (tie_packed_lights == 0xFFFF) {
-                tie_link->unk1B = 1;
+                tie_link->refresh_pending = 1;
             }
             tie_link->packed_lights = tie_packed_lights;
         } while (tie_index_cursor != tie_indices_end_address);
@@ -144,7 +144,7 @@ void detach_point_light(s32 light_index) {
             }
             shrub_index_cursor += 1;
             if (shrub_packed_lights == 0xFFFF) {
-                shrub_link->unk1B = 1;
+                shrub_link->refresh_pending = 1;
             }
             shrub_link->packed_lights = shrub_packed_lights;
         } while (shrub_index_cursor != shrub_indices_end_address);

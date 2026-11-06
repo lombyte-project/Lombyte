@@ -196,9 +196,9 @@ void update_view_context(void) {
     view->viewport_aspect.f[2] = 1.0f;
     view->viewport_aspect.f[3] = 1.0f;
     view->fog_color = *(s32 *)&view->fog_far_int;
-    view->unk4 = 0x103E4000;
-    view->unk8 = 0xE;
-    view->unkC = 0;
+    view->gif_tag_hi = 0x103E4000;
+    view->gif_tag_regs = 0xE;
+    view->gif_tag_regs_hi = 0;
     qzero(&view->regs[0]);
 
     packet_view = &view_context;
