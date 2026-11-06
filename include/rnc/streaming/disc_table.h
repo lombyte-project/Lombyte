@@ -35,8 +35,9 @@ struct DiscTable {
         misc_animations[20]; /* 0xF8, loaded into the stash by load_misc_animations_into_stash */
     struct DiscFile vendor_animation; /* 0x198, streamed by draw_vendor_inset_quads */
     struct DiscFile music_10000[37];  /* 0x1A0, music tracks 10000.. */
-    struct DiscFile unk2C8[6];        /* 0x2C8, one per language */
-    struct DiscFile unk2F8[6];        /* 0x2F8, one per language */
+    struct DiscFile
+        controls_help_left[6]; /* 0x2C8: left half of the controls picture, one per language */
+    struct DiscFile controls_help_right[6]; /* 0x2F8: right half */
     u8              pad_328[0x1D0];
     struct DiscFile level_chunk; /* 0x4F8, read by load_level_chunk_from_disc */
     u8              pad_500[0x3B8];
