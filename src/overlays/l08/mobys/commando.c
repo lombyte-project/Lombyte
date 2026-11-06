@@ -73,13 +73,13 @@ extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
 
 typedef struct {
     char          pad00[0x24];
-    short         h24;
+    short         dialogue_mode;
     char          pad26[2];
-    unsigned char b28;
+    unsigned char dialogue_any_direction; /* 0x28: skips the facing check */
     char          pad29[3];
-    float         f2C;
+    float         dialogue_radius; /* 0x2C: dialogue record (at 0x20) facing tolerance */
     char          pad30[0x10];
-    void         *p40;
+    void         *name_text;
     char          pad44[0x1C];
     char          body[0x64];
     float         pitch;
@@ -92,7 +92,7 @@ typedef struct {
     char          pad14C[0x14];
     float         target[4];
     char          pad170[0x10];
-    int           joint;
+    int           reposition_cuboid; /* D_L08_001600EC row it moves to after the first talk */
     char          pad184[4];
     int           moving_timer;
     int           target_timer;
@@ -139,13 +139,13 @@ void commando_update(WM *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        commando_vars->f2C = 3.0f;
-        commando_vars->p40 = commando_name_string;
+        commando_vars->dialogue_radius = 3.0f;
+        commando_vars->name_text = commando_name_string;
         if (!D_0013D3B4) {
             moby->state = COMMANDO_DIALOGUE_BEFORE_REPOSITION;
         } else {
             char *b = D_L08_001600EC;
-            int   j = commando_vars->joint;
+            int   j = commando_vars->reposition_cuboid;
             qcopy(moby->position, b + j * 0x80 + 0x30);
             qcopy((char *)moby + 0x40, b + j * 0x80 + 0x70);
             moby->state = COMMANDO_DIALOGUE_AFTER_REPOSITION;
@@ -155,7 +155,7 @@ void commando_update(WM *moby) {
     case COMMANDO_DIALOGUE_BEFORE_REPOSITION:
         if (update_npc_dialogue(moby, (char *)commando_vars + 0x20)) {
             char *b = D_L08_001600EC;
-            int   j = commando_vars->joint;
+            int   j = commando_vars->reposition_cuboid;
             qcopy(moby->position, b + j * 0x80 + 0x30);
             qcopy((char *)moby + 0x40, b + j * 0x80 + 0x70);
             moby->state = COMMANDO_DIALOGUE_AFTER_REPOSITION;
@@ -174,8 +174,8 @@ void commando_update(WM *moby) {
         break;
     case COMMANDO_POST_DIALOGUE:
         if (level_game_mode != 2) {
-            commando_vars->b28 = 1;
-            if (commando_vars->h24 == 3) {
+            commando_vars->dialogue_any_direction = 1;
+            if (commando_vars->dialogue_mode == 3) {
                 unlock_planet(10);
                 queue_planet_unlock_message(10);
                 jet_clear_persistent(((unsigned char *)moby)[0xB0]);

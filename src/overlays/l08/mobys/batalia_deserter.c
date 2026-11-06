@@ -95,13 +95,13 @@ extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
 
 typedef struct {
     char  pad00[0x24];
-    short h24;
+    short dialogue_mode;
     char  pad26[6];
-    float f2C;
+    float dialogue_radius; /* 0x2C: dialogue record (at 0x20) facing tolerance */
     char  pad30[0x10];
-    void *p40;
+    void *name_text;
     char  pad44[0x12];
-    short h56;
+    short dialogue_entry;
     char  pad58[0xC];
     int   i64;
     char  pad68[0x18];
@@ -184,8 +184,8 @@ void batalia_deserter_update(WM *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        deserter_data->f2C = 4.0f;
-        deserter_data->p40 = (void *)batalia_deserter_name_text;
+        deserter_data->dialogue_radius = 4.0f;
+        deserter_data->name_text = (void *)batalia_deserter_name_text;
         moby->state = DESERTER_WAIT_FOR_PLAYER;
         if (deserter_data->i64 >= 0)
             initialize_npc_dialogue(moby, (char *)deserter_data + 0x20);
@@ -202,11 +202,11 @@ void batalia_deserter_update(WM *moby) {
                 blend_moby_animation(moby, random_integer_below(2) + 1, 0, scale_game_frames(20));
         }
         if (D_0013F350_g.f2FC == 0 &&
-            (scale_game_frames(30) < D_0013F350_g.f300 || deserter_data->h56 != 0)) {
+            (scale_game_frames(30) < D_0013F350_g.f300 || deserter_data->dialogue_entry != 0)) {
             update_npc_dialogue(moby, (char *)deserter_data + 0x20);
             begin_dialogue_camera_transition(moby, 2.2f);
         }
-        if (deserter_data->h24 == 4) {
+        if (deserter_data->dialogue_mode == 4) {
             unlock_planet(9);
             memcard_save_data(0, -1);
             mark_moby_for_removal(moby);

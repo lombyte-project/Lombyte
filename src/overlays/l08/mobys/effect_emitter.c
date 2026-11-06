@@ -18,8 +18,8 @@ typedef struct EffectEmitterVars {
     u8  pad_0[0x4];
     f32 half_width;
     u8  pad_8[0x4];
-    f32 unkC;
-    s32 unk10;
+    f32 effect_scale;
+    s32 effect_life; /* frames */
     s32 count_per_frame;
     f32 min_speed_y;
     f32 max_speed_y;
@@ -51,7 +51,7 @@ void effect_emitter_update(struct Moby *moby) {
         effect_direction[3] = 0;
         spawn_effect_with_initial_motion(effect_position,
                                          effect_direction,
-                                         effect_spawn_settings->unk10,
-                                         effect_spawn_settings->unkC);
+                                         effect_spawn_settings->effect_life,
+                                         effect_spawn_settings->effect_scale);
     }
 }

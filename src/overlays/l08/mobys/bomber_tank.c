@@ -102,7 +102,7 @@ typedef struct {
     u8    pad0[0x20];
     f32   health; /* 0x20 */
     u8    pad24[4];
-    u8    unk28;
+    u8    hit_response_class;
     u8    unk29;
     u8    unk2A;
     u8    pad2B[3];
@@ -123,7 +123,7 @@ typedef struct {
     u8    padF8[8];
     u8    manipulator[0x40]; /* 0x100 */
     s32 trigger_moby; /* 0x140: index of the moby whose pvars float reaching 1.0 releases the tank */
-    s32   unk144;
+    s32   debris_group_moby; /* 0x144: index of the moby whose linked group holds the debris */
     u8    pad148[4];
     s32   start_point; /* 0x14C: D_L08_001B0CB0 index */
     s32   path;        /* 0x150: D_L08_001B0CB0 index */
@@ -205,7 +205,7 @@ void bomber_tank_update(Moby *moby) {
             bomber_tank_update_vars->part_b->collision = 0;
             if (moby->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, 0);
-        } else if (bomber_tank_update_vars->unk144 > 0) {
+        } else if (bomber_tank_update_vars->debris_group_moby > 0) {
             if (D_0013D3B6 == 0) {
                 moby->state = BOMBER_TANK_STATE_SCATTER_GROUP_AND_ACTIVATE;
                 moby->flags |= 0x41;
@@ -231,7 +231,7 @@ void bomber_tank_update(Moby *moby) {
         }
         clear_u64_value(&bomber_tank_update_vars->unk40);
         bomber_tank_update_vars->unk29 = 0;
-        bomber_tank_update_vars->unk28 = 3;
+        bomber_tank_update_vars->hit_response_class = 3;
         bomber_tank_update_vars->unk30 = 3.0f;
         bomber_tank_update_vars->health = 9.0f;
         bomber_tank_update_vars->unk2A = 12;
@@ -369,11 +369,11 @@ typedef struct {
     struct HitColorFlash hit_flash;
     float                target[4];
     char                 padC0[0x30];
-    int                  fF0;
+    int                  target_moby; /* 0xF0: the hero moby when unset */
     int                  mode;
     char                 padF8[0x18];
-    float                f110[4];
-    float                f120[4];
+    float                manipulator_rotation[4]; /* 0x110: turret yaw and pitch */
+    float                manipulator_scale[4];
     char                 pad130[0x24];
     int                  path;
     char                 pad158[8];
@@ -474,7 +474,7 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
                 qcopy(burst_position_or_aim_scratch, &moby->pos);
                 burst_position_or_aim_scratch[2] += 3.0f;
                 bomber_tank_damage_and_aim_vars->hit_flash.flash_red = 0xFA;
-                clear_u64_value(bomber_tank_damage_and_aim_vars->f120);
+                clear_u64_value(bomber_tank_damage_and_aim_vars->manipulator_scale);
                 spawn_explosion(moby,
                                 bomber_tank_damage_and_aim_vars->f40,
                                 burst_position_or_aim_scratch,
@@ -667,8 +667,8 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
                         0,
                         ((Path *)l08_paths[bomber_tank_damage_and_aim_vars->path])->list,
                         ((Path *)l08_paths[bomber_tank_damage_and_aim_vars->path])->count);
-    if (bomber_tank_damage_and_aim_vars->fF0 == 0)
-        bomber_tank_damage_and_aim_vars->fF0 = *(int *)D_001413D0;
+    if (bomber_tank_damage_and_aim_vars->target_moby == 0)
+        bomber_tank_damage_and_aim_vars->target_moby = *(int *)D_001413D0;
     if (bomber_tank_damage_and_aim_vars->mode !=
         BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM) {
         float yaw, distance, pitch;
@@ -713,11 +713,12 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
     }
     build_axis_rotation_quaternion(
         burst_position_or_aim_scratch, 1, bomber_tank_damage_and_aim_vars->pitch);
-    build_axis_rotation_quaternion(
-        bomber_tank_damage_and_aim_vars->f110, 2, bomber_tank_damage_and_aim_vars->yaw);
-    multiply_quaternions(bomber_tank_damage_and_aim_vars->f110,
+    build_axis_rotation_quaternion(bomber_tank_damage_and_aim_vars->manipulator_rotation,
+                                   2,
+                                   bomber_tank_damage_and_aim_vars->yaw);
+    multiply_quaternions(bomber_tank_damage_and_aim_vars->manipulator_rotation,
                          burst_position_or_aim_scratch,
-                         bomber_tank_damage_and_aim_vars->f110);
+                         bomber_tank_damage_and_aim_vars->manipulator_rotation);
     {
         short saved_anim0 = bomber_tank_damage_and_aim_vars->hit_flash.timer;
         short saved_anim2 = bomber_tank_damage_and_aim_vars->hit_flash.phase;
