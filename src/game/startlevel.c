@@ -212,21 +212,21 @@ void startlevel(void) {
 extern __typeof__(startlevel) func_001E9658 __attribute__((alias("FUN_001e9658")));
 
 volatile SoundDef l00_primary_sound_defs[7] = {
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 0},
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 0},
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 8},
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 9},
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 2},
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 3},
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 4},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 0},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 0},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 8},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 9},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 2},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 3},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 4},
 };
 
 volatile SoundDef boot_sound_defs_b[5] = {
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 0},
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 1},
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 5},
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 6},
-    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 7},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 0},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 1},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 5},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 6},
+    {.max_range = 128.0f, .near_volume = 0x400, .sound = 7},
 };
 
 s32 boot_image_buffer __asm__("D_0015EF5C") MACRO_ADDR = 0;
