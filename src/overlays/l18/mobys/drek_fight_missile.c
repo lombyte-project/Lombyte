@@ -101,11 +101,11 @@ typedef struct DrekFightMissileVars {
     u8    pad_0[0x110];
     u8    wander_destination_position;
     u8    pad_111[0xF];
-    u8    unk120;
+    u8    dive_target_position;
     u8    pad_121[0x7];
-    f32   unk128;
+    f32   dive_target_ground_z;
     u8    pad_12C[0x4];
-    f32   unk130[4];
+    f32   dive_start_velocity[4];
     u8    pad_140[0x4];
     f32   unk144;
     u8    pad_148[0x4];
@@ -146,9 +146,10 @@ void drek_fight_missile_update(struct Moby *moby) {
         missile_vars->unk15C = initialization_frame_time * 10.0f;
         missile_vars->effect_color_phase = random_angle_radians();
         moby->draw_dist = 0xFF;
-        qcopy(&missile_vars->unk120, &moby->pos);
-        missile_vars->unk128 += 5.0f;
-        missile_vars->unk128 = probe_ground_height(&missile_vars->unk120, 0, 0.5f);
+        qcopy(&missile_vars->dive_target_position, &moby->pos);
+        missile_vars->dive_target_ground_z += 5.0f;
+        missile_vars->dive_target_ground_z =
+            probe_ground_height(&missile_vars->dive_target_position, 0, 0.5f);
         select_drek_fight_missile_wander_target(moby, &missile_vars->wander_destination_position);
         moby->state = DREK_MISSILE_WAIT_FOR_ACTIVATION;
         moby->flags |= 1;
@@ -166,26 +167,26 @@ void drek_fight_missile_update(struct Moby *moby) {
             return;
         }
         moby->state = DREK_MISSILE_DIVE;
-        missile_vars->unk130[0] =
+        missile_vars->dive_start_velocity[0] =
             fast_cos(moby->rot.z) *
             (*(float *)&l18_drek_missile_wander_horizontal_speed_gp * frame_time);
-        missile_vars->unk130[1] =
+        missile_vars->dive_start_velocity[1] =
             fast_sin(moby->rot.z) *
             (*(float *)&l18_drek_missile_wander_horizontal_speed_gp * frame_time);
-        missile_vars->unk130[2] = missile_vars->unk144;
+        missile_vars->dive_start_velocity[2] = missile_vars->unk144;
         missile_vars->dive_motion_blend_factor = 0;
         break;
     }
     case DREK_MISSILE_DIVE: {
         float dive_movement_step[4];
         float ground_check_position[4];
-        fast_vec_sub(dive_movement_step, &missile_vars->unk120, &moby->pos);
+        fast_vec_sub(dive_movement_step, &missile_vars->dive_target_position, &moby->pos);
         fast_vec_normalize(dive_movement_step,
                            dive_movement_step,
                            *(float *)&l18_drek_missile_dive_speed_gp * frame_time);
         approach_value((float *)&missile_vars->dive_motion_blend_factor, 1.0f, frame_time);
         lerp_vector(dive_movement_step,
-                    missile_vars->unk130,
+                    missile_vars->dive_start_velocity,
                     dive_movement_step,
                     *(float *)&missile_vars->dive_motion_blend_factor);
         fast_vec_add(&moby->pos, &moby->pos, dive_movement_step);
@@ -194,12 +195,12 @@ void drek_fight_missile_update(struct Moby *moby) {
         fast_vec_normalize(ground_check_position, &moby->rot_row0, 1.0f);
         fast_vec_add(ground_check_position, ground_check_position, &moby->pos);
         update_drek_fight_missile_trail_and_queue_effects(moby);
-        if (ground_check_position[2] < missile_vars->unk128) {
+        if (ground_check_position[2] < missile_vars->dive_target_ground_z) {
             float minimum_missile_height;
             func_0022ED80_2F0F78(1, 0, (int)moby);
             moby->state = DREK_MISSILE_WAIT_TO_EXPLODE;
             missile_vars->timer_160 = scale_game_frames(0x5A);
-            minimum_missile_height = missile_vars->unk128 + 0.7f;
+            minimum_missile_height = missile_vars->dive_target_ground_z + 0.7f;
             if (moby->pos.z < minimum_missile_height) {
                 moby->pos.z = minimum_missile_height;
             }
