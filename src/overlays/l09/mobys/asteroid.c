@@ -36,14 +36,14 @@ typedef struct {
     f32          vel[3]; /* 0x00: sideways drift */
     f32          speed;  /* 0x0C */
     s32          path;   /* 0x10 */
-    s32          unk14;  /* 0x14 */
+    s32          node;   /* 0x14: path node, see Data_2ECC50 */
     s32          count;  /* 0x18: pebbles spawned (on the spawner) */
     u8           pad1C[4];
     Vec4         start;  /* 0x20 */
     Vec4         offset; /* 0x30 */
     f32          spin_x; /* 0x40 */
     f32          spin_y; /* 0x44 */
-    s32          unk48;  /* 0x48 */
+    s32          init;   /* 0x48: 1 skips the spawner set-up */
     u8           pad4C[4];
     struct Moby *owner; /* 0x50 */
 } PebbleVars;
@@ -264,8 +264,8 @@ struct Moby *spawn_path_following_asteroid(struct Moby *owner) {
         ovars->count++;
         spawned_asteroid_vars->owner = owner;
         spawned_asteroid_vars->path = ovars->path;
-        spawned_asteroid_vars->unk48 = 1;
-        spawned_asteroid_vars->unk14 = 0;
+        spawned_asteroid_vars->init = 1;
+        spawned_asteroid_vars->node = 0;
         spawned_moby->command = 1;
         spawned_moby->visible = 1;
         spawned_moby->update_dist = 0xFF;
