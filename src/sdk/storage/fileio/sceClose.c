@@ -5,11 +5,11 @@
 #include "rnc/sdk/library/sif_file_slot.h"
 
 struct SifFileState {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
+    s32 sema;
+    s32 result_addr;
+    s32 result_size;
+    s32 fd;
+    s32 iob_index;
 };
 
 extern struct SifFileState D_00156880;
@@ -40,15 +40,15 @@ s32 sceClose(s32 fd) {
         _sceFsSigSema();
         return -9;
     }
-    state->unkC = io->fd;
+    state->fd = io->fd;
     sema.maxCount = 1;
-    state->unk10 = io - fio_iob;
+    state->iob_index = io - fio_iob;
     sema.initCount = 0;
     sema.option = 0;
     sid = CreateSema(&sema);
-    state->unk0 = sid;
-    state->unk4 = (s32)&close_completion_result;
-    state->unk8 = 4;
+    state->sema = sid;
+    state->result_addr = (s32)&close_completion_result;
+    state->result_size = 4;
     if (sceSifCallRpc(&fio_rpc_client, 1, 0, state, 0x14, fio_rpc_result, 4, 0, 0) < 0) {
         DeleteSema(sid);
         _sceFsSigSema();

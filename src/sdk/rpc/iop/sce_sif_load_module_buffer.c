@@ -3,8 +3,8 @@
 #include "rnc/sdk/rpc/rpc.h"
 
 struct SifLoadModuleArgs {
-    s32 unk0;
-    s32 unk4;
+    s32 module_or_result;
+    s32 arg_len_or_modres;
 };
 
 extern u8  D_00158400[];
@@ -22,22 +22,22 @@ s32 _sceSifLoadModuleBuffer(s32 iop_address, s32 size, s32 module_arguments, s32
     if (sif_load_module_server_changed() != 0) {
         return 0xFFFEFFFC;
     }
-    SIFCMD->unk0 = iop_address;
+    SIFCMD->module_or_result = iop_address;
     if (module_arguments != 0) {
         if (size >= 0xFD) {
             memcpy(D_00158200 + 0x104, (void *)module_arguments, 0xFC);
-            SIFCMD->unk4 = 0xFC;
+            SIFCMD->arg_len_or_modres = 0xFC;
         } else {
             memcpy(D_00158200 + 0x104, (void *)module_arguments, size);
-            SIFCMD->unk4 = size;
+            SIFCMD->arg_len_or_modres = size;
         }
     } else {
-        SIFCMD->unk4 = 0;
+        SIFCMD->arg_len_or_modres = 0;
     }
     if (sceSifCallRpc(D_00158400, 6, 0, D_00158200, 0x200, D_00158200, 8, 0, 0) < 0) {
         return 0xFFFEFFFF;
     }
-    rpc_return_value = SIFCMD->unk0;
-    *result_out = SIFCMD->unk4;
+    rpc_return_value = SIFCMD->module_or_result;
+    *result_out = SIFCMD->arg_len_or_modres;
     return rpc_return_value;
 }
