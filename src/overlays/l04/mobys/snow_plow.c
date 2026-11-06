@@ -60,22 +60,21 @@ typedef struct SnowPlowVars {
     u8  pad_0[0x60];
     s32 path;
     u8  pad_64[0x18];
-    f32 unk7C;
+    f32 turn_velocity;
     u8  pad_80[0x7C];
-    f32 unkFC;
+    f32 speed; /* gunship speed (gunship_update) */
     u8  pad_100[0x1C];
-    s32 unk11C;
+    s32 movement_delay_timer; /* gunship movement delay, stored as a word */
     u8  pad_120[0x18];
-    f32 unk138;
+    f32 initial_speed;
     u8  pad_13C[0x4];
-    f32 unk140;
-    f32 unk144;
+    f32 spin_angle0;
+    f32 spin_angle1;
     u8  selected_clip_volume_index;
     u8  clip_volume_movement_state;
     s16 clip_volume_movement_timer;
     f32 saved_return_heading;
-    s32 unk150;
-    u8  pad_154[0xC];
+    s32 clip_volumes[4]; /* -1: none; entering one sends the plow to its cuboid */
     f32 saved_return_position[4];
     s32 hit_recovery_timer;
     s32 hit_recovery_active;
@@ -83,11 +82,11 @@ typedef struct SnowPlowVars {
     s32 linked_moby_index;
     u8  manipulator;
     u8  pad_181[0xF];
-    u8  unk190;
+    u8  manipulator_quat;
     u8  pad_191[0x2F];
-    u8  unk1C0;
+    u8  manipulator1;
     u8  pad_1C1[0xF];
-    u8  unk1D0;
+    u8  manipulator1_quat;
 } SnowPlowVars;
 
 /* Class-dependent movement, manipulator rotation, hit effects and visibility. */
@@ -163,7 +162,7 @@ void snow_plow_update(struct Moby *moby) {
         }
         moby->draw_dist = 0x7f;
         moby->update_dist = 0xff;
-        snow_plow_vars->unk138 = snow_plow_vars->unkFC;
+        snow_plow_vars->initial_speed = snow_plow_vars->speed;
         snow_plow_vars->saved_draw_distance = moby->draw_dist;
     }
     amount = 0.0f;
@@ -172,14 +171,14 @@ void snow_plow_update(struct Moby *moby) {
         fast_dec_timer_s16(&snow_plow_vars->clip_volume_movement_timer);
         switch (snow_plow_vars->clip_volume_movement_state) {
         case SNOW_PLOW_SCAN_CLIP_VOLUMES: {
-            float length = snow_plow_vars->unkFC;
-            float target = snow_plow_vars->unk138;
+            float length = snow_plow_vars->speed;
+            float target = snow_plow_vars->initial_speed;
             if (length < target) {
-                snow_plow_vars->unkFC = length + frame_time_sq * 20.0f;
-                if (target < snow_plow_vars->unkFC)
-                    snow_plow_vars->unkFC = target;
+                snow_plow_vars->speed = length + frame_time_sq * 20.0f;
+                if (target < snow_plow_vars->speed)
+                    snow_plow_vars->speed = target;
             }
-            p = &snow_plow_vars->unk150;
+            p = snow_plow_vars->clip_volumes;
             i = 0;
             do {
                 if (snow_plow_vars->clip_volume_movement_timer == 0 && p[i] != -1 &&
@@ -188,9 +187,9 @@ void snow_plow_update(struct Moby *moby) {
                     snow_plow_vars->selected_clip_volume_index = *(unsigned char *)&p[i];
                     snow_plow_vars->clip_volume_movement_state = SNOW_PLOW_MOVE_TO_CLIP_VOLUME;
                     snow_plow_vars->saved_return_heading = moby->rot.z;
-                    *(int *)&snow_plow_vars->unk7C = 0;
+                    *(int *)&snow_plow_vars->turn_velocity = 0;
                     moby->state = SNOW_PLOW_WAIT_TO_RESUME_PATH;
-                    snow_plow_vars->unk11C = scale_game_frames(36000);
+                    snow_plow_vars->movement_delay_timer = scale_game_frames(36000);
                     break;
                 }
                 ++i;
@@ -200,7 +199,7 @@ void snow_plow_update(struct Moby *moby) {
         case SNOW_PLOW_MOVE_TO_CLIP_VOLUME:
             FUN_L00_00258278(moby,
                              l04_cuboids[snow_plow_vars->selected_clip_volume_index].rot.z,
-                             &snow_plow_vars->unk7C,
+                             &snow_plow_vars->turn_velocity,
                              frame_time_sq * 1.0471976f,
                              frame_time_sq * 3.1415927f,
                              frame_time * 3.1415927f);
@@ -220,14 +219,14 @@ void snow_plow_update(struct Moby *moby) {
             break;
         case SNOW_PLOW_WAIT_BEFORE_RETURN:
             if (snow_plow_vars->clip_volume_movement_timer == 0) {
-                snow_plow_vars->unk7C = amount;
+                snow_plow_vars->turn_velocity = amount;
                 snow_plow_vars->clip_volume_movement_state = SNOW_PLOW_RETURN_TO_SAVED_TRANSFORM;
             }
             break;
         case SNOW_PLOW_RETURN_TO_SAVED_TRANSFORM:
             FUN_L00_00258278(moby,
                              snow_plow_vars->saved_return_heading,
-                             &snow_plow_vars->unk7C,
+                             &snow_plow_vars->turn_velocity,
                              frame_time_sq * 1.0471976f,
                              frame_time_sq * 3.1415927f,
                              frame_time * 3.1415927f);
@@ -236,9 +235,9 @@ void snow_plow_update(struct Moby *moby) {
                     moby->rot.z, snow_plow_vars->saved_return_heading) < 0.034906585f) {
                 snow_plow_vars->clip_volume_movement_state = SNOW_PLOW_SCAN_CLIP_VOLUMES;
                 snow_plow_vars->clip_volume_movement_timer = scale_game_frames(600);
-                snow_plow_vars->unkFC = amount;
-                snow_plow_vars->unk7C = amount;
-                snow_plow_vars->unk11C = 0;
+                snow_plow_vars->speed = amount;
+                snow_plow_vars->turn_velocity = amount;
+                snow_plow_vars->movement_delay_timer = 0;
             }
             fast_vec_sub(&delta, snow_plow_vars->saved_return_position, &moby->pos);
             length = fast_vec_length(&delta);
@@ -266,23 +265,24 @@ void snow_plow_update(struct Moby *moby) {
         case SNOW_PLOW_CLASS_OFFSET_WITH_THREE_HIT_SPAWNS_AND_TARGET_VOICE_SELECTOR_ZERO:
         case SNOW_PLOW_CLASS_OFFSET_WITH_TARGET_VOICE_SELECTOR_ZERO:
             attach_manipulator((char *)moby, 0, &snow_plow_vars->manipulator);
-            *(int *)&snow_plow_vars->unk140 = 0;
+            *(int *)&snow_plow_vars->spin_angle0 = 0;
             break;
         case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_ROTATING_MANIPULATORS:
         case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_POINT_CART_BURST:
             attach_manipulator((char *)moby, 0, &snow_plow_vars->manipulator);
-            *(int *)&snow_plow_vars->unk140 = 0;
-            attach_manipulator((char *)moby, 1, &snow_plow_vars->unk1C0);
-            *(int *)&snow_plow_vars->unk144 = 0;
+            *(int *)&snow_plow_vars->spin_angle0 = 0;
+            attach_manipulator((char *)moby, 1, &snow_plow_vars->manipulator1);
+            *(int *)&snow_plow_vars->spin_angle1 = 0;
             break;
         }
     } else {
         switch ((short)(moby->oclass - 0x1d2)) {
         case SNOW_PLOW_CLASS_OFFSET_WITH_THREE_HIT_SPAWNS_AND_TARGET_VOICE_SELECTOR_ONE:
         case SNOW_PLOW_CLASS_OFFSET_WITH_QUARTER_TURN_LINKED_MOBY:
-            snow_plow_vars->unk140 =
-                fast_add_rotations(snow_plow_vars->unk140, frame_time * 12.566371f);
-            build_axis_rotation_quaternion(&snow_plow_vars->unk190, 0, snow_plow_vars->unk140);
+            snow_plow_vars->spin_angle0 =
+                fast_add_rotations(snow_plow_vars->spin_angle0, frame_time * 12.566371f);
+            build_axis_rotation_quaternion(
+                &snow_plow_vars->manipulator_quat, 0, snow_plow_vars->spin_angle0);
             break;
         case SNOW_PLOW_CLASS_OFFSET_WITH_HIT_SPHERE_QUERY_AND_TARGET_VOICE:
         case SNOW_PLOW_CLASS_OFFSET_WITH_HIT_SPHERE_QUERY_WITHOUT_TARGET_VOICE:
@@ -290,18 +290,21 @@ void snow_plow_update(struct Moby *moby) {
         case SNOW_PLOW_CLASS_OFFSET_WITH_FOUR_HIT_SPAWNS_AND_TARGET_VOICE_SELECTOR_ONE:
         case SNOW_PLOW_CLASS_OFFSET_WITH_THREE_HIT_SPAWNS_AND_TARGET_VOICE_SELECTOR_ZERO:
         case SNOW_PLOW_CLASS_OFFSET_WITH_TARGET_VOICE_SELECTOR_ZERO:
-            snow_plow_vars->unk140 =
-                fast_add_rotations(snow_plow_vars->unk140, frame_time * 12.566371f);
-            build_axis_rotation_quaternion(&snow_plow_vars->unk190, 2, snow_plow_vars->unk140);
+            snow_plow_vars->spin_angle0 =
+                fast_add_rotations(snow_plow_vars->spin_angle0, frame_time * 12.566371f);
+            build_axis_rotation_quaternion(
+                &snow_plow_vars->manipulator_quat, 2, snow_plow_vars->spin_angle0);
             break;
         case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_ROTATING_MANIPULATORS:
         case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_POINT_CART_BURST:
-            snow_plow_vars->unk140 =
-                fast_add_rotations(snow_plow_vars->unk140, frame_time * 12.566371f);
-            build_axis_rotation_quaternion(&snow_plow_vars->unk190, 2, snow_plow_vars->unk140);
-            snow_plow_vars->unk144 =
-                fast_add_rotations(snow_plow_vars->unk144, frame_time * 12.566371f);
-            build_axis_rotation_quaternion(&snow_plow_vars->unk1D0, 2, snow_plow_vars->unk144);
+            snow_plow_vars->spin_angle0 =
+                fast_add_rotations(snow_plow_vars->spin_angle0, frame_time * 12.566371f);
+            build_axis_rotation_quaternion(
+                &snow_plow_vars->manipulator_quat, 2, snow_plow_vars->spin_angle0);
+            snow_plow_vars->spin_angle1 =
+                fast_add_rotations(snow_plow_vars->spin_angle1, frame_time * 12.566371f);
+            build_axis_rotation_quaternion(
+                &snow_plow_vars->manipulator1_quat, 2, snow_plow_vars->spin_angle1);
             break;
         }
     }

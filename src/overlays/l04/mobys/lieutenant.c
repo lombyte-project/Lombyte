@@ -19,7 +19,7 @@
  * its phase reaches 2, and closes when the slot is already used. */
 struct VendorMobyView {
     u8   pad0[0x7F];
-    u8   unk7F;
+    u8   shadow_range; /* 0x7F */
     u8   pad80[0x30];
     u8   slot; /* 0xB0 */
     u8   padB1[0xF];
@@ -66,7 +66,7 @@ void lieutenant_update(struct Moby *moby) {
 
     if (moby->visible != 0 && fast_vec_dist(&moby->pos, D_L04_00166F40) < 30.0f) {
         FUN_L00_0025a120(moby);
-        ((struct VendorMobyView *)moby)->unk7F = 0x18;
+        ((struct VendorMobyView *)moby)->shadow_range = 0x18;
     }
     attach_big_head_cheat_manipulator_to_matching_moby(moby);
     switch (moby->state) {

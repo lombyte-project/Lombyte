@@ -113,13 +113,13 @@ void initialize_leg_rig(struct Moby *moby, LegRig *rig) {
         if (rig->legs[k].manip_a.attached == 0)
             attach_manipulator(moby, rig->legs[k].slot_a, &rig->legs[k].manip_a);
     }
-    rig->unkEE = 0;
+    rig->control_flags = 0;
     rig->unkB7 = 0;
-    rig->unkB8 = 0;
-    rig->unkBC = 0;
+    rig->pitch_target = 0;
+    rig->pitch_velocity = 0;
     rig->speed = 0.0f;
-    rig->unkC8 = 0;
-    rig->unkE8 = 0;
+    rig->turn_velocity = 0;
+    rig->probe_offset = 0;
     rig->unkD8 = 0;
     rig->unkE4 = 0;
     rig->unkEC = 0;
@@ -409,23 +409,35 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
                animation_start(moby->class_slot, moby->prev_seq);
     }
     mode = rig_pick_mode(moby, rig, time);
-    if (rig->unkEE & 4) {
-        moby->rot.z = spring_turn(
-            moby->rot.z, rig->heading, rig->unkCC, rig->unkD0, rig->unkD4, (f32 *)&rig->unkC8);
+    if (rig->control_flags & 4) {
+        moby->rot.z = spring_turn(moby->rot.z,
+                                  rig->heading,
+                                  rig->turn_gain,
+                                  rig->turn_damping,
+                                  rig->max_turn_step,
+                                  (f32 *)&rig->turn_velocity);
     } else if (mode & 0xF) {
-        moby->rot.z = spring_turn(
-            moby->rot.z, heading, rig->unkCC, rig->unkD0, rig->unkD4, (f32 *)&rig->unkC8);
+        moby->rot.z = spring_turn(moby->rot.z,
+                                  heading,
+                                  rig->turn_gain,
+                                  rig->turn_damping,
+                                  rig->max_turn_step,
+                                  (f32 *)&rig->turn_velocity);
     } else {
-        moby->rot.z = spring_turn(
-            moby->rot.z, heading, 0.0f, rig->unkD0 + rig->unkD0, rig->unkD4, (f32 *)&rig->unkC8);
+        moby->rot.z = spring_turn(moby->rot.z,
+                                  heading,
+                                  0.0f,
+                                  rig->turn_damping + rig->turn_damping,
+                                  rig->max_turn_step,
+                                  (f32 *)&rig->turn_velocity);
     }
     rig_animate(moby, rig, mode, heading);
     moby->rot.y = spring_turn(moby->rot.y,
-                              *(f32 *)&rig->unkB8,
+                              *(f32 *)&rig->pitch_target,
                               0.005f,
                               0.01f,
                               D_0015ED60 * 0.017453292f,
-                              (f32 *)&rig->unkBC);
+                              (f32 *)&rig->pitch_velocity);
     local.joints[0] = rig->legs[0].joint;
     local.joints[1] = rig->legs[0].joint2;
     local.joints[2] = rig->legs[1].joint;
@@ -433,7 +445,7 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
     local.joints[4] = rig->jointB4;
     local.joints[5] = rig->jointB5;
     transform_scaled_vertex_batch(moby, 6, local.joints, transformed);
-    if (!(rig->unkEE & 4)) {
+    if (!(rig->control_flags & 4)) {
         s32     active = mode | (rig->mode & 0x30);
         s32     bit = 1;
         f32     count = 0.0f;
@@ -471,7 +483,7 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
     }
     fast_vec_add(pos, pos, &shift);
     {
-        f32 max_step = rig->unkC4;
+        f32 max_step = rig->max_speed_step;
         s32 previous_mode = rig->mode;
 
         rig->mode = mode;
@@ -490,18 +502,18 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
     }
     flags = update_leg_rig_height_and_tilt(moby, rig);
     walker_update_gait(moby, rig, speed, heading, step, changed);
-    if (!(rig->unkEE & 4)) {
+    if (!(rig->control_flags & 4)) {
         rig_probe_setup(moby, 0, &probe_kind, &local.v.ground, &probe_start, &probe_end);
         if (moby->prev_seq == rig->anims[3]->id || moby->prev_seq == rig->anims[1]->id ||
             moby->prev_seq == rig->anims[2]->id) {
-            *(f32 *)&rig->unkE8 = rig->unkE0 + rig->unkE0;
+            *(f32 *)&rig->probe_offset = rig->probe_lift + rig->probe_lift;
         } else if (moby->prev_seq == rig->anims[7]->id && (rig->mode & 0xF)) {
-            *(f32 *)&rig->unkE8 = rig->unkE0 + rig->unkE0;
+            *(f32 *)&rig->probe_offset = rig->probe_lift + rig->probe_lift;
         } else if (moby->prev_seq == moby->seq) {
-            *(f32 *)&rig->unkE8 = *(f32 *)&rig->unkE8 * 0.9f;
+            *(f32 *)&rig->probe_offset = *(f32 *)&rig->probe_offset * 0.9f;
         }
-        local.v.ground.z += *(f32 *)&rig->unkE8;
-        probe_end -= *(f32 *)&rig->unkE8;
+        local.v.ground.z += *(f32 *)&rig->probe_offset;
+        probe_end -= *(f32 *)&rig->probe_offset;
         fast_vec_sub(&local.v.offset, pos, &local.v.ground);
         for (tries = 0; tries < 8 && rig_probe(&local.v.ground, 4, probe_start, moby, probe_end);
              tries++) {
@@ -614,10 +626,10 @@ void reset_leg_rig_from_animation(struct Moby *moby, LegRig *rig) {
         }
     }
     rig->mode = rig_pick_mode(moby, rig, animation_time);
-    rig->unkB8 = 0;
-    rig->unkBC = 0;
-    rig->unkC8 = 0;
-    rig->unkE8 = 0;
+    rig->pitch_target = 0;
+    rig->pitch_velocity = 0;
+    rig->turn_velocity = 0;
+    rig->probe_offset = 0;
     rig->unkD8 = 0;
     rig->unkE4 = 0;
     rig->unkEC = 0;

@@ -8,7 +8,7 @@
 
 /* Attachment record handed to attach_manipulator. */
 typedef struct {
-    /* 0x00 */ u8            unk0;
+    /* 0x00 */ u8            anim_joint;
     /* 0x01 */ u8            attached;
     /* 0x02 */ u8            pad2[0xE];
     /* 0x10 */ sceVu0FVECTOR rot; /* quaternion, turned by rig_animate */
@@ -55,7 +55,7 @@ typedef struct {
 typedef struct {
     /* 0x000 */ f32         pts[6][4]; /* joint positions from transform_scaled_vertex_batch */
     /* 0x060 */ u8          pad60[0xC];
-    /* 0x06C */ f32         heading; /* turn target while unkEE & 4 is set */
+    /* 0x06C */ f32         heading; /* turn target while control_flags & 4 is set */
     /* 0x070 */ LegRigAnim *anims[13];
     /* 0x0A4 */ u8          padA4[0xC];
     /* 0x0B0 */ u8          unkB0;
@@ -66,21 +66,21 @@ typedef struct {
     /* 0x0B5 */ u8          jointB5;
     /* 0x0B6 */ u8          mode;
     /* 0x0B7 */ u8          unkB7;
-    /* 0x0B8 */ s32         unkB8;
-    /* 0x0BC */ s32         unkBC;
+    /* 0x0B8 */ s32         pitch_target;   /* f32 bits: spring_turn target for rot.y */
+    /* 0x0BC */ s32         pitch_velocity; /* f32 bits */
     /* 0x0C0 */ f32         speed;
-    /* 0x0C4 */ f32         unkC4;
-    /* 0x0C8 */ s32         unkC8;
-    /* 0x0CC */ f32         unkCC;
-    /* 0x0D0 */ f32         unkD0;
-    /* 0x0D4 */ f32         unkD4;
+    /* 0x0C4 */ f32         max_speed_step; /* speed moves toward the gait speed by at most this */
+    /* 0x0C8 */ s32         turn_velocity;  /* f32 bits: spring_turn velocity of rot.z */
+    /* 0x0CC */ f32         turn_gain;
+    /* 0x0D0 */ f32         turn_damping;
+    /* 0x0D4 */ f32         max_turn_step;
     /* 0x0D8 */ s32         unkD8;
-    /* 0x0DC */ f32         unkDC;
-    /* 0x0E0 */ f32         unkE0;
+    /* 0x0DC */ f32         gravity_step;
+    /* 0x0E0 */ f32         probe_lift; /* walker gait animations set probe_offset to twice this */
     /* 0x0E4 */ s32         unkE4;
-    /* 0x0E8 */ s32         unkE8;
+    /* 0x0E8 */ s32         probe_offset; /* f32 bits: eases back to 0 */
     /* 0x0EC */ s16         unkEC;
-    /* 0x0EE */ s16         unkEE;
+    /* 0x0EE */ s16         control_flags; /* 4: steer to heading at speed instead of by the legs */
     /* 0x0F0 */ LegRigLeg   legs[2];
 } LegRig;
 
