@@ -6,7 +6,7 @@
 typedef struct {
     char          pad00[0x10];
     unsigned char nframes; /* 0x10 */
-    signed char   unk11;   /* 0x11 */
+    signed char   sound;   /* 0x11 */
 } MobyISeq;
 
 typedef struct {
@@ -164,7 +164,7 @@ void init_moby_instance(void *moby_mem, int oClass) {
         if (class_resource->seq_count == 1) {
             if (class_resource->seq->nframes < 2) {
                 moby_instance->anim_speed = 0.0f;
-                if (class_resource->seq->unk11 < 0) {
+                if (class_resource->seq->sound < 0) {
                     moby_instance->flags |= 0x40;
                 }
             }
