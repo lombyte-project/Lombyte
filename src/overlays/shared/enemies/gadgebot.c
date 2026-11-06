@@ -165,7 +165,7 @@ typedef struct {
 typedef struct {
     char    p0[0x18];
     GbMoby *moby;
-    int     unk1C;
+    int     surface_type; /* 0x1C: CollisionHit.surface_type */
     char    p20[0x10];
     float   position[4];
     float   normal_xy[2];
@@ -182,7 +182,7 @@ typedef int u128_c __attribute__((mode(TI)));
 typedef struct {
     char  p0[0x18];
     Moby *moby;
-    int   unk1C;
+    int   surface_type; /* 0x1C: CollisionHit.surface_type */
     char  p20[0x10];
     float position[4];
     float normal_xy[2];
@@ -1112,7 +1112,7 @@ void gadgebot_update(GbMoby *moby) {
             return;
         }
     }
-    if (D_L06_001745C0.moby != 0 && D_L06_001745C0.unk1C > 0) {
+    if (D_L06_001745C0.moby != 0 && D_L06_001745C0.surface_type > 0) {
         gadgebot_vars->collision_contact_moby = D_L06_001745C0.moby;
     } else {
         gadgebot_vars->collision_contact_moby = 0;

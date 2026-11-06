@@ -170,9 +170,9 @@ typedef struct {
     s32          mask; /* 0x14: collision classes */
     u8           unk18;
     u8           unk19;
-    s16          oclass; /* 0x1A */
-    f32          radius; /* 0x1C */
-    s32          unk20;
+    s16          oclass;        /* 0x1A */
+    f32          radius;        /* 0x1C */
+    s32          has_direction; /* 0x20: 1 from make_hit_descriptor, which copies dir */
 } CollisionProbe;
 
 extern f32  D_L04_00166F40[]; /* arena centre */
@@ -232,7 +232,7 @@ void blarg_trooper_projectile_update(struct Moby *moby) {
             pr.mask = 0x10001;
             pr.radius = 1.0f;
         }
-        pr.unk20 = 1;
+        pr.has_direction = 1;
         qcopy(&pr.dir, &v->dir);
         set_vector_length_xy(&pr.dir, &pr.dir, 1.0f);
         probe = &pr;
