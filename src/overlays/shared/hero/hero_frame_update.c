@@ -197,7 +197,7 @@ void hero_frame_update(void) {
                 if (hero.vehicle_toggle_timer == 0) {
                     allocate_hero_voice_for_entry(0x19, 0);
                     hero.vehicle_toggle_timer = 0x12;
-                    hero.unk22DC = 1;
+                    hero.scale_pulse_step = 1;
                 }
             } else {
                 hero.pending_item[0] = 0;
@@ -205,7 +205,7 @@ void hero_frame_update(void) {
                     hero.vehicle_toggle_timer == 0) {
                     allocate_hero_voice_for_entry(0x19, 0);
                     hero.vehicle_toggle_timer = 0x12;
-                    hero.unk22DC = 1;
+                    hero.scale_pulse_step = 1;
                 }
             }
         }

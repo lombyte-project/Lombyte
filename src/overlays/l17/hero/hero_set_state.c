@@ -216,8 +216,8 @@ int hero_set_state(int requested_state, int b) {
         set_hero_animation(select_hero_help_value(0), 0, (float)t);
         {
             struct Hero *p = &hero;
-            if (((void *)p->unk1614) != 0) {
-                blend_moby_animation(((void *)p->unk1614), 0, 0, t);
+            if (((void *)p->fidget_prop_moby) != 0) {
+                blend_moby_animation(((void *)p->fidget_prop_moby), 0, 0, t);
             }
         }
         break;
@@ -968,10 +968,10 @@ int hero_set_state(int requested_state, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_LEDGE;
         p->camera_mode = 0xD;
-        p->unk4EC = frame_time_sq * 24.0f;
+        p->ledge_gravity = frame_time_sq * 24.0f;
         p->smoothed_air_z = p->motion.pos.f[2];
         if (p->state.prev_control_mode == HERO_MODE_JUMP) {
-            p->unk4EC = p->jump_gravity;
+            p->ledge_gravity = p->jump_gravity;
             p->smoothed_air_z = p->smoothed_ground_z;
         }
         p->item_select_blocked = 1;
@@ -1667,7 +1667,7 @@ int hero_set_state(int requested_state, int b) {
             q->attack_record = 3;
             q->saved_item[0] = 0;
             update_hero_target_heading(14.0f, 0.5235988f, -1.0f);
-            q->unkA7C = q->unkA7C == 0;
+            q->crouch_swing_toggle = q->crouch_swing_toggle == 0;
             if (b) {
                 int n = scale_game_frames(0xA);
                 if (q->moby->prev_seq == 0x1A)
@@ -2062,10 +2062,10 @@ int hero_set_state(int requested_state, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = HERO_MODE_LEDGE;
         p->camera_mode = 0xD;
-        p->unk4EC = frame_time_sq * 12.0f;
+        p->ledge_gravity = frame_time_sq * 12.0f;
         p->smoothed_air_z = p->motion.pos.f[2];
         if (p->state.prev_control_mode == HERO_MODE_JUMP) {
-            p->unk4EC = p->jump_gravity;
+            p->ledge_gravity = p->jump_gravity;
             p->smoothed_air_z = p->smoothed_ground_z;
         }
         if (b)
@@ -2184,7 +2184,7 @@ int hero_set_state(int requested_state, int b) {
         if (p->rail_off_frames == 0)
             hero_change_health(1);
         p->invulnerable_frames = scale_game_frames(0x4D);
-        p->unk5CC = frame_time * 2.5f;
+        p->grind_recovery_speed = frame_time * 2.5f;
         if (frame_time * 2.5f < p->grind_base_speed)
             p->grind_base_speed = frame_time * 2.5f;
         p->grind_speed_boost.i = 0;

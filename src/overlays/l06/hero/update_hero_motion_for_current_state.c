@@ -2074,7 +2074,7 @@ void update_hero_motion_for_current_state(void) {
         }
         r = hero.grind_speed * (f32)hero.grind_direction;
         if (hero.state.current == 0x42) {
-            r = hero.unk5CC * (f32)hero.grind_direction;
+            r = hero.grind_recovery_speed * (f32)hero.grind_direction;
         }
         sample_path((void *)hero.rail_spline,
                     &vector_or_hit_descriptor_scratch,

@@ -743,7 +743,7 @@ void update_hero_motion_for_current_state(void) {
             if (t < 0.2f) {
                 t = 0.2f;
             }
-            if (controller_state.unk1DC != 0x79) {
+            if (controller_state.pressure_mode_id != 0x79) {
                 hero.cw_turn_frames = 0;
                 hero.swim_square_hold_frames++;
                 t = hero.swim_square_hold_frames * 0.5f / scale_game_frames(0x14) + 0.5f;
@@ -765,7 +765,7 @@ void update_hero_motion_for_current_state(void) {
             if (t < 0.2f) {
                 t = 0.2f;
             }
-            if (controller_state.unk1DC != 0x79) {
+            if (controller_state.pressure_mode_id != 0x79) {
                 hero.swim_square_hold_frames = 0;
                 hero.cw_turn_frames++;
                 t = hero.cw_turn_frames * 0.5f / scale_game_frames(0x14) + 0.5f;

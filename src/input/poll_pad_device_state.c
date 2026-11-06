@@ -33,9 +33,9 @@ void poll_pad_device_state(struct PadState *pad_state) {
         case PAD_PROFILE_INITIALIZATION: {
             byte_count = scePad2GetButtonProfile(pad_state->socket, pad_response_buffer);
             if (*(u32 *)pad_response_buffer == 0xFFFFFFFF) {
-                pad_state->unk1DC = 0x79;
+                pad_state->pressure_mode_id = 0x79;
             } else {
-                pad_state->unk1DC = 0;
+                pad_state->pressure_mode_id = 0;
             }
             if (byte_count < 5) {
                 for (i = 0; i < byte_count; i++) {

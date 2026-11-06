@@ -1006,7 +1006,7 @@ void update_hero_in_vehicle_mode(void) {
                         *(u8 *)(D_0013F350_002062b0 - 0x1e74) && g->vehicle_toggle_timer == 0) {
                         allocate_hero_voice_for_entry(0x19, 0);
                         g->vehicle_toggle_timer = 0x12;
-                        g->unk22DC = 1;
+                        g->scale_pulse_step = 1;
                     }
                 }
             }
@@ -1539,10 +1539,10 @@ void apply_hero_and_item_scale_sequence(void) {
     float          sequence_scale, item_scale;
     int            i, j;
     unsigned char *item_moby;
-    if (G->unk22DC) {
-        sequence_scale = D_L00_001797D8[++G->unk22DC];
+    if (G->scale_pulse_step) {
+        sequence_scale = D_L00_001797D8[++G->scale_pulse_step];
         if (sequence_scale == -1.0f) {
-            G->unk22DC = 0;
+            G->scale_pulse_step = 0;
             return;
         }
         fast_vec_scale(

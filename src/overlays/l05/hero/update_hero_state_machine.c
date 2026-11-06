@@ -2206,7 +2206,7 @@ void update_hero_state_machine(void) {
                         if (hero.vehicle_toggle_timer == 0) {
                             allocate_hero_voice_for_entry(0x19, 0);
                             hero.vehicle_toggle_timer = 0x12;
-                            hero.unk22DC = 1;
+                            hero.scale_pulse_step = 1;
                         }
                         apply_hero_item_slot_selection(0);
                         break;
@@ -2272,7 +2272,7 @@ void update_hero_state_machine(void) {
                         if (hero.vehicle_toggle_timer == 0) {
                             allocate_hero_voice_for_entry(0x19, 0);
                             hero.vehicle_toggle_timer = 0x12;
-                            hero.unk22DC = 1;
+                            hero.scale_pulse_step = 1;
                         }
                         apply_hero_item_slot_selection(0);
                         break;
@@ -2360,7 +2360,7 @@ void update_hero_state_machine(void) {
         release_and_clear_hero_voice_slots();
     }
     if ((hero.state.prev == 0x40 && hero.state.current != HERO_STATE_FIDGET_ALT) ||
-        (hero.state.prev == 0x41 && hero.unk1614 != 0)) {
+        (hero.state.prev == 0x41 && hero.fidget_prop_moby != 0)) {
         remove_hero_cached_moby_and_clear_slot_three_moby_flags();
     }
     if (prevState != hero.state.step) {
