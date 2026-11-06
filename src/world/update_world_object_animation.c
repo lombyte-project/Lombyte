@@ -45,32 +45,32 @@ struct Moby {
 };
 
 struct ModelRec {
-    unsigned short flags; /* 0x00 */
+    unsigned short end_time; /* 0x00 */
     unsigned char  pad02[2];
-    int            part_count; /* 0x04 */
+    int            subtitles_off; /* 0x04: subtitle table, present when >= 0x400 */
     unsigned short pad08;
     unsigned char  pad0A[2];
     unsigned short num_parts; /* 0x0C */
     unsigned char  pad0E[2];
-    int            end_off;     /* 0x10 */
+    int            keys_off;    /* 0x10: camera keys */
     int            part_off[1]; /* 0x14 */
 };
 
 struct TransferState {
     unsigned char    pad00[0x38];
-    int              unk38; /* 0x38 */
+    int              frame; /* 0x38: chunk tick */
     unsigned char    pad3C[4];
-    unsigned short   unk40; /* 0x40 */
+    unsigned short   end; /* 0x40: end tick (record +0x00) */
     unsigned char    pad42[2];
     short            num_parts; /* 0x44 */
     unsigned char    pad46[2];
     unsigned short   unk48; /* 0x48 */
     unsigned char    pad4A[2];
-    int              unk4C; /* 0x4C */
-    int              unk50; /* 0x50 */
-    int              unk54; /* 0x54 */
-    struct ModelRec *rec;   /* 0x58 */
-    int              unk5C; /* 0x5C */
+    int              subs;       /* 0x4C: subtitle table (draw_subtitles) */
+    int              unk50;      /* 0x50 */
+    int              frames;     /* 0x54: camera keys */
+    struct ModelRec *rec;        /* 0x58 */
+    int              source_end; /* 0x5C: compressed chunk */
     unsigned char    pad60[0x118];
     struct Moby     *slots[1]; /* 0x178 */
 };
@@ -96,21 +96,21 @@ void update_world_object_animation(void *unused_arg) {
     int              pc;
 
     FlushCache(0);
-    decompress_wad(D_0018CB20_lui.unk5C, (int)D_0018CB20_lui.rec);
+    decompress_wad(D_0018CB20_lui.source_end, (int)D_0018CB20_lui.rec);
     FlushCache(0);
 
     rec = D_0018CB20_lui.rec;
-    D_0018CB20_lui.unk38 = 0;
+    D_0018CB20_lui.frame = 0;
     cp = rec->part_off;
-    D_0018CB20_lui.unk40 = rec->flags;
-    pc = rec->part_count;
+    D_0018CB20_lui.end = rec->end_time;
+    pc = rec->subtitles_off;
     D_0018CB20_lui.unk48 = rec->pad08;
     D_0018CB20_lui.num_parts = rec->num_parts;
-    D_0018CB20_lui.unk54 = (int)rec + rec->end_off;
+    D_0018CB20_lui.frames = (int)rec + rec->keys_off;
     if (pc < 0x400) {
-        D_0018CB20_lui.unk4C = 0;
+        D_0018CB20_lui.subs = 0;
     } else {
-        D_0018CB20_lui.unk4C = (int)rec + pc;
+        D_0018CB20_lui.subs = (int)rec + pc;
     }
 
     for (i = 0; i < D_0018CB20_lui.num_parts; i++) {

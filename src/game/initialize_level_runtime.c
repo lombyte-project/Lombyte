@@ -71,8 +71,8 @@ typedef struct {
 
 typedef struct {
     u8  pad0[4];
-    s32 unk4;
-    s32 unk8;
+    s32 ring_start; /* 0x04: memory slot 1 (calculate_ring_buffer_bounds) */
+    s32 ring_end;   /* 0x08: memory slot 2 */
     u8  padC[8];
     u8 *buffer;
     s32 unk18;
@@ -80,8 +80,8 @@ typedef struct {
 
 typedef struct {
     u8  pad0[0x58];
-    s32 unk58;
-    s32 unk5C;
+    s32 source_begin; /* 0x58 */
+    s32 source_end;   /* 0x5C */
     s32 chunks[70];
 } SceneInfo;
 
@@ -293,8 +293,8 @@ void initialize_level_runtime(void) {
     scene_offsets = header->scenes;
     workspace_offset = current_vu_chain - 0x60000;
     scene_offset = &scene_offsets[level_render_state.scene_mode];
-    render_sequence.unk58 = D_001940C0.unk4 + workspace_offset;
-    render_sequence.unk5C = D_001940C0.unk8 + workspace_offset;
+    render_sequence.source_begin = D_001940C0.ring_start + workspace_offset;
+    render_sequence.source_end = D_001940C0.ring_end + workspace_offset;
     current_vu_chain = workspace_offset;
     scene_chunk = (Chunk *)(data_base + scene_offsets[level_render_state.scene_mode]);
     /* The archive list is terminated by a zero size and the resident table holds 70 entries. */
