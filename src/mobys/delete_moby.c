@@ -4,7 +4,7 @@
 
 struct MobyRef {
     u8  pad_0[0x38];
-    s64 unk38;
+    s64 spawn_frame;
 };
 
 extern s32 mark_moby_for_removal() __asm__("func_0020C828");
@@ -16,6 +16,6 @@ s32 delete_moby(struct MobyRef *moby) {
         return 0;
     }
     mark_moby_for_removal();
-    moby->unk38 = (s64)world_update_time;
+    moby->spawn_frame = (s64)world_update_time;
     return 0;
 }
