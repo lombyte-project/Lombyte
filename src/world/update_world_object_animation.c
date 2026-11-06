@@ -8,40 +8,40 @@
 
 extern void FlushCache(int);
 
-struct PartList {
+struct CutsceneMobyClass {
     unsigned char pad00[6];
-    unsigned char flag; /* 0x06 */
+    unsigned char metal_count; /* 0x06 */
     unsigned char pad07[5];
-    unsigned char used; /* 0x0C */
+    unsigned char seq_count; /* 0x0C */
     unsigned char pad0D[0x3B];
-    int           entries[1]; /* 0x48 */
+    int           seqs[1]; /* 0x48 */
 };
 
-struct ColorSrc {
+struct LightsSrc {
     unsigned char pad00[0x38];
-    unsigned long color; /* 0x38 */
+    unsigned long lights; /* 0x38 */
 };
 
 struct Moby {
-    unsigned char    pad00[0x24];
-    struct PartList *parts; /* 0x24 */
-    unsigned char    pad28[0xA];
-    unsigned short   unk32; /* 0x32 */
-    unsigned short   unk34; /* 0x34 */
-    unsigned char    pad36[2];
-    unsigned long    color; /* 0x38 */
-    unsigned char    pad40[8];
-    int              attach; /* 0x48 */
-    unsigned char    pad4C[6];
-    unsigned char    idx;  /* 0x52 */
-    unsigned char    slot; /* 0x53 */
-    unsigned char    pad54[0x1E];
-    unsigned char    flag72; /* 0x72 */
-    unsigned char    flag73; /* 0x73 */
-    unsigned char    pad74[4];
-    int              model; /* 0x78 */
-    unsigned char    pad7C[0x18];
-    int              unk94; /* 0x94 */
+    unsigned char             pad00[0x24];
+    struct CutsceneMobyClass *pclass; /* 0x24 */
+    unsigned char             pad28[0xA];
+    unsigned short            draw_dist; /* 0x32 */
+    unsigned short            flags;     /* 0x34 */
+    unsigned char             pad36[2];
+    unsigned long             lights; /* 0x38 */
+    unsigned char             pad40[8];
+    int                       attach; /* 0x48 */
+    unsigned char             pad4C[6];
+    unsigned char             seq;      /* 0x52 */
+    unsigned char             prev_seq; /* 0x53 */
+    unsigned char             pad54[0x1E];
+    unsigned char             lod_dist;    /* 0x72 */
+    unsigned char             metal_alpha; /* 0x73 */
+    unsigned char             pad74[4];
+    int                       pvars; /* 0x78 */
+    unsigned char             pad7C[0x18];
+    int                       collision; /* 0x94 */
 };
 
 struct ModelRec {
@@ -126,26 +126,26 @@ void update_world_object_animation(void *unused_arg) {
         mob = D_0018CB20_lui.slots[i];
         if (mob == 0) {
             mob = create_moby(id);
-            idx = mob->parts->used;
-            mob->parts->used = idx + 1;
-            mob->idx = idx;
-            mob->slot = idx;
-            mob->unk32 = 0x1FF;
-            mob->unk34 |= 6;
-            mob->flag72 = 0xFF;
-            mob->unk94 = 0;
+            idx = mob->pclass->seq_count;
+            mob->pclass->seq_count = idx + 1;
+            mob->seq = idx;
+            mob->prev_seq = idx;
+            mob->draw_dist = 0x1FF;
+            mob->flags |= 6;
+            mob->lod_dist = 0xFF;
+            mob->collision = 0;
             if (hero.moby == 0) {
-                mob->color = 0x38383800000000;
+                mob->lights = 0x38383800000000;
             } else {
-                mob->color = ((struct ColorSrc *)hero.moby)->color;
+                mob->lights = ((struct LightsSrc *)hero.moby)->lights;
             }
-            if (mob->parts->flag) {
-                mob->flag73 = 0x18;
+            if (mob->pclass->metal_count) {
+                mob->metal_alpha = 0x18;
             }
             D_0018CB20_lui.slots[i] = mob;
         }
-        mob->model = endp;
-        mob->parts->entries[mob->idx] = sp;
+        mob->pvars = endp;
+        mob->pclass->seqs[mob->seq] = sp;
         for (k = 0; k < ((unsigned char *)sp)[0x10]; k++) {
             int *pointer_fixup_entries = (int *)((unsigned char *)sp + 0x1C);
 
