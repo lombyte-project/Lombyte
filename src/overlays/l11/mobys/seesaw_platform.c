@@ -29,10 +29,10 @@ extern float seesaw_fall_tilt_threshold_degrees_gp __asm__("D_L11_00161F84") __a
 
 /* Private variables of the tilting platform (seesaw_platform_update). */
 struct L11TiltVars {
-    u8  pad0[0x20];
-    u8  carry[0x3C]; /* 0x20: rider state for update_entity_matrix */
-    s32 unk5C;       /* 0x5C */
-    f32 spin;        /* 0x60: rot.y speed */
+    u8 pad0[0x20];
+    u8 carry[0x3C]; /* 0x20: rider state for update_entity_matrix */
+    s32 carry_flags; /* 0x5C: flags word of the carry record (carry + 0x3C; bit 4 read by transform_attachment_pose) */
+    f32 spin; /* 0x60: rot.y speed */
 };
 
 /* Tilting platform: rot.y springs back and is damped through its spin; the hero standing on it tilts it toward
@@ -52,7 +52,7 @@ void seesaw_platform_update(struct Moby *platform) {
 
     fast_vec_scale(&platform_translation_delta, &platform->pos, -1.0f);
     qcopy(&rot, &platform->rot);
-    platform_vars->unk5C = 1;
+    platform_vars->carry_flags = 1;
     spin = platform_vars->spin;
     /* two separate updates (not one sum): gives retail's FP register allocation */
     platform_vars->spin = spin + seesaw_tilt_feedback_gain_degrees_gp * 0.017453292f *
