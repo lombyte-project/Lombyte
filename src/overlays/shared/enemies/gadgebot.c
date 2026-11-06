@@ -24,6 +24,7 @@
 #include "rnc/overlay/shared/enemies/gadgebot_spawn_container.h"
 #include "rnc/overlay/shared/enemies/gadgebot_spawn_pad.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/mobys/ground_move_control.h"
 
 enum {
     GADGEBOT_ABSORPTION_DISABLED = 2
@@ -100,82 +101,59 @@ typedef struct GbMoby {
 } GbMoby;
 
 typedef struct {
-    int   collision_radius_1024ths;
-    float step_height;
-    float max_drop;
-    float max_climb;
-    float speed;
-    float turn_step;
-    float vertical_velocity;
-    float acceleration;
-    float brake;
-    float max_speed;
-    float heading_tolerance;
-    float arrive_distance;
-    float ground_probe_depth;
-    float unk34;
-    int   movement_option_flags;
-    float turn_spring;
-    float turn_damping;
-    float max_turn_step;
-    int   move_timer;
-    float move_heading;
-} GbCtl;
-
-typedef struct {
     int id[16];
     int node[16];
 } GbPaths;
 
 typedef struct {
-    float         follow_anchor[4] __attribute__((aligned(16)));
-    float         unk10;
-    float         unk14;
-    float         unk18;
-    char          p1C[0x14];
-    GbCtl         ctl;
-    char          knockback_motion[0x60];
-    float         home_position[4] __attribute__((aligned(16)));
-    float         stall_check_position[4] __attribute__((aligned(16)));
-    unsigned char scale_manipulator;
-    unsigned char scale_manipulator_attached;
-    char          p102[0x1E];
-    float         scale_manipulator_scale_x;
-    float         scale_manipulator_scale_y;
-    float         scale_manipulator_scale_z;
-    char          p12C[0x44];
-    GbMoby       *spawn_container_moby;
-    GbMoby       *target; /* nearest mine/box moby found by FUN_L06_002f2910 (0: none) */
-    char          p178[4];
-    float         approach_heading_offset;
-    char          p180[4];
-    int           follow_frame_count;
-    float         stall_hero_distance;
-    int           attack_target_search_frame;
-    short         unk190;
-    char          p192[2];
-    int           attack_substate_timer;
-    short         has_target;
-    short         target_searched; /* set once FUN_L06_002f2910 has run the search */
-    GbMoby       *collision_contact_moby;
-    char          p1A0[0x40];
-    GbPaths       paths;
-    char          p260[0x1C];
-    int           selected_path_slot;
-    char          p280[4];
-    float         collision_correction_speed;
-    float         ground_spring_velocity;
-    float         glow_pulse_angle;
-    char          p290[0x10];
-    int           follow_gate_moby_indices[8];
-    int           follow_gate_volumes[8];
-    GbVec         position_history_latest;
-    GbVec         position_history_previous;
-    float         ground_height_change_limit;
-    GbMoby       *absorption_owner_moby;
-    float         manipulator_scale;
-    int           target_group; /* moby group searched for targets (-1: whole level list) */
-    int           configured_path_count;
+    float                    follow_anchor[4] __attribute__((aligned(16)));
+    float                    unk10;
+    float                    unk14;
+    float                    unk18;
+    char                     p1C[0x14];
+    struct GroundMoveControl ctl;
+    char                     knockback_motion[0x60];
+    float                    home_position[4] __attribute__((aligned(16)));
+    float                    stall_check_position[4] __attribute__((aligned(16)));
+    unsigned char            scale_manipulator;
+    unsigned char            scale_manipulator_attached;
+    char                     p102[0x1E];
+    float                    scale_manipulator_scale_x;
+    float                    scale_manipulator_scale_y;
+    float                    scale_manipulator_scale_z;
+    char                     p12C[0x44];
+    GbMoby                  *spawn_container_moby;
+    GbMoby                  *target; /* nearest mine/box moby found by FUN_L06_002f2910 (0: none) */
+    char                     p178[4];
+    float                    approach_heading_offset;
+    char                     p180[4];
+    int                      follow_frame_count;
+    float                    stall_hero_distance;
+    int                      attack_target_search_frame;
+    short                    unk190;
+    char                     p192[2];
+    int                      attack_substate_timer;
+    short                    has_target;
+    short                    target_searched; /* set once FUN_L06_002f2910 has run the search */
+    GbMoby                  *collision_contact_moby;
+    char                     p1A0[0x40];
+    GbPaths                  paths;
+    char                     p260[0x1C];
+    int                      selected_path_slot;
+    char                     p280[4];
+    float                    collision_correction_speed;
+    float                    ground_spring_velocity;
+    float                    glow_pulse_angle;
+    char                     p290[0x10];
+    int                      follow_gate_moby_indices[8];
+    int                      follow_gate_volumes[8];
+    GbVec                    position_history_latest;
+    GbVec                    position_history_previous;
+    float                    ground_height_change_limit;
+    GbMoby                  *absorption_owner_moby;
+    float                    manipulator_scale;
+    int target_group; /* moby group searched for targets (-1: whole level list) */
+    int configured_path_count;
 } GbVars;
 
 typedef struct {
@@ -335,23 +313,23 @@ void gadgebot_update(GbMoby *moby) {
         GADGEBOT_INTERACTION_SEARCH_TARGET = 0,
         GADGEBOT_INTERACTION_APPROACH_TARGET = 1
     };
-    float   movement_displacement_output[4];
-    float   raised_position_snapshot[4];
-    float   save0[4];
-    float   save1[4];
-    float   vector_and_hit_scratch[4];
-    float   position_and_displacement_scratch[4];
-    float   temporary_position[4];
-    float   path_and_attack_vector[4];
-    float   attack_probe_near_position[4];
-    float   owner_radial_angle;
-    float   step;
-    GbVars *gadgebot_vars = moby->vars;
-    GbCtl  *movement_control;
-    int     flags;
-    float   hero_distance;
-    float   dz;
-    int     interaction_result;
+    float                     movement_displacement_output[4];
+    float                     raised_position_snapshot[4];
+    float                     save0[4];
+    float                     save1[4];
+    float                     vector_and_hit_scratch[4];
+    float                     position_and_displacement_scratch[4];
+    float                     temporary_position[4];
+    float                     path_and_attack_vector[4];
+    float                     attack_probe_near_position[4];
+    float                     owner_radial_angle;
+    float                     step;
+    GbVars                   *gadgebot_vars = moby->vars;
+    struct GroundMoveControl *movement_control;
+    int                       flags;
+    float                     hero_distance;
+    float                     dz;
+    int                       interaction_result;
 
     flags = 0;
     movement_control = &gadgebot_vars->ctl;
@@ -608,7 +586,7 @@ void gadgebot_update(GbMoby *moby) {
                         fast_arc_tan(position_and_displacement_scratch[0] - moby->pos[0],
                                      position_and_displacement_scratch[1] - moby->pos[1]),
                         gadgebot_vars->approach_heading_offset),
-                    &gadgebot_vars->ctl.turn_step,
+                    &gadgebot_vars->ctl.turn_velocity,
                     frame_scale_sq * 0.07f,
                     frame_scale_sq * 0.3f,
                     frame_time * 5.2359877f);
@@ -685,7 +663,7 @@ void gadgebot_update(GbMoby *moby) {
                 FUN_L00_00258278((char *)moby,
                                  fast_arc_tan(hero.motion.pos.f[0] - moby->pos[0],
                                               hero.motion.pos.f[1] - moby->pos[1]),
-                                 &gadgebot_vars->ctl.turn_step,
+                                 &gadgebot_vars->ctl.turn_velocity,
                                  frame_scale_sq * 0.05f,
                                  frame_scale_sq * 0.3f,
                                  frame_time * 3.4906585f);
@@ -703,7 +681,7 @@ void gadgebot_update(GbMoby *moby) {
         FUN_L00_00258278(
             (char *)moby,
             fast_arc_tan(hero.motion.pos.f[0] - moby->pos[0], hero.motion.pos.f[1] - moby->pos[1]),
-            &gadgebot_vars->ctl.turn_step,
+            &gadgebot_vars->ctl.turn_velocity,
             frame_scale_sq * 0.05f,
             frame_scale_sq * 0.3f,
             frame_time * 3.4906585f);
@@ -791,7 +769,7 @@ void gadgebot_update(GbMoby *moby) {
                 }
                 FUN_L00_00258278((char *)moby,
                                  approach_heading,
-                                 &gadgebot_vars->ctl.turn_step,
+                                 &gadgebot_vars->ctl.turn_velocity,
                                  frame_scale_sq * 0.07f,
                                  frame_scale_sq * 0.3f,
                                  frame_time * 5.2359877f);
@@ -905,7 +883,7 @@ void gadgebot_update(GbMoby *moby) {
                 FUN_L00_00258278((char *)moby,
                                  fast_arc_tan(vector_and_hit_scratch[0] - moby->pos[0],
                                               vector_and_hit_scratch[1] - moby->pos[1]),
-                                 &gadgebot_vars->ctl.turn_step,
+                                 &gadgebot_vars->ctl.turn_velocity,
                                  frame_scale_sq * 0.07f,
                                  frame_scale_sq * 0.3f,
                                  frame_time * 5.2359877f);

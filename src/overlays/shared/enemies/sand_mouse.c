@@ -24,6 +24,7 @@
 #include "rnc/overlay/shared/enemies/sand_mouse_data/update_hover_moby_steering.h"
 #include "rnc/overlay/shared/enemies/sand_mouse_data/sand_mouse_update.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/overlay/shared/mobys/ground_move_control.h"
 
 enum {
     SAND_MOUSE_INITIALIZE = 0,
@@ -68,14 +69,10 @@ typedef struct {
     void         *tgt;
 } Data;
 
+/* Ground movement shared by the sand mice; owner is the sand mouse using it. */
 typedef struct {
-    int   collision_radius_1024ths;
-    float step_height, max_drop, max_climb, speed, yaw_speed, vertical_velocity, acceleration,
-        brake, max_speed, heading_tolerance, arrive_distance, ground_probe_depth;
-    int   unk34, movement_option_flags;
-    float turn_spring, turn_damping, max_turn_step;
-    int   move_timer, move_heading;
-    void *owner;
+    struct GroundMoveControl move;
+    void                    *owner; /* 0x50 */
 } Mover;
 
 typedef struct {
@@ -129,7 +126,6 @@ extern int  rand(void) __asm__("FUN_001160d8");
 extern char sand_mouse_already_completed_message[] __asm__("D_L01_0020AE80");
 extern char sand_mouse_missing_start_house_message[] __asm__("D_L01_0020AEA0");
 extern void debug_print(char *) __asm__("FUN_001e93b0");
-extern void initialize_mover_2e3f20(void *) __asm__("FUN_L01_0026d930");
 extern void
 rig_probe_setup(void *, int, int *, float *, float *, int *) __asm__("FUN_L01_00263a28");
 extern void
@@ -557,28 +553,28 @@ void sand_mouse_update(struct Moby *moby) {
         }
         qcopy(sand_mouse_vars->start, ((float *)&moby->pos));
         qcopy(sand_mouse_vars->home, ((float *)&moby->pos));
-        initialize_mover_2e3f20((char *)&mover_2e3f20);
+        init_ground_move_control(&mover_2e3f20.move);
         {
             int   kind;
             float collision_probe_extent;
             int   flag;
             rig_probe_setup(moby, 0, &kind, va, &collision_probe_extent, &flag);
-            mover_2e3f20.yaw_speed = frame_scale * 0.4f;
-            mover_2e3f20.max_drop = 0.15f;
-            mover_2e3f20.max_climb = 0.15f;
-            mover_2e3f20.speed = frame_scale * 0.01f;
-            mover_2e3f20.max_speed = frame_time * 2.7f;
-            mover_2e3f20.acceleration = frame_scale * 0.01f;
-            mover_2e3f20.collision_radius_1024ths =
+            mover_2e3f20.move.turn_velocity = frame_scale * 0.4f;
+            mover_2e3f20.move.max_drop = 0.15f;
+            mover_2e3f20.move.max_climb = 0.15f;
+            mover_2e3f20.move.speed = frame_scale * 0.01f;
+            mover_2e3f20.move.max_speed = frame_time * 2.7f;
+            mover_2e3f20.move.acceleration = frame_scale * 0.01f;
+            mover_2e3f20.move.collision_radius_1024ths =
                 truncate_float_to_s32(collision_probe_extent * 1024.0f) + 1;
-            mover_2e3f20.movement_option_flags |= 8;
-            mover_2e3f20.step_height = 0.3f;
-            mover_2e3f20.ground_probe_depth = 0.005f;
-            mover_2e3f20.turn_spring = frame_time_sq * 11.519173f;
-            mover_2e3f20.turn_damping = frame_time_sq * 3.1415927f;
-            mover_2e3f20.max_turn_step = frame_time * 11.519173f;
-            mover_2e3f20.move_timer = scale_game_frames(4);
-            mover_2e3f20.heading_tolerance = 3.1415927f;
+            mover_2e3f20.move.movement_option_flags |= 8;
+            mover_2e3f20.move.step_height = 0.3f;
+            mover_2e3f20.move.ground_probe_depth = 0.005f;
+            mover_2e3f20.move.turn_spring = frame_time_sq * 11.519173f;
+            mover_2e3f20.move.turn_damping = frame_time_sq * 3.1415927f;
+            mover_2e3f20.move.max_turn_step = frame_time * 11.519173f;
+            mover_2e3f20.move.move_timer = scale_game_frames(4);
+            mover_2e3f20.move.heading_tolerance = 3.1415927f;
         }
         moby->state = SAND_MOUSE_WAIT_FOR_HERO_IN_VOLUME;
         moby->draw_dist = 0;
@@ -604,7 +600,7 @@ void sand_mouse_update(struct Moby *moby) {
                                                   hero_2e3f20->pos[1] - moby->pos.y);
                 approach_w(moby,
                            desired_facing_yaw,
-                           &mover_2e3f20.yaw_speed,
+                           &mover_2e3f20.move.turn_velocity,
                            frame_time_sq * 11.519173f,
                            frame_time_sq * 3.1415927f,
                            frame_time * 11.519173f);
@@ -621,7 +617,7 @@ void sand_mouse_update(struct Moby *moby) {
                             hero_2e3f20->helper->state != 0xFD) {
                             hero_2e3f20->helper->state = 1;
                         }
-                        *(void **)((char *)&mover_2e3f20 + 0x50) = moby;
+                        mover_2e3f20.owner = moby;
                         l01_hero_set_state(0x1F, 0);
                         set_hero_animation(0, 0, (float)scale_game_frames(6));
                         if (sand_mouse_vars->parent != -1) {
@@ -655,7 +651,7 @@ void sand_mouse_update(struct Moby *moby) {
                                           sand_mouse_vars->target[1] - moby->pos.y);
         approach_w(moby,
                    desired_facing_yaw,
-                   &mover_2e3f20.yaw_speed,
+                   &mover_2e3f20.move.turn_velocity,
                    frame_time_sq * 11.519173f,
                    frame_time_sq * 3.1415927f,
                    frame_time * 11.519173f);
@@ -668,7 +664,7 @@ void sand_mouse_update(struct Moby *moby) {
         }
         if (vector_distance_xy(((float *)&moby->pos), sand_mouse_vars->home) > 0.4f &&
             sand_mouse_vars->timer == 0) {
-            *(float *)((char *)&mover_2e3f20 + 4) = 0.7f;
+            mover_2e3f20.move.step_height = 0.7f;
             if (moby->prev_seq != 3) {
                 blend_moby_animation(moby, 3, 0, scale_game_frames(3));
             }
@@ -775,7 +771,7 @@ void sand_mouse_update(struct Moby *moby) {
                                           sand_mouse_vars->target[1] - moby->pos.y);
         approach_w(moby,
                    desired_facing_yaw,
-                   &mover_2e3f20.yaw_speed,
+                   &mover_2e3f20.move.turn_velocity,
                    frame_time_sq * 11.519173f,
                    frame_time_sq * 3.1415927f,
                    frame_time * 11.519173f);

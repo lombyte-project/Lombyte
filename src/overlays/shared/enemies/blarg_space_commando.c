@@ -15,6 +15,7 @@
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/game/interpolated_record.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/mobys/ground_move_control.h"
 
 /* Movement controller block at vars + 0xC0 (FUN_L01_0026d930 init, FUN_L00_00258b50 step). */
 enum {
@@ -34,17 +35,6 @@ enum {
 };
 
 typedef struct {
-    s32 collision_radius_1024ths;
-    f32 step_height;
-    f32 max_drop;
-    f32 max_climb;
-    u8  pad10[0x14];
-    f32 max_speed;
-    u8  pad28[0x10];
-    s32 flags; /* 0x38 */
-} MoveCtl;
-
-typedef struct {
     u8  pad0[0x18];
     u8  unk18;
     u8  unk19;
@@ -54,42 +44,42 @@ typedef struct {
 
 /* pvars of blarg_space_commando_update */
 typedef struct {
-    u8           pad0[0x20];
-    f32          unk20;
-    s16          unk24;
-    u8           pad26[2];
-    u8           unk28;
-    u8           unk29;
-    u8           pad2A[6];
-    f32          unk30;
-    u8           pad34[0xC];
-    Vec4         unk40;
-    u8           pad50[8];
-    u8           unk58;
-    u8           pad59;
-    u8           unk5A;
-    u8           pad5B[5];
-    Vec4         vel; /* 0x60 */
-    u8           pad70[0x50];
-    MoveCtl      ctl; /* 0xC0 */
-    u8           padFC[0x64];
-    struct Moby *target; /* 0x160 */
-    s32          target_selection_status;
-    u8           pad168[8];
-    Vec4         home; /* 0x170 */
-    u8           pad180[8];
-    s32          pursuit_timer;
-    f32          turn_speed; /* 0x18C */
-    u8           pad190[0xC];
-    s32          timer; /* 0x19C */
-    u8           pad1A0[4];
-    s32          path;   /* 0x1A4 */
-    s32          route;  /* 0x1A8 */
-    s32          volume; /* 0x1AC */
-    u8           pad1B0[0x50];
-    Vec4         melee_sweep_previous_position;
-    u8           pad210[0x210];
-    u8           unk420[1];
+    u8                       pad0[0x20];
+    f32                      unk20;
+    s16                      unk24;
+    u8                       pad26[2];
+    u8                       unk28;
+    u8                       unk29;
+    u8                       pad2A[6];
+    f32                      unk30;
+    u8                       pad34[0xC];
+    Vec4                     unk40;
+    u8                       pad50[8];
+    u8                       unk58;
+    u8                       pad59;
+    u8                       unk5A;
+    u8                       pad5B[5];
+    Vec4                     vel; /* 0x60 */
+    u8                       pad70[0x50];
+    struct GroundMoveControl ctl; /* 0xC0 */
+    u8                       pad110[0x50];
+    struct Moby             *target; /* 0x160 */
+    s32                      target_selection_status;
+    u8                       pad168[8];
+    Vec4                     home; /* 0x170 */
+    u8                       pad180[8];
+    s32                      pursuit_timer;
+    f32                      turn_speed; /* 0x18C */
+    u8                       pad190[0xC];
+    s32                      timer; /* 0x19C */
+    u8                       pad1A0[4];
+    s32                      path;   /* 0x1A4 */
+    s32                      route;  /* 0x1A8 */
+    s32                      volume; /* 0x1AC */
+    u8                       pad1B0[0x50];
+    Vec4                     melee_sweep_previous_position;
+    u8                       pad210[0x210];
+    u8                       unk420[1];
 } Moby1068Vars;
 
 extern f32 D_L06_00161FA8 __attribute__((sda));
@@ -106,7 +96,7 @@ extern f32   D_L06_0015F580[] MACRO_ADDR;
 extern void moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern s32  move_moby_with_ground_and_collision_checks(
-     struct Moby *, MoveCtl *, void *, void *, f32) __asm__("FUN_L00_00258b50");
+     struct Moby *, struct GroundMoveControl *, void *, void *, f32) __asm__("FUN_L00_00258b50");
 extern void
 make_hit_descriptor(ShotInfo *, struct Moby *, s32, void *, f32) __asm__("FUN_L00_00259888");
 extern void sweep_hit_segment(
@@ -138,7 +128,6 @@ resolve_point_path_segment_xy_clearance(s32, void *, void *, f32) __asm__("FUN_L
 extern void FUN_L00_00263ac8(struct Moby *, s32, void *, f32);
 extern void
 FUN_L00_00263fd8(struct Moby *, s32, void *, void *, s32, s32, f32, f32 *, f32 *, f32 *);
-extern void FUN_L01_0026d930(MoveCtl *);
 extern void FUN_L06_002feb40_u(struct Moby *) __asm__("FUN_L06_002feb40");
 extern void FUN_L06_002ff100_u(struct Moby *) __asm__("FUN_L06_002ff100");
 
@@ -177,14 +166,14 @@ void blarg_space_commando_update(struct Moby *moby) {
         blarg_commando_state->unk24 = 2;
         blarg_commando_state->unk58 = truncate_float_to_s32(12.0f);
         blarg_commando_state->unk5A = truncate_float_to_s32(13.6f);
-        FUN_L01_0026d930(&blarg_commando_state->ctl);
+        init_ground_move_control(&blarg_commando_state->ctl);
         blarg_commando_state->ctl.max_drop = 2.0f;
         blarg_commando_state->ctl.max_climb = 0.5f;
         blarg_commando_state->ctl.collision_radius_1024ths =
             truncate_float_to_s32(D_L06_00161FA8 * 307.2f);
         blarg_commando_state->ctl.step_height = D_L06_00161FA8 * 0.3f;
         blarg_commando_state->ctl.max_speed = movement_max_horizontal_speed_gp * frame_time;
-        blarg_commando_state->ctl.flags |= 8;
+        blarg_commando_state->ctl.movement_option_flags |= 8;
         qcopy(&blarg_commando_state->home, &moby->pos);
         moby->state = BLARG_COMMANDO_STATE_SELECT_ACTION;
         break;

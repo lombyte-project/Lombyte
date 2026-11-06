@@ -23,6 +23,7 @@
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/mobys/resolve_moby_hit_response.h"
 #include "rnc/overlay/shared/world/level_path.h"
+#include "rnc/overlay/shared/mobys/ground_move_control.h"
 
 typedef struct Moby Moby;
 
@@ -36,74 +37,61 @@ typedef struct {
 } Hero302618;
 
 typedef struct Paratrooper302618 {
-    u8            pad0[0x20];
-    float         health; /* 0x20: hit damage is taken from it */
-    short         f24;
-    u8            pad26[0x2];
-    unsigned char f28;
-    unsigned char f29;
-    u8            pad2A[0x4];
-    unsigned char removal_status;
-    u8            pad2F[0x9];
-    s32           unk38;
-    u8            pad3C[0x1c];
-    unsigned char f58;
-    u8            pad59[0x1];
-    unsigned char f5A;
-    u8            pad5B[0x5];
-    u8            trooper_anim[0x7];
-    u8            hit_flash_red;
-    u8            pad68[0x8];
-    u8            motion[0x10];
-    f32           knockback_gravity;
-    u8            pad84[0x4];
-    f32           knockback_speed;
-    f32           knockback_z_speed;
-    s32           knockback_collision_radius;
-    s32           knockback_motion_flags;
-    f32           knockback_collision_z_offset;
-    u8            pad9C[0x11];
-    u8            unkAD;
-    u8            padAE[0x12];
-    f32           knockback_apex_animation_frame;
-    f32           knockback_landing_animation_frame;
-    u8            padC8[0x8];
-    int           fD0;
-    u8            padD4[0x4];
-    float         fD8;
-    float         fDC;
-    float         fE0;
-    u8            padE4[0x10];
-    f32           unkF4;
-    float         fF8;
-    float         fFC;
-    u8            pad100[0xc];
-    float         f10C;
-    float         f110;
-    float         f114;
-    u8            pad118[0x8];
-    u8            path_search_point[0x8];
-    f32           path_search_point_z;
-    u8            pad12C[0x34];
-    char         *target_moby;
-    int           target_selection_status;
-    u8            pad168[0x68];
-    int           wake_path_index;
-    int           jump_path_index;
-    s16           target_range_boost_timer;
-    short         hop_count;
-    f32           target_range;
-    u8            pad1E0[0x4];
-    f32           base_target_range;
-    float         projectile_pitch_divisor;
-    int           projectile_fire_timer;
-    int           waypoint_transition_timer;
-    int           destination_waypoint_index;
-    char         *bone_attachment_moby;
-    int           patrol_path_index;
-    u8            pad200[0xc];
-    short         patrol_waypoint_step;
-    short         projectile_pattern_index;
+    u8                       pad0[0x20];
+    float                    health; /* 0x20: hit damage is taken from it */
+    short                    f24;
+    u8                       pad26[0x2];
+    unsigned char            f28;
+    unsigned char            f29;
+    u8                       pad2A[0x4];
+    unsigned char            removal_status;
+    u8                       pad2F[0x9];
+    s32                      unk38;
+    u8                       pad3C[0x1c];
+    unsigned char            f58;
+    u8                       pad59[0x1];
+    unsigned char            f5A;
+    u8                       pad5B[0x5];
+    u8                       trooper_anim[0x7];
+    u8                       hit_flash_red;
+    u8                       pad68[0x8];
+    u8                       motion[0x10];
+    f32                      knockback_gravity;
+    u8                       pad84[0x4];
+    f32                      knockback_speed;
+    f32                      knockback_z_speed;
+    s32                      knockback_collision_radius;
+    s32                      knockback_motion_flags;
+    f32                      knockback_collision_z_offset;
+    u8                       pad9C[0x11];
+    u8                       unkAD;
+    u8                       padAE[0x12];
+    f32                      knockback_apex_animation_frame;
+    f32                      knockback_landing_animation_frame;
+    u8                       padC8[0x8];
+    struct GroundMoveControl move_control; /* 0xD0 */
+    u8                       path_search_point[0x8];
+    f32                      path_search_point_z;
+    u8                       pad12C[0x34];
+    char                    *target_moby;
+    int                      target_selection_status;
+    u8                       pad168[0x68];
+    int                      wake_path_index;
+    int                      jump_path_index;
+    s16                      target_range_boost_timer;
+    short                    hop_count;
+    f32                      target_range;
+    u8                       pad1E0[0x4];
+    f32                      base_target_range;
+    float                    projectile_pitch_divisor;
+    int                      projectile_fire_timer;
+    int                      waypoint_transition_timer;
+    int                      destination_waypoint_index;
+    char                    *bone_attachment_moby;
+    int                      patrol_path_index;
+    u8                       pad200[0xc];
+    short                    patrol_waypoint_step;
+    short                    projectile_pattern_index;
 } Paratrooper302618;
 
 extern float D_0015ED6C;
@@ -136,7 +124,6 @@ extern float turn302618(void *, float, void *, float, float, float) __asm__("FUN
 extern void  FUN_L00_00263ac8_c(float, void *, int, void *) __asm__("FUN_L00_00263ac8");
 extern void  FUN_L00_0025a120_c(void *) __asm__("FUN_L00_0025a120");
 extern void  debug_print(char *, int) __asm__("FUN_001e93b0");
-extern void  FUN_L01_0026d930_c(void *) __asm__("FUN_L01_0026d930");
 extern void  step_mover_2e3f20(void *, void *, void *, void *) __asm__("FUN_L00_00259028");
 extern void  FUN_L00_0025f730(void *, float);
 extern void
@@ -249,15 +236,17 @@ void blarg_paratrooper_update(char *moby) {
             debug_print(paratrooper_invalid_jump_path_format, (*(short *)((char *)(moby) + 0xB2)));
             goto delete_moby;
         }
-        FUN_L01_0026d930_c((char *)paratrooper_private_state + 0xD0);
-        paratrooper_private_state->fDC = 0.5f;
-        paratrooper_private_state->fD8 = 0.5f;
-        paratrooper_private_state->fD0 = truncate_float_to_s32(512.0f);
+        init_ground_move_control(&paratrooper_private_state->move_control);
+        paratrooper_private_state->move_control.max_climb = 0.5f;
+        paratrooper_private_state->move_control.max_drop = 0.5f;
+        paratrooper_private_state->move_control.collision_radius_1024ths =
+            truncate_float_to_s32(512.0f);
         turn_rate = D_0015ED70 * 6.981317f;
-        paratrooper_private_state->f110 = paratrooper_private_state->f10C = turn_rate;
-        paratrooper_private_state->f114 = D_0015ED6C * 8.726646f;
-        paratrooper_private_state->fF8 = 0.34906584f;
-        paratrooper_private_state->fFC = 0.2f;
+        paratrooper_private_state->move_control.turn_damping =
+            paratrooper_private_state->move_control.turn_spring = turn_rate;
+        paratrooper_private_state->move_control.max_turn_step = D_0015ED6C * 8.726646f;
+        paratrooper_private_state->move_control.heading_tolerance = 0.34906584f;
+        paratrooper_private_state->move_control.arrive_distance = 0.2f;
         if (random302618() & 1)
             (*(unsigned short *)((char *)(moby) + 0x34)) |= 0x8000;
         qcopy(&MOBY(moby)->pos,
@@ -287,19 +276,19 @@ void blarg_paratrooper_update(char *moby) {
         if (vector_distance_xy(&MOBY(moby)->pos,
                                path + 0x10 +
                                    paratrooper_private_state->destination_waypoint_index * 16) <
-            paratrooper_private_state->fE0) {
+            paratrooper_private_state->move_control.speed) {
             short direction = paratrooper_private_state->patrol_waypoint_step;
             int   index = paratrooper_private_state->destination_waypoint_index + direction;
             paratrooper_private_state->destination_waypoint_index = index;
             if (index >= (*(int *)((char *)(path) + 0)) || index < 0) {
-                paratrooper_private_state->fE0 = 0.0f;
+                paratrooper_private_state->move_control.speed = 0.0f;
                 paratrooper_private_state->patrol_waypoint_step = -direction;
                 paratrooper_private_state->destination_waypoint_index =
                     index + 2 * paratrooper_private_state->patrol_waypoint_step;
             }
         }
         step_mover_2e3f20(moby,
-                          (char *)paratrooper_private_state + 0xD0,
+                          &paratrooper_private_state->move_control,
                           path + 0x10 + paratrooper_private_state->destination_waypoint_index * 16,
                           pos);
         if (target &&
@@ -322,12 +311,12 @@ void blarg_paratrooper_update(char *moby) {
             &MOBY(moby)->pos,
             ((char *)l08_paths[paratrooper_private_state->jump_path_index]) + 0x10 +
                 paratrooper_private_state->destination_waypoint_index * 16);
-        if (distance < 1.0f || distance < paratrooper_private_state->fE0) {
-            paratrooper_private_state->fE0 = 0.0f;
+        if (distance < 1.0f || distance < paratrooper_private_state->move_control.speed) {
+            paratrooper_private_state->move_control.speed = 0.0f;
             (*(unsigned char *)((char *)(moby) + 0x20)) = 3;
         } else {
             step_mover_2e3f20(moby,
-                              (char *)paratrooper_private_state + 0xD0,
+                              &paratrooper_private_state->move_control,
                               ((char *)l08_paths[paratrooper_private_state->jump_path_index]) +
                                   0x10 + paratrooper_private_state->destination_waypoint_index * 16,
                               pos);
@@ -655,7 +644,7 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
         float timer_scale = D_L08_001621B0 * frame_time;
         ((Moby *)moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) *
                                 l08_paratrooper_model_scale_multiplier;
-        paratrooper_instance_state->unkF4 = timer_scale;
+        paratrooper_instance_state->move_control.max_speed = timer_scale;
     }
 
     if (paratrooper_instance_state->bone_attachment_moby == 0) {

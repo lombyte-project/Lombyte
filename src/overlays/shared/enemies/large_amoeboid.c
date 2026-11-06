@@ -22,6 +22,7 @@
 #include "rnc/overlay/shared/enemies/large_amoeboid_data/spawn_amoeboid_movement_particles.h"
 #include "rnc/overlay/shared/enemies/large_amoeboid_data/spawn_amoeboid_burst_sparks_2.h"
 #include "rnc/overlay/shared/enemies/large_amoeboid_data/spawn_amoeboid_burst_sparks.h"
+#include "rnc/overlay/shared/mobys/ground_move_control.h"
 
 enum {
     LARGE_AMOEBOID_INITIALIZE = 0,
@@ -41,65 +42,59 @@ enum {
 };
 
 typedef struct LargeAmoeboidVars {
-    u8    pad0[0x20];
-    f32   health;
-    u8    pad24[0x5];
-    s8    unk29;
-    u8    pad2A[0x6];
-    f32   unk30;
-    u8    pad34[0x4];
-    s32   unk38;
-    u8    pad3C[0x4];
-    u8    move_displacement[0x18];
-    s8    unk58;
-    u8    pad59[0x1];
-    s8    unk5A;
-    u8    pad5B[0x5];
-    u8    motion[0x10];
-    f32   knockback_gravity;
-    u8    pad74[0xc];
-    s32   knockback_collision_radius;
-    s32   knockback_motion_flags;
-    f32   knockback_collision_z_offset;
-    u8    pad8C[0x11];
-    s8    unk9D;
-    u8    pad9E[0x8a];
-    u16   unk128;
-    u8    pad12A[0x6];
-    void *unk130;
-    u8    pad134[0x3c];
-    s32   move_control;
-    u8    pad174[0x4];
-    f32   move_max_drop;
-    f32   move_max_climb;
-    u8    pad180[0x14];
-    f32   move_max_speed;
-    u8    pad198[0x28];
-    f32   path_search_point[4];
-    u8    pad1D0[0x30];
-    char *target;
-    s32   target_selection_status;
-    u8    pad208[0x8];
-    f32   home_pos[4]; /* 0x210: position at spawn */
-    u8    turn_velocity[0x4];
-    f32   base_target_search_radius;
-    f32   effective_target_search_radius;
-    s32   pursuit_timer;
-    s32   starts_active;
-    f32   path_heading_offset;
-    u8    pad238[0x4];
-    f32   move_speed;
-    s32   path_ids;
-    s32   path_index;
-    s32   alternate_target_list_index;
-    s32   target_region_path_index;
-    f32   size_scale; /* 0x250: 1, 0.7 or 0.49 by amoeboid size */
-    f32   glow_cycle_phase;
-    s32   removal_height_table_index;
-    s32   activation_volume;
-    s32   target_search_gate_moby_index;
-    u8    pad264[0xc];
-    u8    unk270[0x4];
+    u8                       pad0[0x20];
+    f32                      health;
+    u8                       pad24[0x5];
+    s8                       unk29;
+    u8                       pad2A[0x6];
+    f32                      unk30;
+    u8                       pad34[0x4];
+    s32                      unk38;
+    u8                       pad3C[0x4];
+    u8                       move_displacement[0x18];
+    s8                       unk58;
+    u8                       pad59[0x1];
+    s8                       unk5A;
+    u8                       pad5B[0x5];
+    u8                       motion[0x10];
+    f32                      knockback_gravity;
+    u8                       pad74[0xc];
+    s32                      knockback_collision_radius;
+    s32                      knockback_motion_flags;
+    f32                      knockback_collision_z_offset;
+    u8                       pad8C[0x11];
+    s8                       unk9D;
+    u8                       pad9E[0x8a];
+    u16                      unk128;
+    u8                       pad12A[0x6];
+    void                    *unk130;
+    u8                       pad134[0x3c];
+    struct GroundMoveControl move_control; /* 0x170 */
+    f32                      path_search_point[4];
+    u8                       pad1D0[0x30];
+    char                    *target;
+    s32                      target_selection_status;
+    u8                       pad208[0x8];
+    f32                      home_pos[4]; /* 0x210: position at spawn */
+    u8                       turn_velocity[0x4];
+    f32                      base_target_search_radius;
+    f32                      effective_target_search_radius;
+    s32                      pursuit_timer;
+    s32                      starts_active;
+    f32                      path_heading_offset;
+    u8                       pad238[0x4];
+    f32                      move_speed;
+    s32                      path_ids;
+    s32                      path_index;
+    s32                      alternate_target_list_index;
+    s32                      target_region_path_index;
+    f32                      size_scale; /* 0x250: 1, 0.7 or 0.49 by amoeboid size */
+    f32                      glow_cycle_phase;
+    s32                      removal_height_table_index;
+    s32                      activation_volume;
+    s32                      target_search_gate_moby_index;
+    u8                       pad264[0xc];
+    u8                       unk270[0x4];
 } LargeAmoeboidVars;
 
 typedef int u128_2F0040 __attribute__((mode(TI)));
@@ -137,7 +132,6 @@ void        spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) __asm__(
 
 extern void spawn_amoeboid_burst_sparks(unsigned char *, float *) __asm__("FUN_L01_002ef770");
 extern int  follow_path(int *, int, int, float, void *, void *, void *) __asm__("FUN_L01_00276fe8");
-extern void FUN_L01_0026d930(void *);
 extern void move_moby_with_ground_and_collision_checks(
     void *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
 extern int              path_8808(int, void *, void *, void *) __asm__("FUN_L00_00261b48");
@@ -305,13 +299,13 @@ void large_amoeboid_update(unsigned char *moby) {
         }
         if (large_amoeboid_vars->base_target_search_radius == 0.0f)
             large_amoeboid_vars->base_target_search_radius = 15.0f;
-        FUN_L01_0026d930(&large_amoeboid_vars->move_control);
-        large_amoeboid_vars->move_max_climb = 2.0f;
-        large_amoeboid_vars->move_max_drop = 2.0f;
+        init_ground_move_control(&large_amoeboid_vars->move_control);
+        large_amoeboid_vars->move_control.max_climb = 2.0f;
+        large_amoeboid_vars->move_control.max_drop = 2.0f;
         result = truncate_float_to_s32(large_amoeboid_vars->size_scale * 0.8f * 1024.0f);
         angle = large_amoeboid_vars->move_speed * frame_time_gp;
-        large_amoeboid_vars->move_control = result;
-        large_amoeboid_vars->move_max_speed = angle;
+        large_amoeboid_vars->move_control.collision_radius_1024ths = result;
+        large_amoeboid_vars->move_control.max_speed = angle;
         if (large_amoeboid_vars->starts_active != 0) {
             MOBY(moby)->state = LARGE_AMOEBOID_TRY_ACQUIRE_TARGET_PATH;
             MOBY(moby)->flags |= 0x1000;
@@ -357,7 +351,7 @@ void large_amoeboid_update(unsigned char *moby) {
                 blend_moby_animation(moby, 1, 0, 5);
             return;
         }
-        large_amoeboid_vars->move_max_speed =
+        large_amoeboid_vars->move_control.max_speed =
             large_amoeboid_vars->move_speed * 0.5f * frame_time_gp;
         if (MOBY(moby)->prev_seq != 1)
             blend_moby_animation(moby, 1, 0, 5);
@@ -397,7 +391,7 @@ void large_amoeboid_update(unsigned char *moby) {
                 angle = random_float_between(-0.34906584f, 0.34906584f);
                 distance = large_amoeboid_vars->move_speed * frame_time_gp;
                 large_amoeboid_vars->path_heading_offset = angle;
-                large_amoeboid_vars->move_max_speed = distance;
+                large_amoeboid_vars->move_control.max_speed = distance;
             } else {
                 large_amoeboid_vars->target_selection_status = 2;
             }
@@ -458,7 +452,7 @@ void large_amoeboid_update(unsigned char *moby) {
         distance = vector_distance_xy(&MOBY(moby)->pos, target_position);
         if (distance < large_amoeboid_path_lunge_distance_threshold_gp) {
             MOBY(moby)->state = LARGE_AMOEBOID_LUNGE_AT_TARGET;
-            large_amoeboid_vars->move_max_speed =
+            large_amoeboid_vars->move_control.max_speed =
                 (large_amoeboid_vars->move_speed + large_amoeboid_vars->move_speed) * frame_time_gp;
             if (MOBY(moby)->prev_seq != 2)
                 blend_moby_animation(moby, 2, 0, scale_game_frames(10));
@@ -549,7 +543,8 @@ void large_amoeboid_update(unsigned char *moby) {
             MOBY(moby)->state = LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESUMING_PATH;
             if (MOBY(moby)->prev_seq != 3)
                 blend_moby_animation(moby, 3, 0, scale_game_frames(10));
-            large_amoeboid_vars->move_max_speed = large_amoeboid_vars->move_speed * frame_time_gp;
+            large_amoeboid_vars->move_control.max_speed =
+                large_amoeboid_vars->move_speed * frame_time_gp;
         }
         break;
     }
@@ -624,7 +619,7 @@ void large_amoeboid_update(unsigned char *moby) {
                                    move);
             if (path_hit != 0) {
                 FUN_0022da68(4, 0, (char *)moby);
-                large_amoeboid_vars->move_max_speed =
+                large_amoeboid_vars->move_control.max_speed =
                     large_amoeboid_vars->move_speed * frame_time_gp;
                 MOBY(moby)->state = LARGE_AMOEBOID_WAIT_FOR_ANIMATION_BEFORE_RESTARTING_PATH;
                 if (MOBY(moby)->prev_seq != 5)
@@ -648,7 +643,7 @@ void large_amoeboid_update(unsigned char *moby) {
             angle = random_float_between(-0.34906584f, 0.34906584f);
             distance = large_amoeboid_vars->move_speed * frame_time_gp;
             large_amoeboid_vars->path_heading_offset = angle;
-            large_amoeboid_vars->move_max_speed = distance;
+            large_amoeboid_vars->move_control.max_speed = distance;
         }
         break;
     case LARGE_AMOEBOID_WAIT_FOR_ACTIVATION_VOLUME:
