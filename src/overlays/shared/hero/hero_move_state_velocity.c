@@ -1309,7 +1309,7 @@ void launch_hero_wrench(void) {
     clear_u64_value(aim_origin_or_euler_angles);
     euler_rotation_basis(item_rotation_matrix, aim_origin_or_euler_angles);
     if (aimed) {
-        aim_origin_or_euler_angles[0] = l00_camera.unk150;
+        aim_origin_or_euler_angles[0] = l00_camera.rotation_x;
         aim_origin_or_euler_angles[1] = l00_camera.pitch;
         aim_origin_or_euler_angles[2] = l00_camera.yaw;
         euler_rotation_basis(cam_mat, aim_origin_or_euler_angles);

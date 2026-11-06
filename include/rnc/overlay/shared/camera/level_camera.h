@@ -11,12 +11,13 @@ struct UpdateCam;
    position, pitch and yaw. A shot sets the two amount/frames pairs (0.03 for
    a few frames), a hard landing sets the first one (0.2 for 40 frames). */
 typedef struct LevelCamera {
-    f32               unk0[12]; /* 0x000: a 3x4 basis; shots copy it as their launch rotation */
+    f32 view_matrix
+        [12]; /* 0x000: GameCamera.view_matrices, a 3x4 basis; shots copy it as their launch rotation */
     u8                pad30[0x110];
-    Vec4              pos; /* 0x140 */
-    f32               unk150;
-    f32               pitch; /* 0x154 */
-    f32               yaw;   /* 0x158 */
+    Vec4              pos;        /* 0x140 */
+    f32               rotation_x; /* 0x150: GameCamera.rotation x; pitch and yaw are its y and z */
+    f32               pitch;      /* 0x154 */
+    f32               yaw;        /* 0x158 */
     u8                pad15C[0x4];
     f32               shake_amount;      /* 0x160: the same two channels as GameCamera.shake */
     f32               shake_offset;      /* 0x164 */

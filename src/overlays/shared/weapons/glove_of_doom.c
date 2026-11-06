@@ -191,7 +191,7 @@ void compute_glove_of_doom_throw_velocity(struct Moby *moby,
     float       *pos = throw_origin;
 
     *(u128 *)pos = grip->q;
-    copy_matrix3x4(basis, l00_camera.unk0);
+    copy_matrix3x4(basis, l00_camera.view_matrix);
     transpose_rotation_matrix(matrix, basis);
     held = throw_carrier_vars->held;
     if (held == 0)

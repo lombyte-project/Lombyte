@@ -109,7 +109,7 @@ void decoy_glove_aim_throw(int collision_arg, Moby_2D3608 *carrier, float *posit
     float *anchor_ptr = anchor;
 
     *(u128_2D3608 *)anchor_ptr = *(u128_2D3608 *)position;
-    copy_matrix3x4(rotation, l00_camera.unk0);
+    copy_matrix3x4(rotation, l00_camera.view_matrix);
     transpose_rotation_matrix(inverse, rotation);
     target = carrier->target;
     if (target == 0)
