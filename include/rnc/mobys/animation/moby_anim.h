@@ -8,7 +8,7 @@
 typedef struct {
     char          _pad00[0x10];
     unsigned char nframes; /* 0x10 */
-    unsigned char unk11;   /* 0x11: copied into MobyAnim.unk7C by a blend */
+    unsigned char sound;   /* 0x11: copied into MobyAnim.seq_sound by a blend */
 } AnimSeq;
 
 typedef struct {
@@ -33,7 +33,7 @@ typedef struct {
     char          _pad6C[4];
     unsigned char unk70; /* 0x70: Moby.anim_flags; a blend clears bit 1 */
     char          _pad71[0xB];
-    unsigned char unk7C; /* 0x7C */
+    unsigned char seq_sound; /* 0x7C */
     char          _pad7D[0x28];
     unsigned char saved_seq; /* 0xA5: seq before a blend parked the pose */
     char          _padA6[0x4A];

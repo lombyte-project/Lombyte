@@ -49,7 +49,7 @@ void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blen
     moby->anim_time = 0.0f;
     moby->unk70 = (unsigned char)(moby->unk70 & 0xFD);
     moby->unk5C = scale;
-    moby->unk7C = moby->pClass->seqs[new_seq]->unk11;
+    moby->seq_sound = moby->pClass->seqs[new_seq]->sound;
 }
 
 extern __typeof__(blend_moby_animation) func_00212F90 __attribute__((alias("FUN_00212f90")));

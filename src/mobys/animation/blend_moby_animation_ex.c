@@ -18,8 +18,8 @@ extern void FUN_0020ede8(void *, int);
    frame = slot. Either way it then sets nextFrame/prevSeq from arg2/arg1,
    refreshes frame pointers (update_moby_animation_state), arms the timer (anim_speed = 1),
    resets anim_time, clears unk70 bit 1, stores 1/convert_integer_to_float(arg3) into
-   unk5C, and copies unk11 out of
-   pClass->seqs[arg1] into unk7C. */
+   unk5C, and copies sound out of
+   pClass->seqs[arg1] into seq_sound. */
 void blend_moby_animation_ex(MobyAnim *moby,
                              int       new_seq,
                              int       frame_index,
@@ -56,7 +56,7 @@ void blend_moby_animation_ex(
     moby->anim_time = 0.0f;
     moby->unk70 = (unsigned char)(moby->unk70 & 0xFD);
     moby->unk5C = scale;
-    moby->unk7C = moby->pClass->seqs[new_seq]->unk11;
+    moby->seq_sound = moby->pClass->seqs[new_seq]->sound;
 }
 
 extern __typeof__(blend_moby_animation_ex) func_002130D8 __attribute__((alias("FUN_002130d8")));

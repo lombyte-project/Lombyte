@@ -11,20 +11,25 @@ struct AnimSeq;
 /* A moby class header, pointed to by Moby.pclass. Size unknown;
    only fields some matched function reads are named. */
 struct MobyClass {
-    u8    pad_0[0xC];
+    u8    pad_0[0x6];
+    u8    metal_count; /* metal (shine) packets */
+    u8    pad_7[0x5];
     u8    seq_count; /* number of entries in seqs[] (menu previews clamp the sequence to it) */
-    u8    pad_D[3];
-    u32   collision; /* collision data; copied into Moby.collision when a moby is (re)classed */
+    u8    pad_D;
+    u8    lod_trans;    /* LOD switch distance, copied into Moby.lod_dist */
+    u8    shadow_count; /* 16-byte shadow entries; nonzero gives the moby a shadow */
+    u32   collision;    /* collision data; copied into Moby.collision when a moby is (re)classed */
     u8    pad_14[0x8];
     void *retarget_table;        /* retarget table: word table, indexed id * 4 + 4 (0024eec0) */
     struct GifEntry *gifs;       /* patched by patch_moby_gifs */
     f32              scale;      /* default draw scale: copied into Moby.scale, divides it */
     s32              sound_defs; /* sound definitions, 0x20 bytes each */
     void           **callbacks;  /* function-pointer table, called with the moby */
-    u8               pad_30[0x14];
-    u16              flags;   /* initial Moby.flags */
-    s16              type;    /* class type; 5 (a creature) is tested by targeting code */
-    struct AnimSeq  *seqs[1]; /* animation sequences, indexed by Moby.seq */
+    u8               pad_30[0x10];
+    s32              glow_rgba; /* nonzero: copied into Moby.glow_color */
+    u16              flags;     /* initial Moby.flags */
+    s16              type;      /* class type; 5 (a creature) is tested by targeting code */
+    struct AnimSeq  *seqs[1];   /* animation sequences, indexed by Moby.seq */
 };
 
 /* A moby instance (MobyInstance in the recovered symbols), 0x100 bytes.
@@ -57,12 +62,12 @@ struct Moby {
     void         *cur_frame_data;
     void         *prev_frame_data;
     u8            anim_flags;
-    u8            unk71; /* set to 0xFF when a moby changes class */
-    u8            unk72;
-    u8            unk73;
+    u8            unk71;       /* set to 0xFF when a moby changes class */
+    u8            lod_dist;    /* low LOD beyond lod_dist * 1024 (class lod_trans) */
+    u8            metal_alpha; /* 0x18 when the class has metal packets */
     void (*update)(struct Moby *moby);
     u8 *pvars;
-    u8  unk7C;
+    u8  seq_sound; /* 0x7C: looping sound of the sequence (AnimSeq + 0x11), 0xFF: none */
     u8 sound_slot; /* 0x7D: D_0013E550 slot of its looping sound, 0xFF: none (advance_hero_animation) */
     u8 anim_trigger_count;
     u8 shadow_range; /* shadow range in units of 1024; 0x17 from seeker_update near D_L09_00166F40 */
