@@ -80,7 +80,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
     struct MapEntry *map_read_entry;
 
     update_map_zoom_and_pan();
-    if (!(screen->data.raw.unk34 & 0x40)) {
+    if (!(screen->data.raw.map_flags & MENU_MAP_NO_INPUT)) {
         previous_selected_level_id = level_map_selection.level;
         if (controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) {
             if (menu_system.close_locked == 0) {
@@ -161,7 +161,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
                 compose_bitmap_from_mask(pal, pix, pal, map_mask_buffer);
             }
         }
-        if (!(screen->data.raw.unk34 & 0x80)) {
+        if (!(screen->data.raw.map_flags & MENU_MAP_NO_TEXTURE_REGISTER)) {
             tbase = (u8 *)level_map_selection.hdr;
             texture_block_base = tbase + hdr->tex0_offset;
             b = tbase + hdr->tex1_offset + 0x420;

@@ -12,8 +12,8 @@ struct MenuPacket {
     s16 x;     /* 0x8: text x */
     s16 y;     /* 0xA: text y */
     u8  pad_C[2];
-    u16 end_y; /* 0xE: y below the printed text; the next line starts 0x10 lower */
-    s16 unk10;
+    u16 end_y;        /* 0xE: y below the printed text; the next line starts 0x10 lower */
+    s16 line_advance; /* 0x10: TextRegion.line_advance */
     u8  pad_12[6];
 };
 
@@ -38,7 +38,7 @@ s32 obtain_all_gold_weapons_menu(struct MenuScreen *menu) {
     memset(&text_window_template, 0, 0x18);
     text_window_template.height = menu->height;
     text_window_template.width = menu->width;
-    text_window_template.unk10 = 0x10;
+    text_window_template.line_advance = 0x10;
     packet = text_window_template;
     setup_gif_paging(0);
     draw_hud_sprite(get_icon_frame(0xE99A, 6), 4, 0xC, 0x10, 0x10, 0x80);

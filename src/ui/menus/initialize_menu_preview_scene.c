@@ -739,7 +739,7 @@ struct MenuLevelMapScreen planet_select_galaxy_map = {
 
 struct MenuMapScreen planet_select_map_screen = {
     {draw_map_screen, 0, 0, leave_map_screen},
-    {{0}, 0xC0},
+    {{0}, MENU_MAP_NO_INPUT | MENU_MAP_NO_TEXTURE_REGISTER},
 };
 
 struct MenuPage planet_confirm_page = {
@@ -766,7 +766,7 @@ struct MenuScreen planet_confirm_missions_screen = {
 
 struct MenuMapScreen planet_confirm_map_screen = {
     {draw_map_screen, draw_map_screen_layers, reset_pause_memory_card_state, leave_map_screen},
-    {{0}, 0x40}
+    {{0}, MENU_MAP_NO_INPUT}
 };
 
 struct MenuItemPreviewScreen planet_confirm_gold_bolt_screen = {
@@ -1309,7 +1309,7 @@ struct MenuLabelScreen in_level_movies_title_label = {
 };
 
 /* The In-Level Movies lists, one per level (in_level_movie_lists). param.half:
-   {lo: menu_system.unkE4, hi: menu_action_messages index, 0 = none}. */
+   {lo: menu_system.travel_level, hi: menu_action_messages index, 0 = none}. */
 struct MenuTextItem in_level_movies_veldin[4] = {
     {0x5022, MENU_ACTION_REQUEST_CLOSE_WITH_OPTIONAL_MESSAGE, {.half = {1, 0}}},
     {0x5023, MENU_ACTION_REQUEST_CLOSE_WITH_OPTIONAL_MESSAGE, {.half = {2, 0}}},

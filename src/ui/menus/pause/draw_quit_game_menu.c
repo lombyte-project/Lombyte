@@ -11,8 +11,8 @@ typedef double             f64;
 
 struct QuitMenu {
     u8  pad_0[0x20];
-    s32 unk20;
-    s32 unk24;
+    s32 width;  /* 0x20: MenuScreen width */
+    s32 height; /* 0x24: MenuScreen height */
 };
 
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
@@ -35,8 +35,8 @@ s32 draw_quit_game_menu(struct QuitMenu *quit_menu) {
     s32           half_width;
     s32           yes_width;
     s32           menu_width;
-    menu_width = quit_menu->unk20;
-    menu_height = quit_menu->unk24;
+    menu_width = quit_menu->width;
+    menu_height = quit_menu->height;
     memset(packet, 0, 0x18);
     half_width = (s32)(menu_width + (((u32)menu_width) >> 0x1F));
     half_width = half_width >> 1;
@@ -57,7 +57,7 @@ s32 draw_quit_game_menu(struct QuitMenu *quit_menu) {
         half_width, menu_height - 0x40, 0x80FFA888, get_help_message_text(0x4F3F), -1);
     no_width = measure_text_width_regular(get_help_message_text(0x524B), -1);
     yes_width = measure_text_width_regular(get_help_message_text(0x524F), -1);
-    text_x = ((s32)(quit_menu->unk20 - ((yes_width >= no_width) ? (yes_width) : (no_width)))) >> 1;
+    text_x = ((s32)(quit_menu->width - ((yes_width >= no_width) ? (yes_width) : (no_width)))) >> 1;
     font_print_large(text_x, menu_height - 0x28, 0x80FFA888, get_help_message_text(0x524B), -1);
     font_print_large(text_x, menu_height - 0x14, 0x80FFA888, get_help_message_text(0x524F), -1);
     do_gif_paging();
