@@ -338,8 +338,8 @@ char *spawn_hero_drone(int previous_spawn_result, void *pos) {
         *(float *)(moby_vars + 0x3C) = player->motion.pos.f[2];
         for (*(short *)(moby_vars + 0x54) = 0; *(short *)(moby_vars + 0x54) < 6;
              (*(short *)(moby_vars + 0x54))++) {
-            if (hero.unk2020[*(short *)(moby_vars + 0x54)] == 0) {
-                hero.unk2020[*(short *)(moby_vars + 0x54)] = spawned_moby;
+            if (hero.drone_mobys[*(short *)(moby_vars + 0x54)] == 0) {
+                hero.drone_mobys[*(short *)(moby_vars + 0x54)] = spawned_moby;
                 break;
             }
         }

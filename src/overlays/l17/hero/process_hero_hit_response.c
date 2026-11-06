@@ -234,7 +234,7 @@ void update_hero_smoothing(void) {
     }
     if (hero.state.control_mode == HERO_MODE_JUMP) {
         if (hero.state_timer > hero.takeoff_frame && hero.past_jump_apex == 0)
-            hero.capsule_bottom_target = hero.unk434;
+            hero.capsule_bottom_target = hero.air_capsule_bottom;
     } else if (hero.state.current == HERO_STATE_FALL) {
         hero.capsule_bottom_target = 0.5f;
     } else if (hero.state.current == HERO_STATE_CROUCH) {

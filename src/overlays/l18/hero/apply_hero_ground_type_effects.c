@@ -104,7 +104,7 @@ void apply_hero_ground_type_effects(void) {
     }
     if (saved_ground_type == 0x9) {
         struct Hero *q = &hero;
-        *(char *)&q->unk12EE = 1;
+        *(char *)&q->grind_jump_block = 1;
     }
     if (saved_ground_type == 0xC) {
         struct Hero *q = &hero;

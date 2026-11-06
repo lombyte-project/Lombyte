@@ -114,7 +114,7 @@ void hero_update_hop_movement(void) {
     } else if (state == HERO_STATE_HIGH_JUMP || state == HERO_STATE_STORED_HEADING_JUMP) {
         hero.motion.move_yaw = hero.takeoff_yaw;
         turn_to(0, ED64 * 0.04f, ED64 * 0.2f, ED6C * 6.981317f);
-        if (hero.unk450 != 3) {
+        if (hero.jump_stick_direction != 3) {
             hero.ground_speed = hero.air_target_speed;
         } else {
             hero.ground_speed = 0.0f;
@@ -187,7 +187,7 @@ void hero_update_hop_movement(void) {
                 velocity_change_step = ED70 * 2.0f;
             }
         }
-        if (hero.unk4A8 && hero.on_ice_ground) {
+        if (hero.took_off_from_ice && hero.on_ice_ground) {
             velocity_change_step = ED70 * 0.17f;
             if (hero.state.current == 15) {
                 stick_target(0, ED6C * 2.5f);

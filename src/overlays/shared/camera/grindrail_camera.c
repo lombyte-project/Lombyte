@@ -603,7 +603,7 @@ typedef struct {
     s16 mode; /* 0x7E: set to 3 or 5 */
     u8  pad80[4];
     s16 slot;  /* 0x84: index into l01_camera_preset_rows */
-    s16 unk86; /* 0x86: compared with hero.unk2284 */
+    s16 unk86; /* 0x86: compared with hero.camera_mode */
 } CamUser;
 
 void update_camera_mode_from_preset(CamUser *camera_user) __asm__("FUN_L01_00316030");

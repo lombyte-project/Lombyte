@@ -284,18 +284,20 @@ void blend_hero_mapped_moby_animation(int animation_id, int frame_index, float b
     int          mapped_animation_id[4];
     int          ok;
 
-    if (((void *)hero_mapped_animation_state->unk2278) != 0) {
-        if (hero_mapped_animation_state->unk227C != 0) {
+    if (((void *)hero_mapped_animation_state->anim_link_moby) != 0) {
+        if (hero_mapped_animation_state->anim_link_table != 0) {
             ok = lookup_s16_pair_value(animation_id, mapped_animation_id);
             if (ok != 0) {
-                blend_moby_animation(((void *)hero_mapped_animation_state->unk2278),
+                blend_moby_animation(((void *)hero_mapped_animation_state->anim_link_moby),
                                      mapped_animation_id[0],
                                      frame_index,
                                      (int)blend_frames);
-            } else if (*(unsigned char *)(((char *)hero_mapped_animation_state->unk2278) + 0x53) !=
-                       0) {
-                blend_moby_animation(
-                    ((void *)hero_mapped_animation_state->unk2278), 0, 0, scale_game_frames(7));
+            } else if (*(unsigned char *)(((char *)hero_mapped_animation_state->anim_link_moby) +
+                                          0x53) != 0) {
+                blend_moby_animation(((void *)hero_mapped_animation_state->anim_link_moby),
+                                     0,
+                                     0,
+                                     scale_game_frames(7));
             }
         }
     }
@@ -313,11 +315,11 @@ void sync_hero_mapped_moby_animation_speed(void) {
     struct Hero *hero_animation_speed_state = &hero;
     int          mapped_animation_id[4];
 
-    if (((void *)hero_animation_speed_state->unk2278) != 0 &&
-        hero_animation_speed_state->unk227C != 0 &&
+    if (((void *)hero_animation_speed_state->anim_link_moby) != 0 &&
+        hero_animation_speed_state->anim_link_table != 0 &&
         lookup_s16_pair_value(hero_animation_speed_state->moby->prev_seq, mapped_animation_id) !=
             0) {
-        *(float *)(((char *)hero_animation_speed_state->unk2278) + 0x58) =
+        *(float *)(((char *)hero_animation_speed_state->anim_link_moby) + 0x58) =
             hero_animation_speed_state->anim_speed;
     }
 }
@@ -358,7 +360,7 @@ void sync_hero_mapped_moby_animation_frames(void) __asm__("FUN_L00_00232320");
 
 void sync_hero_mapped_moby_animation_frames(void) {
     struct Hero *hero_animation_sync_state = &hero;
-    AnimState   *animation_sync_target = ((AnimState *)hero_animation_sync_state->unk2278);
+    AnimState   *animation_sync_target = ((AnimState *)hero_animation_sync_state->anim_link_moby);
 
     if (animation_sync_target == 0) {
         return;
@@ -496,7 +498,7 @@ void set_hero_animation(int requested_animation_id,
             requested_animation_id, starting_frame_index, blend_frames_or_selector);
     }
     clear_hero_mapped_moby_animation_state();
-    if (((int)hero_animation_dispatch_state->unk2278) != 0) {
+    if (((int)hero_animation_dispatch_state->anim_link_moby) != 0) {
         blend_hero_mapped_moby_animation(
             requested_animation_id, starting_frame_index, blend_frames_or_selector);
     }
@@ -712,7 +714,7 @@ void set_hero_item_moby_flag_bit0(void) {
     char        *hero_flag_target;
     int          i;
 
-    *(unsigned short *)(((char *)hero_item_flag_state->unkA88) + 0x34) |= 1;
+    *(unsigned short *)(((char *)hero_item_flag_state->base_moby) + 0x34) |= 1;
     for (i = 0; i < 7; i++) {
         if (*(char **)&hero_item_flag_state->items[i].moby != 0) {
             *(unsigned short *)(*(char **)&hero_item_flag_state->items[i].moby + 0x34) |= 1;
@@ -760,7 +762,7 @@ void update_hero_item_moby_flags(void) {
     char        *hero_flag_target;
     int          i;
 
-    *(unsigned short *)(*(char **)&hero_item_flag_clear_state->unkA88 + 0x34) &= ~1;
+    *(unsigned short *)(*(char **)&hero_item_flag_clear_state->base_moby + 0x34) &= ~1;
     for (i = 0; i < 7; i++) {
         if (*(char **)&hero_item_flag_clear_state->items[i].moby != 0) {
             *(unsigned short *)(*(char **)&hero_item_flag_clear_state->items[i].moby + 0x34) &= ~1;
@@ -1364,7 +1366,7 @@ void request_hero_target_pose(void *source_position,
 void request_hero_target_pose(void *source_position, float f, int state_entry_option) {
     qcopy(&hero.target_pose, source_position);
     hero.target_pose.f[3] = f;
-    hero.unk1650 = state_entry_option;
+    hero.state_entry_option = state_entry_option;
     if ((unsigned)(hero.state.current - 0x65) >= 3) {
         hero_set_state(0x65, 1);
     }
@@ -1710,7 +1712,7 @@ void update_hero_attachment(void) {
 extern int
 resolve_point_path_segment_clearance(int, void *, void *, float) __asm__("FUN_L00_00262030");
 
-/* Sets the short at &hero.unk1F6 to 4 when FUN_L00_00262030 succeeds. */
+/* Sets the short at &hero.pushed_timer to 4 when FUN_L00_00262030 succeeds. */
 void resolve_hero_pending_path_clearance(void) __asm__("FUN_L00_002347c0");
 
 void resolve_hero_pending_path_clearance(void) {
@@ -1720,7 +1722,7 @@ void resolve_hero_pending_path_clearance(void) {
                                              &hero_path_clearance_state->motion.pos,
                                              &hero_path_clearance_state->motion.pos,
                                              hero_path_clearance_state->capsule_radius) != 0) {
-        hero_path_clearance_state->unk1F6 = 4;
+        hero_path_clearance_state->pushed_timer = 4;
     }
 }
 
@@ -1738,17 +1740,18 @@ void animate_hero_slot4_and_slot5_visuals(void) {
     slot4_moby = (char *)hero.items[4].moby;
     if (slot4_moby) {
         if (X == 2)
-            hero.unk22E8 = fast_add_rotations(hero.unk22E8, DD * 1.2217305f);
+            hero.item4_glow_phase = fast_add_rotations(hero.item4_glow_phase, DD * 1.2217305f);
         else
-            hero.unk22E8 = fast_add_rotations(hero.unk22E8, DD * 2.0943952f);
+            hero.item4_glow_phase = fast_add_rotations(hero.item4_glow_phase, DD * 2.0943952f);
         MOBY(slot4_moby)->glow_color =
-            fast_tween_color(0xD2D2D2, 0x285050, fast_sin(hero.unk22E8) * 0.5f + 0.5f);
+            fast_tween_color(0xD2D2D2, 0x285050, fast_sin(hero.item4_glow_phase) * 0.5f + 0.5f);
     }
     slot4_secondary_moby = (char *)hero.items[4].moby2;
     if (slot4_secondary_moby) {
         if (X != 2) {
             f32 v;
-            hero.unk22EC = v = fast_add_rotations(hero.unk22EC, DD * 2.9670596f);
+            hero.item4_alt_glow_phase = v =
+                fast_add_rotations(hero.item4_alt_glow_phase, DD * 2.9670596f);
             slot4_secondary_target_color = 0x1EE628;
             if (0.0f < v && v < 1.9198622f)
                 slot4_secondary_target_color = 0x1E1ED2;
@@ -1756,7 +1759,8 @@ void animate_hero_slot4_and_slot5_visuals(void) {
                 MOBY(slot4_secondary_moby)->glow_color, slot4_secondary_target_color, 0.07f);
         } else {
             f32 v;
-            hero.unk22EC = v = fast_add_rotations(hero.unk22EC, DD * 1.5707964f);
+            hero.item4_alt_glow_phase = v =
+                fast_add_rotations(hero.item4_alt_glow_phase, DD * 1.5707964f);
             MOBY(slot4_secondary_moby)->glow_color =
                 fast_tween_color(0x1E1ED2, 0x1E1E50, fast_sin(v) * 0.5f + 0.5f);
         }
@@ -1764,16 +1768,16 @@ void animate_hero_slot4_and_slot5_visuals(void) {
     slot5_moby = (char *)hero.items[5].moby;
     if (slot5_moby) {
         if (X == 2)
-            hero.unk22F0 = fast_add_rotations(hero.unk22EC, DD * 1.3962634f);
+            hero.item5_glow_phase = fast_add_rotations(hero.item4_alt_glow_phase, DD * 1.3962634f);
         else
-            hero.unk22F0 = fast_add_rotations(hero.unk22EC, DD * 1.9198622f);
+            hero.item5_glow_phase = fast_add_rotations(hero.item4_alt_glow_phase, DD * 1.9198622f);
         MOBY(slot5_moby)->glow_color =
-            fast_tween_color(0xAAC8AA, 0x965050, fast_sin(hero.unk22F0) * 0.5f + 0.5f);
+            fast_tween_color(0xAAC8AA, 0x965050, fast_sin(hero.item5_glow_phase) * 0.5f + 0.5f);
         if (slot5_moby) {
             if (!hero.unk1D90.attached)
                 attach_manipulator(slot5_moby, 0, &hero.unk1D90);
             else
-                build_axis_rotation_quaternion(&hero.unk1D90.quat, 0, hero.unk22F0);
+                build_axis_rotation_quaternion(&hero.unk1D90.quat, 0, hero.item5_glow_phase);
         }
     }
 }

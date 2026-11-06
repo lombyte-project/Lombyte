@@ -66,7 +66,7 @@ void jet_reset_camera(OvlQuad *saved_position, OvlQuad *saved_rotation) {
         *(int *)(saved_state + 0x38) = *(int *)(hero_moby + 0x80);
         *(int *)(saved_state + 0x44) = hero_state->vehicle_mode;
         *(char **)(saved_state + 0x48) = hero_moby;
-        *(int *)(saved_state + 0x4C) = hero_state->unk22CC;
+        *(int *)(saved_state + 0x4C) = hero_state->requested_state;
         *(int *)(saved_state + 0x3C) = *(int *)(saved_state_fields_source + 0x64);
         *(char *)(saved_state + 0x40) = *(unsigned char *)(saved_state_fields_source + 0x68);
         *(char *)(saved_state + 0x41) = *(unsigned char *)(saved_state_fields_source + 0x69);

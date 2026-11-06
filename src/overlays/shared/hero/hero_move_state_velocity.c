@@ -106,7 +106,7 @@ void hero_move_state_velocity(void) {
     } else if (state == HERO_STATE_HIGH_JUMP || state == HERO_STATE_STORED_HEADING_JUMP) {
         hero.motion.move_yaw = hero.takeoff_yaw;
         turn_to(0, ED64 * 0.04f, ED64 * 0.2f, ED6C * 6.981317f);
-        if (hero.unk450 != 3) {
+        if (hero.jump_stick_direction != 3) {
             hero.ground_speed = hero.air_target_speed;
         } else {
             hero.ground_speed = 0.0f;
@@ -187,7 +187,7 @@ void hero_move_state_velocity(void) {
                 base_planar_velocity_step = ED70 * 2.0f;
             }
         }
-        if (hero.unk4A8 && hero.on_ice_ground) {
+        if (hero.took_off_from_ice && hero.on_ice_ground) {
             base_planar_velocity_step = ED70 * 0.17f;
             if (hero.state.current == 15) {
                 stick_target(0, ED6C * 2.5f);
@@ -652,7 +652,7 @@ void update_hero_tilt(void) {
     float        tilt_targets[2];
     int          effective_tilt_mode, current_hero_state, k;
     effective_tilt_mode = hero_state->gravity_mode;
-    if (hero_state->unk1F8) {
+    if (hero_state->magnet_walk_timer) {
         effective_tilt_mode = HERO_TILT_APPLY_REFERENCE_ORIENTATION;
     }
     switch (effective_tilt_mode) {
@@ -877,17 +877,18 @@ void update_hero_planar_movement_velocity(void) {
     qcopy(&xy_velocity_scratch, &hero.motion.velocity);
     xy_velocity_scratch.f[2] = 0.0f;
     hero_state = &hero;
-    hero_state->unk3B0 = fast_vec_dot(&xy_velocity_scratch, &target_velocity);
+    hero_state->run_speed_ratio = fast_vec_dot(&xy_velocity_scratch, &target_velocity);
     k = fast_vec_length(&target_velocity);
     if (0.0f < k) {
-        hero_state->unk3B0 = hero_state->unk3B0 / (k * (frame_time * 5.9f));
+        hero_state->run_speed_ratio = hero_state->run_speed_ratio / (k * (frame_time * 5.9f));
     }
     clip_hero_velocity_against_probed_surfaces(0);
-    if (hero_state->unk3B4.f < DEG_TO_RAD && 0.0872664601f < hero_state->ground_pitch.f) {
+    if (hero_state->prev_ground_pitch.f < DEG_TO_RAD &&
+        0.0872664601f < hero_state->ground_pitch.f) {
         fast_vec_scale(
             &hero.motion.velocity, &hero.motion.velocity, fast_cos(hero_state->ground_pitch.f));
     }
-    hero.unk3B4.f = hero.ground_pitch.f;
+    hero.prev_ground_pitch.f = hero.ground_pitch.f;
     if (absolute_float(hero.motion.pos.f[2] - hero.ground_z.f) < 0.15f) {
         hero.motion.pos.f[2] = hero.ground_z.f;
     }
@@ -905,7 +906,7 @@ int allocate_hero_voice_for_entry(int entry_index, int voice_allocation_flags) {
     struct Hero *hero_base = (struct Hero *)(D_0013E533 + 0xE1D);
     int          voice_target;
     if (hero_base->vehicle_mode == 3) {
-        voice_target = *(int *)&hero_base->unkA88;
+        voice_target = *(int *)&hero_base->base_moby;
         if (voice_target != 0) {
             qcopy((char *)voice_target + 0x10, &hero_base->motion.pos);
             return allocate_voice_for_target_entry(

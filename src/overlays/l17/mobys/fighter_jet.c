@@ -1992,7 +1992,7 @@ void fighter_jet_update(ShipMoby *moby) {
             ((ShipCamera *)g->moby)->unk98 = 0;
             FUN_L17_0021e530(0, 1);
             jet_end_mount(0);
-            set_animation_parameter(g->unk160C, 0);
+            set_animation_parameter(g->ship_hud_handle, 0);
             qcopy_nc(moby->pos, ship_vars->home_pos);
             qcopy_nc(moby->rot, ship_vars->home_rot);
             moby->scale = *(float *)(moby->pclass + 0x24);

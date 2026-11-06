@@ -117,7 +117,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
             MOBY(moby)->collision_disable = 0;
             p->tilt_disabled = 0;
             p->item_select_blocked = 0;
-            p->unk20B2 = 0;
+            p->on_hoverboard = 0;
             p->hand_item_hidden = 0;
             p->glow_pulse_level = 0;
             clear_moby_transform_history(&p->trail);
@@ -247,7 +247,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         p->camera_mode = 0;
         qcopy(&p->motion.momentum, &p->motion.displacement);
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0xA));
-        p->unk1D0 = scale_game_frames(7);
+        p->idle_return_delay = scale_game_frames(7);
         break;
     }
     case HERO_STATE_WAIT_FOR_ITEM_RELEASE_THEN_IDLE: {
@@ -256,7 +256,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         p->camera_mode = 0;
         qcopy(&p->motion.momentum, &p->motion.displacement);
         set_hero_animation(get_hero_idle_animation_index(0), 0, (float)scale_game_frames(5));
-        p->unk1D0 = scale_game_frames(7);
+        p->idle_return_delay = scale_game_frames(7);
         break;
     }
     case HERO_STATE_ITEM_BUTTON_HOLD_ANIMATION_WAIT: {
@@ -265,7 +265,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         p->camera_mode = 0;
         p->ground_speed = vector_length_xy(&p->motion.displacement);
         p->state.step = 0;
-        p->unk3B8 = 0;
+        p->move_along_stick = 0;
         p->run_start_blending = 0;
         set_hero_animation(0x2E, 0, (float)scale_game_frames(5));
         break;
@@ -311,7 +311,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
             } else {
                 int n;
                 t->state.step = 0;
-                t->unk3B8 = 0;
+                t->move_along_stick = 0;
                 t->run_start_blending = 0;
                 n = scale_game_frames(8);
                 if (t->health.hp == 1)
@@ -509,7 +509,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         *(int *)&p->swing_push_speed = 0;
         *(int *)&p->swing_yaw_vel = 0;
         d = *(char **)(((char *)p->swing_target_moby) + 0x78);
-        p->unk9A0 = *(float *)(d + 4);
+        p->swing_rope_target_length = *(float *)(d + 4);
         if (*(float *)(d + 0x10) == p->swing_length_vel) {
             *(float *)(d + 0x14) = *(float *)(d + 0xC);
         } else {
@@ -518,14 +518,14 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         {
             struct Hero *q = &hero;
             q->swing_rope_spring_k = frame_scale_sq * 0.025f;
-            q->unk9C8 = frame_scale_sq * 0.33f;
+            q->swing_rope_damping = frame_scale_sq * 0.33f;
             q->swing_rope_max_speed = frame_time * 11.0f;
             clear_u64_value(&q->motion.rot_spring_vel);
             q->grapple_lockout_timer = scale_game_frames(0x28);
             if (*(float *)(d + 0x24) != 0.0f)
                 q->swing_rope_spring_k = *(float *)(d + 0x24);
             if (*(float *)(d + 0x28) != 0.0f)
-                q->unk9C8 = *(float *)(d + 0x28);
+                q->swing_rope_damping = *(float *)(d + 0x28);
             if (*(float *)(d + 0x2C) != 0.0f)
                 q->swing_rope_max_speed = *(float *)(d + 0x2C);
             q->swing_yaw = fast_arc_tan(q->swing_target_moby->pos.x - q->motion.pos.f[0],
@@ -574,10 +574,10 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         p->state.control_mode = HERO_MODE_LEDGE;
         p->camera_mode = 0xD;
         p->unk4EC = frame_time_sq * 24.0f;
-        p->unk4F0 = p->motion.pos.f[2];
+        p->smoothed_air_z = p->motion.pos.f[2];
         if (p->state.prev_control_mode == HERO_MODE_JUMP) {
             p->unk4EC = p->jump_gravity;
-            p->unk4F0 = p->smoothed_ground_z;
+            p->smoothed_air_z = p->smoothed_ground_z;
         }
         p->item_select_blocked = 1;
         if (entry_animation_mode) {
@@ -746,36 +746,36 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
             u->velocity_key_index = -1;
             u->air_speed_step_up = frame_time_sq * 20.0f;
             u->jump_decel = frame_time_sq * 11.0f;
-            u->unk4A8 = u->on_ice_ground;
+            u->took_off_from_ice = u->on_ice_ground;
             u->past_jump_apex = 0;
             u->rail_land_frames = 0;
-            u->unk428 = 0.0f;
-            u->unk42C = 0.0f;
+            u->pending_jump_impulse = 0.0f;
+            u->jump_impulse_total = 0.0f;
             u->velocity_keys_active = 0;
             u->fall_start_distance = 2.5f;
             u->jump_blocked_ahead = 0;
-            u->unk4AC = 0;
+            u->can_use_item_in_jump = 0;
             u->can_chain_high_jump = 0;
             u->can_double_jump = 0;
             u->jump_max_frames = scale_game_frames(0x50);
             u->fall_delay_frames = scale_game_frames(0x46);
-            u->unk4A6 = 0;
+            u->pack_glide_delay = 0;
             u->jump_anim_retime_scale = 0.5f;
             u->air_stick_speed = frame_time * 5.7f;
             u->air_turn_rate = frame_time * 15.0098314f;
             u->fall_gravity = 0.0f;
-            u->unk22B4 = 0;
+            u->wall_jumped = 0;
             if (u->state.current == 7) {
                 u->jump_height = 1.47f;
                 u->takeoff_frame = scale_game_frames(5);
-                u->unk434 = 0.6f;
+                u->air_capsule_bottom = 0.6f;
                 u->apex_anim_frame = 18.0f;
                 u->target_anim_frame = 30.0f;
                 u->jump_land_anim_frame = 12.0f;
-                u->unk48C = 2.62f;
+                u->jump_height_target = 2.62f;
                 u->jump_height_start = 1.47f;
                 u->jump_ramp_frames = scale_game_frames(0xF);
-                u->unk4AC = 1;
+                u->can_use_item_in_jump = 1;
                 u->can_chain_high_jump = 1;
                 u->can_double_jump = 1;
                 u->fall_gravity = u->jump_gravity * 1.17f;
@@ -791,57 +791,57 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                     struct Hero *w = &hero;
                     w->jump_height = v + 1.7f;
                     w->takeoff_frame = scale_game_frames(5);
-                    w->unk434 = 0.6f;
+                    w->air_capsule_bottom = 0.6f;
                     w->apex_anim_frame = 18.0f;
                     w->target_anim_frame = 30.0f;
                     w->jump_land_anim_frame = 12.0f;
-                    w->unk48C = v + 1.75f;
+                    w->jump_height_target = v + 1.75f;
                     w->jump_height_start = v + 1.7f;
                     w->jump_ramp_frames = scale_game_frames(0x13);
                 }
             } else if (u->state.current == 9) {
                 u->jump_height = 1.0f;
                 u->takeoff_frame = scale_game_frames(5);
-                u->unk434 = 0.6f;
+                u->air_capsule_bottom = 0.6f;
                 u->apex_anim_frame = 18.0f;
                 u->target_anim_frame = 29.0f;
                 u->jump_land_anim_frame = 11.0f;
-                u->unk48C = 2.7f;
+                u->jump_height_target = 2.7f;
                 u->jump_height_start = 1.0f;
                 u->jump_ramp_frames = scale_game_frames(0xF);
                 u->air_stick_speed = frame_time * 5.7f;
-                u->unk4AC = 1;
+                u->can_use_item_in_jump = 1;
                 u->can_chain_high_jump = 1;
                 u->can_double_jump = 1;
             } else if (u->state.current == 0xA) {
                 u->jump_height = 1.9f;
                 u->takeoff_frame = scale_game_frames(5);
-                u->unk434 = 0.6f;
+                u->air_capsule_bottom = 0.6f;
                 u->apex_anim_frame = 18.0f;
                 u->target_anim_frame = 29.0f;
                 u->jump_land_anim_frame = 10.0f;
-                u->unk48C = 1.95f;
+                u->jump_height_target = 1.95f;
                 u->jump_height_start = 1.9f;
                 u->jump_ramp_frames = scale_game_frames(0xE);
                 u->can_chain_high_jump = 1;
                 u->jump_gravity = frame_time_sq * 11.0f;
                 u->jump_max_frames = scale_game_frames(0x78);
                 u->fall_delay_frames = scale_game_frames(0x5A);
-                u->unk4A6 = scale_game_frames(0x46);
+                u->pack_glide_delay = scale_game_frames(0x46);
             } else if (u->state.current == 0x10) {
                 char *x = (char *)&u->trail;
                 u->jump_height = 1.5f;
                 u->takeoff_frame = scale_game_frames(5);
-                u->unk434 = 0.8f;
+                u->air_capsule_bottom = 0.8f;
                 u->apex_anim_frame = 18.0f;
                 u->target_anim_frame = 30.0f;
                 u->jump_land_anim_frame = 11.0f;
-                u->unk48C = 1.55f;
+                u->jump_height_target = 1.55f;
                 u->jump_height_start = 1.5f;
                 u->jump_ramp_frames = scale_game_frames(1);
                 u->jump_height = 0.4f;
                 u->jump_height_start = 0.4f;
-                u->unk48C = 0.9f;
+                u->jump_height_target = 0.9f;
                 initialize_moby_transform_history(*(int *)&u->moby, x);
                 create_moby_transform_history_entry(x, 0x28, 2);
                 create_moby_transform_history_entry(x, 0x14, 4);
@@ -856,11 +856,11 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
             } else if (u->state.current == 0x1C) {
                 u->jump_height = 2.0f;
                 u->takeoff_frame = scale_game_frames(0xA);
-                u->unk434 = 0.85f;
+                u->air_capsule_bottom = 0.85f;
                 u->apex_anim_frame = 20.0f;
                 u->target_anim_frame = 29.0f;
                 u->jump_land_anim_frame = 19.0f;
-                u->unk48C = 2.05f;
+                u->jump_height_target = 2.05f;
                 u->jump_height_start = 2.0f;
                 u->jump_ramp_frames = scale_game_frames(1);
                 u->jump_anim_retime_scale = 1.0f;
@@ -871,28 +871,28 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
             } else if (u->state.current == 0x11) {
                 u->jump_height = 3.3f;
                 u->takeoff_frame = scale_game_frames(9);
-                u->unk434 = 0.6f;
+                u->air_capsule_bottom = 0.6f;
                 u->apex_anim_frame = 12.0f;
                 u->target_anim_frame = 20.0f;
                 u->jump_land_anim_frame = 10.0f;
-                u->unk48C = 3.35f;
+                u->jump_height_target = 3.35f;
                 u->jump_height_start = 3.3f;
                 u->jump_ramp_frames = scale_game_frames(0xC);
                 u->fall_delay_frames = scale_game_frames(0x50);
                 u->jump_gravity = frame_time_sq * 29.0f;
-                qcopy(&u->wall_jump_normal, &u->unk460);
-                u->unk22B4 = 1;
+                qcopy(&u->wall_jump_normal, &u->wall_hit_normal);
+                u->wall_jumped = 1;
                 u->item_select_blocked = 1;
-                u->unk4AC = 1;
+                u->can_use_item_in_jump = 1;
             } else if (u->state.current == 0xD) {
                 char *x = (char *)&u->trail;
                 u->jump_height = 0.1f;
                 u->takeoff_frame = scale_game_frames(9);
-                u->unk434 = 0.6f;
+                u->air_capsule_bottom = 0.6f;
                 u->apex_anim_frame = 26.0f;
                 u->target_anim_frame = 38.0f;
                 u->jump_land_anim_frame = 18.0f;
-                u->unk48C = 0.2f;
+                u->jump_height_target = 0.2f;
                 u->jump_height_start = 0.1f;
                 u->jump_ramp_frames = scale_game_frames(0xE);
                 u->fall_start_distance = 4.5f;
@@ -912,17 +912,17 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
             } else if (u->state.current == 0xF) {
                 u->jump_height = 1.9f;
                 u->takeoff_frame = scale_game_frames(9);
-                u->unk434 = 0.6f;
+                u->air_capsule_bottom = 0.6f;
                 u->apex_anim_frame = 50.0f;
                 u->target_anim_frame = 64.0f;
                 u->jump_land_anim_frame = 28.0f;
-                u->unk48C = 1.95f;
+                u->jump_height_target = 1.95f;
                 u->jump_height_start = 1.9f;
                 u->jump_ramp_frames = scale_game_frames(5);
                 u->fall_start_distance = 4.5f;
                 u->jump_max_frames = scale_game_frames(0x82);
                 u->air_stick_speed = frame_time * 3.3f;
-                u->unk4A6 = scale_game_frames(0x55);
+                u->pack_glide_delay = scale_game_frames(0x55);
                 u->ledge_probe_cooldown = scale_game_frames(0x46);
                 u->velocity_keys_active = 1;
                 if (pal_mode != 0) {
@@ -944,33 +944,33 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                 float v = 0.7f;
                 if (u->ground_distance < 2.0f)
                     v = (2.5f - u->ground_distance) * 0.5f + 0.7f;
-                u->unk434 = 0.6f;
+                u->air_capsule_bottom = 0.6f;
                 u->apex_anim_frame = 32.0f;
                 u->target_anim_frame = 43.0f;
                 u->jump_land_anim_frame = 19.0f;
-                u->unk48C = v + 0.05f;
+                u->jump_height_target = v + 0.05f;
                 u->jump_height = v;
                 u->jump_height_start = v;
                 u->takeoff_frame = -1;
                 u->jump_ramp_frames = scale_game_frames(0xE);
                 u->jump_anim_retime_scale = 1.0f;
                 u->air_stick_speed = frame_time * 3.5f;
-                u->unk4A6 = scale_game_frames(0x1E);
+                u->pack_glide_delay = scale_game_frames(0x1E);
             } else if (u->state.current == 0xB) {
                 u->jump_height = 3.2f;
                 u->takeoff_frame = scale_game_frames(5);
-                u->unk434 = 0.6f;
+                u->air_capsule_bottom = 0.6f;
                 u->apex_anim_frame = 18.0f;
                 u->target_anim_frame = 31.0f;
                 u->jump_land_anim_frame = 24.0f;
-                u->unk48C = 3.25f;
+                u->jump_height_target = 3.25f;
                 u->jump_height_start = 3.2f;
                 u->jump_ramp_frames = scale_game_frames(0xE);
                 u->fall_start_distance = 4.5f;
                 u->fall_delay_frames = scale_game_frames(0x32);
                 u->jump_anim_retime_scale = 1.0f;
                 u->takeoff_yaw = get_hero_yaw_history(scale_game_frames(0xA));
-                u->unk450 = stick_direction_vs_facing();
+                u->jump_stick_direction = stick_direction_vs_facing();
                 u->high_jump_drift_yaw = u->motion.move_yaw;
                 if (frame_time * 1.5f < u->motion.flat_speed) {
                     u->air_target_speed = u->motion.flat_speed;
@@ -980,7 +980,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                 {
                     struct Hero *w = &hero;
                     w->high_jump_drift_speed = 0;
-                    w->unk4AC = 1;
+                    w->can_use_item_in_jump = 1;
                     w->can_chain_high_jump = 1;
                 }
             }
@@ -1024,9 +1024,9 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
                     set_hero_animation(0x15, 0, (float)scale_game_frames(5));
                 } else if (s == 0xB) {
                     int id;
-                    if (q->unk450 == 2)
-                        q->unk450 = 0;
-                    id = q->unk450 + 0x1C;
+                    if (q->jump_stick_direction == 2)
+                        q->jump_stick_direction = 0;
+                    id = q->jump_stick_direction + 0x1C;
                     if (opt_mirror_anim != 0) {
                         if (id == 0x1C) {
                             id = 0x1D;
@@ -1378,7 +1378,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
             hero_base->ground_speed = planar_speed;
             if (frame_time * 1.5f < planar_speed)
                 hero_base->ground_speed = frame_time * 1.5f;
-            hero_base->unk3B8 = 0;
+            hero_base->move_along_stick = 0;
             if (entry_animation_mode)
                 set_hero_animation(1, 0, (float)scale_game_frames(8));
         }
@@ -1419,7 +1419,7 @@ int hero_set_state(int requested_state, int entry_animation_mode) {
         p->unk5CC = frame_time * 2.5f;
         if (frame_time * 2.5f < p->grind_base_speed)
             p->grind_base_speed = frame_time * 2.5f;
-        p->unk5AC.i = 0;
+        p->grind_speed_boost.i = 0;
         clear_u64_value(&p->motion.velocity);
         clear_u64_value(&p->motion.displacement);
         p->motion.velocity.f[2] = frame_time * 10.0f;
@@ -1881,9 +1881,10 @@ void update_hero_state_transitions(void) {
             if ((controller_state.pressed & 0x10) || (controller_state.pressed_unmasked & 0x10)) {
                 if (hero.items[0].switch_lock != 2 && item_selector_hud_inhibit == 0 &&
                     (hero.item_use_locked == 0 || hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK ||
-                     hero.unk1B2 != 0) &&
+                     hero.item_select_override_timer != 0) &&
                     (hero.item_select_blocked == 0 ||
-                     hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK || hero.unk1B2 != 0) &&
+                     hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK ||
+                     hero.item_select_override_timer != 0) &&
                     (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT || hero.vehicle_mode == 3)) {
                     int id;
 
@@ -2054,7 +2055,7 @@ void update_hero_state_transitions(void) {
                             int anim = D_L02_0017A0C0[id].anim;
                             if (((unsigned char *)hero.moby)[0x53] != anim) {
                                 if (hero.held_item_anim_blend[0] != 0) {
-                                    hero.unkD14 = 1;
+                                    hero.arm_layer_fade = 1;
                                 }
                                 hero.item_hold_anim = anim;
                                 set_hero_animation(hero.item_hold_anim, 0, scale_game_frames(0xB));
@@ -2251,7 +2252,7 @@ void update_hero_state_transitions(void) {
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
-                    if (hero.unk1D0 != 0) {
+                    if (hero.idle_return_delay != 0) {
                         break;
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
@@ -2260,7 +2261,7 @@ void update_hero_state_transitions(void) {
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
-                    if (hero.unk1D0 != 0) {
+                    if (hero.idle_return_delay != 0) {
                         break;
                     }
                     if (((unsigned char *)hero.moby)[0x53] == 0x36) {
@@ -2481,7 +2482,7 @@ void update_hero_state_transitions(void) {
                     }
                     break;
                 case HERO_STATE_AT_TARGET_POSE:
-                    if ((hero.anim_flags & 2) || hero.unk1650 != 0) {
+                    if ((hero.anim_flags & 2) || hero.state_entry_option != 0) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     if (0.2f < vector_distance_xy(hero.motion.pos.f, hero.target_pose.f)) {
@@ -2530,7 +2531,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(HERO_STATE_FALL, 1);
                         break;
                     }
-                    hero.unk1F8 = scale_game_frames(0x28);
+                    hero.magnet_walk_timer = scale_game_frames(0x28);
                     if (absolute_float(hero.motion.rot.f[1]) > 0.7853982f ||
                         absolute_float(hero.motion.rot.f[0]) > 0.7853982f) {
                         hero.ledge_probe_cooldown = scale_game_frames(0x28);
@@ -2658,7 +2659,7 @@ void update_hero_state_transitions(void) {
                         int go = 0;
                         if (!(controller_state.held & hero.items[0].button_mask)) {
                             if ((float)scale_game_frames(0x19) < hero.target_arrival_frames) {
-                                hero.unk988 = 1;
+                                hero.swingshot_missed = 1;
                             }
                             go = 1;
                         }
@@ -2710,7 +2711,7 @@ void update_hero_state_transitions(void) {
                     }
                     if (scale_game_frames(0xA) < hero.state_timer) {
                         if (scale_game_frames(0x28) > hero.state_timer) {
-                            hero.unk988 = 1;
+                            hero.swingshot_missed = 1;
                         }
                         hero_set_state(0x2D, 1);
                         hero.stickless_decel = frame_time_sq * 7.0f;
@@ -3414,7 +3415,7 @@ void update_hero_state_transitions(void) {
                         hero.state.current == HERO_STATE_PACK_LONG_JUMP) {
                         if (scale_game_frames(0x19) < hero.state_timer &&
                             hero.on_flagged_ground_moby != 0) {
-                            hero.unk4A6 = scale_game_frames(0x14);
+                            hero.pack_glide_delay = scale_game_frames(0x14);
                         }
                     }
                     {
@@ -3430,7 +3431,7 @@ void update_hero_state_transitions(void) {
                                 approach_value(&hero.anim_speed, 1.3f, frame_scale_gp * 0.1f);
                             }
                             delay = scale_game_frames(0x11);
-                            hero.unk4A6 = delay;
+                            hero.pack_glide_delay = delay;
                         }
                         n = hero.state_timer - 4;
                         if (n < 2) {
@@ -3458,7 +3459,7 @@ void update_hero_state_transitions(void) {
                                            hero.pack_disabled == 0 &&
                                            (controller_state.held & 0x40) &&
                                            delay < hero.state_timer &&
-                                           hero.unk4A6 < hero.state_timer) {
+                                           hero.pack_glide_delay < hero.state_timer) {
                                     float minimum_ground_clearance = 0.6f;
                                     if (hero.state.current == HERO_STATE_RUN_JUMP ||
                                         hero.state.current == HERO_STATE_JUMP) {

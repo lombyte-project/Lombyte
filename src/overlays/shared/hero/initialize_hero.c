@@ -52,7 +52,7 @@ void initialize_hero(void) {
             if (z > 0.0f)
                 hero.moby->pos.z = z;
             hero.moby->flags |= 2;
-            hero.unkA88 = (u8 *)hero.moby;
+            hero.base_moby = (u8 *)hero.moby;
             hero.motion.rot.f[2] = hero.moby->rot.z;
             qcopy(&hero.motion.pos, &hero.moby->pos);
             update_hero_ground_contact_and_surface_slopes();
@@ -87,7 +87,7 @@ void initialize_hero(void) {
     hero.reach_distance = 2.125f;
     hero.reach_height = 1.25f;
     hero.health.vehicle_mode_hp = 4;
-    hero.health.unk22B0 = hero.health.hp;
+    hero.health.saved_hp = hero.health.hp;
     hero.head_look_timer = random_int_between(scale_game_frames(0xB4), scale_game_frames(0x12C));
     hero.idle_look_ease_rate = 0.007f;
     hero.unk1018 = 0.3f;

@@ -308,7 +308,7 @@ void ground_melee_enemy_update(Moby *moby) {
         if (vector_distance_xy(&moby->pos, D_0013E633_2E39E0) > 40.0f)
             return;
         if (ground_enemy_vars->hidden != 0) {
-            if ((*(unsigned char *)&((Hero *)D_0013E633_2E39E0)->unk2020[1]) != 2) {
+            if ((*(unsigned char *)&((Hero *)D_0013E633_2E39E0)->drone_mobys[1]) != 2) {
                 moby->update_dist = 0xFF;
                 moby->collision = 0;
                 moby->flags = (moby->flags | 0x41) & 0xEFFF;

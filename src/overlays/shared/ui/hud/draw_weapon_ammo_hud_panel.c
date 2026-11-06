@@ -267,13 +267,13 @@ void update_weapon_hud_state(void) {
             set_animation_parameter(D_L00_0015F970, 0);
             D_L00_0015F970 = k;
         }
-        hero_state->unk1634 = queue_animation_update(0x10,
-                                                     0xFFFF,
-                                                     reset_numeric_hud_element,
-                                                     hud_update_counter,
-                                                     draw_hud_cropped_gauge_panel,
-                                                     &hero_state->vehicle_hp,
-                                                     200);
+        hero_state->vehicle_anim_handle = queue_animation_update(0x10,
+                                                                 0xFFFF,
+                                                                 reset_numeric_hud_element,
+                                                                 hud_update_counter,
+                                                                 draw_hud_cropped_gauge_panel,
+                                                                 &hero_state->vehicle_hp,
+                                                                 200);
     } else {
         if (D_L00_0015F970 != k) {
             set_animation_parameter(D_L00_0015F970, 0);

@@ -594,8 +594,8 @@ void hero_update_movement(void) {
             swim_pitch_delta = fast_subtract_rotations(hero.motion.rot.f[1], old);
             stick_target(1.0f, 0);
             turn_to(0, frame_scale_sq * 0.007f, frame_scale_sq * 0.08f, frame_time * 5.2359877f);
-            hero.unk8EC = hero.motion.yaw_rate;
-            fast_dec_timer(&hero.unk8F4);
+            hero.swim_yaw_rate = hero.motion.yaw_rate;
+            fast_dec_timer(&hero.swim_thrust_timer);
             if (hero.state.step == 1) {
                 hero.target_speed = frame_time * 6.0f;
             } else if (hero.state.current == 0x35) {
@@ -720,7 +720,7 @@ void hero_update_movement(void) {
                 qcopy(&hero.motion.velocity, &hero.motion.momentum);
             }
             clip_hero_velocity_against_probed_surfaces(0);
-            t = hero.unk8EC * fast_cos(yaw) * -7.0f;
+            t = hero.swim_yaw_rate * fast_cos(yaw) * -7.0f;
             spring_angle(&hero.motion.rot.f[0],
                          t,
                          &hero.swim_lean_vel,
@@ -934,10 +934,11 @@ void hero_update_movement(void) {
         f32 hit2;
         qcopy(&movement_and_hit_descriptor_scratch,
               &((struct MobyView *)hero.grapple_target)->u10.v10);
-        hero.unk970 = fast_vec_dist(&hero.motion.pos, &movement_and_hit_descriptor_scratch);
+        hero.grapple_target_dist =
+            fast_vec_dist(&hero.motion.pos, &movement_and_hit_descriptor_scratch);
         hero.target_arrival_frames = scale_game_frames(60);
         if (hero.grapple_pull_speed > 0.0f) {
-            hero.target_arrival_frames = hero.unk970 / hero.motion.speed_xy;
+            hero.target_arrival_frames = hero.grapple_target_dist / hero.motion.speed_xy;
         }
         if (hero.state.step == 0) {
             approach_value(&hero.grapple_pull_speed, frame_time * 27.0f, frame_time_sq * 80.0f);
@@ -952,7 +953,7 @@ void hero_update_movement(void) {
                                      &hit2,
                                      -(frame_time_sq * 42.0f) * 0.5f,
                                      hero.grapple_pull_speed,
-                                     -(hero.unk970 - 1.9f)) > 0 &&
+                                     -(hero.grapple_target_dist - 1.9f)) > 0 &&
             hit > 0.0f) {
             hero.target_arrival_frames = hit;
             hero.state.step = 1;
@@ -995,7 +996,8 @@ void hero_update_movement(void) {
         hero.motion.velocity.f[2] -= frame_time_sq * 15.0f;
         qcopy(&movement_and_hit_descriptor_scratch,
               &((struct MobyView *)hero.grapple_target)->u10.v10);
-        hero.unk970 = fast_vec_dist(&hero.motion.pos, &movement_and_hit_descriptor_scratch);
+        hero.grapple_target_dist =
+            fast_vec_dist(&hero.motion.pos, &movement_and_hit_descriptor_scratch);
         fast_vec_add(&v10, &hero.motion.pos, &hero.motion.velocity);
         fast_vec_sub(&movement_vector_scratch, &v10, &movement_and_hit_descriptor_scratch);
         fast_vec_normalize(&movement_vector_scratch, &movement_vector_scratch, hero.tether_radius);
@@ -1091,7 +1093,7 @@ void hero_update_movement(void) {
             f32 s;
             if (vector_distance_xy(&hero.motion.pos,
                                    &((struct MobyView *)hero.swing_target_moby)->u10.v10) <
-                    hero.unk9A0 * 1.57f ||
+                    hero.swing_rope_target_length * 1.57f ||
                 hero.ground_distance > 1.5f) {
                 add_hero_gravity_offset(
                     &hero.motion.velocity, &hero.motion.displacement, frame_time_sq * 40.0f);
@@ -1139,9 +1141,9 @@ void hero_update_movement(void) {
             old = hero.swing_rope_length;
             vendor_spring(&hero.swing_rope_length,
                           &hero.swing_length_vel,
-                          hero.unk9A0,
+                          hero.swing_rope_target_length,
                           hero.swing_rope_spring_k,
-                          hero.unk9C8,
+                          hero.swing_rope_damping,
                           hero.swing_rope_max_speed);
             d = hero.swing_rope_length - old;
             if (fast_vec_length(&vC0) > hero.swing_rope_length) {
@@ -1171,7 +1173,7 @@ void hero_update_movement(void) {
                 f32 t;
                 s32 up;
                 hero.swing_entry_push = 0;
-                t = square_root(hero.unk9A0 / hero.swing_gravity) * 3.1415927f;
+                t = square_root(hero.swing_rope_target_length / hero.swing_gravity) * 3.1415927f;
                 if (hero.swing_anim_dir != 0) {
                     up = hero.swing_anim_dir == 1;
                 } else {
@@ -1726,11 +1728,11 @@ void hero_update_movement(void) {
             emit_hero_randomized_motion_effects(5, 2);
         }
         if (hero.motion.flat_speed < frame_time * 0.3f && hero.stick_magnitude > 0.85f) {
-            hero.unk3B8 = 1;
+            hero.move_along_stick = 1;
         }
         if (absolute_float(hero.motion.yaw_error) < 0.05235988f || hero.item_anim_active != 0 ||
             hero.state.step == 1) {
-            hero.unk3B8 = 0;
+            hero.move_along_stick = 0;
         }
         if (hero.sharp_turn != 0 &&
             (absolute_float(hero.motion.yaw_error) < 0.06981317f || hero.item_anim_active != 0)) {
@@ -1789,7 +1791,7 @@ void hero_update_movement(void) {
             }
             speed_step(a, b);
         }
-        if (hero.unk3B8 != 0 && hero.magnetic_floor == 0) {
+        if (hero.move_along_stick != 0 && hero.magnetic_floor == 0) {
             set_planar_vel(hero.motion.move_yaw);
         } else {
             set_planar_vel(99999.0f);
@@ -1992,7 +1994,7 @@ void hero_update_movement(void) {
                              &hero.prev_rail_point,
                              &hero.prev_rail_segment,
                              &hero.prev_rail_seg_frac,
-                             hero.unk5A0,
+                             hero.prev_rail_spline_loops,
                              999.0f,
                              2.0f,
                              2.5f);
@@ -2012,7 +2014,7 @@ void hero_update_movement(void) {
             hero.rail_off_frames++;
             break;
         }
-        r = hero.unk574 * (f32)hero.grind_direction;
+        r = hero.grind_speed * (f32)hero.grind_direction;
         if (hero.state.current == 0x42) {
             r = hero.unk5CC * (f32)hero.grind_direction;
         }
@@ -2028,7 +2030,7 @@ void hero_update_movement(void) {
                         &hero.prev_rail_segment,
                         &hero.prev_rail_seg_frac,
                         r,
-                        hero.unk5A0);
+                        hero.prev_rail_spline_loops);
         }
         if (scale_game_frames(90) < hero.control_mode_timer) {
             s32 h;
@@ -2276,20 +2278,20 @@ void hero_update_movement(void) {
                     hero.grind_pose = -1;
                 }
             }
-            if (hero.unk5AC.f < sp) {
-                approach_value(&hero.unk5AC.f, sp, frame_time_sq * 8.0f);
+            if (hero.grind_speed_boost.f < sp) {
+                approach_value(&hero.grind_speed_boost.f, sp, frame_time_sq * 8.0f);
             } else {
-                approach_value(&hero.unk5AC.f, sp, frame_time_sq * 2.0f);
+                approach_value(&hero.grind_speed_boost.f, sp, frame_time_sq * 2.0f);
             }
-            if (hero.unk5AC.f > frame_time * 12.0f) {
-                hero.unk5AC.f = frame_time * 12.0f;
+            if (hero.grind_speed_boost.f > frame_time * 12.0f) {
+                hero.grind_speed_boost.f = frame_time * 12.0f;
             }
-            if (hero.unk5AC.f < D_0015ED6C_a * -2.5f) {
-                hero.unk5AC.f = D_0015ED6C_a * -2.5f;
+            if (hero.grind_speed_boost.f < D_0015ED6C_a * -2.5f) {
+                hero.grind_speed_boost.f = D_0015ED6C_a * -2.5f;
             }
-            hero.unk574 = hero.grind_base_speed + hero.unk5AC.f;
-            if (hero.unk574 < 0.0f) {
-                hero.unk574 = 0.0f;
+            hero.grind_speed = hero.grind_base_speed + hero.grind_speed_boost.f;
+            if (hero.grind_speed < 0.0f) {
+                hero.grind_speed = 0.0f;
             }
             fast_vec_sub(
                 &hero.motion.velocity, &movement_and_hit_descriptor_scratch, &hero.rail_point);
@@ -2414,19 +2416,19 @@ void hero_update_movement(void) {
             f32 len;
             fl = -fast_vec_length(&spatial_and_hit_descriptor_scratch);
             vendor_spring(&fl,
-                          &hero.unk618.f,
+                          &hero.follow_path_pull_speed.f,
                           0.0f,
                           frame_scale_sq * 0.05f,
                           frame_scale_sq * 0.3f,
                           frame_time * 10.0f);
             len = fast_vec_length(&spatial_and_hit_descriptor_scratch);
-            if (len < hero.unk618.f) {
-                hero.unk618.f = len;
+            if (len < hero.follow_path_pull_speed.f) {
+                hero.follow_path_pull_speed.f = len;
             }
-            if (hero.unk618.f < len) {
+            if (hero.follow_path_pull_speed.f < len) {
                 fast_vec_normalize(&spatial_and_hit_descriptor_scratch,
                                    &spatial_and_hit_descriptor_scratch,
-                                   hero.unk618.f);
+                                   hero.follow_path_pull_speed.f);
             }
             fast_vec_add(&hero.motion.pos, &hero.motion.pos, &spatial_and_hit_descriptor_scratch);
         }
@@ -2439,7 +2441,7 @@ void hero_update_movement(void) {
         step_angle_toward_target(&hero.motion.rot.f[1], 0, 0.0f, frame_time * 4.712389f);
         fast_vec_sub(&hero.motion.velocity, &hero.ledge_hang_pos, &hero.motion.pos);
         FUN_L00_0025f730(&hero.motion.velocity, frame_time * 4.0f);
-        approach_value(&hero.unk4F0, hero.motion.pos.f[2], frame_time * 3.0f);
+        approach_value(&hero.smoothed_air_z, hero.motion.pos.f[2], frame_time * 3.0f);
         break;
     case HERO_STATE_ALT_LEDGE_HANG_ENTRY:
     case HERO_STATE_ALT_LEDGE_HANG:
@@ -2447,7 +2449,7 @@ void hero_update_movement(void) {
         turn_to(0, frame_scale_sq * 0.02f, frame_scale_sq * 0.2f, frame_time * 4.712389f);
         fast_vec_sub(&hero.motion.velocity, &hero.ledge_hang_pos, &hero.motion.pos);
         FUN_L00_0025f730(&hero.motion.velocity, frame_time * 1.7f);
-        approach_value(&hero.unk4F0, hero.motion.pos.f[2], frame_time * 3.0f);
+        approach_value(&hero.smoothed_air_z, hero.motion.pos.f[2], frame_time * 3.0f);
         break;
     case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
     case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
@@ -2692,7 +2694,7 @@ void hero_update_movement(void) {
                 allocate_hero_voice_for_entry(4, 0);
             }
         }
-        if (hero.unk4A8 != 0 && hero.on_ice_ground != 0) {
+        if (hero.took_off_from_ice != 0 && hero.on_ice_ground != 0) {
             hero.target_speed = hero.ground_speed;
         } else {
             if (hero.rail_land_frames != 0) {
@@ -2728,7 +2730,7 @@ void hero_update_movement(void) {
              hero.state.current != HERO_STATE_PACK_LONG_JUMP && hero.state.current != 0xC &&
              hero.state.current != 0x11 && hero.state.current != 0x1C &&
              hero.state.current != 0x4C)) {
-            if (hero.unk4A8 != 0) {
+            if (hero.took_off_from_ice != 0) {
                 update_hero_planar_movement_velocity();
                 if (hero.state.current == HERO_STATE_PACK_JUMP &&
                     hero.state_timer < scale_game_frames(10) &&
@@ -3106,7 +3108,7 @@ void hero_update_movement(void) {
                 0, frame_scale_sq * 0.008f * g, frame_scale_sq * 0.15f, frame_time * 9.948377f * g);
         }
         speed_step(frame_time_sq * 7.5f * k, frame_time_sq * 8.5f);
-        if (hero.unk3B8 != 0 && hero.magnetic_floor == 0) {
+        if (hero.move_along_stick != 0 && hero.magnetic_floor == 0) {
             set_planar_vel(hero.motion.move_yaw);
         } else {
             set_planar_vel(99999.0f);
@@ -3463,7 +3465,7 @@ void hero_update_movement(void) {
             hero_eases[27].rot_target.f[2] = a * 0.25f;
             hero_eases[28].rot_target.f[2] = a * 0.57f;
         }
-        if (hero.unk3B8 != 0 && hero.magnetic_floor == 0) {
+        if (hero.move_along_stick != 0 && hero.magnetic_floor == 0) {
             set_planar_vel(hero.motion.move_yaw);
         } else {
             set_planar_vel(99999.0f);
@@ -3551,7 +3553,7 @@ void hero_update_movement(void) {
         }
         turn_to(0, frame_scale_sq * 0.035f * g, frame_scale_sq * 0.1f, frame_time * 2.268928f * g);
         speed_step(frame_time_sq * 7.5f * k, frame_time_sq * 8.5f);
-        if (hero.unk3B8 != 0 && hero.magnetic_floor == 0) {
+        if (hero.move_along_stick != 0 && hero.magnetic_floor == 0) {
             set_planar_vel(hero.motion.move_yaw);
         } else {
             set_planar_vel(99999.0f);

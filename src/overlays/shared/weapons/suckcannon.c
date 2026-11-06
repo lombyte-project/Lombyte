@@ -2020,7 +2020,7 @@ s32 cancel_suck_cannon_suction(struct Moby *moby) {
     switch (k) {
     case SUCK_CANNON_BEING_PULLED_IN:
         if (*(s16 *)(suction_record + 0x6A) != -1) {
-            hero.unk2050[*(s16 *)(suction_record + 0x6A)] = 0;
+            hero.suction_mobys[*(s16 *)(suction_record + 0x6A)] = 0;
             if (hero.suck_cannon_incoming > 0)
                 hero.suck_cannon_incoming--;
         }
@@ -2428,7 +2428,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
                 hero.suck_cannon_incoming--;
                 hero.sucked_moby_count++;
                 func_L00_002DB6C8_2DDEA0(moby, &suction_and_projectile_scratch.v[0]);
-                hero.unk2050[suction_and_projectile_record->idx]->flags &= 0xEFFF;
+                hero.suction_mobys[suction_and_projectile_record->idx]->flags &= 0xEFFF;
             } else {
                 transpose_rotation_matrix(&suction_and_projectile_scratch.v[5], D_0013FA90_2DDEA0);
                 func_001F9BF0_2DDEA0(&suction_and_projectile_scratch.v[2],

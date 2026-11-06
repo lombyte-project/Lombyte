@@ -372,7 +372,7 @@ void restore_hero_from_vehicle_mode(void) {
     unsigned char *flag_clear_target;
     if (hero_context->vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         hero_context->health.vehicle_mode_hp = hero_context->health.hp;
-        hero_context->health.hp = hero_context->health.unk22B0;
+        hero_context->health.hp = hero_context->health.saved_hp;
         if (hero_context->unk1620) {
             mark_moby_for_removal(hero_context->unk1620);
             hero_context->unk1620 = 0;
@@ -386,18 +386,18 @@ void restore_hero_from_vehicle_mode(void) {
         struct Hero *hero_restore_context = &hero;
         reset_hero_easing_records();
         hero_restore_context->vehicle_mode = HERO_VEHICLE_MODE_ON_FOOT;
-        flag_clear_target = hero_restore_context->unkA84;
+        flag_clear_target = hero_restore_context->replacement_moby;
         if (flag_clear_target) {
             *(u16 *)(flag_clear_target + 0x34) &= ~6;
         }
-        hero_restore_context->unkA84 = 0;
+        hero_restore_context->replacement_moby = 0;
         if (hero_restore_context->vehicle_mode3_moby) {
             mark_moby_for_removal(hero_restore_context->vehicle_mode3_moby);
             hero_restore_context->vehicle_mode3_moby = 0;
         }
         release_and_clear_hero_voice_slots();
         {
-            unsigned char *restored_hero_moby = hero_restore_context->unkA88;
+            unsigned char *restored_hero_moby = hero_restore_context->base_moby;
             hero_restore_context->moby = (struct Moby *)restored_hero_moby;
             qcopy(&MOBY(restored_hero_moby)->pos, &hero_restore_context->motion.pos);
             MOBY(restored_hero_moby)->collision_disable = 0;
@@ -583,8 +583,9 @@ s32 resolve_hero_position_collisions(s32 mode) {
         hero.path_constrain_pending = 0;
     }
     if (hero.state.control_mode != HERO_MODE_SWIM) {
-        if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN || hero.unk1F8 != 0) {
-            if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL || hero.unk1F8 != 0) {
+        if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN || hero.magnet_walk_timer != 0) {
+            if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
+                hero.magnet_walk_timer != 0) {
                 add_hero_up_offset(&collision_query_offset, &collision_query_offset, 0.6f);
             } else {
                 add_hero_gravity_offset(
@@ -688,30 +689,30 @@ void update_hero_timers_and_spatial_state(void) {
     hero.anim_seq_frames++;
     fast_dec_timer(&hero.move_lock_timer);
     fast_dec_timer(&hero.invulnerable_frames);
-    fast_dec_timer_s16(&hero.unk1B2);
+    fast_dec_timer_s16(&hero.item_select_override_timer);
     fast_dec_timer(&hero.long_jump_lockout);
     fast_dec_timer_s16(&hero.jump_lockout_timer);
     fast_dec_timer_s16(&hero.dive_lock);
     fast_dec_timer(&hero.wall_jump_window);
-    fast_dec_timer_s16(&hero.unk1F0);
+    fast_dec_timer_s16(&hero.ledge_ahead_timer);
     fast_dec_timer_s16(&hero.ledge_probe_cooldown);
-    fast_dec_timer_s16(&hero.unk1C8);
+    fast_dec_timer_s16(&hero.grind_catch_lockout);
     fast_dec_timer_s16(&hero.rail_catch_grace);
     fast_dec_timer_s16(&hero.rail_grab_cooldown);
     fast_dec_timer_s16(&hero.grapple_lockout_timer);
     fast_dec_timer(&hero.collision_off_frames);
-    fast_dec_timer(&hero.unk1D0);
+    fast_dec_timer(&hero.idle_return_delay);
     fast_dec_timer(&hero.jump_buffer_lockout);
     fast_dec_timer_s16(&hero.fidget_cooldown);
     fast_dec_timer_s16(&hero.sinking_floor_hold);
     fast_dec_timer_s16(&hero.hit_flash_timer);
-    fast_dec_timer_s16(&hero.unk1EA);
+    fast_dec_timer_s16(&hero.wall_push_out_timer);
     fast_dec_timer_s16(&hero.edge_brake_lock_timer);
     fast_dec_timer_s16(&hero.jump_lock_timer);
-    fast_dec_timer_s16(&hero.unk1DC);
-    fast_dec_timer_s16(&hero.unk1F6);
-    fast_dec_timer_s16(&hero.unk1DA);
-    fast_dec_timer_s16(&hero.unk1F8);
+    fast_dec_timer_s16(&hero.face_expression_timer);
+    fast_dec_timer_s16(&hero.pushed_timer);
+    fast_dec_timer_s16(&hero.item_swap_timer);
+    fast_dec_timer_s16(&hero.magnet_walk_timer);
     if (!(controller_state.held & 5)) {
         hero.unk1EC = 0;
     }

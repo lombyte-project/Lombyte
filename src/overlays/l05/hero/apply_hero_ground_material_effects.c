@@ -88,7 +88,7 @@ void apply_hero_ground_material_effects(void) {
     if (saved_ground_type == 8)
         hero.on_slip_ground = 1;
     if (saved_ground_type == 9)
-        hero.unk12EE = 1;
+        hero.grind_jump_block = 1;
     if (saved_ground_type == 12)
         hero.on_slip_ground = 1;
     if (hero.selector_4 && hero.grounded_frames && hero.state.control_mode != 0x10 &&
@@ -323,7 +323,7 @@ d1:
         break;
     }
     hero.ground_pitch.i = 0;
-    hero.unk2E8.i = 0;
+    hero.ground_roll.i = 0;
     hero.side_probe_roll.i[0] = 0;
     hero.side_probe_roll.i[1] = 0;
     hero.side_probe_pitch.i[0] = 0;
@@ -343,7 +343,7 @@ d1:
         hero.ground_pitch.f = ground_vector_scratch.f[1];
     }
     if (-0.78539819f < ground_vector_scratch.f[0] && ground_vector_scratch.f[0] < 0.78539819f) {
-        hero.unk2E8.f = ground_vector_scratch.f[0];
+        hero.ground_roll.f = ground_vector_scratch.f[0];
     }
     for (i = 0; i < 2; i++) {
         side_probe_angle = 1.5707964f;
@@ -369,7 +369,7 @@ d1:
         } else {
             hero.side_probe_drop.i[i] = 0;
             hero.side_probe_pitch.f[i] = hero.ground_pitch.f;
-            hero.side_probe_roll.f[i] = hero.unk2E8.f;
+            hero.side_probe_roll.f[i] = hero.ground_roll.f;
         }
     }
 }
@@ -416,9 +416,9 @@ s32 resolve_hero_position_collisions(s32 mode) {
         if (hero.state.control_mode == 0x16) {
             transform_hero_local_offset_to_world(&collision_query_offset, 0.0f, 0.0f, 0.7f);
             fast_vec_sub(&collision_query_offset, &collision_query_offset, &hero.motion.pos.q);
-        } else if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN || hero.unk1F8 != 0) {
-            if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL || hero.unk1F8 != 0 ||
-                (unsigned)(hero.state.control_mode - 0x15) < 2) {
+        } else if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN || hero.magnet_walk_timer != 0) {
+            if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
+                hero.magnet_walk_timer != 0 || (unsigned)(hero.state.control_mode - 0x15) < 2) {
                 add_hero_up_offset(&collision_query_offset, &collision_query_offset, 0.6f);
             } else {
                 add_hero_gravity_offset(

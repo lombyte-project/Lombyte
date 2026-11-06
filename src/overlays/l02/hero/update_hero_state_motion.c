@@ -101,7 +101,7 @@ void process_hero_ground_material_effects(void) {
     }
     if (saved_ground_type == 0x9) {
         struct Hero *q = &hero;
-        q->unk12EE = 1;
+        q->grind_jump_block = 1;
     }
     if (saved_ground_type == 0xC) {
         struct Hero *q = &hero;
@@ -289,7 +289,7 @@ void update_hero_collision_dimensions(void) {
     }
     if (hero.state.control_mode == HERO_MODE_JUMP) {
         if (hero.state_timer > hero.takeoff_frame && hero.past_jump_apex == 0)
-            hero.capsule_bottom_target = hero.unk434;
+            hero.capsule_bottom_target = hero.air_capsule_bottom;
     } else if (hero.state.current == HERO_STATE_FALL) {
         hero.capsule_bottom_target = 0.5f;
     } else if (hero.state.current == HERO_STATE_CROUCH) {
@@ -478,7 +478,7 @@ d1:
         break;
     }
     hero.ground_pitch.i = 0;
-    hero.unk2E8.i = 0;
+    hero.ground_roll.i = 0;
     hero.side_probe_roll.i[0] = 0;
     hero.side_probe_roll.i[1] = 0;
     hero.side_probe_pitch.i[0] = 0;
@@ -498,7 +498,7 @@ d1:
         hero.ground_pitch.f = ground_geometry_scratch.f[1];
     }
     if (-0.78539819f < ground_geometry_scratch.f[0] && ground_geometry_scratch.f[0] < 0.78539819f) {
-        hero.unk2E8.f = ground_geometry_scratch.f[0];
+        hero.ground_roll.f = ground_geometry_scratch.f[0];
     }
     for (i = 0; i < 2; i++) {
         probe_angle = 1.5707964f;
@@ -526,7 +526,7 @@ d1:
         } else {
             hero.side_probe_drop.i[i] = 0;
             hero.side_probe_pitch.f[i] = hero.ground_pitch.f;
-            hero.side_probe_roll.f[i] = hero.unk2E8.f;
+            hero.side_probe_roll.f[i] = hero.ground_roll.f;
         }
     }
 }
@@ -594,8 +594,9 @@ s32 resolve_hero_position_collisions(s32 mode) {
         hero.path_constrain_pending = 0;
     }
     if (hero.state.control_mode != HERO_MODE_SWIM) {
-        if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN || hero.unk1F8 != 0) {
-            if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL || hero.unk1F8 != 0) {
+        if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN || hero.magnet_walk_timer != 0) {
+            if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
+                hero.magnet_walk_timer != 0) {
                 add_hero_up_offset(&collision_probe_offset, &collision_probe_offset, 0.6f);
             } else {
                 add_hero_gravity_offset(
@@ -1037,10 +1038,10 @@ void update_hero_state_motion(void) {
         float root1;
 
         qcopy(motion_geometry_scratch[0], &hero.grapple_target->pos);
-        hero.unk970 = fast_vec_dist(hero.motion.pos.f, motion_geometry_scratch[0]);
+        hero.grapple_target_dist = fast_vec_dist(hero.motion.pos.f, motion_geometry_scratch[0]);
         hero.target_arrival_frames = scale_game_frames(0x3C);
         if (hero.grapple_pull_speed > 0.0f) {
-            hero.target_arrival_frames = hero.unk970 / hero.motion.speed_xy;
+            hero.target_arrival_frames = hero.grapple_target_dist / hero.motion.speed_xy;
         }
         if (hero.state.step == 0) {
             approach_value(&hero.grapple_pull_speed, frame_time * 27.0f, frame_time_sq * 80.0f);
@@ -1054,7 +1055,7 @@ void update_hero_state_motion(void) {
                                      &root1,
                                      -(frame_time_sq * 42.0f) * 0.5f,
                                      hero.grapple_pull_speed,
-                                     -(hero.unk970 - 1.9f)) > 0 &&
+                                     -(hero.grapple_target_dist - 1.9f)) > 0 &&
             root0 > 0.0f) {
             hero.target_arrival_frames = root0;
             hero.state.step = 1;
@@ -1096,7 +1097,7 @@ void update_hero_state_motion(void) {
         fast_vec_scale(hero.motion.velocity.f, hero.motion.velocity.f, 0.9f);
         hero.motion.velocity.f[2] -= frame_time_sq * 15.0f;
         qcopy(motion_geometry_scratch[0], &hero.grapple_target->pos);
-        hero.unk970 = fast_vec_dist(hero.motion.pos.f, motion_geometry_scratch[0]);
+        hero.grapple_target_dist = fast_vec_dist(hero.motion.pos.f, motion_geometry_scratch[0]);
         fast_vec_add(motion_geometry_scratch[1], hero.motion.pos.f, hero.motion.velocity.f);
         fast_vec_sub(
             motion_geometry_scratch[3], motion_geometry_scratch[1], motion_geometry_scratch[0]);
@@ -1189,7 +1190,7 @@ void update_hero_state_motion(void) {
             float k;
 
             if (vector_distance_xy(hero.motion.pos.f, &hero.swing_target_moby->pos) <
-                    hero.unk9A0 * 1.57f ||
+                    hero.swing_rope_target_length * 1.57f ||
                 hero.ground_distance > 1.5f) {
                 add_hero_gravity_offset(
                     hero.motion.velocity.f, hero.motion.displacement.f, frame_time_sq * 40.0f);
@@ -1253,9 +1254,9 @@ void update_hero_state_motion(void) {
             d = hero.swing_rope_length;
             vendor_spring(&hero.swing_rope_length,
                           &hero.swing_length_vel,
-                          hero.unk9A0,
+                          hero.swing_rope_target_length,
                           hero.swing_rope_spring_k,
-                          hero.unk9C8,
+                          hero.swing_rope_damping,
                           hero.swing_rope_max_speed);
             d = hero.swing_rope_length - d;
             if (hero.swing_rope_length < fast_vec_length(motion_geometry_scratch[12])) {
@@ -1289,7 +1290,7 @@ void update_hero_state_motion(void) {
             int   up;
 
             hero.swing_entry_push = 0;
-            a = square_root(hero.unk9A0 / hero.swing_gravity) * 3.1415927f;
+            a = square_root(hero.swing_rope_target_length / hero.swing_gravity) * 3.1415927f;
             if (hero.swing_anim_dir != 0) {
                 up = hero.swing_anim_dir == 1;
             } else {
@@ -1808,11 +1809,11 @@ void update_hero_state_motion(void) {
         float down;
 
         if (hero.motion.flat_speed < frame_time * 0.3f && hero.stick_magnitude > 0.85f) {
-            hero.unk3B8 = 1;
+            hero.move_along_stick = 1;
         }
         if (absolute_float(hero.motion.yaw_error) < 0.05235988f || hero.item_anim_active != 0 ||
             hero.state.step == 1) {
-            hero.unk3B8 = 0;
+            hero.move_along_stick = 0;
         }
         if (hero.sharp_turn != 0) {
             if (absolute_float(hero.motion.yaw_error) < 0.06981317f || hero.item_anim_active != 0) {
@@ -1878,7 +1879,7 @@ void update_hero_state_motion(void) {
             down = frame_time_sq * 17.0f;
         }
         speed_step(up, down);
-        if (hero.unk3B8 != 0 && hero.magnetic_floor == 0) {
+        if (hero.move_along_stick != 0 && hero.magnetic_floor == 0) {
             set_planar_vel(hero.motion.move_yaw);
         } else {
             set_planar_vel(99999.0f);
@@ -1903,7 +1904,7 @@ void update_hero_state_motion(void) {
         step_angle_toward_target(&hero.motion.rot.f[1], 0, 0.0f, frame_time * 4.712389f);
         fast_vec_sub(hero.motion.velocity.f, hero.ledge_hang_pos.f, hero.motion.pos.f);
         FUN_L00_0025f730(hero.motion.velocity.f, frame_time * 4.0f);
-        approach_value(&hero.unk4F0, hero.motion.pos.f[2], frame_time * 3.0f);
+        approach_value(&hero.smoothed_air_z, hero.motion.pos.f[2], frame_time * 3.0f);
         break;
     case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
     case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
@@ -2151,7 +2152,7 @@ void update_hero_state_motion(void) {
                 allocate_hero_voice_for_entry(4, 0);
             }
         }
-        if (hero.unk4A8 != 0 && hero.on_ice_ground != 0) {
+        if (hero.took_off_from_ice != 0 && hero.on_ice_ground != 0) {
             hero.target_speed = hero.ground_speed;
         } else {
             if (hero.rail_land_frames != 0) {
@@ -2446,7 +2447,7 @@ void update_hero_state_motion(void) {
         }
         turn_to(0, frame_scale_sq * 0.035f * t, frame_scale_sq * 0.1f, frame_time * 2.268928f * t);
         speed_step(frame_time_sq * 7.5f * k, frame_time_sq * 8.5f);
-        if (hero.unk3B8 != 0 && hero.magnetic_floor == 0) {
+        if (hero.move_along_stick != 0 && hero.magnetic_floor == 0) {
             set_planar_vel(hero.motion.move_yaw);
         } else {
             set_planar_vel(99999.0f);

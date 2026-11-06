@@ -222,7 +222,7 @@ d1:
         break;
     }
     hero.ground_pitch.i = 0;
-    hero.unk2E8.i = 0;
+    hero.ground_roll.i = 0;
     hero.side_probe_roll.i[0] = 0;
     hero.side_probe_roll.i[1] = 0;
     hero.side_probe_pitch.i[0] = 0;
@@ -244,7 +244,7 @@ d1:
     }
     if (-0.78539819f < ground_displacement_or_angles.f[0] &&
         ground_displacement_or_angles.f[0] < 0.78539819f) {
-        hero.unk2E8.f = ground_displacement_or_angles.f[0];
+        hero.ground_roll.f = ground_displacement_or_angles.f[0];
     }
     for (i = 0; i < 2; i++) {
         surface_probe_angle = 1.5707964f;
@@ -274,7 +274,7 @@ d1:
         } else {
             hero.side_probe_drop.i[i] = 0;
             hero.side_probe_pitch.f[i] = hero.ground_pitch.f;
-            hero.side_probe_roll.f[i] = hero.unk2E8.f;
+            hero.side_probe_roll.f[i] = hero.ground_roll.f;
         }
     }
 }
