@@ -26,7 +26,7 @@ struct MenuScreenWords {
 
 /* Option list screen (update_menu_option_list). */
 struct MenuOption {
-    s32 unk0;           /* 0x0: help text id of the option; 0 ends the list */
+    s32 label;          /* 0x0: text id of the option; 0 ends the list */
     u8 *flag;           /* 0x4: toggled by confirm (pad 0x40) */
     s32 first_message;  /* 0x8: text id */
     s32 second_message; /* 0xC: text id */
@@ -35,21 +35,21 @@ struct MenuOption {
 
 struct MenuOptionListData {
     s32 flags; /* 0x30: bit 0 draws a box while the list is empty (draw_cheats_menu) */
-    struct MenuOption *list;       /* 0x34: ended by a null unk0 */
+    struct MenuOption *list;       /* 0x34: ended by a zero label */
     s32                selection;  /* 0x38: pad 0x1000 up, 0x4000 down */
     s32                fade_timer; /* 0x3C: counts down after fade_to_black, drives D_0015F43C */
 };
 
 /* Choice list screen (update_menu_choice_list). */
 struct MenuChoice {
-    s32 unk0;      /* 0x0: 0 ends the list */
+    s32 label;     /* 0x0: text id of the choice; 0 ends the list */
     u8 *value;     /* 0x4: chosen option; confirm advances it */
     s32 option[4]; /* 0x8: 0 ends them early */
 }; /* size 0x18 */
 
 struct MenuChoiceListData {
     u8                 pad_30[0x4];
-    struct MenuChoice *list;      /* 0x34: ended by a zero unk0 */
+    struct MenuChoice *list;      /* 0x34: ended by a zero label */
     s32                selection; /* 0x38: pad 0x1000 up, 0x4000 down */
 };
 
@@ -350,7 +350,7 @@ struct MenuScreen {
     s32 (*draw)(struct MenuScreen *);        /* 0x04 */
     void (*enter)(struct MenuScreen *, s32); /* 0x08 */
     void (*leave)(struct MenuScreen *, s32); /* 0x0C */
-    s32 flags;                               /* 0x10: MENU_SCREEN_HIDDEN while the help text loads */
+    s32 flags;  /* 0x10: MENU_SCREEN_HIDDEN while the help text loads */
     s32 moby;   /* 0x14: its menu moby D_001D5D90[i]; menu sounds play on it */
     s32 x;      /* 0x18: left edge */
     s32 y;      /* 0x1C: top edge */

@@ -383,7 +383,7 @@ void draw_vendor_screen(void) {
             D_L00_00165F80[2] = D_L00_00166FD0[2];
             fast_vec_cross(&D_L00_00166FD0[1], &D_L00_00166FD0[0], &D_L00_00166FD0[2]);
         }
-        p->menu_mobys = (struct VendorMoby *)((u8 *)p->unk14 + 0x100);
+        p->menu_mobys = (struct VendorMoby *)((u8 *)p->moby_buffer + 0x100);
         init_moby_instance(((u8 *)p->menu_mobys), 0xD);
         *(u16 *)(((u8 *)p->menu_mobys) + 0x32) = 0x40;
         update_entity(((u8 *)p->menu_mobys));
@@ -393,7 +393,7 @@ void draw_vendor_screen(void) {
         update_entity(((u8 *)p->menu_mobys) + 0x500);
         pack_render_command_fields(((u8 *)p->menu_mobys) + 0x500, 0x202020, 0xE, 0xE, 0);
         initialize_vendor_selected_item_mobys();
-        p->unk2C = (s32)p->unk14 + 0x1400;
+        p->unk2C = (s32)p->moby_buffer + 0x1400;
         fast_mem_zero16(p->unk2C, 0x400);
         p->unk18 = p->unk2C + 0x400;
         if (cd_read_active[0] == 0) {

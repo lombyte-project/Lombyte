@@ -35,7 +35,7 @@ s32 update_menu_choice_list(struct MenuScreen *menu) {
     }
     if (controller_state.pressed_unmasked & PAD_DOWN) {
         selected_choice_index = menu->data.choices.selection;
-        if (menu->data.choices.list[selected_choice_index + 1].unk0 != 0) {
+        if (menu->data.choices.list[selected_choice_index + 1].label != 0) {
             menu->data.choices.selection = selected_choice_index + 1;
         }
     }

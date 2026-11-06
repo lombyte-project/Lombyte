@@ -446,7 +446,7 @@ void open_vendor_menu(void *vendor_moby_arg) {
     D_L00_0015F5D8 = 1;
     vendor_menu.state = VENDOR_MENU_OPENING;
     vendor_menu.unk10 = D_L00_00173E00[2] + 0x60000;
-    vendor_menu.unk14 = (struct VendorMoby *)(D_L00_00173E00[1] + 0x60000);
+    vendor_menu.moby_buffer = (struct VendorMoby *)(D_L00_00173E00[1] + 0x60000);
     vendor_menu.unk08 = 0;
     vendor_menu.vendor_moby = (struct VendorMoby *)vendor_moby;
     allocate_voice_for_target_entry(3, 0, vendor_moby);
@@ -1253,12 +1253,12 @@ void update_vendor_menu(void) {
     case VENDOR_MENU_OPEN:
         if (D_L00_00161188 == 0 && cd_read_active[0] == 0 && D_L00_0016118C != 0) {
             decompress_and_relocate_vendor_moby_assets();
-            vendor_menu.unk24 = vendor_menu.unk14;
-            init_moby_instance(vendor_menu.unk24, 0xC);
-            vendor_menu.unk24->h32 = 0x40;
-            vendor_menu.unk24->rot.f[2] = vendor_menu.vendor_moby->rot.f[2];
-            update_entity(vendor_menu.unk24);
-            pack_render_command_fields(vendor_menu.unk24, 0x202020, 0xE, 0xE, 0);
+            vendor_menu.auxiliary_moby = vendor_menu.moby_buffer;
+            init_moby_instance(vendor_menu.auxiliary_moby, 0xC);
+            vendor_menu.auxiliary_moby->h32 = 0x40;
+            vendor_menu.auxiliary_moby->rot.f[2] = vendor_menu.vendor_moby->rot.f[2];
+            update_entity(vendor_menu.auxiliary_moby);
+            pack_render_command_fields(vendor_menu.auxiliary_moby, 0x202020, 0xE, 0xE, 0);
             D_L00_00161188 = 1;
             D_L00_0016118C = 0;
             handle_vendor_auxiliary_moby_event(1);
@@ -1266,14 +1266,15 @@ void update_vendor_menu(void) {
         advance_moby_animation(vendor_menu.vendor_moby);
         update_entity(vendor_menu.vendor_moby);
         if (D_L00_00161188 == 1) {
-            transform_vector_by_basis(&vendor_menu.unk24->pos,
+            transform_vector_by_basis(&vendor_menu.auxiliary_moby->pos,
                                       &vendor_auxiliary_moby_local_offset_gp,
                                       vendor_menu.vendor_moby->mtx);
-            fast_vec_add(
-                &vendor_menu.unk24->pos, &vendor_menu.unk24->pos, &vendor_menu.vendor_moby->pos);
-            advance_moby_animation(vendor_menu.unk24);
-            update_entity(vendor_menu.unk24);
-            update_resident_dialogue_animation_state(vendor_menu.unk24);
+            fast_vec_add(&vendor_menu.auxiliary_moby->pos,
+                         &vendor_menu.auxiliary_moby->pos,
+                         &vendor_menu.vendor_moby->pos);
+            advance_moby_animation(vendor_menu.auxiliary_moby);
+            update_entity(vendor_menu.auxiliary_moby);
+            update_resident_dialogue_animation_state(vendor_menu.auxiliary_moby);
         }
         k1 = -0.05f;
         k2 = -0.36f;
@@ -1574,7 +1575,7 @@ void update_vendor_menu(void) {
         update_view_context();
         qcopy(l00_camera.pos.f, current_camera_key);
         transform_vector_by_basis(l00_camera.pos.f, l00_camera.pos.f, vendor_menu.basis);
-        fast_vec_add(l00_camera.pos.f, l00_camera.pos.f, &vendor_menu.unkC0);
+        fast_vec_add(l00_camera.pos.f, l00_camera.pos.f, &vendor_menu.cutscene_offset);
         camera_world_z_rotation = fast_add_rotations(rot[2], vendor_menu.basis[3].f[2]);
         sce_vu0_unit_matrix(camera_rotation_matrix);
         sce_vu0_rot_matrix_x(camera_rotation_matrix, camera_rotation_matrix, rot[0]);
@@ -1604,7 +1605,7 @@ void update_vendor_menu(void) {
             fast_vec_scale(&position_contribution_scratch, &keys[mb->next_frame], mb->blend);
             fast_vec_add(&mb->pos, &position_scratch, &position_contribution_scratch);
             transform_vector_by_basis(&mb->pos, &mb->pos, vendor_menu.basis);
-            fast_vec_add(&mb->pos, &mb->pos, &vendor_menu.unkC0);
+            fast_vec_add(&mb->pos, &mb->pos, &vendor_menu.cutscene_offset);
             mb->rot.f[2] = vendor_menu.basis[3].f[2];
             mb->b71 = 0xFF;
             update_entity(mb);
