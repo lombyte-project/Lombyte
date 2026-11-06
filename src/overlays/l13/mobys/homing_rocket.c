@@ -25,14 +25,14 @@ unsigned char *spawn_level_13_homing_rocket(char *owner_moby,
 
 typedef struct Level13HomingRocketVars {
     u8    pad_0[0x10];
-    f32   unk10[4];
-    char *unk20;
-    char *unk24;
-    s32   unk28;
-    f32   unk2C;
+    f32   target_position[4];
+    char *owner;
+    char *target;
+    s32   expiry_timer;
+    f32   scale;
     s32   unk30;
     s32   unk34;
-    f32   unk38;
+    f32   max_speed;
 } Level13HomingRocketVars;
 
 unsigned char *spawn_level_13_homing_rocket(char *owner_moby,
@@ -53,16 +53,16 @@ unsigned char *spawn_level_13_homing_rocket(char *owner_moby,
         MOBY(moby)->draw_dist = 0xFF;
         MOBY(moby)->visible = 1;
         MOBY(moby)->state = HOMING_ROCKET_STATE_INITIAL;
-        homing_rocket_vars->unk24 = target;
-        homing_rocket_vars->unk20 = owner_moby;
+        homing_rocket_vars->target = target;
+        homing_rocket_vars->owner = owner_moby;
         qcopy(moby + 0x10, rocket_spawn_position);
         qcopy(moby + 0x40, initial_rotation);
         {
             float *sp = &scale;
-            homing_rocket_vars->unk2C = *sp;
+            homing_rocket_vars->scale = *sp;
         }
-        homing_rocket_vars->unk38 = max_speed;
-        homing_rocket_vars->unk28 = initial_expiry_countdown;
+        homing_rocket_vars->max_speed = max_speed;
+        homing_rocket_vars->expiry_timer = initial_expiry_countdown;
         homing_rocket_vars->unk30 = 0;
         homing_rocket_vars->unk34 = 0;
         qcopy(homing_rocket_vars, ((char *)MOBY(owner_moby)->pvars) + 0xC0);
@@ -70,8 +70,8 @@ unsigned char *spawn_level_13_homing_rocket(char *owner_moby,
             blend_moby_animation(moby, 1, 0, 10);
         }
         fast_vec_add(moby + 0x10, moby + 0x10, homing_rocket_vars);
-        if (homing_rocket_vars->unk24 != 0) {
-            qcopy(homing_rocket_vars->unk10, homing_rocket_vars->unk24 + 0x10);
+        if (homing_rocket_vars->target != 0) {
+            qcopy(homing_rocket_vars->target_position, homing_rocket_vars->target + 0x10);
         }
         MOBY(moby)->scale = MOBY(moby)->pclass->scale;
         update_entity(moby);

@@ -20,9 +20,9 @@ void controller_linked_gate_update(struct Moby *moby) __asm__("FUN_L13_002f8a78"
 
 typedef struct ControllerLinkedGateVars {
     u8  pad_0[0x10];
-    f32 unk10;
-    s32 unk14;
-    s32 unk18;
+    f32 fade;
+    s32 point_offset;
+    s32 start_closed;
 } ControllerLinkedGateVars;
 
 /* Moby classes 674, 677, 680 */
@@ -68,13 +68,13 @@ void controller_linked_gate_update(struct Moby *moby) {
         }
         set_moby_color(moby, 0x80, 0x80, 0x80);
         moby->flags |= 0xA08;
-        if (gate_data->unk18 == 0) {
-            gate_data->unk10 = 1.0f;
+        if (gate_data->start_closed == 0) {
+            gate_data->fade = 1.0f;
             moby->state = GATE_STATE_OPEN;
             moby->collision = moby->pclass->collision;
             moby->alpha = 0x14;
         } else {
-            gate_data->unk10 = 0.0f;
+            gate_data->fade = 0.0f;
             moby->state = GATE_STATE_CLOSED;
             moby->collision = 0;
             moby->alpha = 0;
@@ -91,9 +91,9 @@ void controller_linked_gate_update(struct Moby *moby) {
             moby->state = GATE_STATE_OPENING;
             moby->collision = moby->pclass->collision;
         }
-        gate_data->unk10 -= frame_scale * 0.05f;
-        if (gate_data->unk10 < 0.0f) {
-            gate_data->unk10 = 0.0f;
+        gate_data->fade -= frame_scale * 0.05f;
+        if (gate_data->fade < 0.0f) {
+            gate_data->fade = 0.0f;
             moby->state = GATE_STATE_CLOSED;
             moby->collision = 0;
             moby->visible = 0;
@@ -113,22 +113,22 @@ void controller_linked_gate_update(struct Moby *moby) {
             moby->collision = 0;
             moby->state = GATE_STATE_CLOSING;
         }
-        gate_data->unk10 += frame_scale * 0.05f;
-        if (1.0f < gate_data->unk10) {
-            gate_data->unk10 = 1.0f;
+        gate_data->fade += frame_scale * 0.05f;
+        if (1.0f < gate_data->fade) {
+            gate_data->fade = 1.0f;
             moby->state = GATE_STATE_OPEN;
             moby->collision = moby->pclass->collision;
         }
         break;
     }
-    moby->alpha = truncate_float_to_s32(gate_data->unk10 * 20.0f);
+    moby->alpha = truncate_float_to_s32(gate_data->fade * 20.0f);
     step = 0xC0;
-    gate_data->unk14 += step;
-    if (gate_data->unk14 > 0x1000) {
-        gate_data->unk14 -= 0x1000;
+    gate_data->point_offset += step;
+    if (gate_data->point_offset > 0x1000) {
+        gate_data->point_offset -= 0x1000;
         step -= 0x1000;
-    } else if (gate_data->unk14 < 0) {
-        gate_data->unk14 += 0x1000;
+    } else if (gate_data->point_offset < 0) {
+        gate_data->point_offset += 0x1000;
         step += 0x1000;
     }
     offset_moby_class_point_pairs(((unsigned char *)moby->pclass), step, 0);

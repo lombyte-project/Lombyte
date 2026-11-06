@@ -95,11 +95,11 @@ void gemlik_projectile_update(struct Moby *moby) __asm__("FUN_L13_00306300");
 
 typedef struct GemlikProjectileVars {
     u8    pad_0[0xC];
-    f32   unkC;
-    f32   unk10[4];
-    void *unk20;
+    f32   deflected_marker; /* 31337.6 once the hero has knocked it back */
+    f32   launch_position[4];
+    void *owner;
     s32   unk24;
-    f32   unk28;
+    f32   max_travel_distance;
     s32   timer_2C;
 } GemlikProjectileVars;
 
@@ -128,13 +128,13 @@ void gemlik_projectile_update(struct Moby *moby) {
     work.velocity.z = 1.0f;
     flags = 0x10001;
     hero_bytes = (unsigned char *)((char *)((char *)&hero));
-    if (hero_bytes[0x1FF6] != 0 && projectile_vars->unkC != 31337.6015625f &&
+    if (hero_bytes[0x1FF6] != 0 && projectile_vars->deflected_marker != 31337.6015625f &&
         fast_vec_dist(&moby->pos, hero_bytes + 0x80) < 2.0f) {
         fast_vec_normalize(projectile_vars, projectile_vars, 0.5f);
         fast_vec_sub(&moby->pos, &moby->pos, projectile_vars);
         qzero(projectile_vars);
         projectile_vars->timer_2C = 5;
-        projectile_vars->unkC = 31337.6015625f;
+        projectile_vars->deflected_marker = 31337.6015625f;
         for (i = 0; i < 6; i++) {
             unsigned char *hero_base = (unsigned char *)((char *)((char *)&hero));
             ent = ((char **)(hero_base + 0x2020))[i];
@@ -170,7 +170,8 @@ void gemlik_projectile_update(struct Moby *moby) {
     work.hit[0x18] = 1;
     work.hit[0x19] = 1;
     stationary = projectile_vars->unk24 == 0;
-    if (projectile_vars->unk28 < vector_distance_xy(&moby->pos, projectile_vars->unk10) ||
+    if (projectile_vars->max_travel_distance <
+            vector_distance_xy(&moby->pos, projectile_vars->launch_position) ||
         fast_dec_timer(&projectile_vars->timer_2C) != 0) {
         if (moby->visible != 0) {
             int i;
@@ -193,7 +194,7 @@ void gemlik_projectile_update(struct Moby *moby) {
         }
         goto remove;
     }
-    if (collision_line(&work.old_pos, &moby->pos, stationary, projectile_vars->unk20, work.hit) ==
+    if (collision_line(&work.old_pos, &moby->pos, stationary, projectile_vars->owner, work.hit) ==
         0)
         goto bounds;
     qcopy(&moby->pos, &coll_hit_1638.point);

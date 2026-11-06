@@ -1193,7 +1193,7 @@ typedef struct {
     float          rot_y;
     float          rot_z;
     char           pad4C[0x70];
-    unsigned char  unkBC;
+    unsigned char  command;
 } FlightMoby;
 
 typedef struct {
@@ -1282,7 +1282,7 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
     velocity[2] = frame_time_gp * 8.0f;
     moby->flags &= 0xFEFF;
     *(u128 *)impulse = *(u128 *)velocity;
-    if (moby->unkBC == 0) {
+    if (moby->command == 0) {
         if (jet_flight_state->launch_frames > scale_game_frames(120)) {
             pad_state = (char *)D_0013A4E0 + 0x2460;
             if (*(int *)(pad_state + 0x1B4) & 0x40) {
@@ -1439,7 +1439,7 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
         velocity, jet_flight_state->speed, jet_flight_state->yaw, -jet_flight_state->pitch);
     fast_vec_normalize(jet_flight_state->direction, velocity, 1.0f);
     qcopy(old_pos, moby->pos);
-    if (moby->unkBC == 0) {
+    if (moby->command == 0) {
         fast_vec_add(moby->pos, moby->pos, velocity);
     }
     {

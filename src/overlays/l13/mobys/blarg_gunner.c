@@ -50,8 +50,8 @@ typedef struct {
     u8           pad4[0x8];
     void        *unkC;
     u8           pad10[0x10];
-    f32          unk20;
-    s16          unk24;
+    f32          health;
+    s16          max_health;
     u8           pad26[2];
     u8           unk28;
     u8           unk29;
@@ -77,7 +77,7 @@ struct Moby *spawn_blarg_turret_child(struct Moby *parent) {
     if (child_moby != 0) {
         child_vars = (Vars *)child_moby->pvars;
         child_vars->parent = parent;
-        child_vars->unk0 = &child_vars->unk20;
+        child_vars->unk0 = &child_vars->health;
         child_vars->unkC = child_vars->unk60;
         child_moby->update_dist = parent->update_dist;
         child_moby->draw_dist = child_vars->parent->draw_dist;
@@ -87,8 +87,8 @@ struct Moby *spawn_blarg_turret_child(struct Moby *parent) {
         child_moby->command = 0;
         qcopy(&child_moby->pos, &child_vars->parent->pos);
         child_moby->scale = child_moby->pclass->scale * parent->scale / parent->pclass->scale;
-        child_vars->unk20 = 1.0f;
-        child_vars->unk24 = 1;
+        child_vars->health = 1.0f;
+        child_vars->max_health = 1;
         child_vars->unk29 = 1;
         child_vars->unk2A = 3;
         child_vars->unk28 = 0;
