@@ -108,7 +108,7 @@ typedef struct Vars_2e01a8 {
     int                    spawn_kind;
     char                   p178[0x18];
     float                  side_angle;
-    int                    f194;
+    int                    climb_cuboid; /* l10_cuboids row whose z it climbs to */
     int                    wait;
     float                  bob_angle;
     float                  height_offset;
@@ -193,7 +193,7 @@ void darter_update(Moby *moby) {
             vector_and_collision_scratch[1] = fast_sin(random_angle_radians()) * 10.0f;
             moby->state = DARTER_STATE_CUBOID_PATROL;
             vector_and_collision_scratch[2] = 0.0f;
-            moby->pos.z = l10_cuboids[darter_vars->f194].pos.z;
+            moby->pos.z = l10_cuboids[darter_vars->climb_cuboid].pos.z;
             add_vectors(&vector_and_collision_scratch[4], &moby->pos, vector_and_collision_scratch);
             darter_vars->height_offset = random_float_between(0.0f, l10_darter_max_height_offset);
             darter_vars->height_timer = truncate_float_to_s32(
@@ -454,7 +454,8 @@ void darter_update(Moby *moby) {
                 scale_time(l10_darter_height_change_interval_seconds * 60.0f) *
                 random_float_between(0.75f, 1.25f));
         }
-        climb = l10_cuboids[darter_vars->f194].pos.z - moby->pos.z - darter_vars->height_offset;
+        climb =
+            l10_cuboids[darter_vars->climb_cuboid].pos.z - moby->pos.z - darter_vars->height_offset;
         if (frame_time + frame_time < climb) {
             climb = frame_time + frame_time;
         } else if (climb < frame_time * -2.0f) {
@@ -489,7 +490,7 @@ void darter_update(Moby *moby) {
         darter_vars->velocity.x = fast_cos(moby->rot.z) * (frame_time * 4.0f);
         darter_vars->velocity.y = fast_sin(moby->rot.z) * (frame_time * 4.0f);
         darter_vars->velocity.z = 0.0f;
-        climb = l10_cuboids[darter_vars->f194].pos.z - moby->pos.z;
+        climb = l10_cuboids[darter_vars->climb_cuboid].pos.z - moby->pos.z;
         if (frame_time * 4.0f < climb) {
             climb = frame_time * 4.0f;
         } else if (climb < frame_time * -4.0f) {
@@ -498,7 +499,7 @@ void darter_update(Moby *moby) {
         darter_vars->velocity.z = climb;
         func_L00_00259B08_2E0630(moby, &darter_vars->velocity, 0.5f, 0x200, 0.0f, 0);
         if (dist < l10_darter_attack_distance &&
-            absolute_float(l10_cuboids[darter_vars->f194].pos.z - moby->pos.z) < 1.0f) {
+            absolute_float(l10_cuboids[darter_vars->climb_cuboid].pos.z - moby->pos.z) < 1.0f) {
             allocate_voice_for_target_entry(0, 0, moby);
             moby->state = DARTER_STATE_CUBOID_CHARGE_ATTACK;
             if (moby->prev_seq != 2)
@@ -529,7 +530,7 @@ void darter_update(Moby *moby) {
         darter_vars->velocity.x = fast_cos(moby->rot.z) * (frame_time * 6.0f);
         darter_vars->velocity.y = fast_sin(moby->rot.z) * (frame_time * 6.0f);
         darter_vars->velocity.z = 0.0f;
-        climb = l10_cuboids[darter_vars->f194].pos.z - moby->pos.z;
+        climb = l10_cuboids[darter_vars->climb_cuboid].pos.z - moby->pos.z;
         if (frame_time * 3.0f < climb) {
             climb = frame_time * 3.0f;
         } else if (climb < frame_time * -3.0f) {
@@ -575,7 +576,7 @@ void darter_update(Moby *moby) {
         darter_vars->velocity.x = fast_cos(moby->rot.z) * (frame_time * 4.0f);
         darter_vars->velocity.y = fast_sin(moby->rot.z) * (frame_time * 4.0f);
         darter_vars->velocity.z = 0.0f;
-        climb = l10_cuboids[darter_vars->f194].pos.z - moby->pos.z;
+        climb = l10_cuboids[darter_vars->climb_cuboid].pos.z - moby->pos.z;
         if (frame_time * 3.0f < climb) {
             climb = frame_time * 3.0f;
         } else if (climb < frame_time * -3.0f) {
