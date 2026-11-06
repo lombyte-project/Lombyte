@@ -188,8 +188,8 @@ extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void
 trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void
 randomize_blarg_elite_commando_group_pursuit_timers(void *, int, int) __asm__("FUN_L16_002d3f78");
 extern float func_001F9878_timer(float) __asm__("FUN_001f96b0");
@@ -649,10 +649,10 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
         default:
             break;
         }
-        trooper_anim_update(commando_moby, commando_data->damage);
+        start_hit_color_flash(commando_moby, commando_data->damage);
     }
     commando_moby->hit_slot = 0xFF;
-    trooper_anim_finish(commando_moby, commando_data->damage);
+    update_hit_color_flash(commando_moby, commando_data->damage);
     fast_dec_timer(&commando_data->pursuit_timer);
     if (commando_data->reset_timer) {
         commando_data->pursuit_timer =

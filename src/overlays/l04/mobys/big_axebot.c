@@ -253,8 +253,8 @@ extern void  trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN
 extern void
 trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void reset_leg_rig_from_animation(void *, void *) __asm__("FUN_L04_00295de8");
 extern void advance_moby_animation(void *);
@@ -392,7 +392,7 @@ void big_axebot_update(M_B7B0 *moby) {
                 }
                 data->recoil_pose_cooldown_timer = scale_game_frames(0x1E);
                 data->fB7 = 0x78;
-                trooper_anim_update(moby, (short *)data->hit_transition_state);
+                start_hit_color_flash(moby, (short *)data->hit_transition_state);
             } else {
                 switch (hit_reaction_result) {
                 case BIG_AXEBOT_HIT_REACTION_NONE:
@@ -415,7 +415,7 @@ void big_axebot_update(M_B7B0 *moby) {
                     }
                     data->recoil_displacement = 3.4f / scale_time(7.0f) * 0.5f;
                     data->fB7 = 0x78;
-                    trooper_anim_update(moby, (short *)data->hit_transition_state);
+                    start_hit_color_flash(moby, (short *)data->hit_transition_state);
                     data->hit_response_cooldown_timer = scale_game_frames(0x46);
                     data->extended_detection_timer = scale_game_frames(0xF0);
                     break;
@@ -435,7 +435,7 @@ void big_axebot_update(M_B7B0 *moby) {
                     data->knockback.landing_animation_frame = 10.0f;
                     data->recoil_displacement = 3.4f / scale_time(7.0f);
                     data->fB7 = 0x78;
-                    trooper_anim_update(moby, (short *)data->hit_transition_state);
+                    start_hit_color_flash(moby, (short *)data->hit_transition_state);
                     data->hit_response_cooldown_timer = scale_game_frames(0x46);
                     data->extended_detection_timer = scale_game_frames(0xF0);
                     break;
@@ -448,7 +448,7 @@ void big_axebot_update(M_B7B0 *moby) {
                     moby->state = BIG_AXEBOT_STATE_IDLE;
                     data->recoil_displacement = 3.4f / scale_time(7.0f);
                     data->fB7 = 0x78;
-                    trooper_anim_update(moby, (short *)data->hit_transition_state);
+                    start_hit_color_flash(moby, (short *)data->hit_transition_state);
                     data->hit_response_cooldown_timer = scale_game_frames(0x46);
                     data->extended_detection_timer = scale_game_frames(0xF0);
                     break;
@@ -466,7 +466,7 @@ void big_axebot_update(M_B7B0 *moby) {
                     data->knockback.landing_animation_frame = 25.0f;
                     moby->state = BIG_AXEBOT_STATE_DYING;
                     data->fB7 = 0x78;
-                    trooper_anim_update(moby, (short *)data->hit_transition_state);
+                    start_hit_color_flash(moby, (short *)data->hit_transition_state);
                     FUN_L00_00257470(moby, 0, -1);
                     break;
                 case BIG_AXEBOT_HIT_REACTION_SKIP_ADDITIONAL_RESPONSE:
@@ -903,7 +903,7 @@ void big_axebot_update(M_B7B0 *moby) {
         }
         break;
     }
-    trooper_anim_finish(moby, data->hit_transition_state);
+    update_hit_color_flash(moby, data->hit_transition_state);
     if (data->recoil_displacement > 0.0f) {
         struct Hero *h = &hero;
 

@@ -305,8 +305,8 @@ extern void FUN_L00_0025a120(void *);
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void
 trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void select_moby_combat_target(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 extern void FUN_L00_00263ac8(float, void *, int, void *);
 extern void reset_walker_gait_helpers(void *) __asm__("FUN_L00_002a1538");
@@ -447,7 +447,7 @@ void woodcut_bot_update(WBMoby *m) {
                 m->state = WOODCUT_BOT_DEATH_KNOCKBACK;
                 FUN_L00_00257470(m, 0, -1);
                 d->fB7 = 0x78;
-                trooper_anim_update(m, d->fB0);
+                start_hit_color_flash(m, d->fB0);
                 d->recoil_horizontal_step = (2.0f / scale_time(15.0f)) * 2.0f;
                 break;
             case WOODCUT_BOT_REACTION_HIT_RECOVERY_AND_REPOSITION:
@@ -469,7 +469,7 @@ void woodcut_bot_update(WBMoby *m) {
                     *(OvlQuad *)v = *(OvlQuad *)(p + 0x10);
                     trooper_knockback_arc(v, &angle, &d->recoil_horizontal_step, &one);
                     d->fB7 = 0x78;
-                    trooper_anim_update(m, d->fB0);
+                    start_hit_color_flash(m, d->fB0);
                     d->t3C4 = scale_game_frames(0xF);
                     d->t3C6 = scale_game_frames(0xF0);
                 }
@@ -484,7 +484,7 @@ void woodcut_bot_update(WBMoby *m) {
                 trooper_knockback_arc(v, &angle, &d->recoil_horizontal_step, &one);
                 m->rot[2] = fast_add_rotations(3.1415927f, angle);
                 d->fB7 = 0x78;
-                trooper_anim_update(m, d->fB0);
+                start_hit_color_flash(m, d->fB0);
                 d->t3C4 = scale_game_frames(0x1E);
                 d->t3C2 = scale_game_frames(0xB4);
                 d->t3C6 = scale_game_frames(0xF0);
@@ -967,7 +967,7 @@ void woodcut_bot_update(WBMoby *m) {
     {
         float recoil_scratch[16];
 
-        trooper_anim_finish(m, d->fB0);
+        update_hit_color_flash(m, d->fB0);
         if (d->recoil_horizontal_step > 0.0f) {
             struct Hero *h = &hero;
 

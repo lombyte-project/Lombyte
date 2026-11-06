@@ -253,8 +253,8 @@ extern int  random_integer_below(int) __asm__("FUN_00213260");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void
 trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern int
 FUN_L00_0025ff38_c100(float, void *, void *, int, int, int *, int) __asm__("FUN_L00_0025ff38");
 
@@ -370,12 +370,12 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
                 moby->state = GADGEBOT_DEATH_FALL;
                 moby->collision = 0;
                 sentry_vars->anim_flags = 0x78;
-                trooper_anim_update(moby, sentry_vars->anim);
+                start_hit_color_flash(moby, sentry_vars->anim);
             }
         }
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, sentry_vars->anim);
+    update_hit_color_flash(moby, sentry_vars->anim);
     fall_setup_value_or_path_slot_address = (int)&D_L18_001B0EB0[sentry_vars->path];
     reaction_value_or_path_address = *(int *)fall_setup_value_or_path_slot_address;
     FUN_L00_0025ff38_c100(512.0f,

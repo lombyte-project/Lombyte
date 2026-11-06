@@ -90,8 +90,8 @@ extern int  is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int   get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int   get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
-extern void  trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  start_hit_color_flash(void *, short *) __asm__("FUN_L00_0025d458");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void  spawn_explosion(void *,
                              void *,
                              void *,
@@ -460,13 +460,13 @@ void handle_sharkigator_hit(struct Moby *moby, char *x, float *hp) {
                 start_sharkigator_death_knockback(moby, x + 0x70, hit_record + 0x10);
                 FUN_L00_00257470(moby, 0, -1);
                 x[0x67] = 0x78;
-                trooper_anim_update(moby, (short *)(x + 0x60));
+                start_hit_color_flash(moby, (short *)(x + 0x60));
                 moby->state = SHARKIGATOR_DEATH_FALL_AND_REMOVE;
             } else {
                 *hp -= *(float *)(hit_record + 0x2C);
                 ((unsigned char *)x)[0x67] = 0xFA;
                 *(short *)(x + 0x26) = scale_game_frames(0x3C);
-                trooper_anim_update(moby, (short *)(x + 0x60));
+                start_hit_color_flash(moby, (short *)(x + 0x60));
             }
         }
     }
@@ -799,7 +799,7 @@ void sharkigator_update(unsigned char *moby) {
     get_target_sight(moby, &target, 30.0f);
     handle_sharkigator_hit(
         (char *)moby, sharkigator_instance_vars, (float *)(sharkigator_instance_vars + 0x20));
-    trooper_anim_finish(moby, sharkigator_instance_vars + 0x60);
+    update_hit_color_flash(moby, sharkigator_instance_vars + 0x60);
     wander = fast_dec_timer((int *)(sharkigator_instance_vars + 0x134)) != 0;
     if (*(int *)(sharkigator_instance_vars + 0x110) != 0 && moby[0x20] >= 7) {
         char *path = *(char **)(sharkigator_instance_vars + 0x148);

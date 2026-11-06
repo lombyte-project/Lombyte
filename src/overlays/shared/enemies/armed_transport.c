@@ -152,8 +152,8 @@ extern int  FUN_0022da68_i(int, int, void *) __asm__("FUN_0022da68");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern int
 hit_reaction(void *, char *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
 
 extern float D_L16_00161D78_gp __asm__("D_L16_00161D78") __attribute__((sda));
@@ -507,10 +507,10 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
                 transport_data->hit_animation_secondary_red = 120;
             }
         }
-        trooper_anim_update(transport_moby, &transport_data->trooper_anim);
+        start_hit_color_flash(transport_moby, &transport_data->trooper_anim);
     }
     transport_moby->hit_slot = 255;
-    trooper_anim_finish(transport_moby, &transport_data->trooper_anim);
+    update_hit_color_flash(transport_moby, &transport_data->trooper_anim);
     if (transport_data->target_path_index != -1 && D_001413DC[0] != 22) {
         char *path = D_L16_001B0930[transport_data->target_path_index];
         FUN_L00_0025ff38(128.0f,

@@ -158,8 +158,8 @@ extern void
 hit_reaction(void *, void *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_L00_0025a478");
 extern void trooper_knockback_arc(void *, f32 *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(void *, void *, f32, s32, s32, s32) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void
 activate_effect_l08(f32, void *, void *, s32, s32, void *, s32) __asm__("FUN_L00_0025ff38");
 extern void FUN_L00_00257470_2d5160(void *, s32, s32) __asm__("FUN_L00_00257470");
@@ -552,11 +552,11 @@ void process_horny_toad_hit_reaction(unsigned char *toad_moby) {
         *(f32 *)(toad_vars + 0xC4) = reactionC4;
         MOBY(toad_moby)->state = HORNY_TOAD_DYING;
         toad_vars[0x67] = 0x78;
-        trooper_anim_update(toad_moby, toad_vars + 0x60);
+        start_hit_color_flash(toad_moby, toad_vars + 0x60);
         FUN_L00_00257470_2d5160(toad_moby, 0, -1);
     }
     MOBY(toad_moby)->hit_slot = 0xFF;
-    trooper_anim_finish(toad_moby, toad_vars + 0x60);
+    update_hit_color_flash(toad_moby, toad_vars + 0x60);
     if (MOBY(toad_moby)->state == HORNY_TOAD_WAIT_TO_FOLLOW_PATH) {
         index = *(s32 *)(toad_vars + 0x1E4);
         effect = toad_vars + 0x180;

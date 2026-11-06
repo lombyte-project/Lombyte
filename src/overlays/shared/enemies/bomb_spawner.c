@@ -71,7 +71,7 @@ extern char *D_L03_0015FFD8_macro __asm__("D_L03_0015FFD8") MACRO_ADDR;
 extern void  FUN_L00_0025a120_2bef68(void *) __asm__("FUN_L00_0025a120");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
-extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void  start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void  mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
 extern void  spawn_explosion(void *,
                              void *,
@@ -109,7 +109,7 @@ extern void  add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00
 extern float
 FUN_L00_0025abf0_2bef68(void *, void *, void *, float, float) __asm__("FUN_L00_0025abf0");
 extern char *spawn_class_221_moby(char *owner, float *pos, float *dir, short ang, int arg) __asm__("FUN_L03_002c45d8");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern char  D_L03_00166EC0[];
 extern char  D_0013E533_2bef68[] __asm__("D_0013E533");
 extern float D_L03_0015F580_macro[] __asm__("D_L03_0015F580") MACRO_ADDR;
@@ -270,12 +270,12 @@ void bomb_spawner_update(struct Moby *moby) {
         spawner_data->hp = remaining_health;
         if (remaining_health > 0.0f) {
             spawner_data->hit_effect_blend_target = 0x5A;
-            trooper_anim_update(moby, spawner_data->f60);
+            start_hit_color_flash(moby, spawner_data->f60);
         } else {
             mark_moby_for_removal_cf(moby, 0, -1);
             moby->state = SPAWNER_DESTROY;
             spawner_data->hit_effect_blend_target = 0x78;
-            trooper_anim_update(moby, spawner_data->f60);
+            start_hit_color_flash(moby, spawner_data->f60);
         }
     }
     moby->hit_slot = 0xFF;
@@ -561,7 +561,7 @@ void bomb_spawner_update(struct Moby *moby) {
             }
         }
     }
-    trooper_anim_finish(moby, spawner_data->f60);
+    update_hit_color_flash(moby, spawner_data->f60);
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002C59A0), where it is exact; names translated to the US level program. */

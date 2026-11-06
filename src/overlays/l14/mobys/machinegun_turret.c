@@ -38,9 +38,9 @@ hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN
 
 extern void FUN_L00_00257470(void *, int, int);
 
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
 
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 extern int D_L14_0015F5CC MACRO_ADDR;
 
@@ -562,10 +562,10 @@ void process_machinegun_turret_hit_reactions(struct Moby *moby) {
             FUN_L00_00257470(moby, 0, -1);
             break;
         }
-        trooper_anim_update(moby, (short *)&moby_vars->anim_state);
+        start_hit_color_flash(moby, (short *)&moby_vars->anim_state);
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, &moby_vars->anim_state);
+    update_hit_color_flash(moby, &moby_vars->anim_state);
 }
 
 extern int D_L14_0016150C_gp __asm__("D_L14_0016150C") __attribute__((sda));

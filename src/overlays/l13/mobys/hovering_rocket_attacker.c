@@ -359,9 +359,9 @@ extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("
 
 extern void FUN_L00_00257470(struct Moby *, int, int);
 
-extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *, short *) __asm__("FUN_L00_0025d458");
 
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
 
@@ -532,10 +532,10 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
         default:
             break;
         }
-        trooper_anim_update(moby, &moby_data->anim_state);
+        start_hit_color_flash(moby, &moby_data->anim_state);
     }
     MOBY(moby)->hit_slot = 0xFF;
-    trooper_anim_finish(moby, &moby_data->anim_state);
+    update_hit_color_flash(moby, &moby_data->anim_state);
     if (MOBY(moby)->state == UPDATE_ATTACK_SEQUENCE) {
         moby_data->target_range = 50.0f;
     } else {
@@ -566,4 +566,4 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
     }
 }
 
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");

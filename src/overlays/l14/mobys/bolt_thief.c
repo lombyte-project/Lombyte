@@ -110,7 +110,7 @@ extern void FUN_L00_00257470(void *, int, int);
 extern void
 trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 extern void moby_set_state_one(void *) __asm__("FUN_L14_002ffc08");
 
@@ -315,7 +315,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         }
         break;
     }
-    trooper_anim_finish(moby, moby_data->effect);
+    update_hit_color_flash(moby, moby_data->effect);
 }
 
 extern int sample_path(char *, float *, float *, float *, int, float) __asm__("FUN_L00_0025d808");

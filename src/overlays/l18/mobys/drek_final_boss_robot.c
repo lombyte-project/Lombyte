@@ -1859,8 +1859,8 @@ typedef struct {
 } VendorNode_5e80;
 
 extern int resolve_moby_hit_response(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_00213928");
-extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern int   FUN_L00_0025ff38_5e80(float a, char *m, char *b, int c, int d, int *e, int f) __asm__("FUN_L00_0025ff38");
 extern int   poll_moby_state_and_rearm(char *) __asm__("FUN_L18_002d8050");
@@ -1951,7 +1951,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
                     *(float *)(boss_data + 0x38C) = health_floor_or_transition_offset;
                 }
                 *(unsigned char *)(boss_data + 0x67) = 0xF0;
-                trooper_anim_update(moby, (short *)(boss_data + 0x60));
+                start_hit_color_flash(moby, (short *)(boss_data + 0x60));
                 if (*(float *)(boss_data + 0x38C) == 0.0f) {
                     if (*(int *)(boss_data + 0x368) != -1) {
                         set_animation_parameter(*(int *)(boss_data + 0x368), 0);
@@ -1979,7 +1979,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
     }
     MOBY(moby)->hit_slot = 0xFF;
     *(int *)(boss_data + 0x36C) = truncate_float_to_s32(*(float *)(boss_data + 0x38C));
-    trooper_anim_finish(moby, boss_data + 0x60);
+    update_hit_color_flash(moby, boss_data + 0x60);
     if (*(int *)(boss_data + 0x3A0) == 0) {
         spawned_child_moby = (unsigned char *)create_moby(0x58F);
         *(unsigned char **)(boss_data + 0x3A0) = spawned_child_moby;

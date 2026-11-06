@@ -89,7 +89,7 @@ typedef struct SentrybotVars {
     u8                 pad2A[0xE];
     s32                unk38; /* 0x38: set: restart target_countdown */
     u8                 pad3C[0x24];
-    u8                 trooper_anim[7]; /* 0x60: trooper_anim_update / trooper_anim_finish */
+    u8                 trooper_anim[7]; /* 0x60: start_hit_color_flash / update_hit_color_flash */
     u8                 first_channel_blend_target;
     u8                 pad68[8];
     SentrybotKnockback knockback; /* 0x70 */
@@ -252,8 +252,8 @@ extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void
 trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern int  FUN_L00_0025ff38(void *, void *, float, int, int, void *, int);
 
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
@@ -1730,10 +1730,10 @@ void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, i
             sentrybot_data->first_channel_blend_target = 0xF0;
             break;
         }
-        trooper_anim_update(moby, &sentrybot_data->trooper_anim);
+        start_hit_color_flash(moby, &sentrybot_data->trooper_anim);
     }
     MOBY(moby)->hit_slot = 0xFF;
-    trooper_anim_finish(moby, &sentrybot_data->trooper_anim);
+    update_hit_color_flash(moby, &sentrybot_data->trooper_anim);
     if (flag != 0)
         return;
     if (sentrybot_data->unk38 != 0) {

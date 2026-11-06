@@ -29,8 +29,8 @@ extern void  update_entity(void *) __asm__("FUN_L00_00250df8");
 char        *spawn_bomb_with_velocity(int   source_moby,
                                       char *spawn_position,
                                       char *initial_velocity) __asm__("FUN_L08_002d22e0");
-extern void  trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  start_hit_color_flash(void *, short *) __asm__("FUN_L00_0025d458");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern s32   D_001413D0[];
 
 extern short *D_L08_001AC040[];
@@ -298,7 +298,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
             moby->flags &= 0xEFFF;
             bombthrower_vars->waypoint->command = 0;
         }
-        trooper_anim_update(moby, bombthrower_vars->anim);
+        start_hit_color_flash(moby, bombthrower_vars->anim);
     }
     moby->hit_slot = 0xFF;
     search.result = select_nearest_xy_moby_with_hero_fallback(moby, 16.0f, &search);
@@ -552,6 +552,6 @@ void blarg_bombthrower_update(struct Moby *moby) {
         }
         break;
     }
-    trooper_anim_finish(moby, bombthrower_vars->anim);
+    update_hit_color_flash(moby, bombthrower_vars->anim);
     bombthrower_vars->alternate_throw_trigger = 0;
 }

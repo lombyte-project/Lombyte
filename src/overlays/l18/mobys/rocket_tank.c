@@ -225,8 +225,8 @@ extern void  func_L00_0025F4A8_alt(void *,
                                    int,
                                    int,
                                    int) __asm__("FUN_L00_0025e450");
-extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F8F38.c: func_L18_002F94B0), where it is exact; names translated to the US level program. */
 
@@ -246,7 +246,7 @@ extern void *FUN_L00_00257470_cf(char  *src,
                                  float *v11,
                                  float *v12) __asm__("FUN_L00_00263fd8");
 extern void  build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
-extern void  trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
+extern void  start_hit_color_flash(void *, short *) __asm__("FUN_L00_0025d458");
 extern void  mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
 extern void  func_L00_0025F4A8_alt(void *,
                                    void *,
@@ -334,7 +334,7 @@ void update_rocket_tank_damage_and_aim(void *mv) {
             }
             return;
         }
-        trooper_anim_update(moby_bytes, (short *)(tank_data + 0x60));
+        start_hit_color_flash(moby_bytes, (short *)(tank_data + 0x60));
     }
     moby_bytes[0xA4] = 0xFF;
     if (select_moby_combat_target(moby_bytes, tank_data + 0x70, 30.0f) != 2) {
@@ -401,7 +401,7 @@ void update_rocket_tank_damage_and_aim(void *mv) {
         2,
         fast_subtract_rotations(*(float *)(tank_data + 0x110), *(float *)(moby_bytes + 0x48)));
     multiply_quaternions(tank_data + 0xD0, explosion_and_aim_scratch, tank_data + 0xD0);
-    trooper_anim_finish(moby_bytes, tank_data + 0x60);
+    update_hit_color_flash(moby_bytes, tank_data + 0x60);
 }
 
 extern int *D_L18_001B0EB0[];

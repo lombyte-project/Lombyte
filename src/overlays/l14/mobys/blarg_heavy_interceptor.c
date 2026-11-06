@@ -794,9 +794,9 @@ hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN
 
 extern void FUN_L00_00257470(void *, int, int);
 
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
 
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 void blend_moby_animation(MobyAnim *m, int a, int b, int c) __asm__("FUN_00212f90");
 
@@ -870,10 +870,10 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
         case HIT_REACTION_NONE:
             break;
         }
-        trooper_anim_update(moby, &blarg_heavy_interceptor_vars->anim_state);
+        start_hit_color_flash(moby, &blarg_heavy_interceptor_vars->anim_state);
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, &blarg_heavy_interceptor_vars->anim_state);
+    update_hit_color_flash(moby, &blarg_heavy_interceptor_vars->anim_state);
 }
 
 extern s32 blarg_heavy_interceptor_light_ring_vertex_count_gp __asm__("D_L14_00161418")

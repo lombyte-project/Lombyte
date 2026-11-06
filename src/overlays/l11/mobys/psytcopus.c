@@ -96,8 +96,8 @@ extern void FUN_L00_0025ab48_p(void *, float *, float *, float *) __asm__("FUN_L
 extern void
 FUN_L00_0025c558_p(struct Moby *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 extern void FUN_L00_002371e0_p(void *) __asm__("FUN_L00_002371e0");
-extern void FUN_L00_0025d458_p(struct Moby *, void *) __asm__("FUN_L00_0025d458");
-extern void FUN_L00_0025d538_p(struct Moby *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(struct Moby *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(struct Moby *, void *) __asm__("FUN_L00_0025d538");
 extern int
 FUN_L00_0025ff38_p(struct Moby *, void *, int, int, void *, int, float) __asm__("FUN_L00_0025ff38");
 
@@ -372,10 +372,10 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
             FUN_L00_00257470_p(psytcopus, 0, -1);
             break;
         }
-        FUN_L00_0025d458_p(psytcopus, psytcopus_vars->move);
+        start_hit_color_flash(psytcopus, psytcopus_vars->move);
     }
     psytcopus->hit_slot = 0xFF;
-    FUN_L00_0025d538_p(psytcopus, psytcopus_vars->move);
+    update_hit_color_flash(psytcopus, psytcopus_vars->move);
     psytcopus_vars->reach = 24.0f;
     path = (s32 *)l11_paths[psytcopus_vars->path_index];
     if (FUN_L00_0025ff38_p(

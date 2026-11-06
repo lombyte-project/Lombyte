@@ -529,10 +529,10 @@ extern void spawn_explosion(void *,
                             int) __asm__("FUN_L00_0025e450");
 extern void
 spawn_particle_305178(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
-extern void  update_motion_305178(void *, void *) __asm__("FUN_L00_0025d458");
+extern void  start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void  finish_motion_305178(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 int          l05_extermitank_removal_base_frames __asm__("D_L05_00161B74") = 5;
 extern float extermitank_child_animation_speed_divisor_gp __asm__("D_L05_00161AF0")
@@ -743,7 +743,7 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
         }
     }
 update_motion:
-    update_motion_305178(moby, extermitank_hit_sync_vars->motion);
+    start_hit_color_flash(moby, extermitank_hit_sync_vars->motion);
 mark_children:
     ((unsigned char *)moby)[0xa4] = 0xff;
     if (extermitank_hit_sync_vars->tread_moby0 != 0)
@@ -790,7 +790,7 @@ mark_children:
         qcopy(second + 0x40, moby + 0x40);
         qcopy(second + 0x10, moby + 0x10);
     }
-    finish_motion_305178(moby, extermitank_hit_sync_vars->motion);
+    update_hit_color_flash(moby, extermitank_hit_sync_vars->motion);
 }
 /* Drops stale entries from the moby's 8 slots, then pushes each remaining one away from the hero. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_00306CF0), where it is exact; names translated to the US level program. */

@@ -889,8 +889,8 @@ extern void           resolve_moby_hit_response(
               struct Moby *, AnklebiterHit *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
 extern void trooper_knockback_arc(void *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
 extern void start_fall_e3528(struct Moby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
-extern void anim_reset_e3528(struct Moby *, void *) __asm__("FUN_L00_0025d458");
-extern void anim_update_e3528(struct Moby *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(struct Moby *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(struct Moby *, void *) __asm__("FUN_L00_0025d538");
 
 #include "rnc/overlay/l12/mobys/hoven_anklebiter_data/process_hoven_anklebiter_damage_and_alerts.h"
 
@@ -966,7 +966,7 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
                 anklebiter_vars->knockback_descent_animation_target = 18.0f;
                 moby->state = ANKLEBITER_DEATH_FALL;
                 anklebiter_vars->damage_blend_target = 0x78;
-                anim_reset_e3528(moby, anklebiter_vars->anim);
+                start_hit_color_flash(moby, anklebiter_vars->anim);
             } else {
                 help_direction_or_hit_position.q = coll->pos.q;
                 trooper_knockback_arc(&help_direction_or_hit_position,
@@ -979,11 +979,11 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
                 moby->state = ANKLEBITER_KNOCKBACK_FALL;
                 anklebiter_vars->damage_blend_target = 0xFA;
                 anklebiter_vars->stun_timer = scale_game_frames(0x3C);
-                anim_reset_e3528(moby, anklebiter_vars->anim);
+                start_hit_color_flash(moby, anklebiter_vars->anim);
             }
             spawn_hoven_anklebiter_death_sparks(moby);
         }
     }
     moby->hit_slot = 0xFF;
-    anim_update_e3528(moby, anklebiter_vars->anim);
+    update_hit_color_flash(moby, anklebiter_vars->anim);
 }

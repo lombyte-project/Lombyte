@@ -9,14 +9,14 @@
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 
-extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *, short *) __asm__("FUN_L00_0025d458");
 
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 extern int
 hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");
 
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
 
 int process_linked_switch_damage(struct Moby *moby,
                                  char        *moby_data,
@@ -73,17 +73,17 @@ int process_linked_switch_damage(struct Moby *moby, char *moby_data, float *heal
             fl = moby->flags;
             moby->flags = fl & 0xEFFF;
             *(unsigned char *)(moby_data + 0x67) = 0x78;
-            trooper_anim_update(moby, (short *)color_animation_state);
+            start_hit_color_flash(moby, (short *)color_animation_state);
             health_depleted = 1;
         } else {
             *health = *health - damage_amount;
             *(unsigned char *)(moby_data + 0x67) = 0xFA;
             *(short *)(moby_data + 0x26) = scale_game_frames(0x3C);
-            trooper_anim_update(moby, (short *)color_animation_state);
+            start_hit_color_flash(moby, (short *)color_animation_state);
         }
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, color_animation_state);
+    update_hit_color_flash(moby, color_animation_state);
     return health_depleted;
 }
 

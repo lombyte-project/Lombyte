@@ -309,8 +309,8 @@ extern int   FUN_L00_001fefc8(void *);
 extern int
 hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern void FUN_L00_0025a120(void *);
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 
 /* Update of the circular saw enemy: hit reaction, state machine (idle, chase, patrol, attack), movement and gravity. */
@@ -615,10 +615,10 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 moby->state = CIRCULAR_SAW_STATE_HIT_RECOVERY;
                 moby->rot = fast_add_rotations(3.1415927f, ang);
                 data->fB7 = 0x78;
-                trooper_anim_update(moby, (short *)data->fB0);
+                start_hit_color_flash(moby, (short *)data->fB0);
                 data->hit_reaction_cooldown_timer = scale_game_frames(0x14);
                 data->fB7 = 0x78;
-                trooper_anim_update(moby, (short *)data->fB0);
+                start_hit_color_flash(moby, (short *)data->fB0);
                 data->hit_reaction_cooldown_timer = scale_game_frames(0x14);
                 break;
             case CIRCULAR_SAW_HIT_REACTION_IGNORED:
@@ -1155,7 +1155,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 scale_game_frames(alt ? random_int_between(10, 15) : random_int_between(20, 30)));
         }
     }
-    trooper_anim_finish(moby, data->fB0);
+    update_hit_color_flash(moby, data->fB0);
 }
 
 extern int launch_suck_cannon_projectile(char *, int, int, float) __asm__("FUN_L00_002dbc30");

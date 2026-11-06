@@ -1102,8 +1102,8 @@ void update_plasmabot_target_range(struct Moby *moby) {
 extern int
 hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern float plasmabot_stagger_motion_z_scale_gp __asm__("D_L14_001614C8") __attribute__((sda));
-extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void  func_L00_0025D5B0_i(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 
 void process_plasmabot_hit_reaction(struct Moby *moby) {
@@ -1122,7 +1122,7 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
     if (((unsigned char *)moby)[0x20] == 0 || ((unsigned char *)moby)[0x20] == 0xB) {
         if (((unsigned char *)moby)[0x20] == 0xB) {
             ((unsigned char *)moby)[0xA4] = 0xFF;
-            trooper_anim_finish(moby, &state->trooper_anim);
+            update_hit_color_flash(moby, &state->trooper_anim);
         }
         return;
     }
@@ -1206,10 +1206,10 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
         case HIT_REACTION_NONE:
             break;
         }
-        trooper_anim_update(moby, (short *)(&state->trooper_anim));
+        start_hit_color_flash(moby, (short *)(&state->trooper_anim));
     }
     ((unsigned char *)moby)[0xA4] = 0xFF;
-    trooper_anim_finish(moby, &state->trooper_anim);
+    update_hit_color_flash(moby, &state->trooper_anim);
 }
 /* steers the moby toward its target: queries the path, eases x/y, then turns to face the heading */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4668), where it is exact; names translated to the US level program. */

@@ -361,8 +361,8 @@ extern char D_0013F3D0[];
 extern int  D_001413D0[];
 extern void
 trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void func_L00_00261B00_2E2B80(void *, int, int, int, int) __asm__("FUN_L00_00260a88");
 extern int  ahead_f(float, void *, void *) __asm__("FUN_L01_00274b78");
 extern int
@@ -376,7 +376,7 @@ hit_update_2DFC38(void *, void *, void *, int, void *, int, int, int) __asm__("F
 extern void allocate_voice_for_bank_entry_2DFC38(int, int, int) __asm__("FUN_0022db10");
 
 void update_screamer_hit_reactions_and_targeting(struct Moby *moby) __asm__("FUN_L10_002dfc38");
-extern void trooper_anim_update(void *m, void *p) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *m, void *p) __asm__("FUN_L00_0025d458");
 
 #include "rnc/data_labels.h"
 
@@ -427,18 +427,18 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
                         fast_arc_tan(moby->pos.x - hit_record->x, moby->pos.y - hit_record->y);
                 trooper_start_knockback(moby, &screamer_vars->knockback, knockback_angle, 5, 1, 0);
                 screamer_vars->hit_flash.flash_red = 0x78;
-                trooper_anim_update(moby, &screamer_vars->hit_flash);
+                start_hit_color_flash(moby, &screamer_vars->hit_flash);
                 func_L00_00261B00_2E2B80(moby, 1, 3, 0, -1);
             } else {
                 screamer_vars->health = screamer_vars->health - hit_record->damage;
                 screamer_vars->hit_flash.flash_red = 0xfa;
                 screamer_vars->nonlethal_hit_duration_frames = scale_game_frames(60);
-                trooper_anim_update(moby, &screamer_vars->hit_flash);
+                start_hit_color_flash(moby, &screamer_vars->hit_flash);
             }
             moby->hit_slot = 0xff;
         }
     }
-    trooper_anim_finish(moby, &screamer_vars->hit_flash);
+    update_hit_color_flash(moby, &screamer_vars->hit_flash);
     if (screamer_vars->f174 == 2)
         screamer_vars->current_target_range = 42.0f;
     else if (screamer_vars->target_range_boost_timer != 0)

@@ -445,8 +445,8 @@ extern void  FUN_L00_00258278_cf(
      char *moby, float *vel, float target, float k, float d, float max) __asm__("FUN_L00_00258278");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void FUN_L00_0025c558_u(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void spawn_explosion(void *,
                             void *,
                             void *,
@@ -599,7 +599,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
             birdbot_vars->b67 = 0xB4;
             birdbot_moby->state = BIRDBOT_STATE_FATAL_KNOCKBACK;
             birdbot_moby->h34 &= 0xEFFF;
-            trooper_anim_update(birdbot_moby, (short *)birdbot_vars->x60);
+            start_hit_color_flash(birdbot_moby, (short *)birdbot_vars->x60);
             birdbot_vars->hit_reaction_cooldown = scale_game_frames(0x3C);
             break;
         case BIRDBOT_HIT_REACTION_NONFATAL_KNOCKBACK:
@@ -626,7 +626,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
                 blend_moby_animation(birdbot_moby, 0xB, 0, scale_game_frames(6));
             }
             birdbot_moby->state = BIRDBOT_STATE_NONFATAL_KNOCKBACK;
-            trooper_anim_update(birdbot_moby, (short *)birdbot_vars->x60);
+            start_hit_color_flash(birdbot_moby, (short *)birdbot_vars->x60);
             break;
         case BIRDBOT_HIT_REACTION_LOW_SPEED_NONFATAL_KNOCKBACK:
         case BIRDBOT_HIT_REACTION_LOW_SPEED_NONFATAL_KNOCKBACK_NO_BLEND:
@@ -648,7 +648,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
             FUN_L00_0025c558_u(
                 knockback_heading, birdbot_moby, &birdbot_vars->knockback, 0xE, 6, 0);
             birdbot_moby->state = BIRDBOT_STATE_NONFATAL_KNOCKBACK;
-            trooper_anim_update(birdbot_moby, (short *)birdbot_vars->x60);
+            start_hit_color_flash(birdbot_moby, (short *)birdbot_vars->x60);
             break;
         }
     }
@@ -1286,7 +1286,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         }
         break;
     }
-    trooper_anim_finish(birdbot_moby, birdbot_vars->x60);
+    update_hit_color_flash(birdbot_moby, birdbot_vars->x60);
     birdbot_vars->previous_animation_frame = frame;
     if (birdbot_moby->state == BIRDBOT_STATE_TRACK_TARGET_AND_SELECT_ACTION ||
         birdbot_moby->state == 5 || birdbot_moby->state == BIRDBOT_STATE_FIRE_BURST ||

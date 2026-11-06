@@ -75,9 +75,9 @@ extern char D_L13_001670C0[];
 
 extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 
-extern void trooper_anim_update(struct Moby *, void *) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(struct Moby *, void *) __asm__("FUN_L00_0025d458");
 
-extern void trooper_anim_finish(struct Moby *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(struct Moby *, void *) __asm__("FUN_L00_0025d538");
 
 typedef struct {
     u8  pad0[0x18];
@@ -703,10 +703,10 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
             stop_moby_sound_8d10(moby, 0, -1);
             break;
         }
-        trooper_anim_update(moby, blarg_space_commando_private_data->flash);
+        start_hit_color_flash(moby, blarg_space_commando_private_data->flash);
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, blarg_space_commando_private_data->flash);
+    update_hit_color_flash(moby, blarg_space_commando_private_data->flash);
     if (blarg_space_commando_private_data->pursuit_timer != 0) {
         blarg_space_commando_private_data->range = blarg_space_commando_private_data->far_range;
     } else {

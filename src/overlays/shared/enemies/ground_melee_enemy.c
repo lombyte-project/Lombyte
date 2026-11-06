@@ -149,7 +149,7 @@ float                lift_2E39E0 __asm__("D_L09_001618CC") = 3.0f;
 extern unsigned char settings_2E39E0 __asm__("D_L09_001618D8") __attribute__((sda));
 extern void          knock_2E39E0(Moby *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 extern void          explode_2E39E0(Moby *, int, int) __asm__("FUN_L00_00257470");
-extern void          effects_start_2E39E0(Moby *, void *) __asm__("FUN_L00_0025d458");
+extern void          start_hit_color_flash(Moby *, void *) __asm__("FUN_L00_0025d458");
 extern void          sound_2E39E0(float, Moby *, int, void *) __asm__("FUN_L00_00263ac8");
 extern void          wake_2E39E0(Moby *) __asm__("FUN_L00_0025a120");
 extern int           FUN_L04_00252e18_c(Moby *, void *, float) __asm__("FUN_L04_00252e18");
@@ -159,7 +159,7 @@ extern void approach_w(Moby *, float, void *, float, float, float) __asm__("FUN_
 extern void FUN_L01_0028b5e0_c(Moby *, char *, void *, void *) __asm__("FUN_L01_0028b5e0");
 extern int  move_w(Moby *, int *, void *, void *, float) __asm__("FUN_L00_00258b50");
 extern int  recover_2E39E0(Moby *, void *) __asm__("FUN_L00_002dc9f0");
-extern void effects_update_2E39E0(Moby *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(Moby *, void *) __asm__("FUN_L00_0025d538");
 
 /* Suck cannon methods of the ground melee enemy (and the peckbot, robosquawker and chomper). */
 extern int cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
@@ -278,7 +278,7 @@ void ground_melee_enemy_update(Moby *moby) {
                     moby->collision = 0;
                     moby->state = GROUND_ENEMY_STATE_FATAL_KNOCKBACK;
                     ground_enemy_vars->f117 = 120;
-                    effects_start_2E39E0(moby, ground_enemy_vars->effects);
+                    start_hit_color_flash(moby, ground_enemy_vars->effects);
                 } else {
                     if (hit->kind == 180) {
                         ground_enemy_vars->up = lift * 1.35f;
@@ -295,7 +295,7 @@ void ground_melee_enemy_update(Moby *moby) {
                     moby->state = GROUND_ENEMY_STATE_HURT_KNOCKBACK;
                     ground_enemy_vars->f117 = 250;
                     ground_enemy_vars->cooldown = scale_game_frames(60);
-                    effects_start_2E39E0(moby, ground_enemy_vars->effects);
+                    start_hit_color_flash(moby, ground_enemy_vars->effects);
                 }
             }
         }
@@ -674,7 +674,7 @@ void ground_melee_enemy_update(Moby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    effects_update_2E39E0(moby, ground_enemy_vars->effects);
+    update_hit_color_flash(moby, ground_enemy_vars->effects);
 }
 
 int   D_L15_001619D8 = 0x7000000;

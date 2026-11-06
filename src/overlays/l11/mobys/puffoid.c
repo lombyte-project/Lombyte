@@ -687,7 +687,7 @@ struct L11PatrolVars {
     u8  pad24[0x14];
     s32 retimer; /* 0x38: nonzero restarts the timer at 0x244 */
     u8  pad3C[0xD4];
-    u8  move[7]; /* 0x110: movement state (trooper_anim_update / trooper_anim_finish) */
+    u8  move[7]; /* 0x110: movement state (start_hit_color_flash / update_hit_color_flash) */
     u8  hit_flash_red_target; /* 0x117 */
     u8  pad118[8];
     struct KnockbackMotion knockback; /* 0x120 */
@@ -721,8 +721,8 @@ extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_
 extern void
 trooper_start_knockback(void *, void *, s32, s32, s32, float) __asm__("FUN_L00_0025c558");
 extern void  FUN_L00_00257470(void *, s32, s32);
-extern void  trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void  FUN_00212f90(void *, s32, s32, s32);
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern s32   FUN_L00_0025ff38(void *, void *, s32, s32, void *, s32, float);
@@ -868,11 +868,11 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
             case HIT_RESPONSE_COOLDOWN_NO_KNOCKBACK:
                 break;
             }
-            trooper_anim_update(moby, patrol_vars->move);
+            start_hit_color_flash(moby, patrol_vars->move);
         }
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, patrol_vars->move);
+    update_hit_color_flash(moby, patrol_vars->move);
     if (patrol_vars->timer != 0) {
         if (moby->state == PUFFOID_STATE_IDLE ||
             (moby->state == PUFFOID_STATE_WANDER_NEAR_HOME && (moby->anim_flags & 2))) {

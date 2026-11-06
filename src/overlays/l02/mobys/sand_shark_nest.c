@@ -29,8 +29,8 @@ extern void  trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void
 trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 #include "qcopy.h"
 
@@ -378,10 +378,10 @@ void handle_sand_shark_nest_damage(struct Moby *moby) {
                 blend_moby_animation(moby, 3, 0, 0);
             FUN_L00_00257470(moby, 0, -1);
         }
-        trooper_anim_update(moby, (short *)(nest_vars + 0x60));
+        start_hit_color_flash(moby, (short *)(nest_vars + 0x60));
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, nest_vars + 0x60);
+    update_hit_color_flash(moby, nest_vars + 0x60);
     FUN_L00_001fefc8(&moby->command);
 }
 

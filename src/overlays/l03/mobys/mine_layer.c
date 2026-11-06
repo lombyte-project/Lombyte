@@ -372,8 +372,8 @@ extern s32         resolve_moby_hit_response(
 extern void trooper_knockback_arc(Vec4 *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
 extern void
 trooper_start_knockback(f32, struct Moby *, void *, s32, s32, s32) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(struct Moby *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(struct Moby *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(struct Moby *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(struct Moby *, void *) __asm__("FUN_L00_0025d538");
 
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 
@@ -485,10 +485,10 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
             damaged_moby->state = MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION;
             break;
         }
-        trooper_anim_update(damaged_moby, trooper_vars->anim);
+        start_hit_color_flash(damaged_moby, trooper_vars->anim);
     }
     damaged_moby->hit_slot = 0xFF;
-    trooper_anim_finish(damaged_moby, trooper_vars->anim);
+    update_hit_color_flash(damaged_moby, trooper_vars->anim);
 }
 
 extern void set_path_2cc888(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");

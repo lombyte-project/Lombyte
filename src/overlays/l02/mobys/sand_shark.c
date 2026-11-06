@@ -1201,17 +1201,17 @@ void emit_sand_shark_single_particle(Vec4 *from) {
 
 /* pvars of the class FUN_L02_002d5c88 updates (only the fields it touches). */
 typedef struct {
-    char                   pad0[0x20];
-    float                  hp; /* 0x20 */
-    char                   pad24[0xA];
-    unsigned char          relaunch_request_state; /* 0x2E: 2 = respawn requested */
-    char                   pad2F[9];
-    int                    target_range_timer_refresh_request; /* 0x38 */
-    char                   pad3C[0xD4];
-    short                  anim[3]; /* 0x110: passed to trooper_anim_update / trooper_anim_finish */
-    char                   pad116;
-    unsigned char          hit_flash_target_red; /* 0x117 */
-    char                   pad118[8];
+    char          pad0[0x20];
+    float         hp; /* 0x20 */
+    char          pad24[0xA];
+    unsigned char relaunch_request_state; /* 0x2E: 2 = respawn requested */
+    char          pad2F[9];
+    int           target_range_timer_refresh_request; /* 0x38 */
+    char          pad3C[0xD4];
+    short         anim[3]; /* 0x110: passed to start_hit_color_flash / update_hit_color_flash */
+    char          pad116;
+    unsigned char hit_flash_target_red; /* 0x117 */
+    char          pad118[8];
     struct KnockbackMotion knockback; /* 0x120 */
     char                   pad180[0x50];
     float                  tgt[4]; /* 0x1D0: point followed along the path */
@@ -1254,8 +1254,8 @@ extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void
 trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 /* Path-following enemy: respawns at its home point on request, takes hits (dies and drops to the
    ground), then follows its path and retargets the hero when it strays. */
@@ -1358,11 +1358,11 @@ void handle_sand_shark_damage_and_targeting(unsigned char *moby) {
             moby[0x20] = 0x18;
             MOBY(moby)->collision = 0;
             moby_vars->hit_flash_target_red = 0x78;
-            trooper_anim_update(moby, moby_vars->anim);
+            start_hit_color_flash(moby, moby_vars->anim);
         }
     }
     moby[0xA4] = 0xFF;
-    trooper_anim_finish(moby, moby_vars->anim);
+    update_hit_color_flash(moby, moby_vars->anim);
     path = D_L02_001B0AB0_5c88[moby_vars->configured_path_index];
     if (FUN_L00_0025ff38(moby_vars->effective_target_selection_range,
                          moby,

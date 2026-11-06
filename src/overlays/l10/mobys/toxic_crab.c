@@ -59,8 +59,8 @@ extern float        D_0015ED70;
 extern void
 spawn_color_swapped_explosion_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 extern float D_0015ED6C, D_0015ED70;
-extern void  trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern int
 activate_effect_l08(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 
@@ -71,7 +71,7 @@ extern short *moby_group_member_lists[] __asm__("D_L10_001ABCC0");
 
 extern float FUN_L04_001f1978(float);
 extern void  trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
-extern void  trooper_anim_update(void *m, void *p) __asm__("FUN_L00_0025d458");
+extern void  start_hit_color_flash(void *m, void *p) __asm__("FUN_L00_0025d458");
 
 /* Update for the toxic crab (moby class 1202): line-of-sight test, then a 13-state walk/chase/attack/death machine. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002E30F8), where it is exact; names translated to the US level program. */
@@ -217,7 +217,7 @@ collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_00
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void FUN_L00_0025a120(void *);
-extern void FUN_L00_0025d458(void *m, short *p);
+extern void start_hit_color_flash(void *m, void *p) __asm__("FUN_L00_0025d458");
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void FUN_L01_0026d930(char *p);
 extern void trooper_set_knockback(float *p, float a, float b) __asm__("FUN_L03_00250a78");
@@ -826,7 +826,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
                                     0,
                                     fast_add_rotations(m->heading_radians, 3.1415927f));
                 crab_data->b67 = 0xFA;
-                FUN_L00_0025d458(m, (short *)crab_data->q60);
+                start_hit_color_flash(m, (short *)crab_data->q60);
                 FUN_L00_00257470(m, 0, -1);
                 break;
             }
@@ -1208,7 +1208,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
                 &vA, &fx, &moby_data->knockback_xy_scale, &moby_data->knockback_z_scale);
             func_L00_0025D5B0_2E52B0(moby, moby_data->a70, 9, 1, 0, fx);
             moby_data->b67 = 0xFA;
-            trooper_anim_update(moby, moby_data->a60);
+            start_hit_color_flash(moby, moby_data->a60);
             break;
         case VEHICLE_SCALED_KNOCKBACK_HIT_RESPONSE:
         case VEHICLE_DEPENDENT_KNOCKBACK_HIT_RESPONSE: {
@@ -1226,7 +1226,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
             func_L00_0025D5B0_2E52B0(
                 moby, moby_data->a70, 9, 1, 0, fast_arc_tan(hit_record->pos.x, hit_record->pos.y));
             moby_data->b67 = 0xFA;
-            trooper_anim_update(moby, moby_data->a60);
+            start_hit_color_flash(moby, moby_data->a60);
             break;
         }
         case LETHAL_HIT_RESPONSE:
@@ -1240,7 +1240,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
         }
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, moby_data->a60);
+    update_hit_color_flash(moby, moby_data->a60);
     if ((unsigned char)(moby->state - 10) < 3) {
         moby_data->target_loss_frames = 0;
         return;

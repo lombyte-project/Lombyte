@@ -37,9 +37,9 @@ extern void FUN_L00_00257470(void *, int, int);
 
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
 
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 extern float D_L13_001670C0[];
 
@@ -574,7 +574,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 robosquawker_moby->state = ROBOSQUAWKER_STATE_DEATH_KNOCKBACK;
                 release_robosquawker_particle((Level13VendorMoby *)robosquawker_vars);
                 robosquawker_vars->x110[7] = 0x78;
-                trooper_anim_update(robosquawker_moby, (short *)robosquawker_vars->x110);
+                start_hit_color_flash(robosquawker_moby, (short *)robosquawker_vars->x110);
                 FUN_L00_00257470(robosquawker_moby, 0, -1);
             } else {
                 *(u128 *)&va = *(u128 *)&hit->pos;
@@ -594,7 +594,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 release_robosquawker_particle((Level13VendorMoby *)robosquawker_vars);
                 *(unsigned char *)&robosquawker_vars->x110[7] = 0xFA;
                 robosquawker_vars->damage_cooldown_frames = scale_game_frames(0x3C);
-                trooper_anim_update(robosquawker_moby, (short *)robosquawker_vars->x110);
+                start_hit_color_flash(robosquawker_moby, (short *)robosquawker_vars->x110);
             }
         }
     }
@@ -1391,7 +1391,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         break;
     }
     }
-    trooper_anim_finish(robosquawker_moby, robosquawker_vars->x110);
+    update_hit_color_flash(robosquawker_moby, robosquawker_vars->x110);
     if (robosquawker_moby->pos.f[0] < 2.0f || robosquawker_moby->pos.f[0] > 1021.0f ||
         robosquawker_moby->pos.f[1] < 2.0f || robosquawker_moby->pos.f[1] > 1021.0f ||
         robosquawker_moby->pos.f[2] < 2.0f || robosquawker_moby->pos.f[2] > 1021.0f) {

@@ -102,9 +102,9 @@ struct Moby *spawn_blarg_turret_child(struct Moby *parent) {
 extern int
 hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
 
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 void blend_moby_animation(MobyAnim *m, int a, int b, int c) __asm__("FUN_00212f90");
 
@@ -175,7 +175,7 @@ void process_blarg_gunner_hits(struct Moby *moby, char *moby_vars) {
                 }
                 FUN_L00_00257470(moby, 0, -1);
                 moby_vars[0x67] = 0x78;
-                trooper_anim_update(moby, (short *)(moby_vars + 0x60));
+                start_hit_color_flash(moby, (short *)(moby_vars + 0x60));
                 if (moby->prev_seq != 3)
                     blend_moby_animation(moby, 3, 1, 0);
                 moby->state = BLARG_GUNNER_STATE_DESTROY;
@@ -183,12 +183,12 @@ void process_blarg_gunner_hits(struct Moby *moby, char *moby_vars) {
                 *tm = current_health - hit_damage;
                 *(unsigned char *)(moby_vars + 0x67) = 0xFA;
                 *(short *)(moby_vars + 0x26) = scale_game_frames(0x3C);
-                trooper_anim_update(moby, (short *)(moby_vars + 0x60));
+                start_hit_color_flash(moby, (short *)(moby_vars + 0x60));
             }
         }
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, moby_vars + 0x60);
+    update_hit_color_flash(moby, moby_vars + 0x60);
 }
 
 extern float D_L13_001670C0[];

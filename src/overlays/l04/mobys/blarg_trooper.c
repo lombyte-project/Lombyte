@@ -102,8 +102,8 @@ extern void  trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN
 extern void
 trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
 extern void  build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
-extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void  advance_moby_animation(void *);
 extern void  build_moby_bone_transform(char *, int, char *);
 extern void  copy_matrix3x4(void *, void *);
@@ -378,7 +378,7 @@ void blarg_trooper_update(struct Moby *moby) {
         case BLARG_TROOPER_HIT_REACTION_IGNORED:
             break;
         }
-        trooper_anim_update(moby, &blarg_trooper_pvars->anim_state);
+        start_hit_color_flash(moby, &blarg_trooper_pvars->anim_state);
     }
     moby->hit_slot = 0xFF;
     if (blarg_trooper_pvars->retimer != 0) {
@@ -770,7 +770,7 @@ void blarg_trooper_update(struct Moby *moby) {
         }
         break;
     }
-    trooper_anim_finish(moby, &blarg_trooper_pvars->anim_state);
+    update_hit_color_flash(moby, &blarg_trooper_pvars->anim_state);
     {
         int current_state = moby->state;
         if (current_state == BLARG_TROOPER_STATE_IDLE ||

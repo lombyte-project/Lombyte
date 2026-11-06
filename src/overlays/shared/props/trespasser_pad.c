@@ -102,7 +102,7 @@ extern void func_L02_002D9D48_2D9F08(void *, void *, Moby *) __asm__("FUN_L02_00
 extern float
 advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void       func_L02_002DA820_2D9F08(void) __asm__("FUN_L02_002d93e8");
-extern void       func_L00_0025E590_2D9F08(Moby *, Data *) __asm__("FUN_L00_0025d538");
+extern void       update_hit_color_flash(Moby *, Data *) __asm__("FUN_L00_0025d538");
 extern float      D_L02_001D33B0[4][4];
 extern Lvl        D_L02_001BBB40_2D9F08 __asm__("D_L02_001BB830");
 extern int        current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
@@ -443,7 +443,7 @@ void tresspasser_pad_update(Moby *moby) {
         }
         break;
     }
-    func_L00_0025E590_2D9F08(moby, pad_puzzle_state);
+    update_hit_color_flash(moby, pad_puzzle_state);
 }
 
 void align_hero_to_tresspasser_pad(struct Moby *moby) __asm__("FUN_L02_002d92f0");

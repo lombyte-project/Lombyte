@@ -53,8 +53,8 @@ extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern char            *create_moby(int);
 extern void             update_entity(void *) __asm__("FUN_L00_00250df8");
 extern float D_0015ED6C MACRO_ADDR;
-extern void             trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
-extern void             trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void             start_hit_color_flash(void *, short *) __asm__("FUN_L00_0025d458");
+extern void             update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void             spawn_explosion(void *,
                                         void *,
                                         void *,
@@ -654,7 +654,7 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
                 return;
             }
         }
-        trooper_anim_update(moby, &bomber_tank_damage_and_aim_vars->anim0);
+        start_hit_color_flash(moby, &bomber_tank_damage_and_aim_vars->anim0);
     }
 
     moby->hit_slot = 0xFF;
@@ -724,18 +724,18 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
     {
         short saved_anim0 = bomber_tank_damage_and_aim_vars->anim0;
         short saved_anim2 = bomber_tank_damage_and_aim_vars->anim2;
-        trooper_anim_finish(moby, &bomber_tank_damage_and_aim_vars->anim0);
+        update_hit_color_flash(moby, &bomber_tank_damage_and_aim_vars->anim0);
         if (bomber_tank_damage_and_aim_vars->partA != 0) {
             bomber_tank_damage_and_aim_vars->anim0 = saved_anim0;
             bomber_tank_damage_and_aim_vars->anim2 = saved_anim2;
-            trooper_anim_finish(bomber_tank_damage_and_aim_vars->partA,
-                                &bomber_tank_damage_and_aim_vars->anim0);
+            update_hit_color_flash(bomber_tank_damage_and_aim_vars->partA,
+                                   &bomber_tank_damage_and_aim_vars->anim0);
         }
         if (bomber_tank_damage_and_aim_vars->partB != 0) {
             bomber_tank_damage_and_aim_vars->anim0 = saved_anim0;
             bomber_tank_damage_and_aim_vars->anim2 = saved_anim2;
-            trooper_anim_finish(bomber_tank_damage_and_aim_vars->partB,
-                                &bomber_tank_damage_and_aim_vars->anim0);
+            update_hit_color_flash(bomber_tank_damage_and_aim_vars->partB,
+                                   &bomber_tank_damage_and_aim_vars->anim0);
         }
     }
 }

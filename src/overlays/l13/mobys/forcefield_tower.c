@@ -40,11 +40,11 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
 extern void FUN_L00_00257470(struct Moby *, int, int);
 
-extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *, short *) __asm__("FUN_L00_0025d458");
 
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
 
 extern float D_L13_001670C0[];
 
@@ -316,7 +316,7 @@ void process_forcefield_tower_damage(struct Moby *moby, unsigned char *moby_data
                     *(OvlQuad *)position = *(OvlQuad *)velocity;
                     FUN_L00_00257470(moby, 0, -1);
                     moby_data[0x67] = 0x78;
-                    trooper_anim_update(moby, (short *)(moby_data + 0x60));
+                    start_hit_color_flash(moby, (short *)(moby_data + 0x60));
                     moby_point_position(moby, 0, velocity);
                     emit_effect_l13(moby,
                                     position,
@@ -353,14 +353,14 @@ void process_forcefield_tower_damage(struct Moby *moby, unsigned char *moby_data
                     *health -= *(float *)(hit_record + 0x2c);
                     moby_data[0x67] = 0xfa;
                     *(short *)(moby_data + 0x26) = scale_game_frames(0x3c);
-                    trooper_anim_update(moby, (short *)(moby_data + 0x60));
+                    start_hit_color_flash(moby, (short *)(moby_data + 0x60));
                 }
             }
         }
     mark:
         moby->hit_slot = 0xff;
     }
-    trooper_anim_finish(moby, moby_data + 0x60);
+    update_hit_color_flash(moby, moby_data + 0x60);
 }
 
 extern int FUN_001160d8(void);

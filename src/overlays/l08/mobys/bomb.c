@@ -56,8 +56,8 @@ extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__(
 float      bomb_downward_acceleration_gp __asm__("D_L08_00161860") = 15.0f;
 extern void  FUN_L00_001ff660_c(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void  jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
-extern void  trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  start_hit_color_flash(void *, short *) __asm__("FUN_L00_0025d458");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void  spawn_explosion(void *,
                              void *,
                              void *,
@@ -244,9 +244,9 @@ void moby_248_update(char *moby) {
                    bomb_vars->timer_20 == scale_game_frames(0x28) ||
                    bomb_vars->timer_20 == scale_game_frames(0x14)) {
             bomb_vars->fuse_flash_target_red = 0xFA;
-            trooper_anim_update(moby, (short *)bomb_vars);
+            start_hit_color_flash(moby, (short *)bomb_vars);
         }
-        trooper_anim_finish(moby, bomb_vars);
+        update_hit_color_flash(moby, bomb_vars);
         break;
     case BOMB_STATE_EXPLODE_AND_REMOVE:
         allocate_voice_for_target_entry(0, 0, moby);

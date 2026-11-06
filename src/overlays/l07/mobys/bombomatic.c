@@ -27,8 +27,8 @@ extern char debris_far_point[] __asm__("D_L07_00166E40");
 extern int  allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int  resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int);
-extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *, short *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void spawn_explosion(void *,
                             void *,
                             void *,
@@ -327,11 +327,11 @@ void bombomatic_update(char *moby) {
         *(float *)health_ptr = tv;
         moby_data->hit_transition_target = 0xFA;
         moby_data->unk26 = scale_game_frames(60);
-        trooper_anim_update(moby, &moby_data->anim_state);
+        start_hit_color_flash(moby, &moby_data->anim_state);
     }
 eb20:
     ((unsigned char *)moby)[0xA4] = 0xFF;
-    trooper_anim_finish(moby, &moby_data->anim_state);
+    update_hit_color_flash(moby, &moby_data->anim_state);
     get_target_sight(moby, target_buffer, 20.0f);
     switch (((unsigned char *)moby)[0x20]) {
     case BOMBOMATIC_INITIALIZE: {

@@ -634,8 +634,8 @@ int follow_blarg_helicopter_path(struct Moby *moby, int path_index) {
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int
 hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 void process_blarg_helicopter_hits(struct Moby *moby) {
     enum {
@@ -666,7 +666,7 @@ void process_blarg_helicopter_hits(struct Moby *moby) {
             moby->state = BLARG_HELICOPTER_EXPLODE_AND_REMOVE_OR_RESET;
         } else if (hit_reaction_code != 0xB) {
             blarg_helicopter_hit_vars->hit_flash_target_red = 0xB4;
-            trooper_anim_update(moby, (short *)&blarg_helicopter_hit_vars->anim_state);
+            start_hit_color_flash(moby, (short *)&blarg_helicopter_hit_vars->anim_state);
             if (*(float *)(hit_record + 0x1C) == 5627.925f &&
                 moby->state != BLARG_HELICOPTER_KNOCKBACK) {
                 hit_to_moby_angle = fast_arc_tan(moby->pos.x - *(float *)(hit_record + 0),
@@ -691,5 +691,5 @@ void process_blarg_helicopter_hits(struct Moby *moby) {
         }
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, &blarg_helicopter_hit_vars->anim_state);
+    update_hit_color_flash(moby, &blarg_helicopter_hit_vars->anim_state);
 }

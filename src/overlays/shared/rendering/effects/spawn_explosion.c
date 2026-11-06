@@ -48,9 +48,9 @@ void clip_negative_segment_endpoint_xyz(V0025d238 *segment_start, V0025d238 *ino
 }
 
 void get_moby_color(void *, int *, int *, int *) __asm__("FUN_L00_00250320");
-void trooper_anim_update(void *a, struct HitColorFlash *s) __asm__("FUN_L00_0025d458");
+void start_hit_color_flash(void *a, struct HitColorFlash *s) __asm__("FUN_L00_0025d458");
 
-void trooper_anim_update(void *moby, struct HitColorFlash *animation_state) {
+void start_hit_color_flash(void *moby, struct HitColorFlash *animation_state) {
     int previous_timer_frames = animation_state->timer;
     if (previous_timer_frames == 0 || animation_state->phase != 0) {
         animation_state->timer = scale_game_frames(animation_state->flash_frames);
@@ -74,9 +74,9 @@ void trooper_anim_update(void *moby, struct HitColorFlash *animation_state) {
 }
 
 void set_moby_color(s32, s32, s32, s32) __asm__("FUN_L00_002502f0");
-void trooper_anim_finish(s32 id, struct HitColorFlash *s) __asm__("FUN_L00_0025d538");
+void update_hit_color_flash(s32 id, struct HitColorFlash *s) __asm__("FUN_L00_0025d538");
 
-void trooper_anim_finish(s32 id, struct HitColorFlash *animation_state) {
+void update_hit_color_flash(s32 id, struct HitColorFlash *animation_state) {
     enum {
         MOBY_COLOR_PHASE_TO_SECONDARY_COLOR = 0,
         MOBY_COLOR_PHASE_TO_ORIGINAL_COLOR = 1
