@@ -298,7 +298,7 @@ typedef struct {
 
 typedef struct {
     char                   pad0[0x20];
-    float                  f20;
+    float                  health;
     short                  initial_health;
     short                  hit_reaction_cooldown;
     unsigned char          hit_response_profile_index;
@@ -541,7 +541,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         flag ? birdbot_vars->combat_target_radius * 2.0f : birdbot_vars->combat_target_radius;
     select_moby_combat_target(birdbot_moby, &selected_combat_target, target_search_radius);
     hit = find_moby_hit(birdbot_moby, 0x210000, 0);
-    kind = FUN_L00_0025a478_u(birdbot_moby, hit, &birdbot_vars->f20, 0, &hits, &dmg, 0, 4);
+    kind = FUN_L00_0025a478_u(birdbot_moby, hit, &birdbot_vars->health, 0, &hits, &dmg, 0, 4);
     fast_dec_timer_s16(&birdbot_vars->hit_reaction_cooldown);
     if (hit != 0 && birdbot_vars->hit_reaction_cooldown == 0) {
         if (hit->src != 0) {
@@ -561,8 +561,8 @@ void birdbot_update(PeMoby *birdbot_moby) {
                                              birdbot_moby->pos.f[1] - player->motion.pos.f[1]);
         }
         birdbot_vars->h1E2 = scale_game_frames(0x258);
-        birdbot_vars->f20 -= dmg;
-        if (birdbot_vars->f20 <= 0.0f) {
+        birdbot_vars->health -= dmg;
+        if (birdbot_vars->health <= 0.0f) {
             kind = BIRDBOT_HIT_REACTION_FATAL_KNOCKBACK;
         }
         switch (kind) {
@@ -707,8 +707,8 @@ void birdbot_update(PeMoby *birdbot_moby) {
         birdbot_vars->fF4 = fall;
         birdbot_vars->fDC = 2.0f;
         birdbot_vars->fD8 = 2.0f;
-        birdbot_vars->f20 = 2.0f;
-        birdbot_vars->initial_health = truncate_float_to_s32(birdbot_vars->f20);
+        birdbot_vars->health = 2.0f;
+        birdbot_vars->initial_health = truncate_float_to_s32(birdbot_vars->health);
         birdbot_vars->b29 = 0;
         birdbot_vars->hit_response_profile_index = 1;
         clear_u64_value(&birdbot_vars->v40);

@@ -43,9 +43,9 @@ enum {
 typedef struct L16DamageData {
     u8            pad0[0x20];
     float         health;
-    s16           unk24;
+    s16           max_health;
     u8            pad26[0x2];
-    s8            unk28;
+    s8            hit_response_class;
     s8            unk29;
     u8            pad2A[0x6];
     f32           unk30;
@@ -245,8 +245,8 @@ void blarg_elite_commando_update(char *commando_moby) {
     case COMMANDO_STATE_INITIALIZE:
         *(int *)&commando_data->bobbing_amplitude = 0;
         commando_data->unk29 = 1;
-        commando_data->unk24 = 3;
-        commando_data->unk28 = 2;
+        commando_data->max_health = 3;
+        commando_data->hit_response_class = 2;
         commando_data->unk30 = 1.5f;
         commando_data->health = 3.0f;
         commando_data->bobbing_x_phase = random_angle_radians();

@@ -32,9 +32,9 @@ enum {
 typedef struct ArmedTransportVars {
     u8  pad0[0x20];
     f32 health;
-    s16 unk24;
+    s16 max_health;
     u8  pad26[0x2];
-    s8  unk28;
+    s8  hit_response_class;
     u8  pad29[0x37];
     u8  trooper_anim[0x7];
     u8  hit_animation_secondary_red;
@@ -184,8 +184,8 @@ void armed_transport_update(char *transport_moby) {
         MOBY(transport_moby)->draw_dist = 255;
         MOBY(transport_moby)->update_dist = 255;
         transport_data->health = 12.0f;
-        transport_data->unk24 = 12;
-        transport_data->unk28 = 3;
+        transport_data->max_health = 12;
+        transport_data->hit_response_class = 3;
         if (transport_data->path_index != -1)
             compute_armed_transport_path_headings(D_L16_001B0930[transport_data->path_index]);
         if (transport_data->second_path_index != -1)
