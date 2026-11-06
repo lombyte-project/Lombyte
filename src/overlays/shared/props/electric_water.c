@@ -58,8 +58,8 @@ typedef struct {
     float red; /* the colour, as PointLight.color */
     float green;
     float blue;
-    int   unkC;
-    Vec4  pos; /* w: radius */
+    int   intensity; /* PointLight.intensity */
+    Vec4  pos;       /* w: radius */
 } Light29FF90;
 
 typedef struct {
@@ -297,7 +297,7 @@ void electric_water_update(struct Moby *moby) {
                         light->pos.f[3] = 8.0f;
                         light->green = 1.0f;
                         light->blue = 0.5f;
-                        light->unkC = 0;
+                        light->intensity = 0;
                     }
                     initialize_electric_water_bolt_effect((char *)moby);
                     update_electric_water_bolt_effect(moby);

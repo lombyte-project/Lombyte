@@ -21,9 +21,9 @@ extern int D_L13_0015F404;
 
 extern struct {
     char  pad0[0x60];
-    float unk60, unk64, unk68;
+    float hero_start_x, hero_start_y, hero_start_z; /* LevelRenderState.hero_start_pos */
     char  pad6C[0xC];
-    float unk78;
+    float hero_start_yaw; /* LevelRenderState.hero_start_rot z */
 } D_0013E030;
 
 extern unsigned char D_L13_0015FC88[] MACRO_ADDR;
@@ -194,10 +194,10 @@ void gemlik_scene_controller_update(struct Moby *moby) {
                 struct Moby *other = (struct Moby *)(moby_base + scene_controller_vars[8] * 0x100);
                 other->flags &= 0xffbe;
                 initialize_moby_state_record(other);
-                D_0013E030.unk60 = 464.66f;
-                D_0013E030.unk64 = 580.68f;
-                D_0013E030.unk68 = 316.72f;
-                D_0013E030.unk78 = 2.77f;
+                D_0013E030.hero_start_x = 464.66f;
+                D_0013E030.hero_start_y = 580.68f;
+                D_0013E030.hero_start_z = 316.72f;
+                D_0013E030.hero_start_yaw = 2.77f;
             }
             D_L13_0015F404 = 0;
             moby->state = WAIT_LINKED_MOBY_REMOVAL_BEFORE_SAVE;
