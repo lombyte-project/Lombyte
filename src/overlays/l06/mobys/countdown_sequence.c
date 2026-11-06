@@ -170,7 +170,7 @@ typedef struct CountdownSequenceVars {
     s32 unk0;
     s32 unk4;
     s32 unk8;
-    s32 unkC;
+    s32 raised_cuboid; /* cuboid moved up by 10 when the countdown starts */
     s32 unk10;
     s32 unk14;
     s32 unk18;
@@ -247,7 +247,7 @@ void countdown_sequence_update(unsigned char *moby) {
         clear_moby_list_state_18(moby_vars->unk8);
         set_moby_state_3(D_L06_0015FFD8_301b90 + (moby_vars->unk20 << 8));
         {
-            ((LevelCuboid *)((moby_vars->unkC << 7) + (int)l06_cuboids))->pos.z += 10.0f;
+            ((LevelCuboid *)((moby_vars->raised_cuboid << 7) + (int)l06_cuboids))->pos.z += 10.0f;
             p = D_L06_001B0C30_301b90[moby_vars->path_index];
             qcopy(va, (char *)p + 0x20);
             qcopy(vb, (char *)p + 0x10);
