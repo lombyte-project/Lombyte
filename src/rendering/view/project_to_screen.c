@@ -3,9 +3,9 @@
 #include "rnc/math/asm_helpers.h"
 
 struct ScreenPoint {
-    f32 unk0;
-    f32 unk4;
-    f32 unk8;
+    f32 x;     /* GS screen x, 1/16 pixel, offset 2048 */
+    f32 y;     /* GS screen y, 1/16 pixel, offset 2048 */
+    f32 depth; /* view-space depth, world units */
 };
 
 struct Locals {
@@ -44,13 +44,13 @@ void project_to_screen(struct ScreenPoint *screen_out, s32 world_pos) {
     L.v8C = 1.0f;
     transform_vector(&L.v90, &L.blk80, &L.v40);
     scale = D_0018CF10[0] / L.v9C;
-    screen_out->unk8 = L.v98 * 0.0009765625f;
+    screen_out->depth = L.v98 * 0.0009765625f;
     x = L.v90 * scale + 2048.0f;
     y = L.v94 * scale + 2048.0f;
     L.v90 = x;
     L.v94 = y;
-    screen_out->unk0 = x * 16.0f;
-    screen_out->unk4 = y * 16.0f;
+    screen_out->x = x * 16.0f;
+    screen_out->y = y * 16.0f;
 }
 
 extern __typeof__(project_to_screen) func_001F2070 __attribute__((alias("FUN_001f2070")));
