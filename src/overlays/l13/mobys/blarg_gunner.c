@@ -53,7 +53,7 @@ typedef struct {
     f32          health;
     s16          max_health;
     u8           pad26[2];
-    u8           unk28;
+    u8           hit_response_class;
     u8           unk29;
     u8           unk2A;
     u8           pad2B[5];
@@ -91,7 +91,7 @@ struct Moby *spawn_blarg_turret_child(struct Moby *parent) {
         child_vars->max_health = 1;
         child_vars->unk29 = 1;
         child_vars->unk2A = 3;
-        child_vars->unk28 = 0;
+        child_vars->hit_response_class = 0;
         child_vars->unk30 = 0.9f;
         update_entity(child_moby);
         copy_hero_moby_field_38(child_moby);

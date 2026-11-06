@@ -55,7 +55,7 @@ typedef struct ElectroidMoby ElectroidMoby;
 typedef struct {
     u8                     pad0[0x20];
     f32                    health;
-    s16                    unk24;
+    s16                    max_health;
     s16                    unk26;
     u8                     hit_response_class;
     u8                     unk29;
@@ -202,7 +202,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         vars->unk29 = 0;
         vars->health = 2.0f;
         vars->hit_response_class = 1;
-        vars->unk24 = 2;
+        vars->max_health = 2;
         vars->unk58 = truncate_float_to_s32(14.0f);
         vars->unk5A = truncate_float_to_s32(8.0f);
         vars->pathPt = 1;

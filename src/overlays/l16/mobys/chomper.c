@@ -72,7 +72,7 @@ typedef struct ChomperVars {
     f32 health;
     u16 max_health;
     u8  pad_26[0x2];
-    u8  unk28;
+    u8  hit_response_class;
     u8  pad_29[0x2F];
     u8  unk58;
     u8  pad_59[0x1];
@@ -117,7 +117,7 @@ void chomper_update(struct Moby *chomper_moby) {
             return;
         }
         chomper_data->max_health = 1;
-        chomper_data->unk28 = 0;
+        chomper_data->hit_response_class = 0;
         chomper_data->health = 1.0f;
         chomper_data->unkD0 = (int)&D_L16_00161E48;
         if (rand() & 1)

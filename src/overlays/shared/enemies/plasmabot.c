@@ -57,9 +57,9 @@ enum {
 typedef struct PlasmabotVars {
     u8  pad0[0x20];
     f32 health;
-    s16 unk24;
+    s16 max_health;
     s16 stagger_reaction_duration_frames;
-    s8  unk28;
+    s8  hit_response_class;
     s8  unk29;
     u8  pad2A[0x6];
     f32 unk30;
@@ -460,11 +460,11 @@ void plasmabot_update(char *moby) {
             qcopy(&MOBY(moby)->pos,
                   (char *)l14_paths[plasmabot_update_private_vars->path_index] + 0x10);
         }
-        plasmabot_update_private_vars->unk28 = 1;
+        plasmabot_update_private_vars->hit_response_class = 1;
         plasmabot_update_private_vars->unk29 = 0;
         plasmabot_update_private_vars->health = 2.0f;
         plasmabot_update_private_vars->unk30 = 1.25f;
-        plasmabot_update_private_vars->unk24 = 2;
+        plasmabot_update_private_vars->max_health = 2;
         plasmabot_update_private_vars->unk58 = truncate_float_to_s32(15.0f);
         plasmabot_update_private_vars->unk5A = truncate_float_to_s32(16.0f);
         plasmabot_update_private_vars->path_traversal_direction = 1.0f;

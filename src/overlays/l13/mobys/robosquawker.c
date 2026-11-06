@@ -261,10 +261,10 @@ typedef struct {
 
 typedef struct {
     char          pad0[0x20];
-    float         f20;
-    short         h24;
+    float         health;
+    short         max_health;
     short         damage_cooldown_frames;
-    unsigned char b28;
+    unsigned char hit_response_class;
     unsigned char b29;
     char          pad2A[0xE];
     int           alert_refresh_requested;
@@ -528,7 +528,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
     dmg = 0.0f;
     hit = FUN_L00_0025a420(robosquawker_moby, 0x330000, 0);
     resolve_moby_hit_response(
-        robosquawker_moby, hit, &robosquawker_vars->f20, 0, &hits, &dmg, 0, 4);
+        robosquawker_moby, hit, &robosquawker_vars->health, 0, &hits, &dmg, 0, 4);
     fast_dec_timer_s16(&robosquawker_vars->damage_cooldown_frames);
     if (robosquawker_vars->damage_cooldown_frames < scale_game_frames(0x2D) && hit != 0 &&
         robosquawker_moby->state != ROBOSQUAWKER_STATE_DEATH_KNOCKBACK) {
@@ -545,7 +545,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                              robosquawker_moby->pos.f[1] - selected_target_record.pos.f[1]);
             robosquawker_vars->motion_bounce_restitution = 0.5f;
             robosquawker_vars->motion_collision_radius_fixed_point = 0x202;
-            robosquawker_vars->f20 -= hit->damage_amount;
+            robosquawker_vars->health -= hit->damage_amount;
             robosquawker_vars->motion_gravity_step = 0.0055f;
             robosquawker_vars->motion_horizontal_speed_change_limit = 0.0011f;
             robosquawker_vars->motion_horizontal_launch_step =
@@ -554,7 +554,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 robosquawker_damage_knockback_vertical_speed_gp * frame_time;
             robosquawker_vars->motion_behavior_flags = 9;
             robosquawker_vars->b15D = 0;
-            if (robosquawker_vars->f20 <= 0.0f) {
+            if (robosquawker_vars->health <= 0.0f) {
                 robosquawker_moby->h34 &= 0xEFFF;
                 robosquawker_vars->motion_horizontal_launch_step = frame_time * 10.0f;
                 robosquawker_vars->motion_vertical_launch_step = frame_time * 5.5f;
@@ -618,8 +618,8 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         robosquawker_vars->alert_timer_frames = 0;
         robosquawker_vars->h208 = 0;
         robosquawker_vars->b29 = 0;
-        robosquawker_vars->f20 = 1.0f;
-        robosquawker_vars->h24 = 1;
+        robosquawker_vars->health = 1.0f;
+        robosquawker_vars->max_health = 1;
         robosquawker_vars->b58 = 8;
         robosquawker_vars->b5A = 4;
         FUN_L01_0026d930((char *)&robosquawker_vars->w180);
