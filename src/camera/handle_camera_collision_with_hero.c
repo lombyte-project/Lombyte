@@ -14,7 +14,7 @@ void handle_camera_collision_with_hero(struct UpdateCam *cam) __asm__("FUN_001eb
 void handle_camera_collision_with_hero(struct UpdateCam *selected_camera) {
     struct CamColl *collision_state = &cam_coll_state;
 
-    if (selected_camera->unk86 == 0) {
+    if (selected_camera->camera_class == 0) {
         if (collision_state->moby == 0) {
             collision_state->moby = noop_callback_l((u8 *)collision_state - 0x50);
         }

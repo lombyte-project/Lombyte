@@ -617,8 +617,8 @@ typedef struct {
     u8  pad00[0x7E];
     s16 mode; /* 0x7E: set to 3 or 5 */
     u8  pad80[4];
-    s16 slot;  /* 0x84: index into l01_camera_preset_rows */
-    s16 unk86; /* 0x86: compared with hero.camera_mode */
+    s16 slot;         /* 0x84: index into l01_camera_preset_rows */
+    s16 camera_class; /* 0x86: UpdateCam.camera_class, compared with hero.camera_mode */
 } CamUser;
 
 void update_camera_mode_from_preset(CamUser *camera_user) __asm__("FUN_L01_00316030");
@@ -626,7 +626,7 @@ void update_camera_mode_from_preset(CamUser *camera_user) __asm__("FUN_L01_00316
 void update_camera_mode_from_preset(CamUser *camera_user) {
     CameraPreset *camera_preset = l01_camera_preset_rows[camera_user->slot].preset;
 
-    if (hero.camera_mode == camera_user->unk86) {
+    if (hero.camera_mode == camera_user->camera_class) {
         if (camera_preset->target < 0) {
             return;
         }

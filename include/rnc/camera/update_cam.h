@@ -27,11 +27,11 @@ struct UpdateCam {
     s16   transition_state;
     u8    pad80[4];
     s16   descriptor_index;
-    s16   unk86; /* 0 lets the hero collision moby spawn; 6 disables shake */
-    u8    pad88[4];
-    s16   type; /* index into camera_types (D_001E8C00) */
-    s16   activation_blocked;
-    u8    pad90[0x10];
+    s16 camera_class; /* 0x86: 0 the follow camera (lets the hero collision moby spawn), 6 disables shake, 7 Swingshot */
+    u8  pad88[4];
+    s16 type; /* index into camera_types (D_001E8C00) */
+    s16 activation_blocked;
+    u8  pad90[0x10];
 };
 
 /* Per camera type callbacks, indexed by UpdateCam.type. */

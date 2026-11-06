@@ -54,7 +54,7 @@ s32 volume_camera_aim_active(struct UpdateCam *aim_camera_record) {
     FollowCamState   *state = FOLLOW_CAM_STATE(current_follow_camera_record);
     FollowCamTail    *tail = &state->tail;
     FollowCamFlags   *ctl = &state->tail.ctl;
-    if (current_follow_camera_record->unk86 != 0)
+    if (current_follow_camera_record->camera_class != 0)
         return 0;
     if (params->only_in_mode_1 != 0 && D_001413F4 != 1)
         return 0;

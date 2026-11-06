@@ -10,19 +10,19 @@
  * follow_camera_transition reads `follow` for its spring constants, and
  * fast_dec_timer counts `blend_timer` down. The follow_camera_set_* setters
  * (FUN_L00_002e8450..002e8680) each write one field and do nothing while the
- * record's unk86 is set. The shot cameras (volume_camera_swing, volume_camera_aim)
+ * record's camera_class is set. The shot cameras (volume_camera_swing, volume_camera_aim)
  * snap every vector at once when a shot starts.
  */
 typedef struct {
     f32 focus[4];    /* 0x40: point the camera looks at, moved by velocity each frame */
     f32 velocity[4]; /* 0x50: focus displacement for this frame */
     u8  pad60[0x20];
-    f32 look_target[4];  /* 0x80: focus offset blended towards the hero */
-    f32 eye[4];          /* 0x90: resulting camera position */
-    f32 offset[4];       /* 0xA0: eased offset, split into a lateral and an up part */
-    f32 lateral_ease[4]; /* 0xB0: cam_interp_values state of the lateral part */
-    f32 up_ease[4];      /* 0xC0: cam_interp_values state of the up part */
-    f32 snap_look_target[4];        /* 0xD0: set to look_target when a shot camera snaps */
+    f32 look_target[4];      /* 0x80: focus offset blended towards the hero */
+    f32 eye[4];              /* 0x90: resulting camera position */
+    f32 offset[4];           /* 0xA0: eased offset, split into a lateral and an up part */
+    f32 lateral_ease[4];     /* 0xB0: cam_interp_values state of the lateral part */
+    f32 up_ease[4];          /* 0xC0: cam_interp_values state of the up part */
+    f32 snap_look_target[4]; /* 0xD0: set to look_target when a shot camera snaps */
     u8  padE0[0x10];
     f32 look_height; /* 0xF0: height of look_target above the hero */
     u8  padF4[0x22];
@@ -48,18 +48,18 @@ typedef struct {
 /* 0x1D0: written when a shot camera snaps. */
 typedef struct {
     u8  pad1D0[0x20];
-    f32 shot_pos[4]; /* 0x1F0: set to the record's position */
-    f32 eye_distance_error;    /* 0x200: eye_distance minus the length of eye_offset */
+    f32 shot_pos[4];        /* 0x1F0: set to the record's position */
+    f32 eye_distance_error; /* 0x200: eye_distance minus the length of eye_offset */
     u8  pad204[8];
 } FollowCamSnap;
 
 typedef struct {
-    f32            eye_offset[4]; /* 0x130: eye offset; its length is the eye distance */
+    f32            eye_offset[4];       /* 0x130: eye offset; its length is the eye distance */
     f32            saved_eye_offset[4]; /* 0x140: copy of eye_offset */
     u8             pad150[0xC];
-    f32            eye_distance;   /* 0x15C: eye distance, set with eye_offset by the shot cameras */
-    f32            distance; /* 0x160: distance of the eye behind the hero */
-    f32            unk164;   /* 0x164: aim cameras start only while it is (nearly) 0 */
+    f32            eye_distance; /* 0x15C: eye distance, set with eye_offset by the shot cameras */
+    f32            distance;     /* 0x160: distance of the eye behind the hero */
+    f32            unk164;       /* 0x164: aim cameras start only while it is (nearly) 0 */
     u8             pad168[0x40];
     FollowCamFlags ctl; /* 0x1A8 */
     u8             pad1BC[0x10];
