@@ -207,7 +207,7 @@ void record_moby_hit(struct Moby *owner_moby, L_259a88 *hit_descriptor) {
     hit_record->flags = hit_descriptor->y;
     hit_record->unk28 = hit_descriptor->b0;
     hit_record->unk29 = hit_descriptor->b1;
-    hit_record->unk2A = hit_descriptor->s;
+    hit_record->source_class = hit_descriptor->s;
     hit_record->damage = hit_descriptor->f;
     hit_record->has_direction = hit_descriptor->flag;
     hit_record->owner = owner_moby;

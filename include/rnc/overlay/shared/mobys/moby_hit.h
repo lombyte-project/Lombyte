@@ -15,7 +15,7 @@ typedef struct {
     s32     flags;       /* 0x24: tested against the caller's mask */
     u8      unk28;
     u8      unk29;
-    u16     unk2A;
+    u16     source_class; /* 0x2A: oclass of source_moby */
     f32     damage; /* 0x2C: taken off hero.vehicle_hp; a weaker hit does not replace the owner's */
     s32     has_direction; /* 0x30: set when direction is longer than 0.0001 */
     void   *owner;         /* 0x34: the moby that was hit */

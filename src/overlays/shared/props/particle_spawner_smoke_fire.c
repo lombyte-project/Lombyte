@@ -23,11 +23,11 @@ typedef struct {
     s16   count; /* 02 */
     int   idx;   /* 04 */
     char  pad08[0x18];
-    float unk20, unk24, unk28; /* 20 24 28 */
-    s16   h2C, h2E;            /* 2C 2E */
-    int   x30, x34;            /* 30 34 */
-    int   col;                 /* 38 */
-    u8    c0, c1, c2;          /* 3C 3D 3E */
+    float puff_rise_speed, puff_scalar_min, puff_scalar_max; /* 20 24 28 */
+    s16   puff_alpha_min, puff_alpha_max;                    /* 2C 2E */
+    int   puff_frames_min, puff_frames_max;                  /* 30 34 */
+    int   col;                                               /* 38 */
+    u8    red, green, blue;                                  /* 3C 3D 3E */
     u8    pad3F;
     s16   extra;  /* 40 */
     s16   flag42; /* 42 */
@@ -188,7 +188,7 @@ void particle_spawner_smoke_fire_update(P *spawner) {
             FUN_L00_002d7d58_c(spawner, i);
         }
         D_L00_001600EC[q->idx].w = 1.0f;
-        q->col = q->c2 << 16 | q->c1 << 8 | q->c0;
+        q->col = q->blue << 16 | q->green << 8 | q->red;
         return;
     case PARTICLE_SPAWNER_ACTIVE:
         emitter_transform = (u8 *)&D_L00_001600EC[q->idx];
@@ -209,9 +209,10 @@ void particle_spawner_smoke_fire_update(P *spawner) {
                 b.z += 0.5f;
                 particle_vector.x = randf_sym(0.0f, frame_time * 0.25f);
                 particle_vector.y = randf_sym(0.0f, frame_time * 0.25f);
-                particle_vector.z = q->unk20 * frame_time;
-                sampled_particle_scalar = random_float_between(q->unk24, q->unk28);
-                col = random_int_between(q->h2C, q->h2E) << 24 |
+                particle_vector.z = q->puff_rise_speed * frame_time;
+                sampled_particle_scalar =
+                    random_float_between(q->puff_scalar_min, q->puff_scalar_max);
+                col = random_int_between(q->puff_alpha_min, q->puff_alpha_max) << 24 |
                       smoke_fire_emitted_particle_base_color_gp;
                 r = random_int_between(smoke_fire_emitted_particle_sign_randomized_sample_min_gp,
                                        smoke_fire_emitted_particle_sign_randomized_sample_max_gp);
@@ -225,7 +226,8 @@ void particle_spawner_smoke_fire_update(P *spawner) {
                                        sampled_particle_scalar);
                 if (ent) {
                     sub = &ent->sub;
-                    ent->h0A = FUN_001f96f8_c(random_int_between(q->x30, q->x34));
+                    ent->h0A =
+                        FUN_001f96f8_c(random_int_between(q->puff_frames_min, q->puff_frames_max));
                     sub->x04 = 3;
                     sub->emitted_particle_alpha = col >> 24;
                     sub->b0B = ent->h0A;

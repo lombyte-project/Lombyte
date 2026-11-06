@@ -27,7 +27,7 @@ typedef struct TaxiVars {
     f32  wobble_phase_3;
     f32  path_speed;
     f32  path_acceleration;
-    s32  unkDC;
+    s32  hero_path_index;
 } TaxiVars;
 
 typedef struct {
@@ -183,7 +183,7 @@ void transform_moby_vector_table_to_world_space(char *moby) __asm__("FUN_L05_003
 
 void transform_moby_vector_table_to_world_space(char *moby) {
     TaxiVars *moby_private_vars = (TaxiVars *)MOBY(moby)->pvars;
-    int       vector_table_index = moby_private_vars->unkDC;
+    int       vector_table_index = moby_private_vars->hero_path_index;
     if (vector_table_index != -1) {
         char *vector_table_entry = ((char *)l05_paths[vector_table_index]);
         if (*(int *)vector_table_entry == 7) {
@@ -199,7 +199,7 @@ void transform_moby_vector_table_to_world_space(char *moby) {
             }
             player_hero = &hero;
             *(unsigned short *)&player_hero->path_constrain_pending =
-                *(unsigned short *)&moby_private_vars->unkDC;
+                *(unsigned short *)&moby_private_vars->hero_path_index;
         }
     }
 }

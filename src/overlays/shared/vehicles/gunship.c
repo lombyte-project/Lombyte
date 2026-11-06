@@ -58,8 +58,8 @@ typedef struct {
     QVec       spline_position;       /* 0xD0 */
     QVec       prev_spline_position;  /* 0xE0 */
     f32        segment_t;
-    f32        unkF4;
-    f32        unkF8;
+    f32        tangent_tension;
+    f32        tangent_bias;
     f32        speed;
     f32        roll_spring_rate_degrees;
     f32        roll_spring_velocity;
@@ -67,19 +67,19 @@ typedef struct {
     f32        pitch_spring_velocity;
     f32        turn_smoothing;
     f32        turn_to_roll;
-    f32        unk118;
+    f32        roll_error_scale;
     s16        movement_delay_timer;
     s16        voice;
     u8         options;
-    u8         unk121;
+    u8         exhaust_particle_timer;
     s16        yaw_offset_degrees;
     f32        speed_oscillation_amplitude;
     f32        speed_oscillation_rate_degrees;
     f32        speed_oscillation_phase;
-    f32        unk130;
-    f32        unk134;
+    f32        side_offset;
+    f32        vertical_offset;
     s16        ambient_sound_timer;
-    s16        unk13A;
+    s16        respawn_timer;
     s16        ambient_sound_min_frames;
     s16        ambient_sound_extra_frames;
     s32        attached_mobys[4];
@@ -87,9 +87,9 @@ typedef struct {
 
 typedef struct {
     u8   pad0[0x70];
-    s32  unk70;
+    s32  flags;
     u8   pad74[0xC];
-    QVec unk80;
+    QVec attach_direction;
 } ChildVars;
 
 typedef struct {
@@ -258,7 +258,7 @@ void gunship_update(struct Moby *moby) {
     }
     if ((moby->oclass == 0x33 || moby->oclass == 0x46A || moby->oclass == 0x473 ||
          moby->oclass == 0x474) &&
-        (level_frame_count & 7) == (((s32)moby >> 8) & 7) && v->unk13A <= 0 &&
+        (level_frame_count & 7) == (((s32)moby >> 8) & 7) && v->respawn_timer <= 0 &&
         moby->state != GUNSHIP_PATH_STATE_INITIALIZE && FUN_L00_0028d8c0(moby, v->voice) == 0) {
         v->voice = allocate_voice_for_target_entry(0, 4, moby);
     }
@@ -307,15 +307,15 @@ void gunship_update(struct Moby *moby) {
         }
         moby->update_dist = 0xFF;
         v->voice = -1;
-        if (500.0f < v->unk130)
-            v->unk130 = FUN_002132a8(-1.0f, 1.0f) * v->unk130 / 1000.0f;
-        if (500.0f < v->unk134)
-            v->unk134 = FUN_002132a8(-1.0f, 1.0f) * v->unk134 / 1000.0f;
+        if (500.0f < v->side_offset)
+            v->side_offset = FUN_002132a8(-1.0f, 1.0f) * v->side_offset / 1000.0f;
+        if (500.0f < v->vertical_offset)
+            v->vertical_offset = FUN_002132a8(-1.0f, 1.0f) * v->vertical_offset / 1000.0f;
         if (path_cursor->path_id == -1) {
             moby->state = GUNSHIP_PATH_STATE_WAIT_FOR_PATH;
             return;
         }
-        v->unk121 = (moby - (struct Moby *)D_L01_0015FFD8) / 2 % 7;
+        v->exhaust_particle_timer = (moby - (struct Moby *)D_L01_0015FFD8) / 2 % 7;
         initialize_path_descriptor(path_cursor);
         if (path_cursor->state == PATH_CURSOR_STATE_NEEDS_POSITION_SETUP) {
             if (path_cursor->idx <= 0) {
@@ -338,7 +338,8 @@ void gunship_update(struct Moby *moby) {
         }
         v->prev_spline_position.q = (path_cursor->nodes->node + path_cursor->idx)->q;
         v->segment_t = 1.0f;
-        compute_path_node_tangent(&v->segment_end_tangent, path_cursor, 0, v->unkF4, v->unkF8);
+        compute_path_node_tangent(
+            &v->segment_end_tangent, path_cursor, 0, v->tangent_tension, v->tangent_bias);
         v->segment_start.q = v->segment_end.q = (path_cursor->nodes->node + path_cursor->idx)->q;
         *(s32 *)&moby->rot.x = 0;
         moby->rot.y =
@@ -349,7 +350,7 @@ void gunship_update(struct Moby *moby) {
         v->pitch_spring_velocity = 0;
         *(u128 *)&moby->pos = v->prev_spline_position.q;
         apply_gunship_path_position_offsets((char *)moby, (float *)&moby->pos);
-        v->unk121 = 7;
+        v->exhaust_particle_timer = 7;
         if (6.2831855f < v->speed_oscillation_phase) {
             v->speed_oscillation_phase = v->speed_oscillation_phase * 0.017453292f;
         } else if (v->speed_oscillation_amplitude != 0.0f && v->speed_oscillation_phase == -1.0f) {
@@ -357,7 +358,7 @@ void gunship_update(struct Moby *moby) {
         }
         v->spline_position.q = v->segment_end.q;
         compute_sampled_spline_path_lengths(
-            v->unkF4, v->unkF8, path_cursor, v->options & 0x20, moby);
+            v->tangent_tension, v->tangent_bias, path_cursor, v->options & 0x20, moby);
         if ((v->options & 0x1E) && !(v->options & 1)) {
             s32 i;
             for (i = 0; i < 4; i++) {
@@ -368,12 +369,12 @@ void gunship_update(struct Moby *moby) {
                 c = (struct Moby *)D_L01_0015FFD8 + v->attached_mobys[i];
                 if (c == 0 || (cv = (ChildVars *)c->pvars) == 0)
                     continue;
-                cv->unk70 |= 0x1000;
+                cv->flags |= 0x1000;
                 moby_point_position(moby, i, &attachment_and_hit_vectors[i]);
                 fast_vec_sub(&dA0, &attachment_and_hit_vectors[i], &moby->pos);
                 fast_vec_normalize(&dA0, &dA0, 1.0f);
                 *(u128 *)&c->pos = attachment_and_hit_vectors[i].q;
-                cv->unk80.q = dA0.q;
+                cv->attach_direction.q = dA0.q;
             }
         }
         if (v->movement_delay_timer > 0) {
@@ -381,7 +382,7 @@ void gunship_update(struct Moby *moby) {
             return;
         }
         if (D_0015ED84 == 3 || D_0015ED84 == 9)
-            v->unk13A = 0;
+            v->respawn_timer = 0;
         moby->state = GUNSHIP_PATH_STATE_FOLLOW_PATH;
         return;
 
@@ -418,7 +419,8 @@ void gunship_update(struct Moby *moby) {
         v->segment_t -= 1.0f;
         advanced_node_index = advance_path_node_index(path_cursor);
         v->segment_start_tangent.q = v->segment_end_tangent.q;
-        compute_path_node_tangent(&v->segment_end_tangent, path_cursor, 1, v->unkF4, v->unkF8);
+        compute_path_node_tangent(
+            &v->segment_end_tangent, path_cursor, 1, v->tangent_tension, v->tangent_bias);
         v->segment_start.q = v->segment_end.q;
         v->segment_end.q = (path_cursor->nodes->node +
                             resolve_path_node_index(path_cursor, advanced_node_index + 1))
@@ -474,7 +476,7 @@ void gunship_update(struct Moby *moby) {
                                        v->pitch_spring_rate_degrees * k * D_0015ED6C);
         steering_angle = normalize_angle(turn * v->turn_to_roll);
         steering_angle = fast_subtract_rotations(moby->rot.x, steering_angle);
-        steering_angle = normalize_angle(steering_angle * v->unk118);
+        steering_angle = normalize_angle(steering_angle * v->roll_error_scale);
         moby->rot.x = FUN_L00_00258110(&v->roll_spring_velocity,
                                        moby->rot.x,
                                        steering_angle,
@@ -510,10 +512,10 @@ void gunship_update(struct Moby *moby) {
                     continue;
                 fast_vec_normalize(
                     &attachment_and_hit_vectors[1], &attachment_and_hit_vectors[1], 1.0f);
-                cv->unk70 |= 0x1000;
+                cv->flags |= 0x1000;
                 *(u128 *)&c->pos = attachment_and_hit_vectors[0].q;
-                cv->unk80.q = attachment_and_hit_vectors[1].q;
-            } else if (v->unk121 == 0) {
+                cv->attach_direction.q = attachment_and_hit_vectors[1].q;
+            } else if (v->exhaust_particle_timer == 0) {
                 fast_vec_normalize(&attachment_and_hit_vectors[1],
                                    &attachment_and_hit_vectors[1],
                                    FUN_002132a8(0.016f, 0.031f) * D_0015ED60);
@@ -526,9 +528,9 @@ void gunship_update(struct Moby *moby) {
                                        &attachment_and_hit_vectors[1]);
             }
         }
-        if (v->unk121 == 0)
-            v->unk121 = scale_game_frames(7);
-        v->unk121--;
+        if (v->exhaust_particle_timer == 0)
+            v->exhaust_particle_timer = scale_game_frames(7);
+        v->exhaust_particle_timer--;
     }
     if (D_0015ED84 != 3 && D_0015ED84 != 9)
         return;
@@ -550,7 +552,7 @@ void gunship_update(struct Moby *moby) {
             fast_vec_scale(&attachment_and_hit_vectors[1], &attachment_and_hit_vectors[1], 0.5f);
             fast_vec_add(
                 &attachment_and_hit_vectors[0], &attachment_and_hit_vectors[0], current_position);
-            v->unk13A = scale_game_frames(600);
+            v->respawn_timer = scale_game_frames(600);
             dir = &attachment_and_hit_vectors[1];
             /* Fakematch: the never-taken call keeps gcse from propagating &off[1] into the call, so dir
                gets a1 before the class tests and &off[1] gets s0, as in retail. */
@@ -581,9 +583,9 @@ void gunship_update(struct Moby *moby) {
     }
     D_L01_00160770 = (void *)gunship_update;
     moby->hit_slot = 0xFF;
-    if (v->unk13A == 0)
+    if (v->respawn_timer == 0)
         return;
-    if (fast_dec_timer_s16(&v->unk13A) && frozen) {
+    if (fast_dec_timer_s16(&v->respawn_timer) && frozen) {
         moby->collision = ((u32 *)moby->pclass)[4];
         moby->flags = (moby->flags & 0xFFBE) | 0x1000;
         return;
