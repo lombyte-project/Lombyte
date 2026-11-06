@@ -121,10 +121,10 @@ extern float
 approach_angle(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 
 extern int resolve_moby_hit_response() __asm__("FUN_00213928");
-void       trooper_anim_update(void *a, void *s) __asm__("FUN_L00_0025d458");
+void       start_hit_color_flash(void *a, void *s) __asm__("FUN_L00_0025d458");
 extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 /* Alien queen update: wakes, rises, circles and chases the hero, attacks with probes and dies through its states. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FAE58), where it is exact; names translated to the US level program. */
@@ -908,10 +908,10 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
         }
         }
     hit_response_done:
-        trooper_anim_update(moby, &alien_queen_hit_recovery_vars->anim_state);
+        start_hit_color_flash(moby, &alien_queen_hit_recovery_vars->anim_state);
     }
     MOBY(moby)->hit_slot = 0xFF;
-    trooper_anim_finish(moby, &alien_queen_hit_recovery_vars->anim_state);
+    update_hit_color_flash(moby, &alien_queen_hit_recovery_vars->anim_state);
     if ((alien_queen_hit_recovery_vars->death_control_flags & 2) &&
         (unsigned char)moby[0x20] != 15) {
         if (alien_queen_hit_recovery_vars->animation_update != -1) {

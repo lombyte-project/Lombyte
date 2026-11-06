@@ -1465,11 +1465,11 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
     }
 }
 
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void
 trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *, short *) __asm__("FUN_L00_0025d458");
 
 extern float D_L03_001618E0 __attribute__((sda));
 
@@ -1648,10 +1648,10 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
             }
             break;
         }
-        trooper_anim_update(moby, (short *)((char *)moby_data + 0x60));
+        start_hit_color_flash(moby, (short *)((char *)moby_data + 0x60));
     }
     moby->bA4 = 0xFF;
-    trooper_anim_finish(moby, (char *)moby_data + 0x60);
+    update_hit_color_flash(moby, (char *)moby_data + 0x60);
 }
 
 extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);

@@ -14,8 +14,8 @@
 
 extern int resolve_moby_hit_response(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
 extern void  FUN_L00_00257470(void *, int, int);
-extern void  trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void  FUN_00212f90(void *, int, int, int);
 extern int   FUN_0022da68(int, int, void *);
 extern float D_0015ED6C;
@@ -99,14 +99,14 @@ void machinegun_turret_update(unsigned char *moby) {
         MOBY(moby)->flags &= 0xefff;
         turret_instance_vars->hit_flash_target_red = 0xfa;
         turret_instance_vars->unk26 = scale_game_frames(60);
-        trooper_anim_update(moby, animation);
+        start_hit_color_flash(moby, animation);
         turret_instance_vars->fire_timer = scale_game_frames(60);
         if ((u8)MOBY(moby)->prev_seq != 2)
             FUN_00212f90(moby, 2, 0, 5);
         MOBY(moby)->state = TURRET_HIT_SPIN;
     }
     MOBY(moby)->hit_slot = 0xff;
-    trooper_anim_finish(moby, animation);
+    update_hit_color_flash(moby, animation);
     switch ((u8)MOBY(moby)->state) {
     case TURRET_INITIALIZE:
         if (turret_instance_vars->sweep_start_moby != -1) {

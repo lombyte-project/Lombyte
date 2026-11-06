@@ -63,9 +63,9 @@ extern char D_00140940[];
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
-extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *, short *) __asm__("FUN_L00_0025d458");
 
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 extern char *D_L13_001B07B0[];
 
@@ -74,7 +74,7 @@ hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN
 
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
 
 void process_blarg_space_fighter_damage(struct Moby   *moby,
                                         unsigned char *moby_data,
@@ -121,13 +121,13 @@ void process_blarg_space_fighter_damage(struct Moby *moby, unsigned char *moby_d
                 *fp = 0;
                 moby->flags &= 0xEFFF;
                 moby_data[0x67] = 0x78;
-                trooper_anim_update(moby, (short *)(moby_data + 0x60));
+                start_hit_color_flash(moby, (short *)(moby_data + 0x60));
                 moby->state = FIGHTER_EMIT_DESTRUCTION_EFFECTS;
             } else {
                 *fp = *fp - *(float *)(hit_record + 0x2C);
                 moby_data[0x67] = 0xFA;
                 *(short *)(moby_data + 0x26) = scale_game_frames(0x3C);
-                trooper_anim_update(moby, (short *)(moby_data + 0x60));
+                start_hit_color_flash(moby, (short *)(moby_data + 0x60));
                 fast_vec_normalize(hit_position_offset, hit_record + 0x10, 0.1f);
                 fast_vec_add(&moby->pos, &moby->pos, hit_position_offset);
                 random_vector(hit_position_offset, -0.1f, 0.1f);
@@ -138,7 +138,7 @@ void process_blarg_space_fighter_damage(struct Moby *moby, unsigned char *moby_d
             moby->hit_slot = 0xFF;
         }
     }
-    trooper_anim_finish(moby, moby_data + 0x60);
+    update_hit_color_flash(moby, moby_data + 0x60);
 }
 
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");

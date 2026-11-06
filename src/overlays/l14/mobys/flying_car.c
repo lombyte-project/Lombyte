@@ -102,7 +102,7 @@ extern void FUN_L14_00307510_6ee0(void *) __asm__("FUN_L14_00307510");
 
 extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
 
 extern void update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");
 
@@ -177,7 +177,7 @@ void flying_car_update(struct Moby *flying_car_moby) {
         }
         fill_transfer_words(&flying_car_data->fx, 0, 0x40);
         attach_manipulator(flying_car_moby, 0, &flying_car_data->fx);
-        trooper_anim_update(flying_car_moby, flying_car_data->effect);
+        start_hit_color_flash(flying_car_moby, flying_car_data->effect);
         if (flying_car_data->trigger >= 0) {
             flying_car_moby->flags |= 0x41;
             flying_car_moby->collision = 0;

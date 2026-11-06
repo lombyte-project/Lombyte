@@ -26,8 +26,8 @@ extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void
 trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D8B80), where it is exact; names translated to the US level program. */
 
@@ -562,13 +562,13 @@ extern int select_moby_target_goal(char *a, char *o, float best) __asm__("FUN_L0
 
 /* pvars of the class FUN_L02_002d85b8 serves (only the fields it touches). */
 typedef struct {
-    char                   pad0[0x20];
-    float                  hp; /* 0x20 */
-    char                   pad24[0x3C];
-    short                  anim[3]; /* 0x60: passed to trooper_anim_update / trooper_anim_finish */
-    unsigned char          pad66;
-    unsigned char          flash; /* 0x67 */
-    char                   pad68[8];
+    char          pad0[0x20];
+    float         hp; /* 0x20 */
+    char          pad24[0x3C];
+    short         anim[3]; /* 0x60: passed to start_hit_color_flash / update_hit_color_flash */
+    unsigned char pad66;
+    unsigned char flash; /* 0x67 */
+    char          pad68[8];
     struct KnockbackMotion knockback; /* 0x70 */
     char                   padD0[0x150];
     char                  *target; /* 0x220 */
@@ -649,7 +649,7 @@ void handle_constructorbot_damage_and_retargeting(void *owner_moby) {
             moby_vars->flash = 0xFA;
             moby[0x20] = 0x11;
         }
-        trooper_anim_update(moby, moby_vars->anim);
+        start_hit_color_flash(moby, moby_vars->anim);
     }
     ((unsigned char *)moby)[0xA4] = 0xFF;
     current_target = moby_vars->target;
@@ -663,5 +663,5 @@ void handle_constructorbot_damage_and_retargeting(void *owner_moby) {
     if (moby_vars->target == 0) {
         moby_vars->target = ((char *)hero.moby);
     }
-    trooper_anim_finish(moby, moby_vars->anim);
+    update_hit_color_flash(moby, moby_vars->anim);
 }

@@ -4,8 +4,8 @@
 #include "types.h"
 
 /* Colour flash of a hit enemy (0x10 bytes in its pvars).
- * trooper_anim_update (FUN_L00_0025d458) starts it and saves the moby's colour,
- * trooper_anim_finish (FUN_L00_0025d538) blends the moby colour toward the
+ * start_hit_color_flash (FUN_L00_0025d458) starts it and saves the moby's colour,
+ * update_hit_color_flash (FUN_L00_0025d538) blends the moby colour toward the
  * flash colour over flash_frames, then back over return_frames. */
 struct HitColorFlash {
     s16 timer;          /* 0x0: frames left in the current phase */

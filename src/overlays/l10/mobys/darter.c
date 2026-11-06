@@ -65,8 +65,8 @@ extern int   D_001413D0[];
 extern float D_0015ED6C, D_0015ED70;
 extern void
 trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void func_L00_00261B00_2E2B80(void *, int, int, int, int) __asm__("FUN_L00_00260a88");
 extern int  ahead_f(float, void *, void *) __asm__("FUN_L01_00274b78");
 extern int
@@ -657,7 +657,7 @@ typedef struct MobyData {
 extern int resolve_moby_hit_response() __asm__("FUN_00213928");
 extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
-extern void trooper_anim_update(void *m, void *p) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *m, void *p) __asm__("FUN_L00_0025d458");
 
 #include "rnc/data_labels.h"
 
@@ -711,18 +711,18 @@ void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
                 trooper_start_knockback(
                     moby, &class_1199_vars->knockback, knockback_angle, 4, 1, 0);
                 class_1199_vars->hit_flash.flash_red = 0x78;
-                trooper_anim_update(moby, &class_1199_vars->hit_flash);
+                start_hit_color_flash(moby, &class_1199_vars->hit_flash);
                 func_L00_00261B00_2E2B80(moby, 1, 3, 0, -1);
             } else {
                 class_1199_vars->health = class_1199_vars->health - hit_record->damage;
                 class_1199_vars->hit_flash.flash_red = 0xFA;
                 class_1199_vars->nonlethal_hit_duration_frames = scale_game_frames(60);
-                trooper_anim_update(moby, &class_1199_vars->hit_flash);
+                start_hit_color_flash(moby, &class_1199_vars->hit_flash);
             }
         }
         moby->hit_slot = 0xFF;
     }
-    trooper_anim_finish(moby, &class_1199_vars->hit_flash);
+    update_hit_color_flash(moby, &class_1199_vars->hit_flash);
     if (class_1199_vars->f174 == 2) {
         class_1199_vars->current_target_range = 42.0f;
     } else if (class_1199_vars->target_range_boost_timer != 0) {

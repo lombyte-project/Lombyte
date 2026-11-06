@@ -607,7 +607,7 @@ extern int  FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void
 trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void update_float_countdown(float *) __asm__("FUN_L08_00211b08");
 
 void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_volume_suppressed) {
@@ -654,7 +654,7 @@ void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_v
         trooper_start_knockback(knockback_heading, moby, moby_vars->v120, 0xB, 1, 0);
         moby->state = ROBOT_DOG_STATE_FALL_THEN_REMOVE;
         moby_vars->b117 = 0xF0;
-        trooper_anim_update(moby, moby_vars->h110);
+        start_hit_color_flash(moby, moby_vars->h110);
     }
     moby->bA4 = 0xFF;
     if (clip_volume_suppressed != 0) {

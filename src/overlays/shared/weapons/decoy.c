@@ -155,8 +155,8 @@ extern void           draw_moby_oscillating_textured_quads(void) __asm__("FUN_L0
 extern float          FUN_00200240_2c4380(int) __asm__("FUN_001fa6c0");
 extern int            FUN_L00_0025a420(void *, int, int);
 extern int            FUN_L00_00258830(void *, void *, float, float, float, int);
-extern void           trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void           trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void           start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void           update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void           add_random_offset_to_vector_xyz(float, void *) __asm__("FUN_L00_0025f8e0");
 extern void  initialize_hit_descriptor(float, void *, void *, int) __asm__("FUN_L00_00259858");
 extern int   FUN_001fef20_2c4380(int) __asm__("FUN_001f96f8");
@@ -764,7 +764,7 @@ void decoy_update(char *moby) {
                         ((u8 *)decoy_instance_vars)[7] = 0xfa;
                         decoy_instance_vars->health -= len;
                     }
-                    trooper_anim_update(moby, decoy_instance_vars);
+                    start_hit_color_flash(moby, decoy_instance_vars);
                     if (decoy_instance_vars->health < 0.0f) {
                         *(OvlQuad *)scratch.w = 0;
                         scratch.w[0] = frame_scale * 0.5f;
@@ -807,7 +807,7 @@ void decoy_update(char *moby) {
             }
         }
         ((u8 *)moby)[0xa4] = 0xff;
-        trooper_anim_finish(moby, decoy_instance_vars);
+        update_hit_color_flash(moby, decoy_instance_vars);
         if (MOBY(moby)->anim_flags & 2) {
             if (((u8 *)moby)[0x53] != 2)
                 blend_moby_animation(moby, 2, 0, FUN_001fef20_2c4380(10));

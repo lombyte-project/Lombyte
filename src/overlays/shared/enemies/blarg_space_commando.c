@@ -559,8 +559,8 @@ extern unsigned char D_0013D408[];
 extern void          FUN_L00_00257470(void *, int, int);
 extern void
 trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 void        update_blarg_space_commando_beam(void *owner_moby) __asm__("FUN_L06_002ff2c8");
 
@@ -717,10 +717,10 @@ void process_blarg_space_commando_hits(char *moby) {
         default:
             break;
         }
-        trooper_anim_update(moby, (short *)(commando_state + 0x110));
+        start_hit_color_flash(moby, (short *)(commando_state + 0x110));
     }
     MOBY(moby)->hit_slot = 0xFF;
-    trooper_anim_finish(moby, commando_state + 0x110);
+    update_hit_color_flash(moby, commando_state + 0x110);
     if (*(int *)(commando_state + 0x188) != 0) {
         *(float *)(commando_state + 0x198) = base_home_distance_limit_gp + 6.0f;
     } else {

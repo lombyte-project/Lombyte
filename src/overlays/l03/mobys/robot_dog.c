@@ -130,7 +130,7 @@ extern int select_moby_target_with_hero_fallback(char *, char *, float) __asm__(
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void FUN_L00_0025a120(void *);
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_00263ac8_c5bb8(void *, int, void *, float) __asm__("FUN_L00_00263ac8");
 extern void
 spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
@@ -491,7 +491,7 @@ void robot_dog_update(char *moby) {
     if (((unsigned char *)moby)[0x31] != 0 && fast_vec_dist(moby + 0x10, D_L03_00166EC0) < 32.0f) {
         FUN_L00_0025a120(moby);
     }
-    trooper_anim_finish(moby, robot_dog_state->animation_state);
+    update_hit_color_flash(moby, robot_dog_state->animation_state);
     ((unsigned char *)moby)[0xBC] = 0;
 }
 /* Applies damage reaction, knockback parameters and animation state. */
@@ -503,7 +503,7 @@ hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void
 trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *, short *) __asm__("FUN_L00_0025d458");
 extern void FUN_L01_0026e090(int, int);
 extern void trooper_set_knockback(float *, float, float) __asm__("FUN_L03_00250a78");
 
@@ -554,7 +554,7 @@ void update_robot_dog_hit_reaction(struct Moby *moby) {
         trooper_start_knockback(angle, moby, robot_dog_pvars + 0x120, 4, 1, 0);
         moby->state = ROBOT_DOG_DEATH_FALL;
         *(unsigned char *)(robot_dog_pvars + 0x117) = 240;
-        trooper_anim_update(moby, (short *)(robot_dog_pvars + 0x110));
+        start_hit_color_flash(moby, (short *)(robot_dog_pvars + 0x110));
     }
     moby->hit_slot = 255;
 }

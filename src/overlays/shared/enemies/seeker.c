@@ -398,8 +398,8 @@ extern float D_0015ED70;
 extern float D_L09_0016140C __attribute__((sda));
 extern int   scale_time() __asm__("FUN_001f96b0");
 extern void  FUN_L00_00257470_c(void *, int, int) __asm__("FUN_L00_00257470");
-extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  start_hit_color_flash(void *m, void *p) __asm__("FUN_L00_0025d458");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 int          FUN_L00_0025ff38(float best,
                               char *a,
                               char *o,
@@ -411,7 +411,7 @@ int  select_moby_record_by_xy_distance(char *a, char *o, float best) __asm__("FU
 void trooper_knockback_arc(void *v, float *ang, float *s1, float *s2) __asm__("FUN_L00_0025ab48");
 void trooper_start_knockback(u8 *a, void *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
 void        FUN_L01_0026e090_c(int i, int v) __asm__("FUN_L01_0026e090");
-extern void func_L00_0025E4B0_2C73D0(void *, void *) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
 extern void func_L00_0025BBA0_2C73D0(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void
 func_L00_0025D5B0_2C73D0(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
@@ -465,7 +465,7 @@ void update_seeker_damage_and_target(Moby *moby) {
         seeker_vars->timer == scale_game_frames(0x78) ||
         seeker_vars->timer == scale_game_frames(0xB3)) {
         seeker_vars->reactTime = 0xF0;
-        func_L00_0025E4B0_2C73D0(moby, seeker_vars->react);
+        start_hit_color_flash(moby, seeker_vars->react);
     }
     damage = 0.0f;
     source = find_moby_hit(moby, 0x330000, 0);
@@ -533,10 +533,10 @@ void update_seeker_damage_and_target(Moby *moby) {
         default:
             break;
         }
-        func_L00_0025E4B0_2C73D0(moby, seeker_vars->react);
+        start_hit_color_flash(moby, seeker_vars->react);
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, seeker_vars->react);
+    update_hit_color_flash(moby, seeker_vars->react);
     if (seeker_vars->f38 != 0 || moby->command == 1) {
         seeker_vars->retreat =
             truncate_float_to_s32(func_001F9878_2C73D0(random_float_between(180.0f, 240.0f)));

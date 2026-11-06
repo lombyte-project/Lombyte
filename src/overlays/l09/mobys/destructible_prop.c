@@ -23,7 +23,7 @@ typedef struct {
 
 extern char *
 spawn_destructible_prop_wreck(char *owner, void *position, float angle) __asm__("FUN_L09_002ee380");
-extern void          trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void          start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
 void                 destructible_prop_update(struct Moby *moby) __asm__("FUN_L09_002ee110");
 typedef unsigned int u128_ee380 __attribute__((mode(TI)));
 
@@ -43,7 +43,7 @@ void destructible_prop_update(struct Moby *moby) {
             *(float *)moby_vars_or_random_frames - *(float *)(hit_record + 0x2C);
         if (0.0f < *(float *)moby_vars_or_random_frames) {
             moby_vars_or_random_frames[0x47] = 0x46;
-            trooper_anim_update(moby, (short *)(moby_vars_or_random_frames + 0x40));
+            start_hit_color_flash(moby, (short *)(moby_vars_or_random_frames + 0x40));
         } else {
             char *pos = &moby->pos;
             v.x = fast_cos(moby->rot.z) * (frame_time * 20.0f);

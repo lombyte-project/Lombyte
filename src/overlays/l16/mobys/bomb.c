@@ -62,8 +62,8 @@ typedef struct {
 extern char D_L16_0015F580_macro[] __asm__("D_L16_0015F580") MACRO_ADDR;
 
 extern int          coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern void         trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void         trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void         start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void         update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void         spawn_explosion(void *,
                                     void *,
                                     void *,
@@ -128,7 +128,7 @@ void thrown_bomb_update(L16FallingMoby *moby) {
         } else if (bomb_data->timer < scale_game_frames(45) &&
                    bomb_data->timer % scale_game_frames(10) == 0) {
             bomb_data->reaction = 250;
-            trooper_anim_update(moby, (short *)bomb_data);
+            start_hit_color_flash(moby, (short *)bomb_data);
         }
         bomb_data->velocity[2] -= bomb_data->gravity;
         break;
@@ -138,7 +138,7 @@ void thrown_bomb_update(L16FallingMoby *moby) {
         } else if (bomb_data->timer < scale_game_frames(61) &&
                    bomb_data->timer % scale_game_frames(20) == 0) {
             bomb_data->reaction = 250;
-            trooper_anim_update(moby, (short *)bomb_data);
+            start_hit_color_flash(moby, (short *)bomb_data);
         }
         break;
     case BOMB_STATE_EXPLODE:
@@ -164,7 +164,7 @@ void thrown_bomb_update(L16FallingMoby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    trooper_anim_finish(moby, bomb_data);
+    update_hit_color_flash(moby, bomb_data);
 }
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002C75D0), where it is exact; names translated to the US level program. */

@@ -482,8 +482,8 @@ void test_dummy_update(unsigned char *moby) {
 extern int D_L16_0015F5CC;
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 typedef struct {
     char               pad00[0x20];
@@ -602,11 +602,11 @@ void update_test_dummy_damage_and_respawn(void *moby) {
                 dummy_hit_record = 0;
             }
             hit_data->reaction_time = 120;
-            trooper_anim_update(hit_moby, hit_data->reaction);
+            start_hit_color_flash(hit_moby, hit_data->reaction);
         }
     }
     hit_moby->opacity = 255;
-    trooper_anim_finish(hit_moby, hit_data->reaction);
+    update_hit_color_flash(hit_moby, hit_data->reaction);
     if (hit_data->child) {
         moby_point_position(hit_moby, D_L16_001619C8_gp, hit_data->child->position);
         build_moby_bone_transform((char *)hit_moby, D_L16_001619C8_gp, (char *)matrix);
@@ -616,7 +616,7 @@ void update_test_dummy_damage_and_respawn(void *moby) {
         fast_vec_normalize(hit_data->child->matrix[2], hit_data->child->matrix[2], 1.0f);
         update_entity(hit_data->child);
     }
-    trooper_anim_finish(hit_moby, hit_data->reaction);
+    update_hit_color_flash(hit_moby, hit_data->reaction);
 }
 
 extern int D_L16_001ABCC0_u[] __asm__("D_L16_001ABCC0");

@@ -75,15 +75,15 @@ extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("
 
 extern void FUN_L00_00257470(struct Moby *, int, int);
 
-extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
 
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 extern char *D_L13_001B07B0[];
 
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *m, void *p) __asm__("FUN_L00_0025d458");
 
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 
@@ -578,7 +578,7 @@ void begin_starfighter_death_sequence(struct Moby *moby,
     moby->flags &= 0xEFFF;
     FUN_L00_00257470(moby, 0, -1);
     starfighter_moby_data[0x67] = 0x78;
-    trooper_anim_update(moby, (short *)(starfighter_moby_data + 0x60));
+    start_hit_color_flash(moby, (short *)(starfighter_moby_data + 0x60));
     starfighter_moby_data[0x13B] = 4;
     scale = D_0015ED6C * 10.0f;
     velocity = (char *)l13_cuboids + (*(int *)(starfighter_moby_data + 0x130) << 7);
@@ -715,7 +715,7 @@ extern Hit_2EAE80 *func_L00_0025B478_2EAE80(void *, int, int) __asm__("FUN_L00_0
 
 extern void func_L13_002EAC18_2EAE80(void *, void *, void *, void *) __asm__("FUN_L13_002e97e0");
 
-extern void func_L00_0025E4B0_2EAE80(void *, void *) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
 
 extern void func_L13_002EAAB8_2EAE80(void *, void *, int) __asm__("FUN_L13_002e9680");
 
@@ -786,7 +786,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                     moby_data->damage_flash_red = 0xFA;
                     mode = ATTACHMENT_DAMAGE_APPLIED;
                     moby_data->sub.h6 = scale_game_frames(0);
-                    func_L00_0025E4B0_2EAE80(moby, moby_data->q60);
+                    start_hit_color_flash(moby, moby_data->q60);
                     moby_data->first->bA4 = 0xFF;
                 }
                 if (moby->state == STARFIGHTER_STATE_DEATH_FLIGHT) {
@@ -885,7 +885,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                 moby_data->damage_flash_red = 0xFA;
                 mode = ATTACHMENT_DAMAGE_APPLIED;
                 moby_data->sub.h6 = scale_game_frames(0);
-                func_L00_0025E4B0_2EAE80(moby, moby_data->q60);
+                start_hit_color_flash(moby, moby_data->q60);
                 moby_data->list[i]->bA4 = 0xFF;
             }
             if (moby->state == STARFIGHTER_STATE_DEATH_FLIGHT) {
@@ -980,7 +980,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
             }
         }
     }
-    trooper_anim_finish(moby, moby_data->q60);
+    update_hit_color_flash(moby, moby_data->q60);
 }
 
 void predict_hero_ship_projectile_lead_position(char *predicted_target_position,
@@ -1589,7 +1589,7 @@ extern void hud_update_counter() __asm__("FUN_L00_00235ea0");
 
 extern void FUN_L00_0024f7c8(void *, int, void *);
 
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 extern void spawn_explosion(void *,
                             void *,
@@ -1842,7 +1842,7 @@ void qwarks_starfighter_update(Moby388 *moby) {
         if (moby->bBC != 4) {
             process_moby_attachment_damage(moby, starfighter_vars);
         } else {
-            trooper_anim_finish(moby, (char *)starfighter_vars + 0x60);
+            update_hit_color_flash(moby, (char *)starfighter_vars + 0x60);
         }
         break;
     case STARFIGHTER_STATE_TRACTOR_BEAM: {
@@ -2009,7 +2009,7 @@ void qwarks_starfighter_update(Moby388 *moby) {
         if (moby->bBC != 4) {
             process_moby_attachment_damage(moby, starfighter_vars);
         } else {
-            trooper_anim_finish(moby, (char *)starfighter_vars + 0x60);
+            update_hit_color_flash(moby, (char *)starfighter_vars + 0x60);
         }
         {
             char *hero = ((char *)&D_0013F350);

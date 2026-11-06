@@ -562,8 +562,8 @@ typedef struct {
 
 extern BlargTrooperHit *find_hit_e81e0(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void start_fall_e81e0(struct Moby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
-extern void anim_reset_e81e0(struct Moby *, void *) __asm__("FUN_L00_0025d458");
-extern void anim_update_e81e0(struct Moby *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(struct Moby *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(struct Moby *, void *) __asm__("FUN_L00_0025d538");
 
 /* Damage and alert step of the Hoven blarg trooper (cf. FUN_L12_002e3528): refreshes its
    speed while alerted, calls for help behind itself once its groups have 9 or
@@ -650,7 +650,7 @@ void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
             trooper_damage_alert_vars->unkC4 = 19.0f;
             moby->state = BLARG_TROOPER_DEATH_FALL;
             trooper_damage_alert_vars->unk67 = 0x78;
-            anim_reset_e81e0(moby, trooper_damage_alert_vars->anim);
+            start_hit_color_flash(moby, trooper_damage_alert_vars->anim);
         } else {
             trooper_damage_alert_vars->unk88 = frame_time * 4.7f;
             trooper_damage_alert_vars->unk8C = frame_time * 7.7f;
@@ -665,11 +665,11 @@ void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
             moby->state = BLARG_TROOPER_KNOCKBACK_RECOVERY;
             trooper_damage_alert_vars->unk67 = 0xFA;
             trooper_damage_alert_vars->stun_timer = scale_game_frames(0x3C);
-            anim_reset_e81e0(moby, trooper_damage_alert_vars->anim);
+            start_hit_color_flash(moby, trooper_damage_alert_vars->anim);
         }
     }
     moby->hit_slot = 0xFF;
-    anim_update_e81e0(moby, trooper_damage_alert_vars->anim);
+    update_hit_color_flash(moby, trooper_damage_alert_vars->anim);
 }
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9988), where it is exact; names translated to the US level program. */
 

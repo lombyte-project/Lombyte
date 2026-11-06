@@ -421,8 +421,8 @@ hit_reaction(ElectroidMoby *, ElectroidHit *, void *, s32, s32 *, f32 *, s32, s3
 extern void trooper_knockback_arc(ElectroidVec *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
 extern void
 trooper_start_knockback(ElectroidMoby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(ElectroidMoby *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(ElectroidMoby *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(ElectroidMoby *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(ElectroidMoby *, void *) __asm__("FUN_L00_0025d538");
 extern s32  select_moby_combat_target(ElectroidMoby *, f32, void *) __asm__("FUN_L00_0025fcb8");
 extern void FUN_L00_0025ff38(ElectroidMoby *, void *, s32, s32, void *, s32, f32);
 f32         veldin_robot_default_target_range_gp __asm__("D_L00_00161BD0") = 24.0f;
@@ -485,7 +485,7 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
             moby->state = VELDIN_ROBOT_STATE_DEATH_KNOCKBACK;
             moby->collision = 0;
             vars->damage_secondary_red = 0x78;
-            trooper_anim_update(moby, anim);
+            start_hit_color_flash(moby, anim);
             FUN_L00_00257470(moby, 0, -1);
         } else {
             vars->knockback.speed = veldin_robot_knockback_xy_scale_gp * frame_time * 0.35f;
@@ -499,12 +499,12 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
             moby->state = VELDIN_ROBOT_STATE_DAMAGE_KNOCKBACK;
             vars->damage_secondary_red = 0xFA;
             vars->unk26 = scale_game_frames(0x3C);
-            trooper_anim_update(moby, anim);
+            start_hit_color_flash(moby, anim);
         }
         release_beam_slot_by_id(moby);
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, anim);
+    update_hit_color_flash(moby, anim);
     if (moby->state == VELDIN_ROBOT_STATE_WAIT_TO_FOLLOW_PATH) {
         path = toad_paths[vars->targeting_path_index];
         FUN_L00_0025ff38(moby, &vars->targetPos, 0, 0, path->pts, path->count, 64.0f);

@@ -42,7 +42,7 @@ extern void FUN_L00_0025a120(struct Moby *);
 extern void
 trooper_start_knockback(struct Moby *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 extern void FUN_L00_00257470(struct Moby *, int, int);
-extern void trooper_anim_finish(struct Moby *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(struct Moby *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025f730(void *, float);
 extern int  find_listed_moby_by_data_id(struct Moby *) __asm__("FUN_L00_0025f878");
 extern void
@@ -375,5 +375,5 @@ void bolt_thief_update(struct Moby *moby) {
         }
         break;
     }
-    trooper_anim_finish(moby, bolt_thief_instance_vars->x60);
+    update_hit_color_flash(moby, bolt_thief_instance_vars->x60);
 }

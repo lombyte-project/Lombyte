@@ -129,7 +129,7 @@ typedef struct {
 
 void         mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void  start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void  spawn_explosion(void *,
                              void *,
                              void *,
@@ -149,7 +149,7 @@ extern void  spawn_explosion(void *,
                              int,
                              int) __asm__("FUN_L00_0025e450");
 extern void  moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern char  D_L03_00166EC0[];
 extern float D_L03_0015F580_macro[] __asm__("D_L03_0015F580") MACRO_ADDR;
 
@@ -886,7 +886,7 @@ void handle_blarg_helicopter_hits(char *helicopter_moby) {
             MOBY(helicopter_moby)->state = BLARG_HELICOPTER_DESTROY;
         } else if (hit_reaction_result != 0xB) {
             *(unsigned char *)(helicopter_data + 0x67) = 0xB4;
-            trooper_anim_update(helicopter_moby, (short *)(helicopter_data + 0x60));
+            start_hit_color_flash(helicopter_moby, (short *)(helicopter_data + 0x60));
             if (*(float *)(hit_record + 0x1C) == 5627.925f &&
                 MOBY(helicopter_moby)->state != BLARG_HELICOPTER_TIMED_REACTION) {
                 reaction_heading_angle =
@@ -915,7 +915,7 @@ void handle_blarg_helicopter_hits(char *helicopter_moby) {
         }
     }
     MOBY(helicopter_moby)->hit_slot = 0xFF;
-    trooper_anim_finish(helicopter_moby, helicopter_data + 0x60);
+    update_hit_color_flash(helicopter_moby, helicopter_data + 0x60);
 }
 
 /* Spawns a class 0x350 moby and fills its data block from a position, vector and parameters. */

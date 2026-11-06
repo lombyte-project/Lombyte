@@ -67,9 +67,9 @@ extern void FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float,
 
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
 
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 
@@ -1126,13 +1126,13 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
                 mark_moby_for_removal_cf(ultramech_moby, 0x200, -1);
                 break;
             }
-            trooper_anim_update(ultramech_moby, (char *)ultramech_vars + 0x60);
+            start_hit_color_flash(ultramech_moby, (char *)ultramech_vars + 0x60);
         }
         if (slot != 0)
             *(int *)(slot + 0x34) = 0;
     }
     *(unsigned char *)((char *)ultramech_moby + 0xA4) = 0xFF;
-    trooper_anim_finish(ultramech_moby, (char *)ultramech_vars + 0x60);
+    update_hit_color_flash(ultramech_moby, (char *)ultramech_vars + 0x60);
     *(float *)((char *)ultramech_moby + 0x2C) =
         *(float *)(ultramech_moby->cls + 0x24) * ultramech_post_hit_scale_multiplier_gp;
     ultramech_vars->target_range_status = 0;

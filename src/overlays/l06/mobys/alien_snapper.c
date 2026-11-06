@@ -247,7 +247,7 @@ int l06_alien_snapper_glow_gray_color __asm__("D_L06_00161EE8") = 0x80808080;
 int l06_alien_snapper_glow_tinted_color __asm__("D_L06_00161EEC") = 0x80604040;
 
 extern int     resolve_moby_hit_response() __asm__("FUN_00213928");
-void           trooper_anim_update(void *a, void *s) __asm__("FUN_L00_0025d458");
+void           start_hit_color_flash(void *a, void *s) __asm__("FUN_L00_0025d458");
 extern float   func_001F9878_2FA618(float) __asm__("FUN_001f96b0");
 extern Target *func_L00_0025B478_2FA618(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
@@ -255,8 +255,8 @@ extern void func_L06_002FAAC8_2FA618(void *) __asm__("FUN_L06_002f9698");
 extern void
 func_L00_0025D5B0_2FA618(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void func_L00_0025A8E8_2FA618(
     void *, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern int func_001FA8A8_2FA618(int, int, float) __asm__("FUN_001fa6e0");
@@ -851,11 +851,11 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
         case REACTION_NO_RESPONSE:
             break;
         }
-        trooper_anim_update(moby, snapper_vars->f60);
+        start_hit_color_flash(moby, snapper_vars->f60);
     }
 
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, snapper_vars->f60);
+    update_hit_color_flash(moby, snapper_vars->f60);
     switch (moby->state) {
     case SNAPPER_APPROACH_TARGET:
     case SNAPPER_REPOSITION_AROUND_TARGET:

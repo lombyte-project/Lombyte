@@ -135,7 +135,7 @@ extern f32  D_L16_00161D98_gp __asm__("D_L16_00161D98") __attribute__((sda));
 extern void FUN_L00_00257470(void *, int, int);
 extern void
 trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void set_moby_state_14(void *) __asm__("FUN_L03_002c6c90");
 extern void initialize_moby_path_state(void *) __asm__("FUN_L14_002fe900");
 extern void update_linked_moby_position(void *) __asm__("FUN_L14_002fec28");
@@ -339,7 +339,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         }
         break;
     }
-    trooper_anim_finish(moby, bolt_thief_data->effect);
+    update_hit_color_flash(moby, bolt_thief_data->effect);
 }
 
 #include "rnc/overlay/l16/mobys/bolt_thief_globals.h"

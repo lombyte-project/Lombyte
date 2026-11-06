@@ -194,7 +194,7 @@ void chomper_update(struct Moby *chomper_moby) {
 extern char *D_L16_001B0930[];
 extern void
 trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 #include "rnc/overlay/shared/math/quad.h"
 
@@ -255,7 +255,7 @@ extern float chomper_knockback_vertical_speed_gp __asm__("D_L16_00161E5C") __att
 extern float chomper_knockback_horizontal_speed_gp __asm__("D_L16_00161E60") __attribute__((sda));
 extern int   FUN_L00_0025ff38(void *, void *, float, int, int, void *, int);
 extern void  trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
-extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void  start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
 
 void update_chomper_hit_reaction_and_target(void *chomper_instance) {
     enum {
@@ -299,10 +299,10 @@ void update_chomper_hit_reaction_and_target(void *chomper_instance) {
         chomper_moby->state = CHOMPER_KNOCKBACK;
         chomper_moby->i94 = 0;
         pursuit_data->reaction_time = 0x78;
-        trooper_anim_update(chomper_moby, pursuit_data->reaction);
+        start_hit_color_flash(chomper_moby, pursuit_data->reaction);
     }
     chomper_moby->bA4 = 0xFF;
-    trooper_anim_finish(chomper_moby, pursuit_data->reaction);
+    update_hit_color_flash(chomper_moby, pursuit_data->reaction);
     reaction_flags_or_path_entry_address = (int)&D_L16_001B0930[pursuit_data->path];
     reaction_kind_or_path_address = *(int *)reaction_flags_or_path_entry_address;
     if (FUN_L00_0025ff38(chomper_moby,

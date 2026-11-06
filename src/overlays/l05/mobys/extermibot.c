@@ -728,8 +728,8 @@ extern void trooper_knockback_arc(void *, float *, float *, float *) __asm__("FU
 extern void
 trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 extern void stop_animation_l08(void *, int, int) __asm__("FUN_L00_00257470");
-extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, short *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *, short *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, short *) __asm__("FUN_L00_0025d538");
 extern int
 activate_effect_l08(float, void *, void *, int, int, int *, int) __asm__("FUN_L00_0025ff38");
 extern float func_001F9B88_3047E8(float) __asm__("FUN_001f99c0");
@@ -868,10 +868,10 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
             }
             break;
         }
-        trooper_anim_update(moby, moby_data->f60);
+        start_hit_color_flash(moby, moby_data->f60);
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, moby_data->f60);
+    update_hit_color_flash(moby, moby_data->f60);
     if (moby_data->targeting_range_boost_pending != 0) {
         moby_data->targeting_range_boost_timer =
             truncate_float_to_s32(scale_time(random_float_between(180.0f, 240.0f)));

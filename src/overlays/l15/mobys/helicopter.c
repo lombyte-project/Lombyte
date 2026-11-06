@@ -888,9 +888,9 @@ void helicopter_update(struct Moby *moby) {
 extern int
 hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");
 
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
 
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 
 void process_helicopter_hits(struct Moby *moby) {
     enum {
@@ -915,7 +915,7 @@ void process_helicopter_hits(struct Moby *moby) {
             moby->state = HELICOPTER_DEATH_EFFECTS;
         } else if (hit_reaction_code != 0xB) {
             *(unsigned char *)(helicopter_vars + 0x67) = 0xB4;
-            trooper_anim_update(moby, (short *)(helicopter_vars + 0x60));
+            start_hit_color_flash(moby, (short *)(helicopter_vars + 0x60));
             if (*(float *)(hit_record + 0x1C) == 5627.925f && moby->state != HELICOPTER_RECOIL) {
                 hit_away_heading = fast_arc_tan(moby->pos.x - *(float *)(hit_record + 0),
                                                 moby->pos.y - *(float *)(hit_record + 4));
@@ -938,7 +938,7 @@ void process_helicopter_hits(struct Moby *moby) {
         }
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, helicopter_vars + 0x60);
+    update_hit_color_flash(moby, helicopter_vars + 0x60);
 }
 
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");

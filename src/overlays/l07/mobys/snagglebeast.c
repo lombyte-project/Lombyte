@@ -446,8 +446,8 @@ void *collect_snagglebeast_navigation_ids(void *unused, void *dp, void *op) {
 
 extern int resolve_moby_hit_response(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
 extern void FUN_L00_00257470(void *, int, int);
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_00212f90(void *, int, int, int);
 extern void hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_00200228(float, void *);
@@ -521,7 +521,7 @@ void process_snagglebeast_damage(char             *moby,
                 MOBY(moby)->flags &= 0xefff;
                 FUN_L00_00257470(moby, 0, -1);
                 snagglebeast_instance_vars->damage_flash = 0x78;
-                trooper_anim_update(moby, &snagglebeast_instance_vars->move);
+                start_hit_color_flash(moby, &snagglebeast_instance_vars->move);
                 if ((u8)moby[0x53] != 2)
                     FUN_00212f90(moby, 2, 0, random_int_between(10, 13));
                 if (camera_secondary_mode_lui == 0x78)
@@ -549,7 +549,7 @@ void process_snagglebeast_damage(char             *moby,
                 *health -= *(float *)(hit + 0x2c);
                 snagglebeast_instance_vars->damage_flash = 0xfa;
                 snagglebeast_instance_vars->unk26 = scale_game_frames(0);
-                trooper_anim_update(moby, &snagglebeast_instance_vars->move);
+                start_hit_color_flash(moby, &snagglebeast_instance_vars->move);
                 if ((u8)moby[0x20] < 10 && *health < scratch.threshold) {
                     int slot;
                     if (camera_secondary_mode_lui == 0x78)
@@ -589,7 +589,7 @@ void process_snagglebeast_damage(char             *moby,
             snagglebeast_instance_vars->sphere_shade = 0;
         MOBY(moby)->hit_slot = 0xff;
     }
-    trooper_anim_finish(moby, &snagglebeast_instance_vars->move);
+    update_hit_color_flash(moby, &snagglebeast_instance_vars->move);
     output = snagglebeast_instance_vars->damage_reaction_amount + 0.3f;
     snagglebeast_instance_vars->damage_reaction_amount = output;
     if (output > 0.0f)
@@ -1861,7 +1861,7 @@ void snagglebeast_update(unsigned char *moby) {
                 snagglebeast_instance_state->substate -= 1;
                 *health -= 1.0f;
                 snagglebeast_instance_state->damage_flash = 0xFA;
-                trooper_anim_update(moby, &snagglebeast_instance_state->move);
+                start_hit_color_flash(moby, &snagglebeast_instance_state->move);
                 if (*health <= 0.0f) {
                     *health = 0.0f;
                     if (MOBY(moby)->prev_seq != 8)

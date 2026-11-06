@@ -42,8 +42,8 @@ extern void debug_print(char *, s32, s32) __asm__("FUN_001e93b0");
 extern s32  resolve_moby_hit_response(
      struct Moby *, VendorHitSource *, f32 *, s32, s32 *, s32, s32, s32) __asm__("FUN_00213928");
 extern void FUN_L00_00257470(struct Moby *, s32, s32);
-extern void trooper_anim_update(struct Moby *, u8 *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(struct Moby *, u8 *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(struct Moby *, u8 *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(struct Moby *, u8 *) __asm__("FUN_L00_0025d538");
 void        handle_refueling_station_damage(struct Moby *moby,
                                             VendorVars  *vars,
                                             f32         *health) __asm__("FUN_L09_00303b30");
@@ -148,18 +148,18 @@ void handle_refueling_station_damage(struct Moby *moby,
                 }
                 FUN_L00_00257470(moby, 0, -1);
                 refueling_station_vars->anim[7] = 0x78;
-                trooper_anim_update(moby, refueling_station_vars->anim);
+                start_hit_color_flash(moby, refueling_station_vars->anim);
                 moby->state = REFUELING_STATION_STATE_EXPLODE;
             } else {
                 *health -= damage_hit_record->damage;
                 refueling_station_vars->anim[7] = 0xFA;
                 refueling_station_vars->hurt_timer = scale_game_frames(60);
-                trooper_anim_update(moby, refueling_station_vars->anim);
+                start_hit_color_flash(moby, refueling_station_vars->anim);
             }
         }
         moby->hit_slot = 0xFF;
     }
-    trooper_anim_finish(moby, refueling_station_vars->anim);
+    update_hit_color_flash(moby, refueling_station_vars->anim);
 }
 
 typedef struct RefuelingStationVars {

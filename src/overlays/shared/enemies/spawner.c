@@ -49,8 +49,8 @@ typedef struct SpawnerVars {
 } SpawnerVars;
 
 extern int FUN_L00_0025a478_c(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
-extern void FUN_L00_0025d458_c(void *, void *) __asm__("FUN_L00_0025d458");
-extern void FUN_L00_0025d538_c(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_00257470_c(void *, int, int) __asm__("FUN_L00_00257470");
 extern int
 activate_effect_l08(void *, void *, float, void *, int, void *, int) __asm__("FUN_L00_0025ff38");
@@ -106,16 +106,16 @@ void process_spawner_hit_record(struct Moby *moby, char *spawner_vars) {
         *(float *)(spawner_vars + 0x20) = remaining_value;
         if (0.0f < remaining_value) {
             spawner_vars[0x67] = 0x5A;
-            FUN_L00_0025d458_c(moby, spawner_vars + 0x60);
+            start_hit_color_flash(moby, spawner_vars + 0x60);
         } else {
             FUN_L00_00257470_c(moby, 0, -1);
             moby->state = SPAWNER_STATE_EXPLODE;
             spawner_vars[0x67] = 0x78;
-            FUN_L00_0025d458_c(moby, spawner_vars + 0x60);
+            start_hit_color_flash(moby, spawner_vars + 0x60);
         }
     }
     moby->hit_slot = 0xFF;
-    FUN_L00_0025d538_c(moby, spawner_vars + 0x60);
+    update_hit_color_flash(moby, spawner_vars + 0x60);
 }
 
 /* Counts the live level-0x75E mobys among the 20 slots at +0xB0 and returns the last slot not counted. */

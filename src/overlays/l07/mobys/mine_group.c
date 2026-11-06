@@ -60,8 +60,8 @@ extern int   sample_path(void  *path,
 extern int   select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int   resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int);
 extern void  jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
-extern void  trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  start_hit_color_flash(void *, short *) __asm__("FUN_L00_0025d458");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void  spawn_explosion(void *,
                              void *,
                              void *,
@@ -297,11 +297,11 @@ void mine_group_update(struct Moby *moby) {
             *remaining -= step;
             boltcrate_pvars->unk67 = 0xfa;
             boltcrate_pvars->surviving_hit_frame_count = scale_game_frames(0x3c);
-            trooper_anim_update(moby, &boltcrate_pvars->anim_state);
+            start_hit_color_flash(moby, &boltcrate_pvars->anim_state);
         }
         moby->hit_slot = 0xff;
     }
-    trooper_anim_finish(moby, &boltcrate_pvars->anim_state);
+    update_hit_color_flash(moby, &boltcrate_pvars->anim_state);
     if (boltcrate_pvars->unk70 == -1)
         return;
     path = D_L07_001B0530[boltcrate_pvars->unk70];

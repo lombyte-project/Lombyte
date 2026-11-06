@@ -19,8 +19,8 @@ extern float D_L01_0015F580[] MACRO_ADDR;
 extern float FUN_L04_001f1978(float);
 extern void  FUN_L00_00257470(void *, int, int);
 extern void  trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
-extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  start_hit_color_flash(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void  update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void  select_moby_combat_target(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 extern void  blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
@@ -312,7 +312,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
                 peckbot_vars->x174 = 18.0f;
                 peckbot_moby->state = PECKBOT_STATE_FATAL_KNOCKBACK;
                 peckbot_vars->x117 = 0x78;
-                trooper_anim_update(peckbot_moby, peckbot_vars->fx110);
+                start_hit_color_flash(peckbot_moby, peckbot_vars->fx110);
                 FUN_L00_00257470(peckbot_moby, 0, -1);
             } else {
                 vector_scratch.q = hit->pos;
@@ -324,7 +324,7 @@ void peckbot_update(Mob577 *peckbot_moby) {
                 peckbot_moby->state = PECKBOT_STATE_NONFATAL_KNOCKBACK;
                 peckbot_vars->x117 = 0xFA;
                 peckbot_vars->flee_timer = scale_game_frames(0x3C);
-                trooper_anim_update(peckbot_moby, peckbot_vars->fx110);
+                start_hit_color_flash(peckbot_moby, peckbot_vars->fx110);
             }
         }
     }
@@ -865,6 +865,6 @@ void peckbot_update(Mob577 *peckbot_moby) {
         peckbot_moby->hit = 0;
         break;
     }
-    trooper_anim_finish(peckbot_moby, peckbot_vars->fx110);
+    update_hit_color_flash(peckbot_moby, peckbot_vars->fx110);
     FUN_L00_0025a120(peckbot_moby);
 }

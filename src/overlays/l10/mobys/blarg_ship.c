@@ -40,15 +40,15 @@ enum {
 typedef struct Moby Moby;
 extern float        D_0015ED6C;
 extern float        D_0015ED6C, D_0015ED70;
-extern void         trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void         trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void         start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void         update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern void         FUN_L00_0024f7c8(void *, int, void *);
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
 
 extern float FUN_L04_001f1978(float);
 extern int   resolve_moby_hit_response() __asm__("FUN_00213928");
 extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
-extern void trooper_anim_update(void *m, void *p) __asm__("FUN_L00_0025d458");
+extern void start_hit_color_flash(void *m, void *p) __asm__("FUN_L00_0025d458");
 
 extern char D_L10_00167240[];
 
@@ -555,11 +555,11 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
         case COLOR_UPDATE_WITHOUT_STATE_CHANGE_HIT_RESPONSE:
         case COLOR_EFFECT_ONLY_HIT_RESPONSE:
             pvars->damage_secondary_red = 0xFA;
-            trooper_anim_update(moby, &pvars->anim_state);
+            start_hit_color_flash(moby, &pvars->anim_state);
             break;
         case LETHAL_HIT_RESPONSE:
             pvars->damage_secondary_red = 0xFA;
-            trooper_anim_update(moby, &pvars->anim_state);
+            start_hit_color_flash(moby, &pvars->anim_state);
             moby->state = BLARG_SHIP_STATE_EXPLODE;
             break;
         case NO_REACTION_HIT_RESPONSE:
@@ -567,7 +567,7 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
         default:
             pvars->damage_secondary_red = 0xFA;
             pvars->unk26 = scale_game_frames(0x3C);
-            trooper_anim_update(moby, &pvars->anim_state);
+            start_hit_color_flash(moby, &pvars->anim_state);
             blend_moby_animation(moby, 4, 0, scale_game_frames(6));
             moby->command = moby->state;
             moby->state = BLARG_SHIP_STATE_HIT_REACTION;
@@ -575,7 +575,7 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
         }
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, &pvars->anim_state);
+    update_hit_color_flash(moby, &pvars->anim_state);
     if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         select_hero_or_gadgebot_target(101.0f, moby, &pvars->target);
         if (*(char **)&pvars->target == 0) {

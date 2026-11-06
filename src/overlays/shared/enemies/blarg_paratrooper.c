@@ -126,8 +126,8 @@ extern void trooper_knockback_arc(void *, void *, float *, float *) __asm__("FUN
 extern void
 trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 extern void spawn_randomized_bolt_drop(void *, int, int, int, int) __asm__("FUN_L00_00260a88");
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
+extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 extern int
 activate_effect_l08(void *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern float l08_paratrooper_model_scale_multiplier __asm__("D_L08_00162180") __attribute__((sda));
@@ -764,10 +764,10 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
                 break;
             }
         }
-        trooper_anim_update(moby, &paratrooper_instance_state->trooper_anim);
+        start_hit_color_flash(moby, &paratrooper_instance_state->trooper_anim);
     }
     MOBY(moby)->hit_slot = 0xff;
-    trooper_anim_finish(moby, &paratrooper_instance_state->trooper_anim);
+    update_hit_color_flash(moby, &paratrooper_instance_state->trooper_anim);
 
     if (paratrooper_instance_state->unk38 != 0) {
         angle = random_float_between(180.0f, 240.0f);
