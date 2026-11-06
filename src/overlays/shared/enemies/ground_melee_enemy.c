@@ -48,18 +48,19 @@ typedef struct {
 } __attribute__((aligned(16))) V_2E39E0;
 
 typedef struct {
-    char                 pad0[0x20];
+    char pad0[0x20];
+    /* 0x20: enemy target info, see moby_target_info.h */
     float                health;
     short                f24;
     short                cooldown;
     char                 pad28[1];
-    unsigned char        f29;
+    unsigned char        wrench_hit_sound;
     char                 pad2A[0xE];
     int                  hurt;
     char                 pad3C[0x1C];
-    unsigned char        f58;
+    unsigned char        look_range;
     char                 pad59[1];
-    unsigned char        f5A;
+    unsigned char        look_height;
     char                 pad5B[0x6D];
     short                fC8;
     char                 padCA[6];
@@ -335,11 +336,11 @@ void ground_melee_enemy_update(Moby *moby) {
     case GROUND_ENEMY_STATE_INITIALIZE:
         qcopy(&ground_enemy_vars->home, &moby->pos);
         moby->state = GROUND_ENEMY_STATE_IDLE;
-        ground_enemy_vars->f29 = 0;
+        ground_enemy_vars->wrench_hit_sound = 0;
         ground_enemy_vars->health = 1.0f;
         ground_enemy_vars->f24 = 1;
-        ground_enemy_vars->f5A = 2;
-        ground_enemy_vars->f58 = 8;
+        ground_enemy_vars->look_height = 2;
+        ground_enemy_vars->look_range = 8;
         ground_enemy_vars->alert = 0;
         ground_enemy_vars->f208 = 0;
         steer_init_2E39E0(&ground_enemy_vars->steer);
