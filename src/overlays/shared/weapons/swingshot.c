@@ -239,7 +239,7 @@ void swingshot_update(Moby *m) {
             }
         }
         if (hero.state.current == 0x24 ||
-            (hero.state.control_mode == HERO_MODE_GRIND && hero.unk5B4)) {
+            (hero.state.control_mode == HERO_MODE_GRIND && hero.rail_swing_target)) {
             if (hd) {
                 d->size = 0.280000001f;
                 d->scale = 1.0f;
@@ -275,7 +275,7 @@ void swingshot_update(Moby *m) {
         FUN_001f9a28_2bffa8(&v0, &hero.grapple_target->pos, &d->hook->pos);
         speed = hd->speed;
         if (hero.state.control_mode == HERO_MODE_GRIND) {
-            speed = speed + hero.unk574;
+            speed = speed + hero.grind_speed;
         } else if (hero.state.prev_control_mode == HERO_MODE_JUMP ||
                    hero.state.prev_control_mode == HERO_MODE_FALL) {
             if (2.0f < hero.ground_distance)
@@ -325,10 +325,10 @@ void swingshot_update(Moby *m) {
         d->spin = d->spin + 0.69813168f;
         d->size = d->size * (frame_scale * -0.100000024f + 1.0f);
         if (d->size < 0.168000013f) {
-            hero.unk5B4 = 0;
+            hero.rail_swing_target = 0;
             if (d->hook && 3.5f < FUN_001f9b48_2bffa8(&d->hook->pos, &hero.motion.pos)) {
                 if (!(controller_state.held & hero.items[0].button_mask)) {
-                    hero.unk988 = 1;
+                    hero.swingshot_missed = 1;
                     hero_set_state(0, 0);
                     set_hero_animation(hero_idle_sequence(0), 0, (float)FUN_001f96f8_2bffa8(14));
                     m->state = 6;
@@ -554,7 +554,7 @@ child_ready:;
             *(u128 *)(child + 0xe0) = *(u128 *)(m + 0xe0);
         }
         if ((hero.state.current == 36 ||
-             (hero.state.control_mode == HERO_MODE_GRIND && hero.unk5B4)) &&
+             (hero.state.control_mode == HERO_MODE_GRIND && hero.rail_swing_target)) &&
             motion) {
             *(float *)(vars + 0x18) = 0.0f;
             *(float *)(vars + 0x1c) = 1.0f;
@@ -590,7 +590,7 @@ child_ready:;
         FUN_001ff2a8_2c6158(&a, ((u8 *)hero.grapple_target) + 0x10, (*(u8 **)(vars + 0x14)) + 0x10);
         speed = *(float *)(motion + 4);
         if (hero.state.control_mode == HERO_MODE_GRIND)
-            speed += hero.unk574;
+            speed += hero.grind_speed;
         else if ((hero.state.prev_control_mode == HERO_MODE_JUMP ||
                   hero.state.prev_control_mode == HERO_MODE_FALL) &&
                  hero.ground_distance > 2.0f)
@@ -647,11 +647,11 @@ child_ready:;
         *(float *)(vars + 0x20) = factor;
         if (!(factor < 0.16800001f))
             return;
-        hero.unk5B4 = 0;
+        hero.rail_swing_target = 0;
         if ((*(u8 **)(vars + 0x14)) != 0 &&
             3.5f < FUN_001ff450_2c6158((*(u8 **)(vars + 0x14)) + 0x10, &hero.motion.pos)) {
             if ((pad_held_words[0] & hero.items[0].button_mask) == 0) {
-                hero.unk988 = 1;
+                hero.swingshot_missed = 1;
                 hero_set_state(0, 0);
                 effect = hero_idle_sequence(0);
                 frames = scale_game_frames(14);
@@ -741,7 +741,7 @@ child_ready:;
         *(float *)(vars + 0x20) = factor;
         if (!(factor < 0.16800001f))
             return;
-        hero.unk99C = 1;
+        hero.swing_hooked = 1;
         m[0x20] = 12;
         return;
     }

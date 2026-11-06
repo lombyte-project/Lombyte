@@ -174,9 +174,10 @@ void update_hero_state_machine(void) {
             if ((controller_state.pressed & 0x10) || (controller_state.pressed_unmasked & 0x10)) {
                 if (hero.items[0].switch_lock != 2 && D_L15_0015F594 == 0 &&
                     (hero.item_use_locked == 0 || hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK ||
-                     hero.unk1B2 != 0) &&
+                     hero.item_select_override_timer != 0) &&
                     (hero.item_select_blocked == 0 ||
-                     hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK || hero.unk1B2 != 0) &&
+                     hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK ||
+                     hero.item_select_override_timer != 0) &&
                     (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT || hero.vehicle_mode == 3)) {
                     int id;
 
@@ -345,7 +346,7 @@ void update_hero_state_machine(void) {
                             int anim = D_L15_0017A0C0[id].anim;
                             if (((unsigned char *)hero.moby)[0x53] != anim) {
                                 if (hero.held_item_anim_blend[0] != 0) {
-                                    hero.unkD14 = 1;
+                                    hero.arm_layer_fade = 1;
                                 }
                                 hero.item_hold_anim = anim;
                                 set_hero_animation(hero.item_hold_anim, 0, scale_game_frames(0xB));
@@ -677,7 +678,7 @@ void update_hero_state_machine(void) {
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
-                    if (hero.unk1D0 != 0) {
+                    if (hero.idle_return_delay != 0) {
                         break;
                     }
                     hero_set_state(HERO_STATE_IDLE, 1);
@@ -686,7 +687,7 @@ void update_hero_state_machine(void) {
                     if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
-                    if (hero.unk1D0 != 0) {
+                    if (hero.idle_return_delay != 0) {
                         break;
                     }
                     if (((unsigned char *)hero.moby)[0x53] == 0x36) {
@@ -925,7 +926,7 @@ void update_hero_state_machine(void) {
                     }
                     break;
                 case HERO_STATE_AT_TARGET_POSE:
-                    if ((hero.anim_flags & 2) || hero.unk1650 != 0) {
+                    if ((hero.anim_flags & 2) || hero.state_entry_option != 0) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
                     if (0.2f < vector_distance_xy(hero.motion.pos.f, hero.target_pose.f)) {
@@ -1074,7 +1075,7 @@ void update_hero_state_machine(void) {
                         int go = 0;
                         if (!(controller_state.held & hero.items[0].button_mask)) {
                             if ((float)scale_game_frames(0x19) < hero.target_arrival_frames) {
-                                hero.unk988 = 1;
+                                hero.swingshot_missed = 1;
                             }
                             go = 1;
                         }
@@ -1125,7 +1126,7 @@ void update_hero_state_machine(void) {
                     }
                     if (scale_game_frames(0xA) < hero.state_timer) {
                         if (scale_game_frames(0x28) > hero.state_timer) {
-                            hero.unk988 = 1;
+                            hero.swingshot_missed = 1;
                         }
                         hero_set_state(0x2D, 1);
                         hero.stickless_decel = frame_time_sq * 7.0f;
@@ -1824,7 +1825,7 @@ void update_hero_state_machine(void) {
                         hero.state.current == HERO_STATE_PACK_LONG_JUMP) {
                         if (scale_game_frames(0x19) < hero.state_timer &&
                             hero.on_flagged_ground_moby != 0) {
-                            hero.unk4A6 = scale_game_frames(0x14);
+                            hero.pack_glide_delay = scale_game_frames(0x14);
                         }
                     }
                     {
@@ -1840,7 +1841,7 @@ void update_hero_state_machine(void) {
                                 approach_value(&hero.anim_speed, 1.3f, frame_scale * 0.1f);
                             }
                             delay = scale_game_frames(0x11);
-                            hero.unk4A6 = delay;
+                            hero.pack_glide_delay = delay;
                         }
                         n = hero.state_timer - 4;
                         if (n < 2) {
@@ -1868,7 +1869,7 @@ void update_hero_state_machine(void) {
                                            hero.pack_disabled == 0 &&
                                            (controller_state.held & 0x40) &&
                                            delay < hero.state_timer &&
-                                           hero.unk4A6 < hero.state_timer) {
+                                           hero.pack_glide_delay < hero.state_timer) {
                                     float lim = 0.6f;
                                     if (hero.state.current == HERO_STATE_RUN_JUMP ||
                                         hero.state.current == HERO_STATE_JUMP) {

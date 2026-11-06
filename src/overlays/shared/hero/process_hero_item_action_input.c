@@ -272,7 +272,7 @@ void hero_update_hop_velocity(void) {
     } else if (state == HERO_STATE_HIGH_JUMP || state == HERO_STATE_STORED_HEADING_JUMP) {
         hero.motion.move_yaw = hero.takeoff_yaw;
         turn_to(0, ED64 * 0.04f, ED64 * 0.2f, ED6C * 6.981317f);
-        if (hero.unk450 != 3) {
+        if (hero.jump_stick_direction != 3) {
             hero.ground_speed = hero.air_target_speed;
         } else {
             hero.ground_speed = 0.0f;
@@ -382,7 +382,7 @@ extern void open_vendor_menu(s32) __asm__("FUN_L00_0029a6b0");
  * state (hero_set_state) or gadget action once the buttons were pressed within
  * a frame window (pad_pressed_within). Afterwards, when the state did not change,
  * it handles the 0x81 state on button 8 (D_L02_0015F674 counts the window down)
- * or clears hero.unk22CA. Returns nonzero when the hero state changed.
+ * or clears hero.hover_latch. Returns nonzero when the hero state changed.
  */
 s32 process_hero_item_action_input(void) __asm__("FUN_L02_0022ee00");
 
@@ -457,9 +457,9 @@ s32 process_hero_item_action_input(void) {
                     hero.state.current == HERO_STATE_FALL ||
                     (hero.state.current == 0xE && hero.anim_frame > 32.0f) ||
                     (hero.state.current == HERO_STATE_HIGH_JUMP &&
-                         (hero.unk450 != 3 && hero.anim_frame > 18.0f) ||
-                     (hero.state.current == HERO_STATE_HIGH_JUMP && hero.unk450 == 3 &&
-                      hero.anim_frame > 20.0f)) ||
+                         (hero.jump_stick_direction != 3 && hero.anim_frame > 18.0f) ||
+                     (hero.state.current == HERO_STATE_HIGH_JUMP &&
+                      hero.jump_stick_direction == 3 && hero.anim_frame > 20.0f)) ||
                     hero.state.current == 0x2D || hero.state.current == 0x11) &&
                    scale_game_frames(0xA) < hero.state_timer) {
             window = scale_game_frames(0xA);
@@ -520,7 +520,7 @@ s32 process_hero_item_action_input(void) {
                  hero.items[0].ready_frames > scale_game_frames(0xF))) {
                 if (hero.swing_target_in_sight != 0) {
                     if (hero.grapple_target_in_sight != 0) {
-                        if (hero.swing_target_dist < hero.unk984) {
+                        if (hero.swing_target_dist < hero.swing_max_range) {
                             hero.grapple_target_in_sight = 0;
                         } else {
                             hero.swing_target_in_sight = 0;
@@ -596,7 +596,7 @@ s32 process_hero_item_action_input(void) {
             hero.state.control_mode == HERO_MODE_CROUCH ||
             hero.state.control_mode == HERO_MODE_LAND ||
             hero.state.control_mode == HERO_MODE_GRIND ||
-            (hero.state.control_mode == HERO_MODE_JUMP && hero.unk4AC != 0) ||
+            (hero.state.control_mode == HERO_MODE_JUMP && hero.can_use_item_in_jump != 0) ||
             (hero.state.current == 0x23 && hero.anim_frame > 25.0f)) {
             if (hero.item_anim_active == 0) {
                 s32 hold;

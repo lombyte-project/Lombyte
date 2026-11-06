@@ -681,7 +681,7 @@ void          update_hero_bone_attachment(void) __asm__("FUN_L00_002061f0");
 void update_hero_bone_attachment(void) {
     M4_2061f0    bone_transform;
     struct Hero *hero_state = &hero;
-    char        *destination_moby = ((char *)hero_state->unkA88);
+    char        *destination_moby = ((char *)hero_state->base_moby);
     struct Moby *hero_moby;
     MOBY(destination_moby)->shadow_range = 0;
     hero_moby = ((char *)hero_state->moby);
@@ -1120,7 +1120,7 @@ void scan_hero_input_sequences(void) {
         if (g->state.control_mode == HERO_MODE_JUMP) {
             int b = g->state.current;
             if (b == 0xB) {
-                int token_variant_selector = g->unk450;
+                int token_variant_selector = g->jump_stick_direction;
                 if (token_variant_selector == 0) {
                     input_token = 1;
                     if (D_0015EDB4[0])
@@ -1493,11 +1493,11 @@ void apply_hero_vertical_oscillation(void) {
     float        position_offset_rotation_matrix[16] __attribute__((aligned(16)));
     if (P->state.current == 0x7F) {
         update_moby_vertical_oscillation(
-            P->moby, &P->unk6A8, &P->unk6AC, 0.3f, D_0015ED6C * 6.981317f);
+            P->moby, &P->bob_phase, &P->bob_offset, 0.3f, D_0015ED6C * 6.981317f);
     }
     if (P->state.current == 0x6B && P->hoverboard_airborne == 0) {
         update_moby_vertical_oscillation(
-            P->moby, &P->unk6A8, &P->unk6AC, 1.1f, D_0015ED6C * 5.2359877f);
+            P->moby, &P->bob_phase, &P->bob_offset, 1.1f, D_0015ED6C * 5.2359877f);
         if (P->hoverboard_moby) {
             char *hero_moby = P->moby;
             qcopy(((char *)P->hoverboard_moby) + 0x10, &MOBY(hero_moby)->pos);
@@ -1523,8 +1523,8 @@ void apply_hero_rotation_oscillation(void) {
     struct Hero *hero_state = &hero;
     if (hero_state->state.current == 0x7F) {
         update_moby_rotation_oscillation(((int)hero_state->moby),
-                                         &hero_state->unk6B0,
-                                         &hero_state->unk6B4,
+                                         &hero_state->sway_phase,
+                                         &hero_state->sway_axis_phase,
                                          0.1745329201221466f,
                                          frame_time * 1.5707963705062866f,
                                          frame_time * 2.094395160675049f);
@@ -3313,7 +3313,7 @@ void probe_hero_airborne_wall_contact(void) {
     position_scratch.f[1] = position_scratch.f[1] + projected_y_displacement;
     if (probe_hero_ledge_edge(&position_scratch, &g->motion.rot.f[2]) != 0) {
         g->wall_jump_window = 0;
-        g->unk1F0 = prediction_frames + 2;
+        g->ledge_ahead_timer = prediction_frames + 2;
         return;
     }
     if (probe_hero_forward_collision(0, 0.3f, 1.0f) == 0) {
@@ -3359,19 +3359,19 @@ void probe_hero_airborne_wall_contact(void) {
     }
     {
         S2 *collision_result;
-        k2->unk460.q = *(u128_20b5b8 *)pz;
+        k2->wall_hit_normal.q = *(u128_20b5b8 *)pz;
         collision_result = (S2 *)(pz - 0x40);
         f = fast_arc_tan(collision_result->x, collision_result->y);
     }
-    k2->unk460.f[3] = f;
+    k2->wall_hit_normal.f[3] = f;
     if (k2->state.control_mode != HERO_MODE_JUMP && k2->state.prev_control_mode != HERO_MODE_JUMP &&
         k2->state.prev2_control_mode != HERO_MODE_JUMP) {
         return;
     }
     hero_state = &hero;
-    if (hero_state->unk22B4 != 0) {
+    if (hero_state->wall_jumped != 0) {
         f = fast_difference_between_rotations(hero_state->wall_jump_normal.f[3],
-                                              hero_state->unk460.f[3]);
+                                              hero_state->wall_hit_normal.f[3]);
         if (f < 2.9670596f) {
             return;
         }

@@ -250,7 +250,7 @@ void update_hero_airborne_planar_motion(void) {
     } else if (state == HERO_STATE_HIGH_JUMP || state == HERO_STATE_STORED_HEADING_JUMP) {
         hero.motion.move_yaw = hero.takeoff_yaw;
         turn_to(0, frame_scale_sq * 0.04f, frame_scale_sq * 0.2f, frame_time * 6.981317f);
-        if (hero.unk450 != 3) {
+        if (hero.jump_stick_direction != 3) {
             hero.ground_speed = hero.air_target_speed;
         } else {
             hero.ground_speed = 0.0f;
@@ -821,8 +821,8 @@ void update_hero_motion_for_current_state(void) {
         roll = fast_subtract_rotations(hero.motion.rot.f[1], old);
         stick_target(1.0f, 0);
         turn_to(0, frame_scale_sq * 0.007f, frame_scale_sq * 0.08f, frame_time * 5.2359877f);
-        hero.unk8EC = hero.motion.yaw_rate;
-        fast_dec_timer(&hero.unk8F4);
+        hero.swim_yaw_rate = hero.motion.yaw_rate;
+        fast_dec_timer(&hero.swim_thrust_timer);
         if (hero.state.step == 1) {
             hero.target_speed = frame_time * 6.0f;
         } else if (hero.state.current == 0x35) {
@@ -956,7 +956,7 @@ void update_hero_motion_for_current_state(void) {
             qcopy(hero.motion.velocity.f, hero.motion.momentum.f);
         }
         clip_hero_horizontal_velocity(0);
-        lean = hero.unk8EC * fast_cos(swim_velocity_pitch) * -7.0f;
+        lean = hero.swim_yaw_rate * fast_cos(swim_velocity_pitch) * -7.0f;
         spring_angle(&hero.motion.rot.f[0],
                      lean,
                      &hero.swim_lean_vel,
@@ -1610,11 +1610,11 @@ void update_hero_motion_for_current_state(void) {
             emit_hero_randomized_motion_effects(5, 2);
         }
         if (hero.motion.flat_speed < frame_time * 0.3f && hero.stick_magnitude > 0.85f) {
-            hero.unk3B8 = 1;
+            hero.move_along_stick = 1;
         }
         if (absolute_float(hero.motion.yaw_error) < 0.05235988f || hero.item_anim_active != 0 ||
             hero.state.step == 1) {
-            hero.unk3B8 = 0;
+            hero.move_along_stick = 0;
         }
         if (hero.sharp_turn != 0) {
             if (absolute_float(hero.motion.yaw_error) < 0.06981317f || hero.item_anim_active != 0) {
@@ -1680,7 +1680,7 @@ void update_hero_motion_for_current_state(void) {
             down = frame_time_sq * 17.0f;
         }
         speed_step(up, down);
-        if (hero.unk3B8 != 0 && hero.magnetic_floor == 0) {
+        if (hero.move_along_stick != 0 && hero.magnetic_floor == 0) {
             set_planar_vel(hero.motion.move_yaw);
         } else {
             set_planar_vel(99999.0f);
@@ -1778,7 +1778,7 @@ void update_hero_motion_for_current_state(void) {
         step_angle_toward_target(&hero.motion.rot.f[1], 0, 0.0f, frame_time * 4.712389f);
         fast_vec_sub(hero.motion.velocity.f, hero.ledge_hang_pos.f, hero.motion.pos.f);
         FUN_L00_0025f730(hero.motion.velocity.f, frame_time * 4.0f);
-        fast_cos_cf(&hero.unk4F0, hero.motion.pos.f[2], frame_time * 3.0f);
+        fast_cos_cf(&hero.smoothed_air_z, hero.motion.pos.f[2], frame_time * 3.0f);
         break;
     case HERO_STATE_LEDGE_SHIMMY_POSITIVE_YAW:
     case HERO_STATE_LEDGE_SHIMMY_NEGATIVE_YAW: {
@@ -1997,7 +1997,7 @@ void update_hero_motion_for_current_state(void) {
                 allocate_hero_voice_for_entry(4, 0);
             }
         }
-        if (hero.unk4A8 != 0 && hero.on_ice_ground != 0) {
+        if (hero.took_off_from_ice != 0 && hero.on_ice_ground != 0) {
             hero.target_speed = hero.ground_speed;
         } else {
             if (hero.rail_land_frames != 0) {
@@ -2308,7 +2308,7 @@ void update_hero_motion_for_current_state(void) {
         }
         turn_to(0, frame_scale_sq * 0.035f * t, frame_scale_sq * 0.1f, frame_time * 2.268928f * t);
         speed_step(frame_time_sq * 7.5f * k, frame_time_sq * 8.5f);
-        if (hero.unk3B8 != 0 && hero.magnetic_floor == 0) {
+        if (hero.move_along_stick != 0 && hero.magnetic_floor == 0) {
             set_planar_vel(hero.motion.move_yaw);
         } else {
             set_planar_vel(99999.0f);

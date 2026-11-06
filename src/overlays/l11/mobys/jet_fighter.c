@@ -1486,7 +1486,7 @@ void jet_fighter_update(struct Moby *moby) {
             g->moby->collision_disable = 0;
             FUN_L11_0024db50(0, 1);
             jet_end_mount(0);
-            set_animation_parameter(g->unk160C, 0);
+            set_animation_parameter(g->ship_hud_handle, 0);
             request_music_track(0, 8);
             qcopy_nc(&moby->pos, ship_vars->home_pos);
             qcopy_nc(&moby->rot, ship_vars->home_rot);

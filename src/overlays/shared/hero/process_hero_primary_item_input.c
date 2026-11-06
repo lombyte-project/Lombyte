@@ -763,10 +763,10 @@ int process_hero_primary_item_input(void) {
             ((*(Hero *)((char *)&hero)).state.current == 0xE &&
              (*(Hero *)((char *)&hero)).anim_frame > 32.0f) ||
             ((*(Hero *)((char *)&hero)).state.current == 0xB &&
-             (*(Hero *)((char *)&hero)).unk450 != 3 &&
+             (*(Hero *)((char *)&hero)).jump_stick_direction != 3 &&
              (*(Hero *)((char *)&hero)).anim_frame > 18.0f) ||
             ((*(Hero *)((char *)&hero)).state.current == 0xB &&
-             (*(Hero *)((char *)&hero)).unk450 == 3 &&
+             (*(Hero *)((char *)&hero)).jump_stick_direction == 3 &&
              (*(Hero *)((char *)&hero)).anim_frame > 20.0f) ||
             (*(Hero *)((char *)&hero)).state.current == 0x2D ||
             (*(Hero *)((char *)&hero)).state.current == 0x11) {
@@ -869,7 +869,7 @@ int process_hero_primary_item_input(void) {
                 if ((*(Hero *)((char *)&hero)).swing_target_in_sight != 0) {
                     if ((*(Hero *)((char *)&hero)).grapple_target_in_sight != 0) {
                         if ((*(Hero *)((char *)&hero)).swing_target_dist <
-                            (*(Hero *)((char *)&hero)).unk984) {
+                            (*(Hero *)((char *)&hero)).swing_max_range) {
                             (*(Hero *)((char *)&hero)).grapple_target_in_sight = 0;
                         } else {
                             (*(Hero *)((char *)&hero)).swing_target_in_sight = 0;
@@ -968,7 +968,7 @@ int process_hero_primary_item_input(void) {
             (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_LAND ||
             (*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_GRIND ||
             ((*(Hero *)((char *)&hero)).state.control_mode == HERO_MODE_JUMP &&
-             (*(Hero *)((char *)&hero)).unk4AC != 0) ||
+             (*(Hero *)((char *)&hero)).can_use_item_in_jump != 0) ||
             ((*(Hero *)((char *)&hero)).state.current == 0x23 &&
              (*(Hero *)((char *)&hero)).anim_frame > 25.0f)) {
             int window;
@@ -1196,7 +1196,7 @@ void update_hero_hoverboard_trick_animations(void) {
                     l05_hoverboard_trick_animation_frame_bounds[h->air_pose_index].seq);
             } else if ((float)h->anim_loop_frame - 2.0f < h->anim_frame) {
                 h->tricks_landed[h->air_pose_index] = 1;
-                h->unk6F8 += 1;
+                h->tricks_landed_count += 1;
             }
         }
     }
@@ -1859,11 +1859,11 @@ int hero_pick_help_mode(void) {
             D_L05_00174240.unk1C != 0) {
             CollisionHit *wall = &D_L05_00174240;
             if (1.2217305f < fast_arc_tan(wall->normal_z, vector_length_xy(&wall->normal_x))) {
-                player->unk8A4 =
+                player->wall_face_yaw =
                     fast_add_rotations(fast_arc_tan(wall->normal_x, wall->normal_y), 3.1415927f);
                 if (fast_difference_between_rotations(
                         fast_arc_tan(player->motion.velocity.f[0], player->motion.velocity.f[1]),
-                        player->unk8A4) < 0.7853982f) {
+                        player->wall_face_yaw) < 0.7853982f) {
                     state = HERO_STATE_HOVERBOARD_RESPAWN_ANIMATION_WAIT;
                     if (!(player->ground_distance < 1.0f))
                         state = HERO_STATE_HOVERBOARD_RESPAWN_HEIGHT_OR_ANIMATION_WAIT;
@@ -1968,7 +1968,7 @@ change_state:
 continue_fall:
     if (alternate_item_available_lui[0]) {
         if (current_level_index == LEVEL_RILGAR && (&hero)->tricks_landed[4] == 4 &&
-            (&hero)->unk70C > 3 && item_unlocked_lui[7] == 0) {
+            (&hero)->trick_combo_count > 3 && item_unlocked_lui[7] == 0) {
             item_unlocked_lui[7] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
             queue_dialogue_message(0x53D6, -1);
@@ -2006,12 +2006,12 @@ void hero_update_linked_target(void) {
     struct Hero *hero_base = (struct Hero *)((char *)((unsigned char *)&D_0013E533) + 0xE1D);
     int          path_owner_moby = *(int *)&hero_base->hoverboard_moby;
 
-    *(int *)&hero_base->unk2278 = 0;
-    hero_base->unk227C = 0;
+    *(int *)&hero_base->anim_link_moby = 0;
+    hero_base->anim_link_table = 0;
     if (path_owner_moby != 0) {
         if ((unsigned)(hero_base->state.control_mode - 0x15) < 2) {
-            *(int *)&hero_base->unk2278 = path_owner_moby;
-            hero_base->unk227C = (int)hero_hoverboard_animation_link_table;
+            *(int *)&hero_base->anim_link_moby = path_owner_moby;
+            hero_base->anim_link_table = (int)hero_hoverboard_animation_link_table;
         }
     }
 }

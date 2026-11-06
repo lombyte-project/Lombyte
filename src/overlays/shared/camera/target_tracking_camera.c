@@ -158,11 +158,11 @@ void update_target_tracking_camera_position(char *camera_object) {
 
     if (hero.swing_target_moby != 0 && hero.state.current == 0x2c) {
         fraction = ((float *)hero.swing_target_moby)[6] - hero.motion.pos.f[2];
-        if (fraction > hero.unk9A0)
-            fraction = hero.unk9A0;
+        if (fraction > hero.swing_rope_target_length)
+            fraction = hero.swing_rope_target_length;
         else if (fraction < 0.0f)
             fraction = 0.0f;
-        fraction /= hero.unk9A0;
+        fraction /= hero.swing_rope_target_length;
         target = fraction + 3.65f;
         rate = fraction + fraction;
     } else {
@@ -355,7 +355,7 @@ done:
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EDC60), where it is exact; names translated to the US level program. */
 
-/* Resets moby bytes 0x7D/0x7E unless its id at 0x86 is &hero.unk2284 or 0x2084 is 6. */
+/* Resets moby bytes 0x7D/0x7E unless its id at 0x86 is &hero.camera_mode or 0x2084 is 6. */
 void conditionally_set_camera_state_three(char *camera_object) __asm__("FUN_L00_002ec7b0");
 
 void conditionally_set_camera_state_three(char *camera_object) {

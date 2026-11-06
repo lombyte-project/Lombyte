@@ -107,7 +107,7 @@ void update_trick_combo_hud(HudCounter *element) {
         if (player->air_frames.s < 6) {
             return;
         }
-        combo = player->unk70C;
+        combo = player->trick_combo_count;
         if (!((f32)combo >= 1.0f)) {
             return;
         }
@@ -142,8 +142,8 @@ void update_trick_combo_hud(HudCounter *element) {
             }
         }
         player = &hero;
-        if (D_L05_0015FAD4 < player->unk70C) {
-            D_L05_0015FAD4 = player->unk70C;
+        if (D_L05_0015FAD4 < player->trick_combo_count) {
+            D_L05_0015FAD4 = player->trick_combo_count;
             state_bytes[1] = trick_combo_hud_delay_reload_gp;
         }
         if (player->grounded_frames == 0) {
@@ -152,7 +152,7 @@ void update_trick_combo_hud(HudCounter *element) {
             }
         }
         D_L05_0015FB00 = 0;
-        player->unk70C = 0;
+        player->trick_combo_count = 0;
         player->tricks_landed[4] = 0;
         {
             int  k;

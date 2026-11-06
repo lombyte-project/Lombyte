@@ -410,7 +410,7 @@ void update_hero_ground_material_effects(void) {
     }
     if (saved_ground_type == 9) {
         struct Hero *q = &hero;
-        q->unk12EE = 1;
+        q->grind_jump_block = 1;
     }
     if (saved_ground_type == 0xC) {
         struct Hero *q = &hero;
@@ -749,14 +749,14 @@ void enter_hero_vehicle_mode_and_set_moby(int vehicle_mode, int initial_state, i
     hero_state_base = (struct Hero *)((char *)D_0013E533 + 0xE1D);
     *(char *)&hero_state_base->force_slot0_item8 = 1;
     hero_update_items();
-    *(int *)&hero_state_base->moby = *(int *)&hero_state_base->unkA88;
+    *(int *)&hero_state_base->moby = *(int *)&hero_state_base->base_moby;
     clear_moby_transform_history(&hero_state_base->trail.pos);
     hero_state_base->moby->collision_disable = -1;
     set_hero_item_moby_flag_bit0();
     release_and_clear_hero_voice_slots();
     reset_hero_easing_records();
     *(char *)&hero_state_base->vehicle_mode = vehicle_mode;
-    *(int *)&hero_state_base->unkA84 = new_moby;
+    *(int *)&hero_state_base->replacement_moby = new_moby;
     *(int *)&hero_state_base->moby = new_moby;
     update_hero_collision_dimensions();
     hero_state_base->capsule_top = hero_state_base->capsule_top_target;
@@ -767,9 +767,9 @@ void enter_hero_vehicle_mode_and_set_moby(int vehicle_mode, int initial_state, i
     clear_hero_queued_animation();
     FUN_L00_00257024(((void *)hero_state_base->moby));
     apply_hero_and_item_scale_sequence();
-    hero_state_base->unk22CC = initial_state;
+    hero_state_base->requested_state = initial_state;
     if (vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
-        *(unsigned short *)&hero_state_base->health.unk22B0 =
+        *(unsigned short *)&hero_state_base->health.saved_hp =
             *(unsigned short *)&hero_state_base->health;
         hero_state_base->health.hp = hero_state_base->health.vehicle_mode_hp;
     }
@@ -790,19 +790,19 @@ void exit_hero_vehicle_mode_and_restore_moby(void) {
     char        *restored_moby;
     reset_hero_easing_records();
     hero_state_base = (struct Hero *)((char *)D_0013E533 + 0xE1D);
-    previous_active_moby = ((char *)hero_state_base->unkA84);
+    previous_active_moby = ((char *)hero_state_base->replacement_moby);
     hero_state_base->vehicle_mode = HERO_VEHICLE_MODE_ON_FOOT;
     if (previous_active_moby != 0) {
         MOBY(previous_active_moby)->flags &= 0xFFF9;
     }
-    *(int *)&hero_state_base->unkA84 = 0;
+    *(int *)&hero_state_base->replacement_moby = 0;
     moby_to_remove = ((char *)hero_state_base->vehicle_mode3_moby);
     if (moby_to_remove != 0) {
         mark_moby_for_removal(moby_to_remove);
         *(int *)&hero_state_base->vehicle_mode3_moby = 0;
     }
     release_and_clear_hero_voice_slots();
-    restored_moby = ((char *)hero_state_base->unkA88);
+    restored_moby = ((char *)hero_state_base->base_moby);
     hero_state_base->moby = restored_moby;
     qcopy(&MOBY(restored_moby)->pos, &hero_state_base->motion.pos);
     MOBY(restored_moby)->collision_disable = 0;
@@ -975,7 +975,7 @@ void update_hero_collision_dimensions(void) {
     }
     if (hero.state.control_mode == HERO_MODE_JUMP) {
         if (hero.state_timer > hero.takeoff_frame && hero.past_jump_apex == 0)
-            hero.capsule_bottom_target = hero.unk434;
+            hero.capsule_bottom_target = hero.air_capsule_bottom;
     } else if (hero.state.current == HERO_STATE_FALL) {
         hero.capsule_bottom_target = 0.5f;
     } else if (hero.state.current == HERO_STATE_CROUCH) {
@@ -1278,7 +1278,7 @@ d1:
         break;
     }
     hero.ground_pitch.i = 0;
-    hero.unk2E8.i = 0;
+    hero.ground_roll.i = 0;
     hero.side_probe_roll.i[0] = 0;
     hero.side_probe_roll.i[1] = 0;
     hero.side_probe_pitch.i[0] = 0;
@@ -1298,7 +1298,7 @@ d1:
         hero.ground_pitch.f = ground_delta_or_angles.f[1];
     }
     if (-0.78539819f < ground_delta_or_angles.f[0] && ground_delta_or_angles.f[0] < 0.78539819f) {
-        hero.unk2E8.f = ground_delta_or_angles.f[0];
+        hero.ground_roll.f = ground_delta_or_angles.f[0];
     }
     for (i = 0; i < 2; i++) {
         side_probe_angle = 1.5707964f;
@@ -1325,7 +1325,7 @@ d1:
         } else {
             hero.side_probe_drop.i[i] = 0;
             hero.side_probe_pitch.f[i] = hero.ground_pitch.f;
-            hero.side_probe_roll.f[i] = hero.unk2E8.f;
+            hero.side_probe_roll.f[i] = hero.ground_roll.f;
         }
     }
 }
@@ -1363,8 +1363,9 @@ s32 resolve_hero_position_with_collision_queries(s32 mode) {
         hero.path_constrain_pending = 0;
     }
     if (hero.state.control_mode != HERO_MODE_SWIM) {
-        if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN || hero.unk1F8 != 0) {
-            if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL || hero.unk1F8 != 0) {
+        if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN || hero.magnet_walk_timer != 0) {
+            if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
+                hero.magnet_walk_timer != 0) {
                 add_hero_up_offset(&collision_query_offset, &collision_query_offset, 0.6f);
             } else {
                 add_hero_gravity_offset(
@@ -1471,30 +1472,30 @@ void update_hero_timers_and_vehicle_transitions(void) {
     hero.anim_seq_frames++;
     fast_dec_timer(&hero.move_lock_timer);
     fast_dec_timer(&hero.invulnerable_frames);
-    fast_dec_timer_s16(&hero.unk1B2);
+    fast_dec_timer_s16(&hero.item_select_override_timer);
     fast_dec_timer(&hero.long_jump_lockout);
     fast_dec_timer_s16(&hero.jump_lockout_timer);
     fast_dec_timer_s16(&hero.dive_lock);
     fast_dec_timer(&hero.wall_jump_window);
-    fast_dec_timer_s16(&hero.unk1F0);
+    fast_dec_timer_s16(&hero.ledge_ahead_timer);
     fast_dec_timer_s16(&hero.ledge_probe_cooldown);
-    fast_dec_timer_s16(&hero.unk1C8);
+    fast_dec_timer_s16(&hero.grind_catch_lockout);
     fast_dec_timer_s16(&hero.rail_catch_grace);
     fast_dec_timer_s16(&hero.rail_grab_cooldown);
     fast_dec_timer_s16(&hero.grapple_lockout_timer);
     fast_dec_timer(&hero.collision_off_frames);
-    fast_dec_timer(&hero.unk1D0);
+    fast_dec_timer(&hero.idle_return_delay);
     fast_dec_timer(&hero.jump_buffer_lockout);
     fast_dec_timer_s16(&hero.fidget_cooldown);
     fast_dec_timer_s16(&hero.sinking_floor_hold);
     fast_dec_timer_s16(&hero.hit_flash_timer);
-    fast_dec_timer_s16(&hero.unk1EA);
+    fast_dec_timer_s16(&hero.wall_push_out_timer);
     fast_dec_timer_s16(&hero.edge_brake_lock_timer);
     fast_dec_timer_s16(&hero.jump_lock_timer);
-    fast_dec_timer_s16(&hero.unk1DC);
-    fast_dec_timer_s16(&hero.unk1F6);
-    fast_dec_timer_s16(&hero.unk1DA);
-    fast_dec_timer_s16(&hero.unk1F8);
+    fast_dec_timer_s16(&hero.face_expression_timer);
+    fast_dec_timer_s16(&hero.pushed_timer);
+    fast_dec_timer_s16(&hero.item_swap_timer);
+    fast_dec_timer_s16(&hero.magnet_walk_timer);
     if (!(controller_state.held & 5)) {
         hero.unk1EC = 0;
     }
