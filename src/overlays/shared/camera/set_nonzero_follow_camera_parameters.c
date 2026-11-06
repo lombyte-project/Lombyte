@@ -1,6 +1,7 @@
 /* Setters for the follow camera's control word, offsets and position triplets. */
 
 #include "types.h"
+#include "rnc/camera/update_cam.h"
 #include "rnc/camera/follow_cam.h"
 #include "rnc/mobys/moby.h"
 
@@ -13,7 +14,7 @@ void set_follow_camera_control_word(int value) __asm__("FUN_L02_002f6570");
 
 void set_follow_camera_control_word(int control_word) {
     char *moby = D_L02_00167400;
-    if (MOBY(moby)->unk86 == 0) {
+    if (((struct UpdateCam *)moby)->camera_class == 0) {
         char *follow_camera_data = *(char **)(moby + 0x70);
         *(int *)(follow_camera_data + 0x218) = control_word;
     }
@@ -25,7 +26,7 @@ void set_nonzero_follow_camera_parameters(float x, float y, float z) __asm__("FU
 
 void set_nonzero_follow_camera_parameters(float x, float y, float z) {
     char *moby = D_L02_00167400_lui;
-    if (MOBY(moby)->unk86 == 0) {
+    if (((struct UpdateCam *)moby)->camera_class == 0) {
         char *follow_camera_parameter_base = *(char **)(moby + 0x70) + 0x1D0;
         if (*(float *)(follow_camera_parameter_base + 0x3C) != 0.0f) {
             *(float *)(follow_camera_parameter_base + 0x3C) = x;

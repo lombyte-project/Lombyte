@@ -39,8 +39,8 @@ typedef struct {
 
 /* 0x1A8: FUN_L00_002e8680 and the shot cameras reach `flags` through it. */
 typedef struct {
-    u8  pad1A8[8];
-    f32 unk1B0; /* 0x1B0: aim cameras start only while it is (nearly) 0 */
+    u8 pad1A8[8];
+    f32 pitch_input; /* 0x1B0: normalised stick pitch; aim cameras start only while it is (nearly) 0 */
     u8  pad1B4[4];
     s32 flags; /* 0x1B8: bits 0 and 1 set by the shot cameras and FUN_L00_002e8680 */
 } FollowCamFlags;
@@ -54,43 +54,43 @@ typedef struct {
 } FollowCamSnap;
 
 typedef struct {
-    f32            eye_offset[4];       /* 0x130: eye offset; its length is the eye distance */
-    f32            saved_eye_offset[4]; /* 0x140: copy of eye_offset */
-    u8             pad150[0xC];
-    f32            eye_distance; /* 0x15C: eye distance, set with eye_offset by the shot cameras */
-    f32            distance;     /* 0x160: distance of the eye behind the hero */
-    f32            unk164;       /* 0x164: aim cameras start only while it is (nearly) 0 */
-    u8             pad168[0x40];
+    f32 eye_offset[4];       /* 0x130: eye offset; its length is the eye distance */
+    f32 saved_eye_offset[4]; /* 0x140: copy of eye_offset */
+    u8  pad150[0xC];
+    f32 eye_distance; /* 0x15C: eye distance, set with eye_offset by the shot cameras */
+    f32 distance;     /* 0x160: distance of the eye behind the hero */
+    f32 yaw_step; /* 0x164: yaw step this frame; aim cameras start only while it is (nearly) 0 */
+    u8  pad168[0x40];
     FollowCamFlags ctl; /* 0x1A8 */
     u8             pad1BC[0x10];
-    f32            unk1CC;     /* 0x1CC: set by FUN_L00_002e8540 */
-    FollowCamSnap  snap;       /* 0x1D0 */
-    f32            zoom_scale; /* 0x20C */
-    f32            zoom;       /* 0x210: 1.0 is no zoom */
-    f32            zoom_range; /* 0x214 */
+    f32            script_pitch; /* 0x1CC: scripted pitch in radians, set by FUN_L00_002e8540 */
+    FollowCamSnap  snap;         /* 0x1D0 */
+    f32            zoom_scale;   /* 0x20C */
+    f32            zoom;         /* 0x210: 1.0 is no zoom */
+    f32            zoom_range;   /* 0x214 */
     u8             pad218[0xE];
-    s16            unk226; /* 0x226: set to 1 by FUN_L00_002e8620 */
-    u8             pad228[4];
-    f32            unk22C; /* 0x22C: set by FUN_L00_002e8490 */
-    s32            mode;   /* 0x230: 0 normal; shot cameras of type 10 and 11 set 0x14D and 2 */
+    s16 run_toward_lock; /* 0x226: 1 (FUN_L00_002e8620) keeps the camera from pulling back while the hero runs toward it */
+    u8 pad228[4];
+    f32 pull_back_max; /* 0x22C: farthest pull-back while the hero runs toward the camera (6.0), set by FUN_L00_002e8490 */
+    s32 mode; /* 0x230: 0 normal; shot cameras of type 10 and 11 set 0x14D and 2 */
 } FollowCamTail;
 
 /* 0x20..0x3B: eased values reset when a shot camera snaps. */
 typedef struct {
     u8  pad20[2];
-    s16 unk22;       /* 0x22 */
-    f32 look_height; /* 0x24: copy of follow.look_height */
-    f32 distance;    /* 0x28: copy of tail.distance */
-    f32 unk2C;       /* 0x2C */
-    f32 unk30;       /* 0x30 */
-    f32 unk34;       /* 0x34 */
-    f32 unk38;       /* 0x38 */
+    s16 unk22;           /* 0x22 */
+    f32 look_height;     /* 0x24: copy of follow.look_height */
+    f32 distance;        /* 0x28: copy of tail.distance */
+    f32 look_height_vel; /* 0x2C: cam_interp_values step of look_height */
+    f32 distance_vel;    /* 0x30: cam_interp_values step of distance */
+    f32 pitch_bias;      /* 0x34: springed pitch bias while the camera is low */
+    f32 pitch_bias_vel;  /* 0x38 */
     u8  pad3C[4];
 } FollowCamReset;
 
 typedef struct FollowCamState {
-    f32            position[4]; /* 0x00: the record's position when a shot camera snaps */
-    s16            unk10;       /* 0x10: set by set_follow_camera_orbit_clamp_mode */
+    f32 position[4]; /* 0x00: the record's position when a shot camera snaps */
+    s16 leash; /* 0x10: nonzero lets the camera trail the hero on a leash; set by set_follow_camera_orbit_clamp_mode */
     u8             pad12[0xE];
     FollowCamReset reset;  /* 0x20 */
     FollowCamBlock follow; /* 0x40 */

@@ -9,7 +9,7 @@
 
 OFFSET_CHECK(reset, FollowCamState, reset, 0x20);
 OFFSET_CHECK(reset_distance, FollowCamState, reset.distance, 0x28);
-OFFSET_CHECK(reset_unk38, FollowCamState, reset.unk38, 0x38);
+OFFSET_CHECK(reset_pitch_bias_vel, FollowCamState, reset.pitch_bias_vel, 0x38);
 OFFSET_CHECK(follow, FollowCamState, follow, 0x40);
 OFFSET_CHECK(snap_look_target, FollowCamState, follow.snap_look_target, 0xD0);
 OFFSET_CHECK(look_height, FollowCamState, follow.look_height, 0xF0);
@@ -20,12 +20,12 @@ OFFSET_CHECK(eye_distance, FollowCamState, tail.eye_distance, 0x15C);
 OFFSET_CHECK(distance, FollowCamState, tail.distance, 0x160);
 OFFSET_CHECK(ctl, FollowCamState, tail.ctl, 0x1A8);
 OFFSET_CHECK(flags, FollowCamState, tail.ctl.flags, 0x1B8);
-OFFSET_CHECK(unk1CC, FollowCamState, tail.unk1CC, 0x1CC);
+OFFSET_CHECK(script_pitch, FollowCamState, tail.script_pitch, 0x1CC);
 OFFSET_CHECK(snap, FollowCamState, tail.snap, 0x1D0);
 OFFSET_CHECK(eye_distance_error, FollowCamState, tail.snap.eye_distance_error, 0x200);
 OFFSET_CHECK(zoom_scale, FollowCamState, tail.zoom_scale, 0x20C);
 OFFSET_CHECK(zoom_range, FollowCamState, tail.zoom_range, 0x214);
-OFFSET_CHECK(unk226, FollowCamState, tail.unk226, 0x226);
-OFFSET_CHECK(unk22C, FollowCamState, tail.unk22C, 0x22C);
+OFFSET_CHECK(run_toward_lock, FollowCamState, tail.run_toward_lock, 0x226);
+OFFSET_CHECK(pull_back_max, FollowCamState, tail.pull_back_max, 0x22C);
 OFFSET_CHECK(mode, FollowCamState, tail.mode, 0x230);
 SIZE_CHECK(follow_cam_state, FollowCamState, 0x234);
