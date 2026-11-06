@@ -758,16 +758,17 @@ struct Hero {
     s8   hop_mode;          /* 0x1F3F: cleared when a hop starts */
     f32  hop_turn_velocity; /* 0x1F40: spring turn velocity toward hop_heading */
     u8   pad_1F44[0x1C];
-    u8   unk1F60[0x40];    /* 0x1F60: 0x40-byte buffer cleared by FUN_L00_002b58d8 */
-    u8   unk1FA0[0x40];    /* 0x1FA0: 0x40-byte buffer cleared by FUN_L00_002b58d8 */
-    u8  *visibomb_missile; /* 0x1FE0: moby set by FUN_L00_002b58d8 */
-    u8   pad_1FE4[0x11];
-    u8   launch_drones; /* 0x1FF5 */
-    u8   ammo_used;     /* 0x1FF6 */
-    u8   ammo_capacity; /* 0x1FF7 */
-    u8   pad_1FF8[0x28];
-    u8  *drone_mobys[6]; /* 0x2020: six moby slots, filled at the index a moby carries at +0x54 */
-    u8   pad_2038[0x8];
+    u8   visibomb_fin_manip0
+        [0x40]; /* 0x1F60: joint manipulator of the visibomb missile fin 0 (spawn_visibomb_missile) */
+    u8  visibomb_fin_manip1[0x40]; /* 0x1FA0: fin 1 */
+    u8 *visibomb_missile;          /* 0x1FE0: moby set by FUN_L00_002b58d8 */
+    u8  pad_1FE4[0x11];
+    u8  launch_drones; /* 0x1FF5 */
+    u8  ammo_used;     /* 0x1FF6 */
+    u8  ammo_capacity; /* 0x1FF7 */
+    u8  pad_1FF8[0x28];
+    u8 *drone_mobys[6]; /* 0x2020: six moby slots, filled at the index a moby carries at +0x54 */
+    u8  pad_2038[0x8];
     struct Moby
         *metal_detector_target; /* 0x2040: nearest oclass 0x25D moby (metal_detector_update) */
     f32  detector_target_dist;  /* 0x2044: distance to metal_detector_target; 100000 when none */
