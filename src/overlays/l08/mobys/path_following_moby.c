@@ -99,12 +99,12 @@ int moby_motion_spark_second_color_end_gp __asm__("D_L08_00161A80") = 0x20601020
 
 typedef struct PathFollowingMobyVars {
     u8  pad_0[0x4];
-    f32 unk4;
-    f32 unk8;
-    f32 unkC;
-    u8  unk10;
+    f32 path_progress;
+    f32 path_progress_step;
+    f32 height_offset;
+    u8  falling_velocity;
     u8  pad_11[0x7];
-    f32 unk18;
+    f32 falling_velocity_z;
 } PathFollowingMobyVars;
 
 /* Moby class 438 */
@@ -131,21 +131,23 @@ void path_following_moby_update(char *moby) {
             float first_path_segment_length =
                 fast_vec_dist((char *)path + 0x10, (char *)path + 0x20);
             fast_vec_dist((char *)path + 0x10, (char *)path + (*path << 4));
-            moby_vars->unk8 = path_following_moby_speed_gp * D_0015ED6C / first_path_segment_length;
-            moby_vars->unk4 = moby_vars->unk4 * (float)*path;
-            moby_vars->unkC = randf_sym(0.0f, 5.0f);
+            moby_vars->path_progress_step =
+                path_following_moby_speed_gp * D_0015ED6C / first_path_segment_length;
+            moby_vars->path_progress = moby_vars->path_progress * (float)*path;
+            moby_vars->height_offset = randf_sym(0.0f, 5.0f);
         }
         MOBY(moby)->state = MOBY_STATE_FOLLOW_PATH;
         MOBY(moby)->update_dist = 0xFF;
     case MOBY_STATE_FOLLOW_PATH: {
         float path_point_count;
-        sample_camera_path(path, 1, moby + 0x10, (float *)&MOBY(moby)->rot, 0, moby_vars->unk4);
+        sample_camera_path(
+            path, 1, moby + 0x10, (float *)&MOBY(moby)->rot, 0, moby_vars->path_progress);
         MOBY(moby)->rot.y = MOBY(moby)->rot.y * 0.5f;
-        MOBY(moby)->pos.z = MOBY(moby)->pos.z + moby_vars->unkC;
-        moby_vars->unk4 = moby_vars->unk4 + moby_vars->unk8;
+        MOBY(moby)->pos.z = MOBY(moby)->pos.z + moby_vars->height_offset;
+        moby_vars->path_progress = moby_vars->path_progress + moby_vars->path_progress_step;
         path_point_count = (float)*path;
-        if (path_point_count < moby_vars->unk4) {
-            moby_vars->unk4 = moby_vars->unk4 - path_point_count;
+        if (path_point_count < moby_vars->path_progress) {
+            moby_vars->path_progress = moby_vars->path_progress - path_point_count;
         }
         break;
     }
@@ -154,12 +156,14 @@ void path_following_moby_update(char *moby) {
         float falling_removal_height = 10.0f;
         float dd;
         float falling_rotation_step;
-        char *falling_velocity = &moby_vars->unk10;
+        char *falling_velocity = &moby_vars->falling_velocity;
         falling_rotation_step = D_0015ED6C * 7.3303828f;
-        moby_vars->unk18 = moby_vars->unk18 - D_0015ED70 * falling_gravity;
+        moby_vars->falling_velocity_z =
+            moby_vars->falling_velocity_z - D_0015ED70 * falling_gravity;
         dd = fast_add_rotations(MOBY(moby)->rot.x, falling_rotation_step);
         MOBY(moby)->rot.x = MOBY(moby)->rot.x + dd;
-        MOBY(moby)->rot.y = -fast_arc_tan(vector_length_xy(falling_velocity), moby_vars->unk18);
+        MOBY(moby)->rot.y =
+            -fast_arc_tan(vector_length_xy(falling_velocity), moby_vars->falling_velocity_z);
         fast_vec_add(moby_position, moby_position, falling_velocity);
         if (MOBY(moby)->pos.z < falling_removal_height) {
             mark_moby_for_removal(moby);
@@ -204,8 +208,8 @@ void path_following_moby_update(char *moby) {
             queue_dialogue_message(0x53D6, -1);
         }
         fast_vec_sub(frame_displacement, moby + 0x10, previous_position);
-        qcopy(&moby_vars->unk10, frame_displacement);
-        moby_vars->unk18 = moby_vars->unk18 + (D_0015ED6C + D_0015ED6C);
+        qcopy(&moby_vars->falling_velocity, frame_displacement);
+        moby_vars->falling_velocity_z = moby_vars->falling_velocity_z + (D_0015ED6C + D_0015ED6C);
         spawn_explosion(moby,
                         frame_displacement,
                         moby + 0x10,

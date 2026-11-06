@@ -116,7 +116,7 @@ typedef struct {
     u8    pad59;
     u8    unk5A;
     u8    pad5B[5];
-    u8    unk60[0x90];
+    u8    entity_matrix[0x90];
     Moby *target; /* 0xF0 */
     s32   mode;   /* 0xF4 */
     u8    padF8[8];
@@ -351,7 +351,7 @@ void bomber_tank_update(Moby *moby) {
     }
     }
     fast_vec_sub(velocity, &moby->pos, old_pos);
-    FUN_L00_00260738(bomber_tank_update_vars->unk60, velocity, &moby->rot, old_rot);
+    FUN_L00_00260738(bomber_tank_update_vars->entity_matrix, velocity, &moby->rot, old_rot);
 }
 
 /* Per-frame update of a batalia turret moby: damage, its death state and its two helper parts. */

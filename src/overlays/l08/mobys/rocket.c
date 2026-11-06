@@ -548,12 +548,12 @@ struct Moby *spawn_rocket(void        *pos,
 
 typedef struct RocketVars {
     u8           pad_0[0x20];
-    u8           unk20;
+    u8           velocity;
     u8           pad_21[0x1F];
-    f32          unk40;
-    f32          unk44;
-    f32          unk48;
-    struct Moby *unk4C;
+    f32          pitch;
+    f32          yaw;
+    f32          roll;
+    struct Moby *target;
 } RocketVars;
 
 struct Moby *spawn_rocket(void *pos, struct Moby *target, void *velocity, float pitch, float yaw) {
@@ -581,11 +581,11 @@ struct Moby *spawn_rocket(void *pos, struct Moby *target, void *velocity, float 
         moby->draw_dist = 0xFF;
         moby->scale = scale;
         set_moby_color(moby, rocket_color_red_gp, rocket_color_green_gp, rocket_color_blue_gp);
-        projectile_vars->unk40 = pitch;
-        projectile_vars->unk48 = 70.0f;
-        projectile_vars->unk44 = yaw;
-        projectile_vars->unk4C = target_copy;
-        qcopy(&projectile_vars->unk20, velocity_copy);
+        projectile_vars->pitch = pitch;
+        projectile_vars->roll = 70.0f;
+        projectile_vars->yaw = yaw;
+        projectile_vars->target = target_copy;
+        qcopy(&projectile_vars->velocity, velocity_copy);
         update_entity(moby);
     }
     return moby;
@@ -600,7 +600,7 @@ void spawn_rocket_explosion_and_debris(char *moby, int transform_index, int spaw
 
     if (flag) {
         spawn_explosion(moby,
-                        &rocket_vars->unk20,
+                        &rocket_vars->velocity,
                         moby + 0x10,
                         0.0f,
                         0.0f,
@@ -619,7 +619,7 @@ void spawn_rocket_explosion_and_debris(char *moby, int transform_index, int spaw
                         0);
     } else {
         spawn_explosion(moby,
-                        &rocket_vars->unk20,
+                        &rocket_vars->velocity,
                         moby + 0x10,
                         0.0f,
                         0.0f,

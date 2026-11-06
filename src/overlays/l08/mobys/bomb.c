@@ -89,15 +89,15 @@ typedef struct Moby248Vars {
     u8  pad_0[0x7];
     u8  fuse_flash_target_red;
     u8  pad_8[0x8];
-    u8  unk10;
+    u8  velocity;
     u8  pad_11[0x7];
-    f32 unk18;
+    f32 velocity_z;
     u8  pad_1C[0x4];
     s32 timer_20;
-    s32 unk24;
-    f32 unk28;
+    s32 bounce_count;
+    f32 fuse_flash_step;
     u8  pad_2C[0x4];
-    s32 unk30;
+    s32 thrower;
 } Moby248Vars;
 
 /* Moby class 248 */
@@ -122,15 +122,16 @@ void moby_248_update(char *moby) {
         if (coll_sphere(0.5f, moby + 0x10, 0x11, moby)) {
             int sphere_hit_moby = D_L08_00174658_lui;
             if (sphere_hit_moby != 0 &&
-                (sphere_hit_moby != bomb_vars->unk30 || bomb_vars->unk24 != 0)) {
+                (sphere_hit_moby != bomb_vars->thrower || bomb_vars->bounce_count != 0)) {
                 if (!(MOBY(moby)->command & 2))
                     MOBY(moby)->state = BOMB_STATE_EXPLODE_AND_REMOVE;
                 else
                     MOBY(moby)->state = BOMB_STATE_BURST_AND_REMOVE;
                 qcopy((moby + 0x10), ((char *)D_L08_00174660));
                 FUN_L00_001ff660_c(
-                    &bomb_vars->unk10, &bomb_vars->unk10, ((char *)D_L08_00174660) + 0x20);
-                fast_vec_normalize(&bomb_vars->unk10, &bomb_vars->unk10, D_0015ED6C + D_0015ED6C);
+                    &bomb_vars->velocity, &bomb_vars->velocity, ((char *)D_L08_00174660) + 0x20);
+                fast_vec_normalize(
+                    &bomb_vars->velocity, &bomb_vars->velocity, D_0015ED6C + D_0015ED6C);
             }
         }
     }
@@ -140,9 +141,9 @@ void moby_248_update(char *moby) {
     switch (st) {
     case BOMB_STATE_MOVING: {
         float velocity_magnitude;
-        velocity_magnitude = fast_vec_length((&bomb_vars->unk10));
+        velocity_magnitude = fast_vec_length((&bomb_vars->velocity));
         MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, velocity_magnitude * 0.5f);
-        if (bomb_vars->unk24 == 0) {
+        if (bomb_vars->bounce_count == 0) {
             float lo = -1.0f;
             float hi = 1.0f;
             int  *selected_table_entry;
@@ -166,27 +167,27 @@ void moby_248_update(char *moby) {
         qcopy(c.r.start, moby + 0x10);
         collision_z_offset = 0.16f;
         c.r.start[2] -= collision_z_offset;
-        fast_vec_add((moby + 0x10), (moby + 0x10), (&bomb_vars->unk10));
-        bomb_vars->unk18 -= bomb_downward_acceleration_gp * D_0015ED70_gp;
+        fast_vec_add((moby + 0x10), (moby + 0x10), (&bomb_vars->velocity));
+        bomb_vars->velocity_z -= bomb_downward_acceleration_gp * D_0015ED70_gp;
         qcopy(c.r.end, moby + 0x10);
         c.r.end[2] -= collision_z_offset;
         c.r.x.moby = moby;
         c.r.x.flags = 0x810000;
         c.r.x.st = st;
         c.r.x.f = 1.0f;
-        qcopy(c.r.x.v, &bomb_vars->unk10);
+        qcopy(c.r.x.v, &bomb_vars->velocity);
         if (collision_line(c.r.start, c.r.end, 0, moby, 0)) {
             char *collision_result = (char *)&D_L08_00174640;
             int   v = *(int *)(collision_result + 0x18);
             if (v != 0) {
-                if (v != bomb_vars->unk30 || bomb_vars->unk24 != 0) {
+                if (v != bomb_vars->thrower || bomb_vars->bounce_count != 0) {
                     if (!(MOBY(moby)->command & 2))
                         MOBY(moby)->state = BOMB_STATE_EXPLODE_AND_REMOVE;
                     else
                         MOBY(moby)->state = BOMB_STATE_BURST_AND_REMOVE;
                     qcopy((moby + 0x10), ((char *)D_L08_00174660));
                     {
-                        char *v = &bomb_vars->unk10;
+                        char *v = &bomb_vars->velocity;
                         FUN_L00_001ff660_c(v, v, ((char *)D_L08_00174660) + 0x20);
                         fast_vec_normalize(v, v, D_0015ED6C + D_0015ED6C);
                     }
@@ -198,33 +199,33 @@ void moby_248_update(char *moby) {
                     qcopy((moby + 0x10), collision_result + 0x20);
                     MOBY(moby)->pos.z += collision_z_offset;
                     FUN_L00_001ff660_c(
-                        (&bomb_vars->unk10), (&bomb_vars->unk10), collision_result + 0x40);
+                        (&bomb_vars->velocity), (&bomb_vars->velocity), collision_result + 0x40);
                     fast_vec_cross(
-                        &table_or_bounce_scratch, (&bomb_vars->unk10), collision_result + 0x40);
+                        &table_or_bounce_scratch, (&bomb_vars->velocity), collision_result + 0x40);
                     k = D_0015ED6C * 1.5f;
                     fast_vec_normalize(&table_or_bounce_scratch,
                                        &table_or_bounce_scratch,
                                        random_float_between(-k, k));
                     fast_vec_add(
-                        (&bomb_vars->unk10), (&bomb_vars->unk10), &table_or_bounce_scratch);
-                    fast_vec_scale((&bomb_vars->unk10), (&bomb_vars->unk10), 0.4f);
-                    bomb_vars->unk24 += 1;
+                        (&bomb_vars->velocity), (&bomb_vars->velocity), &table_or_bounce_scratch);
+                    fast_vec_scale((&bomb_vars->velocity), (&bomb_vars->velocity), 0.4f);
+                    bomb_vars->bounce_count += 1;
                     bomb_vars->timer_20 = scale_game_frames(0xB4);
-                    if (fast_vec_length((&bomb_vars->unk10)) < D_0015ED6C) {
+                    if (fast_vec_length((&bomb_vars->velocity)) < D_0015ED6C) {
                         int r;
                         MOBY(moby)->state = two;
                         r = scale_game_frames(0x78);
                         bomb_vars->timer_20 = r;
-                        bomb_vars->unk28 = 254.0f / (float)r;
-                        clear_u64_value((&bomb_vars->unk10));
+                        bomb_vars->fuse_flash_step = 254.0f / (float)r;
+                        clear_u64_value((&bomb_vars->velocity));
                     }
                 } else {
                     MOBY(moby)->state = BOMB_STATE_EXPLODE_AND_REMOVE;
                     qcopy((moby + 0x10), collision_result + 0x20);
                     FUN_L00_001ff660_c(
-                        (&bomb_vars->unk10), (&bomb_vars->unk10), collision_result + 0x40);
+                        (&bomb_vars->velocity), (&bomb_vars->velocity), collision_result + 0x40);
                     fast_vec_normalize(
-                        (&bomb_vars->unk10), (&bomb_vars->unk10), D_0015ED6C + D_0015ED6C);
+                        (&bomb_vars->velocity), (&bomb_vars->velocity), D_0015ED6C + D_0015ED6C);
                 }
             }
         } else if (fast_dec_timer(&bomb_vars->timer_20)) {
