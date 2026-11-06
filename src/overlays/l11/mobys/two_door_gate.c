@@ -23,11 +23,11 @@ extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__(
 
 /* Private variables of the two-door moby FUN_L11_00316320 runs. */
 struct L11GateVars {
-    struct Moby *left;  /* 0x0 */
-    struct Moby *right; /* 0x4 */
-    f32          t;     /* 0x8 */
-    f32          speed; /* 0xC */
-    s32          unk10; /* 0x10 */
+    struct Moby *left;           /* 0x0 */
+    struct Moby *right;          /* 0x4 */
+    f32          t;              /* 0x8 */
+    f32          speed;          /* 0xC */
+    s32          trigger_volume; /* 0x10 */
 };
 
 /* Two-door gate: spawns both 0x4DF doors, then once the hero is close lifts, swings and tilts them open. */
@@ -88,7 +88,7 @@ void two_door_gate_update(struct Moby *moby) {
     }
     case GATE_WAIT_FOR_HERO_TRIGGER:
         if (vector_distance_xy(&moby->pos.x, &hero.motion.pos.f[0]) < 12.0f &&
-            is_point_inside_clip_volume(&hero.motion.pos, gate_vars->unk10) != 0) {
+            is_point_inside_clip_volume(&hero.motion.pos, gate_vars->trigger_volume) != 0) {
             gate_vars->t = 0.0f;
             moby->state = GATE_RAISE_DOORS;
             FUN_0022da68(0, 4, gate_vars->left);

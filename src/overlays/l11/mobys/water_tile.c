@@ -37,9 +37,9 @@ typedef struct {
     f32 unk24;
     s32 unk28;
     s32 unk2C;
-    f32 unk30;
-    f32 unk34;
-    f32 unk38;
+    f32 light_dir_x;
+    f32 light_dir_y;
+    f32 light_dir_z;
     u8  unk3C;
     u8  unk3D;
 } Light_e088;
@@ -113,9 +113,9 @@ void water_tile_update(struct Moby *water_tile_moby) {
             water_tile_light->unk20 = 0.1f;
             light_direction_angle =
                 fast_arc_tan(water_light_heading_reference[4], water_light_heading_reference[5]);
-            water_tile_light->unk30 = fast_cos(light_direction_angle) * 0.57735f;
-            water_tile_light->unk34 = fast_sin(light_direction_angle) * 0.57735f;
-            water_tile_light->unk38 = -0.57735f;
+            water_tile_light->light_dir_x = fast_cos(light_direction_angle) * 0.57735f;
+            water_tile_light->light_dir_y = fast_sin(light_direction_angle) * 0.57735f;
+            water_tile_light->light_dir_z = -0.57735f;
             water_tile_light->unk28 = 0x38;
             water_tile_light->unk2C = 0x39;
             water_tile_light->unk3C = 0x1C;
