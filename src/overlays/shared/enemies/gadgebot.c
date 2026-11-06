@@ -24,6 +24,7 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/overlay/shared/enemies/gadgebot_spawn_container.h"
 #include "rnc/overlay/shared/enemies/gadgebot_spawn_pad.h"
+#include "rnc/overlay/shared/enemies/gadgebot.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/mobys/ground_move_control.h"
 
@@ -298,12 +299,6 @@ void gadgebot_update(GbMoby *moby) {
         GADGEBOT_ATTACK_STRIKE = 2,
         GADGEBOT_ATTACK_RECOVER_AFTER_STRIKE = 3,
         GADGEBOT_ATTACK_WAIT_FOR_TARGET = 4
-    };
-    enum {
-        GADGEBOT_COMMAND_FOLLOW_HERO = 1,
-        GADGEBOT_COMMAND_STAND_AND_FACE_HERO = 2,
-        GADGEBOT_COMMAND_SEEK_AND_ATTACK_TARGET = 3,
-        GADGEBOT_COMMAND_SEEK_INTERACTION_TARGET = 4
     };
     enum {
         GADGEBOT_FOLLOW_INITIALIZE = 0,
