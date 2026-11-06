@@ -2104,14 +2104,14 @@ void update_hero_state_motion(void) {
             hero.voice_slot4 = -1;
             release_voice_slot_cf(3, (int)hero.moby, 2);
         } else {
-            if (hero.unk2224 != -1) {
-                Row13E650 *e = (Row13E650 *)(((char *)&voice_pool) + hero.unk2224 * 0x70);
+            if (hero.loop_voice_slot != -1) {
+                Row13E650 *e = (Row13E650 *)(((char *)&voice_pool) + hero.loop_voice_slot * 0x70);
 
                 if (e->f88 == hero.moby && e->f74 != 0) {
-                    release_voice_slot(hero.unk2224);
+                    release_voice_slot(hero.loop_voice_slot);
                 }
             }
-            hero.unk2224 = -1;
+            hero.loop_voice_slot = -1;
             release_voice_slot_cf(4, (int)hero.moby, 0x12);
         }
         v = frame_time * 3.0f;

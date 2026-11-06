@@ -505,7 +505,7 @@ int hero_set_state(int requested_state, int animation_update_mode) {
                 s->hoverboard_airborne = 0;
                 s->board_jump_frames = 0;
                 s->boost_pad_timer = 0;
-                s->unk8B8.i = 0;
+                s->last_ground_z.i = 0;
                 s->race_ammo = 0;
                 s->off_course_reset_pending = 0;
             }
