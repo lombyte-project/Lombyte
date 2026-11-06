@@ -51,17 +51,17 @@ typedef struct MissionGatedTaxiPlatformVars {
     f32 transform[16];
     u8  command;
     u8  pad_A1[0x3];
-    f32 unkA4;
-    f32 unkA8;
-    f32 unkAC;
-    f32 unkB0;
+    f32 t; /* position along the path, 0 to 1 */
+    f32 speed;
+    f32 target_speed; /* +-1 / travel frames */
+    f32 travel_time;  /* seconds per trip */
     s32 path;
-    s16 unkB8;
+    s16 retrigger; /* set when the hero steps off while stopped */
     s16 timer;
-    f32 unkBC;
+    f32 rise; /* height gained this frame */
     u8  pad_C0[0x4];
-    s32 unkC4;
-    s32 unkC8;
+    s32 voice;
+    s32 free_ride; /* nonzero: boarding does not put the hero in the ride state */
 } MissionGatedTaxiPlatformVars;
 
 /* Moby class 1474 */
@@ -96,16 +96,16 @@ void mission_gated_taxi_platform_update(struct Moby *moby) {
         if ((moby->command = mission_gated_taxi_vars->command) == 0) {
             f = 1.0f;
         }
-        mission_gated_taxi_vars->unkA4 = f;
+        mission_gated_taxi_vars->t = f;
         pts = path + 0x10;
         qcopy(&moby->pos, truncate_float_to_s32(f) ? pts + (*(int *)path - 1) * 16 : pts);
         mission_gated_taxi_vars->timer = 0;
-        *(int *)&mission_gated_taxi_vars->unkA8 = 0;
-        *(int *)&mission_gated_taxi_vars->unkBC = 0;
+        *(int *)&mission_gated_taxi_vars->speed = 0;
+        *(int *)&mission_gated_taxi_vars->rise = 0;
         moby->state = TAXI_PLATFORM_STATE_INITIALIZED;
         moby->update_dist = 0xFF;
         moby->draw_dist = 0xFF;
-        mission_gated_taxi_vars->unkC4 = -1;
+        mission_gated_taxi_vars->voice = -1;
         moby->flags &= 0xFFBE;
         moby->collision = moby->pclass->collision;
     }
@@ -118,28 +118,28 @@ void mission_gated_taxi_platform_update(struct Moby *moby) {
             moby->scale = *(float *)(class_defaults + 0x24);
             qcopy(&moby->pos, path + 0x10);
             moby->command = 1;
-            mission_gated_taxi_vars->unkA4 = 0.0f;
+            mission_gated_taxi_vars->t = 0.0f;
         }
         break;
     }
     case TAXI_WAIT_FOR_HERO_BOARDING:
-        if (mission_gated_taxi_vars->unkB8 != 0) {
+        if (mission_gated_taxi_vars->retrigger != 0) {
             if (is_hero_on_moby(moby)) {
-                if (mission_gated_taxi_vars->unkC8 == 0) {
+                if (mission_gated_taxi_vars->free_ride == 0) {
                     if (is_hero_on_moby(moby)) {
                         hero_set_state(0x72, 1);
                     }
                 }
                 moby->command = 2;
-                mission_gated_taxi_vars->unkAC =
-                    1.0f / scale_time(mission_gated_taxi_vars->unkB0 * 60.0f);
-                mission_gated_taxi_vars->unkB8 = 0;
+                mission_gated_taxi_vars->target_speed =
+                    1.0f / scale_time(mission_gated_taxi_vars->travel_time * 60.0f);
+                mission_gated_taxi_vars->retrigger = 0;
             }
         }
         break;
     case TAXI_TRAVERSE_PATH:
         if (mission_gated_taxi_vars->timer != 0 ||
-            (mission_gated_taxi_vars->unkBC < 0.0f &&
+            (mission_gated_taxi_vars->rise < 0.0f &&
              vector_distance_xy(&moby->pos, &hero.motion.pos) < 2.0f &&
              absolute_float(hero.motion.pos.f[2] - moby->pos.z) < 4.0f &&
              moby->pos.z - hero.motion.pos.f[2] > 1.0f)) {
@@ -147,57 +147,57 @@ void mission_gated_taxi_platform_update(struct Moby *moby) {
             if (mission_gated_taxi_vars->timer == 0) {
                 mission_gated_taxi_vars->timer = scale_game_frames(30);
             }
-            r = mission_gated_taxi_vars->unkC4;
-            *(int *)&mission_gated_taxi_vars->unkA8 = 0;
+            r = mission_gated_taxi_vars->voice;
+            *(int *)&mission_gated_taxi_vars->speed = 0;
             if (r != -1) {
                 unsigned char *s = (unsigned char *)((char *)&D_0013E550) + r * 0x70;
                 if (*(unsigned char **)(s + 0x88) == moby && s[0x74] != 0) {
                     release_voice_slot(r);
                 }
             }
-            mission_gated_taxi_vars->unkC4 = -1;
+            mission_gated_taxi_vars->voice = -1;
         } else {
             int   i;
             float segment_fraction_work_value, t;
             char *segment_start_position;
-            if (!voice_is_playing(moby, mission_gated_taxi_vars->unkC4)) {
-                mission_gated_taxi_vars->unkC4 = allocate_voice_for_target_entry(0, 4, (int)moby);
+            if (!voice_is_playing(moby, mission_gated_taxi_vars->voice)) {
+                mission_gated_taxi_vars->voice = allocate_voice_for_target_entry(0, 4, (int)moby);
             }
-            mission_gated_taxi_vars->unkA8 += mission_gated_taxi_vars->unkAC * frame_time;
-            if (absolute_float(mission_gated_taxi_vars->unkA8) >
-                absolute_float(mission_gated_taxi_vars->unkAC)) {
-                mission_gated_taxi_vars->unkA8 = mission_gated_taxi_vars->unkAC;
+            mission_gated_taxi_vars->speed += mission_gated_taxi_vars->target_speed * frame_time;
+            if (absolute_float(mission_gated_taxi_vars->speed) >
+                absolute_float(mission_gated_taxi_vars->target_speed)) {
+                mission_gated_taxi_vars->speed = mission_gated_taxi_vars->target_speed;
             }
-            mission_gated_taxi_vars->unkA4 =
-                mission_gated_taxi_vars->unkA4 + mission_gated_taxi_vars->unkA8;
-            if (0.5f < absolute_float(mission_gated_taxi_vars->unkA4 - 0.5f)) {
+            mission_gated_taxi_vars->t =
+                mission_gated_taxi_vars->t + mission_gated_taxi_vars->speed;
+            if (0.5f < absolute_float(mission_gated_taxi_vars->t - 0.5f)) {
                 int r;
-                if (mission_gated_taxi_vars->unkC8 == 0 && is_hero_on_moby(moby)) {
+                if (mission_gated_taxi_vars->free_ride == 0 && is_hero_on_moby(moby)) {
                     set_hero_idle_state_for_vehicle_mode();
                 }
-                if (0.0f < mission_gated_taxi_vars->unkAC) {
+                if (0.0f < mission_gated_taxi_vars->target_speed) {
                     moby->command = 3;
-                    mission_gated_taxi_vars->unkA4 = 1.0f;
+                    mission_gated_taxi_vars->t = 1.0f;
                 } else {
                     moby->command = 1;
-                    mission_gated_taxi_vars->unkA4 = 0.0f;
+                    mission_gated_taxi_vars->t = 0.0f;
                 }
-                *(int *)&mission_gated_taxi_vars->unkA8 = 0;
+                *(int *)&mission_gated_taxi_vars->speed = 0;
                 mission_gated_taxi_vars->timer = scale_game_frames(15);
-                r = mission_gated_taxi_vars->unkC4;
+                r = mission_gated_taxi_vars->voice;
                 if (r != -1) {
                     unsigned char *s = (unsigned char *)((char *)&D_0013E550) + r * 0x70;
                     if (*(unsigned char **)(s + 0x88) == moby && s[0x74] != 0) {
                         release_voice_slot(r);
                     }
                 }
-                mission_gated_taxi_vars->unkC4 = -1;
+                mission_gated_taxi_vars->voice = -1;
             }
             segment_fraction_work_value = convert_integer_to_float(*(int *)path - 1);
-            i = truncate_float_to_s32(segment_fraction_work_value * mission_gated_taxi_vars->unkA4);
+            i = truncate_float_to_s32(segment_fraction_work_value * mission_gated_taxi_vars->t);
             segment_fraction_work_value = convert_integer_to_float(*(int *)path - 1);
             t = convert_integer_to_float(i);
-            segment_fraction_work_value *= mission_gated_taxi_vars->unkA4;
+            segment_fraction_work_value *= mission_gated_taxi_vars->t;
             segment_fraction_work_value -= t;
             if (i == *(int *)path - 1) {
                 qcopy(&moby->pos, path + 0x10 + i * 16);
@@ -208,7 +208,7 @@ void mission_gated_taxi_platform_update(struct Moby *moby) {
                     path_segment_offset, path_segment_offset, segment_fraction_work_value);
                 fast_vec_add(&moby->pos, path_segment_offset, segment_start_position);
             }
-            mission_gated_taxi_vars->unkBC = moby->pos.z - orig[2];
+            mission_gated_taxi_vars->rise = moby->pos.z - orig[2];
         }
         break;
     case TAXI_WAIT_FOR_HERO_TO_LEAVE:
@@ -222,7 +222,7 @@ void mission_gated_taxi_platform_update(struct Moby *moby) {
     if (!is_hero_on_moby(moby)) {
         if (2.0f < vector_distance_xy(&moby->pos, &hero.motion.pos)) {
             if (mission_gated_taxi_vars->timer == 0) {
-                mission_gated_taxi_vars->unkB8 = 1;
+                mission_gated_taxi_vars->retrigger = 1;
             }
         }
     }

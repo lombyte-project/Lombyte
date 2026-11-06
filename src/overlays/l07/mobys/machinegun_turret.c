@@ -61,7 +61,7 @@ typedef struct MachinegunTurretVars {
     u8                   pad_96[0x2];
     s32                  burst_pause;
     u16                  burst_timer;
-    u8                   unk9E;
+    u8                   solid_shots; /* solid_collision of the shots it fires */
 } MachinegunTurretVars;
 
 /* Moby class 1126 */
@@ -173,7 +173,7 @@ void machinegun_turret_update(unsigned char *moby) {
                 velocity[2] = 0.0f;
                 FUN_0022da68(0, 0, moby);
                 spawn_machinegun_turret_projectile(
-                    position, velocity, moby, (u8)turret_instance_vars->unk9E);
+                    position, velocity, moby, (u8)turret_instance_vars->solid_shots);
             }
             if (turret_instance_vars->burst_pause != 0) {
                 if (fast_dec_timer_s16(&turret_instance_vars->burst_timer) != 0) {

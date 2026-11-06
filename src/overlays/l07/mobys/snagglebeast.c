@@ -99,7 +99,7 @@ typedef struct SnagglebeastVars {
     f32                  rope_end_position[4];
     f32                  rope_tip_velocity[4];
     f32                  rope_tip_position[4];
-    f32                  unk150[4];
+    f32                  rope_target[4]; /* 3 above the position of hero.ground_moby */
     s32                  timer;
     s32                  substate;
     s32                  turn_controller_state;
@@ -113,15 +113,15 @@ typedef struct SnagglebeastVars {
     s16                  timer_198;
     s16                  timer_19A;
     u8                   navigation_mask;
-    u8                   unk19D;
+    u8                   path_select;
     s16                  ammo_drain_step;
     s32                  path_1A0;
-    s32                  unk1A4;
-    s32                  unk1A8;
+    s32                  hero_volume; /* clip volume: updates only while the hero is inside */
+    s32                  target_nav_point;
     f32                  drop_path_distance;
     s32                  health_hud_handle;
     s32                  health_display;
-    f32                  unk1B8;
+    f32                  ground_z;
     u8                   pad_1BC[0x4];
     s32                  nav_point;
     u8                   hero_captured;
@@ -129,8 +129,8 @@ typedef struct SnagglebeastVars {
     u8                   sphere_shade;
     u8                   hero_capture_attack_enabled;
     f32                  sphere_fade;
-    s32                  unk1CC;
-    s32                  unk1D0;
+    s32                  death_effect_moby;
+    s32                  death_raised_moby; /* raised to z 34.6 after the death */
     u8                   pad_1D4[0x1C];
     s32                  cuboid;
     u8                   turn_saved_state;
@@ -146,9 +146,9 @@ typedef struct SnagglebeastVars {
     s16                  point_light;
     u8                   pad_282[0xE];
     s32                  chase_path;
-    s32                  unk294;
-    s32                  unk298;
-    s32                  unk29C;
+    s32                  capture_turn_done; /* 1 once the capture turn toward the hero ran */
+    s32                  chase_frames;
+    s32                  path_1A0_volume; /* the chase uses path_1A0 while the hero is inside */
     u8                   manipulator[1];
 } SnagglebeastVars;
 
@@ -1030,8 +1030,9 @@ void snagglebeast_update(unsigned char *moby) {
     apply_snagglebeast_big_head_cheat((char *)moby);
     if (scene_state == 2)
         return;
-    if (snagglebeast_instance_state->unk1A4 != -1 &&
-        !is_point_inside_clip_volume(((char *)&hero) + 0x80, snagglebeast_instance_state->unk1A4))
+    if (snagglebeast_instance_state->hero_volume != -1 &&
+        !is_point_inside_clip_volume(((char *)&hero) + 0x80,
+                                     snagglebeast_instance_state->hero_volume))
         return;
     if (MOBY(moby)->visible != 0) {
         if (fast_vec_dist(moby + 0x10, &D_L07_00166E40) < 35.0f) {
@@ -1097,7 +1098,7 @@ void snagglebeast_update(unsigned char *moby) {
         sight_ready = 0;
         break;
     case SNAGGLEBEAST_PHASE_AFTER_FIRST_TIMED_DAMAGE:
-        if (snagglebeast_instance_state->unk1A8 != -1) {
+        if (snagglebeast_instance_state->target_nav_point != -1) {
             follow_target = 1;
             path_point_ready = 1;
             timer194 = 0;
@@ -1108,7 +1109,7 @@ void snagglebeast_update(unsigned char *moby) {
         sight_ready = 0;
         break;
     case SNAGGLEBEAST_PHASE_AFTER_SECOND_TIMED_DAMAGE:
-        if (snagglebeast_instance_state->unk1A8 != -1) {
+        if (snagglebeast_instance_state->target_nav_point != -1) {
             follow_target = 1;
             path_point_ready = 1;
             timer194 = 0;
@@ -1254,7 +1255,7 @@ void snagglebeast_update(unsigned char *moby) {
         snagglebeast_instance_state->navigation_mask = 7;
         MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
-        snagglebeast_instance_state->unk1A8 = -1;
+        snagglebeast_instance_state->target_nav_point = -1;
         snagglebeast_instance_state->health_hud_handle = -1;
         snagglebeast_instance_state->nav_point = select_point_index_by_distance(
             moby + 0x10, D_L07_001B0530[snagglebeast_instance_state->nav_path], 0.0f);
@@ -1304,7 +1305,7 @@ void snagglebeast_update(unsigned char *moby) {
                 snagglebeast_instance_state->rope_extension_length = 0.0f;
                 snagglebeast_instance_state->hero_captured = 0;
                 MOBY(moby)->state = SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO;
-                snagglebeast_instance_state->unk294 = 0;
+                snagglebeast_instance_state->capture_turn_done = 0;
                 snagglebeast_instance_state->voice = FUN_0022da68(9, 4, (int)moby);
             }
             if (target_close) {
@@ -1321,7 +1322,7 @@ void snagglebeast_update(unsigned char *moby) {
                 FUN_00212f90(moby, 0xA, r, random_int_between(0x14, 0x1E));
             }
             MOBY(moby)->anim_speed = 1.5f;
-            snagglebeast_instance_state->unk298 = 0;
+            snagglebeast_instance_state->chase_frames = 0;
             MOBY(moby)->state = SNAGGLEBEAST_CHASE_TARGET;
         }
         break;
@@ -1484,9 +1485,9 @@ void snagglebeast_update(unsigned char *moby) {
                 fast_vec_scale(snagglebeast_instance_state->rope_tip_velocity,
                                snagglebeast_instance_state->rope_tip_velocity,
                                1.0f / (float)scale_game_frames(0x3C));
-                qcopy(snagglebeast_instance_state->unk150,
+                qcopy(snagglebeast_instance_state->rope_target,
                       snagglebeast_instance_state->rope_tip_position);
-                *(int *)&snagglebeast_instance_state->unk150[3] = 0;
+                *(int *)&snagglebeast_instance_state->rope_target[3] = 0;
                 snagglebeast_instance_state->substate = 1;
             } else {
                 if (snagglebeast_instance_state->timer < scale_game_frames(0x3C)) {
@@ -1512,9 +1513,9 @@ void snagglebeast_update(unsigned char *moby) {
         collect_snagglebeast_navigation_ids(moby, snagglebeast_instance_state, &direction);
         if (!path_point_ready) {
             thr = 6.0f;
-            if (snagglebeast_instance_state->unk29C != -1 &&
+            if (snagglebeast_instance_state->path_1A0_volume != -1 &&
                 (snagglebeast_instance_state->navigation_mask & 3) == 0 &&
-                is_point_inside_clip_volume(&sight, snagglebeast_instance_state->unk29C)) {
+                is_point_inside_clip_volume(&sight, snagglebeast_instance_state->path_1A0_volume)) {
                 qcopy(&velocity,
                       D_L07_001B0530[snagglebeast_instance_state->path_1A0] +
                           select_point_index_by_distance(
@@ -1539,7 +1540,7 @@ void snagglebeast_update(unsigned char *moby) {
         } else {
             qcopy(&velocity,
                   D_L07_001B0530[snagglebeast_instance_state->nav_path] +
-                      snagglebeast_instance_state->unk1A8 * 16 + 0x10);
+                      snagglebeast_instance_state->target_nav_point * 16 + 0x10);
             dd = vector_distance_xy(moby + 0x10, &velocity);
         }
         update_snagglebeast_chase_speed((struct ChaserAnim *)moby,
@@ -1547,13 +1548,13 @@ void snagglebeast_update(unsigned char *moby) {
                                         dd,
                                         thr,
                                         1.5f);
-        if ((snagglebeast_instance_state->unk298 & 3) == 0)
+        if ((snagglebeast_instance_state->chase_frames & 3) == 0)
             select_snagglebeast_chase_waypoint((char *)moby,
                                                snagglebeast_instance_state,
                                                &velocity,
                                                snagglebeast_instance_state->rope_tip_position);
         qcopy(&position, snagglebeast_instance_state->rope_tip_position);
-        snagglebeast_instance_state->unk298 += 1;
+        snagglebeast_instance_state->chase_frames += 1;
         if (snagglebeast_instance_state->turn_start_angle <
             fast_difference_between_rotations(MOBY(moby)->rot.z,
                                               fast_arc_tan(position.f[0] - MOBY(moby)->pos.x,
@@ -1604,7 +1605,7 @@ void snagglebeast_update(unsigned char *moby) {
                     int r2 = random_int_between(0, 9);
                     FUN_00212f90(moby, r1, r2, random_int_between(0x14, 0x28));
                 }
-                snagglebeast_instance_state->unk1A8 = -1;
+                snagglebeast_instance_state->target_nav_point = -1;
                 MOBY(moby)->state = SNAGGLEBEAST_IDLE;
                 break;
             }
@@ -1639,9 +1640,10 @@ void snagglebeast_update(unsigned char *moby) {
                     snagglebeast_instance_state->substate = 0;
                     {
                         char *g = ((char *)&hero);
-                        qcopy(snagglebeast_instance_state->unk150, *(char **)(g + 0x2FC) + 0x10);
+                        qcopy(snagglebeast_instance_state->rope_target,
+                              *(char **)(g + 0x2FC) + 0x10);
                     }
-                    snagglebeast_instance_state->unk150[2] += 3.0f;
+                    snagglebeast_instance_state->rope_target[2] += 3.0f;
                     MOBY(moby)->state = SNAGGLEBEAST_ROPE_ATTACK;
                 }
                 if (sight_ready) {
@@ -1653,7 +1655,7 @@ void snagglebeast_update(unsigned char *moby) {
                     snagglebeast_instance_state->substate = 0;
                     snagglebeast_instance_state->rope_extension_length = 0.0f;
                     snagglebeast_instance_state->hero_captured = 0;
-                    snagglebeast_instance_state->unk294 = 0;
+                    snagglebeast_instance_state->capture_turn_done = 0;
                     MOBY(moby)->state = SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO;
                     snagglebeast_instance_state->voice = FUN_0022da68(9, 4, (int)moby);
                 }
@@ -1761,9 +1763,9 @@ void snagglebeast_update(unsigned char *moby) {
         if (MOBY(moby)->command >= 8)
             MOBY(moby)->command = 8;
         if (((ChaserPathPoints *)snagglebeast_instance_state)
-                ->linked_mobys[snagglebeast_instance_state->unk19D] != -1) {
+                ->linked_mobys[snagglebeast_instance_state->path_select] != -1) {
             int k2;
-            k = snagglebeast_instance_state->unk19D;
+            k = snagglebeast_instance_state->path_select;
             k2 = k + 3;
             if (((ChaserPathPoints *)snagglebeast_instance_state)->linked_mobys[k2] != -1) {
                 char *linked_moby_vars =
@@ -1819,7 +1821,7 @@ void snagglebeast_update(unsigned char *moby) {
             (snagglebeast_instance_state->velocity)[2] = z;
             (snagglebeast_instance_state->velocity)[2] -= frame_time * 9.8f;
             fast_vec_add(moby + 0x10, moby + 0x10, snagglebeast_instance_state->velocity);
-            if (MOBY(moby)->pos.z < snagglebeast_instance_state->unk1B8)
+            if (MOBY(moby)->pos.z < snagglebeast_instance_state->ground_z)
                 done = 1;
         } else {
             if (compute_interpolated_record_value(moby) > 79.0f)
@@ -1885,7 +1887,7 @@ void snagglebeast_update(unsigned char *moby) {
             }
         } else {
             if (fast_dec_timer(&snagglebeast_instance_state->timer)) {
-                switch (snagglebeast_instance_state->unk19D) {
+                switch (snagglebeast_instance_state->path_select) {
                 case SNAGGLEBEAST_PATH_SELECT_FIRST_POINT:
                     qcopy(snagglebeast_instance_state->rope_end_position,
                           D_L07_001B0530[snagglebeast_instance_state->path_1A0] + 0x10);
@@ -1913,9 +1915,9 @@ void snagglebeast_update(unsigned char *moby) {
                     break;
                 }
                 }
-                snagglebeast_instance_state->unk1A8 =
+                snagglebeast_instance_state->target_nav_point =
                     ((ChaserPathPoints *)snagglebeast_instance_state)
-                        ->path_points[snagglebeast_instance_state->unk19D];
+                        ->path_points[snagglebeast_instance_state->path_select];
                 build_symmetric_adjacency_masks((int *)&position,
                                                 (int)collect_snagglebeast_navigation_ids(
                                                     moby, snagglebeast_instance_state, &position),
@@ -1943,16 +1945,17 @@ void snagglebeast_update(unsigned char *moby) {
             qcopy(moby + 0x10, snagglebeast_instance_state->turn_target);
             MOBY(moby)->rot.z = snagglebeast_instance_state->turn_target[3];
             if (((ChaserPathPoints *)snagglebeast_instance_state)
-                    ->linked_mobys[snagglebeast_instance_state->unk19D] != -1) {
-                *(unsigned char *)(level_mobys +
-                                   ((ChaserPathPoints *)snagglebeast_instance_state)
-                                           ->linked_mobys[snagglebeast_instance_state->unk19D] *
-                                       0x100 +
-                                   0xBC) = 0;
+                    ->linked_mobys[snagglebeast_instance_state->path_select] != -1) {
+                *(unsigned char
+                      *)(level_mobys +
+                         ((ChaserPathPoints *)snagglebeast_instance_state)
+                                 ->linked_mobys[snagglebeast_instance_state->path_select] *
+                             0x100 +
+                         0xBC) = 0;
             }
             MOBY(moby)->anim_speed = 1.5f;
             MOBY(moby)->command += 1;
-            snagglebeast_instance_state->unk298 = 0;
+            snagglebeast_instance_state->chase_frames = 0;
             MOBY(moby)->state = SNAGGLEBEAST_CHASE_AFTER_TRANSFORM_RESTORE;
             snagglebeast_instance_state->timer = scale_game_frames(0x37);
         }
@@ -1960,7 +1963,7 @@ void snagglebeast_update(unsigned char *moby) {
     }
     case SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO: {
         float fr;
-        if (snagglebeast_instance_state->unk294 <= 0) {
+        if (snagglebeast_instance_state->capture_turn_done <= 0) {
             if (start_snagglebeast_turn_toward_target(
                     moby, snagglebeast_instance_state, (float *)(((char *)&hero) + 0x80), 6, 0))
                 break;
@@ -2169,17 +2172,21 @@ void snagglebeast_update(unsigned char *moby) {
     }
     case SNAGGLEBEAST_ROPE_ATTACK:
         if (snagglebeast_instance_state->substate <= 0) {
-            if (start_snagglebeast_turn_toward_target(
-                    moby, snagglebeast_instance_state, snagglebeast_instance_state->unk150, 7, 1))
+            if (start_snagglebeast_turn_toward_target(moby,
+                                                      snagglebeast_instance_state,
+                                                      snagglebeast_instance_state->rope_target,
+                                                      7,
+                                                      1))
                 break;
         }
-        FUN_L00_00258278((struct Moby *)moby,
-                         fast_arc_tan(snagglebeast_instance_state->unk150[0] - MOBY(moby)->pos.x,
-                                      snagglebeast_instance_state->unk150[1] - MOBY(moby)->pos.y),
-                         (float *)&snagglebeast_instance_state->turn_controller_state,
-                         frame_time_sq * 2.0943952f,
-                         frame_time_sq * 0.6981317f,
-                         frame_time * 2.0943952f);
+        FUN_L00_00258278(
+            (struct Moby *)moby,
+            fast_arc_tan(snagglebeast_instance_state->rope_target[0] - MOBY(moby)->pos.x,
+                         snagglebeast_instance_state->rope_target[1] - MOBY(moby)->pos.y),
+            (float *)&snagglebeast_instance_state->turn_controller_state,
+            frame_time_sq * 2.0943952f,
+            frame_time_sq * 0.6981317f,
+            frame_time * 2.0943952f);
         switch (snagglebeast_instance_state->substate) {
         case SNAGGLEBEAST_ROPE_START_ATTACK_ANIMATION:
             if (MOBY(moby)->prev_seq != 7)
@@ -2199,7 +2206,7 @@ void snagglebeast_update(unsigned char *moby) {
                     fast_vec_scale(&position, &position, 0.5f);
                     qcopy(snagglebeast_instance_state->rope_start_position, &position);
                     fast_vec_sub(snagglebeast_instance_state->rope_tip_velocity,
-                                 snagglebeast_instance_state->unk150,
+                                 snagglebeast_instance_state->rope_target,
                                  snagglebeast_instance_state->rope_start_position);
                     fast_vec_normalize(snagglebeast_instance_state->rope_tip_velocity,
                                        snagglebeast_instance_state->rope_tip_velocity,
@@ -2278,7 +2285,7 @@ void snagglebeast_update(unsigned char *moby) {
                 snagglebeast_instance_state->velocity, snagglebeast_instance_state->velocity, 1.0f);
             snagglebeast_instance_state->velocity[2] = 1.0f;
             qcopy(&position, moby + 0x10);
-            position.f[2] = snagglebeast_instance_state->unk1B8 + 1.0f;
+            position.f[2] = snagglebeast_instance_state->ground_z + 1.0f;
             spawn_explosion(moby,
                             snagglebeast_instance_state->velocity,
                             &position,
@@ -2298,9 +2305,9 @@ void snagglebeast_update(unsigned char *moby) {
                             -1,
                             0);
             MOBY(moby)->flags |= 0x41;
-            if (snagglebeast_instance_state->unk1CC != -1)
-                initialize_moby_particle_effect_state(level_mobys +
-                                                      (snagglebeast_instance_state->unk1CC << 8));
+            if (snagglebeast_instance_state->death_effect_moby != -1)
+                initialize_moby_particle_effect_state(
+                    level_mobys + (snagglebeast_instance_state->death_effect_moby << 8));
             MOBY(moby)->state = SNAGGLEBEAST_POST_DEATH_CLEANUP;
             MOBY(moby)->pos.z = 20.0f;
         }
@@ -2311,9 +2318,9 @@ void snagglebeast_update(unsigned char *moby) {
                 snagglebeast_instance_state->substate = 0;
                 {
                     char *g = ((char *)&hero);
-                    qcopy(snagglebeast_instance_state->unk150, *(char **)(g + 0x2FC) + 0x10);
+                    qcopy(snagglebeast_instance_state->rope_target, *(char **)(g + 0x2FC) + 0x10);
                 }
-                snagglebeast_instance_state->unk150[2] += 3.0f;
+                snagglebeast_instance_state->rope_target[2] += 3.0f;
                 MOBY(moby)->state = SNAGGLEBEAST_ROPE_ATTACK;
             } else {
                 MOBY(moby)->state = SNAGGLEBEAST_IDLE;
@@ -2323,14 +2330,15 @@ void snagglebeast_update(unsigned char *moby) {
     case SNAGGLEBEAST_POST_DEATH_CLEANUP:
         if (snagglebeast_instance_state->point_light != -1)
             release_point_light_slot(snagglebeast_instance_state->point_light);
-        if (snagglebeast_instance_state->unk1D0 == -1 ||
-            !(*(float *)(level_mobys + (snagglebeast_instance_state->unk1D0 << 8) + 0x18) <
-              34.5f)) {
+        if (snagglebeast_instance_state->death_raised_moby == -1 ||
+            !(*(float *)(level_mobys + (snagglebeast_instance_state->death_raised_moby << 8) +
+                         0x18) < 34.5f)) {
             mark_moby_for_removal(moby);
             return;
         }
-        *(float *)(level_mobys + (snagglebeast_instance_state->unk1D0 << 8) + 0x18) +=
-            (34.6f - *(float *)(level_mobys + (snagglebeast_instance_state->unk1D0 << 8) + 0x18)) *
+        *(float *)(level_mobys + (snagglebeast_instance_state->death_raised_moby << 8) + 0x18) +=
+            (34.6f - *(float *)(level_mobys +
+                                (snagglebeast_instance_state->death_raised_moby << 8) + 0x18)) *
             0.1f;
         break;
     case 17:
