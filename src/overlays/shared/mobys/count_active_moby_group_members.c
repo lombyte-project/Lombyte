@@ -7,6 +7,8 @@
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_0026E8E0), where it is exact; names translated to the US level program. */
 
 /* Sets the default ground movement tuning: radius 0.625, small steps and turns. */
+void init_ground_move_control(struct GroundMoveControl *control) __asm__("FUN_L01_0026d930");
+
 void init_ground_move_control(struct GroundMoveControl *control) {
     control->collision_radius_1024ths = 0x280;
     control->step_height = 1.0f;
