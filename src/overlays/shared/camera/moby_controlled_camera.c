@@ -31,7 +31,7 @@ typedef struct MobyCameraControl {
     f32   camera_distance;
     f32   camera_height;
     s16   mode;
-    s16   unk3E;
+    s16   idle_frames; /* counts up while active_frames is past the stick hold time */
     f32   heading;
     s32   target_group;
     char *target; /* 0x48: moby the camera follows */
@@ -315,7 +315,7 @@ void apply_moby_camera_control(char *moby) {
         count = moby_camera_control_record->active_frames;
         if (count >= duration) {
             active = 0;
-            moby_camera_control_record->unk3E += 1;
+            moby_camera_control_record->idle_frames += 1;
             if (duration + scale_game_frames(30) < count) {
                 scale = 0.1f;
                 active = 1;
@@ -323,12 +323,12 @@ void apply_moby_camera_control(char *moby) {
         }
         if (moby_camera_control_record->active_frames >= end) {
             active = 1;
-            moby_camera_control_record->unk3E = 0;
+            moby_camera_control_record->idle_frames = 0;
             moby_camera_control_record->active_frames = 1;
         }
         if (frames < moby_camera_control_record->active_frames &&
             moby_camera_control_record->active_frames < duration) {
-            moby_camera_control_record->unk3E = duration;
+            moby_camera_control_record->idle_frames = duration;
             moby_camera_control_record->active_frames = frames;
         }
     } else if ((unsigned short)(moby_camera_control_record->mode - 1) < 2) {
@@ -337,8 +337,8 @@ void apply_moby_camera_control(char *moby) {
         if (controller_state.analog[0] != 0.0f || controller_state.analog[1] != 0.0f)
             moby_camera_control_record->active_frames = duration;
         if (moby_camera_control_record->active_frames >= duration) {
-            int waited = (unsigned short)moby_camera_control_record->unk3E + 1;
-            moby_camera_control_record->unk3E = waited;
+            int waited = (unsigned short)moby_camera_control_record->idle_frames + 1;
+            moby_camera_control_record->idle_frames = waited;
             if ((short)waited >= count) {
                 if (test_moby_camera_target_angle_limits(moby, 30.0f, 0.0f) != 0)
                     moby_camera_control_record->active_frames = end;
@@ -350,12 +350,12 @@ void apply_moby_camera_control(char *moby) {
         }
         if (moby_camera_control_record->active_frames >= end) {
             active = 1;
-            moby_camera_control_record->unk3E = 0;
+            moby_camera_control_record->idle_frames = 0;
             moby_camera_control_record->active_frames = 1;
         }
         if (frames < moby_camera_control_record->active_frames &&
             moby_camera_control_record->active_frames < duration) {
-            moby_camera_control_record->unk3E = duration;
+            moby_camera_control_record->idle_frames = duration;
             moby_camera_control_record->active_frames = frames;
         }
     } else if (frames < moby_camera_control_record->active_frames) {

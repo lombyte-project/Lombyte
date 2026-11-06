@@ -185,23 +185,23 @@ typedef struct {
     s32          unk18; /* 0x18 */
     s16          mode;  /* 0x1C: 0 waiting, 1 orbiting */
     u8           pad1E[0x12];
-    CameraView   view;          /* 0x30 */
-    CameraFocus  focus;         /* 0x80 */
-    CameraSpring spring;        /* 0xE0 */
-    CameraTrack  track;         /* 0x100 */
-    f32          goal[3];       /* 0x150: yaw, pitch, distance */
-    f32          vel[3];        /* 0x15C */
-    f32          accel[3];      /* 0x168 */
-    f32          damp[3];       /* 0x174 */
-    f32          dist;          /* 0x180 */
-    f32          spring_dist;   /* 0x184 */
-    f32          spring_height; /* 0x188 */
-    f32          unk18C;        /* 0x18C */
-    f32          unk190;        /* 0x190 */
-    f32          unk194;        /* 0x194 */
+    CameraView   view;                   /* 0x30 */
+    CameraFocus  focus;                  /* 0x80 */
+    CameraSpring spring;                 /* 0xE0 */
+    CameraTrack  track;                  /* 0x100 */
+    f32          goal[3];                /* 0x150: yaw, pitch, distance */
+    f32          vel[3];                 /* 0x15C */
+    f32          accel[3];               /* 0x168 */
+    f32          damp[3];                /* 0x174 */
+    f32          dist;                   /* 0x180 */
+    f32          spring_dist;            /* 0x184 */
+    f32          spring_height;          /* 0x188 */
+    f32          airborne_focus_dist;    /* 0x18C: focus.dist while the hero is high in the air */
+    f32          airborne_spring_dist;   /* 0x190 */
+    f32          airborne_spring_height; /* 0x194 */
     u8           pad198[0x18];
-    Vec4         unk1B0; /* 0x1B0 */
-    Vec4         unk1C0; /* 0x1C0 */
+    Vec4         bias;     /* 0x1B0: offset added to the camera goal, eased to 0 */
+    Vec4         bias_vel; /* 0x1C0 */
 } CameraOrbit;
 
 typedef struct {
@@ -214,26 +214,26 @@ typedef struct {
     u8           pad5C[0x14];
     CameraOrbit *orbit; /* 0x70 */
     u8           pad74[0xA];
-    s16          unk7E; /* 0x7E: cleared after a preset reset */
-    u8           pad80[4];
-    s16          preset; /* 0x84: row of D_L05_0015EF50 */
+    s16 transition_state; /* 0x7E: UpdateCam.transition_state, cleared after a preset reset */
+    u8  pad80[4];
+    s16 preset; /* 0x84: row of D_L05_0015EF50 */
 } Camera;
 
 /* Camera preset: distances, angle limits and damping. */
 typedef struct {
     f32 unk0; /* 0x00 */
     u8  pad4[0x1C];
-    f32 unk20;         /* 0x20 */
-    f32 unk24;         /* 0x24 */
-    f32 spring_dist;   /* 0x28 */
-    f32 spring_height; /* 0x2C */
-    f32 dist;          /* 0x30 */
-    f32 unk34;         /* 0x34 */
-    f32 unk38;         /* 0x38 */
-    f32 unk3C;         /* 0x3C */
-    f32 unk40;         /* 0x40 */
-    f32 unk44;         /* 0x44 */
-    f32 height_vel;    /* 0x48: spring velocity of the camera height */
+    f32 unk20;                  /* 0x20 */
+    f32 unk24;                  /* 0x24 */
+    f32 spring_dist;            /* 0x28 */
+    f32 spring_height;          /* 0x2C */
+    f32 dist;                   /* 0x30 */
+    f32 airborne_spring_dist;   /* 0x34 */
+    f32 airborne_spring_height; /* 0x38 */
+    f32 airborne_focus_dist;    /* 0x3C */
+    f32 unk40;                  /* 0x40 */
+    f32 unk44;                  /* 0x44 */
+    f32 height_vel;             /* 0x48: spring velocity of the camera height */
 } CameraPreset;
 
 typedef struct {
@@ -261,11 +261,11 @@ void reset_hero_follow_camera_from_preset(Camera *camera_to_reset) {
     orbit_state->spring_dist = preset->spring_dist;
     orbit_state->spring_height = preset->spring_height;
     orbit_state->dist = preset->dist;
-    orbit_state->unk190 = preset->unk34;
-    orbit_state->unk194 = preset->unk38;
-    orbit_state->unk18C = preset->unk3C;
-    clear_u64_value(&orbit_state->unk1B0);
-    clear_u64_value(&orbit_state->unk1C0);
+    orbit_state->airborne_spring_dist = preset->airborne_spring_dist;
+    orbit_state->airborne_spring_height = preset->airborne_spring_height;
+    orbit_state->airborne_focus_dist = preset->airborne_focus_dist;
+    clear_u64_value(&orbit_state->bias);
+    clear_u64_value(&orbit_state->bias_vel);
     focus = &camera_to_reset->orbit->focus;
     focus->state = 5;
     focus->unk44 = D_001413D0[0];
@@ -301,13 +301,13 @@ void reset_hero_follow_camera_from_preset(Camera *camera_to_reset) {
     set_camera_follow_parameters(preset->spring_dist,
                                  preset->spring_height,
                                  preset->dist,
-                                 preset->unk34,
-                                 preset->unk38,
-                                 preset->unk3C,
+                                 preset->airborne_spring_dist,
+                                 preset->airborne_spring_height,
+                                 preset->airborne_focus_dist,
                                  preset->unk40,
                                  preset->unk44);
     build_hero_follow_camera_transform((char *)camera_to_reset);
-    camera_to_reset->unk7E = 0;
+    camera_to_reset->transition_state = 0;
 }
 
 extern float FUN_001ebd78(void *, float, float, float, float, float);
