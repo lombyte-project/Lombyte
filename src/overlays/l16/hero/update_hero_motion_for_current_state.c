@@ -906,7 +906,7 @@ void update_hero_motion_for_current_state(void) {
             }
         }
         if (hero.air_frames.s == 0) {
-            qcopy(&hero.unk740, &hero.ground_normal);
+            qcopy(&hero.grounded_normal, &hero.ground_normal);
             if (hero.air_frames.s == 0 && pad_pressed_within(0x40, scale_game_frames(9), 0) != 0) {
                 if (a != 0 || b != 0) {
                     hero.steep_jump = 1;
@@ -923,7 +923,7 @@ void update_hero_motion_for_current_state(void) {
                 }
             }
         }
-        smooth_and_clamp_value_pair(&v10, &hero.unk8D0, frame_scale_sq * 0.1f);
+        smooth_and_clamp_value_pair(&v10, &hero.smoothed_board_stick, frame_scale_sq * 0.1f);
         if (hero.vert_ramp_launch != 0) {
             apply_hero_rotation_offset(0.0f, 0.0f, v10.f[0] * (frame_time * 6.2831855f));
         } else if (fast_dec_timer_s16(&hero.landing_turn_delay) == 0) {

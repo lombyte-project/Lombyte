@@ -101,7 +101,7 @@ void apply_hero_ground_material_effects(void) {
     }
     if (saved_ground_type == 0x6) {
         struct Hero *q = &hero;
-        q->unk12E9 = 1;
+        q->selector_6 = 1;
     }
     if (saved_ground_type == GROUND_MATERIAL_MAGNET) {
         struct Hero *q = &hero;
