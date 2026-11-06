@@ -207,7 +207,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
     if (hurt_response_entry->owner != hero_moby) {
         return 0;
     }
-    if ((hurt_response_entry->unk24 ^ 1) & 1) {
+    if ((hurt_response_entry->hit_flags ^ 1) & 1) {
         return 0;
     }
     D_0013DF88[D_0015ED84_8]++;
@@ -253,7 +253,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
             vertical_impulse_scale = cached_frame_time * 1.7f;
         }
         hero_knockback(&hurt_impulse, flag, planar_impulse_scale, vertical_impulse_scale);
-        if (flag != 0 && hurt_response_entry->unk28 == 4) {
+        if (flag != 0 && hurt_response_entry->attack_type == 4) {
             hurt_impulse.f[2] += hurt_impulse.f[2];
         }
         break;

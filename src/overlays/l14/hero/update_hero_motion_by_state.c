@@ -172,7 +172,7 @@ s32 process_hero_hit_reaction(s32 apply_hit_reaction) {
     if (hero_hit_entry->owner != hero_moby_bytes) {
         return 0;
     }
-    if ((hero_hit_entry->unk24 ^ 1) & 1) {
+    if ((hero_hit_entry->hit_flags ^ 1) & 1) {
         return 0;
     }
     D_0013DF88[current_level_index]++;
@@ -223,7 +223,7 @@ s32 process_hero_hit_reaction(s32 apply_hit_reaction) {
         }
         hero_knockback(
             &knockback_impulse, flag, horizontal_knockback_scale, vertical_knockback_scale);
-        if (flag != 0 && hero_hit_entry->unk28 == 4) {
+        if (flag != 0 && hero_hit_entry->attack_type == 4) {
             knockback_impulse.f[2] += knockback_impulse.f[2];
         }
         break;

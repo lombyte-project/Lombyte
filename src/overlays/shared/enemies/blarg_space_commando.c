@@ -36,8 +36,8 @@ enum {
 
 typedef struct {
     u8  pad0[0x18];
-    u8  unk18;
-    u8  unk19;
+    u8  attack_type;    /* 0x18: MobyHit.attack_type */
+    u8  attack_subtype; /* 0x19: MobyHit.attack_subtype */
     s16 oclass;
     u8  pad1C[0x14];
 } ShotInfo;
@@ -340,8 +340,8 @@ void blarg_space_commando_update(struct Moby *moby) {
             movement_output_or_hit_vector_or_path_point.f[2] = 1.0f;
             movement_output_or_hit_vector_or_path_point.f[3] = 5627.925f;
             make_hit_descriptor(&shot, moby, 1, &movement_output_or_hit_vector_or_path_point, 1.0f);
-            shot.unk18 = 0;
-            shot.unk19 = 1;
+            shot.attack_type = 0;
+            shot.attack_subtype = 1;
             shot.oclass = moby->oclass;
             sweep_hit_segment(&position_or_movement_vector,
                               &movement_input_or_output_or_melee_origin,
@@ -419,8 +419,8 @@ void blarg_space_commando_update(struct Moby *moby) {
             movement_output_or_hit_vector_or_path_point.f[2] = 1.0f;
             movement_output_or_hit_vector_or_path_point.f[3] = 5627.925f;
             make_hit_descriptor(&shot, moby, 1, &movement_output_or_hit_vector_or_path_point, 1.0f);
-            shot.unk18 = 0;
-            shot.unk19 = 1;
+            shot.attack_type = 0;
+            shot.attack_subtype = 1;
             shot.oclass = moby->oclass;
             sweep_hit_segment(&position_or_movement_vector,
                               &movement_input_or_output_or_melee_origin,
@@ -888,8 +888,8 @@ void update_blarg_space_commando_beam(void *owner_moby) {
                 }
                 make_hit_descriptor(&shot, (struct Moby *)moby, hit_type, point, 1.0f);
                 shot.oclass = MOBY(moby)->oclass;
-                shot.unk18 = 0;
-                shot.unk19 = 1;
+                shot.attack_type = 0;
+                shot.attack_subtype = 1;
                 collision_line(&beam_state->pts[j], &beam_state->pts[j + 1], 0, moby, &shot);
             }
         }
