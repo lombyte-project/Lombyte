@@ -345,7 +345,7 @@ void update_target_tracking_camera(char *camera_object) {
         qcopy(r + 0x10, camera_object + 0x10);
         qcopy(r + 0x20, camera_object + 0x20);
         initialize_target_tracking_camera(camera_object);
-        g->unk2F4 = scale_game_frames(0x2D);
+        g->transition_orbit_frames = scale_game_frames(0x2D);
     }
 done:
     refresh_point_light((int)camera_object);

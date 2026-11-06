@@ -337,10 +337,10 @@ void select_camera_mode_by_hero_alignment_and_distance(char *camera_object) {
                            MOBY(hero_moby)->pos.y - camera_globals->pos.f[1]);
     if (fast_difference_between_rotations(camera_globals->yaw, a) < 0.5585053563117981f &&
         fast_vec_dist(&hero_data->motion.pos, &camera_globals->pos) < 8.0f) {
-        *(char *)&camera_globals->unk273 = 0;
+        *(char *)&camera_globals->transition_requested_kind = 0;
         *(short *)(camera_object + 0x7E) = 2;
-        camera_globals->unk294 = 0.018f;
-        camera_globals->unk288 = 0.018f;
+        camera_globals->transition_position_rate = 0.018f;
+        camera_globals->transition_rotation_rate = 0.018f;
     } else {
         *(short *)(camera_object + 0x7E) = 4;
     }

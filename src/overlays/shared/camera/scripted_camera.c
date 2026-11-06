@@ -150,17 +150,17 @@ void jet_end_mount(int mode) {
         FUN_001f9a10_2eac18(camera_position, camera_position, camera_backward_offset);
         *(short *)(((char *)camera_globals->current_camera) + 0x8A) = 1;
     } else if (mode == 2) {
-        *(char *)&camera_globals->unk273 = 0;
+        *(char *)&camera_globals->transition_requested_kind = 0;
         *(short *)(current_follow_camera + 0x7E) = 2;
-        camera_globals->unk294 = 0.018f;
-        camera_globals->unk288 = 0.018f;
+        camera_globals->transition_position_rate = 0.018f;
+        camera_globals->transition_rotation_rate = 0.018f;
     } else if (mode == 1) {
         *(short *)(current_follow_camera + 0x7E) = 3;
     } else if (mode == 4) {
-        *(char *)&camera_globals->unk273 = 0;
+        *(char *)&camera_globals->transition_requested_kind = 0;
         *(short *)(current_follow_camera + 0x7E) = 5;
-        camera_globals->unk294 = 0.018f;
-        camera_globals->unk288 = 0.018f;
+        camera_globals->transition_position_rate = 0.018f;
+        camera_globals->transition_rotation_rate = 0.018f;
     }
 }
 
