@@ -284,7 +284,7 @@ typedef struct {
 
 typedef struct {
     float vel[3];
-    float unk0C;
+    float pad0C; /* w lane of the velocity quadword */
     float position_rate;
     char  p14[0x1C];
     SubA  a;
