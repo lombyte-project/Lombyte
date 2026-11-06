@@ -39,8 +39,8 @@ float conveyor_belt_base_speed_gp __asm__("D_L16_0016198C") = 4.0f;
 void  conveyor_belt_update(struct Moby *m) __asm__("FUN_L16_002c9878");
 
 typedef struct ConveyorBeltVars {
-    u8  pad_0[0x5C];
-    s32 unk5C;
+    u8 pad_0[0x5C];
+    s32 carry_flags; /* 0x5C: flags word of the carry record at pvars+0x20 (bit 4 read by transform_attachment_pose) */
     s32 belt_cuboid;
     s32 clip_volume_64;
     s32 clip_volume_68;
@@ -62,7 +62,7 @@ void conveyor_belt_update(struct Moby *moby) {
     int               one = 1;
     switch (moby->state) {
     case CONVEYOR_BELT_STATE_INITIALIZE:
-        conveyor_data->unk5C |= 4;
+        conveyor_data->carry_flags |= 4;
         moby->visible = 0;
         moby->flags |= one;
         if (conveyor_data->belt_cuboid == -1) {
