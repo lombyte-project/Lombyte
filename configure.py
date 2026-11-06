@@ -1239,7 +1239,7 @@ DATA_OVERLAYS = {
     "rendering/vu1/vu1_gs_regs_alt": (0x1DE3F0, 0xDF370, 48),  # its GS register packet
     "rendering/vu1/vu1_tex_flush": (0x1DEE00, 0xDFD80, 48),  # its GS register packet
     "ui/map/draw_map_overlay": (0x1E8068, 0xE8FE8, 17),  # no map text
-    "ui/map/update_map_icons": (0x1A2BC0, 0xA3B40, 76),  # icon list of each level
+    "ui/map/update_map_icons": (0x1A08C0, 0xA1840, 9036),  # mission and map icon lists of each level
     "ui/menus/item_preview/draw_menu_preview_objects": (0x1D5020, 0xD5FA0, 96),  # slot draw flags
 }
 
