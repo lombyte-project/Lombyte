@@ -89,9 +89,9 @@ typedef struct PlasmabotVars {
     u8                   aim_joint_rotation[0x30];
     u8                   manipulator_attachment_header[0x10];
     u8                   aim_quaternion_storage[0x70];
-    u8                   unk1E0[0x10];
+    u8                   exhaust_position[0x10];
     u8                   nozzle_position[0x10];
-    u8                   unk200[0x10];
+    u8                   joint6_position[0x10];
     u8                   beam_start_position_storage[0x10];
     u8                   beam_end_position_storage[0x14];
     f32                  target_range;
@@ -963,7 +963,7 @@ void draw_plasmabot_effect_quads(struct Moby *moby) {
     int         j;
     int         alpha;
 
-    qcopy(&quad_transform[3], &plasmabot_effect_private_vars->unk1E0);
+    qcopy(&quad_transform[3], &plasmabot_effect_private_vars->exhaust_position);
     quad_transform[3].f[3] = 1.0f;
     fast_vec_sub(&quad_transform[0], ((char *)&D_L14_001674C0), &quad_transform[3]);
     fast_vec_normalize(&quad_transform[0], &quad_transform[0], 1.0f);
@@ -992,7 +992,7 @@ void draw_plasmabot_effect_quads(struct Moby *moby) {
     }
     fast_draw_quad_real(&pk, 0, 0);
 
-    qcopy(&quad_transform[3], &plasmabot_effect_private_vars->unk200);
+    qcopy(&quad_transform[3], &plasmabot_effect_private_vars->joint6_position);
     pp = &plasmabot_effect_private_vars->beam_end_position_storage;
     fast_vec_sub(&quad_transform[0], ((char *)&D_L14_001674C0), &quad_transform[3]);
     beam_start_position = &plasmabot_effect_private_vars->beam_start_position_storage;

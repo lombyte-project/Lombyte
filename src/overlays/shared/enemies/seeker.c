@@ -58,7 +58,7 @@ typedef struct {
     s32                      voice;
     s32                      moving;
     u8                       pad19C[0xE4];
-    u8                       unk280[1];
+    u8                       big_head_manipulator[1];
 } Moby52Vars;
 
 #include "rnc/overlay/shared/enemies/seeker_globals.h"
@@ -118,7 +118,7 @@ void seeker_update(struct Moby *moby) {
 
     update_seeker_damage_and_target(moby);
     target = seeker_instance_vars->target;
-    FUN_L00_00263ac8(moby, 0, seeker_instance_vars->unk280, 2.7f);
+    FUN_L00_00263ac8(moby, 0, seeker_instance_vars->big_head_manipulator, 2.7f);
     if (moby->visible != 0 && fast_vec_dist(&moby->pos, &D_L09_00166F40) < 29.0f) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 0x17;

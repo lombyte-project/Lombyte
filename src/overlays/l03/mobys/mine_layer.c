@@ -60,8 +60,8 @@ typedef struct {
     s16                      fire_timer;   /* 0x154 */
     s16                      patrol_timer; /* 0x156 */
     u8                       pad158[4];
-    s32                      alert_timer;  /* 0x15C */
-    u8                       unk160[0x10]; /* 0x160: FUN_L00_00263ac8 record */
+    s32                      alert_timer;                /* 0x15C */
+    u8                       big_head_manipulator[0x10]; /* 0x160: FUN_L00_00263ac8 record */
 } TrooperVars;
 
 s32        mine_layer_fire_interval_frames_gp __asm__("D_L03_00161918") = 0x12c;
@@ -127,7 +127,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
 
     select_moby_target_with_hero_fallback(mine_layer_moby, &target, 100.0f);
     sight = 14.0f;
-    FUN_L00_00263ac8(mine_layer_moby, 0, mine_layer_vars->unk160, 4.5f);
+    FUN_L00_00263ac8(mine_layer_moby, 0, mine_layer_vars->big_head_manipulator, 4.5f);
     handle_mine_layer_damage(mine_layer_moby);
     if (mine_layer_vars->alerted) {
         mine_layer_vars->alerted = 0;

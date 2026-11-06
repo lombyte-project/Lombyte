@@ -80,7 +80,7 @@ typedef struct FrogVars {
     f32                    unk244;
     f32                    glow_animation_phase;
     f32                    path_activation_distance_xy;
-    u8                     unk250[0x4];
+    u8                     big_head_manipulator[0x4];
 } FrogVars;
 
 struct MobyHit {
@@ -286,7 +286,8 @@ void frog_update(unsigned char *moby) {
                 return;
         }
     }
-    FUN_L00_00263ac8(2.1f, (int)moby, 1, (unsigned char *)(&frog_instance_vars->unk250));
+    FUN_L00_00263ac8(
+        2.1f, (int)moby, 1, (unsigned char *)(&frog_instance_vars->big_head_manipulator));
     update_frog_health_respawn_and_target(moby);
     if (MOBY(moby)->visible != 0 && fast_vec_dist(&MOBY(moby)->pos, D_L06_00167540) < 14.0f) {
         FUN_L00_0025a120(moby);

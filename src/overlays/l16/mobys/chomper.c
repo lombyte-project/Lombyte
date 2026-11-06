@@ -99,14 +99,14 @@ typedef struct ChomperVars {
     f32 travel_distance_velocity;
     f32 previous_height_drop;
     u8  pad_20C[0x14];
-    u8  unk220;
+    u8  big_head_manipulator;
 } ChomperVars;
 
 /* Moby class 1445 */
 void chomper_update(struct Moby *chomper_moby) {
     ChomperVars *chomper_data = (ChomperVars *)chomper_moby->pvars;
     update_chomper_hit_reaction_and_target(chomper_moby);
-    FUN_L00_00263ac8(2.1f, (int)chomper_moby, 1, &chomper_data->unk220);
+    FUN_L00_00263ac8(2.1f, (int)chomper_moby, 1, &chomper_data->big_head_manipulator);
     if (chomper_moby->visible != 0 && fast_vec_dist(&chomper_moby->pos, D_L16_001671C0) < 29.0f) {
         FUN_L00_0025a120(chomper_moby);
         chomper_moby->shadow_range = 23;

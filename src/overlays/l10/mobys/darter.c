@@ -114,7 +114,7 @@ typedef struct Vars_2e01a8 {
     float                  height_offset;
     int                    height_timer;
     char                   p1A8[0xC8];
-    char                   a270[4];
+    char                   big_head_manipulator[4];
 } Vars_2e01a8;
 
 extern float l10_darter_attack_distance __asm__("D_L10_00161DFC") __attribute__((sda));
@@ -155,7 +155,7 @@ void darter_update(Moby *moby) {
 
     update_darter_hit_reactions_and_targeting(moby);
     target = darter_vars->target;
-    func_L00_00264B40_2E0630(2.5f, moby, 1, darter_vars->a270);
+    func_L00_00264B40_2E0630(2.5f, moby, 1, darter_vars->big_head_manipulator);
     if (moby->visible != 0 && fast_vec_dist(&moby->pos, &D_L10_00167240) < 29.0f) {
         func_L00_0025B178_2E0630(moby);
         moby->shadow_range = 0x17;

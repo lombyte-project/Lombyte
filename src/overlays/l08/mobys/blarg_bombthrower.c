@@ -85,7 +85,7 @@ typedef struct {
     short                s130, s132;
     int                  waypoint_reselection_timer;
     char                 pad138[0x28];
-    char                 blk160[0x10];
+    char                 big_head_manipulator[0x10];
 } Data_DBF68;
 
 char        *spawn_bomb_with_velocity(int arg, char *pos, char *vec) __asm__("FUN_L08_002d22e0");
@@ -219,7 +219,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
     struct Moby *old_waypoint;
 
     damage = 0.0f;
-    func_L00_00264B40_x(moby, D_L08_001619AC_gp, 3.0f, bombthrower_vars->blk160);
+    func_L00_00264B40_x(moby, D_L08_001619AC_gp, 3.0f, bombthrower_vars->big_head_manipulator);
     if (moby->visible != 0) {
         if (fast_vec_dist(&moby->pos, D_L08_001675C0) < 29.0f) {
             FUN_L00_0025a120(moby);

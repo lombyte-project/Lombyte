@@ -70,7 +70,7 @@ typedef struct D_2E0630 {
     char          p178[0x24];
     int           wander_timer;
     char          p1A0[0xD0];
-    char          sound_state[4];
+    char          big_head_manipulator[4];
 } D_2E0630;
 
 /* Entry 2 is the moby array D_L10_0015FFD8. Retail reaches it with the lui/lw macro in some functions and through $gp in toxic_crab_update; going through this table 8 bytes lower keeps the macro form under SN. */
@@ -111,7 +111,7 @@ void screamer_update(Moby *moby) {
 
     func_L10_002E0FF8_2E0630(moby);
     leader = screamer_data->leader;
-    func_L00_00264B40_2E0630(2.5f, moby, 0, screamer_data->sound_state);
+    func_L00_00264B40_2E0630(2.5f, moby, 0, screamer_data->big_head_manipulator);
     if (moby->visible != 0 && fast_vec_dist(&moby->pos, &D_L10_00167240) < 29.0f) {
         func_L00_0025B178_2E0630(moby);
         moby->shadow_range = 0x17;

@@ -401,7 +401,7 @@ typedef struct AlienQueenVars {
     u8                   pad_124[0x4];
     f32                  glow_phase;
     s32                  timer_12C;
-    u8                   unk130;
+    u8                   big_head_manipulator;
     u8                   pad_131[0x3F];
     s32                  intro_or_recovery_delay_active;
     f32                  recovery_health;
@@ -416,7 +416,8 @@ void alien_queen_update(unsigned char *moby) {
 
     FUN_L06_002fa9c0_c(moby);
     target = alien_queen_update_vars->target;
-    func_L00_00264B40_q(moby, *(int *)&D_L06_00161EF0, 1.9f, &alien_queen_update_vars->unk130);
+    func_L00_00264B40_q(
+        moby, *(int *)&D_L06_00161EF0, 1.9f, &alien_queen_update_vars->big_head_manipulator);
     if ((unsigned char)moby[0x31] != 0 && fast_vec_dist(moby + 0x10, D_L06_00167540_q) < 45.0f) {
         func_L00_0025B178_q(moby);
         moby[0x7F] = 0x24;
