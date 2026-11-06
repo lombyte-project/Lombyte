@@ -4,6 +4,7 @@
 #include "sda.h"
 #include "rnc/hero/hero.h"
 #include "rnc/game/usage_stats.h"
+#include "rnc/save/saved_globals.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/overlay/l05/mobys/help_hints_globals.h"
@@ -43,25 +44,11 @@ extern struct UsageStat D_00141968[];
 #define D_00141C5C (D_00141968[94].level_mask)
 #define D_00141B88 (D_00141968[68].count)
 #define D_00141BB8 (D_00141968[74].count)
-typedef struct {
-    unsigned char  pad_0[82];
-    unsigned short D_00141772;
-    unsigned char  pad_54[38];
-    unsigned short D_0014179A;
-    unsigned char  pad_7c[6];
-    unsigned short D_001417A2;
-    unsigned char  pad_84[6];
-    unsigned short D_001417AA;
-    unsigned char  pad_8c[22];
-    unsigned short D_001417C2;
-} L05Fields_00141720;
-
-extern L05Fields_00141720 l05_00141720 __asm__("D_00141720");
-#define D_001417A2 (l05_00141720.D_001417A2)
-#define D_0014179A (l05_00141720.D_0014179A)
-#define D_001417C2 (l05_00141720.D_001417C2)
-#define D_00141772 (l05_00141720.D_00141772)
-#define D_001417AA (l05_00141720.D_001417AA)
+#define D_00141772 (D_00141720[41])
+#define D_0014179A (D_00141720[61])
+#define D_001417A2 (D_00141720[65])
+#define D_001417AA (D_00141720[69])
+#define D_001417C2 (D_00141720[81])
 typedef struct {
     unsigned char D_0013D388;
     unsigned char pad_1[12];

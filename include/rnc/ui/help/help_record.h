@@ -13,6 +13,6 @@ typedef struct {
    walks all 0x94 of them. */
 #define HELP_RECORD_COUNT 0x94
 
-extern HelpRecord D_00141968[HELP_RECORD_COUNT];
+extern HelpRecord D_00141968[HELP_RECORD_COUNT] __asm__("D_00141968");
 
 #endif /* LOMBYTE_RNC_UI_HELP_HELP_RECORD_H */
