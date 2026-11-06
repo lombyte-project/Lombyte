@@ -1484,7 +1484,6 @@ int D_L01_00161194 = 0;
 int D_L01_001622B8 __attribute__((section(".bss")));
 
 float D_L01_001C8DA0 NOT_SDA = 0;
-float D_L01_001C8D80 NOT_SDA = 0;
 int                  D_L01_00161090 = 0;
 
 Vec4 D_L01_00166400[3] __attribute__((section(".bss")));
@@ -1560,7 +1559,6 @@ int D_L02_00161194 = 0;
 int D_L02_00162438 __attribute__((section(".bss")));
 
 float D_L02_001C8F20 NOT_SDA = 0;
-float D_L02_001C8F00 NOT_SDA = 0;
 int                  D_L02_00161090 = 0;
 
 Vec4 D_L02_00166580[3] __attribute__((section(".bss")));
@@ -1637,7 +1635,6 @@ int D_L03_00161194 = 0;
 int D_L03_00161F38 __attribute__((section(".bss")));
 
 float D_L03_001C8A20 NOT_SDA = 0;
-float D_L03_001C8A00 NOT_SDA = 0;
 int                  D_L03_00161090 = 0;
 
 Vec4 D_L03_00166080[3] __attribute__((section(".bss")));
@@ -1717,7 +1714,6 @@ int D_L04_00161194 = 0;
 int D_L04_00161FB8 __attribute__((section(".bss")));
 
 float D_L04_001C8AA0 NOT_SDA = 0;
-float D_L04_001C8A80 NOT_SDA = 0;
 int                  D_L04_00161090 = 0;
 
 Vec4 D_L04_00166100[3] __attribute__((section(".bss")));
@@ -1792,7 +1788,6 @@ int D_L05_00161194 = 0;
 int D_L05_00162238 __attribute__((section(".bss")));
 
 float D_L05_001C8DA0 NOT_SDA = 0;
-float D_L05_001C8D80 NOT_SDA = 0;
 int                  D_L05_00161090 = 0;
 
 Vec4 D_L05_00166380[3] __attribute__((section(".bss")));
@@ -1866,7 +1861,6 @@ int D_L06_00161194 = 0;
 int D_L06_001625B8 __attribute__((section(".bss")));
 
 float D_L06_001C90A0 NOT_SDA = 0;
-float D_L06_001C9080 NOT_SDA = 0;
 int                  D_L06_00161090 = 0;
 
 Vec4 D_L06_00166700[3] __attribute__((section(".bss")));
@@ -1940,7 +1934,6 @@ int D_L07_00161194 = 0;
 int D_L07_00161EB8 __attribute__((section(".bss")));
 
 float D_L07_001C89A0 NOT_SDA = 0;
-float D_L07_001C8980 NOT_SDA = 0;
 int                  D_L07_00161090 = 0;
 
 Vec4 D_L07_00166000[3] __attribute__((section(".bss")));
@@ -2012,7 +2005,6 @@ int D_L08_00161194 = 0;
 int D_L08_00162638 __attribute__((section(".bss")));
 
 float D_L08_001C9120 NOT_SDA = 0;
-float D_L08_001C9100 NOT_SDA = 0;
 int                  D_L08_00161090 = 0;
 
 Vec4 D_L08_00166780[3] __attribute__((section(".bss")));
@@ -2094,7 +2086,6 @@ int D_L09_00161194 = 0;
 int D_L09_00161FB8 __attribute__((section(".bss")));
 
 float D_L09_001C8AA0 NOT_SDA = 0;
-float D_L09_001C8A80 NOT_SDA = 0;
 int                  D_L09_00161090 = 0;
 
 Vec4 D_L09_00166100[3] __attribute__((section(".bss")));
@@ -2172,7 +2163,6 @@ int D_L10_00161194 = 0;
 int D_L10_001622B8 __attribute__((section(".bss")));
 
 float D_L10_001C8DA0 NOT_SDA = 0;
-float D_L10_001C8D80 NOT_SDA = 0;
 int                  D_L10_00161090 = 0;
 
 Vec4 D_L10_00166400[3] __attribute__((section(".bss")));
@@ -2250,7 +2240,6 @@ int D_L11_00161194 = 0;
 int D_L11_00162838 __attribute__((section(".bss")));
 
 float D_L11_001C9320 NOT_SDA = 0;
-float D_L11_001C9300 NOT_SDA = 0;
 int                  D_L11_00161090 = 0;
 
 Vec4 D_L11_001669C0[3] __attribute__((section(".bss")));
@@ -2327,7 +2316,6 @@ int D_L12_00161194 = 0;
 int D_L12_001622B8 __attribute__((section(".bss")));
 
 float D_L12_001C8DA0 NOT_SDA = 0;
-float D_L12_001C8D80 NOT_SDA = 0;
 int                  D_L12_00161090 = 0;
 
 Vec4 D_L12_00166400[3] __attribute__((section(".bss")));
@@ -2405,7 +2393,6 @@ int D_L13_00161194 = 0;
 int D_L13_00162138 __attribute__((section(".bss")));
 
 float D_L13_001C8C20 NOT_SDA = 0;
-float D_L13_001C8C00 NOT_SDA = 0;
 int                  D_L13_00161090 = 0;
 
 Vec4 D_L13_00166280[3] __attribute__((section(".bss")));
@@ -2483,7 +2470,6 @@ int D_L14_00161194 = 0;
 int D_L14_00162538 __attribute__((section(".bss")));
 
 float D_L14_001C9020 NOT_SDA = 0;
-float D_L14_001C9000 NOT_SDA = 0;
 int                  D_L14_00161090 = 0;
 
 Vec4 D_L14_00166680[3] __attribute__((section(".bss")));
@@ -2560,7 +2546,6 @@ int D_L15_00161194 = 0;
 int D_L15_00162438 __attribute__((section(".bss")));
 
 float D_L15_001C8F20 NOT_SDA = 0;
-float D_L15_001C8F00 NOT_SDA = 0;
 int                  D_L15_00161090 = 0;
 
 Vec4 D_L15_00166580[3] __attribute__((section(".bss")));
@@ -2639,7 +2624,6 @@ int D_L16_00161194 = 0;
 int D_L16_00162238 __attribute__((section(".bss")));
 
 float D_L16_001C8DA0 NOT_SDA = 0;
-float D_L16_001C8D80 NOT_SDA = 0;
 int                  D_L16_00161090 = 0;
 
 Vec4 D_L16_001663C0[3] __attribute__((section(".bss")));
@@ -2716,7 +2700,6 @@ int D_L17_00161194 = 0;
 int D_L17_00162738 __attribute__((section(".bss")));
 
 float D_L17_001C9220 NOT_SDA = 0;
-float D_L17_001C9200 NOT_SDA = 0;
 int                  D_L17_00161090 = 0;
 
 Vec4 D_L17_00166880[3] __attribute__((section(".bss")));
@@ -2790,7 +2773,6 @@ int D_L18_00161194 = 0;
 int D_L18_00162838 __attribute__((section(".bss")));
 
 float D_L18_001C9320 NOT_SDA = 0;
-float D_L18_001C9300 NOT_SDA = 0;
 int                  D_L18_00161090 = 0;
 
 Vec4 D_L18_00166980[3] __attribute__((section(".bss")));
