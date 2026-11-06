@@ -21,18 +21,18 @@ extern s32   count_skill_points(void) __asm__("func_00215348");
 extern s32   measure_text_width_regular(char *, s32) __asm__("func_001F6250");
 extern void  font_print_center(s32, s32, u64, char *, s32) __asm__("func_001F6AF0");
 extern void  draw_menu_selection_marker(s32, s32, s32) __asm__("func_0021F8E8");
-extern void  font_print(s32, s32, u64, char *, s32, s64, u8 *) __asm__("func_001F62B0");
+extern void  font_print(s32, s32, u64, char *, s32, s64, struct Glyph *) __asm__("func_001F62B0");
 
 s32 draw_localized_three_option_menu(struct ThreeOptionMenu *menu) __asm__("FUN_00222a98");
 
 s32 draw_localized_three_option_menu(struct ThreeOptionMenu *menu) {
-    char text_buffer[0x50];
-    s32  font_texture_index;
-    u8  *glyphs;
-    s32  maximum_text_width;
-    s32  measured_width;
-    s32  line_spacing;
-    s32  draw_y;
+    char          text_buffer[0x50];
+    s32           font_texture_index;
+    struct Glyph *glyphs;
+    s32           maximum_text_width;
+    s32           measured_width;
+    s32           line_spacing;
+    s32           draw_y;
 
     font_texture_index = 1;
     setup_gif_paging(0);

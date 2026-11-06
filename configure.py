@@ -1255,6 +1255,7 @@ DATA_OVERLAYS = {
     "ui/menus/item_preview/draw_menu_preview_objects": (0x1D5020, 0xD5FA0, 96),  # slot draw flags
     "ui/menus/item_preview/clear_preview_resource_bindings": (0x1D59D8, 0xD6958, 136),
     "ui/menus/system/emit_selected_graphics_dma_packets": (0x1D7D90, 0xD8D10, 192),
+    "ui/text/font/font_print": (0x1DF050, 0xDFFD0, 2784),  # glyph records of the three fonts
 }
 
 # Uninitialised variables a unit defines.  `.sbss` (small ones) sits in the
