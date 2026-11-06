@@ -161,7 +161,7 @@ typedef struct BombomaticVars {
     u8                   pad_0[0x20];
     f32                  health;
     u8                   pad_24[0x2];
-    s16                  unk26;
+    s16                  stun_timer;
     u8                   pad_28[0x38];
     struct HitColorFlash hit_flash;
     u8                   manipulator_70;
@@ -324,7 +324,7 @@ void bombomatic_update(char *moby) {
         tv -= hit_damage;
         *(float *)health_ptr = tv;
         moby_data->hit_flash.flash_red = 0xFA;
-        moby_data->unk26 = scale_game_frames(60);
+        moby_data->stun_timer = scale_game_frames(60);
         start_hit_color_flash(moby, &moby_data->hit_flash);
     }
 eb20:

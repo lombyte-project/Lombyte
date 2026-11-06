@@ -31,12 +31,12 @@ void         command_falling_platform_update(char *moby) __asm__("FUN_L07_003112
 
 typedef struct CommandFallingPlatformVars {
     u8  pad_0[0x20];
-    s32 unk20;
-    s16 unk24;
+    s32 health; /* 0x20: MobyTargetInfo.health, cleared as an int */
+    s16 max_health;
     u8  pad_26[0x2];
     u8  hit_weight; /* 0x28: enemy target info at pvars+0x20, see moby_target_info.h */
     u8  pad_29[0x15];
-    s16 unk3E;
+    s16 target_flags; /* 0x3E: MobyTargetInfo.flags; target info at pvars+0x20, see moby_target_info.h */
     u8  pad_40[0x20];
     f32 transform[16];
     s32 parent_index;
@@ -98,10 +98,10 @@ void command_falling_platform_update(char *moby) {
     }
     switch (((unsigned char *)moby)[0x20]) {
     case PLATFORM_INITIALIZE:
-        falling_platform_vars->unk20 = 0;
-        falling_platform_vars->unk24 = 0;
+        falling_platform_vars->health = 0;
+        falling_platform_vars->max_health = 0;
         falling_platform_vars->hit_weight = 4;
-        falling_platform_vars->unk3E = 13;
+        falling_platform_vars->target_flags = 13;
         timer = rand();
         if (timer & 1)
             MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, 3.1415927f);

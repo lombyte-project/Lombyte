@@ -29,12 +29,12 @@ void        hero_falling_platform_update(char *moby) __asm__("FUN_L07_00311bc8")
 
 typedef struct HeroFallingPlatformVars {
     u8  pad_0[0x20];
-    s32 unk20;
-    s16 unk24;
+    s32 health; /* 0x20: MobyTargetInfo.health, cleared as an int */
+    s16 max_health;
     u8  pad_26[0x2];
-    u8  unk28;
+    u8  hit_weight;
     u8  pad_29[0x15];
-    s16 unk3E;
+    s16 target_flags; /* 0x3E: MobyTargetInfo.flags; target info at pvars+0x20, see moby_target_info.h */
     u8  pad_40[0x20];
     f32 transform[16];
     s16 timer_A0;
@@ -65,10 +65,10 @@ void hero_falling_platform_update(char *moby) {
     qcopy(previous_position, moby + 0x10);
     switch (((unsigned char *)moby)[0x20]) {
     case LEAF_INITIALIZE:
-        moby_data->unk20 = 0;
-        moby_data->unk24 = 0;
-        moby_data->unk28 = 4;
-        moby_data->unk3E = 0xD;
+        moby_data->health = 0;
+        moby_data->max_health = 0;
+        moby_data->hit_weight = 4;
+        moby_data->target_flags = 0xD;
         set_moby_color(moby, 0x50, 0x40, 0x10);
         MOBY(moby)->rot.x += random_float_between(-0.034906585f, 0.034906585f);
         MOBY(moby)->rot.y += random_float_between(-0.034906585f, 0.034906585f);
