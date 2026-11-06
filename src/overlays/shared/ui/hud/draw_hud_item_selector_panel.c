@@ -1236,7 +1236,7 @@ void update_bolt_counter_hud_animation_and_visibility(T00239d00 *hud_element) {
 /*
  * Draw callback of the bolt counter HUD element (queued by update_npc_dialogue
  * with FUN_L00_00239cc8 / FUN_L00_00239d00): a panel that slides open by
- * cnt[0] / bolt_panel_open_steps_gp, the spinning bolt icon (frame from *unk80), the
+ * cnt[0] / bolt_panel_open_steps_gp, the spinning bolt icon (frame from *animation_counters), the
  * bolt count with a drop shadow, and a thousands separator every three
  * digits (an apostrophe, or a dot for languages 3 and 5). Returns the element width.
  */
@@ -1480,7 +1480,7 @@ int draw_hud_cropped_gauge_panel(char *cropped_gauge_element) {
    of 30 + func_001F9850(120). */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_0023B0F8), where it is exact; names translated to the US level program. */
 
-/* Sets unk7C to scale_game_frames(0x78) + 0x1E and w/h to 0x20, calls FUN_L00_00235c80. */
+/* Sets visible_timer to scale_game_frames(0x78) + 0x1E and w/h to 0x20, calls FUN_L00_00235c80. */
 void initialize_numeric_hud_timer_and_base_dimensions(HudElem *hud_element) {
     hud_element->visible_timer = scale_game_frames(0x78) + 0x1E;
     hud_element->w = 0x20;

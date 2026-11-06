@@ -7,7 +7,7 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00237B20), where it is exact; names translated to the US level program. */
 
-/* Sets unk7C to scale_game_frames(0xA) + 0x1E, clears 0x48/0x4A, w/h 0x20, calls 00235c80. */
+/* Sets visible_timer to scale_game_frames(0xA) + 0x1E, clears offset_x/offset_y, w/h 0x20, calls 00235c80. */
 void initialize_numeric_hud_element(HudElem *hud_element) __asm__("FUN_L00_00237190");
 
 void initialize_numeric_hud_element(HudElem *hud_element) {
