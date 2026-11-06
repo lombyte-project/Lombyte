@@ -50,7 +50,7 @@ typedef struct LargeAmoeboidVars {
     u8                       pad2A[0x6];
     f32                      unk30;
     u8                       pad34[0x4];
-    s32                      unk38;
+    s32                      hurt; /* 0x38: set when the moby is hit, cleared once handled */
     u8                       pad3C[0x4];
     u8                       move_displacement[0x18];
     s8                       unk58;
@@ -820,9 +820,9 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (moby_vars->unk38 != 0) {
+    if (moby_vars->hurt != 0) {
         moby_vars->pursuit_timer = scale_game_frames(0xF0);
-        moby_vars->unk38 = 0;
+        moby_vars->hurt = 0;
     }
     if (fast_dec_timer(&moby_vars->pursuit_timer) != 0) {
         moby_vars->effective_target_search_radius = moby_vars->base_target_search_radius;

@@ -48,7 +48,7 @@ typedef struct Paratrooper302618 {
     u8                       pad2A[0x4];
     unsigned char            removal_status;
     u8                       pad2F[0x9];
-    s32                      unk38;
+    s32                      hurt; /* 0x38: set when the moby is hit, cleared once handled */
     u8                       pad3C[0x1c];
     unsigned char            f58;
     u8                       pad59[0x1];
@@ -768,11 +768,11 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
     MOBY(moby)->hit_slot = 0xff;
     update_hit_color_flash(moby, &paratrooper_instance_state->hit_flash);
 
-    if (paratrooper_instance_state->unk38 != 0) {
+    if (paratrooper_instance_state->hurt != 0) {
         angle = random_float_between(180.0f, 240.0f);
         angle = scale_time(angle);
         paratrooper_instance_state->target_range_boost_timer = (short)truncate_float_to_s32(angle);
-        paratrooper_instance_state->unk38 = 0;
+        paratrooper_instance_state->hurt = 0;
     }
     fast_dec_timer_s16((short *)(&paratrooper_instance_state->target_range_boost_timer));
     if (paratrooper_instance_state->target_range_boost_timer != 0)
