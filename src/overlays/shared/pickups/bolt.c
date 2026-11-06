@@ -65,24 +65,24 @@ typedef struct Bolt {
     BoltClass *pclass; /* 0x24 */
     u8         pad28[4];
     f32        scale;         /* 0x2C */
-    u8         unk30;         /* 0x30 */
+    u8         update_dist;   /* 0x30 */
     u8         is_visible;    /* 0x31 */
     u16        draw_distance; /* 0x32 */
     u16        flags;         /* 0x34 */
     u8         pad36[0x3D];
-    u8         unk73; /* 0x73 */
+    u8         metal_alpha; /* 0x73 */
     u8         pad74[4];
     BoltVars  *vars; /* 0x78 */
     u8         pad7C[0x2A];
     s16        oclass; /* 0xA6 */
     u8         padA8[8];
-    u8         unkB0; /* 0xB0 */
+    u8         mission; /* 0xB0 */
     u8         padB1;
-    s16        unkB2; /* 0xB2 */
+    s16        save_id; /* 0xB2 */
     u8         padB4[0xC];
     Vec4       rot; /* 0xC0 */
     u8         padD0[0x10];
-    Vec4       unkE0; /* 0xE0 */
+    Vec4       rot_row2; /* 0xE0 */
 } Bolt;
 
 typedef struct {
@@ -213,16 +213,16 @@ void bolt_update(Bolt *bolt_moby) {
     switch (bolt_moby->state) {
     case BOLT_INITIALIZE:
         bolt_moby->state = BOLT_IDLE;
-        bolt_moby->unk73 = 0x14;
+        bolt_moby->metal_alpha = 0x14;
         bolt_moby->flags |= 0x100;
-        bolt_moby->unk30 = 0x20;
+        bolt_moby->update_dist = 0x20;
         bolt_moby->draw_distance = 0x20;
         if (random_integer_below(2) == 0) {
             v->unk55 |= 1;
         }
-        fast_vec_normalize(&geometry_scratch, &bolt_moby->unkE0, 0.2f);
+        fast_vec_normalize(&geometry_scratch, &bolt_moby->rot_row2, 0.2f);
         fast_vec_add(&geometry_scratch, &geometry_scratch, &bolt_moby->pos);
-        fast_vec_normalize(&vector_scratch, &bolt_moby->unkE0, -3.0f);
+        fast_vec_normalize(&vector_scratch, &bolt_moby->rot_row2, -3.0f);
         fast_vec_add(&vector_scratch, &vector_scratch, &bolt_moby->pos);
         hit = FUN_001efa68(&geometry_scratch, &vector_scratch, 0x22, 0, 0);
         if (v->landed == 0 && hit != 0) {
@@ -440,10 +440,11 @@ void bolt_update(Bolt *bolt_moby) {
         }
         FUN_L00_002a6b70_c(bolt_moby);
         if ((u8 *)bolt_moby < D_L00_0015FFDC) {
-            D_L00_001BA5D0.killed[bolt_moby->unkB2] = bolt_moby->unkB0 + 2;
-            if (bolt_moby->unkB0 == 0xFF || (mission_state_macro[bolt_moby->unkB0] != 0xFF &&
-                                             D_0014C050[D_0015ED84][bolt_moby->unkB0] == 0xFF)) {
-                D_L00_001BB230.killed[bolt_moby->unkB2] = bolt_moby->unkB0 + 2;
+            D_L00_001BA5D0.killed[bolt_moby->save_id] = bolt_moby->mission + 2;
+            if (bolt_moby->mission == 0xFF ||
+                (mission_state_macro[bolt_moby->mission] != 0xFF &&
+                 D_0014C050[D_0015ED84][bolt_moby->mission] == 0xFF)) {
+                D_L00_001BB230.killed[bolt_moby->save_id] = bolt_moby->mission + 2;
             }
         }
         mark_moby_for_removal(bolt_moby);
