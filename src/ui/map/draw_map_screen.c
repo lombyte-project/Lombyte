@@ -12,13 +12,13 @@
 #include "rnc/ui/menus/menu_globals.h"
 
 struct MapHdr {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
+    s32 mask_offset;
+    s32 coverage_offset;
+    s32 pixels_offset;
+    s32 palette_offset;
+    s32 tex0_offset;
+    s32 tex1_offset;
+    s32 tex2_offset;
 };
 
 struct MapEntry {
@@ -142,19 +142,19 @@ s32 draw_map_screen(struct MenuScreen *screen) {
         }
         decompress_wad(level_map_selection.slot[slot], level_map_selection.hdr);
         hdr = level_map_selection.hdr;
-        pix = (u8 *)hdr + hdr->unk8;
-        pal = (u8 *)hdr + hdr->unkC;
+        pix = (u8 *)hdr + hdr->pixels_offset;
+        pal = (u8 *)hdr + hdr->palette_offset;
         map_mask_buffer = acquire_menu_stream_buffer(0);
         if (map_mask_buffer != 0) {
             map_header_base = (u8 *)level_map_selection.hdr;
-            a = map_header_base + hdr->unk0 + 8;
+            a = map_header_base + hdr->mask_offset + 8;
             if (level_map_selection.level == current_level_index) {
                 compose_bitmap_from_mask(pal, pix, pal, level_map_selection.mask);
             } else {
                 if (level_visit_state[level_map_selection.level] != 0) {
                     load_map_chunk(map_mask_buffer,
                                    map_coverage_pages + (level_map_selection.level << 11),
-                                   map_header_base + hdr->unk4);
+                                   map_header_base + hdr->coverage_offset);
                 } else {
                     decode_map_mask(map_mask_buffer, a, a, map_header_base);
                 }
@@ -163,9 +163,9 @@ s32 draw_map_screen(struct MenuScreen *screen) {
         }
         if (!(screen->data.raw.unk34 & 0x80)) {
             tbase = (u8 *)level_map_selection.hdr;
-            texture_block_base = tbase + hdr->unk10;
-            b = tbase + hdr->unk14 + 0x420;
-            tex2_pixels = tbase + hdr->unk18 + 0x420;
+            texture_block_base = tbase + hdr->tex0_offset;
+            b = tbase + hdr->tex1_offset + 0x420;
+            tex2_pixels = tbase + hdr->tex2_offset + 0x420;
             level_map_selection.tex0 = register_8bit_texture(7,
                                                              7,
                                                              texture_block_base + 0x20,
