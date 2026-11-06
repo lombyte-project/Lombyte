@@ -14,21 +14,21 @@
 
 typedef struct RynoRocketVars {
     u8    pad0[0x10];
-    u8    unk10[0x10];
-    char *unk20;
-    s32   unk24;
-    char *unk28;
-    f32   unk2C;
-    f32   unk30;
-    s32   unk34;
-    s32   unk38;
+    u8    path_position[0x10];
+    char *owner;
+    s32   life_timer;
+    char *target;
+    f32   target_height_offset;
+    f32   speed;
+    s32   yaw_velocity;
+    s32   pitch_velocity;
     u8    pad3C[0x8];
-    f32   unk44;
-    f32   unk48;
-    f32   unk4C;
-    f32   unk50;
-    f32   unk54;
-    s32   unk58;
+    f32   wobble_radius;
+    f32   wobble_angle;
+    f32   wobble_phase;
+    f32   wobble_angle_rate;
+    f32   wobble_phase_rate;
+    s32   target_class;
 } RynoRocketVars;
 
 typedef union {
@@ -150,34 +150,34 @@ void ryno_rocket_update(char *rocket_moby) {
         *(float *)(rocket_moby + 0x2C) =
             a + (*(float *)(*(char **)(rocket_moby + 0x24) + 0x24) - a) * (k60 * 0.05f);
         {
-            float e = rocket_vars->unk30;
-            rocket_vars->unk30 = e + (k * 20.0f - e) * (k60 * 0.1f) * k64;
+            float e = rocket_vars->speed;
+            rocket_vars->speed = e + (k * 20.0f - e) * (k60 * 0.1f) * k64;
         }
     }
     steering_timer_threshold = scale_game_frames_c(250);
     steering_timer_threshold -= scale_game_frames_c(5);
-    if (rocket_vars->unk24 < steering_timer_threshold) {
-        target_moby = rocket_vars->unk28;
-        if (target_moby == 0 || *(short *)(target_moby + 0xA6) != rocket_vars->unk58 ||
+    if (rocket_vars->life_timer < steering_timer_threshold) {
+        target_moby = rocket_vars->target;
+        if (target_moby == 0 || *(short *)(target_moby + 0xA6) != rocket_vars->target_class ||
             *(unsigned char *)(target_moby + 0x20) == 0xFE ||
             *(unsigned char *)(target_moby + 0x20) == 0xFD) {
-            rocket_vars->unk44 = rocket_vars->unk44 + D_0015ED60 * 0.1f;
-            *(int *)&rocket_vars->unk28 = 0;
+            rocket_vars->wobble_radius = rocket_vars->wobble_radius + D_0015ED60 * 0.1f;
+            *(int *)&rocket_vars->target = 0;
             steering_timer_threshold = scale_game_frames_c(250);
             steering_timer_threshold -= scale_game_frames_c(100);
-            if (rocket_vars->unk24 < steering_timer_threshold) {
+            if (rocket_vars->life_timer < steering_timer_threshold) {
                 *(float *)(rocket_moby + 0x44) =
                     fast_add_rotations(*(float *)(rocket_moby + 0x44),
-                                       fast_sin(rocket_vars->unk48) * (D_0015ED60 * 0.04f));
+                                       fast_sin(rocket_vars->wobble_angle) * (D_0015ED60 * 0.04f));
             }
             *(float *)(rocket_moby + 0x48) =
                 fast_add_rotations(*(float *)(rocket_moby + 0x48),
-                                   fast_cos(rocket_vars->unk48) * (D_0015ED60 * 0.05f));
+                                   fast_cos(rocket_vars->wobble_angle) * (D_0015ED60 * 0.05f));
         } else {
             qcopy(&u.v.c, target_moby + 0x10);
-            u.v.c.f[2] = u.v.c.f[2] + rocket_vars->unk2C;
+            u.v.c.f[2] = u.v.c.f[2] + rocket_vars->target_height_offset;
             fast_vec_sub(&u.v.b, &u.v.c, rocket_vars);
-            fast_vec_sub(&u.v.a, &u.v.c, &rocket_vars->unk10);
+            fast_vec_sub(&u.v.a, &u.v.c, &rocket_vars->path_position);
             qcopy(rocket_vars, &u.v.c);
             {
                 float target_displacement_length_squared = FUN_L00_001ff430(&u.v.b);
@@ -185,7 +185,7 @@ void ryno_rocket_update(char *rocket_moby) {
                     (u.v.b.f[0] * u.v.a.f[0] + u.v.b.f[1] * u.v.a.f[1] + u.v.b.f[2] * u.v.a.f[2]) *
                     -2.0f;
                 float fA =
-                    rocket_vars->unk30 * rocket_vars->unk30 - target_displacement_length_squared;
+                    rocket_vars->speed * rocket_vars->speed - target_displacement_length_squared;
                 float r2f = FUN_L00_001ff430(&u.v.a);
                 float sq = square_root(fB * fB - (4.0f * fA) * (-r2f));
                 float intercept_root_plus = (-fB + sq) / (fA + fA);
@@ -207,32 +207,34 @@ void ryno_rocket_update(char *rocket_moby) {
                 add_vector_xyz(&intercept_direction, &intercept_direction, &u.v.a);
                 intercept_angle_scratch =
                     fast_arc_tan(intercept_direction.f[0], intercept_direction.f[1]);
-                *(float *)(rocket_moby + 0x48) = FUN_L00_00258110((float *)(&rocket_vars->unk34),
-                                                                  *(float *)(rocket_moby + 0x48),
-                                                                  intercept_angle_scratch,
-                                                                  D_0015ED70 * 188.49556f,
-                                                                  0.0f,
-                                                                  0.0f);
+                *(float *)(rocket_moby + 0x48) =
+                    FUN_L00_00258110((float *)(&rocket_vars->yaw_velocity),
+                                     *(float *)(rocket_moby + 0x48),
+                                     intercept_angle_scratch,
+                                     D_0015ED70 * 188.49556f,
+                                     0.0f,
+                                     0.0f);
                 intercept_angle_scratch =
                     fast_arc_tan(vector_length_xy(&intercept_direction), intercept_direction.f[2]);
-                *(float *)(rocket_moby + 0x44) = FUN_L00_00258110((float *)(&rocket_vars->unk38),
-                                                                  *(float *)(rocket_moby + 0x44),
-                                                                  -intercept_angle_scratch,
-                                                                  D_0015ED70 * 188.49556f,
-                                                                  0.0f,
-                                                                  0.0f);
+                *(float *)(rocket_moby + 0x44) =
+                    FUN_L00_00258110((float *)(&rocket_vars->pitch_velocity),
+                                     *(float *)(rocket_moby + 0x44),
+                                     -intercept_angle_scratch,
+                                     D_0015ED70 * 188.49556f,
+                                     0.0f,
+                                     0.0f);
             }
             s = fast_vec_length(&u.v.a);
             if (s < 6.0f) {
-                rocket_vars->unk44 = rocket_vars->unk44 * (s / 6.0f);
+                rocket_vars->wobble_radius = rocket_vars->wobble_radius * (s / 6.0f);
             } else {
-                rocket_vars->unk44 = rocket_vars->unk44 + D_0015ED60 * 0.1f;
+                rocket_vars->wobble_radius = rocket_vars->wobble_radius + D_0015ED60 * 0.1f;
             }
         }
     }
 
     build_spherical_offset(&forward_step,
-                           rocket_vars->unk30,
+                           rocket_vars->speed,
                            *(float *)(rocket_moby + 0x48),
                            -*(float *)(rocket_moby + 0x44));
     *(u128_cd *)&u.v.b = 0;
@@ -243,7 +245,7 @@ void ryno_rocket_update(char *rocket_moby) {
     fast_vec_normalize(&u.v.a, &u.v.a, random_float_between(0.1f, 0.2f) * D_0015ED6C);
     fast_vec_normalize(&z, &forward_step, -random_float_between(D_0015ED6C * 0.1f, D_0015ED6C));
     add_vector_xyz(&u.v.a, &u.v.a, &z);
-    fast_vec_normalize(&z, &forward_step, random_float_between(0.0f, 1.0f) * rocket_vars->unk30);
+    fast_vec_normalize(&z, &forward_step, random_float_between(0.0f, 1.0f) * rocket_vars->speed);
     add_vector_xyz(&z, &z, rocket_moby + 0x10);
     {
         int particle_duration_frames = scale_game_frames_c(random_int_between(0x1C, 0x28));
@@ -257,13 +259,15 @@ void ryno_rocket_update(char *rocket_moby) {
                      1);
     }
     qcopy(&previous_position, rocket_moby + 0x10);
-    add_vector_xyz(&rocket_vars->unk10, &rocket_vars->unk10, &forward_step);
-    rocket_vars->unk48 = fast_add_rotations(rocket_vars->unk48, rocket_vars->unk50);
-    rocket_vars->unk4C = fast_add_rotations(rocket_vars->unk4C, rocket_vars->unk54);
-    rocket_vars->unk48 =
-        fast_add_rotations(rocket_vars->unk48, fast_sin(rocket_vars->unk4C) * 0.15f);
-    if (0.9f < rocket_vars->unk44)
-        rocket_vars->unk44 = 0.9f;
+    add_vector_xyz(&rocket_vars->path_position, &rocket_vars->path_position, &forward_step);
+    rocket_vars->wobble_angle =
+        fast_add_rotations(rocket_vars->wobble_angle, rocket_vars->wobble_angle_rate);
+    rocket_vars->wobble_phase =
+        fast_add_rotations(rocket_vars->wobble_phase, rocket_vars->wobble_phase_rate);
+    rocket_vars->wobble_angle =
+        fast_add_rotations(rocket_vars->wobble_angle, fast_sin(rocket_vars->wobble_phase) * 0.15f);
+    if (0.9f < rocket_vars->wobble_radius)
+        rocket_vars->wobble_radius = 0.9f;
 
     flag = 0;
     goto body;
@@ -272,16 +276,18 @@ void ryno_rocket_update(char *rocket_moby) {
         if (!(0.1f < sp))
             goto done;
     body:
-        offset_trig_factor = fast_sin(rocket_vars->unk48);
-        u.v.a.f[1] = rocket_vars->unk44 * offset_trig_factor * fast_cos(rocket_vars->unk4C);
-        offset_trig_factor = fast_cos(rocket_vars->unk48);
-        u.v.a.f[2] = rocket_vars->unk44 * offset_trig_factor * fast_cos(rocket_vars->unk4C);
+        offset_trig_factor = fast_sin(rocket_vars->wobble_angle);
+        u.v.a.f[1] =
+            rocket_vars->wobble_radius * offset_trig_factor * fast_cos(rocket_vars->wobble_phase);
+        offset_trig_factor = fast_cos(rocket_vars->wobble_angle);
+        u.v.a.f[2] =
+            rocket_vars->wobble_radius * offset_trig_factor * fast_cos(rocket_vars->wobble_phase);
         zf = 0.0f;
         u.v.a.f[3] = zf;
         u.v.a.f[0] = zf;
         euler_rotation_matrix(va0, rocket_moby + 0x40);
         transform_vector(&u.v.a, &u.v.a, va0);
-        add_vector_xyz(rocket_moby + 0x10, &rocket_vars->unk10, &u.v.a);
+        add_vector_xyz(rocket_moby + 0x10, &rocket_vars->path_position, &u.v.a);
         if (collision_line(&previous_position, rocket_moby + 0x10, 6, (int)rocket_moby, 0) == 0)
             goto done;
         goto hit;
@@ -289,8 +295,8 @@ void ryno_rocket_update(char *rocket_moby) {
     }
 hit:
     flag = 1;
-    sp = rocket_vars->unk44 * 0.7f;
-    rocket_vars->unk44 = sp;
+    sp = rocket_vars->wobble_radius * 0.7f;
+    rocket_vars->wobble_radius = sp;
     goto top;
 done:
 
@@ -301,8 +307,8 @@ done:
         *(float *)(rocket_moby + 0x44) =
             -fast_arc_tan(vector_distance_xy(&previous_position, rocket_moby + 0x10),
                           *(float *)(rocket_moby + 0x18) - previous_position.f[2]);
-        rocket_vars->unk34 = 0;
-        rocket_vars->unk38 = 0;
+        rocket_vars->yaw_velocity = 0;
+        rocket_vars->pitch_velocity = 0;
     }
 
     if (*(float *)(rocket_moby + 0x10) < 0.0f || *(float *)(rocket_moby + 0x14) < 0.0f ||
@@ -323,7 +329,7 @@ done:
         gg = (char *)((int *)&D_L00_00173E40);
         p = *(char **)(gg + 0x18);
         if (p != 0) {
-            if (p == (char *)D_001413D0_lui || p == rocket_vars->unk20 ||
+            if (p == (char *)D_001413D0_lui || p == rocket_vars->owner ||
                 *(short *)(p + 0xA6) == 0x1C9 || *(short *)(p + 0xA6) == 0)
                 goto keep;
             rocket_moby[0xBC] = 2;
@@ -379,7 +385,7 @@ done:
             return;
         }
     } else {
-        if (fast_dec_timer((int *)(&rocket_vars->unk24)) == 0 &&
+        if (fast_dec_timer((int *)(&rocket_vars->life_timer)) == 0 &&
             !(200.0f < vector_distance_xy(rocket_moby + 0x10, (char *)D_001413D0_lui + 0x10)))
             goto keep;
     }
@@ -387,12 +393,14 @@ del:
     mark_moby_for_removal(rocket_moby);
     return;
 keep:
-    if (rocket_vars->unk24 % scale_game_frames_c(0x20) != 0)
+    if (rocket_vars->life_timer % scale_game_frames_c(0x20) != 0)
         return;
     if (RandomNext() & 1) {
-        rocket_vars->unk50 = rocket_vars->unk50 * random_float_between(-0.7f, -1.5f);
+        rocket_vars->wobble_angle_rate =
+            rocket_vars->wobble_angle_rate * random_float_between(-0.7f, -1.5f);
     }
     if (RandomNext() & 1) {
-        rocket_vars->unk54 = rocket_vars->unk54 * random_float_between(-0.6f, -1.6f);
+        rocket_vars->wobble_phase_rate =
+            rocket_vars->wobble_phase_rate * random_float_between(-0.6f, -1.6f);
     }
 }
