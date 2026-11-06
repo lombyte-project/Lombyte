@@ -43,8 +43,8 @@ typedef struct BlargShipVars {
     s32 path_node;
     f32 path_t;
     f32 speed;
-    f32 unk70;
-    f32 unk74;
+    f32 spin_angle;
+    f32 spin_rate;
     f32 unk78;
     u8  pad_7C[0x8];
     s32 reactivation_frames;
@@ -94,8 +94,8 @@ void blarg_ship_update(struct Moby *moby) {
         if (moby_pvars->formation_slot == 0) {
             moby->state = BLARG_SHIP_FOLLOW_PATH;
             moby_pvars->speed = randf_sym(0.3f, 0.5f);
-            moby_pvars->unk70 = random_angle_radians();
-            moby_pvars->unk74 = randf_sym(60.0f, 120.0f) * DEG_TO_RAD * frame_time;
+            moby_pvars->spin_angle = random_angle_radians();
+            moby_pvars->spin_rate = randf_sym(60.0f, 120.0f) * DEG_TO_RAD * frame_time;
             moby_pvars->unk78 = random_float_between(8.0f, 12.0f);
         } else {
             moby->state = BLARG_SHIP_INACTIVE;
@@ -117,7 +117,7 @@ void blarg_ship_update(struct Moby *moby) {
                 (moby_pvars->path_node + **(int **)(D_L17_001B0DB0 + moby_pvars->path * 4) - 1) %
                 **(int **)(D_L17_001B0DB0 + moby_pvars->path * 4);
         }
-        fast_add_rotations(moby_pvars->unk70, moby_pvars->unk74);
+        fast_add_rotations(moby_pvars->spin_angle, moby_pvars->spin_rate);
         update_moby_path_transform(moby);
         if (moby->state == BLARG_SHIP_BURST_AND_HIDE) {
             cart_burst(moby, &moby->pos, -1, 2.0f, 13.0f);
