@@ -156,7 +156,8 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
             D_0013D4C6_lui == 0) {
             audio_stream_table_index = 0;
             secondary_track_index = 11;
-        } else if (current_level_index == LEVEL_OLTANIS && D_0013E030_28e9c8.x26 == 2) {
+        } else if (current_level_index == LEVEL_OLTANIS &&
+                   D_0013E030_28e9c8.audio_selection_base_index == 2) {
             audio_stream_table_index = 8;
             secondary_track_index = 14;
         }
@@ -175,7 +176,8 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
             if (k)
                 secondary_track_index = 9;
             alternate_audio_stream_table_index = 4;
-        } else if (current_level_index == LEVEL_OLTANIS && D_0013E030_28e9c8.x26 == 2) {
+        } else if (current_level_index == LEVEL_OLTANIS &&
+                   D_0013E030_28e9c8.audio_selection_base_index == 2) {
             secondary_track_index = 13;
             if (D_0013E030_28e9c8.x2c)
                 secondary_track_index = 12;

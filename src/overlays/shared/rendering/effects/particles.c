@@ -84,7 +84,8 @@ unsigned char                       *FUN_L00_002712b8(OvlQuad *initial_position,
 
 extern void FUN_L00_001ff318_271450(void *, void *, float) __asm__("FUN_L00_001ff318");
 
-void update_moving_rotating_resizing_alpha_fade_particle(struct EffectParticle *) __asm__("FUN_L00_00271450");
+void update_moving_rotating_resizing_alpha_fade_particle(struct EffectParticle *) __asm__(
+    "FUN_L00_00271450");
 
 void update_moving_rotating_resizing_alpha_fade_particle(struct EffectParticle *particle) {
     float          particle_velocity[4];
@@ -170,7 +171,8 @@ unsigned char *spawn_moving_resizing_height_snapped_alpha_fade_particle(
     return particle;
 }
 
-void update_moving_resizing_height_snapped_alpha_fade_particle(struct EffectParticle *) __asm__("FUN_L00_00271748");
+void update_moving_resizing_height_snapped_alpha_fade_particle(struct EffectParticle *) __asm__(
+    "FUN_L00_00271748");
 
 void update_moving_resizing_height_snapped_alpha_fade_particle(struct EffectParticle *particle) {
     unsigned char *particle_data = particle->data;
@@ -231,7 +233,8 @@ unsigned char *spawn_splash(u128 *initial_position,
     return particle;
 }
 
-void update_expanding_rotating_alpha_fade_particle(struct EffectParticle *) __asm__("FUN_L00_002719f0");
+void update_expanding_rotating_alpha_fade_particle(struct EffectParticle *) __asm__(
+    "FUN_L00_002719f0");
 
 void update_expanding_rotating_alpha_fade_particle(struct EffectParticle *particle) {
     float *particle_data = (float *)particle->data;
@@ -527,7 +530,8 @@ void update_moving_size_alpha_tween_particle(struct EffectParticle *part) {
 
 typedef unsigned int u128_272438 __attribute__((mode(TI), aligned(16)));
 extern unsigned char D_L00_00177F00_272438[] __asm__("D_L00_00177F00");
-void                 path_sample_at_distance(int, float *, float *, void *, float, float) __asm__("FUN_L00_00262360");
+void                 path_sample_at_distance(int, float *, float *, void *, float, float) __asm__(
+    "FUN_L00_00262360");
 int  FUN_L00_0025bfe0_272438(float, float, float, float) __asm__("FUN_L00_0025bfe0");
 int  collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 void send_blast_hits(void *,
@@ -686,7 +690,7 @@ void update_moby_point_attached_particle(P_2726d8 *particle) {
         free_effect_particle(particle);
         return;
     }
-    sc = q->xC * random_float_between(0.5f, 1.0f);
+    sc = q->initial_primary_position_w * random_float_between(0.5f, 1.0f);
     save = particle->secondary_position_w;
     qcopy(&position_delta, &particle->pos);
     moby_point_position(particle->q.owner, q->moby_point_selector, &particle->pos);
@@ -703,7 +707,8 @@ void update_moby_point_attached_particle(P_2726d8 *particle) {
     particle->secondary_position_w = save;
 }
 
-void update_expanding_damped_rgb_fading_particle(struct EffectParticle *) __asm__("FUN_L00_00272838");
+void update_expanding_damped_rgb_fading_particle(struct EffectParticle *) __asm__(
+    "FUN_L00_00272838");
 
 void update_expanding_damped_rgb_fading_particle(struct EffectParticle *particle) {
     s32 faded_intensity;
@@ -821,7 +826,8 @@ extern char           D_0013F3D0[] NOT_SDA;
 extern unsigned char *D_L00_0016016C_272bc0 __asm__("D_L00_0016016C");
 extern int            fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
 extern void           add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
-extern int FUN_L00_002729c8_272bc0(void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_002729c8");
+extern int FUN_L00_002729c8_272bc0(void *, int, int, int, int, int, int, float, float) __asm__(
+    "FUN_L00_002729c8");
 extern void spawn_nearby_effect(int, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 
 void update_color_tween_emitter_particle(struct EffectParticle *) __asm__("FUN_L00_00272bc0");
@@ -1059,7 +1065,8 @@ typedef struct {
 } G_273298;
 
 u32  FUN_001fa6e0_273298(u32, u32, f32) __asm__("FUN_001fa6e0");
-void update_moving_hero_relative_alpha_fade_particle(Part_273298 *particle) __asm__("FUN_L00_00273298");
+void update_moving_hero_relative_alpha_fade_particle(Part_273298 *particle) __asm__(
+    "FUN_L00_00273298");
 
 void update_moving_hero_relative_alpha_fade_particle(Part_273298 *particle) {
     enum {
@@ -1121,7 +1128,8 @@ typedef struct {
 
 extern u8   *D_L00_001B2174_lui __asm__("D_L00_001B2174") NOT_SDA;
 extern float g_debug_camera[4] __asm__("D_L00_00166DC0") NOT_SDA;
-void         update_moby_point_attached_alpha_pulse_particle(P_273448 *particle) __asm__("FUN_L00_00273448");
+void         update_moby_point_attached_alpha_pulse_particle(P_273448 *particle) __asm__(
+    "FUN_L00_00273448");
 
 void update_moby_point_attached_alpha_pulse_particle(P_273448 *particle) {
     E_273448 *e;
@@ -1219,7 +1227,8 @@ unsigned char *spawn_mode_controlled_alpha_fade_particle(void *position,
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002746A0), where it is exact; names translated to the US level program. */
 
-void update_mode_controlled_alpha_fade_particle(struct EffectParticle *) __asm__("FUN_L00_00273800");
+void update_mode_controlled_alpha_fade_particle(struct EffectParticle *) __asm__(
+    "FUN_L00_00273800");
 
 void update_mode_controlled_alpha_fade_particle(struct EffectParticle *particle) {
     char *particle_data = particle->data;
@@ -1323,7 +1332,8 @@ extern int FUN_L00_002371e0(int, int, float);
 extern u32 large_floor_burst_random_limit_plus_one_gp __asm__("D_L00_00160228")
     __attribute__((sda));
 
-void update_gravity_floor_burst_particle(struct EmberParticle *ember_particle) __asm__("FUN_L00_00273a68");
+void update_gravity_floor_burst_particle(struct EmberParticle *ember_particle) __asm__(
+    "FUN_L00_00273a68");
 
 void update_gravity_floor_burst_particle(struct EmberParticle *ember_particle) {
     struct EmberMotion *m = &ember_particle->m;
@@ -1510,7 +1520,8 @@ spawn_random_planar_drift_particle(void *position, int color, float size_scale, 
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002751A8), where it is exact; names translated to the US level program. */
 
-void update_moving_resizing_periodic_alpha_fade_particle(struct EffectParticle *) __asm__("FUN_L00_00274308");
+void update_moving_resizing_periodic_alpha_fade_particle(struct EffectParticle *) __asm__(
+    "FUN_L00_00274308");
 
 void update_moving_resizing_periodic_alpha_fade_particle(struct EffectParticle *particle) {
     char *particle_data = particle->data;
@@ -1610,7 +1621,8 @@ typedef struct {
 } M_274518;
 
 s32 decrement_packed_countdown(void *, s32) __asm__("FUN_L00_00259430");
-u8 *FUN_L00_002743a8_274518(s32, void *, s32, f32, f32, s32, s32, void *) __asm__("FUN_L00_002743a8");
+u8 *FUN_L00_002743a8_274518(s32, void *, s32, f32, f32, s32, s32, void *) __asm__(
+    "FUN_L00_002743a8");
 void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) __asm__("FUN_L00_00274518");
 
 void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
@@ -1701,7 +1713,8 @@ typedef struct {
     float offset_length;  /* 0x0C: second point distance along the bone */
 } S_274818;
 
-void update_randomized_moby_point_attached_particle(struct EffectParticle *) __asm__("FUN_L00_00274818");
+void update_randomized_moby_point_attached_particle(struct EffectParticle *) __asm__(
+    "FUN_L00_00274818");
 
 void update_randomized_moby_point_attached_particle(struct EffectParticle *particle) {
     S_274818 *attachment_data = (S_274818 *)(particle->data + 0x10);
@@ -1767,7 +1780,8 @@ unsigned char *spawn_mode_controlled_rotating_alpha_fade_particle(u128 *position
     return particle;
 }
 
-void update_mode_controlled_rotating_alpha_fade_particle(struct EffectParticle *) __asm__("FUN_L00_00274a70");
+void update_mode_controlled_rotating_alpha_fade_particle(struct EffectParticle *) __asm__(
+    "FUN_L00_00274a70");
 
 void update_mode_controlled_rotating_alpha_fade_particle(struct EffectParticle *particle) {
     u8 *particle_data = particle->data;
@@ -2093,7 +2107,8 @@ void update_gravity_ground_culled_particle(O_275320 *particle) {
 extern int  hud_counter_update(float, int, int) __asm__("FUN_L00_002371e0");
 extern void transform_vector_by_basis(void *, void *, void *);
 
-void update_damped_moby_relative_color_size_tween_particle(struct EffectParticle *) __asm__("FUN_L00_00275510");
+void update_damped_moby_relative_color_size_tween_particle(struct EffectParticle *) __asm__(
+    "FUN_L00_00275510");
 
 void update_damped_moby_relative_color_size_tween_particle(struct EffectParticle *particle) {
     char *particle_data = particle->data;
@@ -2283,7 +2298,8 @@ static __inline__ void vcopy_276940(float *d, float *s) {
     *(int *)&d[3] = 0;
 }
 
-void update_proximity_corrected_size_alpha_tween_particle(struct EffectParticle *) __asm__("FUN_L00_00275aa0");
+void update_proximity_corrected_size_alpha_tween_particle(struct EffectParticle *) __asm__(
+    "FUN_L00_00275aa0");
 
 void update_proximity_corrected_size_alpha_tween_particle(struct EffectParticle *particle) {
     char  *particle_data = particle->data;
@@ -2403,7 +2419,8 @@ typedef struct {
 } Part;
 
 u32  FUN_001fa6e0_00275eb0(u32, u32, f32) __asm__("FUN_001fa6e0");
-void update_mode_controlled_shrinking_color_tween_particle(Part *particle) __asm__("FUN_L00_00275eb0");
+void update_mode_controlled_shrinking_color_tween_particle(Part *particle) __asm__(
+    "FUN_L00_00275eb0");
 
 void update_mode_controlled_shrinking_color_tween_particle(Part *particle) {
     float remaining_frames_minus_one;
