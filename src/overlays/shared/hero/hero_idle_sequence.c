@@ -161,9 +161,6 @@ int get_hero_easing_moby_by_kind(int ease_kind) {
         HERO_EASE_KIND_SLOT_THREE_SECONDARY_MOBY = 1,
         HERO_EASE_KIND_SLOT_ZERO_PRIMARY_MOBY = 5
     };
-    enum {
-        HERO_EASE_KIND_ON_FOOT_HERO_MOBY = 0
-    };
     if (ease_kind == HERO_EASE_KIND_ON_FOOT_HERO_MOBY || ease_kind == 2 || ease_kind == 3 ||
         ease_kind == 4) {
         return D_001413D0[0];
@@ -194,9 +191,6 @@ void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259
 void update_hero_easing_record(struct HeroEase *ease_record) __asm__("FUN_L00_00205168");
 
 void update_hero_easing_record(struct HeroEase *ease_record) {
-    enum {
-        HERO_EASE_KIND_ON_FOOT_HERO_MOBY = 0
-    };
     s32 moby = get_hero_easing_moby_by_kind(ease_record->kind);
     if (moby == 0)
         return;
@@ -3571,6 +3565,10 @@ void apply_hero_selected_flags_and_state_transitions(void) {
 }
 #undef P
 #include "rnc/math/vector.h"
+
+enum {
+    HERO_EASE_KIND_ON_FOOT_HERO_MOBY = 0
+};
 
 /* the ledge probe of the hero: looks for an edge ahead to grab, and where it finds one stores the grab point and direction */
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_0020C568), where it is exact; names translated to the US level program. */

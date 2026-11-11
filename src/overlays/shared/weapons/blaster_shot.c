@@ -1,3 +1,4 @@
+#include "rnc/mobys/moby_state.h"
 /* Shared moby class 0x131: a homing shot, and the function that spawns it. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
@@ -267,9 +268,6 @@ void homing_shot_update(Moby *shot_moby) __asm__("FUN_L00_002cb418");
 
 /* Moby class 305 */
 void homing_shot_update(Moby *shot_moby) {
-    enum {
-        MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
-    };
     Vec4A     start;
     Vec4A     step;
     ShotQuery query;
@@ -414,7 +412,7 @@ void homing_shot_update(Moby *shot_moby) {
             add_vector_xyz_2cb418(
                 (Vec4A *)&shot_moby->pos, ((char *)D_L00_00173E60), &spark_and_pushout_scratch);
             if (D_001403E0_lui != 0 && D_001403E0_lui->oclass == 0xA8 &&
-                D_001403E0_lui->state != MOBY_STATE_MARKED_FOR_REMOVAL &&
+                D_001403E0_lui->state != MOBY_STATE_REMOVAL_MARKER &&
                 D_001403E0_lui->state != 0xFD) {
                 allocate_voice_for_target_entry(4, 0, D_001403E0_lui);
             }

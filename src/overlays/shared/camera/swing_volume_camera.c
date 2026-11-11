@@ -13,8 +13,6 @@
 #include "rnc/overlay/shared/camera.h"
 #include "rnc/overlay/shared/camera/follow_camera_set_up_spring.h"
 
-void set_follow_camera_angle_parameter(float) __asm__("FUN_L00_002e8540");
-
 #include "rnc/overlay/shared/rendering/culling/test_point_in_transformed_unit_cylinder.h"
 #include "rnc/rendering/clip_volume.h"
 
@@ -23,7 +21,8 @@ enum {
     SWING_CAMERA_TYPE_ONE_FRAME_SWING = 3,
     SWING_CAMERA_TYPE_RETAIN_ON_CAMERA_REQUEST = 4,
     SWING_CAMERA_TYPE_SNAP_ON_ENTRY = 5,
-    SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END = 10
+    SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END = 10,
+    SWING_CAMERA_TYPE_FORCE_FOLLOW_MODE = 11
 };
 
 typedef float CameraVec[4] __attribute__((aligned(16)));
@@ -148,9 +147,6 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
     };
     enum {
         SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_ALLOW_AIRBORNE_ENTRY = 7
-    };
-    enum {
-        SWING_CAMERA_TYPE_FORCE_FOLLOW_MODE = 11
     };
     CameraVec          gravity_offset_or_yaw_direction;
     SwingCameraParams *params;
@@ -387,9 +383,6 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
 s32 volume_camera_swing_check(struct UpdateCam *cam) __asm__("FUN_L00_002ed230");
 
 s32 volume_camera_swing_check(struct UpdateCam *swing_camera_record) {
-    enum {
-        SWING_CAMERA_TYPE_FORCE_FOLLOW_MODE = 11
-    };
     SwingCameraParams *params = camera_descriptors[swing_camera_record->descriptor_index].params;
     if (params->l_buttons_end == 1 && params->done != 0)
         return 0;

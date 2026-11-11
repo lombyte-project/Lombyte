@@ -3354,15 +3354,7 @@ int process_hero_equipped_item_input(void) {
         WRENCH_MOBY_STATE_READY = 0
     };
     enum {
-        HERO_CONTROL_MODE_IDLE = 0,
-        HERO_CONTROL_MODE_GROUND_MOVE = 1,
-        HERO_ITEM_SLOT_STATE_READY = 2,
-        HERO_CONTROL_MODE_FALL = 2,
-        HERO_CONTROL_MODE_JUMP = 4,
-        HERO_CONTROL_MODE_LAND = 5,
-        HERO_CONTROL_MODE_MELEE_ATTACK = 6,
-        HERO_CONTROL_MODE_CROUCH = 0xC,
-        HERO_CONTROL_MODE_GRIND = 0xF
+        HERO_ITEM_SLOT_STATE_READY = 2
     };
     int item_press_age_frames[3];
     int start;
@@ -3386,7 +3378,7 @@ int process_hero_equipped_item_input(void) {
     switch (D_0013F450_h228770.equipped_slot_item_id) {
     case ITEM_WRENCH:
         if (D_0013F450_h228770.hero_control_mode < 2U ||
-            (D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_JUMP &&
+            (D_0013F450_h228770.hero_control_mode == HERO_MODE_JUMP &&
              D_0013F450_h228770.jump_ground_item_input_enabled != 0)) {
             Moby_227fa0 *equipped_item_moby;
 
@@ -3467,7 +3459,7 @@ int process_hero_equipped_item_input(void) {
                 break;
             }
         }
-        if (D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_MELEE_ATTACK) {
+        if (D_0013F450_h228770.hero_control_mode == HERO_MODE_ATTACK) {
             HeroTableRow2C *wrench_attack_record =
                 &attack_records[D_0013F450_h228770.active_attack_record_index];
             int t;
@@ -3528,10 +3520,10 @@ int process_hero_equipped_item_input(void) {
             t = scale_game_frames(8);
         }
         if (D_0013F450_h228770.hero_control_mode < 2U ||
-            D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_JUMP ||
-            D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_FALL ||
-            D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_GRIND ||
-            D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_LAND ||
+            D_0013F450_h228770.hero_control_mode == HERO_MODE_JUMP ||
+            D_0013F450_h228770.hero_control_mode == HERO_MODE_FALL ||
+            D_0013F450_h228770.hero_control_mode == HERO_MODE_GRIND ||
+            D_0013F450_h228770.hero_control_mode == HERO_MODE_LAND ||
             D_0013F450_h228770.hero_current_state == HERO_STATE_LOOK_RELEASE_WAIT) {
             if (pad_pressed_within(mask, t, 0) ||
                 ((controller_state.held & mask) &&
@@ -3583,8 +3575,8 @@ int process_hero_equipped_item_input(void) {
         break;
     case ITEM_REMOTE_VENDOR:
         if (D_0013F450_h228770.hero_control_mode < 3U ||
-            D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_JUMP ||
-            D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_LAND) {
+            D_0013F450_h228770.hero_control_mode == HERO_MODE_JUMP ||
+            D_0013F450_h228770.hero_control_mode == HERO_MODE_LAND) {
             if (pad_pressed_within(mask, scale_game_frames(8), 0)) {
                 open_vendor_menu(0);
             }
@@ -3592,11 +3584,11 @@ int process_hero_equipped_item_input(void) {
         break;
     case 15:
         if (D_0013F450_h228770.hero_control_mode < 2U ||
-            D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_CROUCH ||
-            D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_FALL ||
-            D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_JUMP ||
-            D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_LAND ||
-            D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_GRIND ||
+            D_0013F450_h228770.hero_control_mode == HERO_MODE_CROUCH ||
+            D_0013F450_h228770.hero_control_mode == HERO_MODE_FALL ||
+            D_0013F450_h228770.hero_control_mode == HERO_MODE_JUMP ||
+            D_0013F450_h228770.hero_control_mode == HERO_MODE_LAND ||
+            D_0013F450_h228770.hero_control_mode == HERO_MODE_GRIND ||
             D_0013F450_h228770.hero_current_state == HERO_STATE_LOOK_RELEASE_WAIT) {
             PVar *equipped_item_vars;
 
@@ -3630,13 +3622,13 @@ int process_hero_equipped_item_input(void) {
     case 20:
     case 24:
     case 25:
-        if ((D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_IDLE &&
+        if ((D_0013F450_h228770.hero_control_mode == HERO_MODE_IDLE &&
              D_0013F450_h228770.hero_current_state != HERO_STATE_LOOK_RELEASE_WAIT) ||
-            D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_GROUND_MOVE ||
-            D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_CROUCH ||
-            D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_LAND ||
-            D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_GRIND ||
-            (D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_JUMP &&
+            D_0013F450_h228770.hero_control_mode == HERO_MODE_RUN ||
+            D_0013F450_h228770.hero_control_mode == HERO_MODE_CROUCH ||
+            D_0013F450_h228770.hero_control_mode == HERO_MODE_LAND ||
+            D_0013F450_h228770.hero_control_mode == HERO_MODE_GRIND ||
+            (D_0013F450_h228770.hero_control_mode == HERO_MODE_JUMP &&
              D_0013F450_h228770.jump_weapon_input_enabled != 0) ||
             (D_0013F450_h228770.hero_current_state ==
                  HERO_STATE_ANIMATION_RECOVERY_WITH_JUMP_CANCEL &&
@@ -3653,10 +3645,10 @@ int process_hero_equipped_item_input(void) {
                 ((controller_state.held & 0x20) && n > scale_game_frames(8) &&
                  n < scale_game_frames(0x11))) {
                 if (get_ammo(-1)) {
-                    if (D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_CROUCH ||
-                        D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_IDLE ||
+                    if (D_0013F450_h228770.hero_control_mode == HERO_MODE_CROUCH ||
+                        D_0013F450_h228770.hero_control_mode == HERO_MODE_IDLE ||
                         D_0013F450_h228770.hero_current_state == HERO_STATE_STOP ||
-                        (D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_GROUND_MOVE &&
+                        (D_0013F450_h228770.hero_control_mode == HERO_MODE_RUN &&
                          D_0013F450_h228770.hero_stick_magnitude < 0.7f)) {
                         hero_set_state(0x23, 1);
                     } else {
@@ -3672,7 +3664,7 @@ int process_hero_equipped_item_input(void) {
         break;
     case 18:
         if (D_0013F450_h228770.hero_control_mode < 2U ||
-            (D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_JUMP &&
+            (D_0013F450_h228770.hero_control_mode == HERO_MODE_JUMP &&
              D_0013F450_h228770.jump_ground_item_input_enabled != 0)) {
             if (D_0013F450_h228770.hero_current_state != HERO_STATE_LOOK) {
                 int t = scale_game_frames(0xA);
@@ -3707,9 +3699,9 @@ int process_hero_equipped_item_input(void) {
             f_fun_001f9740_227fa0(&hero_repeat_press_window_frames);
             if (hero_repeat_press_window_frames != 0) {
                 if (D_0013F450_h228770.hero_control_mode < 2U ||
-                    D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_CROUCH ||
-                    ((D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_FALL ||
-                      D_0013F450_h228770.hero_control_mode == HERO_CONTROL_MODE_JUMP) &&
+                    D_0013F450_h228770.hero_control_mode == HERO_MODE_CROUCH ||
+                    ((D_0013F450_h228770.hero_control_mode == HERO_MODE_FALL ||
+                      D_0013F450_h228770.hero_control_mode == HERO_MODE_JUMP) &&
                      D_0013F450_h228770.airborne_repeat_press_action_enabled != 0)) {
                     if ((controller_state.held & 8) && (controller_state.pressed & 8)) {
                         hero_set_state(0x81, 1);

@@ -33,7 +33,7 @@ s32 sceSifBindRpc(struct sceSifClientData *client, s32 rpc_number, s32 completio
     packet->sid = rpc_number;
     packet->pkt_addr = (s32)packet;
     packet->client = (s32)client;
-    if (mode & 1) {
+    if (completion_mode & 1) {
         goto block_7;
     }
     sema_param[1] = 1;

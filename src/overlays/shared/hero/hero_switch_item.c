@@ -1,3 +1,4 @@
+#include "rnc/mobys/moby_state.h"
 /* Hero items and targeting: item slots and switching, ledge and grind rail probes, aim pitch, target scoring and selection. */
 #include "rnc/input/pad_globals.h"
 #include "types.h"
@@ -2259,9 +2260,6 @@ extern s32  D_L00_0015F3F8;
 void hero_update_items(void) __asm__("FUN_L00_00210748");
 
 void hero_update_items(void) {
-    enum {
-        MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
-    };
     int          i;
     int          k;
     struct Moby *moby;
@@ -2292,7 +2290,7 @@ void hero_update_items(void) {
                 }
                 break;
             }
-            if (moby != 0 && moby->state != MOBY_STATE_MARKED_FOR_REMOVAL && moby->state != 0xFD) {
+            if (moby != 0 && moby->state != MOBY_STATE_REMOVAL_MARKER && moby->state != 0xFD) {
                 if (i != 6 && moby->update != 0) {
                     moby->update(moby);
                 }

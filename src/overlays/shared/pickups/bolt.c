@@ -1,3 +1,4 @@
+#include "rnc/mobys/moby_state.h"
 /* Shared moby class bolt (and bolt_hexnut, bolt_starnut, bolt_circlenut): bolts dropped and collected. */
 #include "types.h"
 #include "rnc/game/level_progress.h"
@@ -541,9 +542,6 @@ void collect_bolt(struct Moby *bolt) {
 void update_bolt_grounded_pose(char *moby, void *out1, void *out2) __asm__("FUN_L00_002a6de8");
 
 void update_bolt_grounded_pose(char *moby, void *base_position_output, void *base_rotation_output) {
-    enum {
-        MOBY_STATE_PENDING_REMOVAL = 0xFE
-    };
     char *grounded_bolt_vars = ((char *)MOBY(moby)->pvars);
     float local_rotation_basis[12];
     float base_rotation_basis[12];
@@ -626,7 +624,7 @@ void update_bolt_grounded_pose(char *moby, void *base_position_output, void *bas
         if (ground_moby != 0 && *(unsigned char *)(grounded_bolt_vars + 0x57) == 0) {
             int   should_detach_from_ground;
             char *x;
-            if ((unsigned char)MOBY(ground_moby)->state == MOBY_STATE_PENDING_REMOVAL ||
+            if ((unsigned char)MOBY(ground_moby)->state == MOBY_STATE_REMOVAL_MARKER ||
                 (*(unsigned char **)(grounded_bolt_vars + 0x5C))[0x20] == 0xFD) {
                 should_detach_from_ground = 1;
             } else {
