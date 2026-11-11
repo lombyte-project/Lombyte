@@ -22,12 +22,12 @@ void save_card_state_good_save(void) {
         save_card_state = CS_NOCARD;
         return;
     }
-    if (flags & 0x80) {
+    if (original_flags & 0x80) {
         save_card_state = CS_SAVE_FAILED;
         mode_freeze_flags = (nf ^ 0x80) | 0x40;
         return;
     }
-    if (flags & 0x100) {
+    if (original_flags & 0x100) {
         save_card_state = CS_LOAD_FAILED;
         mode_freeze_flags = (nf ^ 0x100) | 0x40;
         return;

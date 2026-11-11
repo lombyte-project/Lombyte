@@ -98,11 +98,11 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
         menu->entry_time = world_update_time;
         linked_entry_index = current_menu_entry->link;
         if (menu->current_entry != linked_entry_index) {
-            flags = current_menu_entry->flags;
+            source_entry_flags = current_menu_entry->flags;
             menu->current_entry = current_menu_entry->link;
             current_menu_entry = (MenuItem *)(menu->entries + linked_entry_index * 0x1C);
             menu->entry_flag = *(u8 *)&current_menu_entry->flags & 1;
-            if (flags & 4) {
+            if (source_entry_flags & 4) {
                 menu_entry_context[2] = (s32)callback_context;
                 menu_entry_context[3] = (s32)menu;
                 if (current_menu_entry->action & 0x4000) {

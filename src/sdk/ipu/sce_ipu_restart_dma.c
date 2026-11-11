@@ -22,9 +22,9 @@ void sceIpuRestartDMA(struct sceIpuDmaEnv *ctx) {
 
     bits = (u32)ctx->ipubp;
     magic = bits & 0x7F;
-    count = ((bits >> 16) & 3) + ((bits >> 8) & 0xF);
-    input_dma_address = ctx->d4madr - count * 0x10;
-    input_dma_quadword_count = ctx->d4qwc + count;
+    buffered_quadword_count = ((bits >> 16) & 3) + ((bits >> 8) & 0xF);
+    input_dma_address = ctx->d4madr - buffered_quadword_count * 0x10;
+    input_dma_quadword_count = ctx->d4qwc + buffered_quadword_count;
     if (ctx->d3madr != 0) {
         if (ctx->d3qwc != 0) {
             *(volatile u32 *)0x1000B010 = ctx->d3madr;

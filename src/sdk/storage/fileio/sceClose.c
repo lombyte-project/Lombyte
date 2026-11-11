@@ -40,16 +40,16 @@ s32 sceClose(s32 fd) {
         _sceFsSigSema();
         return -9;
     }
-    state->fd = io->fd;
+    close_request->fd = io->fd;
     sema.maxCount = 1;
-    state->iob_index = io - fio_iob;
+    close_request->iob_index = io - fio_iob;
     sema.initCount = 0;
     sema.option = 0;
     sid = CreateSema(&sema);
-    state->sema = sid;
-    state->result_addr = (s32)&close_completion_result;
-    state->result_size = 4;
-    if (sceSifCallRpc(&fio_rpc_client, 1, 0, state, 0x14, fio_rpc_result, 4, 0, 0) < 0) {
+    close_request->sema = sid;
+    close_request->result_addr = (s32)&close_completion_result;
+    close_request->result_size = 4;
+    if (sceSifCallRpc(&fio_rpc_client, 1, 0, close_request, 0x14, fio_rpc_result, 4, 0, 0) < 0) {
         DeleteSema(sid);
         _sceFsSigSema();
         return -0xB;

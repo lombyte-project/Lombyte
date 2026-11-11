@@ -11,7 +11,7 @@ s32 count_gold_bolts(void) {
     for (row = 0; row < 0x14; row++) {
         for (k = 0; k < 4; k++) {
             if (gold_bolts_collected[row * 4 + k] != 0) {
-                count++;
+                collected_bolt_count++;
             }
         }
     }

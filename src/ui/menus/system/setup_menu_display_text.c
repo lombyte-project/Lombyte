@@ -35,7 +35,7 @@ int setup_menu_display_text(struct MenuScreen *menu) {
         draw_moby_list(menu->data.preview.moby, 1);
     }
     setup_gif_paging(0);
-    collected_gold_bolt_count = 0;
+    count = 0;
     {
         int k;
         for (k = 0; k < 4; k++) {
@@ -47,7 +47,7 @@ int setup_menu_display_text(struct MenuScreen *menu) {
     sprintf(formatted_menu_text,
             setup_menu_text_format,
             get_help_message_text(0x4F4F),
-            collected_gold_bolt_count,
+            count,
             get_help_message_text(0x4F53),
             gold_bolts_per_level[level_map_selection.level]);
     font_print_right(

@@ -39,7 +39,7 @@ s32 sceMcGetDir(s32 port, s32 slot, s8 *name, s32 continue_search, s32 maxent, s
         }
         D_00159AB0.port = port;
         D_00159AB0.slot = path_arg;
-        D_00159AB0.mode = mode;
+        D_00159AB0.mode = continue_search;
         D_00159AB0.maxent = maxent;
         D_00159AB0.table = table;
         strncpy(D_00159AB0.name, name, 0x3FF);

@@ -34,8 +34,8 @@ void load_preview_resource_bindings(s32 first_resource, s32 resource_count) {
     binding_count = resource_count;
     resource_index = 0;
     menu_system.preview_resource_first = first_resource;
-    menu_system.preview_resource_count = count;
-    /* Testing the index, not count, lets combine drop the constant note on
+    menu_system.preview_resource_count = binding_count;
+    /* Testing the index, not binding_count, lets combine drop the constant note on
        its zero, so its live range is not doubled. */
     if (resource_index < binding_count) {
         resource_offset = first_resource * 4;

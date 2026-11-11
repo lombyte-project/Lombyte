@@ -17,12 +17,12 @@ void save_card_state_saving(void) {
     s32 updated_freeze_flags;
 
     if ((memory_card_state.state < MEMCARD_REQUEST_FORMAT) &&
-        (memory_card_state.pending_state < MEMCARD_QUERY_INFO)) {
+        (memory_card_state.pending_state < 0)) {
         if (memory_card_state.err != 0) {
             mode_freeze_init(3, 0);
             save_card_state = CS_SAVE_FAILED;
-            flags = mode_freeze_flags | 0x40;
-            mode_freeze_flags = flags;
+            updated_freeze_flags = mode_freeze_flags | 0x40;
+            mode_freeze_flags = updated_freeze_flags;
         } else {
             save_card_state = CS_GOOD_SAVE;
         }

@@ -125,7 +125,7 @@ void update_world_object_animation(void *unused_arg) {
         }
         mob = D_0018CB20_lui.slots[i];
         if (mob == 0) {
-            mob = create_moby(id);
+            mob = create_moby(moby_id);
             idx = mob->pclass->seq_count;
             mob->pclass->seq_count = idx + 1;
             mob->seq = idx;

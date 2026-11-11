@@ -127,9 +127,9 @@ s32 draw_map_screen(struct MenuScreen *screen) {
         }
     }
 
-    id = level_map_selection.level;
+    selected_map_id = level_map_selection.level;
     if (item_available[ITEM_MAP_SHIFT] != 0) {
-        id += 0x100;
+        selected_map_id += 0x100;
     }
     slot = find_map_entry_slot(selected_map_id);
     if (level_map_selection.level != level_map_selection.loaded && slot != -1) {

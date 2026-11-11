@@ -36,7 +36,7 @@ s32 sceMcGetInfo(s32 port, s32 slot, s32 card_type_output, s32 free_blocks, s32 
     D_00159A80.port = port;
     D_00159A80.slot = slot;
     D_00159A80.result = D_00159F00;
-    if (type != NULL) {
+    if (card_type_output != NULL) {
         D_00159A80.want_type = 1;
     } else {
         D_00159A80.want_type = 0;

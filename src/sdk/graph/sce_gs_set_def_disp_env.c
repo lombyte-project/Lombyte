@@ -40,10 +40,13 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output,
     u64               display_vertical;
     u64               progressive_width;
 
-    state = sceGsGetGParam();
-    if (!((u32)(state->wMode - 2) < 2) && checkModelVersion() != 0) {
-        _GetGsDxDyOffset(
-            (s16)state->wMode, &kernel_horizontal, &kernel_vertical, &kernel_width, &kernel_height);
+    video_mode_state = sceGsGetGParam();
+    if (!((u32)(video_mode_state->wMode - 2) < 2) && checkModelVersion() != 0) {
+        _GetGsDxDyOffset((s16)video_mode_state->wMode,
+                         &kernel_horizontal,
+                         &kernel_vertical,
+                         &kernel_width,
+                         &kernel_height);
     } else {
         kernel_height = 0;
         kernel_width = 0;

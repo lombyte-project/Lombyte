@@ -32,8 +32,8 @@ s32 _sceSifLoadModuleBuffer(s32 iop_address,
             memcpy(D_00158200 + 0x104, (void *)module_arguments, 0xFC);
             SIFCMD->arg_len_or_modres = 0xFC;
         } else {
-            memcpy(D_00158200 + 0x104, (void *)module_arguments, size);
-            SIFCMD->arg_len_or_modres = size;
+            memcpy(D_00158200 + 0x104, (void *)module_arguments, argument_byte_count);
+            SIFCMD->arg_len_or_modres = argument_byte_count;
         }
     } else {
         SIFCMD->arg_len_or_modres = 0;

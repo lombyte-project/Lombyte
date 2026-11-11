@@ -22,8 +22,8 @@ void save_card_state_prompt_create_save(void) {
         }
         return;
     }
-    if (flags & 0x10) {
-        mode_freeze_flags = flags ^ 0x10;
+    if (freeze_flags_snapshot & 0x10) {
+        mode_freeze_flags = freeze_flags_snapshot ^ 0x10;
         save_card_state = CS_CREATE_SAVE_PENDING;
     }
 }

@@ -25,7 +25,8 @@ struct Anim {
 
 extern struct Anim hud_chan_slots[] __asm__("D_00199B60");
 extern void        apply_pending_animation(struct Anim *) __asm__("func_001FF418");
-s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b) __asm__("FUN_001ff308");
+s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b) __asm__(
+    "FUN_001ff308");
 
 s32 queue_animation_update(s32 chan,
                            s32 queued_animation_id,
@@ -54,10 +55,10 @@ s32 queue_animation_update(s32 chan,
         anim->next_d = animation_callback;
         anim->next_e = queued_animation_callback;
         anim->pending = 1;
-        anim->next_mode = mode;
+        anim->next_mode = channel_flags;
         anim->visible_timer = 0;
         anim->counter_digits = 0;
-        if (mode & anim->flags & 0x20) {
+        if (channel_flags & anim->flags & 0x20) {
             apply_pending_animation(anim);
         }
     }
