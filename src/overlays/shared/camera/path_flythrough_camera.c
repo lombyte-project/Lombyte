@@ -249,9 +249,9 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
             } else {
                 fast_vec_sub(initial_aim_or_previous_position, look_path + 0x10, &cam->pos);
             }
-            fast_vec_scale(offset, D_0013F5E0_5f18, -1.0f);
+            fast_vec_scale(orientation_vector, D_0013F5E0_5f18, -1.0f);
             fast_vec_normalize(&cam->forward, initial_aim_or_previous_position, 1.0f);
-            fast_vec_cross(&cam->right, &cam->forward, offset);
+            fast_vec_cross(&cam->right, &cam->forward, orientation_vector);
             fast_vec_normalize(&cam->right, &cam->right, 1.0f);
             fast_vec_cross(&cam->up, &cam->right, &cam->forward);
         }
@@ -351,7 +351,7 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
         fast_vec_sub(orientation_vector, point, &cam->pos);
     }
     fast_vec_scale(point, D_0013F5E0_5f18, -1.0f);
-    fast_vec_normalize(&cam->forward, offset, 1.0f);
+    fast_vec_normalize(&cam->forward, orientation_vector, 1.0f);
     fast_vec_cross(&cam->right, &cam->forward, point);
     fast_vec_normalize(&cam->right, &cam->right, 1.0f);
     fast_vec_cross(&cam->up, &cam->right, &cam->forward);

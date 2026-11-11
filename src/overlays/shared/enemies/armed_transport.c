@@ -91,7 +91,8 @@ typedef struct {
     PathPoint2fa0 pts[1];
 } Path2fa0;
 
-char *spawn_armed_transport_rocket(char *owner, char *vec, void *pos, void *vel, int c) __asm__("FUN_L16_002a0dc0");
+char *spawn_armed_transport_rocket(char *owner, char *vec, void *pos, void *vel, int c) __asm__(
+    "FUN_L16_002a0dc0");
 extern char *D_L16_0015FFD8;
 extern char *D_L16_001B0930[];
 extern f32   advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
@@ -128,7 +129,8 @@ extern void spawn_explosion(void *,
                             int,
                             int,
                             int) __asm__("FUN_L00_0025e450");
-void        update_armed_transport_damage_and_targeting(struct Moby *transport_moby) __asm__("FUN_L16_002e2b60");
+void        update_armed_transport_damage_and_targeting(struct Moby *transport_moby) __asm__(
+    "FUN_L16_002e2b60");
 
 extern void update_armed_transport_damage_and_targeting(struct Moby *) __asm__("FUN_L16_002e2b60");
 void        compute_armed_transport_path_headings(void *path_data) __asm__("FUN_L16_002e2fa0");
@@ -499,7 +501,7 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
                         if (*child >= 0)
                             mark_moby_for_removal(pool + (*child << 8));
                         child++;
-                    } while (--passenger_slot_countdown >= 0);
+                    } while (--count >= 0);
                 }
                 transport_moby->state = ARMED_TRANSPORT_STATE_DYING;
                 transport_data->death_timer_frames = scale_game_frames(90);

@@ -75,7 +75,8 @@ typedef struct {
 } V4 __attribute__((aligned(16)));
 
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int generate_random_points_from_shape_entries(void *, int, void *, void *, float) __asm__("FUN_L00_0025aca0");
+extern int generate_random_points_from_shape_entries(void *, int, void *, void *, float) __asm__(
+    "FUN_L00_0025aca0");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 
 void spawn_particles_at_shape_points(void *source_object,
@@ -352,7 +353,7 @@ int step_moby_motion(char *moby, struct KnockbackMotion *motion_state) {
             if (is_moby_in_class_range_500_to_540(*pp) == 0) {
                 if (motion_state->flags & 0x20) {
                     if (motion_state->phase == 2) {
-                        flags |= 0x100;
+                        motion_outcome_flags |= 0x100;
                     }
                 }
             } else {
@@ -389,7 +390,7 @@ int step_moby_motion(char *moby, struct KnockbackMotion *motion_state) {
                 collision_metadata = (char *)collision_result_position - 0x30;
                 if (*(int *)(collision_metadata + 0x18) == 0 ||
                     *(int *)(collision_metadata + 0x1C) > 0) {
-                    flags |= 1;
+                    motion_outcome_flags |= 1;
                     motion_state->phase = 2;
                 }
                 fast_vec_normalize(normal_response_vector, surface_normal, motion_normal_dot);

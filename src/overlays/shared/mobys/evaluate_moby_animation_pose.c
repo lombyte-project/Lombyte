@@ -164,7 +164,7 @@ void FUN_L00_00257470(unsigned char *moby, int bolt_drop_flags, int trajectory_t
     if (bolt_drop_flags & 0x100) {
         call_flags = 5;
     }
-    if (hero_lui.on_hoverboard || (flags & 0x200)) {
+    if (hero_lui.on_hoverboard || (bolt_drop_flags & 0x200)) {
         call_flags |= 2;
     }
     if (hero_lui.state.current == 0x10 &&

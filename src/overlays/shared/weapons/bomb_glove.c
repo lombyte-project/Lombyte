@@ -101,7 +101,8 @@ extern float          frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
  * After the route is fixed: re-score this file, expect EXACT 572/572, then
  * promote normally. Do NOT add inline asm or a per-unit exception for this.
  */
-void aim_throw_arc(V2c2488 *pos, V2c2488 *tgt, f32 *out, f32 speed, f32 unused, f32 range) __asm__("FUN_L00_002c2488");
+void aim_throw_arc(V2c2488 *pos, V2c2488 *tgt, f32 *out, f32 speed, f32 unused, f32 range) __asm__(
+    "FUN_L00_002c2488");
 
 void aim_throw_arc(V2c2488 *origin_position,
                    V2c2488 *target_position,
@@ -186,9 +187,9 @@ void bomb_glove_update(struct Moby *moby) {
     if (moby == 0)
         return;
     bomb_glove_vars = (CarrierVars_2c26c8 *)moby->pvars;
-    offset.q = 0;
-    offset.f[1] = -0.09f;
-    offset.f[2] = -0.02f;
+    grip_local_offset.q = 0;
+    grip_local_offset.f[1] = -0.09f;
+    grip_local_offset.f[2] = -0.02f;
     copy_matrix3x4(basis, l00_camera_lui.view_matrix);
     transpose_rotation_matrix(matrix, basis);
     if (bomb_glove_vars == 0)

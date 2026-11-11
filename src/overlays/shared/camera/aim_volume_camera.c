@@ -148,7 +148,7 @@ run:
         follow = &rig->follow;
         tail = &rig->tail;
         snap = &rig->tail.snap;
-        /* A second pointer to the same state: retail keeps both. */
+        /* A second pointer to the same current_follow_camera_state: retail keeps both. */
         current_follow_camera_state = rig;
         reset = &current_follow_camera_state->reset;
         qcopy(rec_pos, pos);
@@ -156,16 +156,18 @@ run:
         tail->pivot_height = params->height;
         follow->look_height = params->offset_scale;
         fast_vec_scale(gravity_offset, &hero.gravity_dir, -tail->pivot_height);
-        fast_vec_add(state->follow.pivot, &hero.motion.pos, gravity_offset);
-        fast_vec_sub(tail->eye_offset, pos, state->follow.pivot);
-        qcopy(state->tail.saved_eye_offset, tail->eye_offset);
+        fast_vec_add(current_follow_camera_state->follow.pivot, &hero.motion.pos, gravity_offset);
+        fast_vec_sub(tail->eye_offset, pos, current_follow_camera_state->follow.pivot);
+        qcopy(current_follow_camera_state->tail.saved_eye_offset, tail->eye_offset);
         fast_vec_scale(gravity_offset, &hero.gravity_dir, -follow->look_height);
-        fast_vec_add(state->follow.look_target, &hero.motion.pos, gravity_offset);
-        qcopy(state->follow.snap_look_target, state->follow.look_target);
+        fast_vec_add(
+            current_follow_camera_state->follow.look_target, &hero.motion.pos, gravity_offset);
+        qcopy(current_follow_camera_state->follow.snap_look_target,
+              current_follow_camera_state->follow.look_target);
         qcopy(follow->focus, &hero.motion.pos);
-        qcopy(state->follow.offset, follow->focus);
-        qcopy(state->position, rec_pos);
-        qcopy(state->tail.snap.shot_pos, rec_pos);
+        qcopy(current_follow_camera_state->follow.offset, follow->focus);
+        qcopy(current_follow_camera_state->position, rec_pos);
+        qcopy(current_follow_camera_state->tail.snap.shot_pos, rec_pos);
         *(s32 *)&snap->distance_reduction = 0;
         *(s32 *)&reset->pitch_bias = 0;
         reset->look_height = follow->look_height;

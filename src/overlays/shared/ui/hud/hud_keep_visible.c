@@ -493,8 +493,9 @@ int draw_hud_stars(HudElem *element) {
         origin[0] = half_w * sixteen;
         origin[1] = half_h * sixteen;
     }
-    offset = (float)(10000 - element->shown_value) / 10000.0f;
-    offset = 116.0f - (offset + offset) * 116.0f;
+    star_visibility_y_threshold = (float)(10000 - element->shown_value) / 10000.0f;
+    star_visibility_y_threshold =
+        116.0f - (star_visibility_y_threshold + star_visibility_y_threshold) * 116.0f;
     image = get_icon_frame(*(int *)element, 2);
 
     clear_u64_value(first_step);
@@ -591,8 +592,8 @@ int draw_uniform_size_hud_stars(HudElem *hud_element) {
         origin[0] = half_w * 16.0f;
         origin[1] = half_h * 16.0f;
     }
-    offset = (10000 - hud_element->shown_value) / 10000.0f;
-    offset = 116.0f - (offset + offset) * 116.0f;
+    star_y_threshold = (10000 - hud_element->shown_value) / 10000.0f;
+    star_y_threshold = 116.0f - (star_y_threshold + star_y_threshold) * 116.0f;
     image = get_icon_frame(*(int *)hud_element, 1);
     clear_u64_value(first_step);
     clear_u64_value(second_step);

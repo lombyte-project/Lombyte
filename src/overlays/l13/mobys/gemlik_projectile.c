@@ -114,7 +114,7 @@ void gemlik_projectile_update(struct Moby *moby) {
         L13Vec_p random_direction;
     } work;
     int                    i;
-    int                    flags;
+    int                    hit_descriptor_flags;
     int                    skip_level;
     unsigned char         *hero_bytes;
     char                  *ent;

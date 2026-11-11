@@ -282,7 +282,7 @@ void render_data_processor_linked_effect(u8 *moby) {
                                                   *(float *)(linked_processor_vars + 0x12de0);
             }
             for (i = 0; i < linked_effect_render_vars->strip_count; i = next_strip_index) {
-                int          offset;
+                int          strip_transform_byte_offset;
                 int          age;
                 float        progress;
                 unsigned int color;

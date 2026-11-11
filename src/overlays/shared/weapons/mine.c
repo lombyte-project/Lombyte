@@ -84,7 +84,8 @@ extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN_L00_00259888");
 extern void jet_animate(unsigned char *, float) __asm__("FUN_L00_00259fe8");
 extern void
-send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
+send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__(
+    "FUN_L00_0025a9f8");
 extern void spawn_explosion(void *,
                             void *,
                             void *,
@@ -105,7 +106,8 @@ extern void spawn_explosion(void *,
                             int) __asm__("FUN_L00_0025e450");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
-extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
+extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__(
+    "FUN_L00_00262b80");
 extern void spawn_debris_chunk(void *, void *, int, int) __asm__("FUN_L00_0026f548");
 extern void spawn_gravity_floor_burst_particle(
     void *, void *, int, float, float, float, int, int, int) __asm__("FUN_L00_002738e8");
@@ -501,7 +503,7 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
                         other_same_class_moby_count++;
                     }
     }
-    if (count >= 8)
+    if (other_same_class_moby_count >= 8)
         ((D_2aa008 *)best->moby_private_vars)->spawn_frame = -1;
     qcopy(&initialized_moby->v10, requested_position);
     vector_scratch.q = ((Q_2aa008 *)hero.moby)->v10.q;
@@ -999,8 +1001,8 @@ void mine_update(M910 *mine_moby) {
                         if (max_homing_step < sp) {
                             v->homing_speed = max_homing_step;
                         }
-                        mode = v->homing_phase;
-                        if (mode == MINE_HOMING_RISE_PHASE) {
+                        homing_phase = v->homing_phase;
+                        if (homing_phase == MINE_HOMING_RISE_PHASE) {
                             mine_moby->pos.f[2] += frame_scale * 0.05f;
                             if (fast_dec_timer(&v->homing_phase_timer) != 0) {
                                 v->homing_phase_timer = scale_game_frames(7);

@@ -19,7 +19,8 @@
 
 extern float D_0015ED6C;
 
-void update_conveyor_group_motion_transforms(int index, void *conveyor_motion_vector) __asm__("FUN_L16_002c9c38");
+void update_conveyor_group_motion_transforms(int index, void *conveyor_motion_vector) __asm__(
+    "FUN_L16_002c9c38");
 extern void  add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 extern f32   approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float D_0015ED6C, frame_time;
@@ -207,7 +208,7 @@ void draw_conveyor_belt_strips(struct Moby *moby) {
     L16RibbonPacket_u packets[2];
     ConveyorBeltVars *conveyor_data = (ConveyorBeltVars *)moby->pvars;
     float scale = fast_vec_length(D_L16_001600EC_m + ((conveyor_data->belt_cuboid) << 7)) * 2.001f;
-    int   count = truncate_float_to_s32(scale);
+    int   interior_strip_count = truncate_float_to_s32(scale);
     float step = 2.0f / scale;
     int   period, tint, color, limit, j;
     float phase;

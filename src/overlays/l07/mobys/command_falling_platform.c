@@ -16,7 +16,7 @@
 #include "rnc/overlay/shared/mobys/count_active_moby_group_members.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 
-/* steps a hit-effect emitter: orient, spawn a puff, and reseed the timer */
+/* steps a hit-effect emitter: orient, spawn a puff, and reseed the random_bits_or_sink_hold_frames */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00313690), where it is exact; names translated to the US level program. */
 extern int   FUN_0022da68(int, int, int);
 extern void  update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
@@ -102,8 +102,8 @@ void command_falling_platform_update(char *moby) {
         falling_platform_vars->max_health = 0;
         falling_platform_vars->hit_weight = 4;
         falling_platform_vars->target_flags = 13;
-        timer = rand();
-        if (timer & 1)
+        random_bits_or_sink_hold_frames = rand();
+        if (random_bits_or_sink_hold_frames & 1)
             MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, 3.1415927f);
         falling_platform_vars->saved_rot_x = MOBY(moby)->rot.x;
         falling_platform_vars->saved_rot_y = MOBY(moby)->rot.y;
@@ -199,8 +199,8 @@ void command_falling_platform_update(char *moby) {
         if (hero.air_frames.s == 0 && (char *)hero.ground_moby == moby) {
             if (falling_platform_vars->sway_timer == 0)
                 FUN_0022da68(0, 0, (int)moby);
-            timer = scale_game_frames(90);
-            if (falling_platform_vars->sway_timer < timer)
+            random_bits_or_sink_hold_frames = scale_game_frames(90);
+            if (falling_platform_vars->sway_timer < random_bits_or_sink_hold_frames)
                 falling_platform_vars->sway_timer = scale_game_frames(90);
         }
         if (falling_platform_vars->sway_timer != 0) {

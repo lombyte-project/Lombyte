@@ -370,7 +370,7 @@ void initialize_pause_menu(void) {
         D_L00_001841F0.map_image_vram = 0;
         D_L00_001841F0.tex_clut_vram = 0;
         slot = &D_L00_001841F0.texture_slots[3];
-        for (texture_slots_cleared = 0; texture_slots_cleared < 4; texture_slots_cleared++) {
+        for (count = 0; count < 4; count++) {
             *slot = 0;
             slot--;
         }

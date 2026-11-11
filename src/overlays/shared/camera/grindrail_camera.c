@@ -119,7 +119,8 @@ extern s32              FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s
 
 /* Resets the camera's orbit, focus, spring, view and track from fixed values; for a kind 2 preset it
    also prepares its two paths once, measuring each point against the path it follows. */
-void reset_camera_state_and_prepare_preset_paths(Camera *destination_camera) __asm__("FUN_L01_00314e98");
+void reset_camera_state_and_prepare_preset_paths(Camera *destination_camera) __asm__(
+    "FUN_L01_00314e98");
 
 void reset_camera_state_and_prepare_preset_paths(Camera *destination_camera) {
     Vec4           at;
@@ -330,7 +331,7 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
     CameraPreset *camera_path_preset =
         l01_camera_preset_rows_macro[camera_to_update->preset].preset;
     float rate = 0.01f;
-    int   mode = camera_path_preset->kind;
+    int   preset_kind = camera_path_preset->kind;
     int   path_index = camera_path_preset->track_path;
     float lead = camera_path_preset->lead;
     float pitch_error;

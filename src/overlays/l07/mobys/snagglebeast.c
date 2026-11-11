@@ -339,11 +339,12 @@ void draw_snagglebeast_rope_attack_layer(
         qcopy(&quad.positions[0], &quad.positions[1]);
         qcopy(&quad.positions[2], &quad.positions[3]);
         wrapped = normalize_angle(angle + spin * 0.02f);
-        offset[1] = radius * fast_cos(wrapped);
-        offset[2] = radius * fast_sin(wrapped);
-        offset[0] = 0.0f;
-        transform_vector_by_basis(offset, offset, moby + 0xC0);
-        fast_vec_add(&quad.positions[3], rope_layer_moby_vars->rope_tip_position, offset);
+        rope_radial_offset[1] = radius * fast_cos(wrapped);
+        rope_radial_offset[2] = radius * fast_sin(wrapped);
+        rope_radial_offset[0] = 0.0f;
+        transform_vector_by_basis(rope_radial_offset, rope_radial_offset, moby + 0xC0);
+        fast_vec_add(
+            &quad.positions[3], rope_layer_moby_vars->rope_tip_position, rope_radial_offset);
         if (angle != -3.1415927f) {
             draw_geometry_quad(&quad, 0, 1);
             qcopy(&inner.positions[2], &quad.positions[2]);
@@ -444,7 +445,8 @@ void *collect_snagglebeast_navigation_ids(void *unused, void *dp, void *op) {
     return (void *)output_count;
 }
 
-extern int resolve_moby_hit_response(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
+extern int resolve_moby_hit_response(void *, void *, void *, int, int *, int, int, int) __asm__(
+    "FUN_00213928");
 extern void FUN_L00_00257470(void *, int, int);
 extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
 extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
@@ -683,7 +685,8 @@ extern s32                 level_frame_count_lui __asm__("D_L07_0015F5CC");
 extern float               D_0015ED6C;
 extern struct ChaserTarget D_L07_00173EC0;
 extern int step_mover_2e3f20(struct Moby *, void *, int, void *) __asm__("FUN_L00_00259028");
-extern int probe_vertical_ground_collision(void *, struct Moby *, int, float, float) __asm__("FUN_L00_002583f0");
+extern int probe_vertical_ground_collision(void *, struct Moby *, int, float, float) __asm__(
+    "FUN_L00_002583f0");
 int update_snagglebeast_chase_movement(struct Moby       *chaser_moby,
                                        struct ChaserVars *chaser_vars,
                                        Vec4              *goal,
@@ -959,7 +962,8 @@ extern void spawn_moby_point_offset_particle(char *, int, float, float) __asm__(
 extern int
 update_alternating_joint_emission_burst(void *, char *, float *) __asm__("FUN_L07_003122b0");
 extern int   is_value_within_interpolated_window(void *, float) __asm__("FUN_00214cc8");
-extern void *spawn_fading_ring_effect(int, void *, int, float, float, float, float, float) __asm__("FUN_L07_0030dbb0");
+extern void *spawn_fading_ring_effect(int, void *, int, float, float, float, float, float) __asm__(
+    "FUN_L07_0030dbb0");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void configure_timed_point_light(
     void *, void *, int, void *, short, unsigned int, int, float) __asm__("FUN_L07_00311eb8");
@@ -1637,7 +1641,7 @@ void snagglebeast_update(unsigned char *moby) {
                     }
                     MOBY(moby)->state = SNAGGLEBEAST_SWEEP_BEAM_ATTACK;
                 }
-                if (timer194) {
+                if (triple_spawn_attack_ready) {
                     snagglebeast_instance_state->substate = 0;
                     if (MOBY(moby)->prev_seq != 4) {
                         int r = random_int_between(0, 5);

@@ -26,7 +26,8 @@ extern void          FUN_L11_002f2cd0_2518(char *) __asm__("FUN_L11_002f2cd0");
 extern void          FUN_L11_002f2d58_2518(char *) __asm__("FUN_L11_002f2d58");
 extern void          update_teleporter_child_transforms(char *) __asm__("FUN_L01_003092d0");
 extern void          request_hero_target_pose(float *, int, float) __asm__("FUN_L00_00233ee8");
-extern void FUN_L00_002598b0_2518(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
+extern void FUN_L00_002598b0_2518(int, float, void *, int, float, float, int, int, int) __asm__(
+    "FUN_L00_002598b0");
 extern int get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
 extern void
 advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
@@ -353,7 +354,7 @@ void restore_teleporter_visibility_and_collision(struct Moby *moby) __asm__("FUN
 void restore_teleporter_visibility_and_collision(struct Moby *moby) {
     TeleporterVars *teleporter_vars = (TeleporterVars *)moby->pvars;
     char          **child = teleporter_vars->parts;
-    int             count;
+    int             child_slot_countdown;
     int             on;
     moby->visible = 1;
     moby->flags &= 0xFFFE;

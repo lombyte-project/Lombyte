@@ -309,7 +309,7 @@ void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int gait_mask) {
             fast_add_rotations(fast_subtract_rotations(leg->yaw, heading), leg->upper_turn),
             leg->lower_turn);
         base_yaw = fast_subtract_rotations(heading, twist);
-        if (rig->gait == 0 || (flags & mask) == 0) {
+        if (rig->gait == 0 || (gait_mask & mask) == 0) {
             leg->upper_turn = rig_turn_2d48(leg->upper_turn,
                                             0.0f,
                                             &rig->legs[i].upper_turn_speed,
@@ -380,7 +380,8 @@ extern s32 rig_probe(void *, s32, f32, struct Moby *, f32) __asm__("FUN_L00_001f
 extern f32 D_0015ED60;
 extern s32 D_L04_00173FF0[] NOT_SDA;
 
-s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32 step) __asm__("FUN_L04_00295778");
+s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32 step) __asm__(
+    "FUN_L04_00295778");
 
 s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32 step) {
     union {
@@ -533,7 +534,7 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
     local.joints[5] = rig->jointB5;
     transform_scaled_vertex_batch(moby, 6, local.joints, rig);
     if (rig->gait == 0x12 && moby->seq == rig->anims[12]->id)
-        return flags;
+        return movement_constraint_flags;
     moby->anim_speed = 1.0f;
     if (rig->gait != 0) {
         LegRigAnim **fallback = rig->anims;

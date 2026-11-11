@@ -86,7 +86,8 @@ extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 
 extern void start_hit_color_flash(void *m, void *p) __asm__("FUN_L00_0025d458");
 
-extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
+extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__(
+    "FUN_L00_00258110");
 
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 
@@ -779,12 +780,12 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                 }
                 if (dd->health <= r->damage_amount) {
                     func_L13_002EAC18_2EAE80(moby, moby_data, dd, r);
-                    mode = ATTACHMENT_DAMAGE_LETHAL;
+                    damage_outcome = ATTACHMENT_DAMAGE_LETHAL;
                     moby_data->first->hit_slot = 0xFF;
                 } else {
                     dd->health = dd->health - r->damage_amount;
                     moby_data->hit_flash.flash_red = 0xFA;
-                    mode = ATTACHMENT_DAMAGE_APPLIED;
+                    damage_outcome = ATTACHMENT_DAMAGE_APPLIED;
                     moby_data->sub.h6 = scale_game_frames(0);
                     start_hit_color_flash(moby, &moby_data->hit_flash);
                     moby_data->first->hit_slot = 0xFF;
@@ -833,7 +834,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                     }
                     moby_data->voice_line_flags = 0;
                     moby_data->b148 = 0;
-                    mode = ATTACHMENT_DAMAGE_STAGE_ADVANCED;
+                    damage_outcome = ATTACHMENT_DAMAGE_STAGE_ADVANCED;
                     if (moby->command == 7) {
                         for (j = moby->command - 1; j < 10; j++) {
                             func_L13_002EAAB8_2EAE80(
@@ -878,12 +879,12 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
             }
             if (dd->health <= r->damage_amount) {
                 func_L13_002EAC18_2EAE80(moby, moby_data, dd, r);
-                mode = ATTACHMENT_DAMAGE_LETHAL;
+                damage_outcome = ATTACHMENT_DAMAGE_LETHAL;
                 moby_data->list[i]->hit_slot = 0xFF;
             } else {
                 dd->health = dd->health - r->damage_amount;
                 moby_data->hit_flash.flash_red = 0xFA;
-                mode = ATTACHMENT_DAMAGE_APPLIED;
+                damage_outcome = ATTACHMENT_DAMAGE_APPLIED;
                 moby_data->sub.h6 = scale_game_frames(0);
                 start_hit_color_flash(moby, &moby_data->hit_flash);
                 moby_data->list[i]->hit_slot = 0xFF;
@@ -930,7 +931,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                 }
                 moby_data->voice_line_flags = 0;
                 moby_data->b148 = 0;
-                mode = ATTACHMENT_DAMAGE_STAGE_ADVANCED;
+                damage_outcome = ATTACHMENT_DAMAGE_STAGE_ADVANCED;
                 if (moby->command == 7) {
                     for (k = moby->command - 1; k < 10; k++) {
                         func_L13_002EAAB8_2EAE80(
@@ -1561,7 +1562,8 @@ extern char qwarks_starfighter_tractor_offscreen_abort_message[] __asm__("D_L13_
 
 extern float D_L13_00160660[] MACRO_ADDR;
 
-extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
+extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__(
+    "FUN_L00_00258110");
 
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 
@@ -1579,7 +1581,8 @@ extern int qwarks_starfighter_attachment_class_ids[] __asm__("D_L13_001D34D8");
 
 extern int DebugPrint_alt() __asm__("FUN_001e93b0");
 
-extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
+extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__(
+    "FUN_L00_0023e738");
 
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 

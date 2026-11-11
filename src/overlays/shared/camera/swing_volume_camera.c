@@ -214,25 +214,28 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
         follow = &rig->follow;
         tail = &rig->tail;
         snap = &rig->tail.snap;
-        /* A second pointer to the same state: retail keeps both. */
-        state = rig;
-        reset = &state->reset;
+        /* A second pointer to the same snap_camera_state: retail keeps both. */
+        snap_camera_state = rig;
+        reset = &snap_camera_state->reset;
         fast_vec_normalize(tail->eye_offset, tail->eye_offset, params->distance);
         tail->distance = params->distance;
         tail->pivot_height = params->height;
         follow->look_height = params->offset_scale;
-        qcopy(state->tail.saved_eye_offset, tail->eye_offset);
+        qcopy(snap_camera_state->tail.saved_eye_offset, tail->eye_offset);
         fast_vec_scale(gravity_offset_or_yaw_direction, &hero.gravity_dir, -tail->pivot_height);
         pos = &current_follow_camera_record->pos;
-        fast_vec_add(state->follow.pivot, &hero.motion.pos, gravity_offset_or_yaw_direction);
-        fast_vec_add(pos, state->follow.pivot, tail->eye_offset);
+        fast_vec_add(
+            snap_camera_state->follow.pivot, &hero.motion.pos, gravity_offset_or_yaw_direction);
+        fast_vec_add(pos, snap_camera_state->follow.pivot, tail->eye_offset);
         fast_vec_scale(gravity_offset_or_yaw_direction, &hero.gravity_dir, -follow->look_height);
-        fast_vec_add(state->follow.look_target, &hero.motion.pos, gravity_offset_or_yaw_direction);
-        qcopy(state->follow.snap_look_target, state->follow.look_target);
+        fast_vec_add(snap_camera_state->follow.look_target,
+                     &hero.motion.pos,
+                     gravity_offset_or_yaw_direction);
+        qcopy(snap_camera_state->follow.snap_look_target, snap_camera_state->follow.look_target);
         qcopy(follow->focus, &hero.motion.pos);
-        qcopy(state->follow.offset, follow->focus);
-        qcopy(state->position, pos);
-        qcopy(state->tail.snap.shot_pos, pos);
+        qcopy(snap_camera_state->follow.offset, follow->focus);
+        qcopy(snap_camera_state->position, pos);
+        qcopy(snap_camera_state->tail.snap.shot_pos, pos);
         snap->distance_reduction = tail->distance - fast_vec_length(tail->eye_offset);
         *(s32 *)&reset->pitch_bias = 0;
         reset->look_height = follow->look_height;

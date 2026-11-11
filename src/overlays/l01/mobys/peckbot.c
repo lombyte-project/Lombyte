@@ -98,7 +98,7 @@ typedef struct {
     u8                     pad28;
     u8                     x29;
     u8                     pad2a[0xE];
-    s32                    x38;
+    s32                    reduced_range_request;
     u8                     pad3c[0x4];
     Vec577                 vel;
     u8                     pad50[0x8];
@@ -114,12 +114,12 @@ typedef struct {
     struct KnockbackMotion knockback;
     s32                    x180;
     u8                     pad184[0x4];
-    f32                    x188;
-    f32                    x18C;
+    f32                    maximum_ground_drop;
+    f32                    maximum_ground_rise;
     u8                     pad190[0x8];
-    f32                    x198;
+    f32                    movement_vertical_velocity;
     u8                     pad19c[0x8];
-    f32                    x1A4;
+    f32                    maximum_horizontal_movement_step;
     u8                     pad1a8[0x28];
     Vec577                 home;
     Vec577                 dest;
@@ -130,15 +130,15 @@ typedef struct {
     u8                     pad200[0x4];
     f32                    speed;
     s16                    x208;
-    s16                    x20A;
+    s16                    stay_grounded;
     s32                    idle_timer;
     s32                    turn_timer;
-    s16                    x214;
-    s16                    x216;
+    s16                    reduced_range_timer;
+    s16                    maximum_leader_distance;
     Mob577                *leader;
     s32                    path;
     u8                     pad220[0x8];
-    s32                    x228;
+    s32                    airborne_idle_timer;
     u8                     pad22c[0x4];
     u8                     x230[0x10];
 } Mob577Vars;
@@ -166,7 +166,8 @@ extern s32  FUN_L00_001f35d8_cf(void) __asm__("FUN_001f0b58");
 extern void FUN_L00_001ff500_cf(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_00257470(void *, s32, s32);
 extern void FUN_L00_00258278(void *, void *, f32, f32, f32, f32);
-extern s32  move_moby_with_ground_and_collision_checks(void *, void *, void *, void *, f32) __asm__("FUN_L00_00258b50");
+extern s32  move_moby_with_ground_and_collision_checks(void *, void *, void *, void *, f32) __asm__(
+    "FUN_L00_00258b50");
 extern void FUN_L00_0025a120(void *);
 extern void
 hit_reaction(void *, void *, void *, s32, void *, void *, s32, s32) __asm__("FUN_L00_0025a478");

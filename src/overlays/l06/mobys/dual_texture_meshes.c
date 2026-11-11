@@ -5431,13 +5431,13 @@ void draw_dual_texture_50_quad_mesh(void) {
     second_pass_quad_packet.tex = get_effect_texture(0x2a);
     second_pass_quad_packet.tex1 = 0xFF9000000260L;
     first_pass_quad_packet.tex1 = 0xFF9000000260L;
-    flags = (long)dual_texture_mesh_blend_color_a_selector_gp;
-    flags |= (long)dual_texture_mesh_blend_color_b_selector_gp << 2;
-    flags |= (long)dual_texture_mesh_blend_alpha_c_selector_gp << 4;
-    flags |= (long)dual_texture_mesh_blend_color_d_selector_gp << 6;
-    flags |= (long)dual_texture_mesh_blend_fixed_alpha_gp << 32;
-    second_pass_quad_packet.alpha = flags;
-    first_pass_quad_packet.alpha = flags;
+    packed_blend_settings = (long)dual_texture_mesh_blend_color_a_selector_gp;
+    packed_blend_settings |= (long)dual_texture_mesh_blend_color_b_selector_gp << 2;
+    packed_blend_settings |= (long)dual_texture_mesh_blend_alpha_c_selector_gp << 4;
+    packed_blend_settings |= (long)dual_texture_mesh_blend_color_d_selector_gp << 6;
+    packed_blend_settings |= (long)dual_texture_mesh_blend_fixed_alpha_gp << 32;
+    second_pass_quad_packet.alpha = packed_blend_settings;
+    first_pass_quad_packet.alpha = packed_blend_settings;
     second_pass_quad_packet.clamp = 0;
     first_pass_quad_packet.clamp = 0;
     matrix_ptr = matrix;
@@ -5503,8 +5503,8 @@ void draw_dual_texture_58_quad_mesh(void) {
                                  (long)dual_texture_mesh_blend_alpha_c_selector_gp << 4 |
                                  (long)dual_texture_mesh_blend_color_d_selector_gp << 6 |
                                  (long)dual_texture_mesh_blend_fixed_alpha_gp << 32;
-    mesh_second_pass_quad_packet.alpha = flags;
-    mesh_first_pass_quad_packet.alpha = flags;
+    mesh_second_pass_quad_packet.alpha = packed_quad_blend_settings;
+    mesh_first_pass_quad_packet.alpha = packed_quad_blend_settings;
     mesh_second_pass_quad_packet.tex1 = 0xFF9000000260L;
     mesh_first_pass_quad_packet.tex1 = 0xFF9000000260L;
     mesh_second_pass_quad_packet.clamp = 0;
@@ -5576,8 +5576,8 @@ void draw_dual_texture_864_quad_mesh(void) {
                                          (long)dual_texture_mesh_blend_alpha_c_selector_gp << 4 |
                                          (long)dual_texture_mesh_blend_color_d_selector_gp << 6 |
                                          (long)dual_texture_mesh_blend_fixed_alpha_gp << 32;
-    second_texture_pass_quad_packet.alpha = flags;
-    first_texture_pass_quad_packet.alpha = flags;
+    second_texture_pass_quad_packet.alpha = packed_texture_pass_blend_settings;
+    first_texture_pass_quad_packet.alpha = packed_texture_pass_blend_settings;
     second_texture_pass_quad_packet.tex1 = 0xFF9000000260L;
     first_texture_pass_quad_packet.tex1 = 0xFF9000000260L;
     second_texture_pass_quad_packet.clamp = 0;

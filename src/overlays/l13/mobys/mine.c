@@ -172,9 +172,9 @@ void level_13_mine_update(ProjectileMoby *moby) {
                 cls_id == 0x18F || cls_id == 0x190)
                 detonation_flags = 0;
         }
-        if (flags != 0) {
+        if (detonation_flags != 0) {
             if (moby->visible != 0) {
-                if ((flags & 0x2000) != 0) {
+                if ((detonation_flags & 0x2000) != 0) {
                     func_L00_0025F4A8_alt(moby,
                                           velocity,
                                           0,

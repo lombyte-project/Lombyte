@@ -141,7 +141,7 @@ void update_hit_color_flash(s32 id, struct HitColorFlash *animation_state) {
         else
             b = animation_state->original_blue;
     }
-    set_moby_color(color_target_moby, r, g, b);
+    set_moby_color(id, r, g, b);
 }
 
 s32 offset_path_index(s32 *tab, s32 i, s32 index_offset, s32 wrap) __asm__("FUN_L00_0025d7a0");
@@ -540,7 +540,8 @@ f32 normalize_angle(f32 angle_radians) {
 extern int FUN_L00_0025e3b8_u(void *) __asm__("FUN_L00_0025e3b8");
 
 /* False for null; true for a moby outside FUN_L00_0025e3b8's range or of class 0x1F6. */
-int is_nonnull_moby_outside_table_or_class_range_500_to_540_or_class_502(struct Moby *moby) __asm__("FUN_L00_0025e368");
+int is_nonnull_moby_outside_table_or_class_range_500_to_540_or_class_502(struct Moby *moby) __asm__(
+    "FUN_L00_0025e368");
 
 int is_nonnull_moby_outside_table_or_class_range_500_to_540_or_class_502(struct Moby *moby) {
     int predicate_result;
@@ -607,10 +608,12 @@ extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__(
 extern void *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(
     void *, void *, int, int, int, int, int, int, float) __asm__("FUN_L00_0026bb70");
 extern void *spawn_debris(void *, void *, int, int, int) __asm__("FUN_L00_002af450");
-extern void  spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
+extern void  spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__(
+    "FUN_L00_0026a9f0");
 extern void
 spawn_particle_alt_9768(void *, void *, int, int, int, float) __asm__("FUN_L00_0026a4c8");
-extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
+extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__(
+    "FUN_L00_002ac910");
 extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
 
 extern char  default_explosion_flash_descriptor[] __asm__("D_L00_001B0250");
@@ -936,7 +939,8 @@ typedef struct {
 
 /* Explosion burst at `pos`: three random-coloured particles, two tinted particles on `owner`, a camera shake when the
    spot is in view, the owner's sound unless it is dying, and a light flash of intensity `flash` (13 if negative). */
-void cart_burst(u8 *owner, u128 *pos, int sound, float scale, float flash) __asm__("FUN_L00_0025f090");
+void cart_burst(u8 *owner, u128 *pos, int sound, float scale, float flash) __asm__(
+    "FUN_L00_0025f090");
 
 void cart_burst(u8 *burst_owner_moby, u128 *burst_position, int sound, float scale, float flash) {
     Vy10  particle_velocity;

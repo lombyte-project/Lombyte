@@ -887,7 +887,7 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
         reset_follow_camera_state_from_position(camera_moby);
         qcopy(camera_moby->v40, camera_moby->v0);
         if (D_L00_00166E04->camera_class == 7 && D_0013F450_2E8210.h30C == 0) {
-            e->e.h0 = 0;
+            e->e.height_state_timer = 0;
         } else {
             camera_height_state->height_state_timer = scale_game_frames(D_L00_00161D24_gp);
         }
@@ -1272,7 +1272,8 @@ extern int         test_follow_camera_point_in_collision_volume(void *) __asm__(
 extern int         FUN_L00_001f0d60_2e7a30(void *, int, int, float) __asm__("FUN_L00_001f0d60");
 extern int         FUN_L00_002e79c8_2e7a30(void *, int, void *, float) __asm__("FUN_L00_002e79c8");
 
-int resolve_follow_camera_orbit_path_collisions(unsigned char *camera_moby) __asm__("FUN_L00_002e7a30");
+int resolve_follow_camera_orbit_path_collisions(unsigned char *camera_moby) __asm__(
+    "FUN_L00_002e7a30");
 
 int resolve_follow_camera_orbit_path_collisions(unsigned char *camera_moby) {
     OvlQuad        initial_orbit_vector[1];

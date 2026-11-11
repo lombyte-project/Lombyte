@@ -170,13 +170,13 @@ void draw_electric_gate_beams(struct Moby *moby) {
     list = (unsigned short *)D_L05_001ABCC0[moby->group];
     do {
         char *listed_moby;
-        offset = (*list & 0x7FFF) << 8;
-        listed_moby = (char *)(offset + (int)l05_moby_array);
+        moby_table_byte_offset = (*list & 0x7FFF) << 8;
+        listed_moby = (char *)(moby_table_byte_offset + (int)l05_moby_array);
         next_moby_index_ptr = list + 1;
         if (*(short *)(listed_moby + 0xA6) == 0x346 &&
             *(unsigned char *)(listed_moby + 0x20) == 1) {
             copy_matrix_rotation(matrix, listed_moby + 0xC0);
-            qcopy(matrix + 0x30, (char *)(offset + (int)l05_moby_array) + 0x10);
+            qcopy(matrix + 0x30, (char *)(moby_table_byte_offset + (int)l05_moby_array) + 0x10);
             *(float *)(matrix + 0x3C) = 1.0f;
             for (k = 0; k < 5; k++) {
                 draw_geometry_quad(&quads[0][k], matrix, 0);

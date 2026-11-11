@@ -1239,7 +1239,7 @@ typedef struct {
     float                  base_target_selection_range; /* 0x24C */
     float                  effective_target_selection_range;
     char                   pad254[8];
-    short                  t25C;              /* 0x25C */
+    short                  proximity_range_refresh_delay; /* 0x25C */
     short                  range_boost_timer; /* while it runs the target range is 5 longer */
     char                   pad260[0x1C];
     int                    selected_relaunch_moby; /* 0x27C */

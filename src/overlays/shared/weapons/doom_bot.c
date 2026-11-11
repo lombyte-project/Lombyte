@@ -84,11 +84,13 @@ extern void  spawn_explosion(float,
                              int) __asm__("FUN_L00_0025e450");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void
-send_blast_hits(void *, void *, void *, int, void *, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
+send_blast_hits(void *, void *, void *, int, void *, int, int, int, float, float, float) __asm__(
+    "FUN_L00_0025a9f8");
 extern int  FUN_L00_001ff600(float, void *, void *);
 extern int  probe_moby_raised_sphere_collision(char *, int, void *) __asm__("FUN_L00_002beab0");
 extern void FUN_L00_00260400(void *, int, void *, void *, void *, void *);
-extern int  move_moby_with_collision_integer_radius(void *, void *, int, int, float, float) __asm__("FUN_L00_00258ad0");
+extern int  move_moby_with_collision_integer_radius(void *, void *, int, int, float, float) __asm__(
+    "FUN_L00_00258ad0");
 extern void FUN_L00_00258278(void *, float *, float, float, float, float);
 extern struct Moby *
 select_class5_target_or_hero(void *, void *, void *, void *, int) __asm__("FUN_L00_002bed90");
@@ -587,12 +589,12 @@ void doom_bot_update(struct Moby *moby) {
                             -1,
                             item_text_variant[0x14]);
             movement_and_detonation_vectors[1].f[2] += scale * 0.5f;
-            collected_moby_count = collect_mobies_in_sphere(&moby->pos, speed, 0x15, moby, 0);
+            count = collect_mobies_in_sphere(&moby->pos, speed, 0x15, moby, 0);
             movement_and_detonation_vectors[3].q = *(OvlQuad *)&moby->pos;
             send_blast_hits(moby,
                             &movement_and_detonation_vectors[3],
                             D_L00_00177F00,
-                            collected_moby_count,
+                            count,
                             0,
                             0x10000,
                             2,
