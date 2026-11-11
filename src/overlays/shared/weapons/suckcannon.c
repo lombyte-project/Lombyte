@@ -507,9 +507,11 @@ extern char    *mine_camera_blast(char *, char *, int, char *) __asm__("FUN_L00_
 extern s32      scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c0e8");
 extern void
-send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
+send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__(
+    "FUN_L00_0025a9f8");
 extern void swap_color_channel_words(int *, int *, int *, int) __asm__("FUN_L00_0025c088");
-extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
+extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__(
+    "FUN_L00_0026a9f0");
 extern char *func_L00_002E0CB8_DD3D8(float,
                                      void *,
                                      void *,
@@ -3015,7 +3017,7 @@ void suck_beam_update(void *moby, void *position) {
         spawned_beam_particle_count = 0;
         sparks = 0;
         for (i = 0; i < 200; i++) {
-            if (!D_L00_001E4C80_lui[i].p && count < 5) {
+            if (!D_L00_001E4C80_lui[i].p && spawned_beam_particle_count < 5) {
                 for (segment = 9; segment >= 0 && suck_beam_ring_alphas[segment] < 64; segment--)
                     ;
                 if (segment > 0) {

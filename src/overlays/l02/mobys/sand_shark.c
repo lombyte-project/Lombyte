@@ -48,6 +48,15 @@ enum {
     SAND_SHARK_WAIT_FOR_LINKED_MOBY_BEFORE_INITIALIZE = 29
 };
 
+enum SandSharkRelaunchRequestState {
+    SAND_SHARK_RELAUNCH_REQUEST_CONSUMED = 1,
+    SAND_SHARK_RELAUNCH_REQUEST_PENDING = 2
+};
+
+enum SandSharkTargetSelectionStatus {
+    SAND_SHARK_TARGET_SELECTION_EXCLUDED = 2
+};
+
 extern float sand_shark_dust_vertical_velocity_scale_gp __asm__("D_L02_001619D4")
     __attribute__((sda));
 extern float sand_shark_dust_position_jitter_radius_gp __asm__("D_L02_001619DC")
@@ -55,7 +64,8 @@ extern float sand_shark_dust_position_jitter_radius_gp __asm__("D_L02_001619DC")
 unsigned short D_L02_001619E0 = 0;
 /* Dust puff emitter, declared in the argument order the other levels use (pos, three floats, n, vel, size, colour). */
 extern unsigned char *
-spawn_puff(void *pos, float r, float lo, float hi, int n, void *vel, float size, int color) __asm__("FUN_L00_0026d000");
+spawn_puff(void *pos, float r, float lo, float hi, int n, void *vel, float size, int color) __asm__(
+    "FUN_L00_0026d000");
 
 /* Emits n dust puffs evenly spaced along the segment from a to b. */
 void emit_sand_shark_dust_puffs_along_segment(void *moby,
@@ -265,7 +275,8 @@ extern void
 FUN_L00_00258278_c(void *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
 extern void move_moby_with_ground_and_collision_checks(
     void *, void *, void *, void *, float) __asm__("FUN_L00_00258b50");
-extern void play_entity_sound(void *, void *, float, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
+extern void play_entity_sound(void *, void *, float, int, float, float, int, int, int) __asm__(
+    "FUN_L00_002598b0");
 extern void FUN_L00_0025a120_e50(void *) __asm__("FUN_L00_0025a120");
 extern void
            turn_angle_e50(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
@@ -296,10 +307,6 @@ void sand_shark_update(struct Moby *moby) __asm__("FUN_L02_002d3e50");
 void sand_shark_update(struct Moby *moby) {
     enum {
         SAND_SHARK_LANDED_AFTER_KNOCKBACK = 0xB
-    };
-    enum {
-        SAND_SHARK_RELAUNCH_REQUEST_CONSUMED = 1,
-        SAND_SHARK_TARGET_SELECTION_EXCLUDED = 2
     };
     Varsd3e50 *sand_shark_behavior_vars;
     OvlVec4    position_or_offset_scratch;
@@ -1258,7 +1265,8 @@ extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_
 extern int  FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
 extern int  select_group_class_29c_moby(void *argp) __asm__("FUN_L02_002d5658");
 extern void extend_group_sand_shark_timers(char *arg) __asm__("FUN_L02_002d5728");
-extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__(
+    "FUN_00213928");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void
 trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
@@ -1270,11 +1278,6 @@ extern void update_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d538");
 void handle_sand_shark_damage_and_targeting(unsigned char *moby) __asm__("FUN_L02_002d5c88");
 
 void handle_sand_shark_damage_and_targeting(unsigned char *moby) {
-    enum {
-        SAND_SHARK_RELAUNCH_REQUEST_CONSUMED = 1,
-        SAND_SHARK_RELAUNCH_REQUEST_PENDING = 2,
-        SAND_SHARK_TARGET_SELECTION_EXCLUDED = 2
-    };
     Vars5c88 *moby_vars = ((Vars5c88 *)MOBY(moby)->pvars);
     char     *hit_record;
     int      *path;
