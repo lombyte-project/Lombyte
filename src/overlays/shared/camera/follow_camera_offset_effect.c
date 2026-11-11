@@ -22,7 +22,9 @@ void        update_camera_offset_effect_state(void) __asm__("FUN_L02_002fa770");
 extern CameraOffsetEffect   camera_offset_effect __asm__("D_L02_00167600");
 extern float D_L02_0016760C NOT_SDA;
 extern short camera_offset_effect_duration_step_gp __asm__("D_L02_0016238C") __attribute__((sda));
+
 #include "rnc/overlay/shared/camera/follow_camera_offset_effect_data.h"
+
 extern short camera_offset_effect_duration_step __asm__("D_L02_0016238C");
 
 s32 D_L02_00167604[1] __attribute__((section(".data"))) = {0};

@@ -84,13 +84,11 @@ extern void  spawn_explosion(float,
                              int) __asm__("FUN_L00_0025e450");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void
-send_blast_hits(void *, void *, void *, int, void *, int, int, int, float, float, float) __asm__(
-    "FUN_L00_0025a9f8");
+send_blast_hits(void *, void *, void *, int, void *, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 extern int  FUN_L00_001ff600(float, void *, void *);
 extern int  probe_moby_raised_sphere_collision(char *, int, void *) __asm__("FUN_L00_002beab0");
 extern void FUN_L00_00260400(void *, int, void *, void *, void *, void *);
-extern int  move_moby_with_collision_integer_radius(void *, void *, int, int, float, float) __asm__(
-    "FUN_L00_00258ad0");
+extern int  move_moby_with_collision_integer_radius(void *, void *, int, int, float, float) __asm__("FUN_L00_00258ad0");
 extern void FUN_L00_00258278(void *, float *, float, float, float, float);
 extern struct Moby *
 select_class5_target_or_hero(void *, void *, void *, void *, int) __asm__("FUN_L00_002bed90");

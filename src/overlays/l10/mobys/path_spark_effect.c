@@ -25,8 +25,7 @@ typedef struct {
 } EffectData;
 
 extern void
-send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__(
-    "FUN_L00_0025a9f8");
+send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 
 void path_spark_effect_update(char *moby) __asm__("FUN_L10_002dd3d8");
 

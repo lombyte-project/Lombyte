@@ -30,8 +30,7 @@ enum {
 extern float
 approach_angle(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern int   resolve_moby_hit_response(void *, void *, float *, int, int *, int, int, int) __asm__(
-    "FUN_00213928");
+extern int   resolve_moby_hit_response(void *, void *, float *, int, int *, int, int, int) __asm__("FUN_00213928");
 
 /* pvars of the moby run by psytcopus_update (FUN_L11_00310698 does its hit handling) */
 struct PokiPathVars {

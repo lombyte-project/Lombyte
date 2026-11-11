@@ -101,8 +101,7 @@ extern float          frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
  * After the route is fixed: re-score this file, expect EXACT 572/572, then
  * promote normally. Do NOT add inline asm or a per-unit exception for this.
  */
-void aim_throw_arc(V2c2488 *pos, V2c2488 *tgt, f32 *out, f32 speed, f32 unused, f32 range) __asm__(
-    "FUN_L00_002c2488");
+void aim_throw_arc(V2c2488 *pos, V2c2488 *tgt, f32 *out, f32 speed, f32 unused, f32 range) __asm__("FUN_L00_002c2488");
 
 void aim_throw_arc(V2c2488 *origin_position,
                    V2c2488 *target_position,

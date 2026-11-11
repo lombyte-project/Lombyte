@@ -166,8 +166,7 @@ extern s32  FUN_L00_001f35d8_cf(void) __asm__("FUN_001f0b58");
 extern void FUN_L00_001ff500_cf(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_00257470(void *, s32, s32);
 extern void FUN_L00_00258278(void *, void *, f32, f32, f32, f32);
-extern s32  move_moby_with_ground_and_collision_checks(void *, void *, void *, void *, f32) __asm__(
-    "FUN_L00_00258b50");
+extern s32  move_moby_with_ground_and_collision_checks(void *, void *, void *, void *, f32) __asm__("FUN_L00_00258b50");
 extern void FUN_L00_0025a120(void *);
 extern void
 hit_reaction(void *, void *, void *, s32, void *, void *, s32, s32) __asm__("FUN_L00_0025a478");

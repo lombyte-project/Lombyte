@@ -105,8 +105,7 @@ extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 
 extern void start_hit_color_flash(void *, void *) __asm__("FUN_L00_0025d458");
 
-extern void update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__(
-    "FUN_L00_00262b80");
+extern void update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");
 
 extern int FUN_L14_00307620_6ee0(void *) __asm__("FUN_L14_00307620");
 
@@ -332,8 +331,7 @@ extern char *D_L14_0015FFD8_7620 __asm__("D_L14_0015FFD8");
 
 extern float D_L14_00162274 __attribute__((sda));
 
-extern int sample_path(char *path, float *out, void *pos, void *t, int dir, float step) __asm__(
-    "FUN_L00_0025d808");
+extern int sample_path(char *path, float *out, void *pos, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
 
 extern void cart_burst(void *, void *, f32, f32, s32) __asm__("FUN_L00_0025f090");
 
@@ -475,7 +473,6 @@ void seed_linked_record_for_flying_car(u8 *flying_car_moby) {
     *(f32 *)(linked_record + 0xB0) = 2.0f;
 }
 
-extern int sample_path(char *path, float *out, void *seg, void *t, int dir, float step) __asm__(
-    "FUN_L00_0025d808");
+extern int sample_path(char *path, float *out, void *seg, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
 
 int flying_car_path_reset_delay_frames_gp __asm__("D_L14_0016227C") = 0x1f4;

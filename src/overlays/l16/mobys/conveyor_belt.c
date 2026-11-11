@@ -19,8 +19,7 @@
 
 extern float D_0015ED6C;
 
-void update_conveyor_group_motion_transforms(int index, void *conveyor_motion_vector) __asm__(
-    "FUN_L16_002c9c38");
+void update_conveyor_group_motion_transforms(int index, void *conveyor_motion_vector) __asm__("FUN_L16_002c9c38");
 extern void  add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 extern f32   approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float D_0015ED6C, frame_time;

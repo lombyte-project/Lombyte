@@ -86,8 +86,7 @@ extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 
 extern void start_hit_color_flash(void *m, void *p) __asm__("FUN_L00_0025d458");
 
-extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__(
-    "FUN_L00_00258110");
+extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 
@@ -1562,8 +1561,7 @@ extern char qwarks_starfighter_tractor_offscreen_abort_message[] __asm__("D_L13_
 
 extern float D_L13_00160660[] MACRO_ADDR;
 
-extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__(
-    "FUN_L00_00258110");
+extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 
@@ -1581,8 +1579,7 @@ extern int qwarks_starfighter_attachment_class_ids[] __asm__("D_L13_001D34D8");
 
 extern int DebugPrint_alt() __asm__("FUN_001e93b0");
 
-extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__(
-    "FUN_L00_0023e738");
+extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 

@@ -147,12 +147,10 @@ blend_frog_rotation_to_facing_frame(char *, float *, float *) __asm__("FUN_L06_0
 extern void probe_frog_local_z_collision(char *) __asm__("FUN_L06_002e9aa8");
 extern void FUN_L06_002e9b60_c(void *, void *, int, float, float) __asm__("FUN_L06_002e9b60");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
-void        trooper_start_knockback(u8 *a, void *b, int c, int d, int e, float f) __asm__(
-    "FUN_L00_0025c558");
+void        trooper_start_knockback(u8 *a, void *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
 void       update_frog_health_respawn_and_target(struct Moby *moby) __asm__("FUN_L06_002e94f0");
 void       destroy_frog_child_moby(struct Moby *moby) __asm__("FUN_L06_002e9f30");
-extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__(
-    "FUN_00213928");
+extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void  mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
 void         spawn_moby_directional_spark_bursts(struct Moby *moby,
                                                  Vec4 *spark_push_direction) __asm__("FUN_L06_002ea198");
@@ -167,8 +165,7 @@ activate_effect_l08(void *, void *, float, int, int, void *, int) __asm__("FUN_L
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void
 resolve_point_path_segment_xy_clearance(float, int, void *, void *) __asm__("FUN_L00_00261d78");
-extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, float) __asm__(
-    "FUN_L00_002af8b0");
+extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, float) __asm__("FUN_L00_002af8b0");
 extern void  add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern float fast_cos(float);
 extern float fast_sin(float);
@@ -207,8 +204,7 @@ extern struct Moby *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 extern float frog_facing_rotation_blend_factor_gp __asm__("D_L06_00161C00") __attribute__((sda));
 extern f32   D_0015ED6C;
 extern u128 D_L06_001745E0 NOT_SDA;
-extern OvlVec4             coll_hit_pos __asm__(
-    "D_L06_001745F0") NOT_SDA; /* position after push-out of the last collision query */
+extern OvlVec4             coll_hit_pos __asm__("D_L06_001745F0") NOT_SDA; /* position after push-out of the last collision query */
 extern s32 moby_spark_burst_count_gp __asm__("D_L06_00161C18") __attribute__((sda));
 extern s32 moby_sparks_per_burst_gp __asm__("D_L06_00161C1C") __attribute__((sda));
 extern f32 moby_spark_burst_position_jitter_bound_gp __asm__("D_L06_00161C20") __attribute__((sda));
