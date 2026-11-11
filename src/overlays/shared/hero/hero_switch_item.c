@@ -3292,7 +3292,12 @@ void clip_negative_segment_endpoint_xyz(Vec4_002126b8 *, void *) __asm__("FUN_L0
 void hero_get_collision_ray_endpoints(Vec4_002126b8 *, Vec4_002126b8 *, int, float, float) __asm__("FUN_L00_002126b8");
 void hero_get_collision_ray_endpoints(
 
-    Vec4_002126b8 *ray_start, Vec4_002126b8 *ray_end, int use_gravity_direction, float fa, float fb) {
+    Vec4_002126b8 *ray_start,
+    Vec4_002126b8 *ray_end,
+    int            use_gravity_direction,
+    float          fa,
+
+    float fb) {
     Vec4_002126b8 ray_scratch_vectors[2];
     if (use_gravity_direction) {
         char *up = (char *)&hero.gravity_dir;

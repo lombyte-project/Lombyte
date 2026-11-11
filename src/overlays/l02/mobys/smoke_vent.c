@@ -175,7 +175,8 @@ void smoke_vent_update(struct Moby *moby) {
             smoke_vent_vars->timer_C0 = truncate_float_to_s32(
                 scale_time(random_float_between((f32)view_gated_smoke_burst_interval_min_gp,
                                                 (f32)view_gated_smoke_burst_interval_max_gp)));
-            view_gated_burst_particle_count = random_integer_below(7) != 0 ? 1 : random_integer_below(5) + 5;
+            view_gated_burst_particle_count =
+                random_integer_below(7) != 0 ? 1 : random_integer_below(5) + 5;
             for (k1 = 0; k1 < view_gated_burst_particle_count; k1++) {
                 random_vector(&vector_perturbation,
                               0.0f,
@@ -316,7 +317,8 @@ void smoke_vent_update(struct Moby *moby) {
             smoke_vent_vars->timer_C0 = truncate_float_to_s32(
                 scale_time(random_float_between((f32)alternating_smoke_burst_interval_min_gp,
                                                 (f32)alternating_smoke_burst_interval_max_gp)));
-            alternating_burst_particle_count = random_integer_below(7) != 0 ? 1 : random_integer_below(5) + 5;
+            alternating_burst_particle_count =
+                random_integer_below(7) != 0 ? 1 : random_integer_below(5) + 5;
             for (k2 = 0; k2 < alternating_burst_particle_count; k2++) {
                 random_vector(&vector_perturbation,
                               0.0f,

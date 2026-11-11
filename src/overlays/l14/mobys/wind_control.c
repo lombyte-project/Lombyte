@@ -269,16 +269,20 @@ void update_wind_sparks(struct Moby *wind_control_moby) {
             }
         } else {
             opacity = wind_spark_peak_alpha_gp;
-            if (spark_vars->spark_lifetime_initial_frames[i] - wind_spark_fade_in_frames_gp < spark_vars->spark_lifetime_remaining_frames[i]) {
+            if (spark_vars->spark_lifetime_initial_frames[i] - wind_spark_fade_in_frames_gp <
+                spark_vars->spark_lifetime_remaining_frames[i]) {
                 spark_fade_fraction =
-                    convert_integer_to_float(spark_vars->spark_lifetime_initial_frames[i] - spark_vars->spark_lifetime_remaining_frames[i]);
+                    convert_integer_to_float(spark_vars->spark_lifetime_initial_frames[i] -
+                                             spark_vars->spark_lifetime_remaining_frames[i]);
                 spark_fade_fraction =
                     spark_fade_fraction / convert_integer_to_float(wind_spark_fade_in_frames_gp);
             } else {
-                spark_fade_fraction = convert_integer_to_float(spark_vars->spark_lifetime_remaining_frames[i]);
+                spark_fade_fraction =
+                    convert_integer_to_float(spark_vars->spark_lifetime_remaining_frames[i]);
                 spark_fade_fraction =
                     spark_fade_fraction /
-                    convert_integer_to_float(spark_vars->spark_lifetime_initial_frames[i] - wind_spark_fade_in_frames_gp);
+                    convert_integer_to_float(spark_vars->spark_lifetime_initial_frames[i] -
+                                             wind_spark_fade_in_frames_gp);
             }
             {
                 int spark_alpha =

@@ -231,7 +231,8 @@ void flying_car_update(struct Moby *flying_car_moby) {
                     (hero.state.control_mode == HERO_MODE_GRAPPLE_SWING &&
                      hero.swing_target_moby == o)) {
                     seed_linked_record_for_flying_car(flying_car_moby);
-                    flying_car_data->attached_part_interaction_hold_timer_frames = scale_game_frames(0x1E);
+                    flying_car_data->attached_part_interaction_hold_timer_frames =
+                        scale_game_frames(0x1E);
                 } else {
                     fast_dec_timer(&flying_car_data->attached_part_interaction_hold_timer_frames);
                     if (flying_car_data->attached_part_interaction_hold_timer_frames != 0) {

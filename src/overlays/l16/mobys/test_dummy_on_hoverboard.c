@@ -571,7 +571,8 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
        expression table, and that size orders the stack slots of the cached addresses (sp+0x90..0xC4):
        with the literal at both calls every one of those slots is rotated by three. */
     int   mask = 0x30000;
-    float distance, duration, target, z, gap, speed, angle, scale, rate, limit, competitor_speed_offset, slow;
+    float distance, duration, target, z, gap, speed, angle, scale, rate, limit,
+        competitor_speed_offset, slow;
 
     /* No pointer locals: every address is written where it is used. The compiler caches them itself
        (d + 0x1E0 from here on, the others at the top of the active state). */
@@ -594,7 +595,8 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
                                          *(float *)(path + 0x24) - *(float *)(path + 0x14));
         hoverboard_dummy_data->unk2B = 1;
         time = D_0015ED6C;
-        competitor_speed_offset = (float)hoverboard_dummy_data->race_competitor_index * (time * 1.55f);
+        competitor_speed_offset =
+            (float)hoverboard_dummy_data->race_competitor_index * (time * 1.55f);
         hoverboard_dummy_data->normal_speed_target = time * 17.0f + competitor_speed_offset;
         hoverboard_dummy_data->boost_speed_target = time * 24.0f + competitor_speed_offset;
         if (D_0013D4DF == 0) {
@@ -637,7 +639,8 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
         if (hero.state.control_mode != 22) {
             MOBY(moby)->state = HOVERBOARD_DUMMY_STATE_INITIALIZE;
         } else {
-            int   reactivation_elapsed_frames = *(unsigned short *)&hoverboard_dummy_data->reactivation_timer_frames + 1;
+            int reactivation_elapsed_frames =
+                *(unsigned short *)&hoverboard_dummy_data->reactivation_timer_frames + 1;
             short timer = reactivation_elapsed_frames;
 
             hoverboard_dummy_data->reactivation_timer_frames = reactivation_elapsed_frames;

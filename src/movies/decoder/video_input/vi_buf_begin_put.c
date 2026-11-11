@@ -24,7 +24,8 @@ void vi_buf_begin_put(struct ViBuf *ring_buffer,
     used_blocks = pending + 2;
     ring_capacity_bytes = ring_buffer->buff_size;
     free_bytes = ((ring_buffer->n - used_blocks) << 0xB) - read_byte_count;
-    write_pos = (s32)(((ring_buffer->dma_start + pending) << 0xB) + read_byte_count) % ring_capacity_bytes;
+    write_pos =
+        (s32)(((ring_buffer->dma_start + pending) << 0xB) + read_byte_count) % ring_capacity_bytes;
     if ((ring_capacity_bytes - write_pos) >= free_bytes) {
         *first_write_address_out = (s32)ring_buffer->data + write_pos;
         *first_write_byte_count_out = free_bytes;

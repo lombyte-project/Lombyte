@@ -42,8 +42,9 @@ enum {
 int is_robot_dog_in_state_5(struct Moby *moby) __asm__("FUN_L03_002c5b78");
 
 int is_robot_dog_in_state_5(struct Moby *moby) {
-    if (moby && moby->state != MOBY_STATE_PENDING_REMOVAL && moby->state != MOBY_STATE_ALTERNATE_REMOVAL_MARKER &&
-        moby->oclass == 0x23D && moby->state == ROBOT_DOG_FOLLOW_PATH) {
+    if (moby && moby->state != MOBY_STATE_PENDING_REMOVAL &&
+        moby->state != MOBY_STATE_ALTERNATE_REMOVAL_MARKER && moby->oclass == 0x23D &&
+        moby->state == ROBOT_DOG_FOLLOW_PATH) {
         return 1;
     }
     return 0;

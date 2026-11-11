@@ -72,7 +72,9 @@ void upper_door_update(struct Moby *moby) {
         moby_save_id = moby->save_id;
         save_id_index = moby_save_id;
         if (l04_save_id_collection_state.collected[save_id_index] == 0 &&
-            !((D_0014C190_257218[current_level_index][save_id_index >> 5] >> (moby_save_id & 0x1F)) & 1)) {
+            !((D_0014C190_257218[current_level_index][save_id_index >> 5] >>
+               (moby_save_id & 0x1F)) &
+              1)) {
             if (riser_vars->trigger == -1)
                 break;
             trigger_moby = (struct Moby *)((riser_vars->trigger << 8) + D_L04_0015FFD8);

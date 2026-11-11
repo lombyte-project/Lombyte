@@ -454,7 +454,8 @@ void initialize_level_map_archive(void) {
         archive = archive_base;
         first_size = archive[1] - archive[0];
         map_archive_state->first_data = hud_heap_alloc(first_size, 0, (char *)heap_tag, 0x2DB);
-        fast_mem_copy((void *)map_archive_state->first_data, (char *)archive + archive[0], first_size);
+        fast_mem_copy(
+            (void *)map_archive_state->first_data, (char *)archive + archive[0], first_size);
         map_archive_state->first_data += 8;
         map_archive_state->second_data = map_archive_state->first_data;
         second_size = archive[2] - archive[1];

@@ -362,7 +362,10 @@ s32 predict_thrown_moby_landing(ThrowVars   *throw_vars,
                                 struct Moby *thrown_moby,
                                 s32          mode) __asm__("FUN_L00_002c3af8");
 
-s32 predict_thrown_moby_landing(ThrowVars *throw_vars, struct Moby *thrown_moby, s32 linked_moby_policy) {
+s32 predict_thrown_moby_landing(ThrowVars   *throw_vars,
+                                struct Moby *thrown_moby,
+
+                                s32 linked_moby_policy) {
     Vec4 predicted_position, predicted_velocity, position_scratch, q, ground_probe_position;
     s32  prediction_countdown;
     s32  found = 0;

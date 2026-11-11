@@ -40,7 +40,13 @@ s32 vi_buf_create(ViBuf *f, u128 *data, u128 *tag, s32 size, TimeStamp *ts, s32 
 
 s32 vi_buf_create(
 
-    ViBuf *video_input_buffer, u128 *data, u128 *tag, s32 buffer_element_count, TimeStamp *ts, s32 n_ts) {
+    ViBuf     *video_input_buffer,
+    u128      *data,
+    u128      *tag,
+    s32        buffer_element_count,
+    TimeStamp *ts,
+
+    s32 n_ts) {
     struct SemaParam param;
 
     video_input_buffer->data = data;

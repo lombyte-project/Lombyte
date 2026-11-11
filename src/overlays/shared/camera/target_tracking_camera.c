@@ -224,8 +224,12 @@ void update_target_tracking_camera_position(char *camera_object) {
             }
             if (chosen != 0) {
                 fast_vec_sub(position_delta, chosen + 0x10, current_target + 0x10);
-                *angle = rope_spring_turn(
-                    turn, *angle, fast_arc_tan(position_delta[0], position_delta[1]), 0.00125f, 0.175f, 0.0f);
+                *angle = rope_spring_turn(turn,
+                                          *angle,
+                                          fast_arc_tan(position_delta[0], position_delta[1]),
+                                          0.00125f,
+                                          0.175f,
+                                          0.0f);
             } else if (*(int *)(follow + 0x40) == 1)
                 *angle = rope_spring_turn(turn,
                                           *angle,

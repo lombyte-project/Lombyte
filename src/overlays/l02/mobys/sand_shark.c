@@ -430,7 +430,8 @@ void sand_shark_update(struct Moby *moby) {
             FUN_L02_002d5a68_e50(&target_or_particle_vector);
         }
         moby->pos.z -= sand_shark_height_offset_gp;
-        if (sand_shark_behavior_vars->target_selection_status != SAND_SHARK_TARGET_SELECTION_EXCLUDED) {
+        if (sand_shark_behavior_vars->target_selection_status !=
+            SAND_SHARK_TARGET_SELECTION_EXCLUDED) {
             if (sand_shark_behavior_vars->wander_target_volume_index >= 0) {
                 if ((!is_point_inside_clip_volume(
                          &sand_shark_behavior_vars->target,
@@ -469,7 +470,8 @@ void sand_shark_update(struct Moby *moby) {
         }
         break;
     case SAND_SHARK_WAIT_FOR_TARGET_IN_VOLUME:
-        if (sand_shark_behavior_vars->target_selection_status != SAND_SHARK_TARGET_SELECTION_EXCLUDED &&
+        if (sand_shark_behavior_vars->target_selection_status !=
+                SAND_SHARK_TARGET_SELECTION_EXCLUDED &&
             is_point_inside_clip_volume(&sand_shark_behavior_vars->target,
                                         sand_shark_behavior_vars->target_activation_volume_index)) {
             moby->state = SAND_SHARK_APPROACH_TARGET;
@@ -519,7 +521,8 @@ void sand_shark_update(struct Moby *moby) {
                 if (moby->prev_seq != 1) {
                     blend_moby_animation(moby, 1, 0, scale_game_frames(0xA));
                 }
-            } else if (sand_shark_behavior_vars->target_selection_status != SAND_SHARK_TARGET_SELECTION_EXCLUDED) {
+            } else if (sand_shark_behavior_vars->target_selection_status !=
+                       SAND_SHARK_TARGET_SELECTION_EXCLUDED) {
                 moby->state = SAND_SHARK_APPROACH_TARGET;
                 if (moby->prev_seq != 0) {
                     blend_moby_animation(moby, 0, 0, scale_game_frames(0xF));
@@ -544,7 +547,8 @@ void sand_shark_update(struct Moby *moby) {
                 if (moby->prev_seq != 1) {
                     blend_moby_animation(moby, 1, 0, scale_game_frames(0xA));
                 }
-            } else if (sand_shark_behavior_vars->target_selection_status != SAND_SHARK_TARGET_SELECTION_EXCLUDED) {
+            } else if (sand_shark_behavior_vars->target_selection_status !=
+                       SAND_SHARK_TARGET_SELECTION_EXCLUDED) {
                 moby->state = SAND_SHARK_APPROACH_TARGET;
                 if (moby->prev_seq != 0) {
                     blend_moby_animation(moby, 0, 0, scale_game_frames(0xF));
@@ -647,7 +651,8 @@ void sand_shark_update(struct Moby *moby) {
         if (moby->state == SAND_SHARK_APPROACH_TARGET_WITH_HEIGHT_OFFSET) {
             moby->pos.z -= sand_shark_height_offset_gp;
         }
-        if (sand_shark_behavior_vars->target_selection_status != SAND_SHARK_TARGET_SELECTION_EXCLUDED) {
+        if (sand_shark_behavior_vars->target_selection_status !=
+            SAND_SHARK_TARGET_SELECTION_EXCLUDED) {
             if (sand_shark_behavior_vars->target_activation_volume_index >= 0 &&
                 !is_point_inside_clip_volume(
                     &sand_shark_behavior_vars->target,
@@ -764,7 +769,8 @@ void sand_shark_update(struct Moby *moby) {
             }
         }
         if (sand_shark_behavior_vars->outside_path_return_active == 0) {
-            if (sand_shark_behavior_vars->target_selection_status != SAND_SHARK_TARGET_SELECTION_EXCLUDED) {
+            if (sand_shark_behavior_vars->target_selection_status !=
+                SAND_SHARK_TARGET_SELECTION_EXCLUDED) {
                 fast_vec_sub(&target_home_delta,
                              &sand_shark_behavior_vars->target,
                              &sand_shark_behavior_vars->home);

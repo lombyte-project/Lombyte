@@ -31,8 +31,8 @@ void set_up_vis_gif_viewer(u64 *packet_destination,
         packet_destination[0] = (0x20 | (template_draw_control_bits & 0x1C)) | ((u64)prim << 6) |
                                 ((u64)(u32)draw_control_high_word << 32);
         packet_destination += 2;
-        packet_destination[0] =
-            (material_control_base | ((u64)material_control_shift2 << 2)) | ((u64)material_index << 24);
+        packet_destination[0] = (material_control_base | ((u64)material_control_shift2 << 2)) |
+                                ((u64)material_index << 24);
         packet_destination += 2;
         packet_destination[0] = template_texture_state0;
         packet_destination[2] = template_texture_state1;

@@ -44,7 +44,8 @@ void button_update(struct Moby *moby) {
         moby->pos.z -= 0.35f;
         save_entry_index = (s16)moby->save_id;
         if (D_L14_001BB930.cleared[save_entry_index] != 0 ||
-            (D_0014C190_257218[current_level_index][save_entry_index >> 5] >> (moby->save_id & 31) & 1) != 0 ||
+            (D_0014C190_257218[current_level_index][save_entry_index >> 5] >> (moby->save_id & 31) &
+             1) != 0 ||
             (button_pvars[2] != 0 &&
              D_0014C050[moby->mission + current_level_index * 16] == 0xFF)) {
             moby->command = 2;
@@ -80,7 +81,8 @@ void button_update(struct Moby *moby) {
         moby->glow_color = high | shade | color;
         if (hero.ground_moby == moby && hero.air_frames.s == 0) {
             save_entry_index = (s16)moby->save_id;
-            D_0014C190_257218[current_level_index][save_entry_index >> 5] |= 1 << (moby->save_id & 31);
+            D_0014C190_257218[current_level_index][save_entry_index >> 5] |=
+                1 << (moby->save_id & 31);
             D_L14_001BABD0[(s16)moby->save_id >> 5] |= 1 << (moby->save_id & 31);
             moby->state = BUTTON_ACTIVATED;
             moby->command = 1;

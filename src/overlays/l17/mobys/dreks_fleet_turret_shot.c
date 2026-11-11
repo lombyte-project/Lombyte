@@ -49,7 +49,9 @@ unsigned char *create_drone_flight_trail_record(char *position_source,
                                                 int   mode,
                                                 int   step) __asm__("FUN_L17_0026fdd0");
 
-unsigned char *create_drone_flight_trail_record(char *position_source, int use_short_step_range, int step) {
+unsigned char *
+
+create_drone_flight_trail_record(char *position_source, int use_short_step_range, int step) {
     enum {
         DRONE_FLIGHT_TRAIL_MODE_EXTENDED_STEP_RANGE = 0
     };

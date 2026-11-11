@@ -522,7 +522,8 @@ void rebuild_follow_camera_pose(int snap) {
             }
         }
         /* straight above or below the target: nudge the camera sideways */
-        fast_vec_sub(target_to_camera_offset, (float *)&MOBY(camera_moby)->update_dist, (float *)target);
+        fast_vec_sub(
+            target_to_camera_offset, (float *)&MOBY(camera_moby)->update_dist, (float *)target);
         length = fast_vec_dot(target_to_camera_offset, track + 0x30);
         fast_vec_scale(part, track + 0x30, length);
         fast_vec_sub(target_to_camera_offset, target_to_camera_offset, part);
@@ -597,14 +598,14 @@ void reset_follow_camera_state_from_position(char *camera_moby) {
 /* Initialises the type-0 camera: fills its data blocks and seeds the first position. */
 
 typedef struct CamE {
-    short height_state_timer;  /* 0x00 */
-    short h2;  /* 0x02 */
-    float f4;  /* 0x04 */
-    float f8;  /* 0x08 */
-    int   iC;  /* 0x0C */
-    int   i10; /* 0x10 */
-    int   i14; /* 0x14 */
-    int   i18; /* 0x18 */
+    short height_state_timer; /* 0x00 */
+    short h2;                 /* 0x02 */
+    float f4;                 /* 0x04 */
+    float f8;                 /* 0x08 */
+    int   iC;                 /* 0x0C */
+    int   i10;                /* 0x10 */
+    int   i14;                /* 0x14 */
+    int   i18;                /* 0x18 */
     int   pad1C;
 } CamE;
 
@@ -613,38 +614,38 @@ typedef struct CamA {
     char          pad10[0x40];
     float         orbit_origin_position[4]; /* 0x50 */
     char          pad60[0x50];
-    float         fB0; /* 0xB0 */
-    int           requested_target_height; /* 0xB4 */
-    float         fB8; /* 0xB8 */
+    float         fB0;                               /* 0xB0 */
+    int           requested_target_height;           /* 0xB4 */
+    float         fB8;                               /* 0xB8 */
     int           target_height_interpolation_state; /* 0xBC */
-    int           followed_moby; /* 0xC0 */
-    unsigned char bC4; /* 0xC4 */
+    int           followed_moby;                     /* 0xC0 */
+    unsigned char bC4;                               /* 0xC4 */
     char          padC5;
     short         hC6; /* 0xC6 */
     char          padC8[0xE];
     unsigned char bD6; /* 0xD6 */
     char          padD7;
-    short         hD8; /* 0xD8 */
+    short         hD8;                              /* 0xD8 */
     short         target_height_override_requested; /* 0xDA */
-    float         fDC; /* 0xDC */
-    float         fE0; /* 0xE0 */
-    float         fE4; /* 0xE4 */
-    float         fE8; /* 0xE8 */
+    float         fDC;                              /* 0xDC */
+    float         fE0;                              /* 0xE0 */
+    float         fE4;                              /* 0xE4 */
+    float         fE8;                              /* 0xE8 */
     char          padEC[4];
 } CamA;
 
 typedef struct CamB {
-    float v0[4];                 /* 0x00 */
-    float v10[4];                /* 0x10 */
-    int   i20;                   /* 0x20 */
-    int   i24;                   /* 0x24 */
-    int   i28;                   /* 0x28 */
-    float target_orbit_distance; /* 0x2C */
-    float f30;                   /* 0x30 */
-    int   i34;                   /* 0x34 */
-    int   i38;                   /* 0x38 */
-    short orbit_distance_override_pending;                   /* 0x3C */
-    short orbit_height_override_pending;                   /* 0x3E */
+    float v0[4];                           /* 0x00 */
+    float v10[4];                          /* 0x10 */
+    int   i20;                             /* 0x20 */
+    int   i24;                             /* 0x24 */
+    int   i28;                             /* 0x28 */
+    float target_orbit_distance;           /* 0x2C */
+    float f30;                             /* 0x30 */
+    int   i34;                             /* 0x34 */
+    int   i38;                             /* 0x38 */
+    short orbit_distance_override_pending; /* 0x3C */
+    short orbit_height_override_pending;   /* 0x3E */
     char  pad40[4];
     int   orbit_distance_interpolation_state; /* 0x44 */
     float f48;                                /* 0x48 */
@@ -679,18 +680,18 @@ typedef struct Cam1A8 {
 
 typedef struct CamG {
     char  pad0[0x10];
-    float v10[4];                                /* 0x10 */
-    float v20[4];                                /* 0x20 */
-    float f30;                                   /* 0x30 */
-    short h34;                                   /* 0x34 */
-    short h36;                                   /* 0x36 */
-    short orbit_endpoint_collision_direction_class;                                   /* 0x38 */
-    short force_orbit_retraction_decay;                                   /* 0x3A */
-    float f3C;                                   /* 0x3C */
-    float f40;                                   /* 0x40 */
-    float f44;                                   /* 0x44 */
-    int   i48;                                   /* 0x48 */
-    int   consecutive_camera_obstruction_frames; /* 0x4C */
+    float v10[4];                                   /* 0x10 */
+    float v20[4];                                   /* 0x20 */
+    float f30;                                      /* 0x30 */
+    short h34;                                      /* 0x34 */
+    short h36;                                      /* 0x36 */
+    short orbit_endpoint_collision_direction_class; /* 0x38 */
+    short force_orbit_retraction_decay;             /* 0x3A */
+    float f3C;                                      /* 0x3C */
+    float f40;                                      /* 0x40 */
+    float f44;                                      /* 0x44 */
+    int   i48;                                      /* 0x48 */
+    int   consecutive_camera_obstruction_frames;    /* 0x4C */
 } CamG;
 
 typedef struct Cam220 {

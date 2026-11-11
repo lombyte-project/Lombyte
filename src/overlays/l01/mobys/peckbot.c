@@ -620,7 +620,8 @@ void peckbot_update(Mob577 *peckbot_moby) {
             SET_ANIM(peckbot_moby, 2, 0, scale_game_frames(3));
         }
         attack_ground_height = FUN_00213508(&peckbot_moby->pos, 0, 0.5f);
-        peckbot_vars->movement_vertical_velocity = peckbot_vars->movement_vertical_velocity - frame_time_sq * 9.8f;
+        peckbot_vars->movement_vertical_velocity =
+            peckbot_vars->movement_vertical_velocity - frame_time_sq * 9.8f;
         peckbot_moby->pos.f[2] = peckbot_moby->pos.f[2] + peckbot_vars->movement_vertical_velocity;
         if (peckbot_moby->pos.f[2] < attack_ground_height) {
             peckbot_vars->movement_vertical_velocity = 0.0f;
@@ -846,7 +847,8 @@ void peckbot_update(Mob577 *peckbot_moby) {
         }
         qcopy(&peckbot_moby->pos, &position_scratch);
         forward_movement_ground_height = FUN_00213508(&peckbot_moby->pos, 0, 0.5f);
-        peckbot_vars->movement_vertical_velocity = peckbot_vars->movement_vertical_velocity - frame_time_sq * 9.8f;
+        peckbot_vars->movement_vertical_velocity =
+            peckbot_vars->movement_vertical_velocity - frame_time_sq * 9.8f;
         peckbot_moby->pos.f[2] = peckbot_moby->pos.f[2] + peckbot_vars->movement_vertical_velocity;
         if (peckbot_moby->pos.f[2] < forward_movement_ground_height) {
             peckbot_vars->movement_vertical_velocity = 0.0f;

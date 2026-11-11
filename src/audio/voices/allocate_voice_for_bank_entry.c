@@ -21,7 +21,8 @@ s32 allocate_voice_for_bank_entry(s32 entry_index, s32 voice_control_flags, s32 
     if (entry_index >= D_0015F5B4) {
         return -1;
     }
-    slot_index = allocate_voice_slot(level_sound_defs + (entry_index << 5), voice_control_flags, owner, 0, 0x400);
+    slot_index = allocate_voice_slot(
+        level_sound_defs + (entry_index << 5), voice_control_flags, owner, 0, 0x400);
     if (slot_index >= 0) {
         slot = (struct VoiceBankEntryWindow *)(((u8 *)&voice_pool) + slot_index * 0x70);
         slot->owner = owner;

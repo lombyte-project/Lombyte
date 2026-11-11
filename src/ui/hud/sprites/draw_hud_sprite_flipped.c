@@ -8,7 +8,9 @@ extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
 
 void draw_hud_sprite_flipped(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("FUN_001ffe18");
 
-void draw_hud_sprite_flipped(s32 frame_index, s32 x, s32 y, s32 sprite_width, s32 sprite_height, s32 alpha) {
+void draw_hud_sprite_flipped(
+
+    s32 frame_index, s32 x, s32 y, s32 sprite_width, s32 sprite_height, s32 alpha) {
     struct HudTexPage *image_page;
     struct DmaTag     *tag;
     u64               *packet_words;

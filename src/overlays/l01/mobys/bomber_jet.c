@@ -385,8 +385,8 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
                         if (gunship_vars->turrets[j] != -1) {
                             GunshipMoby *o =
                                 (GunshipMoby *)(ents_macro + (gunship_vars->turrets[j] << 8));
-                            if (o != 0 && o->oclass == 0x1CB && o->state != MOBY_STATE_MARKED_FOR_REMOVAL &&
-                                o->state != 0xFD) {
+                            if (o != 0 && o->oclass == 0x1CB &&
+                                o->state != MOBY_STATE_MARKED_FOR_REMOVAL && o->state != 0xFD) {
                                 GunshipTurretVars *t = o->vars;
                                 t->activated = 1;
                                 t->activate_delay = scale_game_frames(2);

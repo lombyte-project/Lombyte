@@ -341,7 +341,8 @@ void update_sand_mouse_targeted_spawning(char *moby, char *sand_mouse_instance_v
                         moby, &spawn_position, aim_yaw, aim_pitch, initial_yaw, initial_pitch);
                     *(short *)(sand_mouse_instance_vars + 0x4E) =
                         scale_game_frames(sand_mouse_projectile_spawn_interval_frames_gp);
-                    *(int *)(sand_mouse_instance_vars + 0x64) = *(int *)(sand_mouse_instance_vars + 0x64) + 1;
+                    *(int *)(sand_mouse_instance_vars + 0x64) =
+                        *(int *)(sand_mouse_instance_vars + 0x64) + 1;
                 }
             }
         }
@@ -539,7 +540,8 @@ void sand_mouse_update(struct Moby *moby) {
                   ((float *)&((struct Moby *)ents)[sand_mouse_vars->parent].pos));
             moby->pos.z = moby->pos.z + 0.02f;
             if (l01_save_state.cleared[(short)(moby_save_id = moby->save_id)] != 0 ||
-                (*(int *)((char *)D_0014C190_257218 + (((short)moby_save_id >> 5) * 4 + (D_0015ED84 << 8))) >>
+                (*(int *)((char *)D_0014C190_257218 +
+                          (((short)moby_save_id >> 5) * 4 + (D_0015ED84 << 8))) >>
                  (moby_save_id & 0x1F)) &
                     1) {
                 debug_print(sand_mouse_already_completed_message);

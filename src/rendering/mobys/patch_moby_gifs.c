@@ -23,7 +23,8 @@ void patch_moby_gifs(void) {
     u32             *gif;
     struct TexRemap *texture_remap;
 
-    for (moby_class_id_cursor = moby_class_rectify; *moby_class_id_cursor >= 0; moby_class_id_cursor++) {
+    for (moby_class_id_cursor = moby_class_rectify; *moby_class_id_cursor >= 0;
+         moby_class_id_cursor++) {
         gif_entry = ((struct MobyClass *)moby_class_resources[*moby_class_id_cursor])->gifs;
         for (;; gif_entry++) {
             gif = (u32 *)(gif_entry->gif & 0x7FFFFFFF);

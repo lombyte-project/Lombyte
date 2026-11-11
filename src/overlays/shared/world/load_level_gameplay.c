@@ -2165,11 +2165,11 @@ s32 start_cutscene_chunk_read(s32 i) {
 
     if (pal_mode != FALSE) {
         sector_count = disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i + 1] -
-               disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i];
+                       disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i];
         start = disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i];
     } else {
         sector_count = disc_table.sector_lists[D_L00_0016C860.list].sectors[i + 1] -
-               disc_table.sector_lists[D_L00_0016C860.list].sectors[i];
+                       disc_table.sector_lists[D_L00_0016C860.list].sectors[i];
         start = disc_table.sector_lists[D_L00_0016C860.list].sectors[i];
     }
     if (sector_count > 0) {

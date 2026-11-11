@@ -90,10 +90,10 @@ void magnet_elevator_update(struct Moby *moby) {
     fast_vec_scale(delta, &moby->pos, -1.0f);
     qcopy(rot, &moby->rot);
     if (W(elevator_runtime_state, 0x7C) == 0) {
-        float f =
-            1.0f -
-            ((*(float *)((char *)(moby) + (0x18))) - (*(float *)((char *)(elevator_runtime_state) + (0x64)))) /
-                ((*(float *)((char *)(elevator_runtime_state) + (0x60))) - (*(float *)((char *)(elevator_runtime_state) + (0x64))));
+        float f = 1.0f - ((*(float *)((char *)(moby) + (0x18))) -
+                          (*(float *)((char *)(elevator_runtime_state) + (0x64)))) /
+                             ((*(float *)((char *)(elevator_runtime_state) + (0x60))) -
+                              (*(float *)((char *)(elevator_runtime_state) + (0x64))));
         if (f > 1.0f) {
             f = 1.0f;
         } else if (f < 0.0f) {
@@ -106,14 +106,16 @@ void magnet_elevator_update(struct Moby *moby) {
     case MAGNET_ELEVATOR_STATE_INITIALIZE:
         (*(float *)((char *)(elevator_runtime_state) + (0x78))) = random_angle_radians();
         W(elevator_runtime_state, 0x6C) = -1;
-        if (W(elevator_runtime_state, 0x80) == -1 || **(int **)(D_L17_001B0DB0 + W(elevator_runtime_state, 0x80) * 4) != 0xB) {
+        if (W(elevator_runtime_state, 0x80) == -1 ||
+            **(int **)(D_L17_001B0DB0 + W(elevator_runtime_state, 0x80) * 4) != 0xB) {
             mark_moby_for_removal(moby);
             return;
         }
         B(moby, 0x20) = 6;
         break;
     case MAGNET_ELEVATOR_STATE_BLEND_CAMERA: {
-        float previous_camera_blend_progress = (*(float *)((char *)(elevator_runtime_state) + (0x70)));
+        float previous_camera_blend_progress =
+            (*(float *)((char *)(elevator_runtime_state) + (0x70)));
         advance_accelerated_scalar((float *)(elevator_runtime_state + 0x70),
                                    (float *)(elevator_runtime_state + 0x74),
                                    1.0f,
@@ -121,8 +123,9 @@ void magnet_elevator_update(struct Moby *moby) {
                                    frame_time_sq * 4.0f,
                                    frame_time * 4.0f);
         if ((*(float *)((char *)(elevator_runtime_state) + (0x70))) < 1.0f) {
-            float remaining_camera_blend_ratio = (1.0f - (*(float *)((char *)(elevator_runtime_state) + (0x70)))) /
-                                                 (1.0f - previous_camera_blend_progress);
+            float remaining_camera_blend_ratio =
+                (1.0f - (*(float *)((char *)(elevator_runtime_state) + (0x70)))) /
+                (1.0f - previous_camera_blend_progress);
             char *camera_pose_base;
             FUN_L17_002ee9c0_c(moby, (char *)camera_position, (char *)camera_rotation);
             fast_vec_sub(camera_position_offset, D_L17_001676C0, camera_position);
@@ -216,10 +219,11 @@ void magnet_elevator_update(struct Moby *moby) {
     case MAGNET_ELEVATOR_STATE_WAIT_AT_SECOND_STOP: {
         int   i;
         char *hero_state;
-        (*(float *)((char *)(elevator_runtime_state) + (0x78))) =
-            fast_add_rotations((*(float *)((char *)(elevator_runtime_state) + (0x78))), frame_time * 6.2831855f);
-        i = truncate_float_to_s32((fast_sin((*(float *)((char *)(elevator_runtime_state) + (0x78)))) * 4.0f - 3.0f) *
-                                  128.0f);
+        (*(float *)((char *)(elevator_runtime_state) + (0x78))) = fast_add_rotations(
+            (*(float *)((char *)(elevator_runtime_state) + (0x78))), frame_time * 6.2831855f);
+        i = truncate_float_to_s32(
+            (fast_sin((*(float *)((char *)(elevator_runtime_state) + (0x78)))) * 4.0f - 3.0f) *
+            128.0f);
         if (i > 0x80) {
             i = 0x80;
         } else if (i < 0x20) {
@@ -280,7 +284,10 @@ void build_magnet_elevator_camera_pose(struct Moby *moby,
                                        char        *camera_position,
                                        char        *state) __asm__("FUN_L17_002ee9c0");
 
-void build_magnet_elevator_camera_pose(struct Moby *moby, char *camera_position, char *camera_rotation) {
+void build_magnet_elevator_camera_pose(struct Moby *moby,
+                                       char        *camera_position,
+
+                                       char *camera_rotation) {
     fast_vec_sub(camera_position, D_L17_001676C0, &moby->pos);
     set_vector_length_xy(camera_position, camera_position, 2.5f);
     *(float *)(camera_position + 8) = 1.5f;

@@ -7,7 +7,8 @@ void save_card_state_formatting(void) __asm__("FUN_00208b28");
 
 void save_card_state_formatting(void) {
     struct MemoryCardState *card_state = &memory_card_state;
-    if (card_state->state == MEMCARD_DISPATCH_PENDING_OPERATION && card_state->pending_state < MEMCARD_QUERY_INFO) {
+    if (card_state->state == MEMCARD_DISPATCH_PENDING_OPERATION &&
+        card_state->pending_state < MEMCARD_QUERY_INFO) {
         if (card_state->err != 0) {
             save_card_state = CS_FORMAT_FAILED;
             mode_freeze_flags |= 0x40;

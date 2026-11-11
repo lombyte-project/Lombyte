@@ -149,8 +149,10 @@ void level_13_mine_update(ProjectileMoby *moby) {
         make_hit_descriptor(16.0f, &hitpos, moby, 0x30000, velocity);
         qcopy(&steering_and_collision_vector, pos);
         steering_and_collision_vector.z += 0.75f;
-        detonation_flags = collect_mobies_in_sphere(1.7f, &steering_and_collision_vector, 0x10, moby, &hitpos);
-        detonation_flags = detonation_flags | FUN_L00_001f0d60_2048(&steering_and_collision_vector, 1.7f, 4, moby);
+        detonation_flags =
+            collect_mobies_in_sphere(1.7f, &steering_and_collision_vector, 0x10, moby, &hitpos);
+        detonation_flags =
+            detonation_flags | FUN_L00_001f0d60_2048(&steering_and_collision_vector, 1.7f, 4, moby);
         hit = (ProjectileMoby *)FUN_L00_0025a420(moby, -1, 0);
         if (hit != 0) {
             float health = *(float *)(moby_data + 0x20) - *(float *)((char *)hit + 0x2C);

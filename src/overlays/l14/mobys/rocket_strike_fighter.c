@@ -101,7 +101,9 @@ void rocket_strike_fighter_update(struct Moby *moby) {
     if (moby->state == ROCKET_STRIKE_FIGHTER_STATE_INITIALIZE) {
         u16 fighter_save_id = moby->save_id;
         if (D_L14_001BB930.cleared[(short)fighter_save_id] != 0 ||
-            (D_0014C190_257218[current_level_index][(short)fighter_save_id >> 5] >> (fighter_save_id & 0x1F)) & 1) {
+            (D_0014C190_257218[current_level_index][(short)fighter_save_id >> 5] >>
+             (fighter_save_id & 0x1F)) &
+                1) {
             mark_moby_and_linked_moby_for_removal(&D_L14_0015FFD8_t[moby_vars->rocket]);
             mark_moby_for_removal(moby);
             return;
@@ -324,7 +326,8 @@ void spawn_rocket_strike_fighter_exhaust(struct Moby *moby) {
     spin = 16;
     life = scale_game_frames(2);
     for (i = 0; i < 3; i++) {
-        puff = spawn_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, puff_spawn_size, 0x7FFFFFFF);
+        puff =
+            spawn_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, puff_spawn_size, 0x7FFFFFFF);
         if (puff != 0) {
             L14PuffTail *tail = &puff->tail;
             puff->life = life;
@@ -389,7 +392,8 @@ void spawn_rocket_strike_fighter_exhaust(struct Moby *moby) {
     spin = 16;
     life = scale_game_frames(2);
     for (i = 0; i < 3; i++) {
-        puff = spawn_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, puff_spawn_size, 0x7FFFFFFF);
+        puff =
+            spawn_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, puff_spawn_size, 0x7FFFFFFF);
         if (puff != 0) {
             L14PuffTail *tail = &puff->tail;
             puff->life = life;

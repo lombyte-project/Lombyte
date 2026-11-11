@@ -667,7 +667,7 @@ int generate_random_points_from_shape_entries(
                         radius *= 0.0009765625f;
                         extent = *(float *)list * (*(float *)(entity + 0x2c) * 0.0009765625f);
                         weights[eligible_shape_entry_count] = radius * 4.187743f * radius * radius +
-                                         radius * 1.5707964f * radius * extent;
+                                                              radius * 1.5707964f * radius * extent;
                         break;
                     }
                     case SHAPE_ENDPOINT_SEGMENT_WITH_BALL_OFFSET: {

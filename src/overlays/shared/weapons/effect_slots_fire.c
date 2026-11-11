@@ -115,7 +115,8 @@ void effect_slots_fire(char *slots, float *position, float *direction, float dis
             fl = 1;
         else
             fl = 0;
-        shot = spawn_spinning_and_fading_effect_particle(velocity, randomized_particle_velocity, fl, travel);
+        shot = spawn_spinning_and_fading_effect_particle(
+            velocity, randomized_particle_velocity, fl, travel);
         if (i == 2 && save_shot) {
             int j;
             for (j = 0; j < 7; j++) {

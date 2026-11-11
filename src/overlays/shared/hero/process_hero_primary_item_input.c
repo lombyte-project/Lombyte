@@ -505,8 +505,10 @@ void update_hero_movement_and_collision_probes(void) {
             distance = 20.0f;
             hit = collision_line(start, end, 2, hero.moby, 0);
             if (!hit || (distance = fast_vec_dist(start, D_L05_00174260), distance > 3.0f)) {
-                for (edge_probe_scan_offset = -0.4f; edge_probe_scan_offset < 0.5f; edge_probe_scan_offset += 0.1f) {
-                    transform_hero_local_offset_to_world(probe, 1.1f + edge_probe_scan_offset, 0.0f, 0.0f);
+                for (edge_probe_scan_offset = -0.4f; edge_probe_scan_offset < 0.5f;
+                     edge_probe_scan_offset += 0.1f) {
+                    transform_hero_local_offset_to_world(
+                        probe, 1.1f + edge_probe_scan_offset, 0.0f, 0.0f);
                     if (!coll_sphere(hero.capsule_radius, probe, 2, 0)) {
                         hero.edge_ahead = 1;
                         if (!hit)
@@ -1263,7 +1265,8 @@ void process_hero_race_object_interactions(void) {
         return;
     hoverboard_pvars = *(u8 **)(hero.hoverboard_moby + 0x78);
     if (*(s32 *)(hoverboard_pvars + 0x44) != -1) {
-        get_first_moby_in_group((void **)&boost_trigger_moby, *(s32 *)(hoverboard_pvars + 0x44), 0, 0);
+        get_first_moby_in_group(
+            (void **)&boost_trigger_moby, *(s32 *)(hoverboard_pvars + 0x44), 0, 0);
         if (boost_trigger_moby != 0) {
             do {
                 if (*(s16 *)(boost_trigger_moby + 0xA6) == 0x473 &&

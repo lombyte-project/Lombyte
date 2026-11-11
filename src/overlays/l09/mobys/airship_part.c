@@ -151,7 +151,10 @@ char *spawn_airship_part(struct Moby *rotation_source_moby,
     return spawned_moby;
 }
 
-char *find_nearest_moby_by_class(void *search_position, int target_moby_class, float *nearest_distance_out) {
+char *find_nearest_moby_by_class(void *search_position,
+                                 int   target_moby_class,
+
+                                 float *nearest_distance_out) {
     char *best = 0;
     float bestd = 100000.0f;
     char *candidate_moby;

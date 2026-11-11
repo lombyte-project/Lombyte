@@ -1346,7 +1346,8 @@ void follow_camera_transition(O002e5730 *camera, void *input_offset) {
         x = follow_camera_position_default_stiffness_gp;
         y = follow_camera_position_default_damping_gp;
     }
-    interpolate_follow_camera_position(camera, attach_state->smoothed_target_position_storage, &target_position, x, y, 0.0f);
+    interpolate_follow_camera_position(
+        camera, attach_state->smoothed_target_position_storage, &target_position, x, y, 0.0f);
 }
 
 /* Updates the follow camera: eases its focus and offset vectors, then places

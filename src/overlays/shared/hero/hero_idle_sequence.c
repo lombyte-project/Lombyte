@@ -164,7 +164,8 @@ int get_hero_easing_moby_by_kind(int ease_kind) {
     enum {
         HERO_EASE_KIND_ON_FOOT_HERO_MOBY = 0
     };
-    if (ease_kind == HERO_EASE_KIND_ON_FOOT_HERO_MOBY || ease_kind == 2 || ease_kind == 3 || ease_kind == 4) {
+    if (ease_kind == HERO_EASE_KIND_ON_FOOT_HERO_MOBY || ease_kind == 2 || ease_kind == 3 ||
+        ease_kind == 4) {
         return D_001413D0[0];
     }
     if (ease_kind == HERO_EASE_KIND_SLOT_THREE_SECONDARY_MOBY) {
@@ -1094,7 +1095,8 @@ void                  check_hero_item_reward_conditions(void) __asm__("FUN_L00_0
 
 void check_hero_item_reward_conditions(void) {
     s32 i, qualifying_item_count;
-    if (help_records.special_state_item_help_request_gate == 0 && item_available[4] != 0 && hero_is_in_special_state() != 0) {
+    if (help_records.special_state_item_help_request_gate == 0 && item_available[4] != 0 &&
+        hero_is_in_special_state() != 0) {
         help_request(0x4E2E, 0x78);
     }
     if (D_L00_0015F5CC_00206cf8 <= 0)
@@ -3071,7 +3073,8 @@ void update_hero_target_tracking(void) {
     struct HeroEase *manipulator_table;
     float            yaw_delta, pitch, s;
     int              control_mode = *(int *)(hero_control_mode_owner + 0x208C);
-    if (control_mode != 1 && control_mode != 4 && control_mode != 2 && control_mode != 7 && control_mode != 0) {
+    if (control_mode != 1 && control_mode != 4 && control_mode != 2 && control_mode != 7 &&
+        control_mode != 0) {
         *(int *)(hero_control_mode_owner + 0x2274) = 0;
         return;
     }
@@ -3765,8 +3768,10 @@ void check_ledge_grab(void) {
         for (ledge_normal_offset = 0.0f; ledge_normal_offset < max; ledge_normal_offset += step) {
             qcopy(edge_end, ledge);
             edge_end[2] = ledge[2];
-            edge_end[0] += fast_cos(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * ledge_normal_offset;
-            edge_end[1] += fast_sin(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * ledge_normal_offset;
+            edge_end[0] +=
+                fast_cos(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * ledge_normal_offset;
+            edge_end[1] +=
+                fast_sin(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * ledge_normal_offset;
             qcopy(edge_start, edge_end);
             edge_end[2] += 0.5f;
             edge_start[2] -= 0.5f;
@@ -3776,8 +3781,10 @@ void check_ledge_grab(void) {
                 ledge_normal_offset = step * 0.5f;
                 ledge_normal_offset = -ledge_normal_offset;
                 grab_point[2] = ledge[2];
-                grab_point[0] += fast_cos(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * ledge_normal_offset;
-                grab_point[1] += fast_sin(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * ledge_normal_offset;
+                grab_point[0] +=
+                    fast_cos(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * ledge_normal_offset;
+                grab_point[1] +=
+                    fast_sin(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * ledge_normal_offset;
                 qcopy(((Hero *)D_0013F450_20C568)->ledge_hang_pos.f, grab_point);
                 ((Hero *)D_0013F450_20C568)->ledge_hang_pos.f[0] +=
                     fast_cos(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * back;

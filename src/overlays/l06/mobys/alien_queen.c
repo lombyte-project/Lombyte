@@ -924,7 +924,8 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
     if ((unsigned char)moby[0x20] >= 2 && D_L06_00140408 != 8 && (pad_held_lui & 0x20))
         alien_queen_hit_recovery_vars->suppress_death_dialogue = 1;
     intro_or_recovery_delay_frames = alien_queen_hit_recovery_vars->timer_12C;
-    if (intro_or_recovery_delay_frames != 0 && alien_queen_hit_recovery_vars->intro_or_recovery_delay_active != 0) {
+    if (intro_or_recovery_delay_frames != 0 &&
+        alien_queen_hit_recovery_vars->intro_or_recovery_delay_active != 0) {
         --alien_queen_hit_recovery_vars->timer_12C;
         if (alien_queen_hit_recovery_vars->timer_12C < scale_game_frames(10))
             D_L06_0015F3FC =

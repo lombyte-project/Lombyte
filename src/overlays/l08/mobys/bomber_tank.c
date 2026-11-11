@@ -891,15 +891,17 @@ void spawn_bomber_tank_joint_particles(struct Moby *moby, int joint, int count) 
             fast_vec_scale(spread_vector, spread_vector, 0.5f);
             horizontal_spread_offset = func_001F9F90_2D6C58(random_angle);
             horizontal_spread_offset =
-                horizontal_spread_offset * (random_float_between(
-                              0.0f, bomber_tank_joint_particle_horizontal_spread_range_end_gp) *
-                          D_0015ED6C);
+                horizontal_spread_offset *
+                (random_float_between(0.0f,
+                                      bomber_tank_joint_particle_horizontal_spread_range_end_gp) *
+                 D_0015ED6C);
             spread_vector[0] = spread_vector[0] + horizontal_spread_offset;
             horizontal_spread_offset = func_001F9FA8_2D6C58(random_angle);
             horizontal_spread_offset =
-                horizontal_spread_offset * (random_float_between(
-                              0.0f, bomber_tank_joint_particle_horizontal_spread_range_end_gp) *
-                          D_0015ED6C);
+                horizontal_spread_offset *
+                (random_float_between(0.0f,
+                                      bomber_tank_joint_particle_horizontal_spread_range_end_gp) *
+                 D_0015ED6C);
             spread_vector[1] = spread_vector[1] + horizontal_spread_offset;
             spread_vector[2] = bomber_tank_joint_particle_vertical_spread_gp * D_0015ED6C;
         } else {
@@ -911,16 +913,18 @@ void spawn_bomber_tank_joint_particles(struct Moby *moby, int joint, int count) 
             fast_vec_add(velocity, velocity, jitter);
             fast_vec_scale(spread_vector, spread_vector, 0.5f);
             horizontal_spread_offset = func_001F9F90_2D6C58(random_angle);
-            horizontal_spread_offset = horizontal_spread_offset *
-                     (random_float_between(
-                          0.0f, bomber_tank_joint_particle_horizontal_spread_range_end_gp * 0.25f) *
-                      D_0015ED6C);
+            horizontal_spread_offset =
+                horizontal_spread_offset *
+                (random_float_between(
+                     0.0f, bomber_tank_joint_particle_horizontal_spread_range_end_gp * 0.25f) *
+                 D_0015ED6C);
             spread_vector[0] = spread_vector[0] + horizontal_spread_offset;
             horizontal_spread_offset = func_001F9FA8_2D6C58(random_angle);
-            horizontal_spread_offset = horizontal_spread_offset *
-                     (random_float_between(
-                          0.0f, bomber_tank_joint_particle_horizontal_spread_range_end_gp * 0.25f) *
-                      D_0015ED6C);
+            horizontal_spread_offset =
+                horizontal_spread_offset *
+                (random_float_between(
+                     0.0f, bomber_tank_joint_particle_horizontal_spread_range_end_gp * 0.25f) *
+                 D_0015ED6C);
             spread_vector[1] = spread_vector[1] + horizontal_spread_offset;
             spread_vector[2] = bomber_tank_joint_particle_vertical_spread_gp * D_0015ED6C;
         }

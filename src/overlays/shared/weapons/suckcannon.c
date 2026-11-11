@@ -1791,7 +1791,8 @@ s32 process_moby_suck_cannon_suction(u8 *moby, u8 *position, u8 *target) {
     s16 state;
     if (moby_suction_record == 0)
         goto missing;
-    if (moby == 0 || MOBY(moby)->state == MOBY_STATE_REMOVAL_MARKER || MOBY(moby)->state == MOBY_STATE_ALTERNATE_REMOVAL_MARKER ||
+    if (moby == 0 || MOBY(moby)->state == MOBY_STATE_REMOVAL_MARKER ||
+        MOBY(moby)->state == MOBY_STATE_ALTERNATE_REMOVAL_MARKER ||
         *(s16 *)(moby_suction_record + 0x68) == 8)
         goto fail;
     qcopy_nc(moby_suction_record, position);
@@ -1863,7 +1864,8 @@ s32 store_moby_in_suck_cannon(u8 *moby, OvlQuad *position) {
     struct Moby *sound_source_moby;
     if (suction_record == 0)
         return 0;
-    if (moby != 0 && MOBY(moby)->state != MOBY_STATE_REMOVAL_MARKER && MOBY(moby)->state != MOBY_STATE_ALTERNATE_REMOVAL_MARKER &&
+    if (moby != 0 && MOBY(moby)->state != MOBY_STATE_REMOVAL_MARKER &&
+        MOBY(moby)->state != MOBY_STATE_ALTERNATE_REMOVAL_MARKER &&
         *(s16 *)(suction_record + 0x68) != 8) {
         qcopy(&MOBY(moby)->pos, position);
         FUN_L00_002d9fd0_002dbb20(
@@ -1900,7 +1902,8 @@ s32 launch_suck_cannon_projectile(u8 *moby,
     u8 *d;
     if (projectile_record == 0)
         return 0;
-    if (moby == 0 || MOBY(moby)->state == MOBY_STATE_REMOVAL_MARKER || MOBY(moby)->state == MOBY_STATE_ALTERNATE_REMOVAL_MARKER ||
+    if (moby == 0 || MOBY(moby)->state == MOBY_STATE_REMOVAL_MARKER ||
+        MOBY(moby)->state == MOBY_STATE_ALTERNATE_REMOVAL_MARKER ||
         *(s16 *)(projectile_record + 0x68) == 8)
         goto fail;
     MOBY(moby)->visible = 1;
@@ -1958,7 +1961,8 @@ s32 cancel_suck_cannon_suction(struct Moby *moby) {
     s32 k;
     if (suction_record == 0)
         return 0;
-    if (moby == 0 || moby->state == MOBY_STATE_REMOVAL_MARKER || moby->state == MOBY_STATE_ALTERNATE_REMOVAL_MARKER)
+    if (moby == 0 || moby->state == MOBY_STATE_REMOVAL_MARKER ||
+        moby->state == MOBY_STATE_ALTERNATE_REMOVAL_MARKER)
         return 0;
     k = *(s16 *)(suction_record + 0x68);
     if (k == 8)
@@ -2280,7 +2284,8 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
     Frame_2DDEA0 suction_and_projectile_scratch;
     R_2DDEA0    *suction_and_projectile_record;
 
-    if (moby == 0 || moby->state == MOBY_STATE_REMOVAL_MARKER || moby->state == MOBY_STATE_ALTERNATE_REMOVAL_MARKER)
+    if (moby == 0 || moby->state == MOBY_STATE_REMOVAL_MARKER ||
+        moby->state == MOBY_STATE_ALTERNATE_REMOVAL_MARKER)
         return 0;
     suction_and_projectile_record = func_L00_002DCD40_2DDEA0(moby);
     if (suction_and_projectile_record != 0) {
@@ -2314,8 +2319,8 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
             if (1.0f < suction_and_projectile_record->f6C)
                 suction_and_projectile_record->f6C = 1.0f;
             moby->pos.z += suction_and_projectile_record->f6C / 100.0f * frame_scale;
-            extract_matrix_rotation_quaternion(&suction_and_projectile_record->suction_start_rotation_quaternion,
-                                               &moby->rot_row0);
+            extract_matrix_rotation_quaternion(
+                &suction_and_projectile_record->suction_start_rotation_quaternion, &moby->rot_row0);
             clear_u64_value(&suction_and_projectile_record->vel);
             break;
         case SUCK_UPDATE_BEING_PULLED_IN: {

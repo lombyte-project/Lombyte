@@ -770,13 +770,16 @@ int classify_resort_owner_target_proximity(struct Moby *moby) {
             continue;
         do {
             int          target_moby_byte_offset = (*group_moby_entry & 0x7fff) << 8;
-            struct Moby *target_group_moby = (struct Moby *)(target_moby_byte_offset + D_L11_0015FFD8);
+            struct Moby *target_group_moby =
+                (struct Moby *)(target_moby_byte_offset + D_L11_0015FFD8);
             if ((signed char)target_group_moby->state >= RESORT_OWNER_TARGET_MIN_LIVE_STATE) {
                 if (target_group_moby->oclass != 0x4de ||
                     is_moby_in_bob_target_exclusion_state((const u8 *)target_group_moby) == 0) {
                     found = 1;
-                    if (fast_vec_dist(&moby->pos,
-                                      &((struct Moby *)(D_L11_0015FFD8 + target_moby_byte_offset))->pos) < 10.0f)
+                    if (fast_vec_dist(
+                            &moby->pos,
+                            &((struct Moby *)(D_L11_0015FFD8 + target_moby_byte_offset))->pos) <
+                        10.0f)
                         return 2;
                 }
             }

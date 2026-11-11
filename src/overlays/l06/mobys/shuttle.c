@@ -821,11 +821,19 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
         linked_moby_index = *list & 0x7FFF;
         random_vector(push, 1.0f, 2.0f);
         spawn_shuttle_explosion_effect(
-            30.0f, moby, &((struct Moby *)(D_L06_0015FFD8_03b68 + (linked_moby_index << 8)))->pos, push, 1);
-        fast_vec_add(middle, middle, &((struct Moby *)(D_L06_0015FFD8_03b68 + (linked_moby_index << 8)))->pos);
+            30.0f,
+            moby,
+            &((struct Moby *)(D_L06_0015FFD8_03b68 + (linked_moby_index << 8)))->pos,
+            push,
+            1);
+        fast_vec_add(middle,
+                     middle,
+                     &((struct Moby *)(D_L06_0015FFD8_03b68 + (linked_moby_index << 8)))->pos);
         linked_moby_count++;
-        if (largest < ((struct Moby *)((linked_moby_index << 8) + (int)D_L06_0015FFD8_03b68))->bsphere.w) {
-            largest = ((struct Moby *)((linked_moby_index << 8) + (int)D_L06_0015FFD8_03b68))->bsphere.w;
+        if (largest <
+            ((struct Moby *)((linked_moby_index << 8) + (int)D_L06_0015FFD8_03b68))->bsphere.w) {
+            largest =
+                ((struct Moby *)((linked_moby_index << 8) + (int)D_L06_0015FFD8_03b68))->bsphere.w;
         }
     } while (*list++ >= 0);
     fast_vec_scale(middle, middle, 1.0f / convert_integer_to_float(linked_moby_count));
@@ -833,7 +841,8 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
     do {
         float speed;
         linked_moby_index = *list & 0x7FFF;
-        fast_vec_sub(push, &((struct Moby *)(D_L06_0015FFD8_03b68 + (linked_moby_index << 8)))->pos, middle);
+        fast_vec_sub(
+            push, &((struct Moby *)(D_L06_0015FFD8_03b68 + (linked_moby_index << 8)))->pos, middle);
         piece = (struct Moby *)((linked_moby_index << 8) + (int)D_L06_0015FFD8_03b68);
         speed = frame_time * 30.0f;
         fast_vec_normalize(push, push, -((piece->bsphere.w - largest) / largest) * speed + speed);
@@ -844,7 +853,8 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
         for (i = 0; i < shuttle_breakup_particles_per_piece_gp; i++) {
             piece = (struct Moby *)((linked_moby_index << 8) + (int)D_L06_0015FFD8_03b68);
             random_vector(pos, 0.0f, piece->bsphere.w * 0.00048828125f);
-            fast_vec_add(pos, pos, &((struct Moby *)(D_L06_0015FFD8_03b68 + (linked_moby_index << 8)))->pos);
+            fast_vec_add(
+                pos, pos, &((struct Moby *)(D_L06_0015FFD8_03b68 + (linked_moby_index << 8)))->pos);
             random_vector(
                 particle_velocity, 0.0f, shuttle_breakup_particle_max_speed_gp * frame_time);
             clear_u64_value(particle_acceleration);

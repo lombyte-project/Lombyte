@@ -277,8 +277,9 @@ void skids_agent_update(struct Moby *moby) {
             moby_point_position(moby, 2, &skids_agent_vars->carried_prop->pos);
             build_moby_bone_transform(moby, 2, mtx);
             copy_matrix3x4(&skids_agent_vars->carried_prop->rot_row0, mtx);
-            transform_vector_by_basis(
-                &prop_world_offset, skids_agent_prop_local_offset, &skids_agent_vars->carried_prop->rot_row0);
+            transform_vector_by_basis(&prop_world_offset,
+                                      skids_agent_prop_local_offset,
+                                      &skids_agent_vars->carried_prop->rot_row0);
             fast_vec_add(&skids_agent_vars->carried_prop->pos,
                          &skids_agent_vars->carried_prop->pos,
                          &prop_world_offset);

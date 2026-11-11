@@ -451,11 +451,13 @@ void draw_electric_beam(char *moby) {
                 } else {
                     qcopy(&packet[0].vertices[corner], &beam->points[point + 1]);
                     if (corner & 1)
-                        fast_vec_add(
-                            &packet[0].vertices[corner], &packet[0].vertices[corner], strip_half_width_offset);
+                        fast_vec_add(&packet[0].vertices[corner],
+                                     &packet[0].vertices[corner],
+                                     strip_half_width_offset);
                     else
-                        fast_vec_sub(
-                            &packet[0].vertices[corner], &packet[0].vertices[corner], strip_half_width_offset);
+                        fast_vec_sub(&packet[0].vertices[corner],
+                                     &packet[0].vertices[corner],
+                                     strip_half_width_offset);
                 }
                 /* Fakematch: 34 block notes push this loop past haifa-sched's 100-insn region limit,
                  * so sched1 moves nothing between its blocks, as in retail. */
@@ -503,11 +505,13 @@ void draw_electric_beam(char *moby) {
                     qcopy(&packet[0].vertices[corner],
                           &beam->branches[branch_segment_index + 1][branch]);
                     if (corner & 1)
-                        fast_vec_add(
-                            &packet[0].vertices[corner], &packet[0].vertices[corner], strip_half_width_offset);
+                        fast_vec_add(&packet[0].vertices[corner],
+                                     &packet[0].vertices[corner],
+                                     strip_half_width_offset);
                     else
-                        fast_vec_sub(
-                            &packet[0].vertices[corner], &packet[0].vertices[corner], strip_half_width_offset);
+                        fast_vec_sub(&packet[0].vertices[corner],
+                                     &packet[0].vertices[corner],
+                                     strip_half_width_offset);
                 }
                 /* Fakematch: 32 block notes push this loop past haifa-sched's 100-insn region limit,
                  * so sched1 moves nothing between its blocks, as in retail. */

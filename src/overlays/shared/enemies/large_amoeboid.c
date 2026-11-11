@@ -337,7 +337,8 @@ void large_amoeboid_update(unsigned char *moby) {
                     large_amoeboid_vars->path_heading_offset =
                         random_float_between(-0.34906584f, 0.34906584f);
                 } else {
-                    large_amoeboid_vars->target_selection_status = AMOEBOID_TARGET_STATUS_UNAVAILABLE;
+                    large_amoeboid_vars->target_selection_status =
+                        AMOEBOID_TARGET_STATUS_UNAVAILABLE;
                 }
             }
         }

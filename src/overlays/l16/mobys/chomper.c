@@ -148,7 +148,8 @@ void chomper_update(struct Moby *chomper_moby) {
             chomper_moby->state = CHOMPER_FACE_TARGET;
             if (chomper_moby->prev_seq != 1)
                 blend_moby_animation(chomper_moby, 1, 0, scale_game_frames(20));
-        } else if (chomper_data->pursuit_target_selection_status == CHOMPER_TARGET_SELECTION_REJECTED)
+        } else if (chomper_data->pursuit_target_selection_status ==
+                   CHOMPER_TARGET_SELECTION_REJECTED)
             chomper_moby->state = CHOMPER_RETURN_HOME;
         break;
     case CHOMPER_FACE_TARGET: {
@@ -176,7 +177,8 @@ void chomper_update(struct Moby *chomper_moby) {
             chomper_moby->state = CHOMPER_WAIT_TO_APPROACH_TARGET;
             if (chomper_moby->prev_seq != 2)
                 blend_moby_animation(chomper_moby, 2, 0, scale_game_frames(20));
-        } else if (chomper_data->pursuit_target_selection_status != CHOMPER_TARGET_SELECTION_REJECTED)
+        } else if (chomper_data->pursuit_target_selection_status !=
+                   CHOMPER_TARGET_SELECTION_REJECTED)
             chomper_moby->state = CHOMPER_APPROACH_TARGET;
         break;
     case 7:

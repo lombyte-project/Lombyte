@@ -277,7 +277,8 @@ s32 sound_update(void) {
                     {
                         /* Fakematch: the byte index in a local keeps the copy's start address as
                            (index + base) + 1, unflattened as retail's loop pass emits it. */
-                        s32 occlusion_history_pool_offset = slot_index * (s32)sizeof(VoiceSlot) + 0xB4;
+                        s32 occlusion_history_pool_offset =
+                            slot_index * (s32)sizeof(VoiceSlot) + 0xB4;
                         s32 index = history_offset + occlusion_history_pool_offset;
                         for (repeat_index = 1; repeat_index < 6; repeat_index++) {
                             ((u8 *)&voice_pool)[index + repeat_index] =

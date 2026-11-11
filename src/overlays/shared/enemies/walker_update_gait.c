@@ -408,7 +408,8 @@ void walker_update_gait(WalkMoby *walker_moby,
                                     walker_moby->pClass->seqs[a->id], (float)fr);
                                 blend_moby_animation(walker_moby, a->id, f, bl);
                                 reset_walker_gait_helpers((char *)gait_data);
-                                gait_data->gait_state = WALKER_GAIT_ALTERNATE_TRANSITION_TO_DOWNHILL;
+                                gait_data->gait_state =
+                                    WALKER_GAIT_ALTERNATE_TRANSITION_TO_DOWNHILL;
                             } else {
                                 int bl = truncate_float_to_s32(
                                     gait_data->anim[4]->alternate_transition_position_span * 0.25f /
@@ -504,7 +505,8 @@ void walker_update_gait(WalkMoby *walker_moby,
                                        gait_data->anim[gait_animation_index]->f04 * 0.5f *
                                            fast_sin(gait_data->ground_probe_correction_angle) <
                                    gait_data->terrain_transition_height_scale * 0.75f) {
-                            gait_data->gait_state = WALKER_GAIT_ALTERNATE_TRANSITION_FROM_UPHILL_TO_WALK;
+                            gait_data->gait_state =
+                                WALKER_GAIT_ALTERNATE_TRANSITION_FROM_UPHILL_TO_WALK;
                         } else {
                             int bl = truncate_float_to_s32(
                                 gait_data->anim[3]->alternate_transition_position_span * 0.25f /
@@ -543,7 +545,8 @@ void walker_update_gait(WalkMoby *walker_moby,
                                     walker_moby->pClass->seqs[a->id], (float)fr);
                                 blend_moby_animation(walker_moby, a->id, f, bl);
                                 reset_walker_gait_helpers((char *)gait_data);
-                                gait_data->gait_state = WALKER_GAIT_ALTERNATE_TRANSITION_TO_DOWNHILL;
+                                gait_data->gait_state =
+                                    WALKER_GAIT_ALTERNATE_TRANSITION_TO_DOWNHILL;
                             } else {
                                 int bl = truncate_float_to_s32(
                                     gait_data->anim[4]->alternate_transition_position_span * 0.25f /
@@ -597,7 +600,8 @@ void walker_update_gait(WalkMoby *walker_moby,
                                     walker_moby->pClass->seqs[a->id], (float)fr);
                                 blend_moby_animation(walker_moby, a->id, f, bl);
                                 reset_walker_gait_helpers((char *)gait_data);
-                                gait_data->gait_state = WALKER_GAIT_ALTERNATE_TRANSITION_FROM_UPHILL_TO_WALK;
+                                gait_data->gait_state =
+                                    WALKER_GAIT_ALTERNATE_TRANSITION_FROM_UPHILL_TO_WALK;
                             }
                         }
                         break;
@@ -760,7 +764,8 @@ void walker_update_gait(WalkMoby *walker_moby,
                                        gait_data->anim[gait_animation_index]->f04 * 0.5f *
                                            fast_sin(gait_data->ground_probe_correction_angle) >
                                    -gait_data->terrain_transition_height_scale * 0.75f) {
-                            gait_data->gait_state = WALKER_GAIT_ALTERNATE_TRANSITION_FROM_DOWNHILL_TO_WALK;
+                            gait_data->gait_state =
+                                WALKER_GAIT_ALTERNATE_TRANSITION_FROM_DOWNHILL_TO_WALK;
                         } else {
                             int bl = truncate_float_to_s32(
                                 gait_data->anim[6]->alternate_transition_position_span * 0.25f /
@@ -835,7 +840,8 @@ void walker_update_gait(WalkMoby *walker_moby,
                                     walker_moby->pClass->seqs[a->id], (float)fr);
                                 blend_moby_animation(walker_moby, a->id, f, bl);
                                 reset_walker_gait_helpers((char *)gait_data);
-                                gait_data->gait_state = WALKER_GAIT_TRANSITION_FROM_DOWNHILL_TO_WALK;
+                                gait_data->gait_state =
+                                    WALKER_GAIT_TRANSITION_FROM_DOWNHILL_TO_WALK;
                             } else {
                                 int bl = truncate_float_to_s32(
                                     gait_data->anim[5]->alternate_transition_position_span * 0.25f /
@@ -852,7 +858,8 @@ void walker_update_gait(WalkMoby *walker_moby,
                                     walker_moby->pClass->seqs[a->id], (float)fr);
                                 blend_moby_animation(walker_moby, a->id, f, bl);
                                 reset_walker_gait_helpers((char *)gait_data);
-                                gait_data->gait_state = WALKER_GAIT_ALTERNATE_TRANSITION_FROM_DOWNHILL_TO_WALK;
+                                gait_data->gait_state =
+                                    WALKER_GAIT_ALTERNATE_TRANSITION_FROM_DOWNHILL_TO_WALK;
                             }
                         }
                         break;

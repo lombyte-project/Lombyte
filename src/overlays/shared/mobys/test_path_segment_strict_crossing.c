@@ -58,7 +58,8 @@ s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *e
         current_path_point_byte_offset = 0x20;
         zero = 0.0f;
         do {
-            fast_vec_sub(current, (OvlVec4 *)((u8 *)*path_slot + current_path_point_byte_offset), start);
+            fast_vec_sub(
+                current, (OvlVec4 *)((u8 *)*path_slot + current_path_point_byte_offset), start);
             transform_vector_by_basis(current, current, &direction);
             if (transformed_previous_point.f[3] != zero || transformed_current_point.f[3] != zero) {
                 if (transformed_current_point.f[1] * transformed_previous_point.f[1] < 0.0f) {
@@ -292,11 +293,16 @@ s32 resolve_point_path_segment_clearance(f32      distance,
         do {
             axis_address_or_point_byte_offset = i << 4;
             next_point_index = i + 1;
-            if (((OvlVec4 *)((u8 *)segment_path + axis_address_or_point_byte_offset + 0x10))->f[3] != 0.0f ||
+            if (((OvlVec4 *)((u8 *)segment_path + axis_address_or_point_byte_offset + 0x10))
+                        ->f[3] != 0.0f ||
                 segment_path->points[next_point_index].f[3] != 0.0f) {
-                current = (OvlVec4 *)((u8 *)segment_path + (axis_address_or_point_byte_offset + 0x10));
+                current =
+                    (OvlVec4 *)((u8 *)segment_path + (axis_address_or_point_byte_offset + 0x10));
                 fast_vec_sub(&difference, &working, current);
-                fast_vec_sub(&segment, (OvlVec4 *)((u8 *)segment_path + (axis_address_or_point_byte_offset + 0x20)), current);
+                fast_vec_sub(
+                    &segment,
+                    (OvlVec4 *)((u8 *)segment_path + (axis_address_or_point_byte_offset + 0x20)),
+                    current);
                 projection = fast_vec_dot(&difference, height_axis);
                 FUN_001ff500_262030(projection, &scaled_cross, height_axis);
                 fast_vec_sub(&difference, &difference, &scaled_cross);

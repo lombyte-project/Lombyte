@@ -242,7 +242,8 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
                 orientation_vector[1] = ofs[1];
                 orientation_vector[2] = ofs[2];
                 orientation_vector[3] = 0.0f;
-                transform_vector_by_basis(orientation_vector, orientation_vector, l10_path_camera_anchor_offset_basis);
+                transform_vector_by_basis(
+                    orientation_vector, orientation_vector, l10_path_camera_anchor_offset_basis);
                 fast_vec_add(point, &anchor->pos, orientation_vector);
                 fast_vec_sub(initial_aim_or_previous_position, point, &cam->pos);
             } else {

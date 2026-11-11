@@ -91,7 +91,8 @@ void linked_spark_emitter_update(unsigned char *moby) {
         MOBY(moby)->visible = 0;
         emitter_save_id = MOBY(moby)->save_id;
         if (l15_save_state.cleared[(short)emitter_save_id] == 0 &&
-            (((*(int *)(D_0014C190 + (((short)emitter_save_id >> 5) * 4) + (D_0015ED84 << 8)) >> (emitter_save_id & 0x1F)) ^
+            (((*(int *)(D_0014C190 + (((short)emitter_save_id >> 5) * 4) + (D_0015ED84 << 8)) >>
+               (emitter_save_id & 0x1F)) ^
               1) &
              1)) {
             MOBY(moby)->state = EMIT_SPARKS;

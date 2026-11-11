@@ -123,5 +123,6 @@ void piston_platform_update(LiftMoby *piston_platform) {
     }
     dp = &delta;
     fast_vec_sub(dp, &piston_platform->pos, &previous_position);
-    update_entity_matrix(piston_platform_vars->x60, dp, piston_platform->rotation, piston_platform->rotation);
+    update_entity_matrix(
+        piston_platform_vars->x60, dp, piston_platform->rotation, piston_platform->rotation);
 }

@@ -133,7 +133,9 @@ void sam_update(L14WatchMoby *moby) {
         }
         moby_save_state_index = moby->hB2;
         if (D_L14_001BB930.cleared[(short)moby_save_state_index] != 0 ||
-            (D_0014C190_257218[current_level_index][(short)moby_save_state_index >> 5] >> (moby_save_state_index & 0x1F)) & 1) {
+            (D_0014C190_257218[current_level_index][(short)moby_save_state_index >> 5] >>
+             (moby_save_state_index & 0x1F)) &
+                1) {
             mark_moby_for_removal(moby);
             return;
         }

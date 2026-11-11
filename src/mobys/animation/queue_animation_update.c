@@ -43,8 +43,9 @@ s32 queue_animation_update(s32 chan,
         return 0;
     }
     if (anim->next_c != animation_context || anim->next_b != queued_animation_value ||
-        anim->next_id != queued_animation_id || anim->next_mode != channel_flags || anim->next_fn != fn ||
-        anim->next_d != animation_callback || anim->next_e != queued_animation_callback) {
+        anim->next_id != queued_animation_id || anim->next_mode != channel_flags ||
+        anim->next_fn != fn || anim->next_d != animation_callback ||
+        anim->next_e != queued_animation_callback) {
         anim->next_c = animation_context;
         anim->serial = hud_state.serial++;
         anim->next_b = queued_animation_value;

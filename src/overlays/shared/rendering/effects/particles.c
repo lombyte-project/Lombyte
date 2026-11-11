@@ -680,7 +680,8 @@ void update_moby_point_attached_particle(P_2726d8 *particle) {
     Q_2726d8   *q = &particle->q;
     u128_2726d8 position_delta;
     f32         save, sc, length_jitter, target_length;
-    if (particle->q.owner == 0 || *(s16 *)(particle->q.owner + 0xA6) != q->attached_owner_identity ||
+    if (particle->q.owner == 0 ||
+        *(s16 *)(particle->q.owner + 0xA6) != q->attached_owner_identity ||
         particle->q.owner[0x20] == 0xFE || particle->q.owner[0x20] == 0xFD) {
         free_effect_particle(particle);
         return;

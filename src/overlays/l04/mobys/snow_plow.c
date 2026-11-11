@@ -157,7 +157,8 @@ void snow_plow_update(struct Moby *moby) {
         } else {
             char *message = snow_plow_missing_path_warning_format;
             int   oclass = moby->oclass;
-            instance_index_or_spawn_frames = truncate_float_to_s32((float)(((int)moby - D_L04_0015FFD8) >> 8));
+            instance_index_or_spawn_frames =
+                truncate_float_to_s32((float)(((int)moby - D_L04_0015FFD8) >> 8));
             debug_print(message, oclass, instance_index_or_spawn_frames);
         }
         moby->draw_dist = 0x7f;

@@ -523,7 +523,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                         sv0.f[2] = random_float_between(0.0f, flickering_mesh_vars->particle_z) *
                                    frame_scale;
                         particle_size = random_float_between(flickering_mesh_vars->particle_size0,
-                                                    flickering_mesh_vars->particle_size1);
+                                                             flickering_mesh_vars->particle_size1);
                         life = scale_game_frames(flickering_mesh_vars->particle_life);
                         r = flickering_mesh_vars->particle_r;
                         g = flickering_mesh_vars->particle_g;
@@ -548,7 +548,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                                                  flickering_mesh_vars->puff_c1[0];
                         float width = flickering_mesh_vars->size_x * 0.5f;
                         float puff_size = random_float_between(flickering_mesh_vars->puff_size0,
-                                                          flickering_mesh_vars->puff_size1);
+                                                               flickering_mesh_vars->puff_size1);
                         int   life = scale_game_frames(random_int_between(
                             flickering_mesh_vars->puff_life0, flickering_mesh_vars->puff_life1));
                         float fraction =

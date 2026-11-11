@@ -171,7 +171,10 @@ extern int   burst_spark_active_duration_max_gp __asm__("D_L10_00161FB0") __attr
 extern int   burst_spark_pause_duration_min_gp __asm__("D_L10_00161FB4") __attribute__((sda));
 extern int   burst_spark_pause_duration_max_gp __asm__("D_L10_00161FB8") __attribute__((sda));
 
-void emit_burst_spark_particle(void *emission_position, short *spark_emission_countdown, short *burst) {
+void emit_burst_spark_particle(void  *emission_position,
+                               short *spark_emission_countdown,
+
+                               short *burst) {
     float visibility_sphere[4];
     float burst_spark_vertical_vector[4];
     float acc[4];
@@ -225,8 +228,8 @@ void emit_burst_spark_particle(void *emission_position, short *spark_emission_co
                 second_frame_count,
                 third_frame_count,
                 -1);
-    *spark_emission_countdown = truncate_float_to_s32(random_float_between((float)burst_spark_timer_reset_min_gp,
-                                                        (float)burst_spark_timer_reset_max_gp));
+    *spark_emission_countdown = truncate_float_to_s32(random_float_between(
+        (float)burst_spark_timer_reset_min_gp, (float)burst_spark_timer_reset_max_gp));
 }
 
 /* Emits a smoke particle from pos on its timer, when the camera is near and the spot is visible. */
@@ -302,8 +305,8 @@ void emit_timed_spark_particle(void *emission_position, short *emission_countdow
                 second_frame_count,
                 third_frame_count,
                 -1);
-    *emission_countdown = truncate_float_to_s32(random_float_between((float)timed_spark_timer_reset_min_gp,
-                                                        (float)timed_spark_timer_reset_max_gp));
+    *emission_countdown = truncate_float_to_s32(random_float_between(
+        (float)timed_spark_timer_reset_min_gp, (float)timed_spark_timer_reset_max_gp));
 }
 
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EBDC8), where it is exact; names translated to the US level program. */

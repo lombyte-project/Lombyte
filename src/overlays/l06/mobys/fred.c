@@ -269,7 +269,8 @@ void fred_update(struct Moby *moby) {
             set_camera_position(pos);
             set_camera_rotation(rot);
             if (fred_vars->f178 >= 1.0f ||
-                (((Busy *)D_L06_00179B90)->f0 == 0 && ((Busy *)D_L06_00179B90)->current_help_message_id == -1 &&
+                (((Busy *)D_L06_00179B90)->f0 == 0 &&
+                 ((Busy *)D_L06_00179B90)->current_help_message_id == -1 &&
                  fred_vars->f178 > 0.2f)) {
                 approach_value(&D_L06_0015F3FC_macro, 1.0f, frame_time_macro * 4.0f);
             } else {
@@ -368,6 +369,9 @@ void fred_update(struct Moby *moby) {
         fred_vars->joint_0_scale = 2.75f;
     update_joint_animation(
         rate * frame_scale_sq_macro, head_rate * frame_scale_sq_macro, moby, fred_vars->f40, 0);
-    update_joint_animation(
-        rate * frame_scale_sq_macro, head_rate * frame_scale_sq_macro, moby, fred_vars->joint_2_animation_record, 2);
+    update_joint_animation(rate * frame_scale_sq_macro,
+                           head_rate * frame_scale_sq_macro,
+                           moby,
+                           fred_vars->joint_2_animation_record,
+                           2);
 }

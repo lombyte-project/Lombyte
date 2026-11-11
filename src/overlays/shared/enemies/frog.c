@@ -488,7 +488,8 @@ void frog_update(unsigned char *moby) {
             fast_vec_normalize(B, moby + 0xC0, frog_instance_vars->movement_speed * D_0015ED6C_gp);
             FUN_L06_002e9b60_c(moby, B, 1, 0.3f, 0.3f);
         }
-        if (frog_instance_vars->pursuit_target_mode != FROG_TARGET_MODE_NO_PURSUIT_TARGET && random_integer_below(9) == 0) {
+        if (frog_instance_vars->pursuit_target_mode != FROG_TARGET_MODE_NO_PURSUIT_TARGET &&
+            random_integer_below(9) == 0) {
             frog_instance_vars->turn_angle =
                 random_float_between(-frog_instance_vars->turn_range_degrees,
                                      frog_instance_vars->turn_range_degrees) *

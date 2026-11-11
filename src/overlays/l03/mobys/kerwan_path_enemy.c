@@ -518,7 +518,8 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
             m->rot[2] = fast_arc_tan(*(float *)(np + 0x20) - *(float *)(np + 0x10),
                                      *(float *)(np + 0x24) - *(float *)(np + 0x14));
             if (is_point_inside_clip_volume_cf(m->activation_moby_lookup_selector) ||
-                is_point_inside_clip_volume(&selected_target, moby_data->target_activation_clip_volume_id) ||
+                is_point_inside_clip_volume(&selected_target,
+                                            moby_data->target_activation_clip_volume_id) ||
                 (visited52)[m->mission_index + (current_level_index << 4)] == 0xFF ||
                 (target_distance < moby_data->alternate_path_activation_range &&
                  absolute_float(selected_target.pos[2] - m->pos[2]) < 4.0f)) {
@@ -740,7 +741,8 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
             fr = compute_interpolated_record_value(m);
             ang = fast_arc_tan(selected_target.pos[0] - m->pos[0],
                                selected_target.pos[1] - m->pos[1]);
-            FUN_001f9c48_cf((char *)m, &moby_data->heading_angular_velocity, ang, 0.03f, 0.3f, 0.3f);
+            FUN_001f9c48_cf(
+                (char *)m, &moby_data->heading_angular_velocity, ang, 0.03f, 0.3f, 0.3f);
             moby_point_position(m, 0, v);
             if (25.0f <= fr && fr <= 31.0f &&
                 absolute_float(m->pos[2] - selected_target.pos[2]) < 2.0f &&
@@ -901,10 +903,11 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
             if (moby_data->alternate_path_node_index < seg) {
                 moby_data->alternate_path_node_index = seg;
             }
-            if (!(step_mover_2e3f20((char *)m,
-                                    (char *)&moby_data->mv,
-                                    (float *)(path + 0x10 + moby_data->alternate_path_node_index * 0x10),
-                                    (char *)moby_data->v40) &
+            if (!(step_mover_2e3f20(
+                      (char *)m,
+                      (char *)&moby_data->mv,
+                      (float *)(path + 0x10 + moby_data->alternate_path_node_index * 0x10),
+                      (char *)moby_data->v40) &
                   0x14)) {
                 break;
             }
@@ -1147,8 +1150,14 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
     case ENEMY_TURN_TO_HEADING:
         switch (m->anim) {
         case ENEMY_ANIM_LOCOMOTION:
-            FUN_001f9c48_cf((char *)m, &moby_data->heading_angular_velocity, moby_data->desired_turn_heading, 0.09f, 0.27f, 0.15f);
-            if (fast_difference_between_rotations(m->rot[2], moby_data->desired_turn_heading) < 0.034906585f) {
+            FUN_001f9c48_cf((char *)m,
+                            &moby_data->heading_angular_velocity,
+                            moby_data->desired_turn_heading,
+                            0.09f,
+                            0.27f,
+                            0.15f);
+            if (fast_difference_between_rotations(m->rot[2], moby_data->desired_turn_heading) <
+                0.034906585f) {
                 moby_data->heading_turn_cooldown = scale_game_frames(0x3C);
                 if (m->bBC >= 7 && m->bBC <= 8) {
                     if (m->bBC == 7) {
@@ -1169,8 +1178,14 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
             }
             break;
         case ENEMY_ANIM_HEADING_TURN:
-            FUN_001f9c48_cf((char *)m, &moby_data->heading_angular_velocity, moby_data->desired_turn_heading, 0.01f, 0.3f, 0.2f);
-            if (fast_difference_between_rotations(m->rot[2], moby_data->desired_turn_heading) < 0.034906585f) {
+            FUN_001f9c48_cf((char *)m,
+                            &moby_data->heading_angular_velocity,
+                            moby_data->desired_turn_heading,
+                            0.01f,
+                            0.3f,
+                            0.2f);
+            if (fast_difference_between_rotations(m->rot[2], moby_data->desired_turn_heading) <
+                0.034906585f) {
                 moby_data->heading_turn_cooldown = scale_game_frames(0x3C);
                 if (m->bBC >= 7 && m->bBC <= 8) {
                     if (m->bBC == 7) {

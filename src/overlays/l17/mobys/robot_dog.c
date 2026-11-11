@@ -294,7 +294,8 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
             MOBY(robot_dog_moby)->anim_speed = 1.7f;
             mode = robot_dog_vars->mode;
             if (mode == ROBOT_DOG_DETECTION_CLEAR_LINE_IN_FACING_CONE &&
-                (fast_dec_timer_s16(&robot_dog_vars->clear_line_response_delay_frames) || D_0013E533[0x2EC1] != 3)) {
+                (fast_dec_timer_s16(&robot_dog_vars->clear_line_response_delay_frames) ||
+                 D_0013E533[0x2EC1] != 3)) {
                 if (random_integer_below(3) == 0) {
                     if (robot_dog_moby[0x53] != mode) {
                         blend_moby_animation(robot_dog_moby, 2, 0, scale_game_frames(10));

@@ -1401,11 +1401,13 @@ int find_sentrybot_attention_target(char *moby) {
                 MOBY(moby)->rot.z,
                 fast_arc_tan(MOBY(candidate_moby)->pos.x - MOBY(moby)->pos.x,
                              MOBY(candidate_moby)->pos.y - MOBY(moby)->pos.y));
-            unsigned char candidate_state = ((char *)((candidate_moby_index << 8) + (int)l15_moby_array))[0x20];
+            unsigned char candidate_state =
+                ((char *)((candidate_moby_index << 8) + (int)l15_moby_array))[0x20];
             if (candidate_state == 7 || candidate_state == 0xF)
                 moby_data->priority_attention_active = 1;
             if (moby_data->priority_attention_active != 0 || f < 1.2217305f) {
-                qcopy(candidate_line_endpoint, (char *)((candidate_moby_index << 8) + (int)l15_moby_array) + 0x10);
+                qcopy(candidate_line_endpoint,
+                      (char *)((candidate_moby_index << 8) + (int)l15_moby_array) + 0x10);
                 line_start[2] += 1.0f;
                 if (collision_line(line_start, candidate_line_endpoint, 2, 0, 0) == 0) {
                     float candidate_line_distance =

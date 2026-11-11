@@ -130,7 +130,9 @@ extern G_23bac0 D_L00_0017E4D8_23bac0 __asm__("D_L00_0017E4D8") NOT_SDA;
 void            draw_rotated_hud_sprite(
                int id, int x, int y, int draw_width, int draw_height, int alpha) __asm__("FUN_L00_0023bac0");
 
-void draw_rotated_hud_sprite(int sprite_frame_id, int x, int y, int draw_width, int draw_height, int alpha) {
+void draw_rotated_hud_sprite(
+
+    int sprite_frame_id, int x, int y, int draw_width, int draw_height, int alpha) {
     u64_23bac0 *packet_words;
     int        *coordinate_offsets;
     G_23bac0   *sprite_render_data = &D_L00_0017E4D8_23bac0;

@@ -69,9 +69,9 @@ void directional_particle_emitter_update(struct Moby *moby) {
             i = life;
             qcopy(&position, moby_position);
             spawn_position_offset.f[0] = fast_cos(fast_add_rotations(moby->rot.z, 1.5707964f)) *
-                          random_float_between(-pvars[4], pvars[4]);
+                                         random_float_between(-pvars[4], pvars[4]);
             spawn_position_offset.f[1] = fast_sin(fast_add_rotations(moby->rot.z, 1.5707964f)) *
-                          random_float_between(-pvars[4], pvars[4]);
+                                         random_float_between(-pvars[4], pvars[4]);
             *(volatile f32 *)&spawn_position_offset.f[2] = 0.0f;
             spawn_position_offset.f[2] = random_float_between(-pvars[5], pvars[5]);
             fast_vec_add(&position, &position, &spawn_position_offset);

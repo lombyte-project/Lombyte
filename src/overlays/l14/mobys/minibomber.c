@@ -1162,8 +1162,14 @@ void emit_minibomber_exhaust_puffs(struct Moby *moby) {
     for (j = 0; j < 3; j++) {
         L14Puff     *part;
         L14PuffTail *tail;
-        part = spawn_puff(
-            pos, 0.05f, 1.0f, 1.0f, signed_puff_value, D_L14_0015F580_macro, exhaust_puff_size, 0x7FFFFFFF);
+        part = spawn_puff(pos,
+                          0.05f,
+                          1.0f,
+                          1.0f,
+                          signed_puff_value,
+                          D_L14_0015F580_macro,
+                          exhaust_puff_size,
+                          0x7FFFFFFF);
         if (part) {
             tail = &part->tail;
             part->life = life;

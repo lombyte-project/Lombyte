@@ -729,7 +729,8 @@ char *spawn_radially_scattered_moby(
             fast_vec_normalize(spawned_velocity, &MOBY(moby)->pos, difference * speed);
         }
         gap = pi - difference;
-        fast_vec_normalize(direction_velocity_contribution, direction, gap * gap * 0.25f * frame_time);
+        fast_vec_normalize(
+            direction_velocity_contribution, direction, gap * gap * 0.25f * frame_time);
         fast_vec_add(spawned_velocity, spawned_velocity, direction_velocity_contribution);
         *(int *)(spawned_velocity + 8) = 0;
         fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, origin);

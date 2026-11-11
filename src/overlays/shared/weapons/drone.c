@@ -414,7 +414,8 @@ void drone_update(struct Moby *updated_moby) {
                     }
                 }
             }
-            for (exclusion_clear_index = exclusion_entry_count; exclusion_clear_index < 9; exclusion_clear_index++)
+            for (exclusion_clear_index = exclusion_entry_count; exclusion_clear_index < 9;
+                 exclusion_clear_index++)
                 ((DroneSlots *)&hero)->exclusions[exclusion_clear_index] = 0;
             selected_target_moby =
                 func_L00_002CF3D8_2CF808(&hero.motion, ((DroneSlots *)&hero)->exclusions);

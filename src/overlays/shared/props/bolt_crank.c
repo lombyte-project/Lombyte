@@ -323,7 +323,8 @@ void bolt_crank_update(struct Moby *moby) {
                           frame_scale_sq * 0.015f,
                           frame_scale_sq * 0.3f,
                           frame_time * 7.0f);
-            fast_vec_normalize(radial_correction, radial_correction, bolt_crank_radial_correction_step_gp);
+            fast_vec_normalize(
+                radial_correction, radial_correction, bolt_crank_radial_correction_step_gp);
             fast_vec_add(&player->motion.pos, &player->motion.pos, radial_correction);
             player->motion.pos.f[2] = height;
             if (opt_mirror_anim) {

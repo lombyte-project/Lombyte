@@ -105,7 +105,8 @@ void data_processor_linked_effect_update(struct Moby *moby) {
             fade_duration_frames = data_processor_linked_effect_fade_duration_seconds_gp * 60.0f;
             moby->rot.z = new_rotation;
             linked_effect_vars->voice = -1;
-            linked_effect_vars->timer_34 = scale_game_frames(truncate_float_to_s32(fade_duration_frames));
+            linked_effect_vars->timer_34 =
+                scale_game_frames(truncate_float_to_s32(fade_duration_frames));
         }
 
         moby->flags |= 0x41;
@@ -325,7 +326,8 @@ void render_data_processor_linked_effect(u8 *moby) {
                                  linked_processor_vars + group_vertices +
                                      (row + (vertex >> 1)) * 0x140 + order[i] * 0x10);
                 }
-                draw_geometry_quad(buffers.packet.quad, strip_transforms + strip_transform_byte_offset, 0);
+                draw_geometry_quad(
+                    buffers.packet.quad, strip_transforms + strip_transform_byte_offset, 0);
             }
             row = next_row;
         } while (row < 19);

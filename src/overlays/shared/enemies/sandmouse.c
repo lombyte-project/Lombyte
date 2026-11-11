@@ -864,7 +864,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
             life = FUN_L00_00257b90(*(int *)&sandmouse_fade_particle_min_lifetime_gp,
                                     *(int *)&sandmouse_fade_particle_max_lifetime_gp);
             fade_particle_size = random_float_between(*(f32 *)&sandmouse_fade_particle_min_size_gp,
-                                        *(f32 *)&sandmouse_fade_particle_max_size_gp);
+                                                      *(f32 *)&sandmouse_fade_particle_max_size_gp);
             FUN_L00_00272060(&pos,
                              life,
                              fade_particle_size,

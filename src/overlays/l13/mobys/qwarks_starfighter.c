@@ -1189,7 +1189,8 @@ void draw_starfighter_tractor_beam(struct Moby *moby) {
     fast_vec_normalize(direction, direction, step);
     qcopy(position, start);
     distance = zero;
-    fast_vec_normalize(beam_phase_offset, direction, convert_integer_to_float(frame_count % 20) / 20.0f);
+    fast_vec_normalize(
+        beam_phase_offset, direction, convert_integer_to_float(frame_count % 20) / 20.0f);
     fast_vec_sub(position, position, beam_phase_offset);
     while (distance < length) {
         width = (distance * 0.0f) / (length + length) + 0.5f;
@@ -1881,9 +1882,11 @@ void qwarks_starfighter_update(Moby388 *moby) {
             starfighter_vars->flight_speed +=
                 (frame_time * 30.0f - starfighter_vars->flight_speed) * 0.1f;
             if (frame_time * 40.0f < hero_distance) {
-                fast_vec_sub(
-                    effect_position_or_beam_step, ((char *)&D_0013F3D0), starfighter_vars->tractor_beam_endpoint);
-                fast_vec_normalize(effect_position_or_beam_step, effect_position_or_beam_step, frame_time * 40.0f);
+                fast_vec_sub(effect_position_or_beam_step,
+                             ((char *)&D_0013F3D0),
+                             starfighter_vars->tractor_beam_endpoint);
+                fast_vec_normalize(
+                    effect_position_or_beam_step, effect_position_or_beam_step, frame_time * 40.0f);
                 fast_vec_add(starfighter_vars->tractor_beam_endpoint,
                              starfighter_vars->tractor_beam_endpoint,
                              effect_position_or_beam_step);
@@ -1965,7 +1968,8 @@ void qwarks_starfighter_update(Moby388 *moby) {
             fast_vec_sub(ray_start, starfighter_vars->tractor_beam_endpoint, probe);
             fast_vec_normalize(ray_start, ray_start, 30.0f);
             fast_vec_add(ray_start, ray_start, probe);
-            fast_vec_sub(effect_position_or_beam_step, ray_start, starfighter_vars->tractor_beam_endpoint);
+            fast_vec_sub(
+                effect_position_or_beam_step, ray_start, starfighter_vars->tractor_beam_endpoint);
             distance = fast_vec_dist(ray_start, ((char *)&D_0013F3D0));
             if (distance != 30.0f) {
                 fast_vec_normalize(effect_position_or_beam_step,
@@ -2339,8 +2343,8 @@ void qwarks_starfighter_update(Moby388 *moby) {
         fast_vec_sub(effect_position_or_beam_step, moby->pos, effect_position_or_beam_step);
         effect_position_or_beam_step[3] = 50.0f;
         if (starfighter_vars->light120 == -1) {
-            starfighter_vars->light120 =
-                allocate_colored_effect_slot(effect_position_or_beam_step, 50.0f, 0.0f, 3.0f, 0.5f, 0.01f);
+            starfighter_vars->light120 = allocate_colored_effect_slot(
+                effect_position_or_beam_step, 50.0f, 0.0f, 3.0f, 0.5f, 0.01f);
         } else {
             char *light = level13_point_light_slots + (starfighter_vars->light120 << 5);
             qcopy(light + 0x10, effect_position_or_beam_step);
@@ -2405,7 +2409,10 @@ extern char *create_moby(int);
 
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
-char *spawn_moby_joint_attachment(char *parent_moby, int attachment_joint_index, int attachment_class_id) {
+char *spawn_moby_joint_attachment(char *parent_moby,
+                                  int   attachment_joint_index,
+
+                                  int attachment_class_id) {
     char *moby = create_moby(attachment_class_id);
     if (moby != 0) {
         char *attachment_vars;

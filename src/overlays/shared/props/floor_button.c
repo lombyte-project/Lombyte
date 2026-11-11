@@ -49,7 +49,8 @@ void floor_button_update(struct Moby *moby) {
         moby->pos.z -= 0.35f;
         save_flag_index = (s16)moby->save_id;
         if (l05_mission_gated_moby_save_flags.collected[save_flag_index] != 0 ||
-            (D_0014C190_257218[current_level_index][save_flag_index >> 5] >> (moby->save_id & 31) & 1) != 0 ||
+            (D_0014C190_257218[current_level_index][save_flag_index >> 5] >> (moby->save_id & 31) &
+             1) != 0 ||
             (floor_button_private_state[2] != 0 &&
              D_0014C050[moby->mission + current_level_index * 16] == 0xFF)) {
             moby->command = 2;

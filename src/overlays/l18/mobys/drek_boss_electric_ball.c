@@ -492,10 +492,14 @@ void spawn_explosion_burst(void *source_moby) {
             speed = random_float_between(explosion_burst_spark_speed_min_gp,
                                          explosion_burst_spark_speed_max_gp);
             build_spherical_offset(velocity, speed * frame_time, angle, elevation);
-            fast_vec_scale(second_spark_vector_or_particle_position, velocity, explosion_burst_spark_second_vector_scale_gp);
+            fast_vec_scale(second_spark_vector_or_particle_position,
+                           velocity,
+                           explosion_burst_spark_second_vector_scale_gp);
             scale = random_float_between(0.8f, 1.2f);
-            second_spark_vector_or_particle_position[3] = velocity[3] = explosion_burst_spark_vector_w_gp;
-            second_spark_vector_or_particle_position[2] += explosion_burst_spark_second_vector_z_rate_gp * scale * frame_time;
+            second_spark_vector_or_particle_position[3] = velocity[3] =
+                explosion_burst_spark_vector_w_gp;
+            second_spark_vector_or_particle_position[2] +=
+                explosion_burst_spark_second_vector_z_rate_gp * scale * frame_time;
             scale = random_float_between(0.8f, 1.2f);
             a = truncate_float_to_s32(
                 (float)scale_game_frames(explosion_burst_spark_frame_count_gp) * scale);
@@ -529,15 +533,19 @@ void spawn_explosion_burst(void *source_moby) {
             build_spherical_offset(velocity, speed, angle, elevation);
             angle = random_angle_radians();
             offset_x = fast_cos(angle);
-            second_spark_vector_or_particle_position[0] = random_float_between(0.0f, explosion_burst_particle_xy_offset_limit_gp);
+            second_spark_vector_or_particle_position[0] =
+                random_float_between(0.0f, explosion_burst_particle_xy_offset_limit_gp);
             offset_x *= second_spark_vector_or_particle_position[0];
             second_spark_vector_or_particle_position[0] = offset_x;
             offset_y = fast_sin(angle);
-            second_spark_vector_or_particle_position[1] = random_float_between(0.0f, explosion_burst_particle_xy_offset_limit_gp);
+            second_spark_vector_or_particle_position[1] =
+                random_float_between(0.0f, explosion_burst_particle_xy_offset_limit_gp);
             offset_y *= second_spark_vector_or_particle_position[1];
             second_spark_vector_or_particle_position[1] = offset_y;
             second_spark_vector_or_particle_position[2] = 0.0f;
-            fast_vec_add(second_spark_vector_or_particle_position, second_spark_vector_or_particle_position, &moby->pos);
+            fast_vec_add(second_spark_vector_or_particle_position,
+                         second_spark_vector_or_particle_position,
+                         &moby->pos);
             color1 = explosion_burst_particle_first_color_choices[random_integer_below(6)];
             color2 = explosion_burst_particle_second_color_choices[random_integer_below(6)];
             scale = explosion_burst_particle_scale_multiplier_gp * 400000.0f;
@@ -547,7 +555,16 @@ void spawn_explosion_burst(void *source_moby) {
             b = scale_game_frames(
                 random_int_between(explosion_burst_particle_second_frame_count_range_start_gp,
                                    explosion_burst_particle_second_frame_count_range_end_gp));
-            spawn_particle(second_spark_vector_or_particle_position, velocity, color1, color2, scale, a, b, speed, 0, 0);
+            spawn_particle(second_spark_vector_or_particle_position,
+                           velocity,
+                           color1,
+                           color2,
+                           scale,
+                           a,
+                           b,
+                           speed,
+                           0,
+                           0);
         } while (j < explosion_burst_particle_count_gp);
     }
     if (explosion_burst_first_glow_scale_multiplier_gp > 0.0f) {

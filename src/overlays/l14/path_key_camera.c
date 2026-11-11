@@ -272,7 +272,8 @@ void update_path_key_camera(char *path_key_camera) {
         (path_key_camera_rail_distances[side][hero.rail_segment] + hero.rail_seg_frac) /
         path_key_camera_rail_distances[side][999];
     if (rec->angle_override_stage < 2 &&
-        path_key_camera_angle_override_progress_thresholds[rec->angle_override_stage][side] <= D_L14_001624C0) {
+        path_key_camera_angle_override_progress_thresholds[rec->angle_override_stage][side] <=
+            D_L14_001624C0) {
         rec->angle_override_stage++;
     }
     if (rec->angle_override_stage == 1) {
@@ -280,7 +281,8 @@ void update_path_key_camera(char *path_key_camera) {
         ((CamBones5d48 *)D_L14_0017AD80)->f278 = D_L14_001624AC * 0.017453292f;
     }
     if (rec->linked_moby_event_stage < 3 &&
-        path_key_camera_linked_moby_event_progress_thresholds[rec->linked_moby_event_stage][side] <= D_L14_001624C0) {
+        path_key_camera_linked_moby_event_progress_thresholds[rec->linked_moby_event_stage][side] <=
+            D_L14_001624C0) {
         struct Moby *first_linked_moby =
             (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->first_linked_moby_index << 8));
         struct Moby *second_linked_moby =
@@ -378,9 +380,11 @@ void update_path_key_camera(char *path_key_camera) {
     next_camera_key_index = st->idx + 1;
     if (side == 0 && D_L14_001F6488[st->idx + 1].side_zero_progress_threshold <= D_L14_001624C0) {
         st->idx++;
-    } else if (side == 1 && D_L14_001F6488[st->idx + 1].side_one_progress_threshold <= D_L14_001624C0) {
+    } else if (side == 1 &&
+               D_L14_001F6488[st->idx + 1].side_one_progress_threshold <= D_L14_001624C0) {
         st->idx++;
-    } else if (side == 2 && D_L14_001F6488[st->idx + 1].side_two_progress_threshold <= D_L14_001624C0) {
+    } else if (side == 2 &&
+               D_L14_001F6488[st->idx + 1].side_two_progress_threshold <= D_L14_001624C0) {
         st->idx++;
     }
     if (D_L14_001F6488[st->idx + 1].interpolation_stop_marker == 0x2710) {
@@ -391,13 +395,16 @@ void update_path_key_camera(char *path_key_camera) {
         float den;
 
         if (side == 0) {
-            den = D_L14_001F6488[st->idx + 1].side_zero_progress_threshold - D_L14_001F6488[st->idx].side_zero_progress_threshold;
+            den = D_L14_001F6488[st->idx + 1].side_zero_progress_threshold -
+                  D_L14_001F6488[st->idx].side_zero_progress_threshold;
             num = D_L14_001624C0 - D_L14_001F6488[st->idx].side_zero_progress_threshold;
         } else if (side == 1) {
-            den = D_L14_001F6488[st->idx + 1].side_one_progress_threshold - D_L14_001F6488[st->idx].side_one_progress_threshold;
+            den = D_L14_001F6488[st->idx + 1].side_one_progress_threshold -
+                  D_L14_001F6488[st->idx].side_one_progress_threshold;
             num = D_L14_001624C0 - D_L14_001F6488[st->idx].side_one_progress_threshold;
         } else {
-            den = D_L14_001F6488[st->idx + 1].side_two_progress_threshold - D_L14_001F6488[st->idx].side_two_progress_threshold;
+            den = D_L14_001F6488[st->idx + 1].side_two_progress_threshold -
+                  D_L14_001F6488[st->idx].side_two_progress_threshold;
             num = D_L14_001624C0 - D_L14_001F6488[st->idx].side_two_progress_threshold;
         }
         key_interpolation_fraction = num / den;

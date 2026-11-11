@@ -180,7 +180,8 @@ void test_dummy_update(unsigned char *moby) {
         dummy_data->max_health = 2;
         dummy_data->health = 2.0f;
         dummy_data->glow_pulse_phase = random_angle_radians();
-        dummy_data->route = find_nearest_test_dummy_door(dummy_data->door_moby_group_index, moby + 0x10);
+        dummy_data->route =
+            find_nearest_test_dummy_door(dummy_data->door_moby_group_index, moby + 0x10);
         qcopy(dummy_data->spawn, moby + 0x10);
         switch (dummy_data->kind) {
         case TEST_DUMMY_KIND_THROWER:
@@ -575,9 +576,10 @@ void update_test_dummy_damage_and_respawn(void *moby) {
     }
     amount = 0.0f;
     dummy_hit_record = find_moby_hit(hit_moby, 0x330000, 0);
-    hit_reaction(hit_moby, dummy_hit_record, &hit_data->health, 0, &hit_reaction_status, &amount, 0, 4);
-    if (hit_reaction_status != HIT_REACTION_STATUS_NO_DAMAGE && hit_moby->state != TEST_DUMMY_STATE_BURST &&
-        hit_moby->state != TEST_DUMMY_STATE_RESPAWN) {
+    hit_reaction(
+        hit_moby, dummy_hit_record, &hit_data->health, 0, &hit_reaction_status, &amount, 0, 4);
+    if (hit_reaction_status != HIT_REACTION_STATUS_NO_DAMAGE &&
+        hit_moby->state != TEST_DUMMY_STATE_BURST && hit_moby->state != TEST_DUMMY_STATE_RESPAWN) {
         hit_data->health -= amount;
         if (hit_data->health <= 0.0f) {
             hit_moby->state = TEST_DUMMY_STATE_BURST;

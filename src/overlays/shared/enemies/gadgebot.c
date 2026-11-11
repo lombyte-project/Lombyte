@@ -1586,7 +1586,8 @@ int process_gadgebot_interactions(char *moby, int flag) {
     if (list_id != -1) {
         get_first_moby_in_group(&iter.list, list_id, 0, 0);
         while (iter.list != 0) {
-            if (process_gadgebot_interaction_candidate(moby, gadgebot_private_vars, iter.list, flag, &iter.out))
+            if (process_gadgebot_interaction_candidate(
+                    moby, gadgebot_private_vars, iter.list, flag, &iter.out))
                 return iter.out;
             get_next_moby_in_group(&iter.list, iter.list, 0, 0);
         }

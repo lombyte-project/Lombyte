@@ -871,8 +871,9 @@ void visibomb_missile_update(struct Moby *missile_moby) {
         float requested_speed_target = visibomb_missile_default_speed_gp * frame_time_macro;
         if (controller_state.held & 0x40)
             requested_speed_target = visibomb_missile_max_speed_gp * frame_time_macro;
-        missile_vars->smoothed_speed_target += (requested_speed_target - missile_vars->smoothed_speed_target) *
-                                               visibomb_missile_speed_target_blend_factor_gp;
+        missile_vars->smoothed_speed_target +=
+            (requested_speed_target - missile_vars->smoothed_speed_target) *
+            visibomb_missile_speed_target_blend_factor_gp;
         missile_vars->f4 += (missile_vars->smoothed_speed_target - missile_vars->f4) *
                             visibomb_missile_speed_blend_factor_gp;
         if (visibomb_missile_max_speed_gp * frame_time_macro < missile_vars->f4)
@@ -913,13 +914,15 @@ void visibomb_missile_update(struct Moby *missile_moby) {
     fast_vec_add(&missile_moby->pos, &missile_moby->pos, &v50);
     if (scale_game_frames(0xBB8) - scale_game_frames(0x3C) < missile_vars->f10) {
         float launch_clearance_target_height = probe_ground_height(&missile_moby->pos, 0, 0.5f) +
-                  missile_vars->launch_ground_clearance;
+                                               missile_vars->launch_ground_clearance;
         if (missile_moby->pos.z < launch_clearance_target_height) {
             if (coll_hit_moby == 0 ||
                 (coll_hit_moby->pclass != 0 && coll_hit_moby->pclass->type == 5)) {
                 float ground_clearance_pitch_adjustment =
                     fast_arc_tan(missile_vars->f4,
-                                 approach_value(&missile_moby->pos.z, launch_clearance_target_height, frame_time_macro * 6.0f));
+                                 approach_value(&missile_moby->pos.z,
+                                                launch_clearance_target_height,
+                                                frame_time_macro * 6.0f));
                 if (frame_time_macro * 1.57079637f < ground_clearance_pitch_adjustment)
                     ground_clearance_pitch_adjustment = frame_time_macro * 1.57079637f;
                 missile_moby->rot.y -= ground_clearance_pitch_adjustment;

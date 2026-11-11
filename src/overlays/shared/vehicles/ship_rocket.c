@@ -74,8 +74,9 @@ void ship_rocket_update(struct Moby *moby) {
     random.f[2] = random_float_between(-1.0f, 1.0f);
     velocity.q = random.q;
     fast_vec_normalize(&velocity, &velocity, random_float_between(0.1f, 0.2f) * frame_time);
-    fast_vec_normalize(
-        &trail_particle_vector, &rocket_vars->step, -random_float_between(frame_time * 0.1f, frame_time));
+    fast_vec_normalize(&trail_particle_vector,
+                       &rocket_vars->step,
+                       -random_float_between(frame_time * 0.1f, frame_time));
     fast_vec_add(&velocity, &velocity, &trail_particle_vector);
     FUN_L00_002712b8(&moby->pos,
                      &velocity,
@@ -117,8 +118,13 @@ void ship_rocket_update(struct Moby *moby) {
         random.f[2] = 0.02f;
         transform_vector_by_basis(&random, &random, &moby->rot_row0);
         build_look_at_matrix(&random, &random, &moby->rot_row0, random_angle_radians());
-        FUN_L00_0026cbb0(
-            &trail_particle_vector, &random, 0x4f007fff, 0x1fffffff, scale_game_frames(5), 1, 20000.0f);
+        FUN_L00_0026cbb0(&trail_particle_vector,
+                         &random,
+                         0x4f007fff,
+                         0x1fffffff,
+                         scale_game_frames(5),
+                         1,
+                         20000.0f);
     }
     pos = &moby->pos;
     target = rocket_vars->target;

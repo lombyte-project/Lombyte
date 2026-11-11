@@ -734,7 +734,8 @@ void batalia_cannon_update(Moby *moby) {
         CANNON_THREE_INACTIVE_INDEXED_TARGETS = 3,
         CANNON_ALL_INDEXED_TARGETS_INACTIVE = 4
     };
-    float position[4], mounted_hero_position_offset[4], work[4], direction[4], muzzle[4], scatter[4], random_vec[4];
+    float position[4], mounted_hero_position_offset[4], work[4], direction[4], muzzle[4],
+        scatter[4], random_vec[4];
     CannonData52 *cannon_control_vars = (*(CannonData52 **)&moby->pvars);
     int           i, target, all_done, dead, best, min_life;
     Moby        **links;

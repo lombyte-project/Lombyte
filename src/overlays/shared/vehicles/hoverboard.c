@@ -33,10 +33,10 @@ void hoverboard_update(unsigned char *moby) {
         HOVERBOARD_STATE_WAIT_FOR_PLAYER_APPROACH = 0,
         HOVERBOARD_STATE_WAIT_FOR_CONTROL_MODE_EXIT = 1
     };
-    char        *hoverboard_vars = ((char *)MOBY(moby)->pvars);
-    float        delta[4], position[4], effect_position[4], effect_sine_offset[4], second_position[4];
-    float        angle, distance_scale, delta_length;
-    int          state = (u8)MOBY(moby)->state;
+    char *hoverboard_vars = ((char *)MOBY(moby)->pvars);
+    float delta[4], position[4], effect_position[4], effect_sine_offset[4], second_position[4];
+    float angle, distance_scale, delta_length;
+    int   state = (u8)MOBY(moby)->state;
     struct Hero *player_hero;
 
     switch (state) {

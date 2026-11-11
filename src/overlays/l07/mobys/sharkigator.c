@@ -876,7 +876,8 @@ void sharkigator_update(unsigned char *moby) {
             point[0] += random_float_between(-0.15f, 0.15f);
             point[1] += random_float_between(-0.15f, 0.15f);
             point[2] = resolve_camera_surface_height((Vec4 *)&D_L07_00173EE0, 0);
-            spawn_moving_resizing_height_snapped_alpha_fade_particle(point, 0, -1, particle_size, 5250.0f);
+            spawn_moving_resizing_height_snapped_alpha_fade_particle(
+                point, 0, -1, particle_size, 5250.0f);
         }
     }
     if (1.0f <= F(sharkigator_instance_vars, 0x14C)) {

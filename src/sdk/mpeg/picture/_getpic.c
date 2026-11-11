@@ -60,12 +60,14 @@ s32 _getpic(struct sceMpeg *mpeg) {
             decoder->picture_count_i = (s32)(decoder->picture_count_i + 1);
             break;
         case MPEG_PREDICTIVE_PICTURE:
-            decode_or_skip_result = _decodeOrSkip(mpeg, decoder->picture_count_p, decoder->decode_count_p);
+            decode_or_skip_result =
+                _decodeOrSkip(mpeg, decoder->picture_count_p, decoder->decode_count_p);
             decoder->picture_count_p = (s32)(decoder->picture_count_p + 1);
             break;
         case MPEG_BIDIRECTIONAL_PICTURE:
         case MPEG_DC_INTRA_PICTURE:
-            decode_or_skip_result = _decodeOrSkip(mpeg, decoder->picture_count_b, decoder->decode_count_b);
+            decode_or_skip_result =
+                _decodeOrSkip(mpeg, decoder->picture_count_b, decoder->decode_count_b);
             decoder->picture_count_b = (s32)(decoder->picture_count_b + 1);
             break;
         }

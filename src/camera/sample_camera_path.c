@@ -25,7 +25,13 @@ void sample_camera_path(struct CameraPath *path,
 
 void sample_camera_path(
 
-    struct CameraPath *path, s32 loop, void *position, f32 *rotation, s32 rotation_output_flags, f32 progress) {
+    struct CameraPath *path,
+    s32                loop,
+    void              *position,
+    f32               *rotation,
+    s32                rotation_output_flags,
+
+    f32 progress) {
     Vec4 current_point;
     Vec4 next_point;
     Vec4 following_point;

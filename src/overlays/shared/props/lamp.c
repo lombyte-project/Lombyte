@@ -136,9 +136,9 @@ void draw_moby_wobble_quads(struct Moby *moby) {
 
     texture = get_effect_texture(wobble_quad_texture_index_gp);
     blend_control = (u64)(s64)wobble_quad_blend_a_selector_gp |
-            ((u64)(s64)wobble_quad_blend_b_selector_gp << 2) |
-            ((u64)(s64)wobble_quad_blend_c_selector_gp << 4) |
-            ((u64)(s64)wobble_quad_blend_d_selector_gp << 6) | 0x8000000000ULL;
+                    ((u64)(s64)wobble_quad_blend_b_selector_gp << 2) |
+                    ((u64)(s64)wobble_quad_blend_c_selector_gp << 4) |
+                    ((u64)(s64)wobble_quad_blend_d_selector_gp << 6) | 0x8000000000ULL;
     quad_b.control[0] = 0;
     quad_b.control[2] = 0xff9000000260ULL;
     quad_a.control[2] = 0xff9000000260ULL;

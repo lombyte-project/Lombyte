@@ -363,6 +363,7 @@ void initialize_orbit_camera_from_hero(O002ebb00 *camera_object) {
     qcopy(camera_state + 0x80, raised_hero_position);
     zero_five_words(camera_state + 0x14);
     *(f32 *)(camera_state + 0x1C) = 4.64f;
-    copy_five_floats_with_rotation_offset(camera_object->orbit_parameters, camera_state + 0x14, 0.0f);
+    copy_five_floats_with_rotation_offset(
+        camera_object->orbit_parameters, camera_state + 0x14, 0.0f);
     initialize_orbit_camera_state(camera_object);
 }

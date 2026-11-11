@@ -61,7 +61,8 @@ void decompress_and_relocate_selected_groups(int optional_bank_selection) {
             decompression_destination += slot_3_size;
         }
     }
-    if (optional_bank_selection == HUD_DECOMPRESS_OPTIONAL_BANK_3 || optional_bank_selection == HUD_DECOMPRESS_BOTH_OPTIONAL_BANKS) {
+    if (optional_bank_selection == HUD_DECOMPRESS_OPTIONAL_BANK_3 ||
+        optional_bank_selection == HUD_DECOMPRESS_BOTH_OPTIONAL_BANKS) {
         {
             int slot_4_size;
             if ((slot_4_size = decompression_slot_state->t->sz[4])) {

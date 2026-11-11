@@ -247,7 +247,8 @@ void mine_group_update(struct Moby *moby) {
     remaining = &boltcrate_pvars->health;
     if (boltcrate_pvars->hittable) {
         limit = find_moby_hit(moby, 0x230000, 0);
-        hit_response_code = resolve_moby_hit_response(moby, limit, remaining, 0, &hit_damage_code, 0, 0, 4);
+        hit_response_code =
+            resolve_moby_hit_response(moby, limit, remaining, 0, &hit_damage_code, 0, 0, 4);
         switch ((unsigned)hit_response_code) {
         case HIT_REACTION_NONE:
         case HIT_REACTION_START_KNOCKBACK:

@@ -139,7 +139,12 @@ void        draw_level09_scrolling_textured_strips(char *list,
 
 void draw_level09_scrolling_textured_strips(
 
-    char *list, int strip_entry_count, float unused, long first_texture_index, long second_texture_index) {
+    char *list,
+    int   strip_entry_count,
+    float unused,
+    long  first_texture_index,
+
+    long second_texture_index) {
     int   i;
     int   j;
     int   strip_vertex_index;
@@ -217,7 +222,10 @@ void build_packet_and_draw_scaled_entries(void *data_ptr,
                                           void *list_ptr,
                                           int   count) __asm__("FUN_L09_002c1978");
 
-void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int scaled_surface_entry_count) {
+void build_packet_and_draw_scaled_entries(void *data_ptr,
+                                          void *list_ptr,
+
+                                          int scaled_surface_entry_count) {
     enum {
         TEXTURED_GRID_USE_CURRENT_VIEW_SETTINGS = 1
     };

@@ -220,7 +220,9 @@ u8 *initialize_level_render_state(LevelHeader *header) {
     occl_fog_density_set = 500.0f;
     occl_fog_count = 500;
     part_clip_dist = 0x1F4000;
-    set_background_color(D_0018CD00.background_color_red, D_0018CD00.background_color_green, D_0018CD00.background_color_blue);
+    set_background_color(D_0018CD00.background_color_red,
+                         D_0018CD00.background_color_green,
+                         D_0018CD00.background_color_blue);
     vu0_load_micro_program(D_00100AE0);
     fast_mem_zero16(point_lights, 0x100);
     fast_mem_zero16(point_light_data, 0x180);

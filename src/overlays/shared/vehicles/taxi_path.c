@@ -82,7 +82,8 @@ char *find_moby_in_owner_list_by_id(unsigned char *list_owner_moby, int target_m
         pool = D_L05_0015FFD8_9598;
         do {
             candidate_moby_pool_index = *moby_index_entry & 0x7FFF;
-            if (*(short *)(((M_9598 *)pool)[candidate_moby_pool_index].data + 0xB4) == target_moby_data_id)
+            if (*(short *)(((M_9598 *)pool)[candidate_moby_pool_index].data + 0xB4) ==
+                target_moby_data_id)
                 goto found;
         } while ((short)*moby_index_entry++ >= 0);
     }

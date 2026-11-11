@@ -872,8 +872,11 @@ void gold_devastator_missile_update(M910 *missile_moby) {
         int   particles;
         int   particle_reduction;
         int   i, j;
-        int   hit =
-            collect_mobies_in_sphere((&missile_moby->pos), 16, missile_moby, 0, (impact_scale_multiplier + impact_scale_multiplier));
+        int   hit = collect_mobies_in_sphere((&missile_moby->pos),
+                                           16,
+                                           missile_moby,
+                                           0,
+                                           (impact_scale_multiplier + impact_scale_multiplier));
         particles = 10;
         predicted.q = missile_moby->pos.q;
         FUN_L00_0025a9f8(missile_moby,
@@ -922,9 +925,11 @@ void gold_devastator_missile_update(M910 *missile_moby) {
                     transform_vector(&predicted, &surface_motion, rotation);
                     fast_vec_normalize(&predicted,
                                        &predicted,
-                                       random_float_between(8.5f, 16.5f) * D_0015ED6C * impact_scale_multiplier);
+                                       random_float_between(8.5f, 16.5f) * D_0015ED6C *
+                                           impact_scale_multiplier);
                 } else {
-                    float speed = random_float_between(8.5f, 16.5f) * D_0015ED6C * impact_scale_multiplier;
+                    float speed =
+                        random_float_between(8.5f, 16.5f) * D_0015ED6C * impact_scale_multiplier;
                     float a = random_angle_radians();
                     build_spherical_offset(&predicted, speed, a, random_angle_radians());
                 }
@@ -964,7 +969,8 @@ void gold_devastator_missile_update(M910 *missile_moby) {
         fast_vec_sub(&camera_delta, D_L00_00166DC0, (&missile_moby->pos));
         distance = fast_vec_length(&camera_delta);
         camera_delta.f[2] += distance * 0.5f;
-        fast_vec_normalize(&predicted, &predicted, distance / 5.0f * D_0015ED6C * impact_scale_multiplier);
+        fast_vec_normalize(
+            &predicted, &predicted, distance / 5.0f * D_0015ED6C * impact_scale_multiplier);
         fast_vec_normalize(&camera_delta, &camera_delta, (distance + distance) * D_0015ED6C);
         fast_vec_add(&predicted, &predicted, &camera_delta);
         clamp_vector_length(&predicted, &predicted, D_0015ED6C * 10.0f);
@@ -983,8 +989,8 @@ void gold_devastator_missile_update(M910 *missile_moby) {
         if (reduced)
             j /= 2;
         for (i = 0; i < j; i++) {
-            float speed =
-                random_float_between(8.0f, 10.0f) * impact_scale_multiplier * D_0015ED6C - near_adjust * D_0015ED6C;
+            float speed = random_float_between(8.0f, 10.0f) * impact_scale_multiplier * D_0015ED6C -
+                          near_adjust * D_0015ED6C;
             Colors1688 color = l00_devastator_missile_impact_color_palette;
             Colors1688 fade = l00_devastator_missile_impact_fade_palette;
             int        c =
@@ -1026,7 +1032,8 @@ void gold_devastator_missile_update(M910 *missile_moby) {
                 random.f[2] = random_float_between(-1.0f, 1.0f);
                 v.q = random.q;
             }
-            fast_vec_normalize(&v, &v, random_float_between(0.0f, 3.0f) * D_0015ED6C * impact_scale_multiplier);
+            fast_vec_normalize(
+                &v, &v, random_float_between(0.0f, 3.0f) * D_0015ED6C * impact_scale_multiplier);
             c = swap_packed_color_channels(color.colors[random_integer_below(6)], D_0013E520.bB);
             f = swap_packed_color_channels(fade.colors[random_integer_below(6)], D_0013E520.bB);
             debris_scale = impact_scale_multiplier * 200000.0f;

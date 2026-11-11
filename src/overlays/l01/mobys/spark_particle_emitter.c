@@ -125,7 +125,8 @@ void spark_particle_emitter_update(EmitterMoby *emitter_moby) {
                 }
                 euler_rotation_matrix(&u.rot.m, &u.rot.ang);
                 transform_vector(&rotated_particle_velocity, &emitter_vars->vel, &u.rot.m);
-                sampled_particle_size = random_float_between(emitter_vars->size_min, emitter_vars->size_max);
+                sampled_particle_size =
+                    random_float_between(emitter_vars->size_min, emitter_vars->size_max);
                 create_spark_particle(
                     emitter_vars,
                     &position_scratch,
@@ -156,7 +157,8 @@ void spark_particle_emitter_update(EmitterMoby *emitter_moby) {
                     euler_rotation_matrix(&u.lin.m, emitter_moby->rot);
                     transform_vector(&u.lin.vel, &u.lin.vel, &u.lin.m);
                 }
-                sampled_particle_size = random_float_between(emitter_vars->size_min, emitter_vars->size_max);
+                sampled_particle_size =
+                    random_float_between(emitter_vars->size_min, emitter_vars->size_max);
                 create_spark_particle(
                     emitter_vars,
                     &position_scratch,

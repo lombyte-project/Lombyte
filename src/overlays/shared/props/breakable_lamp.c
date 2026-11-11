@@ -209,8 +209,15 @@ void breakable_lamp_update(struct Moby *moby) {
                          0.003f);
         sign = -sign;
         frames = scale_game_frames(0x3C);
-        spawn_trail_c8e0(
-            &start, frames, trail_size * 0.07f, trail_size * 0.7f, 0x7F7F7F7F, 1, sign, &effect_motion, 0.003f);
+        spawn_trail_c8e0(&start,
+                         frames,
+                         trail_size * 0.07f,
+                         trail_size * 0.7f,
+                         0x7F7F7F7F,
+                         1,
+                         sign,
+                         &effect_motion,
+                         0.003f);
         effect_motion.f[1] = 0.0f;
         effect_motion.f[0] = 0.0f;
         effect_motion.f[2] = random_float_between(0.01f, 0.05f) * frame_scale;

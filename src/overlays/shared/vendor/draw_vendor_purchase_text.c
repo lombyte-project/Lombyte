@@ -146,7 +146,14 @@ void pool_splash(HeightTile *tile,
 
 void pool_splash(
 
-    HeightTile *tile, int tile_count, int add_to_existing_height, float x, float z, float radius, float amount) {
+    HeightTile *tile,
+    int         tile_count,
+    int         add_to_existing_height,
+    float       x,
+    float       z,
+    float       radius,
+
+    float amount) {
     enum {
         POOL_SPLASH_KEEP_GREATER_MAGNITUDE = 0
     };

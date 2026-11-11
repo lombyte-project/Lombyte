@@ -198,7 +198,8 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
     fast_vec_add(&pos, &pos, &step);
     life = scale_game_frames(2);
     for (i = 0; i < 3; i++) {
-        puff = spawn_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, ring_puff_size, 0x7FFFFFFF);
+        puff =
+            spawn_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, ring_puff_size, 0x7FFFFFFF);
         if (puff != 0) {
             L14PuffTail *tail = &puff->tail;
             puff->frame = (emitter_moby->draw_dist >> 5 << 4) + exhaust_ftoi(4.0f);
@@ -239,7 +240,8 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
     fast_vec_add(&pos, &pos, &step);
     life = scale_game_frames(2);
     for (i = 0; i < 3; i++) {
-        puff = spawn_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, ring_puff_size, 0x7FFFFFFF);
+        puff =
+            spawn_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, ring_puff_size, 0x7FFFFFFF);
         if (puff != 0) {
             L14PuffTail *tail = &puff->tail;
             puff->frame = (emitter_moby->draw_dist >> 5 << 4) + exhaust_ftoi(4.0f);

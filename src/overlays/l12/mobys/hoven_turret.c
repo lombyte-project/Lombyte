@@ -251,7 +251,8 @@ void hoven_turret_update(struct Moby *moby) {
         if (vector_distance_xy(((float *)&moby->pos),
                                ((Hero *)(D_0013E533 + 0xE1D))->motion.pos.f) < 7.0f ||
             ((Hero *)(D_0013E533 + 0xE1D))->ground_moby == moby) {
-            moby->pos.z = moby->pos.z + ((hoven_turret_state->initial_height - 1.2f) - moby->pos.z) * 0.11f;
+            moby->pos.z =
+                moby->pos.z + ((hoven_turret_state->initial_height - 1.2f) - moby->pos.z) * 0.11f;
             hoven_turret_state->boarding_yaw_step =
                 fast_add_rotations(
                     hoven_turret_state->boarding_yaw_step,
@@ -425,19 +426,27 @@ void hoven_turret_update(struct Moby *moby) {
                 float      yaw;
                 int        i;
 
-                blend_moby_animation(
-                    moby, hoven_turret_state->muzzle_alternation_state == HOVEN_TURRET_MUZZLE_POINT_TWO_PENDING ? 4 : 3, 0, 1);
+                blend_moby_animation(moby,
+                                     hoven_turret_state->muzzle_alternation_state ==
+                                             HOVEN_TURRET_MUZZLE_POINT_TWO_PENDING
+                                         ? 4
+                                         : 3,
+                                     0,
+                                     1);
                 yaw = fast_add_rotations(moby->rot.z, 1.5707964f);
                 build_spherical_offset(firing_offset,
                                        hoven_turret_firing_offset_rate * D_0015ED6C_gp,
                                        yaw,
                                        hoven_turret_state->f74);
-                if (hoven_turret_state->muzzle_alternation_state == HOVEN_TURRET_MUZZLE_POINT_TWO_PENDING) {
-                    hoven_turret_state->muzzle_alternation_state = HOVEN_TURRET_MUZZLE_POINT_ONE_PENDING;
+                if (hoven_turret_state->muzzle_alternation_state ==
+                    HOVEN_TURRET_MUZZLE_POINT_TWO_PENDING) {
+                    hoven_turret_state->muzzle_alternation_state =
+                        HOVEN_TURRET_MUZZLE_POINT_ONE_PENDING;
                     moby_point_position(moby, 2, muz);
                 } else {
                     moby_point_position(moby, 1, muz);
-                    hoven_turret_state->muzzle_alternation_state = HOVEN_TURRET_MUZZLE_POINT_TWO_PENDING;
+                    hoven_turret_state->muzzle_alternation_state =
+                        HOVEN_TURRET_MUZZLE_POINT_TWO_PENDING;
                 }
                 fast_vec_add(muz, muz, firing_offset);
                 fast_vec_add(muz, muz, firing_offset);
@@ -527,7 +536,8 @@ void hoven_turret_update(struct Moby *moby) {
                             0,
                             -1,
                             0);
-            hoven_turret_state->destruction_explosion_cooldown_frames = scale_game_frames(random_int_between(5, 0xD));
+            hoven_turret_state->destruction_explosion_cooldown_frames =
+                scale_game_frames(random_int_between(5, 0xD));
         }
         if (fast_dec_timer_s16(&hoven_turret_state->destruction_respawn_frames)) {
             hero_respawn();
@@ -858,6 +868,7 @@ void draw_hoven_turret_destruction_fade(Level12VendorCounterMoby *moby) {
     int                       fade_duration_frames = scale_game_frames(0x50);
     int                       value = data->value;
     if (value < fade_duration_frames) {
-        emit_rgba_draw_packet(0xAA, 0, 0, (fade_duration_frames - value) * 0x50 / fade_duration_frames);
+        emit_rgba_draw_packet(
+            0xAA, 0, 0, (fade_duration_frames - value) * 0x50 / fade_duration_frames);
     }
 }

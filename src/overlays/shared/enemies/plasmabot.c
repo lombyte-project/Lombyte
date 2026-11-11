@@ -503,7 +503,8 @@ void plasmabot_update(char *moby) {
     }
     case PLASMABOT_WAIT_TO_START_PATH_TRAVERSAL: {
         float *path;
-        if (plasmabot_update_private_vars->target_selection_status == PLASMABOT_TARGET_STATUS_REJECTED)
+        if (plasmabot_update_private_vars->target_selection_status ==
+            PLASMABOT_TARGET_STATUS_REJECTED)
             return;
         if (fast_dec_timer_s16(&plasmabot_update_private_vars->path_traversal_delay_timer) == 0)
             return;
@@ -582,7 +583,8 @@ void plasmabot_update(char *moby) {
                   k,
                   k,
                   frame_time * 6.2831855f);
-        if (plasmabot_update_private_vars->target_selection_status == PLASMABOT_TARGET_STATUS_REJECTED)
+        if (plasmabot_update_private_vars->target_selection_status ==
+            PLASMABOT_TARGET_STATUS_REJECTED)
             break;
         if (fast_dec_timer_s16(&plasmabot_update_private_vars->path_traversal_delay_timer) == 0)
             break;
@@ -637,7 +639,8 @@ void plasmabot_update(char *moby) {
                   frame_time * 6.2831855f);
         aim = update_plasmabot_aim_quaternion(moby, 0, MOBY(moby)->rot.z);
         update_plasmabot_aim_joint_rotation(moby, ang);
-        if (plasmabot_update_private_vars->target_selection_status == PLASMABOT_TARGET_STATUS_REJECTED) {
+        if (plasmabot_update_private_vars->target_selection_status ==
+            PLASMABOT_TARGET_STATUS_REJECTED) {
             if (plasmabot_update_private_vars->path_index == -1)
                 break;
             ((unsigned char *)moby)[0x20] = 8;
@@ -816,7 +819,8 @@ void plasmabot_update(char *moby) {
         FUN_L00_0024f7c8(moby, 2, bone_transform_scratch);
         spawn_plasmabot_death_debris(moby, (char *)bone_transform_scratch);
         unused_debris_spawn_input = 0;
-        ((void (*)(char *, int *, int))spawn_path_or_ballistic_debris)(moby, &unused_debris_spawn_input, 1);
+        ((void (*)(char *, int *, int))spawn_path_or_ballistic_debris)(
+            moby, &unused_debris_spawn_input, 1);
         release_beam_slot_by_id(moby);
         call_D678(moby);
         return;
@@ -1287,7 +1291,9 @@ float update_plasmabot_aim_quaternion(char *moby, int flag, float target_angle) 
                                  yaw_easing_coefficient,
                                  frame_time * 6.2831854820251465f);
     }
-    build_axis_rotation_quaternion(&plasmabot_aim_private_vars->aim_quaternion_storage, 2, plasmabot_aim_private_vars->aim_yaw_offset);
+    build_axis_rotation_quaternion(&plasmabot_aim_private_vars->aim_quaternion_storage,
+                                   2,
+                                   plasmabot_aim_private_vars->aim_yaw_offset);
     if (flag) {
         float        owner_aim_position[4];
         float        owner_aim_offset[4];
@@ -1311,8 +1317,11 @@ float update_plasmabot_aim_quaternion(char *moby, int flag, float target_angle) 
                                  frame_time_sq * 12.566370964050293f,
                                  frame_time * 6.2831854820251465f);
         cp = pitch_quaternion;
-        build_axis_rotation_quaternion(cp, 1, *(float *)&plasmabot_aim_private_vars->aim_pitch_angle);
-        multiply_quaternions(&plasmabot_aim_private_vars->aim_quaternion_storage, &plasmabot_aim_private_vars->aim_quaternion_storage, cp);
+        build_axis_rotation_quaternion(
+            cp, 1, *(float *)&plasmabot_aim_private_vars->aim_pitch_angle);
+        multiply_quaternions(&plasmabot_aim_private_vars->aim_quaternion_storage,
+                             &plasmabot_aim_private_vars->aim_quaternion_storage,
+                             cp);
     }
     return fast_difference_between_rotations(turn, plasmabot_aim_private_vars->aim_yaw_offset);
 }

@@ -215,7 +215,8 @@ void emit_path_walker_particle(unsigned char *source_moby, void *previous_positi
     float particle_position[4];
     float movement_velocity[4];
     float velocity[4];
-    float random_offset_angle, second_random_offset_angle, random_velocity_magnitude, movement_distance, final_size;
+    float random_offset_angle, second_random_offset_angle, random_velocity_magnitude,
+        movement_distance, final_size;
     *(OvlQuad *)input = *(OvlQuad *)previous_position;
     if ((unsigned char)source_moby[0x31] == 0)
         return;
@@ -233,7 +234,8 @@ void emit_path_walker_particle(unsigned char *source_moby, void *previous_positi
     fast_vec_add(particle_position, particle_position, source_moby + 0x10);
     random_offset_angle = random_angle_radians();
     second_random_offset_angle = random_angle_radians();
-    build_spherical_offset(velocity, random_velocity_magnitude, random_offset_angle, second_random_offset_angle);
+    build_spherical_offset(
+        velocity, random_velocity_magnitude, random_offset_angle, second_random_offset_angle);
     fast_vec_add(velocity, velocity, movement_velocity);
     final_size = path_walker_particle_target_scalar_scale_gp;
     final_size *= 210000.0f;

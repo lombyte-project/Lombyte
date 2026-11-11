@@ -85,7 +85,8 @@ int hero_set_state(int requested_state, int animation_update_mode) {
              animation_update_mode != HERO_ANIMATION_ENTRY_OVERRIDE_GUARDS))
             return 0;
     }
-    if ((D_L18_0015F5C4 == 2 || D_L18_0015F5C4 == 6) && animation_update_mode != HERO_ANIMATION_ENTRY_OVERRIDE_GUARDS)
+    if ((D_L18_0015F5C4 == 2 || D_L18_0015F5C4 == 6) &&
+        animation_update_mode != HERO_ANIMATION_ENTRY_OVERRIDE_GUARDS)
         return 0;
     {
         struct Hero *p = &hero;

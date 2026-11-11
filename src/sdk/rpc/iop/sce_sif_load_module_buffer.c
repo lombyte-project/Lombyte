@@ -11,7 +11,11 @@ extern u8  D_00158400[];
 extern s32 sif_load_module_server_changed() __asm__("func_0011CAE0");
 extern s32 memcpy();
 #define SIFCMD ((struct SifLoadModuleArgs *)D_00158200)
-s32 _sceSifLoadModuleBuffer(s32 iop_address, s32 argument_byte_count, s32 module_arguments, s32 *result_out) {
+s32 _sceSifLoadModuleBuffer(s32 iop_address,
+                            s32 argument_byte_count,
+                            s32 module_arguments,
+
+                            s32 *result_out) {
     s32 mask;
     s32 rpc_return_value;
 

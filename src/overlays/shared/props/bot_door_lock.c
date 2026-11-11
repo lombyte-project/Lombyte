@@ -287,30 +287,62 @@ void bot_door_lock_update(char *moby) {
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
                         digit_layout_offset[1] = fast_sin(angle) * 0.15f;
                         digit_layout_offset[2] = 0.0f;
-                        add_vectors(number_position_sum, digit_layout_offset, number_anchor_position);
-                        draw_number(digit_layout_offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
+                        add_vectors(
+                            number_position_sum, digit_layout_offset, number_anchor_position);
+                        draw_number(digit_layout_offset,
+                                    moby,
+                                    idata[5] / 10 + 2,
+                                    color,
+                                    0x7f,
+                                    4,
+                                    0xff,
+                                    0.5f);
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
                         digit_layout_offset[0] = fast_cos(angle) * -0.4f;
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
                         digit_layout_offset[1] = fast_sin(angle) * -0.4f;
                         digit_layout_offset[2] = 0.0f;
-                        add_vectors(number_position_sum, digit_layout_offset, number_anchor_position);
-                        draw_number(digit_layout_offset, moby, idata[5] % 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
+                        add_vectors(
+                            number_position_sum, digit_layout_offset, number_anchor_position);
+                        draw_number(digit_layout_offset,
+                                    moby,
+                                    idata[5] % 10 + 2,
+                                    color,
+                                    0x7f,
+                                    4,
+                                    0xff,
+                                    0.5f);
                     } else {
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
                         digit_layout_offset[0] = fast_cos(angle) * -0.4f;
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
                         digit_layout_offset[1] = fast_sin(angle) * -0.4f;
                         digit_layout_offset[2] = 0.0f;
-                        add_vectors(number_position_sum, digit_layout_offset, number_anchor_position);
-                        draw_number(digit_layout_offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
+                        add_vectors(
+                            number_position_sum, digit_layout_offset, number_anchor_position);
+                        draw_number(digit_layout_offset,
+                                    moby,
+                                    idata[5] / 10 + 2,
+                                    color,
+                                    0x7f,
+                                    4,
+                                    0xff,
+                                    0.5f);
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
                         digit_layout_offset[0] = fast_cos(angle) * 0.15f;
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
                         digit_layout_offset[1] = fast_sin(angle) * 0.15f;
                         digit_layout_offset[2] = 0.0f;
-                        add_vectors(number_position_sum, digit_layout_offset, number_anchor_position);
-                        draw_number(digit_layout_offset, moby, idata[5] % 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
+                        add_vectors(
+                            number_position_sum, digit_layout_offset, number_anchor_position);
+                        draw_number(digit_layout_offset,
+                                    moby,
+                                    idata[5] % 10 + 2,
+                                    color,
+                                    0x7f,
+                                    4,
+                                    0xff,
+                                    0.5f);
                     }
                 }
             }

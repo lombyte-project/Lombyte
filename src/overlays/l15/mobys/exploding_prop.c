@@ -132,7 +132,8 @@ void exploding_prop_update(struct Moby *moby) {
             radius = random_float_between(0.1f, 0.3f);
             life = random_int_between(100, 160);
             size = random_float_between(3.0f, 7.0f);
-            spawn_debris_chunk(&effect_spawn_position, &velocity, *color, radius, life, size, 0.15f, 2.0f, 1);
+            spawn_debris_chunk(
+                &effect_spawn_position, &velocity, *color, radius, life, size, 0.15f, 2.0f, 1);
         }
         clear_u64_value(&velocity);
         spawn_explosion(moby,
@@ -182,7 +183,8 @@ void exploding_prop_update(struct Moby *moby) {
             size = random_float_between(1.0f, 3.0f) * 210000.0f;
             life = scale_game_frames(180);
             pick = random_integer_below(3);
-            debris = mine_debris(&effect_spawn_position, &velocity, color1, color2, size, life, colors[pick]);
+            debris = mine_debris(
+                &effect_spawn_position, &velocity, color1, color2, size, life, colors[pick]);
             if (debris != 0)
                 *(float *)((char *)debris + 0x2c) = moby->pos.z - 0.5f;
         }

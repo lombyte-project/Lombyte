@@ -52,8 +52,8 @@ void nanotech_upgrade_vendor_update(struct Moby *moby) {
         angle =
             fast_arc_tan(hero.motion.pos.f[0] - moby->pos.x, hero.motion.pos.f[1] - moby->pos.y);
         if (fast_difference_between_rotations(moby->rot.z, angle) < 1.5707964f &&
-            vector_distance_xy(&moby->pos, hero.motion.pos.f) < 4.0f && purchase_cooldown_base[1] == 0 &&
-            D_L10_0015F5C4_vendor != 2) {
+            vector_distance_xy(&moby->pos, hero.motion.pos.f) < 4.0f &&
+            purchase_cooldown_base[1] == 0 && D_L10_0015F5C4_vendor != 2) {
             set_moby_dialogue_record_value(moby, 1);
             if (alternate_item_available[4] == 0) {
                 if (current_bolt_count >= 4001) {

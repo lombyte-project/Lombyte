@@ -108,7 +108,8 @@ s32 read_mpeg(struct VideoDec *video_dec,
         switch_thread();
         avail = read_buf_begin_get(read_buf, &read_ptr);
         if (avail > 0) {
-            transferred_bytes = sceMpegDemuxPssRing(video_dec, read_ptr, avail, read_buf, read_buf->size);
+            transferred_bytes =
+                sceMpegDemuxPssRing(video_dec, read_ptr, avail, read_buf, read_buf->size);
             decode_remaining -= transferred_bytes;
             read_buf_end_get(read_buf, transferred_bytes);
         }

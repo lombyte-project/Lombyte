@@ -375,7 +375,8 @@ void woodcut_bot_update(WBMoby *m) {
         r = hit_reaction(m, p, &d->hp, 0, &htype, &damage, 0, 4);
         d->knockback_collision_radius_scaled = 0x15E;
         d->knockback_ground_probe_z_offset = 0.35f;
-        if (p != 0 && damage != 0.0f && m->state != WOODCUT_BOT_INITIALIZE && d->hit_response_cooldown == 0) {
+        if (p != 0 && damage != 0.0f && m->state != WOODCUT_BOT_INITIALIZE &&
+            d->hit_response_cooldown == 0) {
             unsigned char *hit_source_moby;
             float          knockback_gravity_step;
             float          b;
@@ -417,7 +418,8 @@ void woodcut_bot_update(WBMoby *m) {
                 d->knockback_horizontal_step = frame_time * 7.0f;
                 d->knockback_vertical_step_limit = frame_time * 13.0f;
                 *(OvlQuad *)v = *(OvlQuad *)(p + 0x10);
-                trooper_knockback_arc(v, &angle, &d->knockback_horizontal_step, &d->knockback_vertical_step_limit);
+                trooper_knockback_arc(
+                    v, &angle, &d->knockback_horizontal_step, &d->knockback_vertical_step_limit);
                 trooper_start_knockback(angle, m, d->knockback_motion_vector, 8, 1, 0);
                 d->knockback_ascent_target_frame = 14.0f;
                 d->knockback_descent_target_frame = 24.0f;

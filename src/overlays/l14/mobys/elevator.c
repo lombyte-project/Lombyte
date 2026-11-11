@@ -116,7 +116,10 @@ void elevator_update(struct Moby *elevator_moby) {
         qcopy(&elevator_moby->rot, elevator_vars->rot);
         elevator_save_id = elevator_moby->save_id;
         if (D_L14_001BB930.cleared[(short)elevator_save_id] == 0 &&
-            (((D_0014C190_257218[current_level_index][(short)elevator_save_id >> 5] >> (elevator_save_id & 0x1F)) ^ 1) & 1) &&
+            (((D_0014C190_257218[current_level_index][(short)elevator_save_id >> 5] >>
+               (elevator_save_id & 0x1F)) ^
+              1) &
+             1) &&
             visited52[elevator_vars->item + current_level_index * 16] == 0xFF)
             elevator_vars->bought = 1;
         else

@@ -692,7 +692,12 @@ int update_snagglebeast_chase_movement(struct Moby       *chaser_moby,
 
 int update_snagglebeast_chase_movement(
 
-    struct Moby *chaser_moby, struct ChaserVars *chaser_vars, Vec4 *goal, int waypoint_position, float range) {
+    struct Moby       *chaser_moby,
+    struct ChaserVars *chaser_vars,
+    Vec4              *goal,
+    int                waypoint_position,
+
+    float range) {
     float        position_delta[4];
     char        *path;
     struct Moby *target_moby;
@@ -703,8 +708,8 @@ int update_snagglebeast_chase_movement(
     navigation_result = 4;
     path = D_L07_001B0530[chaser_vars->path];
     if (range < goal_distance) {
-        navigation_result =
-            step_mover_2e3f20(chaser_moby, chaser_vars->nav, waypoint_position, chaser_vars->navOut);
+        navigation_result = step_mover_2e3f20(
+            chaser_moby, chaser_vars->nav, waypoint_position, chaser_vars->navOut);
         if (navigation_result == 2) {
             fast_vec_sub(
                 position_delta,
@@ -1473,7 +1478,8 @@ void snagglebeast_update(unsigned char *moby) {
                 fast_vec_sub(&direction, &direction, &velocity);
                 qcopy(&projection, ((char *)&hero) + 0x100);
                 projection.f[2] = 0.0f;
-                fast_vec_scale(&hero_motion_prediction_offset, &projection, (float)scale_game_frames(0x28));
+                fast_vec_scale(
+                    &hero_motion_prediction_offset, &projection, (float)scale_game_frames(0x28));
                 fast_vec_sub(&velocity, &direction, &start);
                 fast_vec_scale(&velocity, &velocity, 0.5f);
                 fast_vec_add(&velocity, &velocity, &start);
@@ -2719,7 +2725,8 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
                     radius += radius * 0.25f *
                               fast_sin(fast_add_rotations(
                                   (*(float *)&D_L07_00161B84_gp) + index * 0.7f, 0.0f));
-                    fast_vec_scale(ring_radial_offset, l07_rope_ring_profile_vectors[column], radius);
+                    fast_vec_scale(
+                        ring_radial_offset, l07_rope_ring_profile_vectors[column], radius);
                     transform_vector_by_basis(ring_radial_offset, ring_radial_offset, side);
                     fast_vec_add(rope_grid[i][column], rope_points[i], ring_radial_offset);
                 }

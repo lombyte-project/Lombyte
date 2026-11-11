@@ -76,7 +76,8 @@ void radial_exploding_prop_update(struct Moby *moby) {
         RADIAL_EXPLODING_PROP_STATE_INITIALIZED = 1
     };
     char *slot = 0;
-    Vec   velocity, hit_direction_step, doubled_hit_direction_step, debris_spawn_position, debris_origin;
+    Vec   velocity, hit_direction_step, doubled_hit_direction_step, debris_spawn_position,
+        debris_origin;
     u32   palette[4];
     u32   colors[4];
     Vec   position;
@@ -140,8 +141,15 @@ void radial_exploding_prop_update(struct Moby *moby) {
             radius = random_float_between(0.1f, 0.3f);
             duration = random_int_between(60, 100);
             size = random_float_between(3.0f, 7.0f);
-            spawn_debris_chunk(
-                &debris_spawn_position, &velocity, *palette_entry, radius, duration, size, 0.15f, 2.0f, 1);
+            spawn_debris_chunk(&debris_spawn_position,
+                               &velocity,
+                               *palette_entry,
+                               radius,
+                               duration,
+                               size,
+                               0.15f,
+                               2.0f,
+                               1);
             i--;
         } while (i >= 0);
     }
@@ -157,8 +165,8 @@ void radial_exploding_prop_update(struct Moby *moby) {
         size = random_float_between(0.75f, 1.25f);
         scale_vector_xyz_7880(size, &velocity, &velocity);
         duration = random_int_between(60, 100);
-        effect =
-            spawn_debris_chunk(&debris_spawn_position, &velocity, 0xc9, radius, duration, 5.0f, radius, 2.0f, 1);
+        effect = spawn_debris_chunk(
+            &debris_spawn_position, &velocity, 0xc9, radius, duration, 5.0f, radius, 2.0f, 1);
         if (effect != 0)
             scale_vector_xyz_7880(0.35f, (char *)effect + 0x40, (char *)effect + 0x40);
     }
@@ -209,7 +217,8 @@ void radial_exploding_prop_update(struct Moby *moby) {
         size = random_float_between(1.0f, 3.0f) * 210000.0f;
         duration = scale_game_frames(180);
         index = random_integer_below(3);
-        effect = mine_debris(&debris_spawn_position, &velocity, color, color2, size, duration, colors[index]);
+        effect = mine_debris(
+            &debris_spawn_position, &velocity, color, color2, size, duration, colors[index]);
         if (effect != 0)
             *(float *)((char *)effect + 0x2c) = moby->pos.z - 0.5f;
         i--;

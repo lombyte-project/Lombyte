@@ -235,7 +235,8 @@ void scoutbot_update(Moby *moby) {
         scoutbot_instance_vars->b29 = 0;
         break;
     case SCOUTBOT_STATE_IDLE:
-        if (scoutbot_instance_vars->path_target_selection_status != SCOUTBOT_TARGET_SELECTION_UNAVAILABLE) {
+        if (scoutbot_instance_vars->path_target_selection_status !=
+            SCOUTBOT_TARGET_SELECTION_UNAVAILABLE) {
             scoutbot_instance_vars->ground_hover_height_offset = 0.0f;
             scoutbot_instance_vars->hover_bob_amplitude = 0.1f;
             if (moby->prev_seq != 2) {
@@ -249,7 +250,9 @@ void scoutbot_update(Moby *moby) {
             wander_or_effect_vector[0] = fast_cos(heading) * radius;
             wander_or_effect_vector[1] = fast_sin(heading) * radius;
             wander_or_effect_vector[2] = 0.0f;
-            fast_vec_add(scoutbot_instance_vars->wander_goal, scoutbot_instance_vars->home, wander_or_effect_vector);
+            fast_vec_add(scoutbot_instance_vars->wander_goal,
+                         scoutbot_instance_vars->home,
+                         wander_or_effect_vector);
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 6);
             }
@@ -344,8 +347,12 @@ void scoutbot_update(Moby *moby) {
                 wander_or_effect_vector[2] = 0.0f;
                 qcopy(shot_pos, target_pos);
                 shot_pos[2] += 0.75f;
-                spawn_nearby_effect(
-                    scoutbot_instance_vars->current_target, moby, 1, shot_pos, wander_or_effect_vector, 1.0f);
+                spawn_nearby_effect(scoutbot_instance_vars->current_target,
+                                    moby,
+                                    1,
+                                    shot_pos,
+                                    wander_or_effect_vector,
+                                    1.0f);
             }
             scoutbot_instance_vars->ground_hover_height_offset = 4.0f;
             scoutbot_instance_vars->hover_bob_amplitude = 0.5f;

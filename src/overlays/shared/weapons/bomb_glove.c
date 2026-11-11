@@ -172,8 +172,8 @@ void bomb_glove_update(struct Moby *moby) {
         BOMB_GLOVE_READY = 2
     };
     CarrierVars_2c26c8 *bomb_glove_vars;
-    OvlVec4             local[4], saved, grip_local_offset, rotatedOffset, pos, target, basis[3], matrix[4];
-    OvlVec4             launch;
+    OvlVec4 local[4], saved, grip_local_offset, rotatedOffset, pos, target, basis[3], matrix[4];
+    OvlVec4 launch;
     union {
         OvlVec4 arc;
     } temporary;

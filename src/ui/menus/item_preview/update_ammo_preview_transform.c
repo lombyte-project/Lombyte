@@ -106,7 +106,8 @@ void update_ammo_preview_transform(struct AmmoPreviewMoby *moby) {
     preview_position_offset[0] = fast_cos(orbit_angle);
     preview_position_offset[1] = fast_sin(orbit_angle);
     preview_position_offset[2] = zero;
-    preview_position_offset[2] = fast_sin(bob_angle) * 0.25f + 0.5f + ammo_preview_offsets[moby->slot];
+    preview_position_offset[2] =
+        fast_sin(bob_angle) * 0.25f + 0.5f + ammo_preview_offsets[moby->slot];
     transform_vector_by_basis(preview_position_offset, preview_position_offset, source_moby->basis);
     fast_vec_add(moby->position, moby->position, preview_position_offset);
     clear_u64_value(angles);
