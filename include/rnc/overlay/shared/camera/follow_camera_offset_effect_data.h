@@ -1,0 +1,6 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_CAMERA_FOLLOW_CAMERA_OFFSET_EFFECT_DATA_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_CAMERA_FOLLOW_CAMERA_OFFSET_EFFECT_DATA_H
+
+extern char camera_offset_effect_selection_gate[] __asm__("D_0013CA44");
+
+#endif
