@@ -74,7 +74,7 @@ void reset_selected_moby_to_current_placement(void *moby_v) {
 char *find_moby_in_owner_list_by_id(unsigned char *list_owner_moby,
                                     int            id) __asm__("FUN_L05_00319598");
 
-char *find_moby_in_owner_list_by_id(unsigned char *list_owner_moby, int id) {
+char *find_moby_in_owner_list_by_id(unsigned char *list_owner_moby, int target_moby_data_id) {
     unsigned short *moby_index_entry = D_L05_001ABCC0_9598[MOBY(list_owner_moby)->group];
     char           *pool;
     int             candidate_moby_pool_index;
@@ -82,7 +82,8 @@ char *find_moby_in_owner_list_by_id(unsigned char *list_owner_moby, int id) {
         pool = D_L05_0015FFD8_9598;
         do {
             candidate_moby_pool_index = *moby_index_entry & 0x7FFF;
-            if (*(short *)(((M_9598 *)pool)[candidate_moby_pool_index].data + 0xB4) == id)
+            if (*(short *)(((M_9598 *)pool)[candidate_moby_pool_index].data + 0xB4) ==
+                target_moby_data_id)
                 goto found;
         } while ((short)*moby_index_entry++ >= 0);
     }

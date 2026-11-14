@@ -67,7 +67,7 @@ void spawn_birdbot_movement_particles(SplashMoby_u *moby, u128 *origin) {
     Vec4        *bp;
     u32         *inner_color_entry;
     u32         *outer_color_entry;
-    f32          size;
+    f32          target_particle_scalar;
     s32          i;
 
     previous_moby_position.q = *origin;
@@ -86,12 +86,12 @@ void spawn_birdbot_movement_particles(SplashMoby_u *moby, u128 *origin) {
         fast_vec_add(&world_motion_delta, &world_motion_delta, &rel);
         inner_color_entry = &inner.c[random_integer_below(6)];
         outer_color_entry = &outer.c[random_integer_below(6)];
-        size = random_float_between(105000.0f, 157500.0f);
+        target_particle_scalar = random_float_between(105000.0f, 157500.0f);
         spawn_effect_particle_with_target_scalar(&vector_scratch,
                                                  &world_motion_delta,
                                                  *inner_color_entry,
                                                  *outer_color_entry,
-                                                 size,
+                                                 target_particle_scalar,
                                                  scale_game_frames(random_int_between(5, 0xF)));
     }
 }

@@ -76,7 +76,7 @@ typedef struct {
     s32 x4;
     s32 pad8[2];
     u8  x10[0x10];
-    u8  x20[0x10];
+    u8  mip_texture_definition[0x10];
 } WadClass30;
 
 typedef struct {
@@ -276,7 +276,7 @@ void transition_load_wad(void) {
         register_shrub_render_class(data + shrub_class_entry->offset,
                                     ((u8 *)hdr) + hdr->x4C,
                                     shrub_class_entry->x10,
-                                    shrub_class_entry->x20,
+                                    shrub_class_entry->mip_texture_definition,
                                     shrub_class_entry->x4);
         shrub_class_entry++;
     }

@@ -32,11 +32,11 @@ typedef struct __sFILE {
 
 extern s64 _lseek_r() __asm__("func_00114518");
 
-s64 __sseek(void *cookie, s32 offset, s32 whence) {
+s64 __sseek(void *cookie, s32 byte_offset, s32 whence) {
     register FILE *fp = (FILE *)cookie;
     register s64   ret;
 
-    ret = _lseek_r(fp->_data, fp->_file, offset, whence);
+    ret = _lseek_r(fp->_data, fp->_file, byte_offset, whence);
     if (ret == -1L)
         fp->_flags &= ~__SOFF;
     else {

@@ -27,7 +27,7 @@ typedef struct {
     void *moby;
     s32   flags;
     s32   x18;
-    s32   x1c;
+    s32   collision_priority;
     s32   x20;
 } CollQuery;
 
@@ -55,7 +55,7 @@ void fan_update(SwayMoby *fan_moby) {
     }
     collision_query.moby = fan_moby;
     collision_query.flags = 0x10001;
-    collision_query.x1c = 0;
+    collision_query.collision_priority = 0;
     clear_u64_value(&collision_query);
     collision_query.x20 = 0;
     collect_mobies_in_sphere(fan_moby->pos, 0x10, fan_moby, &collision_query, 1.2f);

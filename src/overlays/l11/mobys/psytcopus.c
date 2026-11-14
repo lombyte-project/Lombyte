@@ -1,3 +1,7 @@
+enum {
+    PSYTCOPUS_PROJECTILE_CREATION_BLOCKED = 2
+};
+
 /* Level 11 moby class psytcopus: hits and its path state machine. */
 #include "types.h"
 #include "rnc/overlay/shared/mobys/hit_color_flash.h"

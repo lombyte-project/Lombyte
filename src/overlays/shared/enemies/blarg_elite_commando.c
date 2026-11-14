@@ -413,9 +413,9 @@ void blarg_elite_commando_update(char *commando_moby) {
             fast_vec_normalize(delta, delta, frame_time * 20.0f);
             spawn_blarg_elite_commando_rocket(commando_moby, delta, (char *)scratch_vector);
         } else if (is_value_within_interpolated_window(commando_moby, 10.0f)) {
-            int count = commando_data->rocket_fire_cycle_count + 1;
-            commando_data->rocket_fire_cycle_count = count;
-            if ((short)count >= 3) {
+            int updated_fire_cycle_count = commando_data->rocket_fire_cycle_count + 1;
+            commando_data->rocket_fire_cycle_count = updated_fire_cycle_count;
+            if ((short)updated_fire_cycle_count >= 3) {
                 MOBY(commando_moby)->state = COMMANDO_STATE_IDLE;
                 if (((unsigned char *)commando_moby)[0x53] != 0)
                     blend_moby_animation(commando_moby, 0, 0, scale_game_frames(10));
@@ -807,7 +807,7 @@ void emit_blarg_elite_commando_death_particles(void *moby) {
     float              delta[4], velocity[4], position[4];
     L16ParticleChoices first_particle_choices, second_particle_choices;
     float              distance, range, delay;
-    int                count;
+    int                particle_count;
     void              *origin;
     float             *joint = position;
     void              *movement;
@@ -816,16 +816,16 @@ void emit_blarg_elite_commando_death_particles(void *moby) {
     clear_u64_value(velocity);
     distance = fast_vec_length(delta);
     if (distance < 8.0f)
-        count = truncate_float_to_s32(distance) + 2;
+        particle_count = truncate_float_to_s32(distance) + 2;
     else
-        count = 10;
+        particle_count = 10;
     range = 0.0f;
     if (distance < 7.0f)
         range = 7.0f - distance;
     origin = position;
     movement = velocity;
-    if (count > 0) {
-        int remaining = count;
+    if (particle_count > 0) {
+        int remaining = particle_count;
         do {
             float sample;
             int  *first_choice, *second_choice, duration1, duration2;

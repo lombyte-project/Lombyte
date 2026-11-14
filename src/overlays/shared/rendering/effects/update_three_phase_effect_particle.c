@@ -874,16 +874,16 @@ unsigned char                       *spawn_spinning_and_fading_effect_particle(v
 
 unsigned char *spawn_spinning_and_fading_effect_particle(void         *spawn_position,
                                                          void         *initial_velocity,
-                                                         unsigned char flags,
+                                                         unsigned char variant_flags,
 
-                                                         float size) {
+                                                         float initial_travel_distance) {
     void          *source = spawn_position;
     unsigned char *particle = create_part2(0xC, 0);
     if (particle) {
         unsigned char *motion = particle + 0x20;
         qcopy(particle + 0x10, source);
         qcopy(motion, initial_velocity);
-        if (flags & 1) {
+        if (variant_flags & 1) {
             float one = 1.0f;
             float zero = 0.0f;
             float scale = D_L00_001601D8_gp;
@@ -907,7 +907,7 @@ unsigned char *spawn_spinning_and_fading_effect_particle(void         *spawn_pos
                 particle[2] = texture;
             }
         } else {
-            int   offset = 0;
+            int   texture_bank_offset = 0;
             float one = 1.0f;
             float zero = 0.0f;
             float scale = D_L00_001601B8_gp;
@@ -925,21 +925,21 @@ unsigned char *spawn_spinning_and_fading_effect_particle(void         *spawn_pos
                 FUN_001fa6e0_26b230(spinning_particle_default_final_color_blend_source_gp,
                                     spinning_particle_default_final_color_blend_target_gp,
                                     random_float_between(zero, one));
-            if (flags & 4) {
-                offset = 8;
+            if (variant_flags & 4) {
+                texture_bank_offset = 8;
                 if (!item_text_variant[0x10])
-                    offset = 0;
+                    texture_bank_offset = 0;
             }
-            particle[2] = effect_texture_ids[random_integer_below(8) + offset];
+            particle[2] = effect_texture_ids[random_integer_below(8) + texture_bank_offset];
             particle[3] = 0x44;
         }
         particle[9] = truncate_float_to_s32(4.0f) + 0x40;
         particle[1] = 0;
         particle[8] = random_integer_below(0xFF);
         motion[0x1E] = truncate_float_to_s32(randf_sym(1.0f, 4.0f));
-        *(float *)(motion + 0x10) = size;
-        motion[0x1F] = flags;
-        if (flags & 4) {
+        *(float *)(motion + 0x10) = initial_travel_distance;
+        motion[0x1F] = variant_flags;
+        if (variant_flags & 4) {
             *(short *)(particle + 0xA) =
                 *(short *)(particle + 0xA) * (item_text_variant[0x10] + 2) / 2;
             swap_packed_color_channels(*(int *)(particle + 4), item_text_variant[0x10]);
@@ -1034,7 +1034,7 @@ unsigned char *spawn_spinning_fade_in_out_effect_particle(void *spawn_origin,
                                                           float hi,
                                                           float vertical_position_step,
 
-                                                          float size) {
+                                                          float initial_spawn_size) {
     unsigned char *particle = FUN_L00_002678b8_26b790(0xD);
     if (particle) {
         unsigned char *particle_data;
@@ -1043,7 +1043,7 @@ unsigned char *spawn_spinning_fade_in_out_effect_particle(void *spawn_origin,
         *(int *)(particle + 4) = color;
         particle[9] = truncate_float_to_s32(4.0f) + 0x40;
         particle[3] = 0x48;
-        *(float *)(particle + 0xC) = size;
+        *(float *)(particle + 0xC) = initial_spawn_size;
         particle[1] = 0;
         particle[8] = 0;
         particle[2] = *D_L00_001B20B4;
@@ -1818,7 +1818,7 @@ unsigned char *FUN_L00_0026d000(void *spawn_position,
                                 float lo,
                                 float hi,
 
-                                float size) {
+                                float initial_particle_size) {
     unsigned char *particle = FUN_L00_002678b8_26d000(0x17);
     if (particle) {
         unsigned char *particle_data;
@@ -1829,7 +1829,7 @@ unsigned char *FUN_L00_0026d000(void *spawn_position,
         particle_data = particle + 0x20;
         particle[9] = truncate_float_to_s32(4.0f) + 0x70;
         particle[3] = 0x48;
-        *(float *)(particle + 0xC) = size;
+        *(float *)(particle + 0xC) = initial_particle_size;
         particle[1] = 0;
         particle[8] = 0;
         particle[2] = *D_L00_001B20DC;
@@ -2279,9 +2279,9 @@ typedef struct {
 
 typedef struct {
     f32      q0;
-    f32      q4;
-    f32      q8;
-    f32      qC;
+    f32      fade_alpha;
+    f32      spin_phase;
+    f32      fade_direction;
     V_26de90 v30;
 } Q_26de90;
 
@@ -2313,7 +2313,7 @@ void                      spawn_jittered_effect_particle_with_optional_basis(voi
 void spawn_jittered_effect_particle_with_optional_basis(void *spawn_origin,
                                                         void *optional_spawn_basis,
 
-                                                        f32 size) {
+                                                        f32 local_velocity_scale) {
     M_26de90 *particle;
     V_26de90  transformed_spawn_offset, spawn_offset, local_velocity;
     X_26de90  x;
@@ -2346,19 +2346,19 @@ void spawn_jittered_effect_particle_with_optional_basis(void *spawn_origin,
         particle->b1 = 0;
         particle->b8 = 0;
         particle->b2 = *D_L00_001B20F0;
-        q->q4 = random_float_between(0.0f, 0.0223456f) + 1e-05f;
+        q->fade_alpha = random_float_between(0.0f, 0.0223456f) + 1e-05f;
         particle->fC = random_float_between(10080.0f, 19950.0f);
-        q->q8 = 0.0f;
+        q->spin_phase = 0.0f;
         particle->hA = scale_game_frames(0xFC);
-        q->qC = 1.0f;
+        q->fade_direction = 1.0f;
         qzero(&local_velocity);
         if (optional_spawn_basis) {
-            local_velocity.f[0] = size;
+            local_velocity.f[0] = local_velocity_scale;
             local_velocity.f[2] = -0.0025f;
             transform_vector_by_basis(&q->v30, &local_velocity, optional_spawn_basis);
         } else {
-            q->v30.f[0] = random_float_between(-size, size);
-            q->v30.f[1] = random_float_between(-size, size);
+            q->v30.f[0] = random_float_between(-local_velocity_scale, local_velocity_scale);
+            q->v30.f[1] = random_float_between(-local_velocity_scale, local_velocity_scale);
             q->v30.f[2] = -0.0025f;
         }
     }
@@ -3343,7 +3343,7 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
     u8           fl;
     s32          fm;
     s64          hit;
-    s32          k, mode, kk2, t;
+    s32          k, collision_query_mode, kk2, t;
     void        *aux, *col, *pa, *pb;
     f32          f, rotation_direction_sign, alpha_factor;
 
@@ -3399,7 +3399,7 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         col = pv->f1C;
         pa = v1u.f;
         pb = v0u.f;
-        mode = 4;
+        collision_query_mode = 4;
         aux = 0;
     } else {
         collision_parameters.f10 = pv->f1C;
@@ -3413,9 +3413,9 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         aux = &collision_parameters;
         pa = v1u.f;
         pb = v0u.f;
-        mode = 0;
+        collision_query_mode = 0;
     }
-    hit = FUN_001efa68_26ff10(pa, pb, mode, col, aux) != 0;
+    hit = FUN_001efa68_26ff10(pa, pb, collision_query_mode, col, aux) != 0;
     if (hit) {
         fast_vec_normalize(collision_offset, coll_hit_normal.f, 1.0f);
         reflect_vector(pv, pv, coll_hit_normal.f);
@@ -3702,11 +3702,11 @@ void update_splitting_effect_particle_with_collision_and_fade(M_270948 *particle
         e->v.f[1] *= 0.95f;
     }
     {
-        u8 flags = e->b18;
+        u8 rotation_and_motion_flags = e->b18;
         alpha_input_or_rotation_sign = -1.0f;
-        if (flags & 1)
+        if (rotation_and_motion_flags & 1)
             alpha_input_or_rotation_sign = 1.0f;
-        if (flags & 8) {
+        if (rotation_and_motion_flags & 8) {
             e->v.f[2] += frame_scale_sq * 0.008f;
             e->x10 += alpha_input_or_rotation_sign * (D_0015ED60 * -0.01f) /
                       convert_integer_to_float(e->h16);

@@ -353,7 +353,7 @@ void explosive_projectile_update(struct Moby *moby) {
         for (spark = 0; cutscene_active_macro != 0 ? spark < 10 : spark < 40; spark++) {
             Vec_2F7E08 spark_vel;
             float      speed;
-            float      size;
+            float      spark_particle_size;
             {
                 Vec_2F7E08 random_dir;
                 *(u128_f6 *)&random_dir = 0;
@@ -365,17 +365,17 @@ void explosive_projectile_update(struct Moby *moby) {
             speed = random_float_between(10.0f, 40.0f) * D_0015ED6C;
             fast_vec_normalize(
                 &spark_vel, &spark_vel, cutscene_active_macro != 0 ? speed * 0.2f : speed);
-            size = 105000.0f;
+            spark_particle_size = 105000.0f;
             fast_vec_add(&spark_vel, &spark_vel, projectile_vars);
             if (cutscene_active_macro != 0) {
-                size = 21000.0f;
+                spark_particle_size = 21000.0f;
             }
             spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(
                 &(*(Vec_2F7E08 *)&moby->pos),
                 &spark_vel,
                 0x4F007FFF,
                 0x1F00007F,
-                size,
+                spark_particle_size,
                 random_int_between(scale_game_frames(0x5A), scale_game_frames(0x96)) / rate_divisor,
                 1,
                 -1,

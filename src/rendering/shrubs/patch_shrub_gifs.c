@@ -13,7 +13,7 @@ extern struct TexRemap shrub_paging_table[] __asm__("D_001D88B0");
 void                   patch_shrub_gifs(void) __asm__("FUN_00228a30");
 
 void patch_shrub_gifs(void) {
-    s32              *id;
+    s32              *class_id_cursor;
     ShrubRenderClass *tc;
     s32               i;
     s32               j;
@@ -21,8 +21,8 @@ void patch_shrub_gifs(void) {
     u8               *gif;
     struct TexRemap  *texture_remap;
 
-    for (id = shrub_gif_patch_class_ids; *id >= 0; id++) {
-        tc = shrub_render_classes[*id];
+    for (class_id_cursor = shrub_gif_patch_class_ids; *class_id_cursor >= 0; class_id_cursor++) {
+        tc = shrub_render_classes[*class_id_cursor];
         for (i = 0; i < tc->group_count; i++) {
             pkt = (struct GifPacket *)tc->groups[i].group + 1;
             gif = (u8 *)(pkt + pkt->skip) + 0x10;

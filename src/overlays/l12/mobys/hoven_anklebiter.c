@@ -764,7 +764,7 @@ void spawn_hoven_anklebiter_death_sparks(struct Moby *moby) {
     float  gravity_adjusted_spark_velocity[4];
     float  push[4];
     char  *spark_moby_vars;
-    int    count;
+    int    burst_count;
     float *pos_ptr;
     void  *moby_position_source;
     int    i;
@@ -772,18 +772,18 @@ void spawn_hoven_anklebiter_death_sparks(struct Moby *moby) {
     float  angle;
     float  speed;
     float  rise;
-    float  size;
+    float  spark_vector_w_scale;
     float  time_base;
     int    start_color;
     int    end_color;
     int    life;
     int    fade;
 
-    count = l12_anklebiter_spark_burst_count;
+    burst_count = l12_anklebiter_spark_burst_count;
     spark_moby_vars = (char *)moby->pvars;
     if (moby->state == ANKLEBITER_DEATH_EFFECTS_AND_REMOVE)
-        count = truncate_float_to_s32((float)count * 1.5f);
-    for (i = 0; i < count; i++) {
+        burst_count = truncate_float_to_s32((float)burst_count * 1.5f);
+    for (i = 0; i < burst_count; i++) {
         pos_ptr = pos;
         moby_position_source = &moby->pos;
         qcopy_nc(pos, moby_position_source);
@@ -810,9 +810,9 @@ void spawn_hoven_anklebiter_death_sparks(struct Moby *moby) {
             l12_anklebiter_spark_downward_velocity_scale * D_0015ED70 *
             (float)scale_game_frames(l12_anklebiter_spark_fade_frames);
         for (j = 0; j < l12_anklebiter_sparks_per_burst; j++) {
-            size = random_float_between(0.5f, 1.5f);
-            spark_launch_velocity[3] = size * D_L12_00161864;
-            gravity_adjusted_spark_velocity[3] = size * D_L12_00161868;
+            spark_vector_w_scale = random_float_between(0.5f, 1.5f);
+            spark_launch_velocity[3] = spark_vector_w_scale * D_L12_00161864;
+            gravity_adjusted_spark_velocity[3] = spark_vector_w_scale * D_L12_00161868;
             add_random_offset_to_vector_xyz(pos, l12_anklebiter_spark_position_jitter);
             add_random_offset_to_vector_xyz(gravity_adjusted_spark_velocity,
                                             l12_anklebiter_spark_velocity_jitter_scale *

@@ -37,11 +37,11 @@ void tracked_group_watcher_update(struct Moby *moby) {
         int   valid_tracked_moby_count = 0;
         int   i;
         for (i = 0; i < 8; i++) {
-            int            id = ids[i];
+            int            tracked_moby_index = ids[i];
             int            saved_moby_class;
             unsigned char *o;
-            if (id != -1 && (saved_moby_class = cls[i]) != -1) {
-                o = (unsigned char *)(base + (id << 8));
+            if (tracked_moby_index != -1 && (saved_moby_class = cls[i]) != -1) {
+                o = (unsigned char *)(base + (tracked_moby_index << 8));
                 if (o != 0 && *(short *)(o + 0xA6) == saved_moby_class && o[0x20] != 0xFE &&
                     o[0x20] != 0xFD) {
                     valid_tracked_moby_count++;

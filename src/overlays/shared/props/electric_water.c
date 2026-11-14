@@ -970,12 +970,12 @@ void update_electric_water_bolt_effect(Moby *moby) {
             }
             {
                 int   elapsed = D_L15_00161CD8[k];
-                int   timer = D_L15_00161CC0[k];
+                int   side_arc_remaining_frames = D_L15_00161CC0[k];
                 float fade;
-                if (elapsed < timer) {
-                    elapsed = timer - elapsed;
+                if (elapsed < side_arc_remaining_frames) {
+                    elapsed = side_arc_remaining_frames - elapsed;
                 } else {
-                    elapsed = elapsed - timer;
+                    elapsed = elapsed - side_arc_remaining_frames;
                 }
                 fade = convert_integer_to_float(elapsed);
                 fade = fade / convert_integer_to_float(scale_game_frames(15));

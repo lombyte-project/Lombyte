@@ -35,7 +35,7 @@ void dmaRefImage(MpegRefImageState *state) {
     u64 *tag;
     s32  count;
     s32  interrupts;
-    s32  id;
+    s32  second_tag_id;
     u32  address;
     u64  first_tag;
 
@@ -47,12 +47,12 @@ void dmaRefImage(MpegRefImageState *state) {
             first_tag = ((u64)(state->buffers[state->index].first_source[i] & 0x0fffffff) << 32) |
                         0x30000030;
             address = state->buffers[state->index].second_source[i];
-            id = 3;
+            second_tag_id = 3;
             if (i == count - 1) {
-                id = 0;
+                second_tag_id = 0;
             }
             tag[0] = first_tag;
-            tag[2] = ((u64)(address & 0x0fffffff) << 32) | ((u64)id << 28) | 0x30;
+            tag[2] = ((u64)(address & 0x0fffffff) << 32) | ((u64)second_tag_id << 28) | 0x30;
             tag += 4;
             i++;
         } while (i < count);

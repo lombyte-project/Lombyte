@@ -4,19 +4,19 @@
 
 s32 hud_heap_alloc(s32 size) __asm__("FUN_001ff288");
 
-s32 hud_heap_alloc(s32 size) {
+s32 hud_heap_alloc(s32 allocation_size_bytes) {
     struct HudState *hud_state_ptr = &hud_state;
     s32              allocation_address;
 
     if (hud_state_ptr->heap_cur == 0) {
         hud_heap_reset();
     }
-    if (hud_state_ptr->heap_end - hud_state_ptr->heap_cur < size) {
+    if (hud_state_ptr->heap_end - hud_state_ptr->heap_cur < allocation_size_bytes) {
         return 0;
     }
     allocation_address = hud_state_ptr->heap_cur;
-    size = (size + 15) & 0xFFFFFFF0;
-    hud_state_ptr->heap_cur = allocation_address + size;
+    allocation_size_bytes = (allocation_size_bytes + 15) & 0xFFFFFFF0;
+    hud_state_ptr->heap_cur = allocation_address + allocation_size_bytes;
     return allocation_address;
 }
 

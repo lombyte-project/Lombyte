@@ -421,12 +421,12 @@ int collect_oil_tanker_chain_mobys(struct Moby *moby, void **out) __asm__("FUN_L
 int collect_oil_tanker_chain_mobys(struct Moby *moby, void **chain_mobys_output) {
     char *tanker_chain_vars = (char *)moby->pvars;
     int   i;
-    int   count = *(int *)(tanker_chain_vars + 0x64) + 1;
+    int   chain_moby_count = *(int *)(tanker_chain_vars + 0x64) + 1;
     chain_mobys_output[0] = moby;
     for (i = 0; i < *(int *)(tanker_chain_vars + 0x64); i++) {
         chain_mobys_output[i + 1] = ((void **)(tanker_chain_vars + 0x70))[i];
     }
-    return count;
+    return chain_moby_count;
 }
 
 /* Spreads the 0x527 chain mobys of a D_L11_001AC240 group evenly along path table_index: each gets a start point and its path index. */

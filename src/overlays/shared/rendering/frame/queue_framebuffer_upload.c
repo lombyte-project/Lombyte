@@ -16,15 +16,15 @@ void queue_framebuffer_upload(unsigned int source) __asm__("FUN_L00_001fc558");
 void queue_framebuffer_upload(unsigned int source) {
     int            remaining = frame_size[0];
     int            destination = draw_buffer_address >> 8;
-    unsigned long  count;
+    unsigned long  chunk_row_count;
     unsigned long  transfer;
     unsigned char *packet;
     unsigned long *words;
 
     do {
-        count = (long)remaining;
-        if (count > 0x80)
-            count = 0x80;
+        chunk_row_count = (long)remaining;
+        if (chunk_row_count > 0x80)
+            chunk_row_count = 0x80;
         *(unsigned int *)(PK + 0) = 0x10000006;
         remaining -= 0x80;
         *(unsigned int *)(PK + 4) = 0;
@@ -32,7 +32,7 @@ void queue_framebuffer_upload(unsigned int source) {
         *(unsigned int *)(PK + 12) = 0x50000006;
         packet = PK;
         (*(int **)&D_L00_001611C0) = (int *)(packet + 0x10);
-        transfer = (unsigned long)count << 7;
+        transfer = (unsigned long)chunk_row_count << 7;
         words = (unsigned long *)(packet + 0x10);
         words[0] = 0x4000000000000001UL;
         words[1] = 0x0eeeeeee;
@@ -40,7 +40,7 @@ void queue_framebuffer_upload(unsigned int source) {
         words[3] = 0x50;
         words[4] = 0;
         words[5] = 0x51;
-        words[6] = ((unsigned long)count << 32) | 0x200;
+        words[6] = ((unsigned long)chunk_row_count << 32) | 0x200;
         words[7] = 0x52;
         words[8] = 0;
         words[9] = 0x53;
@@ -49,8 +49,8 @@ void queue_framebuffer_upload(unsigned int source) {
         (*(int **)&D_L00_001611C0) = (int *)(packet + 0x70);
         *(unsigned int *)(packet + 0x70) = (unsigned int)(long)(int)(transfer | 0x30000000);
         *(unsigned int *)(PK + 4) = source;
-        source += (int)(count * 0x800);
-        destination += (int)(count * 8);
+        source += (int)(chunk_row_count * 0x800);
+        destination += (int)(chunk_row_count * 8);
         *(unsigned int *)(PK + 8) = 0;
         *(unsigned int *)(PK + 12) = (unsigned int)transfer | 0x50000000;
         (*(int **)&D_L00_001611C0) = (int *)(PK + 0x10);

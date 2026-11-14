@@ -26,7 +26,7 @@ extern s32        DIntr(void);
 extern u32        sceSifGetReg(u32 reg);
 extern u32        sceSifSetReg(u32 reg, u32 val);
 
-void sceSifInitRpc(u32 mode) {
+void sceSifInitRpc(u32 unused_mode) {
     s32 *packet;
 
     DIntr();

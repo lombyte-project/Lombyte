@@ -151,12 +151,12 @@ void configure_timed_point_light(float        radius,
 
 void rumble_by_distance(char *moby) {
     float distance = fast_vec_dist(moby + 0x10, debris_far_point);
-    char *state;
+    char *rumble_state;
     if (distance > 80.0f)
         distance = 80.0f;
-    state = debris_far_point - 0x140;
-    *(int *)(state + 0x168) = 0x14;
-    *(float *)(state + 0x160) = ((80.0f - distance) / 80.0f) * 0.1f;
+    rumble_state = debris_far_point - 0x140;
+    *(int *)(rumble_state + 0x168) = 0x14;
+    *(float *)(rumble_state + 0x160) = ((80.0f - distance) / 80.0f) * 0.1f;
 }
 
 void update_timed_point_light_color(char *light_effect_state) {

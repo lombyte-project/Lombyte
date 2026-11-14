@@ -1292,7 +1292,7 @@ void assign_gadgebot_attack_targets(void) {
         float max_spread = 1.7453293f;
         int   weight = 0;
         int   m;
-        int   count;
+        int   selected_moby_count;
         int   wanted;
         int   target;
         char *target_capacity_record;
@@ -1305,12 +1305,12 @@ void assign_gadgebot_attack_targets(void) {
         }
         weights[index] = -1;
         target = targets[index];
-        count = 0;
+        selected_moby_count = 0;
         wanted = 1;
         target_capacity_record = (char *)get_moby_target_info(target);
         if (target_capacity_record != 0)
             wanted = S16(target_capacity_record, 4);
-        while (count < wanted) {
+        while (selected_moby_count < wanted) {
             float best_score = 9999999.0f;
             char *best_moby = 0;
             for (i = 0; i < moby_count; i++) {
@@ -1329,21 +1329,21 @@ void assign_gadgebot_attack_targets(void) {
             if (best_moby == 0)
                 break;
             ((GbSlots *)PVARS(best_moby))->claimed_target = target;
-            selected[count] = best_moby;
-            count++;
+            selected[selected_moby_count] = best_moby;
+            selected_moby_count++;
         }
-        if (count != 0) {
-            float gaps = (float)(count - 1);
+        if (selected_moby_count != 0) {
+            float gaps = (float)(selected_moby_count - 1);
             float spread = gaps * spread_per_gap;
             float step;
             float first_angle;
             if (max_spread < spread)
                 spread = 1.7453293f;
             step = 0.0f;
-            if (count >= 2)
+            if (selected_moby_count >= 2)
                 step = spread / gaps;
             first_angle = spread * -0.5f;
-            for (i = 0; i < count; i++) {
+            for (i = 0; i < selected_moby_count; i++) {
                 char *vars = PVARS(selected[i]);
                 ((GbSlots *)vars)->spread_angle = fast_add_rotations(first_angle, (float)i * step);
             }
@@ -1575,18 +1575,19 @@ int process_gadgebot_interactions(char *moby, int flag) __asm__("FUN_L06_002f32f
 int process_gadgebot_interactions(char *moby, int flag) {
     char   **moby_ref;
     Iter32f0 iter;
-    char    *state;
+    char    *gadgebot_private_vars;
     int      list_id;
     int     *cursor;
     int      interaction_candidate_moby;
 
-    state = ((char *)MOBY(moby)->pvars);
+    gadgebot_private_vars = ((char *)MOBY(moby)->pvars);
     iter.out = 0;
-    list_id = *(int *)(state + 0x30C);
+    list_id = *(int *)(gadgebot_private_vars + 0x30C);
     if (list_id != -1) {
         get_first_moby_in_group(&iter.list, list_id, 0, 0);
         while (iter.list != 0) {
-            if (process_gadgebot_interaction_candidate(moby, state, iter.list, flag, &iter.out))
+            if (process_gadgebot_interaction_candidate(
+                    moby, gadgebot_private_vars, iter.list, flag, &iter.out))
                 return iter.out;
             get_next_moby_in_group(&iter.list, iter.list, 0, 0);
         }
@@ -1596,7 +1597,7 @@ int process_gadgebot_interactions(char *moby, int flag) {
         while (interaction_candidate_moby != 0) {
             moby_ref = &moby;
             if (process_gadgebot_interaction_candidate(
-                    *moby_ref, state, interaction_candidate_moby, flag, &iter.out))
+                    *moby_ref, gadgebot_private_vars, interaction_candidate_moby, flag, &iter.out))
                 return iter.out;
             cursor++;
             interaction_candidate_moby = *cursor;

@@ -172,8 +172,8 @@ void bomb_glove_update(struct Moby *moby) {
         BOMB_GLOVE_READY = 2
     };
     CarrierVars_2c26c8 *bomb_glove_vars;
-    OvlVec4             local[4], saved, offset, rotatedOffset, pos, target, basis[3], matrix[4];
-    OvlVec4             launch;
+    OvlVec4 local[4], saved, grip_local_offset, rotatedOffset, pos, target, basis[3], matrix[4];
+    OvlVec4 launch;
     union {
         OvlVec4 arc;
     } temporary;
@@ -186,9 +186,9 @@ void bomb_glove_update(struct Moby *moby) {
     if (moby == 0)
         return;
     bomb_glove_vars = (CarrierVars_2c26c8 *)moby->pvars;
-    offset.q = 0;
-    offset.f[1] = -0.09f;
-    offset.f[2] = -0.02f;
+    grip_local_offset.q = 0;
+    grip_local_offset.f[1] = -0.09f;
+    grip_local_offset.f[2] = -0.02f;
     copy_matrix3x4(basis, l00_camera_lui.view_matrix);
     transpose_rotation_matrix(matrix, basis);
     if (bomb_glove_vars == 0)
@@ -199,7 +199,7 @@ void bomb_glove_update(struct Moby *moby) {
     }
     FUN_L00_0024f7c8((u8 *)moby, 0, &saved);
     build_moby_bone_transform(moby, 0, local);
-    transform_vector(&rotatedOffset, &offset, local);
+    transform_vector(&rotatedOffset, &grip_local_offset, local);
     fast_vec_add(&bomb_glove_vars->grip, &saved, &rotatedOffset);
     if (bomb_glove_vars->held != 0)
         bomb_glove_vars->held->collision_disable = 1;

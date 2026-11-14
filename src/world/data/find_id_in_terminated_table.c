@@ -4,11 +4,11 @@
 
 s32 find_id_in_terminated_table(s32 id) __asm__("FUN_00205220");
 
-s32 find_id_in_terminated_table(s32 id) {
+s32 find_id_in_terminated_table(s32 level_index) {
     s32 i;
 
     for (i = 0; menu_level_indices[i] != 0 && i < 20; i++) {
-        if (menu_level_indices[i] == id) {
+        if (menu_level_indices[i] == level_index) {
             return i;
         }
     }

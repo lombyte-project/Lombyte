@@ -1,3 +1,4 @@
+#include "rnc/mobys/moby_state.h"
 /* Level 01 moby class bomber_jet. */
 #include "types.h"
 #include "rnc/game/item_state.h"
@@ -382,8 +383,8 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
                         if (gunship_vars->turrets[j] != -1) {
                             GunshipMoby *o =
                                 (GunshipMoby *)(ents_macro + (gunship_vars->turrets[j] << 8));
-                            if (o != 0 && o->oclass == 0x1CB && o->state != 0xFE &&
-                                o->state != 0xFD) {
+                            if (o != 0 && o->oclass == 0x1CB &&
+                                o->state != MOBY_STATE_REMOVAL_MARKER && o->state != 0xFD) {
                                 GunshipTurretVars *t = o->vars;
                                 t->activated = 1;
                                 t->activate_delay = scale_game_frames(2);

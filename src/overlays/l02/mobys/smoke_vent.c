@@ -137,13 +137,13 @@ void smoke_vent_update(struct Moby *moby) {
     Vec4           smoke_particle_velocity;
     Vec4           acc;
     Vec4           vector_perturbation;
-    s32            count1;
+    s32            view_gated_burst_particle_count;
     s32            k1;
     s32            time_a1_burst;
     s32            time_b1_burst;
     s32            color_a1_burst;
     s32            color_b1_burst;
-    s32            count2;
+    s32            alternating_burst_particle_count;
     s32            k2;
     s32            time_a2_burst;
     s32            time_b2_burst;
@@ -175,8 +175,9 @@ void smoke_vent_update(struct Moby *moby) {
             smoke_vent_vars->timer_C0 = truncate_float_to_s32(
                 scale_time(random_float_between((f32)view_gated_smoke_burst_interval_min_gp,
                                                 (f32)view_gated_smoke_burst_interval_max_gp)));
-            count1 = random_integer_below(7) != 0 ? 1 : random_integer_below(5) + 5;
-            for (k1 = 0; k1 < count1; k1++) {
+            view_gated_burst_particle_count =
+                random_integer_below(7) != 0 ? 1 : random_integer_below(5) + 5;
+            for (k1 = 0; k1 < view_gated_burst_particle_count; k1++) {
                 random_vector(&vector_perturbation,
                               0.0f,
                               view_gated_smoke_burst_jitter_magnitude_max_gp * frame_time);
@@ -316,8 +317,9 @@ void smoke_vent_update(struct Moby *moby) {
             smoke_vent_vars->timer_C0 = truncate_float_to_s32(
                 scale_time(random_float_between((f32)alternating_smoke_burst_interval_min_gp,
                                                 (f32)alternating_smoke_burst_interval_max_gp)));
-            count2 = random_integer_below(7) != 0 ? 1 : random_integer_below(5) + 5;
-            for (k2 = 0; k2 < count2; k2++) {
+            alternating_burst_particle_count =
+                random_integer_below(7) != 0 ? 1 : random_integer_below(5) + 5;
+            for (k2 = 0; k2 < alternating_burst_particle_count; k2++) {
                 random_vector(&vector_perturbation,
                               0.0f,
                               alternating_smoke_burst_jitter_magnitude_max_gp * frame_time);

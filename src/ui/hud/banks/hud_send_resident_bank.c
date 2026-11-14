@@ -19,7 +19,7 @@ void hud_send_resident_bank(s32 bank, s32 bank_source_address, s32 immediate) {
     s32                  page;
     s32                  width_log2;
     s32                  height_log2;
-    s32                  size;
+    s32                  image_pixel_count;
 
     if (hud_state.header.counts->loaded[bank] == 0) {
         link_hud_bank(0, bank_source_address);
@@ -36,14 +36,14 @@ void hud_send_resident_bank(s32 bank, s32 bank_source_address, s32 immediate) {
         page = address >> 8;
         width_log2 = hud_state.image_pages[i].width_log2;
         height_log2 = hud_state.image_pages[i].height_log2;
-        size = 1 << (width_log2 + height_log2);
+        image_pixel_count = 1 << (width_log2 + height_log2);
         hud_send_texture(hud_state.image_pages[i].source_address,
                          page,
                          0x1B,
                          width_log2,
                          height_log2,
                          immediate);
-        address += size * 4;
+        address += image_pixel_count * 4;
         hud_state.image_pages[i].gs_block_offset = page;
     }
 }

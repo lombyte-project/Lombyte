@@ -757,7 +757,7 @@ void draw_pause_menu_pages(int transfer_only) {
     int    j;
     int    flashing_panel_index;
     int    pass;
-    int    flags;
+    int    page_width_or_render_flags;
     int    never;
 
     append_gif_transfer_packet();
@@ -806,11 +806,11 @@ void draw_pause_menu_pages(int transfer_only) {
         box[0] = corners[0];
         box[1] = corners[3];
         project_graphics_bounds(&box[0], &box[1], &rect.w, &rect.h, &rect.x, &rect.y);
-        flags = rect.w;
+        page_width_or_render_flags = rect.w;
         rect.x++;
         rect.y++;
         if (page_objects != 0 && page_objects[k] != 0) {
-            *(int *)(page_objects[k] + 0x20) = flags;
+            *(int *)(page_objects[k] + 0x20) = page_width_or_render_flags;
             *(int *)(page_objects[k] + 0x24) = rect.h;
             *(int *)(page_objects[k] + 0x18) = rect.x;
             *(int *)(page_objects[k] + 0x1C) = rect.y;
@@ -837,8 +837,8 @@ void draw_pause_menu_pages(int transfer_only) {
             if (moby == 0 || page_objects == 0 || page_objects[j] == 0) {
                 continue;
             }
-            flags = *(int *)(page_objects[j] + 0x10);
-            if (flags & 4) {
+            page_width_or_render_flags = *(int *)(page_objects[j] + 0x10);
+            if (page_width_or_render_flags & 4) {
                 continue;
             }
             if (pause_menu_page_render_enabled[j] == 0 || *(int *)(page_objects[j] + 4) == 0) {
@@ -847,13 +847,13 @@ void draw_pause_menu_pages(int transfer_only) {
             if (j == 6 && D_L00_001B9CF0.goodies_tab_shown == 0) {
                 continue;
             }
-            if (pass == 0 && !(flags & 2)) {
+            if (pass == 0 && !(page_width_or_render_flags & 2)) {
                 continue;
             }
-            if (pass == 1 && (flags & 2)) {
+            if (pass == 1 && (page_width_or_render_flags & 2)) {
                 continue;
             }
-            if (flags & 1) {
+            if (page_width_or_render_flags & 1) {
                 (*(int (**)(char *))(page_objects[j] + 4))(page_objects[j]);
                 continue;
             }

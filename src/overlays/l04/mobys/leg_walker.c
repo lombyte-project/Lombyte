@@ -290,7 +290,7 @@ int update_leg_rig_height_and_tilt(StMoby *moby, Steer *steer_state) {
 
 extern float rig_turn_2d48(float, float, float *, float, float, float) __asm__("FUN_L00_00258110");
 
-void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
+void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int gait_mask) {
     float      joint[16];
     float      tilt[4];
     float      twist;
@@ -309,7 +309,7 @@ void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
             fast_add_rotations(fast_subtract_rotations(leg->yaw, heading), leg->upper_turn),
             leg->lower_turn);
         base_yaw = fast_subtract_rotations(heading, twist);
-        if (rig->gait == 0 || (flags & mask) == 0) {
+        if (rig->gait == 0 || (gait_mask & mask) == 0) {
             leg->upper_turn = rig_turn_2d48(leg->upper_turn,
                                             0.0f,
                                             &rig->legs[i].upper_turn_speed,
@@ -354,7 +354,7 @@ void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
             build_axis_rotation_quaternion(rig->legs[i].manip_b.rot, 2, rig->legs[i].upper_turn);
         if (rig->legs[i].manip_a.attached) {
             build_axis_rotation_quaternion(rig->legs[i].manip_a.rot, 2, rig->legs[i].lower_turn);
-            if (flags & mask) {
+            if (gait_mask & mask) {
                 build_axis_rotation_quaternion(tilt, 0, -moby->rot.x);
                 multiply_quaternions(rig->legs[i].manip_a.rot, rig->legs[i].manip_a.rot, tilt);
             }
@@ -395,7 +395,7 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
     s32    probe_kind;
     f32    probe_start, probe_end;
     s32    mode;
-    s32    flags;
+    s32    movement_constraint_flags;
     s32    changed;
     f32    time;
     s32    i;
@@ -448,7 +448,7 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
     if (!(rig->control_flags & 4)) {
         s32     active = mode | (rig->mode & 0x30);
         s32     bit = 1;
-        f32     count = 0.0f;
+        f32     active_point_count = 0.0f;
         RigVec *moved = transformed;
         RigVec *point = (RigVec *)rig->pts;
 
@@ -456,7 +456,7 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
         pos = &moby->pos;
         for (i = 5; i >= 0; i--) {
             if (active & bit) {
-                count += 1.0f;
+                active_point_count += 1.0f;
                 fast_vec_add(&shift, &shift, point);
                 fast_vec_sub(&shift, &shift, moved);
             }
@@ -464,7 +464,7 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
             moved++;
             point++;
         }
-        divide_vector_xyz(&shift, &shift, count);
+        divide_vector_xyz(&shift, &shift, active_point_count);
     } else {
         pos = &moby->pos;
         shift.x = fast_cos(rig->heading) * rig->speed;
@@ -500,7 +500,7 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
         if (rig->speed < speed)
             rig->speed = speed;
     }
-    flags = update_leg_rig_height_and_tilt(moby, rig);
+    movement_constraint_flags = update_leg_rig_height_and_tilt(moby, rig);
     walker_update_gait(moby, rig, speed, heading, step, changed);
     if (!(rig->control_flags & 4)) {
         rig_probe_setup(moby, 0, &probe_kind, &local.v.ground, &probe_start, &probe_end);
@@ -518,12 +518,12 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
         for (tries = 0; tries < 8 && rig_probe(&local.v.ground, 4, probe_start, moby, probe_end);
              tries++) {
             qcopy(&local.v.ground, D_L04_00173FF0);
-            flags |= 1;
+            movement_constraint_flags |= 1;
         }
         fast_vec_sub(transformed, &local.v.ground, pos);
         fast_vec_add(pos, &local.v.ground, &local.v.offset);
         if (vector_length_xy(transformed) < rig->speed * 0.5f)
-            flags |= 2;
+            movement_constraint_flags |= 2;
     }
     local.joints[0] = rig->legs[0].joint;
     local.joints[1] = rig->legs[0].joint2;
@@ -533,7 +533,7 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
     local.joints[5] = rig->jointB5;
     transform_scaled_vertex_batch(moby, 6, local.joints, rig);
     if (rig->gait == 0x12 && moby->seq == rig->anims[12]->id)
-        return flags;
+        return movement_constraint_flags;
     moby->anim_speed = 1.0f;
     if (rig->gait != 0) {
         LegRigAnim **fallback = rig->anims;
@@ -561,7 +561,7 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
             fallback++;
         }
     }
-    return flags;
+    return movement_constraint_flags;
 }
 
 u8 D_L04_001CA938[13][4] = {

@@ -462,7 +462,7 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
                 int              value;
                 int              spin;
                 float            shrink;
-                float            size;
+                float            collection_effect_scale;
                 BoltSource_4BE8 *source;
 
                 switch (moby->oclass) {
@@ -506,11 +506,11 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
                 if (spin == 0) {
                     spin--;
                 }
-                size = random_float_between(0.4f, 0.5f);
+                collection_effect_scale = random_float_between(0.4f, 0.5f);
                 FUN_L00_00272060(surface_basis_and_collection_vectors + 4,
                                  scale_game_frames(0x19),
-                                 size * 0.2f,
-                                 size,
+                                 collection_effect_scale * 0.2f,
+                                 collection_effect_scale,
                                  0x7F207F7F,
                                  0,
                                  spin,
@@ -519,8 +519,8 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
                 spin = -spin;
                 FUN_L00_00272060(surface_basis_and_collection_vectors + 4,
                                  scale_game_frames(0x19),
-                                 size * 0.14f,
-                                 size * shrink,
+                                 collection_effect_scale * 0.14f,
+                                 collection_effect_scale * shrink,
                                  0x7F7F7F7F,
                                  1,
                                  spin,

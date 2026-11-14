@@ -37,7 +37,7 @@ void unlock_sequence_controller_update(struct Moby *moby) {
         UNLOCK_SEQUENCE_COMPLETE = 3
     };
     int  *unlock_sequence_data = ((int *)moby->pvars);
-    short id;
+    short save_id;
 
     switch (moby->state) {
     case UNLOCK_SEQUENCE_INITIALIZE:
@@ -46,12 +46,12 @@ void unlock_sequence_controller_update(struct Moby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        id = ((short)moby->save_id);
-        if (D_L14_001BB930.cleared[id] != 0) {
+        save_id = ((short)moby->save_id);
+        if (D_L14_001BB930.cleared[save_id] != 0) {
             moby->state = UNLOCK_SEQUENCE_COMPLETE;
             return;
         }
-        if (D_0014C190_257218[current_level_index][id >> 5] >> (moby->save_id & 0x1F) & 1) {
+        if (D_0014C190_257218[current_level_index][save_id >> 5] >> (moby->save_id & 0x1F) & 1) {
             moby->state = UNLOCK_SEQUENCE_COMPLETE;
             return;
         }

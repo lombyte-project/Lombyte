@@ -47,8 +47,8 @@ void draw_vendor_purchase_text(void *moby, s32 x, s32 y) {
 
     draw_framebuffer_rect(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
     {
-        s32 size = sizeof(box);
-        memset((void *)&box, 0, size);
+        s32 box_byte_count = sizeof(box);
+        memset((void *)&box, 0, box_byte_count);
     }
     box.half_x = x / 2;
     box.half_y = y / 2;
@@ -146,7 +146,14 @@ void pool_splash(HeightTile *tile,
 
 void pool_splash(
 
-    HeightTile *tile, int count, int mode, float x, float z, float radius, float amount) {
+    HeightTile *tile,
+    int         tile_count,
+    int         add_to_existing_height,
+    float       x,
+    float       z,
+    float       radius,
+
+    float amount) {
     enum {
         POOL_SPLASH_KEEP_GREATER_MAGNITUDE = 0
     };
@@ -154,7 +161,7 @@ void pool_splash(
     int         row;
     int         i;
 
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < tile_count; i++) {
         float tile_z = tile->z + l00_pool_height_grid_layout.origin_z;
         float cell_z = (z - tile_z) / l00_pool_height_grid_layout.cell_height;
         float cell_x = (x - (tile->x + l00_pool_height_grid_layout.origin_x)) /
@@ -190,7 +197,7 @@ void pool_splash(
                 } else {
                     height = amount / square_root(dist_sq);
                 }
-                if (mode == POOL_SPLASH_KEEP_GREATER_MAGNITUDE) {
+                if (add_to_existing_height == POOL_SPLASH_KEEP_GREATER_MAGNITUDE) {
                     float magnitude = absolute_float(height);
                     if (magnitude <
                         absolute_float(tile->heights[l00_pool_height_write_bank_index][row][col])) {

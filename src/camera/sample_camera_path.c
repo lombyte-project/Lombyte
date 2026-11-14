@@ -25,7 +25,13 @@ void sample_camera_path(struct CameraPath *path,
 
 void sample_camera_path(
 
-    struct CameraPath *path, s32 loop, void *position, f32 *rotation, s32 flags, f32 progress) {
+    struct CameraPath *path,
+    s32                loop,
+    void              *position,
+    f32               *rotation,
+    s32                rotation_output_flags,
+
+    f32 progress) {
     Vec4 current_point;
     Vec4 next_point;
     Vec4 following_point;
@@ -68,7 +74,7 @@ void sample_camera_path(
     qcopy(&current_point.q, &path->points[point_index]);
     qcopy(&next_point.q, &path->points[next_index]);
     lerp_vector(position, &current_point, &next_point, fraction);
-    if (!(flags & 1)) {
+    if (!(rotation_output_flags & 1)) {
         fast_vec_sub(&segment, &next_point, &current_point);
         heading = fast_arc_tan(segment.f[0], segment.f[1]);
         pitch = fast_arc_tan(vector_length_xy(&segment), segment.f[2]);

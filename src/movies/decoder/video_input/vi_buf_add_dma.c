@@ -38,7 +38,7 @@ s32 vi_buf_add_dma(ViBuf *f) __asm__("FUN_0023bf70");
 s32 vi_buf_add_dma(ViBuf *input_fifo) {
     s32 i;
     s32 index;
-    s32 id;
+    s32 dma_tag_id;
     s32 last;
     u32 d4chcr;
     u32 madr;
@@ -77,10 +77,10 @@ s32 vi_buf_add_dma(ViBuf *input_fifo) {
 
     index = read_start;
     for (i = 0; i < read_n; i++) {
-        id = (i == read_n - 1) ? DMA_ID_REFE : DMA_ID_REF;
+        dma_tag_id = (i == read_n - 1) ? DMA_ID_REFE : DMA_ID_REF;
         sc_tag2((u64 *)(input_fifo->tag + index),
                 (u32)((u8 *)input_fifo->data + VIBUF_ELM_SIZE * index),
-                id,
+                dma_tag_id,
                 VIBUF_ELM_SIZE / 16);
         index = (index + 1) % input_fifo->n;
     }

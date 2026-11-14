@@ -58,17 +58,17 @@ typedef struct {
     float                yaw_spring_state;
     char                 pad9C[4];
     int                  part; /* 0xA0 */
-    float                fA4;
-    float                fA8;
-    float                fAC;
-    int                  fB0;
-    int                  fB4;
+    float                attached_part_local_offset_x;
+    float                attached_part_local_offset_y;
+    float                attached_part_local_offset_z;
+    int                  sink_offset;
+    int                  sink_offset_step;
     int                  fB8;
-    int                  fBC;
-    int                  fC0;
+    int                  rotation_oscillation_common_phase;
+    int                  rotation_oscillation_axis_phase;
     int                  trigger; /* 0xC4 */
     int                  fC8;
-    int                  fCC;
+    int                  attached_part_interaction_hold_timer_frames;
     Fx_6ee0              fx; /* 0xD0 */
 } Data_6ee0;
 
@@ -166,11 +166,11 @@ void flying_car_update(struct Moby *flying_car_moby) {
         flying_car_moby->draw_dist = 0xFF;
         flying_car_data->sound = -1;
         flying_car_data->timer = scale_game_frames(flying_car_path_reset_delay_frames_gp);
-        flying_car_data->fB0 = 0;
-        flying_car_data->fB4 = 0;
-        flying_car_data->fBC = 0;
-        flying_car_data->fC0 = 0;
-        flying_car_data->fCC = 0;
+        flying_car_data->sink_offset = 0;
+        flying_car_data->sink_offset_step = 0;
+        flying_car_data->rotation_oscillation_common_phase = 0;
+        flying_car_data->rotation_oscillation_axis_phase = 0;
+        flying_car_data->attached_part_interaction_hold_timer_frames = 0;
         if (flying_car_data->part >= 0) {
             struct Moby *o = (struct Moby *)(D_L14_0015FFD8_macro + (flying_car_data->part << 8));
             o->draw_dist = (u16)flying_car_moby->draw_dist;
@@ -206,8 +206,8 @@ void flying_car_update(struct Moby *flying_car_moby) {
         flying_car_data->fx.b2 = 1;
         flying_car_data->fx.f20 = flying_car_data->fx.f24 = flying_car_data->fx.f28 = 0.0001f;
         update_moby_rotation_oscillation(flying_car_moby,
-                                         &flying_car_data->fBC,
-                                         &flying_car_data->fC0,
+                                         &flying_car_data->rotation_oscillation_common_phase,
+                                         &flying_car_data->rotation_oscillation_axis_phase,
                                          flying_car_rotation_oscillation_amplitude_gp,
                                          flying_car_rotation_oscillation_common_phase_update_gp,
                                          flying_car_rotation_oscillation_axis_phase_update_gp);
@@ -217,24 +217,25 @@ void flying_car_update(struct Moby *flying_car_moby) {
                     (struct Moby *)(D_L14_0015FFD8_macro + (flying_car_data->part << 8));
                 fast_vec_scale(&attached_part_offset_component,
                                &flying_car_moby->rot_row0,
-                               flying_car_data->fA4);
+                               flying_car_data->attached_part_local_offset_x);
                 fast_vec_add(&o->pos, &flying_car_moby->pos, &attached_part_offset_component);
                 fast_vec_scale(&attached_part_offset_component,
                                &flying_car_moby->rot_row1,
-                               flying_car_data->fA8);
+                               flying_car_data->attached_part_local_offset_y);
                 fast_vec_add(&o->pos, &o->pos, &attached_part_offset_component);
                 fast_vec_scale(&attached_part_offset_component,
                                &flying_car_moby->rot_row2,
-                               flying_car_data->fAC);
+                               flying_car_data->attached_part_local_offset_z);
                 fast_vec_add(&o->pos, &o->pos, &attached_part_offset_component);
                 if ((hero.state.control_mode == HERO_MODE_GRAPPLE && hero.grapple_target == o) ||
                     (hero.state.control_mode == HERO_MODE_GRAPPLE_SWING &&
                      hero.swing_target_moby == o)) {
                     seed_linked_record_for_flying_car(flying_car_moby);
-                    flying_car_data->fCC = scale_game_frames(0x1E);
+                    flying_car_data->attached_part_interaction_hold_timer_frames =
+                        scale_game_frames(0x1E);
                 } else {
-                    fast_dec_timer(&flying_car_data->fCC);
-                    if (flying_car_data->fCC != 0) {
+                    fast_dec_timer(&flying_car_data->attached_part_interaction_hold_timer_frames);
+                    if (flying_car_data->attached_part_interaction_hold_timer_frames != 0) {
                         ((Part_6ee0 *)o->pvars)->f20 = 2.0f;
                     } else {
                         Part_6ee0 *pd = (Part_6ee0 *)o->pvars;
@@ -275,15 +276,15 @@ void flying_car_update(struct Moby *flying_car_moby) {
                 o->flags &= 0xFFBE;
                 fast_vec_scale(&attached_part_offset_component,
                                &flying_car_moby->rot_row0,
-                               flying_car_data->fA4);
+                               flying_car_data->attached_part_local_offset_x);
                 fast_vec_add(&o->pos, &flying_car_moby->pos, &attached_part_offset_component);
                 fast_vec_scale(&attached_part_offset_component,
                                &flying_car_moby->rot_row1,
-                               flying_car_data->fA8);
+                               flying_car_data->attached_part_local_offset_y);
                 fast_vec_add(&o->pos, &o->pos, &attached_part_offset_component);
                 fast_vec_scale(&attached_part_offset_component,
                                &flying_car_moby->rot_row2,
-                               flying_car_data->fAC);
+                               flying_car_data->attached_part_local_offset_z);
                 fast_vec_add(&o->pos, &o->pos, &attached_part_offset_component);
             }
             if (flying_car_data->trigger >= 0) {

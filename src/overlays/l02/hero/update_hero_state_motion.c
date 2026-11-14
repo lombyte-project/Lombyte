@@ -179,7 +179,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
     OvlMobyEntry40 *hurt_response_entry;
     u8             *mob;
     s32             flag;
-    s32             id;
+    s32             hurt_response_state;
     f32             planar_impulse_scale, vertical_impulse_scale, cached_frame_time;
     OvlVec4         hurt_impulse;
 
@@ -234,9 +234,9 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
     case HERO_VEHICLE_MODE_ON_FOOT:
         mob = (u8 *)G.damage_source_moby;
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
-            id = 0x80;
+            hurt_response_state = HERO_STATE_DYING_SPEED_LIMITED;
         call_ret:
-            hero_set_state(id, 1);
+            hero_set_state(hurt_response_state, 1);
             return 1;
         }
         if (G.state.control_mode == 0x16) {
@@ -576,7 +576,10 @@ extern s32         coll3_222270(void *, f32) __asm__("FUN_L00_001f3170");
 extern u128_222270 D_L02_00174470[] NOT_SDA;
 s32                resolve_hero_position_collisions(s32 mode) __asm__("FUN_L02_00222270");
 
-s32 resolve_hero_position_collisions(s32 mode) {
+s32 resolve_hero_position_collisions(s32 excessive_correction_mode) {
+    enum {
+        EXCESSIVE_CORRECTION_LIMIT_TO_CAPSULE_RADIUS = 0xF
+    };
     V_222270     pre_collision_position;
     V_222270     collision_probe_offset;
     V_222270     corrected_displacement;
@@ -640,7 +643,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
     fast_vec_sub(&corrected_displacement, &hero.motion.pos.q, &pre_collision_position);
     probe_height_or_displacement_length = fast_vec_length(&corrected_displacement);
     if (hero.capsule_radius * 1.5f < probe_height_or_displacement_length) {
-        if (mode == 0xF) {
+        if (excessive_correction_mode == EXCESSIVE_CORRECTION_LIMIT_TO_CAPSULE_RADIUS) {
             if (512.0f < corrected_displacement.f[0])
                 corrected_displacement.f[0] = 512.0f;
             else if (corrected_displacement.f[0] < -512.0f)

@@ -34,7 +34,7 @@ void floor_button_update(struct Moby *moby) {
         FLOOR_BUTTON_STATE_DISABLED = 2
     };
     s32  *floor_button_private_state = (s32 *)moby->pvars;
-    s16   id;
+    s16   save_flag_index;
     s32   i;
     s32   list;
     char *path_key_cursor;
@@ -47,9 +47,10 @@ void floor_button_update(struct Moby *moby) {
     case FLOOR_BUTTON_STATE_INITIALIZE:
         *(f32 *)(floor_button_private_state + 3) = random_angle_radians();
         moby->pos.z -= 0.35f;
-        id = (s16)moby->save_id;
-        if (l05_mission_gated_moby_save_flags.collected[id] != 0 ||
-            (D_0014C190_257218[current_level_index][id >> 5] >> (moby->save_id & 31) & 1) != 0 ||
+        save_flag_index = (s16)moby->save_id;
+        if (l05_mission_gated_moby_save_flags.collected[save_flag_index] != 0 ||
+            (D_0014C190_257218[current_level_index][save_flag_index >> 5] >> (moby->save_id & 31) &
+             1) != 0 ||
             (floor_button_private_state[2] != 0 &&
              D_0014C050[moby->mission + current_level_index * 16] == 0xFF)) {
             moby->command = 2;

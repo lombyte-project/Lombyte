@@ -126,7 +126,7 @@ void homing_mine_update(struct Moby *moby) {
     f32   turn;
     f32   new_speed;
     f32   max_speed;
-    s32   timer;
+    s32   chase_timeout_frames;
 
     if (moby == NULL)
         return;
@@ -177,9 +177,9 @@ void homing_mine_update(struct Moby *moby) {
         moby->state = HOMING_MINE_WAIT_FOR_PROXIMITY;
         break;
     case HOMING_MINE_WAIT_FOR_PROXIMITY:
-        timer = scale_game_frames(600);
+        chase_timeout_frames = scale_game_frames(600);
         turn = D_0015ED6C * 6.2831855f;
-        homing_mine_vars->timeout = timer;
+        homing_mine_vars->timeout = chase_timeout_frames;
         moby->rot.z = fast_add_rotations(moby->rot.z, turn);
         if ((homing_mine_vars->target != NULL &&
              vector_distance_xy(&moby->pos, &(homing_mine_vars->target)->pos) < 20.0f &&

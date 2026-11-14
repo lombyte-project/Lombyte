@@ -228,7 +228,7 @@ void mine_group_update(struct Moby *moby) {
     MineGroupVars *boltcrate_pvars;
     char          *path;
     float         *remaining;
-    int            count;
+    int            hit_damage_code;
     int            current;
     int            child;
     int            i;
@@ -247,7 +247,8 @@ void mine_group_update(struct Moby *moby) {
     remaining = &boltcrate_pvars->health;
     if (boltcrate_pvars->hittable) {
         limit = find_moby_hit(moby, 0x230000, 0);
-        hit_response_code = resolve_moby_hit_response(moby, limit, remaining, 0, &count, 0, 0, 4);
+        hit_response_code =
+            resolve_moby_hit_response(moby, limit, remaining, 0, &hit_damage_code, 0, 0, 4);
         switch ((unsigned)hit_response_code) {
         case HIT_REACTION_NONE:
         case HIT_REACTION_START_KNOCKBACK:
@@ -265,7 +266,7 @@ void mine_group_update(struct Moby *moby) {
             *remaining = 0.0f;
             break;
         }
-        if (count > 1) {
+        if (hit_damage_code > 1) {
             float step = *(float *)(limit + 0x2c);
             if (*remaining <= step) {
                 *remaining = 0.0f;
@@ -311,8 +312,8 @@ void mine_group_update(struct Moby *moby) {
         child_placement_segment_distance = 0;
         qcopy(position, path + 0x10);
         for (j = 0; j < *(int *)path; j++) {
-            int offset = j * 16;
-            *(float *)(path + offset + 0x1c) =
+            int path_point_byte_offset = j * 16;
+            *(float *)(path + path_point_byte_offset + 0x1c) =
                 fast_vec_dist(path + 0x10 + j * 16, path + 0x10 + ((j + 1) % *(int *)path) * 16);
         }
         if (get_first_moby_in_group(&current, boltcrate_pvars->group, 1, 0)) {

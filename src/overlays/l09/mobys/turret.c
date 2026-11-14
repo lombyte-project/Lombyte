@@ -96,7 +96,7 @@ void turret_update(struct Moby *moby) {
         TURRET_STATE_MOUNTED = 5
     };
     Vec4        seat;
-    Vec4        offset;
+    Vec4        hero_seat_offset;
     Vec4        work_vector;
     Vec4        shot;
     Vec4        muzzle;
@@ -120,10 +120,10 @@ void turret_update(struct Moby *moby) {
             qcopy(&hero.motion.pos, &seat);
             qcopy(&hero.motion.rot, &moby->rot);
             hero.motion.rot.f[2] = fast_add_rotations(1.5707964f, hero.motion.rot.f[2]);
-            offset.f[0] = fast_cos(hero.motion.rot.f[2]) * -0.7f;
-            offset.f[1] = fast_sin(hero.motion.rot.f[2]) * -0.7f;
-            offset.f[2] = 0.0f;
-            fast_vec_add(&hero.motion.pos, &hero.motion.pos, &offset);
+            hero_seat_offset.f[0] = fast_cos(hero.motion.rot.f[2]) * -0.7f;
+            hero_seat_offset.f[1] = fast_sin(hero.motion.rot.f[2]) * -0.7f;
+            hero_seat_offset.f[2] = 0.0f;
+            fast_vec_add(&hero.motion.pos, &hero.motion.pos, &hero_seat_offset);
             fast_mem_zero16(&hero.motion.velocity, 0x90);
             if (((u32)pad_pressed_lui) & 0x10) {
                 jet_end_mount(0);

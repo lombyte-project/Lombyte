@@ -34,6 +34,9 @@ void apply_hero_ground_material_effects(void) {
         GROUND_MATERIAL_SINK_SURFACE_PROBE_THROUGH = 3,
         GROUND_MATERIAL_SINK_SURFACE_CONTACT_BYPASS = 11
     };
+    enum {
+        GROUND_MATERIAL_STATE_DEPENDENT_CONTACT_BYPASS = 1
+    };
     u8  save = hero.ground_sound_class;
     s16 saved_ground_type = hero.ground_type;
     f32 water_depth;
@@ -83,7 +86,7 @@ void apply_hero_ground_material_effects(void) {
         hero.selector_4 = 1;
     if (saved_ground_type == GROUND_MATERIAL_SINK_TRIGGER)
         hero.selector_13 = 1;
-    if (saved_ground_type == 1)
+    if (saved_ground_type == GROUND_MATERIAL_STATE_DEPENDENT_CONTACT_BYPASS)
         hero.selector_1 = 1;
     if (saved_ground_type == 8)
         hero.on_slip_ground = 1;
@@ -395,7 +398,10 @@ extern s32  FUN_L00_001f3170(void *, f32);
 extern u128_2133a8 D_L05_00174270[] NOT_SDA;
 s32                resolve_hero_position_collisions(s32 mode) __asm__("FUN_L05_00240ed0");
 
-s32 resolve_hero_position_collisions(s32 mode) {
+s32 resolve_hero_position_collisions(s32 excess_displacement_mode) {
+    enum {
+        EXCESS_DISPLACEMENT_NORMALIZE_TO_CAPSULE_RADIUS = 0xF
+    };
     V_2133a8     initial_position;
     V_2133a8     collision_query_offset;
     V_2133a8     resolved_displacement;
@@ -469,7 +475,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
     fast_vec_sub(&resolved_displacement, &hero.motion.pos.q, &initial_position);
     query_height_or_displacement_length = fast_vec_length(&resolved_displacement);
     if (hero.capsule_radius * 1.5f < query_height_or_displacement_length) {
-        if (mode == 0xF) {
+        if (excess_displacement_mode == EXCESS_DISPLACEMENT_NORMALIZE_TO_CAPSULE_RADIUS) {
             if (512.0f < resolved_displacement.f[0])
                 resolved_displacement.f[0] = 512.0f;
             else if (resolved_displacement.f[0] < -512.0f)

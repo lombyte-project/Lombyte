@@ -130,7 +130,7 @@ void spawn_explosion_effects(struct Moby *moby, u128 *where, s32 sound, f32 scal
     BurstPalette  outer;
     BurstPalette *inner_p;
     Vec4         *pos_p;
-    f32           size;
+    f32           particle_size;
     f32           speed;
     s32           i;
 
@@ -141,14 +141,14 @@ void spawn_explosion_effects(struct Moby *moby, u128 *where, s32 sound, f32 scal
     inner_p = &inner;
     for (i = 2; i >= 0; i--) {
         speed = random_float_between(8.0f, 10.0f) * frame_time;
-        size = scale * 400000.0f;
+        particle_size = scale * 400000.0f;
         inner = D_L01_0020B4F0;
         outer = D_L01_0020B508;
         spawn_particle(pos_p,
                        &particle_base_velocity,
                        inner_p->c[random_integer_below(6)],
                        outer.c[random_integer_below(6)],
-                       size,
+                       particle_size,
                        random_int_between(scale_game_frames(0xF), scale_game_frames(0x14)),
                        random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E)),
                        speed * scale,

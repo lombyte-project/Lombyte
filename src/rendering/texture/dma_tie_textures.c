@@ -15,7 +15,7 @@ void              dma_tie_textures(void) __asm__("FUN_00235640");
 
 void dma_tie_textures(void) {
     struct DmaTag *tag;
-    s32            size;
+    s32            tie_texture_dma_size;
 
     tag = render_packet_cursor.tag;
     render_packet_cursor.tag = tag + 1;
@@ -24,13 +24,13 @@ void dma_tie_textures(void) {
     D_00160F68.p->vif0 = 0;
     D_00160F68.p->vif1 = 0;
     if (draw_config.tie.enabled != 0 && draw_config.tie.count != 0) {
-        size = build_tie_texture_dma(gs_texture_allocation_cursor);
+        tie_texture_dma_size = build_tie_texture_dma(gs_texture_allocation_cursor);
         vu1_tex_flush();
-        if (size > 0x400000) {
+        if (tie_texture_dma_size > 0x400000) {
             DebugPrint(tie_texture_overflow_message);
         }
-        if (max_tie_texture_dma_size < size) {
-            max_tie_texture_dma_size = size;
+        if (max_tie_texture_dma_size < tie_texture_dma_size) {
+            max_tie_texture_dma_size = tie_texture_dma_size;
         }
     }
     render_packet_cursor.tag->tag = 0x20000000;

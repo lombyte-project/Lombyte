@@ -456,6 +456,9 @@ unsigned char *spawn_ryno_rocket(int            owner_moby,
                                  float          yaw,
 
                                  float pitch) {
+    enum {
+        RYNO_ROCKET_STATE_INITIAL = 0
+    };
     V_2ccee0       forward_step;
     V_2ccee0       collision_start;
     V_2ccee0       explosion_direction;
@@ -475,7 +478,7 @@ unsigned char *spawn_ryno_rocket(int            owner_moby,
         MOBY(spawned_moby)->visible = 1;
         MOBY(spawned_moby)->rot.z = yaw;
         MOBY(spawned_moby)->rot.y = pitch;
-        MOBY(spawned_moby)->state = 0;
+        MOBY(spawned_moby)->state = RYNO_ROCKET_STATE_INITIAL;
         *(int *)(rocket_vars + 0x20) = owner_moby;
         qcopy(&MOBY(spawned_moby)->pos, spawn_position);
         qcopy(rocket_vars + 0x10, spawn_position);

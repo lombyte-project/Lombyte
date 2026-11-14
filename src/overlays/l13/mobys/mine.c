@@ -102,7 +102,7 @@ void level_13_mine_update(ProjectileMoby *moby) {
     ProjectileHero *hero_state;
     ProjectileMoby *target;
     ProjectileMoby *hit;
-    int             flags;
+    int             detonation_flags;
     float           distance;
     float           factor;
     float           magnitude;
@@ -149,14 +149,16 @@ void level_13_mine_update(ProjectileMoby *moby) {
         make_hit_descriptor(16.0f, &hitpos, moby, 0x30000, velocity);
         qcopy(&steering_and_collision_vector, pos);
         steering_and_collision_vector.z += 0.75f;
-        flags = collect_mobies_in_sphere(1.7f, &steering_and_collision_vector, 0x10, moby, &hitpos);
-        flags = flags | FUN_L00_001f0d60_2048(&steering_and_collision_vector, 1.7f, 4, moby);
+        detonation_flags =
+            collect_mobies_in_sphere(1.7f, &steering_and_collision_vector, 0x10, moby, &hitpos);
+        detonation_flags =
+            detonation_flags | FUN_L00_001f0d60_2048(&steering_and_collision_vector, 1.7f, 4, moby);
         hit = (ProjectileMoby *)FUN_L00_0025a420(moby, -1, 0);
         if (hit != 0) {
             float health = *(float *)(moby_data + 0x20) - *(float *)((char *)hit + 0x2C);
             *(float *)(moby_data + 0x20) = health;
             if (health <= 0.0f) {
-                flags |= 0x2000;
+                detonation_flags |= 0x2000;
                 D_L13_00174140.moby = 0;
             }
         }
@@ -168,11 +170,11 @@ void level_13_mine_update(ProjectileMoby *moby) {
                 cls_id == 0x185 || cls_id == 0x186 || cls_id == 0x187 || cls_id == 0x188 ||
                 cls_id == 0x189 || cls_id == 0x18A || cls_id == 0x18B || cls_id == 0x18C ||
                 cls_id == 0x18F || cls_id == 0x190)
-                flags = 0;
+                detonation_flags = 0;
         }
-        if (flags != 0) {
+        if (detonation_flags != 0) {
             if (moby->visible != 0) {
-                if ((flags & 0x2000) != 0) {
+                if ((detonation_flags & 0x2000) != 0) {
                     func_L00_0025F4A8_alt(moby,
                                           velocity,
                                           0,

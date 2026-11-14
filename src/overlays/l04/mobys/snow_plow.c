@@ -143,7 +143,7 @@ void snow_plow_update(struct Moby *moby) {
     unsigned char state = moby->state;
     int           i, *p, *path;
     float         amount, length, step, speed;
-    int           timer;
+    int           instance_index_or_spawn_frames;
     qcopy(&update_start_position, &moby->pos);
     if (!snow_plow_vars)
         return;
@@ -157,8 +157,9 @@ void snow_plow_update(struct Moby *moby) {
         } else {
             char *message = snow_plow_missing_path_warning_format;
             int   oclass = moby->oclass;
-            timer = truncate_float_to_s32((float)(((int)moby - D_L04_0015FFD8) >> 8));
-            debug_print(message, oclass, timer);
+            instance_index_or_spawn_frames =
+                truncate_float_to_s32((float)(((int)moby - D_L04_0015FFD8) >> 8));
+            debug_print(message, oclass, instance_index_or_spawn_frames);
         }
         moby->draw_dist = 0x7f;
         moby->update_dist = 0xff;
@@ -436,68 +437,68 @@ hit:
         fast_vec_scale(&delta, &moby->rot_row0, frame_scale * 0.075f);
         delta.f[2] += frame_scale * 0.08f;
         if (moby->oclass == 0x1d2) {
-            timer = scale_game_frames(90);
+            instance_index_or_spawn_frames = scale_game_frames(90);
             FUN_L00_00263fd8(moby,
                              0x63f,
                              &moby->pos,
                              &moby->rot,
-                             timer,
+                             instance_index_or_spawn_frames,
                              0,
                              frame_time_sq * 12.0f,
                              &delta,
                              D_L04_0015F580,
                              D_L04_0015F580);
-            timer = scale_game_frames(90);
+            instance_index_or_spawn_frames = scale_game_frames(90);
             FUN_L00_00263fd8(moby,
                              0x641,
                              &moby->pos,
                              &moby->rot,
-                             timer,
+                             instance_index_or_spawn_frames,
                              0,
                              frame_time_sq * 12.0f,
                              &delta,
                              D_L04_0015F580,
                              D_L04_0015F580);
-            timer = scale_game_frames(90);
+            instance_index_or_spawn_frames = scale_game_frames(90);
             FUN_L00_00263fd8(moby,
                              0x642,
                              &moby->pos,
                              &moby->rot,
-                             timer,
+                             instance_index_or_spawn_frames,
                              0,
                              frame_time_sq * 12.0f,
                              &delta,
                              D_L04_0015F580,
                              D_L04_0015F580);
         } else if (moby->oclass == 0x1e0) {
-            timer = scale_game_frames(90);
+            instance_index_or_spawn_frames = scale_game_frames(90);
             FUN_L00_00263fd8(moby,
                              0x642,
                              &moby->pos,
                              &moby->rot,
-                             timer,
+                             instance_index_or_spawn_frames,
                              0,
                              frame_time_sq * 12.0f,
                              &delta,
                              D_L04_0015F580,
                              D_L04_0015F580);
-            timer = scale_game_frames(90);
+            instance_index_or_spawn_frames = scale_game_frames(90);
             FUN_L00_00263fd8(moby,
                              0x643,
                              &moby->pos,
                              &moby->rot,
-                             timer,
+                             instance_index_or_spawn_frames,
                              0,
                              frame_time_sq * 12.0f,
                              &delta,
                              D_L04_0015F580,
                              D_L04_0015F580);
-            timer = scale_game_frames(90);
+            instance_index_or_spawn_frames = scale_game_frames(90);
             FUN_L00_00263fd8(moby,
                              0x644,
                              &moby->pos,
                              &moby->rot,
-                             timer,
+                             instance_index_or_spawn_frames,
                              0,
                              frame_time_sq * 12.0f,
                              &delta,
@@ -505,12 +506,12 @@ hit:
                              D_L04_0015F580);
         } else if (moby->oclass == 0x1e6) {
             int i;
-            timer = scale_game_frames(90);
+            instance_index_or_spawn_frames = scale_game_frames(90);
             FUN_L00_00263fd8(moby,
                              0x645,
                              &moby->pos,
                              &moby->rot,
-                             timer,
+                             instance_index_or_spawn_frames,
                              0,
                              frame_time_sq * 12.0f,
                              &delta,
@@ -519,12 +520,12 @@ hit:
             i = 5;
             do {
                 --i;
-                timer = scale_game_frames(90);
+                instance_index_or_spawn_frames = scale_game_frames(90);
                 FUN_L00_00263fd8(moby,
                                  0x646,
                                  &moby->pos,
                                  &moby->rot,
-                                 timer,
+                                 instance_index_or_spawn_frames,
                                  0,
                                  frame_time_sq * 12.0f,
                                  &delta,
@@ -532,159 +533,159 @@ hit:
                                  D_L04_0015F580);
             } while (i >= 0);
         } else if (moby->oclass == 0x1ea) {
-            timer = scale_game_frames(90);
+            instance_index_or_spawn_frames = scale_game_frames(90);
             FUN_L00_00263fd8(moby,
                              0x647,
                              &moby->pos,
                              &moby->rot,
-                             timer,
+                             instance_index_or_spawn_frames,
                              0,
                              frame_time_sq * 12.0f,
                              &delta,
                              D_L04_0015F580,
                              D_L04_0015F580);
-            timer = scale_game_frames(90);
+            instance_index_or_spawn_frames = scale_game_frames(90);
             FUN_L00_00263fd8(moby,
                              0x648,
                              &moby->pos,
                              &moby->rot,
-                             timer,
+                             instance_index_or_spawn_frames,
                              0,
                              frame_time_sq * 12.0f,
                              &delta,
                              D_L04_0015F580,
                              D_L04_0015F580);
-            timer = scale_game_frames(90);
+            instance_index_or_spawn_frames = scale_game_frames(90);
             FUN_L00_00263fd8(moby,
                              0x649,
                              &moby->pos,
                              &moby->rot,
-                             timer,
+                             instance_index_or_spawn_frames,
                              0,
                              frame_time_sq * 12.0f,
                              &delta,
                              D_L04_0015F580,
                              D_L04_0015F580);
         } else if (moby->oclass == 0x1ee) {
-            timer = scale_game_frames(90);
+            instance_index_or_spawn_frames = scale_game_frames(90);
             FUN_L00_00263fd8(moby,
                              0x64d,
                              &moby->pos,
                              &moby->rot,
-                             timer,
+                             instance_index_or_spawn_frames,
                              0,
                              frame_time_sq * 12.0f,
                              &delta,
                              D_L04_0015F580,
                              D_L04_0015F580);
-            timer = scale_game_frames(90);
+            instance_index_or_spawn_frames = scale_game_frames(90);
             FUN_L00_00263fd8(moby,
                              0x64e,
                              &moby->pos,
                              &moby->rot,
-                             timer,
+                             instance_index_or_spawn_frames,
                              0,
                              frame_time_sq * 12.0f,
                              &delta,
                              D_L04_0015F580,
                              D_L04_0015F580);
         } else if (moby->oclass == 0x1ef) {
-            timer = scale_game_frames(90);
+            instance_index_or_spawn_frames = scale_game_frames(90);
             FUN_L00_00263fd8(moby,
                              0x64f,
                              &moby->pos,
                              &moby->rot,
-                             timer,
+                             instance_index_or_spawn_frames,
                              0,
                              frame_time_sq * 12.0f,
                              &delta,
                              D_L04_0015F580,
                              D_L04_0015F580);
-            timer = scale_game_frames(90);
+            instance_index_or_spawn_frames = scale_game_frames(90);
             FUN_L00_00263fd8(moby,
                              0x650,
                              &moby->pos,
                              &moby->rot,
-                             timer,
+                             instance_index_or_spawn_frames,
                              0,
                              frame_time_sq * 12.0f,
                              &delta,
                              D_L04_0015F580,
                              D_L04_0015F580);
-            timer = scale_game_frames(90);
+            instance_index_or_spawn_frames = scale_game_frames(90);
             FUN_L00_00263fd8(moby,
                              0x651,
                              &moby->pos,
                              &moby->rot,
-                             timer,
+                             instance_index_or_spawn_frames,
                              0,
                              frame_time_sq * 12.0f,
                              &delta,
                              D_L04_0015F580,
                              D_L04_0015F580);
-            timer = scale_game_frames(90);
+            instance_index_or_spawn_frames = scale_game_frames(90);
             FUN_L00_00263fd8(moby,
                              0x658,
                              &moby->pos,
                              &moby->rot,
-                             timer,
+                             instance_index_or_spawn_frames,
                              0,
                              frame_time_sq * 12.0f,
                              &delta,
                              D_L04_0015F580,
                              D_L04_0015F580);
         } else if (moby->oclass == 0x1f2) {
-            timer = scale_game_frames(90);
+            instance_index_or_spawn_frames = scale_game_frames(90);
             FUN_L00_00263fd8(moby,
                              0x652,
                              &moby->pos,
                              &moby->rot,
-                             timer,
+                             instance_index_or_spawn_frames,
                              0,
                              frame_time_sq * 12.0f,
                              &delta,
                              D_L04_0015F580,
                              D_L04_0015F580);
-            timer = scale_game_frames(90);
+            instance_index_or_spawn_frames = scale_game_frames(90);
             FUN_L00_00263fd8(moby,
                              0x653,
                              &moby->pos,
                              &moby->rot,
-                             timer,
+                             instance_index_or_spawn_frames,
                              0,
                              frame_time_sq * 12.0f,
                              &delta,
                              D_L04_0015F580,
                              D_L04_0015F580);
-            timer = scale_game_frames(90);
+            instance_index_or_spawn_frames = scale_game_frames(90);
             FUN_L00_00263fd8(moby,
                              0x654,
                              &moby->pos,
                              &moby->rot,
-                             timer,
+                             instance_index_or_spawn_frames,
                              0,
                              frame_time_sq * 12.0f,
                              &delta,
                              D_L04_0015F580,
                              D_L04_0015F580);
         } else if (moby->oclass == 0x1ed) {
-            timer = scale_game_frames(90);
+            instance_index_or_spawn_frames = scale_game_frames(90);
             FUN_L00_00263fd8(moby,
                              0x793,
                              &moby->pos,
                              &moby->rot,
-                             timer,
+                             instance_index_or_spawn_frames,
                              0,
                              frame_time_sq * 12.0f,
                              &delta,
                              D_L04_0015F580,
                              D_L04_0015F580);
-            timer = scale_game_frames(90);
+            instance_index_or_spawn_frames = scale_game_frames(90);
             FUN_L00_00263fd8(moby,
                              0x794,
                              &moby->pos,
                              &moby->rot,
-                             timer,
+                             instance_index_or_spawn_frames,
                              0,
                              frame_time_sq * 12.0f,
                              &delta,
@@ -694,12 +695,12 @@ hit:
                 int i = 2;
                 do {
                     --i;
-                    timer = scale_game_frames(90);
+                    instance_index_or_spawn_frames = scale_game_frames(90);
                     FUN_L00_00263fd8(moby,
                                      0x795,
                                      &moby->pos,
                                      &moby->rot,
-                                     timer,
+                                     instance_index_or_spawn_frames,
                                      0,
                                      frame_time_sq * 12.0f,
                                      &delta,
@@ -711,12 +712,12 @@ hit:
                 int i = 2;
                 do {
                     --i;
-                    timer = scale_game_frames(90);
+                    instance_index_or_spawn_frames = scale_game_frames(90);
                     FUN_L00_00263fd8(moby,
                                      0x796,
                                      &moby->pos,
                                      &moby->rot,
-                                     timer,
+                                     instance_index_or_spawn_frames,
                                      0,
                                      frame_time_sq * 12.0f,
                                      &delta,

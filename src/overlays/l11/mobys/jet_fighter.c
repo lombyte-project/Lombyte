@@ -244,11 +244,11 @@ void count_active_and_visible_listed_mobys(void *moby,
 
                                            void *visible_moby_count) {
     char  *moby_private_data = *(char **)((char *)moby + 0x78);
-    int    type = *(short *)(moby_private_data + 0x108);
+    int    target_moby_list_index = *(short *)(moby_private_data + 0x108);
     short *moby_list_entry;
     *(unsigned short *)active_moby_count = 0;
     *(unsigned short *)visible_moby_count = 0;
-    moby_list_entry = D_L11_001AC240[type];
+    moby_list_entry = D_L11_001AC240[target_moby_list_index];
     if (moby_list_entry == 0)
         return;
     do {
@@ -384,7 +384,7 @@ void draw_ship_hud(struct Moby *moby) {
     u8        alpha;
     s32       blink;
     f32       step;
-    f32       size;
+    f32       hp_step_magnitude;
     s32       fill;
     s32       lo;
     s32       hi;
@@ -581,9 +581,9 @@ void draw_ship_hud(struct Moby *moby) {
 
     step = hero.ship_hp - ship_hud_vars->shown_hp;
     step *= 0.2f;
-    size = absolute_float(step);
-    if (size > 1.0f) {
-        step /= size;
+    hp_step_magnitude = absolute_float(step);
+    if (hp_step_magnitude > 1.0f) {
+        step /= hp_step_magnitude;
     }
     ship_hud_vars->shown_hp += step;
     fill = truncate_float_to_s32(ship_hud_vars->shown_hp * 251.0f / hero.ship_hp_max) + 2;

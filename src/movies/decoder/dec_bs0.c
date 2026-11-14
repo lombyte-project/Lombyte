@@ -26,12 +26,12 @@ int dec_bs0(struct VideoDec *vd) {
         DEC_BS0_COMPLETED = 1
     };
     struct VoData *voData;
-    int            status = DEC_BS0_COMPLETED;
+    int            completion_status = DEC_BS0_COMPLETED;
     int            i;
 
     while (!sceMpegIsEnd(&vd->mpeg)) {
         if (video_dec_get_state(vd) == VD_STATE_ABORT) {
-            status = -1;
+            completion_status = -1;
             DebugPrint(decode_thread_aborted_message);
             break;
         }
@@ -57,7 +57,7 @@ int dec_bs0(struct VideoDec *vd) {
         switch_thread();
     }
     sceMpegReset(&vd->mpeg);
-    return status;
+    return completion_status;
 }
 
 extern __typeof__(dec_bs0) func_0023CEC8 __attribute__((alias("FUN_0023cec8")));

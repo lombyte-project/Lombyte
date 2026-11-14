@@ -63,12 +63,12 @@ void run_follow_camera_noop(void) {
 /* -1 while D_L00_00166E00+0x86 is set; else clears its current id, 1 if it was id. */
 s32 clear_follow_camera_volume_if_current(s32 id) __asm__("FUN_L00_002e8388");
 
-s32 clear_follow_camera_volume_if_current(s32 id) {
+s32 clear_follow_camera_volume_if_current(s32 volume_camera_record) {
     struct P1_388 *current_camera = (struct P1_388 *)current_follow_cam;
     if (current_camera->f86 != 0) {
         return -1;
     }
-    if (current_camera->p->cur == id) {
+    if (current_camera->p->cur == volume_camera_record) {
         current_camera->p->cur = 0;
         return 1;
     }

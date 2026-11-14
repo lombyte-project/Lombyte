@@ -21,13 +21,13 @@ extern void memcard_restore_data(u8 *, s32, void *) __asm__("func_0020AF20");
 void        memcard_restore_game(u8 *p) __asm__("FUN_00209298");
 
 void memcard_restore_game(u8 *save_buffer) {
-    s32 size0 = memcard_get_data_size(mc_gamedata);
-    s32 size1 = memcard_get_data_size(mc_leveldata);
+    s32 expected_game_span_bytes = memcard_get_data_size(mc_gamedata);
+    s32 expected_level_span_bytes = memcard_get_data_size(mc_leveldata);
     s32 saved_game_span_bytes = ((struct MemoryCardSaveSizes *)save_buffer)->main_size;
     s32 i;
 
-    if (saved_game_span_bytes != size0 ||
-        ((struct MemoryCardSaveSizes *)save_buffer)->record_size != size1) {
+    if (saved_game_span_bytes != expected_game_span_bytes ||
+        ((struct MemoryCardSaveSizes *)save_buffer)->record_size != expected_level_span_bytes) {
         DebugPrint(out_of_date_save_message);
         return;
     }
@@ -36,7 +36,7 @@ void memcard_restore_game(u8 *save_buffer) {
     save_buffer += saved_game_span_bytes;
     for (i = 0; i < 20; i++) {
         memcard_restore_data(save_buffer, i, mc_leveldata);
-        save_buffer += size1;
+        save_buffer += expected_level_span_bytes;
     }
 }
 

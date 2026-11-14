@@ -212,10 +212,11 @@ extern float path_walker_particle_target_scalar_scale_gp __asm__("D_L16_00161EA8
 
 void emit_path_walker_particle(unsigned char *source_moby, void *previous_position) {
     float input[4];
-    float offset[4];
+    float particle_position[4];
     float movement_velocity[4];
     float velocity[4];
-    float random_offset_angle, second_random_offset_angle, size, movement_distance, final_size;
+    float random_offset_angle, second_random_offset_angle, random_velocity_magnitude,
+        movement_distance, final_size;
     *(OvlQuad *)input = *(OvlQuad *)previous_position;
     if ((unsigned char)source_moby[0x31] == 0)
         return;
@@ -227,17 +228,18 @@ void emit_path_walker_particle(unsigned char *source_moby, void *previous_positi
     fast_vec_scale(movement_velocity,
                    source_moby + 0xC0,
                    path_walker_particle_movement_velocity_scale_gp * movement_distance);
-    size = path_walker_particle_random_velocity_scale_gp;
-    size *= frame_time;
-    fast_vec_normalize(offset, source_moby + 0xC0, -0.5f);
-    fast_vec_add(offset, offset, source_moby + 0x10);
+    random_velocity_magnitude = path_walker_particle_random_velocity_scale_gp;
+    random_velocity_magnitude *= frame_time;
+    fast_vec_normalize(particle_position, source_moby + 0xC0, -0.5f);
+    fast_vec_add(particle_position, particle_position, source_moby + 0x10);
     random_offset_angle = random_angle_radians();
     second_random_offset_angle = random_angle_radians();
-    build_spherical_offset(velocity, size, random_offset_angle, second_random_offset_angle);
+    build_spherical_offset(
+        velocity, random_velocity_magnitude, random_offset_angle, second_random_offset_angle);
     fast_vec_add(velocity, velocity, movement_velocity);
     final_size = path_walker_particle_target_scalar_scale_gp;
     final_size *= 210000.0f;
-    func_L00_0026DD70_emit(offset,
+    func_L00_0026DD70_emit(particle_position,
                            velocity,
                            l16_path_walker_particle_initial_color,
                            D_L16_00161E9C,
@@ -288,7 +290,7 @@ void initialize_path_walker_group(struct Moby *moby) {
     for (i = 0; i < count; i++) {
         unsigned char *current;
         L16WalkerData *selected_walker_data;
-        unsigned short flags;
+        unsigned short draw_distance;
 
         if (i == count - 1) {
             /* the last one takes the slot the loop index is on */
@@ -306,11 +308,11 @@ void initialize_path_walker_group(struct Moby *moby) {
                 selected = (selected + 1) % (count - 1);
             }
         }
-        flags = path_walker_draw_distance_gp;
+        draw_distance = path_walker_draw_distance_gp;
         current[0x30] = 255;
         *(float *)(current + 0x2C) *= path_walker_initial_scale_multiplier;
         *(int *)(current + 0x94) = 0;
-        *(unsigned short *)(current + 0x32) = flags;
+        *(unsigned short *)(current + 0x32) = draw_distance;
         selected_walker_data = *(L16WalkerData **)(current + 0x78);
         selected_walker_data->parameter = (float)rank * (period / convert_integer_to_float(count));
         selected_walker_data->owner = previous;

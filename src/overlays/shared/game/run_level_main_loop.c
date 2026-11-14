@@ -235,12 +235,12 @@ void run_level_main_loop(void) {
             memory_card_state.pending_state >= MEMCARD_QUERY_INFO) {
             if (D_L00_001B9CF0.card_icon_hidden == 0) {
                 int   rotation_period_frames = 55;
-                float size;
+                float rotating_sprite_size;
                 float sprite_rotation_radians;
                 int   hud_sprite;
 
                 setup_gif_paging(0);
-                size = 272.0f;
+                rotating_sprite_size = 272.0f;
                 vu1_add_g_sregister(0x47, 0x3004B);
                 hud_sprite = get_icon_frame(0x755D, 0);
                 draw_hud_sprite(hud_sprite, 0x32, 0x12C, 0x40, 0x40, 0x80);
@@ -251,8 +251,8 @@ void run_level_main_loop(void) {
                                     0x40,
                                     0x40,
                                     get_frame_texture(get_icon_frame(0x755D, 1)),
-                                    size,
-                                    size,
+                                    rotating_sprite_size,
+                                    rotating_sprite_size,
                                     sprite_rotation_radians);
                 do_gif_paging();
             }
@@ -394,7 +394,7 @@ extern char            D_001383A0[];
 
 void initialize_level_map_archive(void) {
     int                 i;
-    RenderArchiveState *state;
+    RenderArchiveState *map_archive_state;
     int                 level;
     struct DiscFile    *file;
     int                 heap_tag, first_size, second_size, archive_transfer_qwords;
@@ -402,7 +402,7 @@ void initialize_level_map_archive(void) {
     unsigned char      *level_data;
     int                 x, y, mask_buffer;
     float               radius_sq;
-    unsigned char      *flags;
+    unsigned char      *item_availability;
 
     D_L00_001841F0.initialized = 1;
     {
@@ -431,8 +431,8 @@ void initialize_level_map_archive(void) {
             map_coefficients[i * 4 + 2] = map_y0 - scale_y * world_y0;
         }
     }
-    flags = (unsigned char *)((unsigned char *)item_available);
-    if (flags[0x21] != 0) {
+    item_availability = (unsigned char *)((unsigned char *)item_available);
+    if (item_availability[0x21] != 0) {
         D_L00_001841F0.loaded = 1;
         file = (struct DiscFile *)D_00138438 + D_L00_001841F0.archive_index;
     } else {
@@ -440,27 +440,29 @@ void initialize_level_map_archive(void) {
         file = (struct DiscFile *)D_001383A0 + D_L00_001841F0.archive_index;
     }
     if (file->size != 0) {
-        state = &D_L00_001841F0;
-        state->coverage_enabled = 1;
+        map_archive_state = &D_L00_001841F0;
+        map_archive_state->coverage_enabled = 1;
         heap_tag = (int)render_archive_source_file;
         archive_base = ((int **)&D_L00_00173E08)[0];
         archive = (int *)((int)archive_base + 0x9A800);
         archive_transfer_qwords = file->size << 7;
         read_disc_sectors_and_wait(archive, file->sector, file->size);
-        state->file_handle = stash_send_data(
+        map_archive_state->file_handle = stash_send_data(
             (int)archive, archive_transfer_qwords, 0x4800, (int)map_archive_stash_tag);
-        state->transfer_bytes = archive_transfer_qwords;
+        map_archive_state->transfer_bytes = archive_transfer_qwords;
         fast_decompress((int)archive, (int)archive_base);
         archive = archive_base;
         first_size = archive[1] - archive[0];
-        state->first_data = hud_heap_alloc(first_size, 0, (char *)heap_tag, 0x2DB);
-        fast_mem_copy((void *)state->first_data, (char *)archive + archive[0], first_size);
-        state->first_data += 8;
-        state->second_data = state->first_data;
+        map_archive_state->first_data = hud_heap_alloc(first_size, 0, (char *)heap_tag, 0x2DB);
+        fast_mem_copy(
+            (void *)map_archive_state->first_data, (char *)archive + archive[0], first_size);
+        map_archive_state->first_data += 8;
+        map_archive_state->second_data = map_archive_state->first_data;
         second_size = archive[2] - archive[1];
-        state->coverage_runs = hud_heap_alloc(second_size, 0, (char *)heap_tag, 0x2EC);
-        fast_mem_copy((void *)state->coverage_runs, (char *)archive + archive[1], second_size);
-        state->scratch_data = hud_heap_alloc(0x1000, 0, (char *)heap_tag, 0x2F3);
+        map_archive_state->coverage_runs = hud_heap_alloc(second_size, 0, (char *)heap_tag, 0x2EC);
+        fast_mem_copy(
+            (void *)map_archive_state->coverage_runs, (char *)archive + archive[1], second_size);
+        map_archive_state->scratch_data = hud_heap_alloc(0x1000, 0, (char *)heap_tag, 0x2F3);
         for (i = 0; i < 8; i++) {
             D_L00_001841F0.slots[i].cell = -1;
             D_L00_001841F0.slots[i].unk4 = -1;
@@ -512,10 +514,10 @@ void initialize_render_archive_transfer(void) {
     s32                 buffer;
     s32                 bytes;
     s32                 archive_index;
-    RenderArchiveState *state = &D_L00_001841F0;
+    RenderArchiveState *render_archive = &D_L00_001841F0;
 
     noop_main_callback();
-    update_map_icons(state->archive_index, 1);
+    update_map_icons(render_archive->archive_index, 1);
     first_base = D_L00_001B9CF0.first_base;
     second_base = D_L00_001B9CF0.second_base;
     buffer = first_base + 0x9a800;
@@ -525,29 +527,29 @@ void initialize_render_archive_transfer(void) {
     D_L00_001841F0.buffer = buffer;
     D_L00_001841F0.old_end = second_base;
     D_L00_001B9CF0.second_base = second_base + 0x48000;
-    state->zero_284 = 0;
-    state->zero_288 = 0;
-    state->slot_28c = -1;
-    state->level_slot = -1;
-    state->slot_294 = -1;
-    state->slot_298 = -1;
-    state->slot_29c = -1;
-    state->slot_2a0 = -1;
-    if (state->file_handle != -1) {
-        if (state->loaded == 0 && D_0013D4E1 != 0) {
-            archive_index = state->archive_index;
+    render_archive->zero_284 = 0;
+    render_archive->zero_288 = 0;
+    render_archive->slot_28c = -1;
+    render_archive->level_slot = -1;
+    render_archive->slot_294 = -1;
+    render_archive->slot_298 = -1;
+    render_archive->slot_29c = -1;
+    render_archive->slot_2a0 = -1;
+    if (render_archive->file_handle != -1) {
+        if (render_archive->loaded == 0 && D_0013D4E1 != 0) {
+            archive_index = render_archive->archive_index;
             bytes = disc_table.render_archives[archive_index].size << 7;
             start_audio_stream_read(buffer,
                                     disc_table.render_archives[archive_index].sector,
                                     disc_table.render_archives[archive_index].size);
             update_audio_stream_until_idle(1);
-            state->loaded = 1;
-            state->transfer_bytes = bytes;
-            send_dma_to_stash_slot(state->buffer, state->file_handle, 0, bytes);
-            state->level_slot = current_level_index + 0x100;
-            state->last_transfer_bytes = bytes;
-            state->map_ready = 1;
-            state->load_state = -2;
+            render_archive->loaded = 1;
+            render_archive->transfer_bytes = bytes;
+            send_dma_to_stash_slot(render_archive->buffer, render_archive->file_handle, 0, bytes);
+            render_archive->level_slot = current_level_index + 0x100;
+            render_archive->last_transfer_bytes = bytes;
+            render_archive->map_ready = 1;
+            render_archive->load_state = -2;
             return;
         }
         if (D_L00_001841F0.file_handle != -1) {

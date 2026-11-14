@@ -126,7 +126,7 @@ struct Shot5BD0 {
     float hit_direction_z;
     float fC;
     void *p10;
-    int   v14;
+    int   hit_flags;
     char  c18;
     char  c19;
     short hit_source_class;
@@ -718,7 +718,7 @@ void blarg_trooper_update(struct Moby *moby) {
             update_scratch.w.p.blk.f4 = fast_sin(moby->rot.z) * 0.2f;
             update_scratch.w.p.blk.hit_direction_z = 0.0f;
             update_scratch.w.p.blk.p10 = moby;
-            update_scratch.w.p.blk.v14 = 1;
+            update_scratch.w.p.blk.hit_flags = 1;
             update_scratch.w.p.blk.f1C = 1.0f;
             set_vector_length_xy(&update_scratch.w.p.blk, &update_scratch.w.p.blk, 1.0f);
             update_scratch.w.p.blk.hit_direction_z = 1.0f;

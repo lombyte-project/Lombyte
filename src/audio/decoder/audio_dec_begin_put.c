@@ -6,10 +6,10 @@ void audio_dec_begin_put(
 
 void audio_dec_begin_put(struct AudioDec *dec,
                          void           **first_destination,
-                         s32             *size1,
+                         s32             *first_destination_byte_count,
                          void           **second_destination,
 
-                         s32 *size2) {
+                         s32 *second_destination_byte_count) {
     enum {
         AUDIO_DEC_STATE_HEADER_PENDING = 0
     };
@@ -18,27 +18,27 @@ void audio_dec_begin_put(struct AudioDec *dec,
     if (dec->state == AUDIO_DEC_STATE_HEADER_PENDING) {
         if (dec->strType != 4) {
             *first_destination = ((u8 *)&dec->hdr + dec->hdrCount);
-            *size1 = 0x28 - dec->hdrCount;
+            *first_destination_byte_count = 0x28 - dec->hdrCount;
             *second_destination = dec->data;
-            *size2 = dec->size;
+            *second_destination_byte_count = dec->size;
         } else {
             *first_destination = dec->data;
-            *size1 = dec->size;
+            *first_destination_byte_count = dec->size;
             *second_destination = NULL;
-            *size2 = 0;
+            *second_destination_byte_count = 0;
         }
     } else {
         writable_byte_count = dec->size - dec->count;
         if ((dec->size - dec->put) >= writable_byte_count) {
             *first_destination = dec->data + dec->put;
-            *size1 = writable_byte_count;
+            *first_destination_byte_count = writable_byte_count;
             *second_destination = NULL;
-            *size2 = 0;
+            *second_destination_byte_count = 0;
         } else {
             *first_destination = dec->data + dec->put;
-            *size1 = dec->size - dec->put;
+            *first_destination_byte_count = dec->size - dec->put;
             *second_destination = dec->data;
-            *size2 = writable_byte_count - (dec->size - dec->put);
+            *second_destination_byte_count = writable_byte_count - (dec->size - dec->put);
         }
     }
 }

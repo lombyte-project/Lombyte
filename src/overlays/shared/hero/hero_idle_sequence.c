@@ -1,3 +1,7 @@
+enum {
+    HERO_EASE_KIND_ON_FOOT_HERO_MOBY = 0
+};
+
 /* Hero idle sequence and per-frame helpers: health, easing records, random timers, rotation targets, glow and HUD effects. */
 #include "types.h"
 #include "rnc/overlay/shared/world/level_globals.h"
@@ -161,7 +165,8 @@ int get_hero_easing_moby_by_kind(int ease_kind) {
         HERO_EASE_KIND_SLOT_THREE_SECONDARY_MOBY = 1,
         HERO_EASE_KIND_SLOT_ZERO_PRIMARY_MOBY = 5
     };
-    if (ease_kind == 0 || ease_kind == 2 || ease_kind == 3 || ease_kind == 4) {
+    if (ease_kind == HERO_EASE_KIND_ON_FOOT_HERO_MOBY || ease_kind == 2 || ease_kind == 3 ||
+        ease_kind == 4) {
         return D_001413D0[0];
     }
     if (ease_kind == HERO_EASE_KIND_SLOT_THREE_SECONDARY_MOBY) {
@@ -196,7 +201,7 @@ void update_hero_easing_record(struct HeroEase *ease_record) {
     if (D_001413F4 == 0) {
         if (ease_record->kind == 4 || ease_record->kind == 2 || ease_record->kind == 3)
             return;
-    } else if (ease_record->kind == 0) {
+    } else if (ease_record->kind == HERO_EASE_KIND_ON_FOOT_HERO_MOBY) {
         return;
     }
     if (ease_record->rot_target.f[0] == 0.0f && ease_record->rot_target.f[1] == 0.0f &&
@@ -1075,9 +1080,9 @@ void release_and_clear_hero_voice_slots(void) {
 
 typedef struct {
     u8  p[0x280];
-    u16 x280;
+    u16 qualifying_items_help_request_gate;
     u8  p282[0x13E];
-    u16 x3c0;
+    u16 special_state_item_help_request_gate;
 } G00206cf8;
 
 extern G00206cf8      help_records __asm__("D_00141968");
@@ -1088,14 +1093,15 @@ void                  check_hero_item_reward_conditions(void) __asm__("FUN_L00_0
 
 void check_hero_item_reward_conditions(void) {
     s32 i, qualifying_item_count;
-    if (help_records.x3c0 == 0 && item_available[4] != 0 && hero_is_in_special_state() != 0) {
+    if (help_records.special_state_item_help_request_gate == 0 && item_available[4] != 0 &&
+        hero_is_in_special_state() != 0) {
         help_request(0x4E2E, 0x78);
     }
     if (D_L00_0015F5CC_00206cf8 <= 0)
         return;
     if (D_L00_0015F5CC_00206cf8 & 0x7F)
         return;
-    if (help_records.x280 != 0)
+    if (help_records.qualifying_items_help_request_gate != 0)
         return;
     if (D_001418F0 != 0)
         return;
@@ -1655,11 +1661,11 @@ void draw_hero_glow_quads(void) {
     int       i;
     int       vehicle_mode;
     int       glow_color;
-    int       mode;
+    int       glow_dispatch_mode;
     V_207d40 *glow_position_cursor;
 
-    mode = D_L00_0015F5C4;
-    if (mode == 2 || mode == 6) {
+    glow_dispatch_mode = D_L00_0015F5C4;
+    if (glow_dispatch_mode == 2 || glow_dispatch_mode == 6) {
         for (i = 0; i < P.queued_glow_count; i++)
             draw_offset_textured_effect_quad(&P.queued_glow_positions[i],
                                              P.queued_glow_colors[i],
@@ -2575,7 +2581,7 @@ extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L0
 
 void emit_hero_randomized_motion_effects(int iteration_count, int mode) __asm__("FUN_L00_00209a40");
 
-void emit_hero_randomized_motion_effects(int iteration_count, int mode) {
+void emit_hero_randomized_motion_effects(int iteration_count, int emission_position_mode) {
     enum {
         HERO_MOTION_EFFECT_RANDOMIZED_HERO_POSITION = 0
     };
@@ -2592,17 +2598,17 @@ void emit_hero_randomized_motion_effects(int iteration_count, int mode) {
     for (i = 0; i < iteration_count; i++) {
         hero_state = &hero;
         hero_displacement_source = (V_209a40 *)&hero_state->motion.displacement;
-        if (mode == HERO_MOTION_EFFECT_RANDOMIZED_HERO_POSITION) {
+        if (emission_position_mode == HERO_MOTION_EFFECT_RANDOMIZED_HERO_POSITION) {
             pos[0] = hero_state->motion.pos.f[0] + random_float_between(-0.1f, 0.1f);
             pos[1] = hero_state->motion.pos.f[1] + random_float_between(-0.1f, 0.1f);
             pos[2] = hero_state->motion.pos.f[2] + random_float_between(-0.5f, 0.1f);
-        } else if (mode == HERO_MOTION_EFFECT_ALTERNATING_MOBY_POINTS_0_AND_14) {
+        } else if (emission_position_mode == HERO_MOTION_EFFECT_ALTERNATING_MOBY_POINTS_0_AND_14) {
             if (!(i & 1)) {
                 moby_point_position(hero_state->moby, 0, pos);
             } else {
                 moby_point_position(hero_state->moby, 0xE, pos);
             }
-        } else if (mode == HERO_MOTION_EFFECT_ALTERNATING_MOBY_POINTS_23_AND_22) {
+        } else if (emission_position_mode == HERO_MOTION_EFFECT_ALTERNATING_MOBY_POINTS_23_AND_22) {
             if (!(i & 1)) {
                 moby_point_position(hero_state->moby, 0x17, pos);
             } else {
@@ -3064,8 +3070,9 @@ void update_hero_target_tracking(void) {
     char            *selected_moby;
     struct HeroEase *manipulator_table;
     float            yaw_delta, pitch, s;
-    int              mode = *(int *)(hero_control_mode_owner + 0x208C);
-    if (mode != 1 && mode != 4 && mode != 2 && mode != 7 && mode != 0) {
+    int              control_mode = *(int *)(hero_control_mode_owner + 0x208C);
+    if (control_mode != 1 && control_mode != 4 && control_mode != 2 && control_mode != 7 &&
+        control_mode != 0) {
         *(int *)(hero_control_mode_owner + 0x2274) = 0;
         return;
     }
@@ -3600,7 +3607,7 @@ void check_ledge_grab(void) {
     float probe[4], ledge[4], ray_end[4], hero_level[4], clearance[4], edge_start[4], edge_end[4],
         grab_point[4];
     float down, fwd, up, top, drop, rise, back;
-    float speed, ledge_yaw, offset;
+    float speed, ledge_yaw, ledge_normal_offset;
     int   can_grab, found, edge, i, j, surface, grabbable, frames;
     Obj  *moby_info;
     Obj  *moby_props;
@@ -3756,22 +3763,26 @@ void check_ledge_grab(void) {
         float max = 2.4f;
         float step = 0.03f;
 
-        for (offset = 0.0f; offset < max; offset += step) {
+        for (ledge_normal_offset = 0.0f; ledge_normal_offset < max; ledge_normal_offset += step) {
             qcopy(edge_end, ledge);
             edge_end[2] = ledge[2];
-            edge_end[0] += fast_cos(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * offset;
-            edge_end[1] += fast_sin(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * offset;
+            edge_end[0] +=
+                fast_cos(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * ledge_normal_offset;
+            edge_end[1] +=
+                fast_sin(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * ledge_normal_offset;
             qcopy(edge_start, edge_end);
             edge_end[2] += 0.5f;
             edge_start[2] -= 0.5f;
             if (!func_L00_001EFFF0_20C568(
                     edge_end, edge_start, 4, (int)((Hero *)D_0013F450_20C568)->moby, 0)) {
                 qcopy(grab_point, edge_end);
-                offset = step * 0.5f;
-                offset = -offset;
+                ledge_normal_offset = step * 0.5f;
+                ledge_normal_offset = -ledge_normal_offset;
                 grab_point[2] = ledge[2];
-                grab_point[0] += fast_cos(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * offset;
-                grab_point[1] += fast_sin(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * offset;
+                grab_point[0] +=
+                    fast_cos(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * ledge_normal_offset;
+                grab_point[1] +=
+                    fast_sin(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * ledge_normal_offset;
                 qcopy(((Hero *)D_0013F450_20C568)->ledge_hang_pos.f, grab_point);
                 ((Hero *)D_0013F450_20C568)->ledge_hang_pos.f[0] +=
                     fast_cos(((Hero *)D_0013F450_20C568)->ledge_normal_yaw) * back;

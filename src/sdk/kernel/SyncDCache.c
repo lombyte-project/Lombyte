@@ -11,15 +11,15 @@ void SyncDCache(s32 range_start_address, s32 range_end_address) {
     enum {
         INTERRUPT_ENABLE_BIT_CLEAR = 0
     };
-    u32 status;
+    u32 saved_interrupt_enable_bit;
 
-    status = CpuReadStatus();
-    status &= 0x10000;
-    if (status != INTERRUPT_ENABLE_BIT_CLEAR) {
+    saved_interrupt_enable_bit = CpuReadStatus();
+    saved_interrupt_enable_bit &= 0x10000;
+    if (saved_interrupt_enable_bit != INTERRUPT_ENABLE_BIT_CLEAR) {
         DIntr();
     }
     _sceSDC(range_start_address & 0xFFFFFFC0, range_end_address & 0xFFFFFFC0);
-    if (status != INTERRUPT_ENABLE_BIT_CLEAR) {
+    if (saved_interrupt_enable_bit != INTERRUPT_ENABLE_BIT_CLEAR) {
         EnableInterrupts();
     }
 }

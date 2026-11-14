@@ -39,7 +39,7 @@ typedef struct {
     u8        pad31;
     s16       h32;
     u8        pad34[0xC];
-    u8        x40[0x38];
+    u8        rotation[0x38];
     LiftVars *pvars;
     u8        pad7c[0x40];
     u8        mode;
@@ -123,5 +123,6 @@ void piston_platform_update(LiftMoby *piston_platform) {
     }
     dp = &delta;
     fast_vec_sub(dp, &piston_platform->pos, &previous_position);
-    update_entity_matrix(piston_platform_vars->x60, dp, piston_platform->x40, piston_platform->x40);
+    update_entity_matrix(
+        piston_platform_vars->x60, dp, piston_platform->rotation, piston_platform->rotation);
 }

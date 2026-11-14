@@ -140,6 +140,9 @@ void trooper_start_knockback(u8                     *moby,
                              int                     animation_frame_index,
 
                              float knockback_angle) {
+    enum {
+        MOTION_RISING = 0
+    };
     float *moby_vars_record;
     knockback_state->velocity[0] = fast_cos(knockback_angle) * knockback_state->speed;
     knockback_state->velocity[1] = fast_sin(knockback_angle) * knockback_state->speed;
@@ -206,7 +209,7 @@ int step_moby_motion(char *moby, struct KnockbackMotion *motion_state) {
 
     Vec4 *collision_result_position;
     char *collision_metadata;
-    int   flags = 0;
+    int   motion_outcome_flags = 0;
 
     float sc, ground_reference_height, landing_prediction_divisor, f12, motion_or_record_value, r,
         rr, one;
@@ -262,7 +265,7 @@ int step_moby_motion(char *moby, struct KnockbackMotion *motion_state) {
     }
     if (MOBY(moby)->pos.x < 2.0f || 1021.0f < MOBY(moby)->pos.x || MOBY(moby)->pos.y < 2.0f ||
         1021.0f < MOBY(moby)->pos.y || MOBY(moby)->pos.z < 2.0f || 1021.0f < MOBY(moby)->pos.z) {
-        flags = 0x100;
+        motion_outcome_flags = 0x100;
     }
 
     if (motion_state->landing_animation_frame != -1.0f &&
@@ -318,7 +321,7 @@ int step_moby_motion(char *moby, struct KnockbackMotion *motion_state) {
     }
 
     if (MOBY(moby)->anim_flags & 2) {
-        flags |= 0x40;
+        motion_outcome_flags |= 0x40;
     }
     if (!(motion_state->flags & 4)) {
         FUN_L00_00258278(moby,
@@ -349,7 +352,7 @@ int step_moby_motion(char *moby, struct KnockbackMotion *motion_state) {
             if (is_moby_in_class_range_500_to_540(*pp) == 0) {
                 if (motion_state->flags & 0x20) {
                     if (motion_state->phase == 2) {
-                        flags |= 0x100;
+                        motion_outcome_flags |= 0x100;
                     }
                 }
             } else {
@@ -374,7 +377,7 @@ int step_moby_motion(char *moby, struct KnockbackMotion *motion_state) {
                             convert_integer_to_float(motion_state->collision_radius_1024ths) * sc,
                             36,
                             moby) != 0) {
-        flags |= 2;
+        motion_outcome_flags |= 2;
         collision_result_position = (Vec4 *)&coll_hit_position;
         qcopy(&MOBY(moby)->pos, collision_result_position);
         one = 1.0f;
@@ -386,7 +389,7 @@ int step_moby_motion(char *moby, struct KnockbackMotion *motion_state) {
                 collision_metadata = (char *)collision_result_position - 0x30;
                 if (*(int *)(collision_metadata + 0x18) == 0 ||
                     *(int *)(collision_metadata + 0x1C) > 0) {
-                    flags |= 1;
+                    motion_outcome_flags |= 1;
                     motion_state->phase = 2;
                 }
                 fast_vec_normalize(normal_response_vector, surface_normal, motion_normal_dot);
@@ -413,5 +416,5 @@ int step_moby_motion(char *moby, struct KnockbackMotion *motion_state) {
             motion_state->phase = 1;
         }
     }
-    return flags;
+    return motion_outcome_flags;
 }

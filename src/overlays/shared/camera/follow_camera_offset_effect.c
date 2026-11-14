@@ -22,7 +22,9 @@ void        update_camera_offset_effect_state(void) __asm__("FUN_L02_002fa770");
 extern CameraOffsetEffect   camera_offset_effect __asm__("D_L02_00167600");
 extern float D_L02_0016760C NOT_SDA;
 extern short camera_offset_effect_duration_step_gp __asm__("D_L02_0016238C") __attribute__((sda));
-extern char  D_0013CA44[];
+
+#include "rnc/overlay/shared/camera/follow_camera_offset_effect_data.h"
+
 extern short camera_offset_effect_duration_step __asm__("D_L02_0016238C");
 
 s32 D_L02_00167604[1] __attribute__((section(".data"))) = {0};
@@ -193,7 +195,7 @@ void try_select_camera_offset_effect_moby(char *candidate_moby) {
     float accumulated_amount;
     float candidate_reference_angle_radians;
     if (*(short *)(selection_reference + 0x86) == 0) {
-        if (!(0.05f < absolute_float(*(float *)(D_0013CA44)))) {
+        if (!(0.05f < absolute_float(*(float *)(camera_offset_effect_selection_gate)))) {
             candidate_selection_state = camera_selection_context + 0x380;
             fast_vec_sub(candidate_displacement, candidate_moby + 0x10, &hero.motion.pos);
             vector_distance = fast_vec_length(candidate_displacement);

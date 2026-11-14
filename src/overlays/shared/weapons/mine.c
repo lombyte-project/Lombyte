@@ -464,7 +464,7 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
     M_2aa008    *moby_vars;
     struct Hero *P;
     N_2aa008    *scanned_moby;
-    s32          count;
+    s32          other_same_class_moby_count;
     N_2aa008    *best;
     s32          bestv;
     V_2aa008    *k;
@@ -485,7 +485,7 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
         fast_vec_add(moby_vars, moby_vars, &P->motion.displacement);
     }
     moby_vars->h34 = scale_game_frames(0x78);
-    count = 0;
+    other_same_class_moby_count = 0;
     best = 0;
     bestv = 0;
     for (scanned_moby = D_L00_0015FFE4_2aa008; scanned_moby; scanned_moby = scanned_moby->p28) {
@@ -498,10 +498,10 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
                             bestv = ((D_2aa008 *)scanned_moby->moby_private_vars)->spawn_frame;
                             best = scanned_moby;
                         }
-                        count++;
+                        other_same_class_moby_count++;
                     }
     }
-    if (count >= 8)
+    if (other_same_class_moby_count >= 8)
         ((D_2aa008 *)best->moby_private_vars)->spawn_frame = -1;
     qcopy(&initialized_moby->v10, requested_position);
     vector_scratch.q = ((Q_2aa008 *)hero.moby)->v10.q;
@@ -984,7 +984,7 @@ void mine_update(M910 *mine_moby) {
                     {
                         float sp;
                         float max_homing_step;
-                        int   mode;
+                        int   homing_phase;
 
                         *(OvlQuad *)n = mine_moby->pos.q;
                         if ((mine_moby->b70 & 2) && mine_moby->b52 == 1 && mine_moby->anim != 2) {
@@ -999,14 +999,14 @@ void mine_update(M910 *mine_moby) {
                         if (max_homing_step < sp) {
                             v->homing_speed = max_homing_step;
                         }
-                        mode = v->homing_phase;
-                        if (mode == MINE_HOMING_RISE_PHASE) {
+                        homing_phase = v->homing_phase;
+                        if (homing_phase == MINE_HOMING_RISE_PHASE) {
                             mine_moby->pos.f[2] += frame_scale * 0.05f;
                             if (fast_dec_timer(&v->homing_phase_timer) != 0) {
                                 v->homing_phase_timer = scale_game_frames(7);
                                 v->homing_phase = 2;
                             }
-                        } else if (mode == MINE_HOMING_FALL_PHASE) {
+                        } else if (homing_phase == MINE_HOMING_FALL_PHASE) {
                             mine_moby->pos.f[2] -= frame_scale * 0.05f;
                             if (fast_dec_timer(&v->homing_phase_timer) != 0) {
                                 v->homing_phase = 0;

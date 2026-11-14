@@ -286,7 +286,7 @@ void draw_snagglebeast_rope_attack_layer(
     SnagglebeastVars   *rope_layer_moby_vars = (SnagglebeastVars *)MOBY(moby)->pvars;
     struct GeometryQuad quad;
     struct GeometryQuad inner;
-    float               offset[4];
+    float               rope_radial_offset[4];
     float               spin;
     float               step;
     float               angle;
@@ -339,11 +339,12 @@ void draw_snagglebeast_rope_attack_layer(
         qcopy(&quad.positions[0], &quad.positions[1]);
         qcopy(&quad.positions[2], &quad.positions[3]);
         wrapped = normalize_angle(angle + spin * 0.02f);
-        offset[1] = radius * fast_cos(wrapped);
-        offset[2] = radius * fast_sin(wrapped);
-        offset[0] = 0.0f;
-        transform_vector_by_basis(offset, offset, moby + 0xC0);
-        fast_vec_add(&quad.positions[3], rope_layer_moby_vars->rope_tip_position, offset);
+        rope_radial_offset[1] = radius * fast_cos(wrapped);
+        rope_radial_offset[2] = radius * fast_sin(wrapped);
+        rope_radial_offset[0] = 0.0f;
+        transform_vector_by_basis(rope_radial_offset, rope_radial_offset, moby + 0xC0);
+        fast_vec_add(
+            &quad.positions[3], rope_layer_moby_vars->rope_tip_position, rope_radial_offset);
         if (angle != -3.1415927f) {
             draw_geometry_quad(&quad, 0, 1);
             qcopy(&inner.positions[2], &quad.positions[2]);
@@ -692,7 +693,12 @@ int update_snagglebeast_chase_movement(struct Moby       *chaser_moby,
 
 int update_snagglebeast_chase_movement(
 
-    struct Moby *chaser_moby, struct ChaserVars *chaser_vars, Vec4 *goal, int mode, float range) {
+    struct Moby       *chaser_moby,
+    struct ChaserVars *chaser_vars,
+    Vec4              *goal,
+    int                waypoint_position,
+
+    float range) {
     float        position_delta[4];
     char        *path;
     struct Moby *target_moby;
@@ -703,8 +709,8 @@ int update_snagglebeast_chase_movement(
     navigation_result = 4;
     path = D_L07_001B0530[chaser_vars->path];
     if (range < goal_distance) {
-        navigation_result =
-            step_mover_2e3f20(chaser_moby, chaser_vars->nav, mode, chaser_vars->navOut);
+        navigation_result = step_mover_2e3f20(
+            chaser_moby, chaser_vars->nav, waypoint_position, chaser_vars->navOut);
         if (navigation_result == 2) {
             fast_vec_sub(
                 position_delta,
@@ -1003,18 +1009,21 @@ void snagglebeast_update(unsigned char *moby) {
         SNAGGLEBEAST_PHASE_AFTER_THIRD_HEALTH_THRESHOLD = 7,
         SNAGGLEBEAST_PHASE_FINAL_TIMED_DAMAGE_SEQUENCE = 8
     };
+    enum {
+        SNAGGLEBEAST_TURN_CONTROLLER_RESET = 0
+    };
     Vec4              oldpos;
     ChaserSight       sight;
     Vec4              position;
     Vec4              velocity;
     Vec4              direction;
     Vec4              start;
-    Vec4              offset;
+    Vec4              hero_motion_prediction_offset;
     Vec4              step;
     Vec4              projection;
     SnagglebeastVars *snagglebeast_instance_state = (SnagglebeastVars *)MOBY(moby)->pvars;
     int               follow_target;
-    int               timer194;
+    int               triple_spawn_attack_ready;
     int               timer19a;
     int               sight_ready;
     int               target_close;
@@ -1064,7 +1073,7 @@ void snagglebeast_update(unsigned char *moby) {
         }
     }
     timer19a = 0;
-    timer194 = fast_dec_timer_s16(&snagglebeast_instance_state->timer_194) != 0;
+    triple_spawn_attack_ready = fast_dec_timer_s16(&snagglebeast_instance_state->timer_194) != 0;
     if (fast_dec_timer_s16(&snagglebeast_instance_state->timer_19A) && target_distance > 9.0f)
         timer19a = 1;
     sight_ready = 0;
@@ -1102,7 +1111,7 @@ void snagglebeast_update(unsigned char *moby) {
         if (snagglebeast_instance_state->target_nav_point != -1) {
             follow_target = 1;
             path_point_ready = 1;
-            timer194 = 0;
+            triple_spawn_attack_ready = 0;
             target_close = 0;
         } else {
             follow_target = 0;
@@ -1113,7 +1122,7 @@ void snagglebeast_update(unsigned char *moby) {
         if (snagglebeast_instance_state->target_nav_point != -1) {
             follow_target = 1;
             path_point_ready = 1;
-            timer194 = 0;
+            triple_spawn_attack_ready = 0;
             target_close = 0;
         } else {
             follow_target = 0;
@@ -1122,7 +1131,7 @@ void snagglebeast_update(unsigned char *moby) {
     case SNAGGLEBEAST_PHASE_AFTER_FIRST_HEALTH_THRESHOLD:
     case SNAGGLEBEAST_PHASE_AFTER_SECOND_HEALTH_THRESHOLD:
     case SNAGGLEBEAST_PHASE_AFTER_THIRD_HEALTH_THRESHOLD:
-        timer194 = 0;
+        triple_spawn_attack_ready = 0;
         sight_ready = 0;
         if (MOBY(moby)->state != SNAGGLEBEAST_IDLE)
             timer19a = 0;
@@ -1131,7 +1140,7 @@ void snagglebeast_update(unsigned char *moby) {
     case SNAGGLEBEAST_PHASE_SECOND_TIMED_DAMAGE_SEQUENCE:
     case SNAGGLEBEAST_PHASE_FINAL_TIMED_DAMAGE_SEQUENCE:
         target_close = 0;
-        timer194 = 0;
+        triple_spawn_attack_ready = 0;
         sight_ready = 0;
         timer19a = 0;
         break;
@@ -1286,7 +1295,7 @@ void snagglebeast_update(unsigned char *moby) {
                 }
                 MOBY(moby)->state = SNAGGLEBEAST_SWEEP_BEAM_ATTACK;
             }
-            if (timer194) {
+            if (triple_spawn_attack_ready) {
                 if (MOBY(moby)->state != SNAGGLEBEAST_CHASE_TARGET || FUN_00213260(4) == 0) {
                     snagglebeast_instance_state->substate = 0;
                     if (MOBY(moby)->prev_seq != 4) {
@@ -1379,7 +1388,7 @@ void snagglebeast_update(unsigned char *moby) {
             snagglebeast_instance_state->substate += 1;
             qcopy(&position, moby + 0x10);
             speed = frame_time * 8.0f;
-            snagglebeast_instance_state->turn_controller_state = 0;
+            snagglebeast_instance_state->turn_controller_state = SNAGGLEBEAST_TURN_CONTROLLER_RESET;
             spawn_fading_ring_effect((int)moby, &position, 0x3A, 1.0f, 25.0f, 2.0f, speed, 1.0f);
             FUN_L00_0024f7c8(moby, (snagglebeast_instance_state->substate & 1) + 5, &position);
             configure_timed_point_light(moby,
@@ -1470,13 +1479,14 @@ void snagglebeast_update(unsigned char *moby) {
                 fast_vec_sub(&direction, &direction, &velocity);
                 qcopy(&projection, ((char *)&hero) + 0x100);
                 projection.f[2] = 0.0f;
-                fast_vec_scale(&offset, &projection, (float)scale_game_frames(0x28));
+                fast_vec_scale(
+                    &hero_motion_prediction_offset, &projection, (float)scale_game_frames(0x28));
                 fast_vec_sub(&velocity, &direction, &start);
                 fast_vec_scale(&velocity, &velocity, 0.5f);
                 fast_vec_add(&velocity, &velocity, &start);
                 fast_vec_sub(&velocity, &velocity, &position);
                 fast_vec_sub(&velocity, &velocity, &step);
-                fast_vec_sub(&velocity, &offset, &velocity);
+                fast_vec_sub(&velocity, &hero_motion_prediction_offset, &velocity);
                 fast_vec_add(&start, &start, &velocity);
                 fast_vec_add(&direction, &direction, &velocity);
                 qcopy(snagglebeast_instance_state->rope_start_position, &start);
@@ -1628,7 +1638,7 @@ void snagglebeast_update(unsigned char *moby) {
                     }
                     MOBY(moby)->state = SNAGGLEBEAST_SWEEP_BEAM_ATTACK;
                 }
-                if (timer194) {
+                if (triple_spawn_attack_ready) {
                     snagglebeast_instance_state->substate = 0;
                     if (MOBY(moby)->prev_seq != 4) {
                         int r = random_int_between(0, 5);
@@ -2577,7 +2587,7 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
     RopeVec             side;
     RopeVec             perpendicular;
     RopeVec             normal;
-    RopeVec             offset;
+    RopeVec             ring_radial_offset;
     RopeVec             previous;
     RopeVec             previous_cross;
     extern RopeParticle rope_particles[];
@@ -2689,13 +2699,13 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
             qcopy(tangent, step);
             if (absolute_float(step[2]) > 2.1f) {
                 qcopy(normal, up);
-                fast_vec_cross(offset, normal, step);
+                fast_vec_cross(ring_radial_offset, normal, step);
                 fast_vec_sub(previous_cross,
                              l07_rope_previous_segment_start_points[i],
                              rope_previous_points[i]);
                 fast_vec_cross(previous, normal, previous_cross);
                 {
-                    float facing = fast_vec_dot(offset, previous);
+                    float facing = fast_vec_dot(ring_radial_offset, previous);
                     if (facing > 0.0f) {
                         fast_vec_scale(normal, normal, -1.0f);
                     }
@@ -2716,9 +2726,10 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
                     radius += radius * 0.25f *
                               fast_sin(fast_add_rotations(
                                   (*(float *)&D_L07_00161B84_gp) + index * 0.7f, 0.0f));
-                    fast_vec_scale(offset, l07_rope_ring_profile_vectors[column], radius);
-                    transform_vector_by_basis(offset, offset, side);
-                    fast_vec_add(rope_grid[i][column], rope_points[i], offset);
+                    fast_vec_scale(
+                        ring_radial_offset, l07_rope_ring_profile_vectors[column], radius);
+                    transform_vector_by_basis(ring_radial_offset, ring_radial_offset, side);
+                    fast_vec_add(rope_grid[i][column], rope_points[i], ring_radial_offset);
                 }
             }
             fast_vec_normalize(step, extension, 2.8f);

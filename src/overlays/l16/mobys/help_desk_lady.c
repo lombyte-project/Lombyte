@@ -120,7 +120,7 @@ void help_desk_lady_update(L16WatchMoby *moby) {
     };
     L16WatchScratch gaze_vectors;
     L16WatchData   *watch_data = moby->data;
-    L16WatchFlags  *flags;
+    L16WatchFlags  *help_desk_progress_flags;
     float           rate;
     float           head_rate;
     int             tracking;
@@ -158,10 +158,10 @@ void help_desk_lady_update(L16WatchMoby *moby) {
         }
         break;
     }
-    flags = (L16WatchFlags *)((char *)&D_0013D355_watch + 0x13B);
-    if (!flags->entered &&
+    help_desk_progress_flags = (L16WatchFlags *)((char *)&D_0013D355_watch + 0x13B);
+    if (!help_desk_progress_flags->entered &&
         is_point_inside_clip_volume((char *)&D_0013E533 + 0xE9D, watch_data->entry_region))
-        flags->entered = 1;
+        help_desk_progress_flags->entered = 1;
     if (!((L16WatchFlags *)((char *)&D_0013D355_watch + 0x13B))->mission &&
         hero.state.control_mode == HERO_MODE_GRIND)
         ((L16WatchFlags *)((char *)&D_0013D355_watch + 0x13B))->mission = 1;

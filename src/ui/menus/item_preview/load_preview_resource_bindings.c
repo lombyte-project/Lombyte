@@ -17,7 +17,7 @@ void load_preview_resource_bindings(s32 first_resource, s32 resource_count) __as
    preview_resource_buffers array; reading them through the struct gives
    the state base its own register. */
 void load_preview_resource_bindings(s32 first_resource, s32 resource_count) {
-    s32                     count;
+    s32                     binding_count;
     s32                    *class_resource_slot;
     s32                     read_address;
     s32                     buffer_address;
@@ -31,13 +31,13 @@ void load_preview_resource_bindings(s32 first_resource, s32 resource_count) {
     PreviewResourceBinding *binding;
     s32                     resource_index;
 
-    count = resource_count;
+    binding_count = resource_count;
     resource_index = 0;
     menu_system.preview_resource_first = first_resource;
-    menu_system.preview_resource_count = count;
-    /* Testing the index, not count, lets combine drop the constant note on
+    menu_system.preview_resource_count = binding_count;
+    /* Testing the index, not binding_count, lets combine drop the constant note on
        its zero, so its live range is not doubled. */
-    if (resource_index < count) {
+    if (resource_index < binding_count) {
         resource_offset = first_resource * 4;
         binding = preview_resource_bindings + first_resource;
         do {
@@ -47,7 +47,7 @@ void load_preview_resource_bindings(s32 first_resource, s32 resource_count) {
             /* Fakematch: two bindings use resource buffers 0 and 2. The
                do-while weights the index use one loop deeper, so the index
                is allocated before the binding pointer. */
-            if (count == 2) {
+            if (binding_count == 2) {
                 do {
                     if (resource_index == 1) {
                         buffer_skip = 1;
@@ -74,6 +74,6 @@ void load_preview_resource_bindings(s32 first_resource, s32 resource_count) {
                     buffer_address;
             }
             relocate_asset_entry_pointers(*class_resource_slot, animation_index);
-        } while (resource_index < count);
+        } while (resource_index < binding_count);
     }
 }

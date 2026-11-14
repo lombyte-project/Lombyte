@@ -444,6 +444,9 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         DREK_BOSS_PHASE_WAIT_TO_QUEUE_ENDING_MOVIE = 10,
         DREK_BOSS_PHASE_WAIT_FOR_ENDING_CLEANUP = 0xB
     };
+    enum {
+        DREK_BOSS_GROUND_TARGET_CENTER_HERO_POSITION = 2
+    };
     BossData *boss_data = (BossData *)moby->boss_private_data;
     BossMoby *aim_target_moby;
     float     position_and_displacement_scratch[4];
@@ -1193,11 +1196,13 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         update_drek_boss_arena_circling_movement((struct Moby *)moby);
         if (is_value_within_interpolated_window((char *)moby, 1.0f) != 0 ||
             is_value_within_interpolated_window((char *)moby, 16.0f) != 0) {
-            if (random_integer_below(5) != 0 || boss_data->ground_target_center_mode == 2) {
+            if (random_integer_below(5) != 0 || boss_data->ground_target_center_mode ==
+                                                    DREK_BOSS_GROUND_TARGET_CENTER_HERO_POSITION) {
                 float a;
                 float r;
 
-                if (boss_data->ground_target_center_mode != 2) {
+                if (boss_data->ground_target_center_mode !=
+                    DREK_BOSS_GROUND_TARGET_CENTER_HERO_POSITION) {
                     qcopy(position_displacement_direction_and_rotation_scratch, boss_data->f70);
                 } else {
                     qcopy(position_displacement_direction_and_rotation_scratch, hero.motion.pos.f);
@@ -2455,7 +2460,7 @@ int select_drek_boss_next_action(struct Moby *moby) {
         BOSS_ACTION_CHOICE_FOLLOW_HERO = 5
     };
     char *boss_action_vars = (char *)moby->pvars;
-    int   state = *(int *)(boss_action_vars + 0x350);
+    int   candidate_action_state = *(int *)(boss_action_vars + 0x350);
     int   tries = 0;
     int   boss_action_choice_index;
     int   ok;
@@ -2463,29 +2468,29 @@ int select_drek_boss_next_action(struct Moby *moby) {
         boss_action_choice_index = random_integer_below(6);
         switch (boss_action_choice_index) {
         case BOSS_ACTION_CHOICE_LAUNCH_FORWARD_WITH_LATERAL_OFFSET:
-            state = DREK_BOSS_LAUNCH_FORWARD_WITH_LATERAL_OFFSET;
+            candidate_action_state = DREK_BOSS_LAUNCH_FORWARD_WITH_LATERAL_OFFSET;
             break;
         case BOSS_ACTION_CHOICE_REPOSITION_AND_AIM:
-            state = DREK_BOSS_ACTION_REPOSITION_AND_AIM;
+            candidate_action_state = DREK_BOSS_ACTION_REPOSITION_AND_AIM;
             break;
         case BOSS_ACTION_CHOICE_TARGET_GROUND_POINTS:
-            state = DREK_BOSS_TARGET_GROUND_POINTS;
+            candidate_action_state = DREK_BOSS_TARGET_GROUND_POINTS;
             break;
         case BOSS_ACTION_CHOICE_TARGET_RANDOM_ARENA_POINTS:
-            state = DREK_BOSS_TARGET_RANDOM_ARENA_POINTS;
+            candidate_action_state = DREK_BOSS_TARGET_RANDOM_ARENA_POINTS;
             break;
         case BOSS_ACTION_CHOICE_TARGET_SIDE_GROUND_POINTS:
-            state = DREK_BOSS_TARGET_SIDE_GROUND_POINTS;
+            candidate_action_state = DREK_BOSS_TARGET_SIDE_GROUND_POINTS;
             break;
         case BOSS_ACTION_CHOICE_FOLLOW_HERO:
-            state = DREK_BOSS_FOLLOW_HERO;
+            candidate_action_state = DREK_BOSS_FOLLOW_HERO;
             break;
         }
         ok = *(short *)((char *)drek_boss_action_eligibility_by_phase +
                         boss_action_choice_index * 2 + *(int *)(boss_action_vars + 0x34C) * 12);
-        if (state == *(int *)(boss_action_vars + 0x350))
+        if (candidate_action_state == *(int *)(boss_action_vars + 0x350))
             ok = 0;
-        if (state == DREK_BOSS_FOLLOW_HERO) {
+        if (candidate_action_state == DREK_BOSS_FOLLOW_HERO) {
             if (*(int *)(boss_action_vars + 0x364) != 0) {
                 ok = 0;
             } else {
@@ -2496,7 +2501,7 @@ int select_drek_boss_next_action(struct Moby *moby) {
                     ok = 0;
             }
         }
-        if (state == DREK_BOSS_TARGET_SIDE_GROUND_POINTS) {
+        if (candidate_action_state == DREK_BOSS_TARGET_SIDE_GROUND_POINTS) {
             if (*(int *)(boss_action_vars + 0x350) == 0xE)
                 ok = 0;
         }
@@ -2504,7 +2509,7 @@ int select_drek_boss_next_action(struct Moby *moby) {
             break;
         tries++;
     } while (tries < 100);
-    return state;
+    return candidate_action_state;
 }
 
 typedef unsigned int u128_f7220 __attribute__((mode(TI)));

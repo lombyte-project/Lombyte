@@ -91,7 +91,7 @@ void flying_debris_update(struct Moby *moby) {
     int               i;
     int               signed_puff_random_value;
     int               puff_rgb_component;
-    float             size;
+    float             offset_scale_or_puff_scalar;
     float             bright;
     u8               *puff_particle;
     u8               *puff_tail;
@@ -152,8 +152,8 @@ void flying_debris_update(struct Moby *moby) {
     moby->rot.y = fast_add_rotations(moby->rot.y, debris_vars->spin_y);
     moby->rot.z = fast_add_rotations(moby->rot.z, debris_vars->spin_z);
     moby_point_position(moby, 0, joint);
-    size = randf_sym(0.01f, 0.5f);
-    fast_vec_scale(ofs, (char *)moby + 0xC0, size);
+    offset_scale_or_puff_scalar = randf_sym(0.01f, 0.5f);
+    fast_vec_scale(ofs, (char *)moby + 0xC0, offset_scale_or_puff_scalar);
     fast_vec_add(at, joint, ofs);
     fast_vec_sub(moby_to_joint_direction, joint, &moby->pos);
     normalize_d(moby_to_joint_direction, moby_to_joint_direction, 0.05f);
@@ -174,7 +174,7 @@ void flying_debris_update(struct Moby *moby) {
         signed_puff_random_value = random_integer_below(6);
         if (random_integer_below(2) != 0)
             signed_puff_random_value = -signed_puff_random_value;
-        size = random_float_between(20000.0f, 100000.0f);
+        offset_scale_or_puff_scalar = random_float_between(20000.0f, 100000.0f);
         puff_rgb_component = random_int_between(0x10, 0xFF);
         puff_particle =
             (u8 *)spawn_puff(at,
@@ -183,7 +183,7 @@ void flying_debris_update(struct Moby *moby) {
                              1.0f,
                              signed_puff_random_value,
                              D_L14_0015F580,
-                             size,
+                             offset_scale_or_puff_scalar,
                              puff_rgb_component | (0x60000000 | (puff_rgb_component << 16) |
                                                    (puff_rgb_component << 8)));
         if (puff_particle != NULL) {

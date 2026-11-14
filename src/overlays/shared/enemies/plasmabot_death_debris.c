@@ -60,7 +60,7 @@ void plasmabot_death_debris_update(struct Moby *moby) {
     s32  signed_particle_variation;
     s32  alpha;
     s32  color;
-    f32  size;
+    f32  particle_size;
     f32  absolute_velocity;
     u8  *particle;
     u8  *fade;
@@ -125,7 +125,7 @@ void plasmabot_death_debris_update(struct Moby *moby) {
         signed_particle_variation = random_integer_below(6);
         if (random_integer_below(2) != 0)
             signed_particle_variation = -signed_particle_variation;
-        size = random_float_between(40000.0f, 100000.0f);
+        particle_size = random_float_between(40000.0f, 100000.0f);
         color = random_int_between(0x30, 0xFF);
         alpha = 0x60000000;
         particle = FUN_L00_0026d000_de670(&moby->pos,
@@ -134,7 +134,7 @@ void plasmabot_death_debris_update(struct Moby *moby) {
                                           1.0f,
                                           signed_particle_variation,
                                           D_L14_0015F580,
-                                          size,
+                                          particle_size,
                                           color | ((color << 16) | ((color << 8) | alpha)));
         if (particle != 0) {
             particle[3] = 0x44;
@@ -161,6 +161,9 @@ extern float plasmabot_debris_z_velocity_range_end_gp __asm__("D_L14_00161B14")
 unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) __asm__("FUN_L14_002dea98");
 
 unsigned char *spawn_plasmabot_death_debris(char *debris_source_moby, char *pos) {
+    enum {
+        PLASMABOT_DEBRIS_STATE_INITIAL = 0
+    };
     unsigned char *spawned_moby = create_moby(0x145);
     char          *spawned_vars;
     char          *hero_launch_reference;
@@ -170,7 +173,7 @@ unsigned char *spawn_plasmabot_death_debris(char *debris_source_moby, char *pos)
         *(char **)(spawned_vars + 0x24) = debris_source_moby;
         qcopy(&MOBY(spawned_moby)->pos, pos);
         MOBY(spawned_moby)->rot.z = MOBY(debris_source_moby)->rot.z;
-        MOBY(spawned_moby)->state = 0;
+        MOBY(spawned_moby)->state = PLASMABOT_DEBRIS_STATE_INITIAL;
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
         MOBY(spawned_moby)->visible = 1;

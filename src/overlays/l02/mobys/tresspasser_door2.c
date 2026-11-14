@@ -33,9 +33,9 @@ void tresspasser_door2_update(struct Moby *moby) {
         moby->state = TRESSPASSER_DOOR2_WAIT_FOR_LINKED_MOBY;
         break;
     case TRESSPASSER_DOOR2_WAIT_FOR_LINKED_MOBY: {
-        int id = *(int *)(tresspasser_door2_vars + 0x10);
-        if (id >= 0) {
-            char *linked_moby = (char *)((id << 8) + *(int *)&D_L02_0015FFD8_c3);
+        int linked_moby_index = *(int *)(tresspasser_door2_vars + 0x10);
+        if (linked_moby_index >= 0) {
+            char *linked_moby = (char *)((linked_moby_index << 8) + *(int *)&D_L02_0015FFD8_c3);
             int   linked_moby_class = MOBY(linked_moby)->oclass;
             if (linked_moby_class == 0x267 || linked_moby_class == 0x23F) {
                 if (((unsigned char *)linked_moby)[0x20] == 4)

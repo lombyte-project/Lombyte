@@ -29,7 +29,7 @@ void draw_textured_effect_list(void *list_,
                                int   context_two_texture_state) __asm__("FUN_L12_002bc210");
 
 void draw_textured_effect_list(void *list_,
-                               int   count,
+                               int   effect_entry_count,
                                int   context_one_texture_state,
 
                                int context_two_texture_state) {
@@ -49,8 +49,8 @@ void draw_textured_effect_list(void *list_,
     for (i = 0xB3; i >= 0; i--) {
         *sp++ = 0x80808080;
     }
-    if (count > 0) {
-        for (i = count; i != 0; i--) {
+    if (effect_entry_count > 0) {
+        for (i = effect_entry_count; i != 0; i--) {
             sphere_check_result = fast_bsphere_check(list, 256.0f);
             if (sphere_check_result != -1) {
                 FUN_L12_002667fc(*(int *)(list + 0x1C),

@@ -51,7 +51,7 @@ typedef struct {
     char           pad3[3];
     unsigned short h34;
     char           pad4[0x42];
-    T2d8138       *t78;
+    T2d8138       *nanotech_ball_private_state;
     char           pad5[0x18];
     int            f94;
 } O2d8138;
@@ -1031,7 +1031,7 @@ O2d8138 *create_linked_class_0326_moby(P2d8138 *p) {
     if (spawned_moby) {
         spawned_moby->b30 = 0x40;
         spawned_moby->b20 = 0;
-        spawned_moby->t78->p = p;
+        spawned_moby->nanotech_ball_private_state->p = p;
         spawned_moby->f94 = 0;
         spawned_moby->h34 |= 0x41;
         qcopy(&spawned_moby->q, &p->q);

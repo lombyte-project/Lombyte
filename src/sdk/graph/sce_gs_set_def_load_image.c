@@ -14,35 +14,35 @@ s32 sceGsSetDefLoadImage(sceGsLoadImage *image,
                          s16             width,
 
                          s16 height) {
-    s32 size = 0;
+    s32 image_qword_count = 0;
 
     switch (pixel_format) {
     case PIXEL_FORMAT_32_BIT:
     case PIXEL_FORMAT_32_BIT_ALTERNATE:
-        size = (width * height) >> 2;
+        image_qword_count = (width * height) >> 2;
         break;
     case PIXEL_FORMAT_24_BIT:
     case PIXEL_FORMAT_24_BIT_ALTERNATE:
-        size = (width * height * 3) >> 4;
+        image_qword_count = (width * height * 3) >> 4;
         break;
     case PIXEL_FORMAT_16_BIT:
     case PIXEL_FORMAT_16_BIT_ALTERNATE:
     case PIXEL_FORMAT_16_BIT_ALTERNATE_2:
     case PIXEL_FORMAT_16_BIT_ALTERNATE_3:
-        size = (width * height) >> 3;
+        image_qword_count = (width * height) >> 3;
         break;
     case PIXEL_FORMAT_8_BIT:
     case PIXEL_FORMAT_8_BIT_ALTERNATE:
-        size = (width * height) >> 4;
+        image_qword_count = (width * height) >> 4;
         break;
     case PIXEL_FORMAT_4_BIT:
     case PIXEL_FORMAT_4_BIT_ALTERNATE:
     case PIXEL_FORMAT_4_BIT_ALTERNATE_2:
-        size = (width * height) >> 5;
+        image_qword_count = (width * height) >> 5;
         break;
     }
 
-    if (size > 0x7fff) {
+    if (image_qword_count > 0x7fff) {
         scePrintf("sceGsSetDefLoadImage: too big size\r\n");
         return 0;
     }
@@ -61,7 +61,7 @@ s32 sceGsSetDefLoadImage(sceGsLoadImage *image,
     image->q[7] = 0x52;
     image->q[8] = 0;
     image->q[9] = 0x53;
-    ((struct GifTag *)&image->q[10])->NLOOP = size;
+    ((struct GifTag *)&image->q[10])->NLOOP = image_qword_count;
     ((struct GifTag *)&image->q[10])->EOP = 1;
     ((struct GifTag *)&image->q[10])->FLG = 2;
     CpuSync();

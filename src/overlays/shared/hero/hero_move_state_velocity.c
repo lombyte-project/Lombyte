@@ -1013,7 +1013,7 @@ void        set_race_camera(Vec4_00216f90 *hero_world_position,
 
 void set_race_camera(Vec4_00216f90 *hero_world_position,
                      Vec4_00216f90 *hero_euler_rotation,
-                     int            mode,
+                     int            requested_hero_state,
 
                      int flag) {
     char *position_destination = D_0013F3D0;
@@ -1044,8 +1044,8 @@ void set_race_camera(Vec4_00216f90 *hero_world_position,
     reset_pad_history();
     cancel_hero_item_animation();
     reset_hero_easing_records();
-    if (mode != -1)
-        hero_set_state(mode, 1);
+    if (requested_hero_state != -1)
+        hero_set_state(requested_hero_state, 1);
     set_hero_animation_sequence_and_frame(
         *(unsigned char *)(*(char **)(hero_base + 0x2080) + 0x53),
         *(unsigned char *)(*(char **)(hero_base + 0x2080) + 0x51));

@@ -577,16 +577,20 @@ void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
         moby->state != BLARG_TROOPER_WAIT_FOR_ACTIVATION) {
         trooper_damage_alert_vars->call_timer++;
         if (scale_game_frames(0x3C) * 17 < trooper_damage_alert_vars->call_timer) {
-            s32 count = 0;
+            s32 active_group_member_count = 0;
             if (trooper_damage_alert_vars->groups[0] != -1)
-                count += count_active_moby_group_members(trooper_damage_alert_vars->groups[0], 2);
+                active_group_member_count +=
+                    count_active_moby_group_members(trooper_damage_alert_vars->groups[0], 2);
             if (trooper_damage_alert_vars->groups[1] != -1)
-                count += count_active_moby_group_members(trooper_damage_alert_vars->groups[1], 2);
+                active_group_member_count +=
+                    count_active_moby_group_members(trooper_damage_alert_vars->groups[1], 2);
             if (trooper_damage_alert_vars->groups[2] != -1)
-                count += count_active_moby_group_members(trooper_damage_alert_vars->groups[2], 2);
+                active_group_member_count +=
+                    count_active_moby_group_members(trooper_damage_alert_vars->groups[2], 2);
             if (trooper_damage_alert_vars->groups[3] != -1)
-                count += count_active_moby_group_members(trooper_damage_alert_vars->groups[3], 2);
-            if (count >= 9 && random_integer_below(0x27) == 0) {
+                active_group_member_count +=
+                    count_active_moby_group_members(trooper_damage_alert_vars->groups[3], 2);
+            if (active_group_member_count >= 9 && random_integer_below(0x27) == 0) {
                 help_direction_or_hit_position.f[0] =
                     fast_cos(fast_add_rotations(moby->rot.z, 3.1415927f));
                 help_direction_or_hit_position.f[1] =
@@ -735,7 +739,7 @@ void steer_blarg_trooper_toward_point(struct Moby *moby,
     float path_constrained_position[4] __attribute__((aligned(16)));
     float path_constraint_test_position[4] __attribute__((aligned(16)));
     float delta[4] __attribute__((aligned(16)));
-    int   count;
+    int   low_movement_frame_count;
 
     if (*(unsigned char *)(trooper_steering_vars + 0x242)) {
         float *rotation = &moby->rot.z;
@@ -793,8 +797,8 @@ void steer_blarg_trooper_toward_point(struct Moby *moby,
                 *(OvlQuad *)&moby->pos = *(OvlQuad *)path_constrained_position;
             if (fast_vec_dist(&moby->pos, trooper_pre_move_position) < frame_time * 0.5f) {
                 ++*(unsigned char *)(trooper_steering_vars + 0x243);
-                count = *(unsigned char *)(trooper_steering_vars + 0x243);
-                if (scale_game_frames(15) < count)
+                low_movement_frame_count = *(unsigned char *)(trooper_steering_vars + 0x243);
+                if (scale_game_frames(15) < low_movement_frame_count)
                     *(unsigned char *)(trooper_steering_vars + 0x242) = 1;
             } else {
                 *(unsigned char *)(trooper_steering_vars + 0x243) = 0;

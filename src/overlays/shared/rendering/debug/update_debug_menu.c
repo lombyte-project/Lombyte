@@ -874,7 +874,7 @@ void update_debug_menu(void) {
         if (g_debug_menu.selected_row == 2 && (controller_words.buttons.w.pressed & 0xF0)) {
             char *directory = level_directory_macro;
             char *path_format = level_file_path_format_gp;
-            s32   i = 0, found, fd, size;
+            s32   i = 0, found, fd, sample_file_byte_count;
             {
                 f32 *sample;
                 s32  count = occlusion_sample_count;
@@ -930,11 +930,11 @@ void update_debug_menu(void) {
                     sceWrite(fd, &l00_camera.pos.f[1], 4);
                     sceWrite(fd, &l00_camera.pos.f[2], 4);
                     sceLseek(fd, 0, 0);
-                    size = sceLseek(fd, 0, 2);
-                    if (size <= 0x100000) {
+                    sample_file_byte_count = sceLseek(fd, 0, 2);
+                    if (sample_file_byte_count <= 0x100000) {
                         sceLseek(fd, 0, 0);
-                        sceRead(fd, samples, size);
-                        occlusion_sample_count = size / 12;
+                        sceRead(fd, samples, sample_file_byte_count);
+                        occlusion_sample_count = sample_file_byte_count / 12;
                     } else {
                         occlusion_sample_count = 0;
                     }

@@ -39,7 +39,7 @@ void GetMpegPictureTimestampsAndFlags(struct MpegTimestampState         *state,
                                       s64                               *presentation_timestamp,
                                       s64                               *decoding_timestamp,
 
-                                      s64 *flags) {
+                                      s64 *packed_picture_attributes) {
     enum {
         MPEG_PTS_OVERRIDE_INACTIVE = 0,
         MPEG_PTS_OVERRIDE_PENDING = 2
@@ -87,5 +87,5 @@ void GetMpegPictureTimestampsAndFlags(struct MpegTimestampState         *state,
     field_flags = ((s64)picture->repeat_first_field << 5) | ((s64)picture->top_field_first << 6);
     sequence_flags = ((s64)picture->progressive_sequence << 8) | picture->coding_type;
     picture_flags = ((s64)picture->progressive_frame << 7) | ((s64)picture->picture_structure << 3);
-    *flags = (sequence_flags | field_flags) | picture_flags;
+    *packed_picture_attributes = (sequence_flags | field_flags) | picture_flags;
 }

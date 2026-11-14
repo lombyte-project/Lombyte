@@ -26,24 +26,24 @@ void spawn_particle_line_effect(struct Moby *moby,
 
 void spawn_particle_line_effect(
 
-    struct Moby *moby, void *from, void *to, int count, f32 size0, f32 size1) {
+    struct Moby *moby, void *from, void *to, int line_puff_count, f32 size0, f32 size1) {
     Vec4           step;
     Vec4           puff_spawn_position;
     Vec4           effect_initial_velocity;
     f32            grow;
-    f32            size;
+    f32            puff_scalar_range_end;
     unsigned char *puff;
     unsigned char *tail;
     int            alpha, grey;
     int            i;
 
     fast_vec_sub(&step, to, from);
-    fast_vec_scale(&step, &step, 1.0f / (f32)count);
-    grow = (size1 - size0) / (f32)count;
+    fast_vec_scale(&step, &step, 1.0f / (f32)line_puff_count);
+    grow = (size1 - size0) / (f32)line_puff_count;
     effect_initial_velocity.q = 0;
     effect_initial_velocity.f[3] = 1.0f;
     effect_initial_velocity.f[2] = 0.01f;
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < line_puff_count; i++) {
         fast_vec_scale(&puff_spawn_position, &step, convert_integer_to_float(i));
         fast_vec_add(&puff_spawn_position, from, &puff_spawn_position);
         effect_initial_velocity.f[0] = randf_sym(0.0f, 0.005f);
@@ -54,11 +54,11 @@ void spawn_particle_line_effect(
         alpha = random_int_between(0x30, 0x70);
         grey = random_int_between(0x30, 0x7F);
         grey |= (grey << 16) | (grey << 8);
-        size = random_float_between(1.0f, 1.02f);
+        puff_scalar_range_end = random_float_between(1.0f, 1.02f);
         puff = spawn_puff(&puff_spawn_position,
                           line_puff_position_jitter_range_end_gp,
                           1.0f,
-                          size,
+                          puff_scalar_range_end,
                           random_int_between(-2, 2),
                           &effect_initial_velocity,
                           grow + size0 * 210000.0f,

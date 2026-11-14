@@ -13,14 +13,14 @@ s32 read_cd_stream_sectors(struct CdStream *stream,
 
 s32 read_cd_stream_sectors(struct CdStream *stream,
                            u32              sector_read_destination,
-                           s32              size,
+                           s32              requested_byte_count,
 
                            s32 is_async) {
     u8  readcmd[0x10];
     s32 blocks;
     s32 returned_byte_count;
 
-    blocks = size >> 11;
+    blocks = requested_byte_count >> 11;
     returned_byte_count = 0;
     readcmd[0] = 0x64;
     readcmd[1] = 0;
@@ -29,7 +29,7 @@ s32 read_cd_stream_sectors(struct CdStream *stream,
     if (is_async == 0) {
         stream->sector += blocks;
         sceCdSync(0);
-        returned_byte_count = size;
+        returned_byte_count = requested_byte_count;
     }
     return returned_byte_count;
 }

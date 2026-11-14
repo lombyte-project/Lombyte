@@ -6,9 +6,9 @@ void init_mem_slots(void) __asm__("FUN_002015d8");
 
 void init_mem_slots(void) {
     int runtime_memory_base = (int)D_24135F & 0xFFFFC000;
-    int size = current_vu_chain;
-    int level_zero_workspace_base = runtime_memory_base + size;
-    int memory_slot_three_base = level_zero_workspace_base + size;
+    int runtime_reserve_bytes = current_vu_chain;
+    int level_zero_workspace_base = runtime_memory_base + runtime_reserve_bytes;
+    int memory_slot_three_base = level_zero_workspace_base + runtime_reserve_bytes;
     int memory_slot_four_base = memory_slot_three_base + 0x64000;
     int common_archive_base = memory_slot_four_base + 0x30000;
     D_001940C0[0] = runtime_memory_base;

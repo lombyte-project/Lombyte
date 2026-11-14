@@ -87,7 +87,7 @@ void breakable_lamp_update(struct Moby *moby) {
     Vec4                   start;
     f32                    distance;
     f32                    fade;
-    f32                    size;
+    f32                    trail_size;
     f32                    speed;
     f32                    yaw;
     f32                    pitch;
@@ -184,7 +184,7 @@ void breakable_lamp_update(struct Moby *moby) {
         debris->spawn_frame = moby->spawn_frame;
     }
     for (i = 0; i < 24; i++) {
-        size = random_float_between(0.3f, 4.0f);
+        trail_size = random_float_between(0.3f, 4.0f);
         sign = random_integer_below(2);
         if (sign == 0) {
             sign--;
@@ -200,8 +200,8 @@ void breakable_lamp_update(struct Moby *moby) {
         frames = scale_game_frames(0x3C);
         spawn_trail_c8e0(&start,
                          frames,
-                         size * 0.1f,
-                         size,
+                         trail_size * 0.1f,
+                         trail_size,
                          glow_and_spark_state->color | 0x7F000000,
                          0,
                          sign,
@@ -209,8 +209,15 @@ void breakable_lamp_update(struct Moby *moby) {
                          0.003f);
         sign = -sign;
         frames = scale_game_frames(0x3C);
-        spawn_trail_c8e0(
-            &start, frames, size * 0.07f, size * 0.7f, 0x7F7F7F7F, 1, sign, &effect_motion, 0.003f);
+        spawn_trail_c8e0(&start,
+                         frames,
+                         trail_size * 0.07f,
+                         trail_size * 0.7f,
+                         0x7F7F7F7F,
+                         1,
+                         sign,
+                         &effect_motion,
+                         0.003f);
         effect_motion.f[1] = 0.0f;
         effect_motion.f[0] = 0.0f;
         effect_motion.f[2] = random_float_between(0.01f, 0.05f) * frame_scale;

@@ -76,10 +76,10 @@ char *spawn_barrier_replacement(struct Moby *source_moby, int spawned_moby_class
     };
     char *moby = create_moby(spawned_moby_class);
     if (moby != 0) {
-        unsigned char state;
+        unsigned char draw_distance;
         ((unsigned char *)moby)[0x30] = 0xFF;
-        state = BARRIER_REPLACEMENT_DRAW_DISTANCE;
-        MOBY(moby)->draw_dist = state;
+        draw_distance = BARRIER_REPLACEMENT_DRAW_DISTANCE;
+        MOBY(moby)->draw_dist = draw_distance;
         moby[0x31] = 1;
         moby[0x20] = 0;
         qcopy(moby + 0x10, &source_moby->pos);
@@ -104,7 +104,7 @@ void barrier_update(Moby *moby) {
     float        origin[4], center[4], piece_pos[4], piece_velocity[4], push[4];
     Hit_309688  *hit;
     int          has_next;
-    int          count;
+    int          radial_effect_iteration_count;
     int          i;
     float        angle;
     float        scale;
@@ -141,12 +141,12 @@ void barrier_update(Moby *moby) {
         allocate_voice_for_target_entry(0, 0, moby);
     }
     moby->hit_slot = 0xFF;
-    count = 40;
+    radial_effect_iteration_count = 40;
     if (0.85f < radial_effect_count_reduction_control ||
         0.85f < barrier_radial_effect_count_reduction_control)
-        count = 30;
+        radial_effect_iteration_count = 30;
     angle = -3.1415927f;
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < radial_effect_iteration_count; i++) {
         *(u128 *)piece_velocity = 0;
         piece_velocity[0] = random_float_between(-0.4f, 0.4f);
         piece_velocity[1] = random_float_between(-0.6f, 0.6f);
@@ -173,7 +173,7 @@ void barrier_update(Moby *moby) {
         if (i % 3 == 0) {
             cart_burst(moby, piece_pos, -1, random_float_between(0.3f, 0.6f), 0.0f);
         }
-        angle = angle + 6.2831855f / convert_integer_to_float(count);
+        angle = angle + 6.2831855f / convert_integer_to_float(radial_effect_iteration_count);
     }
     fast_vec_scale(piece_pos, hit->pos, 0.5f);
     func_L00_0025F4A8_309688(moby,

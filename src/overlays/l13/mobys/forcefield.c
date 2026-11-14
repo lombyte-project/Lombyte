@@ -31,7 +31,7 @@ void spawn_forcefield_contact_effects(void *moby, void *forcefield_vars) {
     float  rotation_matrix[16];
     float  probe[4];
     void **candidates;
-    int    count, hit_count, i, j;
+    int    candidate_count, hit_count, i, j;
     char  *candidate;
     short  half_width, half_height, max_size;
     float  radius;
@@ -46,12 +46,12 @@ void spawn_forcefield_contact_effects(void *moby, void *forcefield_vars) {
     query[2] = radius;
     transform_vector_by_basis(query, query, matrix);
     fast_vec_add(query, query, moby + 0x10);
-    count = collect_mobies_in_sphere(query, radius, 0x10, moby, 0);
-    if (count == 0)
+    candidate_count = collect_mobies_in_sphere(query, radius, 0x10, moby, 0);
+    if (candidate_count == 0)
         return;
-    candidates = __builtin_alloca(((unsigned)count << 5) >> 3);
-    memcpy(candidates, sphere_hits_ed158, count * 4);
-    for (i = 0; i < count; i++) {
+    candidates = __builtin_alloca(((unsigned)candidate_count << 5) >> 3);
+    memcpy(candidates, sphere_hits_ed158, candidate_count * 4);
+    for (i = 0; i < candidate_count; i++) {
         candidate = *(void **)((u32)candidates + (i << 2));
         if (candidate == 0 || (unsigned char)candidate[0x20] == 0xfe ||
             (unsigned char)candidate[0x20] == 0xfd)

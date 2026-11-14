@@ -265,16 +265,16 @@ extern u8 D_0015EDD0_macro[] __asm__("D_0015EDD0") MACRO_ADDR;
 void build_vendor_menu_rows(s32 skip_unflagged) __asm__("FUN_L00_0029a400");
 
 void build_vendor_menu_rows(s32 skip_unflagged) {
-    s32 count, i, j, stocked_item_entry, item, k;
+    s32 stocked_item_count, i, j, stocked_item_entry, item, k;
 
-    count = 0;
+    stocked_item_count = 0;
     if (D_0015EDD0_macro[0] != 0xFF) {
         do
-            count++;
-        while (count < 12 && D_0015EDD0_macro[count] != 0xFF);
+            stocked_item_count++;
+        while (stocked_item_count < 12 && D_0015EDD0_macro[stocked_item_count] != 0xFF);
     }
     vendor_menu_lui.row_count = 0;
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < stocked_item_count; i++) {
         stocked_item_entry = D_0015EDD0_macro[i];
         if (stocked_item_entry == 0xFF)
             continue;
@@ -583,11 +583,11 @@ void start_vendor_exit_cutscene(void) {
     };
     VendorMenu              *vendor_state;
     VendorMoby_29a6b0       *moby;
-    s32                      index, exit_cutscene_id, offset;
+    s32                      index, exit_cutscene_id, cutscene_resource_base_address;
     f32                     *cutscene_world_origin;
     struct MusicStreamState *state;
     s32                     *selected;
-    s16                      mode;
+    s16                      secondary_stream_state;
 
     jet_end_mount(2);
     if ((u16)(music_stream_state.secondary.state - 6) >= 2)
@@ -614,11 +614,11 @@ void start_vendor_exit_cutscene(void) {
     vu1_sync_chain(1);
     select_level_vu_chain();
     selected = (s32 *)((char *)vendor_state + 0x48);
-    offset = D_L00_001611CC - 0x40000;
-    D_L00_001611CC = offset;
+    cutscene_resource_base_address = D_L00_001611CC - 0x40000;
+    D_L00_001611CC = cutscene_resource_base_address;
     index = vendor_menu.purchased_item;
-    D_L00_0016C860_lui.x58 = D_L00_00173E00[1] + offset;
-    D_L00_0016C860_lui.x5c = D_L00_00173E00[2] + offset;
+    D_L00_0016C860_lui.x58 = D_L00_00173E00[1] + cutscene_resource_base_address;
+    D_L00_0016C860_lui.x5c = D_L00_00173E00[2] + cutscene_resource_base_address;
     exit_cutscene_id = vendor_exit_cutscene_ids_by_item[index];
     D_L00_0015F3FC = 0;
     D_L00_0015F400 = 0;
@@ -632,11 +632,11 @@ void start_vendor_exit_cutscene(void) {
     state = &music_stream_state;
     state->queued_secondary_track = 0x2734;
     FUN_L00_002455c0(0);
-    mode = music_stream_state.secondary.state;
-    while (mode != SECONDARY_MUSIC_STREAM_READY_TO_CONTINUE) {
+    secondary_stream_state = music_stream_state.secondary.state;
+    while (secondary_stream_state != SECONDARY_MUSIC_STREAM_READY_TO_CONTINUE) {
         sound_update();
         sce_gs_sync_v(0);
-        mode = music_stream_state.secondary.state;
+        secondary_stream_state = music_stream_state.secondary.state;
     }
     continue_audio_stream_if_ready();
 }
@@ -757,18 +757,18 @@ void         initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b6
 
 void initialize_vendor_selected_item_mobys(void) {
     V_29b680 item_local_position;
-    int      id;
+    int      selected_item_moby_class;
     int      k;
     int      x;
 
     k = vendor_menu_lui.rows[vendor_menu_lui.cursor].item;
-    id = item_defs_lui[k].cls;
+    selected_item_moby_class = item_defs_lui[k].cls;
     if (k == 0x18) {
-        id = 0x1DF;
+        selected_item_moby_class = 0x1DF;
     } else {
-        select_world_object_resource_tables(id, -1);
+        select_world_object_resource_tables(selected_item_moby_class, -1);
     }
-    init_moby_instance(((u8 *)vendor_menu_lui.menu_mobys) + 0x100, id);
+    init_moby_instance(((u8 *)vendor_menu_lui.menu_mobys) + 0x100, selected_item_moby_class);
     *(short *)(((u8 *)vendor_menu_lui.menu_mobys) + 0x132) = 0x40;
     *(int *)(((u8 *)vendor_menu_lui.menu_mobys) + 0x194) = 0;
     fast_vec_add(item_local_position,
@@ -819,7 +819,7 @@ void initialize_vendor_selected_item_mobys(void) {
         update_entity(((u8 *)vendor_menu_lui.menu_mobys) + 0x200);
         FUN_0020d4f0_29b680(((u8 *)vendor_menu_lui.menu_mobys) + 0x200, 0x202020, 0xE, 0xE, 0);
     }
-    init_moby_instance(((u8 *)vendor_menu_lui.menu_mobys) + 0x300, id);
+    init_moby_instance(((u8 *)vendor_menu_lui.menu_mobys) + 0x300, selected_item_moby_class);
     if ((*(unsigned char **)(((u8 *)vendor_menu_lui.menu_mobys) + 0x224))[6]) {
         ((u8 *)vendor_menu_lui.menu_mobys)[0x273] = 0x18;
     }
@@ -1148,7 +1148,7 @@ void update_vendor_menu(void) {
     s32                i;
     s32                j;
     s32                k;
-    s32                id;
+    s32                cutscene_animation_frame;
     f32                k1;
     f32                k2;
     f32                k3;
@@ -1592,9 +1592,9 @@ void update_vendor_menu(void) {
         l00_camera.rows[10] = camera_rotation_matrix[1][2];
         for (i = 0; i < D_L00_0016C860.h44; i++) {
             mb = D_L00_0016C860.f178[i];
-            id = D_L00_0016C860.f38 >> 1;
-            mb->next_frame = id + 1;
-            mb->frame = id;
+            cutscene_animation_frame = D_L00_0016C860.f38 >> 1;
+            mb->next_frame = cutscene_animation_frame + 1;
+            mb->frame = cutscene_animation_frame;
             update_moby_animation_state(mb);
             mb->blend = convert_integer_to_float(D_L00_0016C860.f38 & 1) * 0.5f;
             if (flag && (D_L00_0016C860.f38 & 1)) {

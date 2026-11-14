@@ -51,7 +51,7 @@ void sliding_gate_update(struct Moby *gate_moby) {
         GATE_OPEN_LATCHED = 5
     };
     MovingVars       *gate_vars = (MovingVars *)gate_moby->pvars;
-    Vec4              offset;
+    Vec4              home_offset;
     Vec4              pos;
     s32               slot;
     VoiceSlot_29aff0 *voice_slot;
@@ -122,10 +122,10 @@ void sliding_gate_update(struct Moby *gate_moby) {
                 gate_moby->state = GATE_OPEN;
             }
         }
-        offset.f[0] = fast_cos(gate_moby->rot.z) * -gate_vars->travel;
-        offset.f[1] = fast_sin(gate_moby->rot.z) * -gate_vars->travel;
-        offset.f[2] = 0.0f;
-        fast_vec_add(&pos, &gate_vars->home, &offset);
+        home_offset.f[0] = fast_cos(gate_moby->rot.z) * -gate_vars->travel;
+        home_offset.f[1] = fast_sin(gate_moby->rot.z) * -gate_vars->travel;
+        home_offset.f[2] = 0.0f;
+        fast_vec_add(&pos, &gate_vars->home, &home_offset);
         *(u128 *)&gate_moby->pos = pos.q;
         return;
     case GATE_OPEN:
@@ -150,10 +150,10 @@ void sliding_gate_update(struct Moby *gate_moby) {
             gate_vars->sound = -1;
             gate_moby->state = GATE_WAIT_TO_OPEN;
         }
-        offset.f[0] = fast_cos(gate_moby->rot.z) * -gate_vars->travel;
-        offset.f[1] = fast_sin(gate_moby->rot.z) * -gate_vars->travel;
-        offset.f[2] = 0.0f;
-        fast_vec_add(&pos, &gate_vars->home, &offset);
+        home_offset.f[0] = fast_cos(gate_moby->rot.z) * -gate_vars->travel;
+        home_offset.f[1] = fast_sin(gate_moby->rot.z) * -gate_vars->travel;
+        home_offset.f[2] = 0.0f;
+        fast_vec_add(&pos, &gate_vars->home, &home_offset);
         *(u128 *)&gate_moby->pos = pos.q;
         if (is_point_inside_clip_volume(D_0013F3D0, gate_vars->open_volume) ||
             is_point_inside_clip_volume(D_L15_001673C0, gate_vars->open_volume))

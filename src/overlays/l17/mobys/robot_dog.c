@@ -97,8 +97,8 @@ typedef struct {
     float          f1D4;
     float          speed;
     float          yawvel;
-    short          t1E0;
-    short          t1E2;
+    short          blocked_line_idle_delay_frames;
+    short          clear_line_response_delay_frames;
     unsigned char  mode;
     unsigned char  b1E5;
     char           pad1E6[2];
@@ -261,8 +261,8 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
                 if (robot_dog_moby[0x53] != 3) {
                     blend_moby_animation(robot_dog_moby, 3, 0, scale_game_frames(10));
                 }
-                robot_dog_vars->t1E0 = scale_game_frames(120);
-                robot_dog_vars->t1E2 = scale_game_frames(120);
+                robot_dog_vars->blocked_line_idle_delay_frames = scale_game_frames(120);
+                robot_dog_vars->clear_line_response_delay_frames = scale_game_frames(120);
             }
         }
         break;
@@ -294,7 +294,8 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
             MOBY(robot_dog_moby)->anim_speed = 1.7f;
             mode = robot_dog_vars->mode;
             if (mode == ROBOT_DOG_DETECTION_CLEAR_LINE_IN_FACING_CONE &&
-                (fast_dec_timer_s16(&robot_dog_vars->t1E2) || D_0013E533[0x2EC1] != 3)) {
+                (fast_dec_timer_s16(&robot_dog_vars->clear_line_response_delay_frames) ||
+                 D_0013E533[0x2EC1] != 3)) {
                 if (random_integer_below(3) == 0) {
                     if (robot_dog_moby[0x53] != mode) {
                         blend_moby_animation(robot_dog_moby, 2, 0, scale_game_frames(10));
@@ -310,7 +311,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
                         blend_moby_animation(robot_dog_moby, 7, 0, scale_game_frames(10));
                     }
                 }
-            } else if (robot_dog_vars->t1E0 == 0 &&
+            } else if (robot_dog_vars->blocked_line_idle_delay_frames == 0 &&
                        robot_dog_vars->mode == ROBOT_DOG_DETECTION_LINE_BLOCKED) {
                 robot_dog_moby[0x20] = 3;
                 if (robot_dog_moby[0x53] != 0) {
@@ -352,8 +353,8 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
                 if (robot_dog_moby[0x53] != 3) {
                     blend_moby_animation(robot_dog_moby, 3, 0, scale_game_frames(10));
                 }
-                robot_dog_vars->t1E2 = scale_game_frames(120);
-                robot_dog_vars->t1E0 = scale_game_frames(120);
+                robot_dog_vars->clear_line_response_delay_frames = scale_game_frames(120);
+                robot_dog_vars->blocked_line_idle_delay_frames = scale_game_frames(120);
             }
             break;
         }
@@ -471,8 +472,8 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
             if (robot_dog_moby[0x53] != 3) {
                 blend_moby_animation(robot_dog_moby, 3, 0, scale_game_frames(10));
             }
-            robot_dog_vars->t1E2 = scale_game_frames(120);
-            robot_dog_vars->t1E0 = scale_game_frames(120);
+            robot_dog_vars->clear_line_response_delay_frames = scale_game_frames(120);
+            robot_dog_vars->blocked_line_idle_delay_frames = scale_game_frames(120);
         } else if (robot_dog_moby[0x70] & 2) {
             far = vector_distance_xy(robot_dog_moby + 0x10, robot_dog_vars->v180);
             k1 = scale_time(40.0f);
@@ -498,8 +499,8 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
             if (robot_dog_moby[0x53] != 3) {
                 blend_moby_animation(robot_dog_moby, 3, 0, scale_game_frames(10));
             }
-            robot_dog_vars->t1E2 = scale_game_frames(120);
-            robot_dog_vars->t1E0 = scale_game_frames(120);
+            robot_dog_vars->clear_line_response_delay_frames = scale_game_frames(120);
+            robot_dog_vars->blocked_line_idle_delay_frames = scale_game_frames(120);
         } else if (MOBY(robot_dog_moby)->pos.z < 2.0f) {
             FUN_L00_00257470(robot_dog_moby, 0, -1);
             mark_moby_for_removal(robot_dog_moby);
@@ -788,7 +789,7 @@ void update_robot_dog_glow_effects(struct Moby *moby) {
     char *robot_dog_glow_vars;
     int   glow_pulse_period_frames;
     int   alpha;
-    int   mode;
+    int   glow_pulse_mode;
     int   i;
     int   x, y, z;
     int   r, g, b;
@@ -810,12 +811,12 @@ void update_robot_dog_glow_effects(struct Moby *moby) {
     robot_dog_glow_vars = (char *)moby->pvars;
     glow_pulse_period_frames = scale_game_frames(glow_pulse_period_frames);
     alpha = 0x80;
-    mode = ROBOT_DOG_GLOW_MODE_SLOW_PULSE;
+    glow_pulse_mode = ROBOT_DOG_GLOW_MODE_SLOW_PULSE;
     switch (moby->state) {
     case ROBOT_DOG_STATE_FALL_UNTIL_LANDING:
     case ROBOT_DOG_STATE_TRACK_TARGET_FACING:
     case ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER:
-        mode = ROBOT_DOG_GLOW_MODE_MEDIUM_PULSE;
+        glow_pulse_mode = ROBOT_DOG_GLOW_MODE_MEDIUM_PULSE;
         break;
     case ROBOT_DOG_STATE_WAIT_FOR_CHASE_TRIGGER_FAST_PULSE:
     case ROBOT_DOG_STATE_TURN_TOWARD_TARGET:
@@ -825,16 +826,16 @@ void update_robot_dog_glow_effects(struct Moby *moby) {
     case 13:
     case 14:
     case ROBOT_DOG_STATE_FALL_THEN_REMOVE:
-        mode = ROBOT_DOG_GLOW_MODE_FAST_PULSE;
+        glow_pulse_mode = ROBOT_DOG_GLOW_MODE_FAST_PULSE;
         break;
     case ROBOT_DOG_STATE_RECOVER_THEN_REINITIALIZE:
-        mode = -1;
+        glow_pulse_mode = -1;
         break;
     }
-    if (mode >= ROBOT_DOG_GLOW_MODE_SLOW_PULSE) {
-        if (mode == ROBOT_DOG_GLOW_MODE_FAST_PULSE) {
+    if (glow_pulse_mode >= ROBOT_DOG_GLOW_MODE_SLOW_PULSE) {
+        if (glow_pulse_mode == ROBOT_DOG_GLOW_MODE_FAST_PULSE) {
             glow_pulse_period_frames = scale_game_frames(0x32);
-        } else if (mode == ROBOT_DOG_GLOW_MODE_MEDIUM_PULSE) {
+        } else if (glow_pulse_mode == ROBOT_DOG_GLOW_MODE_MEDIUM_PULSE) {
             glow_pulse_period_frames = scale_game_frames(0x5A);
         }
         glow_pulse_sine = fast_sin(((float)(D_L17_0015F5CC % glow_pulse_period_frames) /
@@ -853,9 +854,9 @@ void update_robot_dog_glow_effects(struct Moby *moby) {
         if (g > 255) {
             g = 255;
         }
-        if (mode == ROBOT_DOG_GLOW_MODE_FAST_PULSE) {
+        if (glow_pulse_mode == ROBOT_DOG_GLOW_MODE_FAST_PULSE) {
             color = (alpha << 24) | (b << 16) | ((r / 2) << 8) | g;
-        } else if (mode != ROBOT_DOG_GLOW_MODE_SLOW_PULSE) {
+        } else if (glow_pulse_mode != ROBOT_DOG_GLOW_MODE_SLOW_PULSE) {
             color = (alpha << 24) | (b << 16) | ((r / 2) << 8) | g;
         } else {
             color = (alpha << 24) | (b << 16) | (g << 8) | r;

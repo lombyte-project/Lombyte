@@ -16,7 +16,7 @@ void              dma_tfrag_textures(void) __asm__("FUN_002331c0");
 
 void dma_tfrag_textures(void) {
     struct DmaTag *tag;
-    s32            size;
+    s32            tfrag_texture_dma_size;
 
     tag = render_packet_cursor.tag;
     render_packet_cursor.tag = tag + 1;
@@ -26,13 +26,13 @@ void dma_tfrag_textures(void) {
     D_00160EBC.p->vif1 = 0;
     if (draw_config.tfrag.enabled != 0 && draw_config.tfrag.count != 0) {
         compute_tfrag_texture_usage();
-        size = build_tfrag_texture_dma(gs_texture_allocation_cursor);
+        tfrag_texture_dma_size = build_tfrag_texture_dma(gs_texture_allocation_cursor);
         vu1_tex_flush();
-        if (size > 0x400000) {
+        if (tfrag_texture_dma_size > 0x400000) {
             DebugPrint(tfrag_texture_overflow_message);
         }
-        if (max_tfrag_texture_dma_size < size) {
-            max_tfrag_texture_dma_size = size;
+        if (max_tfrag_texture_dma_size < tfrag_texture_dma_size) {
+            max_tfrag_texture_dma_size = tfrag_texture_dma_size;
         }
     }
     render_packet_cursor.tag->tag = 0x20000000;

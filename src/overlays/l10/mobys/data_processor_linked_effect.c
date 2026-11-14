@@ -98,14 +98,15 @@ void data_processor_linked_effect_update(struct Moby *moby) {
             } while (copy_index < linked_effect_vars->strip_count);
         }
         {
-            float timer;
+            float fade_duration_frames;
             float new_rotation = fast_add_rotations(moby->rot.z, 1.5707964f);
             moby->update_dist = 0x60;
             moby->state = MOBY_STATE_ACTIVE_WITH_SOUND;
-            timer = data_processor_linked_effect_fade_duration_seconds_gp * 60.0f;
+            fade_duration_frames = data_processor_linked_effect_fade_duration_seconds_gp * 60.0f;
             moby->rot.z = new_rotation;
             linked_effect_vars->voice = -1;
-            linked_effect_vars->timer_34 = scale_game_frames(truncate_float_to_s32(timer));
+            linked_effect_vars->timer_34 =
+                scale_game_frames(truncate_float_to_s32(fade_duration_frames));
         }
 
         moby->flags |= 0x41;
@@ -281,7 +282,7 @@ void render_data_processor_linked_effect(u8 *moby) {
                                                   *(float *)(linked_processor_vars + 0x12de0);
             }
             for (i = 0; i < linked_effect_render_vars->strip_count; i = next_strip_index) {
-                int          offset;
+                int          strip_transform_byte_offset;
                 int          age;
                 float        progress;
                 unsigned int color;
@@ -312,7 +313,7 @@ void render_data_processor_linked_effect(u8 *moby) {
                     color = (truncate_float_to_s32(alpha * 255.0f / duration) << 24) | 0xffffff;
                 }
                 vertex = 0;
-                offset = i * 0x40;
+                strip_transform_byte_offset = i * 0x40;
                 next_strip_index = i + 1;
                 *(unsigned int *)(buffers.packet.quad + 0x4c) = color;
                 *(unsigned int *)(buffers.packet.quad + 0x48) = color;
@@ -325,7 +326,8 @@ void render_data_processor_linked_effect(u8 *moby) {
                                  linked_processor_vars + group_vertices +
                                      (row + (vertex >> 1)) * 0x140 + order[i] * 0x10);
                 }
-                draw_geometry_quad(buffers.packet.quad, strip_transforms + offset, 0);
+                draw_geometry_quad(
+                    buffers.packet.quad, strip_transforms + strip_transform_byte_offset, 0);
             }
             row = next_row;
         } while (row < 19);

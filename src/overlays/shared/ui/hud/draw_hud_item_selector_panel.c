@@ -134,15 +134,15 @@ int hud_draw_gauge_frame(HudElem_237840 *gauge_element) {
 
 typedef struct {
     u8  pad[0x48];
-    s16 x48;
-    s16 x4a;
+    s16 selector_x_offset;
+    s16 selector_y_offset;
     u8  p4c[0xC];
-    s32 x58;
-    s32 x5c;
+    s32 selector_width;
+    s32 selector_height;
     u8  p60[0x10];
-    s32 x70;
-    s32 x74;
-    s32 x78;
+    s32 selector_fade_counters;
+    s32 selector_selected_slot_index;
+    s32 selector_input_state;
 } O00237ae8;
 
 /* One slot of a HUD selector ring: its icon, the slot each pad direction moves to, and what
@@ -180,13 +180,13 @@ void initialize_eight_slot_hud_selector(O00237ae8 *hud_element) {
     ItemDef         *tab;
     D_L00_0015FA90 = 8;
     D_L00_0015FAC0 = &eight_slot_hud_selector_table_pointer_gp;
-    hud_element->x48 = 0;
-    hud_element->x4a = 0;
-    hud_element->x58 = D_L00_0015F718_gp;
-    hud_element->x5c = D_L00_0015F71C_gp;
-    hud_element->x74 = -2;
-    hud_element->x78 = scale_game_frames(0x1E);
-    hud_element->x70 = 0;
+    hud_element->selector_x_offset = 0;
+    hud_element->selector_y_offset = 0;
+    hud_element->selector_width = D_L00_0015F718_gp;
+    hud_element->selector_height = D_L00_0015F71C_gp;
+    hud_element->selector_selected_slot_index = -2;
+    hud_element->selector_input_state = scale_game_frames(0x1E);
+    hud_element->selector_fade_counters = 0;
     D_L00_0015F72C = 0;
     slot_entry = eight_slot_hud_selector_slots;
     tab = item_defs;
@@ -251,7 +251,7 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) __asm__
 
 void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
     float x, y, mag, stick_angle, a, slot_position, previous_slot_angle;
-    int   previous_selected_slot_index, slot_step, stick_slot_index, k, id;
+    int   previous_selected_slot_index, slot_step, stick_slot_index, k, selected_item_id;
     u8   *counters = &hud_element->b70;
 
     hud_element->w7C = scale_game_frames(0xB4);
@@ -357,10 +357,10 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
         counters[1]++;
     if (!(((s32)controller_state.held_unmasked) & 0x10)) {
         int sel = hud_element->w74;
-        if (sel >= 0 && (id = D_L00_0015FAC0_c[D_L00_0015F72C][sel].command) != 0) {
+        if (sel >= 0 && (selected_item_id = D_L00_0015FAC0_c[D_L00_0015F72C][sel].command) != 0) {
             VendorItemInfo *rr;
-            int             ri = id;
-            if (hero_lui.items[0].item_id != id) {
+            int             ri = selected_item_id;
+            if (hero_lui.items[0].item_id != selected_item_id) {
                 if (usage_stats.stat[20].count < 0xFFFF)
                     usage_stats.stat[20].count++;
             }
@@ -368,13 +368,13 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
                 usage_stats.stat[20].latest_time_bucket = scale_game_frames(D_0015EEA4) / 600;
             usage_stats.stat[20].level_mask =
                 usage_stats.stat[20].level_mask | (1 << current_level_index) | 0x80000000;
-            if (id == 0x18)
+            if (selected_item_id == 0x18)
                 hero_lui.launch_drones = 1;
             else
-                hero_lui.pending_item[0] = id;
+                hero_lui.pending_item[0] = selected_item_id;
             rr = &D_L00_001C40B0[ri];
-            if (rr->h8 && rr->hE < weapon_ammo_counts[id])
-                weapon_ammo_counts[id] = rr->hE;
+            if (rr->h8 && rr->hE < weapon_ammo_counts[selected_item_id])
+                weapon_ammo_counts[selected_item_id] = rr->hE;
         }
         if (counters[0])
             counters[0]--;
@@ -1045,7 +1045,7 @@ s32 draw_health_hud_panel(Hud *hud_element) {
     s16 *p;
     s32  sel;
     Pt  *tab;
-    s32  mode;
+    s32  icon_capacity;
     s32  first_panel_half_width;
     s32  second_panel_half_width;
     s32  x0;
@@ -1086,16 +1086,16 @@ s32 draw_health_hud_panel(Hud *hud_element) {
     panel_alpha = truncate_float_to_s32((f32)health_hud_panel_max_alpha * ratio_x);
     p = hud_element->p;
     sel = p[0] >> 1;
-    mode = hero_max_health;
+    icon_capacity = hero_max_health;
     if (cnt == 0)
         sel = 0x1E;
     if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK)
-        mode = hero.health.vehicle_mode_hp;
-    if (mode == HEALTH_HUD_EIGHT_ICON_CAPACITY) {
+        icon_capacity = hero.health.vehicle_mode_hp;
+    if (icon_capacity == HEALTH_HUD_EIGHT_ICON_CAPACITY) {
         tab = l00_health_hud_eight_capacity_icon_offsets;
         first_panel_half_width = truncate_float_to_s32(ratio_x * 48.0f);
         second_panel_half_width = truncate_float_to_s32(ratio_x * 48.0f);
-    } else if (mode == HEALTH_HUD_FIVE_ICON_CAPACITY) {
+    } else if (icon_capacity == HEALTH_HUD_FIVE_ICON_CAPACITY) {
         tab = l00_health_hud_five_capacity_icon_offsets;
         first_panel_half_width = truncate_float_to_s32(ratio_x * 32.0f);
         second_panel_half_width = truncate_float_to_s32(ratio_x * 16.0f);
@@ -1147,7 +1147,7 @@ s32 draw_health_hud_panel(Hud *hud_element) {
                         health_hud_panel_cap_size,
                         panel_alpha);
     }
-    for (i = 0; i < mode; i++) {
+    for (i = 0; i < icon_capacity; i++) {
         health_icon_frame_index = get_icon_frame(0x7536, sel);
         hud_frame(hud_element, health_icon_frame_index, x + tab[i].x, y + tab[i].y, 1, alpha);
         if (sel != 0x1E) {

@@ -33,10 +33,10 @@ void hoverboard_update(unsigned char *moby) {
         HOVERBOARD_STATE_WAIT_FOR_PLAYER_APPROACH = 0,
         HOVERBOARD_STATE_WAIT_FOR_CONTROL_MODE_EXIT = 1
     };
-    char        *hoverboard_vars = ((char *)MOBY(moby)->pvars);
-    float        delta[4], position[4], effect_position[4], offset[4], second_position[4];
-    float        angle, distance_scale, delta_length;
-    int          state = (u8)MOBY(moby)->state;
+    char *hoverboard_vars = ((char *)MOBY(moby)->pvars);
+    float delta[4], position[4], effect_position[4], effect_sine_offset[4], second_position[4];
+    float angle, distance_scale, delta_length;
+    int   state = (u8)MOBY(moby)->state;
     struct Hero *player_hero;
 
     switch (state) {
@@ -88,9 +88,9 @@ void hoverboard_update(unsigned char *moby) {
         angle = random_angle_radians();
         distance_scale = frame_time * 0.25f;
         fast_vec_normalize(effect_position, moby + 0xe0, distance_scale * fast_cos(angle));
-        fast_vec_normalize(offset, moby + 0xd0, distance_scale * fast_sin(angle));
+        fast_vec_normalize(effect_sine_offset, moby + 0xd0, distance_scale * fast_sin(angle));
         fast_vec_add(effect_position, effect_position, delta);
-        fast_vec_add(effect_position, effect_position, offset);
+        fast_vec_add(effect_position, effect_position, effect_sine_offset);
         qcopy(effect_position, delta);
         effect_position[3] = (float)hoverboard_effect_displacement_w_gp;
         if ((unsigned char)MOBY(moby)->command == 0) {

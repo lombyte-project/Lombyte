@@ -100,7 +100,7 @@ int move_moby_with_sphere_collision(struct Moby *moving_moby,
 
 int move_moby_with_sphere_collision(
 
-    struct Moby *moving_moby, u128 *delta, int flags, float step, float radius) {
+    struct Moby *moving_moby, u128 *delta, int collision_query_flags, float step, float radius) {
     Vec4 start;
     Vec4 probe;
     int  pushed = 0;
@@ -111,7 +111,7 @@ int move_moby_with_sphere_collision(
     fast_vec_add(&moving_moby->pos, &moving_moby->pos, delta);
     i = 0;
     do {
-        mask = (flags << 1) & 0x20;
+        mask = (collision_query_flags << 1) & 0x20;
         qcopy(&probe, &moving_moby->pos);
         probe.f[2] += step;
         if (coll_sphere(&probe, radius, mask | 4, moving_moby) == 0) {

@@ -5,14 +5,15 @@ extern s32 decompress_wad() __asm__("func_0020B618");
 void       load_compressed_hud_bank(s32 bank, s32 raw_size) __asm__("FUN_00202d10");
 
 void load_compressed_hud_bank(s32 bank, s32 raw_size) {
-    s32 size;
+    s32 aligned_raw_size;
     u32 level_archive_base;
 
-    size = (raw_size + 0xF) & 0xFFFFFFF0;
-    if (size != 0) {
+    aligned_raw_size = (raw_size + 0xF) & 0xFFFFFFF0;
+    if (aligned_raw_size != 0) {
         level_archive_base = *(u32 *)0x15EE4C;
-        decompress_wad(
-            *(s32 *)((u8 *)(level_archive_base - (-(bank * 8))) + 0x28) + level_archive_base, size);
+        decompress_wad(*(s32 *)((u8 *)(level_archive_base - (-(bank * 8))) + 0x28) +
+                           level_archive_base,
+                       aligned_raw_size);
     }
     {
         register u32 b2;

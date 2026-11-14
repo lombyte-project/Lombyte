@@ -7,11 +7,11 @@ extern void EnableInterrupts();
 extern s32  sceIpuSync();
 
 void _clearEach(u8 *ctx) {
-    s32 state;
+    s32 interrupts_were_enabled;
 
     *(s32 *)(ctx + 0x818) = 1;
     *(s32 *)(ctx + 0x1B0) = 0;
-    state = DIntr();
+    interrupts_were_enabled = DIntr();
 
     *(volatile u32 *)0x1000F590 = *(volatile u32 *)0x1000F520 | 0x10000;
     *(volatile u32 *)0x1000B000 = 0;
@@ -19,7 +19,7 @@ void _clearEach(u8 *ctx) {
     *(volatile u32 *)0x1000D400 = 0;
     *(volatile u32 *)0x1000F590 = *(volatile u32 *)0x1000F520 & 0xFFFEFFFF;
 
-    if (state != FALSE)
+    if (interrupts_were_enabled != FALSE)
         EnableInterrupts();
 
     *(volatile u32 *)0x1000B020 = 0;

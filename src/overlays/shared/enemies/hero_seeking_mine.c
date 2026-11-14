@@ -211,18 +211,18 @@ void draw_group_moby_effect_quads(unsigned char *moby) {
     effect_quad.alpha = 0x8000000044LL;
     effect_quad.clamp = 0;
     {
-        int    count = 3;
+        int    uv_pair_countdown = 3;
         float *source = group_moby_effect_quad_uvs;
         float *v = &effect_quad.uv[0][1];
         float *u = &effect_quad.uv[0][0];
         do {
-            count--;
+            uv_pair_countdown--;
             *u = source[0];
             *v = source[1];
             source += 2;
             u += 2;
             v += 2;
-        } while (count >= 0);
+        } while (uv_pair_countdown >= 0);
     }
     group_moby_entry = (unsigned short *)D_L15_001ABE40[MOBY(moby)->group];
     do {

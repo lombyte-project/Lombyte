@@ -36,7 +36,7 @@ unsigned char *create_particle_with_velocity_and_lifetime(float unscaled_particl
                                                           void *initial_position_source,
                                                           void *initial_velocity_source,
                                                           int   life,
-                                                          int   size,
+                                                          int   initial_particle_size,
 
                                                           int color) {
     unsigned char *allocated_object = create_part(0x30);
@@ -55,7 +55,7 @@ unsigned char *create_particle_with_velocity_and_lifetime(float unscaled_particl
         *(float *)(velocity_block + 0x10) = 2.0f / convert_integer_to_float(life);
         *(short *)(allocated_object + 0xa) = life;
         *(volatile int *)(velocity_block + 0x18) = color;
-        *(volatile short *)(velocity_block + 0x1c) = size;
+        *(volatile short *)(velocity_block + 0x1c) = initial_particle_size;
         *(volatile int *)(velocity_block + 0x14) = color & 0xffffff;
     }
     return allocated_object;
@@ -485,7 +485,7 @@ typedef struct DrainCoverVars {
 void update_drain_cover_tilt(char *moby, float turn_scale, float speed_scale) {
     DrainCoverVars *drain_cover_vars = (DrainCoverVars *)MOBY(moby)->pvars;
     struct Hero    *game = &hero;
-    float           offset[4];
+    float           hero_offset_from_cover[4];
     float           horizontal;
     float           vertical;
     float           angle0;
@@ -499,9 +499,9 @@ void update_drain_cover_tilt(char *moby, float turn_scale, float speed_scale) {
     float           dot1;
 
     if ((char *)game->ground_moby == moby && game->air_frames.s == 0) {
-        fast_vec_sub(offset, &game->motion.pos, &MOBY(moby)->pos);
-        dot0 = fast_vec_dot(offset, &MOBY(moby)->rot_row0);
-        dot1 = fast_vec_dot(offset, &MOBY(moby)->rot_row1);
+        fast_vec_sub(hero_offset_from_cover, &game->motion.pos, &MOBY(moby)->pos);
+        dot0 = fast_vec_dot(hero_offset_from_cover, &MOBY(moby)->rot_row0);
+        dot1 = fast_vec_dot(hero_offset_from_cover, &MOBY(moby)->rot_row1);
         horizontal = turn_scale * dot0;
         vertical = -turn_scale * dot1;
     } else {

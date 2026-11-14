@@ -62,9 +62,9 @@ void clip_volume_dialogue_trigger_update(struct Moby *moby) {
             *(int *)(trigger_data + 8) = 0;
         } else if (is_point_inside_clip_volume(&player->motion.pos, *(int *)(trigger_data + 4)) !=
                    0) {
-            unsigned char *flags = (unsigned char *)item_unlocked;
-            if (flags[0x19] == 0) {
-                flags[0x19] = 1;
+            unsigned char *item_unlock_flags = (unsigned char *)item_unlocked;
+            if (item_unlock_flags[0x19] == 0) {
+                item_unlock_flags[0x19] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);
                 queue_dialogue_message(0x53D6, -1);
             }

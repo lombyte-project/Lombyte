@@ -99,12 +99,12 @@ void path_mover_update(struct Moby *moby) {
         }
     }
     {
-        u16 id;
+        u16 save_id;
 
         if (path_mover_vars->trigger == -1 ||
             is_point_inside_clip_volume(&hero.motion.pos, path_mover_vars->trigger) ||
-            D_L14_001BB930.cleared[(s16)(id = moby->save_id)] != 0 ||
-            (D_0014C190_257218[current_level_index][(s16)id >> 5] >> (id & 0x1F)) & 1) {
+            D_L14_001BB930.cleared[(s16)(save_id = moby->save_id)] != 0 ||
+            (D_0014C190_257218[current_level_index][(s16)save_id >> 5] >> (save_id & 0x1F)) & 1) {
             if (path_mover_vars->trigger != -1) {
                 D_0014C190_257218[current_level_index][(s16)moby->save_id >> 5] |=
                     1 << (moby->save_id & 0x1F);

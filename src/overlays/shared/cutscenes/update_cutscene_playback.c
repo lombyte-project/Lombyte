@@ -109,7 +109,7 @@ typedef struct {
     s32 w8;
     u8  padc[0x14 - 0xC];
     s32 debug_camera_mode;
-    s32 w18;
+    s32 frame_end_callback_selector;
     u8  pad1c[0xA0 - 0x1C];
     s32 previous_step_held_buttons;
     u8  padA4[0xEC - 0xA4];
@@ -194,6 +194,9 @@ extern void update_game_frame_and_idle_counters(void) __asm__("FUN_L00_00297e70"
 void handle_pause_input(void) __asm__("FUN_L00_00297f78");
 
 void handle_pause_input(void) {
+    enum {
+        DEBUG_CAMERA_MODE_UPDATE_HERO = 2
+    };
     s32 lvl, area, noctl, special;
     if (D_L00_0016C058.single_step_mode_countdown) {
         if (--D_L00_0016C058.single_step_mode_countdown == 0)
@@ -316,7 +319,7 @@ void handle_pause_input(void) {
         update_camera();
     } else if (D_L00_0016C058.debug_camera_mode) {
         update_debug_camera();
-        if (D_L00_0016C058.debug_camera_mode == 2)
+        if (D_L00_0016C058.debug_camera_mode == DEBUG_CAMERA_MODE_UPDATE_HERO)
             update_hero_from_debug_camera();
     }
     noop_main_callback(D_L00_00161028, 8);
@@ -328,15 +331,15 @@ void handle_pause_input(void) {
     update_help_state();
     if (DBG(2))
         update_game_frame_and_idle_counters();
-    if (D_L00_0016C058.w18 == 2)
+    if (D_L00_0016C058.frame_end_callback_selector == 2)
         no_op_main_callback_alt();
-    if (D_L00_0016C058.w18 == 3)
+    if (D_L00_0016C058.frame_end_callback_selector == 3)
         no_op_main_callback_alt();
-    if (D_L00_0016C058.w18 == 4)
+    if (D_L00_0016C058.frame_end_callback_selector == 4)
         no_op_main_callback_alt();
-    if (D_L00_0016C058.w18 == 5)
+    if (D_L00_0016C058.frame_end_callback_selector == 5)
         no_op_main_callback_alt();
-    if (D_L00_0016C058.w18 == 6)
+    if (D_L00_0016C058.frame_end_callback_selector == 6)
         no_op_main_callback_alt();
 }
 
@@ -492,7 +495,7 @@ typedef struct {
     float     x18;
     char      pad1c[0x28];
     short     n;
-    short     x46;
+    short     apply_hero_return_transform;
     char      pad48[0x130];
     M_298b18 *m[1];
 } C_298b18;
@@ -538,7 +541,7 @@ void finish_cutscene(void) {
         hero.motion.pos.f[2] = hero_candidate_z;
     hero.hidden = 0;
     update_hero_item_moby_flags();
-    if (D_L00_0016C860_298b18.x46) {
+    if (D_L00_0016C860_298b18.apply_hero_return_transform) {
         f = probe_ground_height(D_L00_0016C860_298b18.v, 0, 0.5f);
         if (2.0f < f && absolute_float(D_L00_0016C860_298b18.x18 - f) < 2.0f)
             D_L00_0016C860_298b18.x18 = f;
@@ -712,7 +715,7 @@ void update_cutscene_playback(void) {
     s32             done;
     s32             last;
     s32             i;
-    s32             id;
+    s32             current_keyframe_index;
     s32             audio_chunk_frame_threshold;
     Vec4           *keys;
     f32             fade;
@@ -777,9 +780,9 @@ void update_cutscene_playback(void) {
         last = apply_cutscene_camera_key();
         for (i = 0; i < D_L00_0016C860.h44; i++) {
             cutscene_moby = D_L00_0016C860.f178[i];
-            id = D_L00_0016C860.f38 >> 1;
-            cutscene_moby->frame = id;
-            cutscene_moby->next_frame = id + 1;
+            current_keyframe_index = D_L00_0016C860.f38 >> 1;
+            cutscene_moby->frame = current_keyframe_index;
+            cutscene_moby->next_frame = current_keyframe_index + 1;
             update_moby_animation_state(cutscene_moby);
             cutscene_moby->blend = convert_integer_to_float(D_L00_0016C860.f38 & 1) * 0.5f;
             if (last && (D_L00_0016C860.f38 & 1)) {
@@ -899,7 +902,7 @@ extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern char mpeg_memory_alloc_error_format[] __asm__("D_L00_001E9480");
 
 /* Sets up a movie load, then uploads image data from the level buffer to GS memory in two runs of strips. */
-void prepare_movie_playback(s32 sector, s32 size, s32 language) {
+void prepare_movie_playback(s32 sector, s32 movie_file_size, s32 language) {
     s32 image[24];
     s32 large_count, small_count, gs_address, source, i, j;
 
@@ -908,7 +911,7 @@ void prepare_movie_playback(s32 sector, s32 size, s32 language) {
     sound_stop_all_sounds();
     music_stop();
     D_L00_00161048_macro = sector;
-    D_L00_0016104C_macro = size;
+    D_L00_0016104C_macro = movie_file_size;
     D_L00_00161050_macro = language;
     D_L00_0015F5D8 = 1;
     fade_to_black(4);

@@ -31,11 +31,11 @@ const s32 DmaChannelsUsed[10] __asm__("D_001533F8") = {1, 1, 1, 1, 1, 0, 0, 0, 1
 
 s32 sceDmaReset(s32 enable_dma) {
     s32 dma_environment[5];
-    s32 status;
+    s32 previous_dma_enable_bit;
     s32 i;
     u32 mask;
 
-    status = *(volatile u32 *)0x1000E000 & 1;
+    previous_dma_enable_bit = *(volatile u32 *)0x1000E000 & 1;
     for (i = 9; i >= 0; i--) {
         if (DmaChannelsUsed[9 - i] != 0) {
             sceDmaChan *dma_channel = DmaChannels[9 - i];
@@ -55,5 +55,5 @@ s32 sceDmaReset(s32 enable_dma) {
     if (enable_dma == 1) {
         *(volatile u32 *)0x1000E000 |= 1;
     }
-    return status;
+    return previous_dma_enable_bit;
 }

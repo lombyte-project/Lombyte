@@ -13,10 +13,10 @@ typedef struct PeepBitContext {
     s32 unk858;
 } PeepBitContext;
 
-s32 _peepBit(PeepBitContext *ctx, s32 count) {
+s32 _peepBit(PeepBitContext *ctx, s32 requested_bit_count) {
     s32 counter;
 
-    if (ctx->ipu_command_class != 0 || ctx->available_bit_count < count) {
+    if (ctx->ipu_command_class != 0 || ctx->available_bit_count < requested_bit_count) {
         counter = 0;
         if ((*(volatile u32 *)0x10002010 & 0x80004000) == 0x80000000) {
             do {
@@ -31,5 +31,5 @@ s32 _peepBit(PeepBitContext *ctx, s32 count) {
         ctx->bit_window = (s32)_waitIpuIdle64(ctx);
         ctx->available_bit_count = 0x20;
     }
-    return (u32)ctx->bit_window >> (0x20 - count);
+    return (u32)ctx->bit_window >> (0x20 - requested_bit_count);
 }

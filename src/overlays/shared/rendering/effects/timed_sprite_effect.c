@@ -87,7 +87,7 @@ void draw_projected_fading_quad(char *moby) {
     u32     colors[4];
     s32     uvs[4];
     float   screen[4];
-    float   size;
+    float   radius_scale;
     float   fade;
     s32     y, x, radius;
     s32     raw_x;
@@ -97,9 +97,9 @@ void draw_projected_fading_quad(char *moby) {
     float   screen_offset;
 
     qcopy(&world_position, &MOBY(moby)->pos);
-    size = effect_data[0];
-    if (1.0f < size)
-        size = 1.0f;
+    radius_scale = effect_data[0];
+    if (1.0f < radius_scale)
+        radius_scale = 1.0f;
     fade = effect_data[0] - 1.0f;
     if (1.0f < fade)
         fade = 1.0f;
@@ -122,7 +122,7 @@ void draw_projected_fading_quad(char *moby) {
     colors[2] = color;
     colors[1] = color;
     colors[0] = color;
-    radius = truncate_float_to_s32((float)(projected_quad_base_radius_gp << 4) * size);
+    radius = truncate_float_to_s32((float)(projected_quad_base_radius_gp << 4) * radius_scale);
     corners[3] = 0xfffff080008000LL;
     corners[2] = 0xfffff080008000LL;
     corners[1] = 0xfffff080008000LL;

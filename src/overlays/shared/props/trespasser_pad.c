@@ -511,7 +511,7 @@ void draw_tresspasser_puzzle(char *moby) {
     Ring12            *markers = (Ring12 *)(&puzzle_state->markers);
     Ring12            *first_ring, *second_ring, *third;
 
-    int   i, state, third_step;
+    int   i, selected_ring, third_step;
     float phase;
 
     vu1_add_g_sregister(0x47, 0x5380b);
@@ -530,18 +530,18 @@ void draw_tresspasser_puzzle(char *moby) {
     second_step = 0;
     third_step = 0;
     if (puzzle_state->turn_angle > 0.31415927f) {
-        state = puzzle_state->turning_ring;
-        if (state == TRESSPASSER_SELECTED_RING_FIRST)
+        selected_ring = puzzle_state->turning_ring;
+        if (selected_ring == TRESSPASSER_SELECTED_RING_FIRST)
             first_step = 1;
-        else if (state == TRESSPASSER_SELECTED_RING_SECOND)
+        else if (selected_ring == TRESSPASSER_SELECTED_RING_SECOND)
             second_step = 1;
         else
             third_step = 1;
     } else if (puzzle_state->turn_angle < -0.31415927f) {
-        state = puzzle_state->turning_ring;
-        if (state == TRESSPASSER_SELECTED_RING_FIRST)
+        selected_ring = puzzle_state->turning_ring;
+        if (selected_ring == TRESSPASSER_SELECTED_RING_FIRST)
             first_step = -1;
-        else if (state == TRESSPASSER_SELECTED_RING_SECOND)
+        else if (selected_ring == TRESSPASSER_SELECTED_RING_SECOND)
             second_step = -1;
         else
             third_step = -1;

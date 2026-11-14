@@ -4,18 +4,18 @@
 f32 round_float_to_decimal_places(s32 decimal_places, f32 input_value) __asm__("FUN_00214c48");
 
 f32 round_float_to_decimal_places(s32 decimal_places, f32 input_value) {
-    s32 count;
+    s32 remaining_decimal_places;
     s32 decimal_scale_factor;
     f32 scale;
     f32 half;
 
-    count = decimal_places;
+    remaining_decimal_places = decimal_places;
     decimal_scale_factor = 1;
-    if (count > 0) {
+    if (remaining_decimal_places > 0) {
         do {
-            count--;
+            remaining_decimal_places--;
             decimal_scale_factor *= 10;
-        } while (count != 0);
+        } while (remaining_decimal_places != 0);
     }
     scale = (f32)decimal_scale_factor;
     half = 1.0f / (2.0f * scale);

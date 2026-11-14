@@ -14,22 +14,22 @@ extern void  _clearOnce(void *);
 extern s32   sceMpegReset(void *);
 extern s32   ClearMpegReferenceBuffer(void *);
 
-s32 sceMpegCreate(void *mp, u8 *mpeg_work_area, s32 size) {
+s32 sceMpegCreate(void *mp, u8 *mpeg_work_area, s32 mpeg_work_area_size) {
     u8 *decoder;
-    u8 *state;
+    u8 *work_area_allocator;
     s32 rest;
     s32 decode_workspace_address;
 
-    memset(mpeg_work_area, 0, size);
+    memset(mpeg_work_area, 0, mpeg_work_area_size);
     decoder = (u8 *)((((u32)mpeg_work_area + 3) >> 2) << 2);
-    rest = size - (decoder - mpeg_work_area);
+    rest = mpeg_work_area_size - (decoder - mpeg_work_area);
     if ((u32)rest < 0x10C0) {
         _Error(decoder, mpeg_work_area_too_small_message);
         return 0;
     }
-    state = decoder + 0x108;
+    work_area_allocator = decoder + 0x108;
     W(mp, 0x40) = (s32)decoder;
-    init_work_area(state, decoder + 0x10C0, rest - 0x10C0);
+    init_work_area(work_area_allocator, decoder + 0x10C0, rest - 0x10C0);
     W(mp, 0x0) = 0;
     W(mp, 0x4) = 0;
     W(mp, 0x8) = 0;
@@ -62,7 +62,7 @@ s32 sceMpegCreate(void *mp, u8 *mpeg_work_area, s32 size) {
     L(decoder, 0xF0) = -1;
     W(decoder, 0x1C) = (s32)D_0012CB30;
     W(decoder, 0x24) = (s32)D_0012CB40;
-    decode_workspace_address = alloc_work_area(decoder, state, 0x600, 8);
+    decode_workspace_address = alloc_work_area(decoder, work_area_allocator, 0x600, 8);
     W(decoder, 0x48) = 0;
     W(decoder, 0xFC) = 0;
     W(decoder, 0x100) = 0;
@@ -91,7 +91,7 @@ s32 sceMpegCreate(void *mp, u8 *mpeg_work_area, s32 size) {
     W(decoder, 0x1D8) = (s32)(decoder + 0x458);
     W(decoder, 0x1DC) = (s32)(decoder + 0x4C0);
     W(decoder, 0x1E4) = (s32)(decoder + 0x528);
-    mark_work_area(state);
+    mark_work_area(work_area_allocator);
     W(decoder, 0x850) = -1;
     W(decoder, 0x84C) = 0;
     W(decoder, 0x81C) = 0x70003600;

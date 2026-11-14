@@ -610,7 +610,7 @@ void spawn_lightning_arc_particle_pairs(float *particle_spawn_position, int spaw
     float          initial_velocity[4];
     float          saved_position[4];
     float          particle_scale, velocity_horizontal_angle, velocity_vertical_angle;
-    int            random_sign, r0, i, id;
+    int            random_sign, r0, i, particle_lifetime_frames;
     unsigned char *particle;
     if (spawn_pair_count > 0) {
         i = spawn_pair_count;
@@ -633,9 +633,9 @@ void spawn_lightning_arc_particle_pairs(float *particle_spawn_position, int spaw
             particle_spawn_position[0] += randf_sym(0.0f, 0.15f);
             particle_spawn_position[1] += randf_sym(0.0f, 0.15f);
             particle_spawn_position[2] += randf_sym(0.0f, 0.15f);
-            id = scale_game_frames(0x3C);
+            particle_lifetime_frames = scale_game_frames(0x3C);
             particle = FUN_L00_00272060(particle_spawn_position,
-                                        id,
+                                        particle_lifetime_frames,
                                         particle_scale * 0.1f,
                                         particle_scale,
                                         0x7F7F2020,

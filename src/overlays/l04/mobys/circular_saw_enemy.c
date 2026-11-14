@@ -850,7 +850,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 is_point_inside_clip_volume(moby->pos, data->point_attack_cuboid_indices[i]) != 0) {
                 data->f158 = data->point_attack_cuboid_indices[i];
                 moby->state = CIRCULAR_SAW_STATE_POINT_ATTACK;
-                data->point_attack_phase = 0;
+                data->point_attack_phase = CIRCULAR_SAW_POINT_ATTACK_APPROACH_AND_ALIGN;
                 break;
             }
         }
@@ -917,7 +917,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             if (vector_distance_xy(moby->pos, dest) < 1.0f) {
                 if (fast_difference_between_rotations(moby->rot, l04_cuboids[data->f158].rot.z) <
                     0.17453292f) {
-                    data->point_attack_phase = 1;
+                    data->point_attack_phase = CIRCULAR_SAW_POINT_ATTACK_ATTACK;
                 }
             }
             break;
@@ -929,7 +929,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             } else if (moby->f70 & 2) {
                 blend_moby_animation(moby, 0, 0, (void *)scale_game_frames(10));
                 data->yaw_turn_step = 0.0f;
-                data->point_attack_phase = 2;
+                data->point_attack_phase = CIRCULAR_SAW_POINT_ATTACK_TURN_TO_PATH;
             }
             break;
         case CIRCULAR_SAW_POINT_ATTACK_TURN_TO_PATH: {

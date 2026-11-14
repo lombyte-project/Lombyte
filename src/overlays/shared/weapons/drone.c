@@ -371,7 +371,7 @@ void drone_update(struct Moby *updated_moby) {
     struct Moby *closest;
     struct Moby *selected_target_moby;
     f32          f, distance;
-    s32          i, count, category, random, health;
+    s32          i, exclusion_entry_count, category, random, health;
     s32          state;
     struct Moby *drone;
     s32          k, exclusion_clear_index;
@@ -386,7 +386,7 @@ void drone_update(struct Moby *updated_moby) {
         ((DroneSlots *)&hero)->counter++;
         if (((DroneSlots *)&hero)->ammo_used < ((DroneSlots *)&hero)->counter) {
             closest = 0;
-            count = 0;
+            exclusion_entry_count = 0;
             distance = 1000000.0f;
             ((DroneSlots *)&hero)->counter = 1;
             ((DroneSlots *)&hero)->ammo_capacity = 0;
@@ -401,12 +401,12 @@ void drone_update(struct Moby *updated_moby) {
                         } else if (drone->state == 0xFD) {
                             ((DroneSlots *)&hero)->slots[k] = 0;
                         } else {
-                            ((DroneSlots *)&hero)->exclusions[count] =
+                            ((DroneSlots *)&hero)->exclusions[exclusion_entry_count] =
                                 *(struct Moby **)(drone->pvars + 0x30);
-                            count++;
+                            exclusion_entry_count++;
                             if (drone->state < DRONE_STATE_FADE)
                                 ((DroneSlots *)&hero)->ammo_capacity++;
-                            if (count > 8)
+                            if (exclusion_entry_count > 8)
                                 break;
                         }
                     } else {
@@ -414,7 +414,8 @@ void drone_update(struct Moby *updated_moby) {
                     }
                 }
             }
-            for (exclusion_clear_index = count; exclusion_clear_index < 9; exclusion_clear_index++)
+            for (exclusion_clear_index = exclusion_entry_count; exclusion_clear_index < 9;
+                 exclusion_clear_index++)
                 ((DroneSlots *)&hero)->exclusions[exclusion_clear_index] = 0;
             selected_target_moby =
                 func_L00_002CF3D8_2CF808(&hero.motion, ((DroneSlots *)&hero)->exclusions);
@@ -452,7 +453,7 @@ void drone_update(struct Moby *updated_moby) {
                     closest->state = DRONE_STATE_PURSUE_TARGET;
                     random = rand_2cc608() % 3;
                     allocate_voice_for_target_entry(random + (random > 0), 0, updated_moby);
-                    ((DroneSlots *)&hero)->exclusions[count] = assigned->target;
+                    ((DroneSlots *)&hero)->exclusions[exclusion_entry_count] = assigned->target;
                 }
             }
         }

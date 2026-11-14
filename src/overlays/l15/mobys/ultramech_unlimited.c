@@ -1000,6 +1000,10 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
     enum {
         HIT_CLASSIFICATION_NO_DAMAGE = 1
     };
+    enum {
+        ULTRAMECH_TARGET_NOT_OUTSIDE_SEARCH_RANGE = 0,
+        ULTRAMECH_TARGET_OUTSIDE_SEARCH_RANGE = 2
+    };
     UMoby        *ultramech_moby = ultramech_instance;
     UData        *ultramech_vars = ultramech_moby->data;
     char         *slot = 0;
@@ -1135,7 +1139,7 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
     update_hit_color_flash(ultramech_moby, (char *)ultramech_vars + 0x60);
     *(float *)((char *)ultramech_moby + 0x2C) =
         *(float *)(ultramech_moby->cls + 0x24) * ultramech_post_hit_scale_multiplier_gp;
-    ultramech_vars->target_range_status = 0;
+    ultramech_vars->target_range_status = ULTRAMECH_TARGET_NOT_OUTSIDE_SEARCH_RANGE;
     if (ultramech_moby->state != ULTRAMECH_WAIT_FOR_ACTIVATION) {
         if (ultramech_vars->target_constraint_path_index != -1)
             goto follow_path;
@@ -1163,7 +1167,7 @@ follow_path: {
 check_path:
     if (ultramech_vars->current_target_search_range <
         fast_vec_dist(&ultramech_moby->pos, (char *)ultramech_vars + 0x120))
-        ultramech_vars->target_range_status = 2;
+        ultramech_vars->target_range_status = ULTRAMECH_TARGET_OUTSIDE_SEARCH_RANGE;
     if (ultramech_vars->target == 0)
         ultramech_vars->target = (UMoby *)D_001413D0;
 }

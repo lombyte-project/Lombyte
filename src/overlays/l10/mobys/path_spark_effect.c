@@ -71,12 +71,13 @@ void path_spark_effect_update(char *moby) {
             convert_integer_to_float(truncate_float_to_s32(10.0f / (frame_time * 5.0f)) / 4) * 0.5f;
     }
     if (MOBY(moby)->pclass->scale * 0.25f < MOBY(moby)->scale) {
-        int count = collect_mobies_in_sphere(moby + 0x10, 0.15f, 16, effect_data->blast_source, 0);
+        int nearby_moby_count =
+            collect_mobies_in_sphere(moby + 0x10, 0.15f, 16, effect_data->blast_source, 0);
         *(OvlQuad *)blast_hit_position = *(OvlQuad *)&MOBY(moby)->pos;
         send_blast_hits(effect_data->blast_source,
                         blast_hit_position,
                         nearby_mobys,
-                        count,
+                        nearby_moby_count,
                         0,
                         0x810001,
                         2,

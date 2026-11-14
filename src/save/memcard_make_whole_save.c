@@ -10,7 +10,7 @@ void memcard_make_whole_save(u8 *cursor) __asm__("FUN_0020abb0");
 
 void memcard_make_whole_save(u8 *cursor) {
     s32 index;
-    s32 size;
+    s32 level_record_bytes;
 
     ((struct MemoryCardSaveSizes *)cursor)->main_size = memcard_get_data_size(mc_gamedata);
     ((struct MemoryCardSaveSizes *)cursor)->record_size = memcard_get_data_size(mc_leveldata);
@@ -18,8 +18,8 @@ void memcard_make_whole_save(u8 *cursor) {
     cursor += memcard_prepare_data(cursor, 0, mc_gamedata);
     index = 0;
     do {
-        size = memcard_prepare_data(cursor, index, mc_leveldata);
-        cursor += size;
+        level_record_bytes = memcard_prepare_data(cursor, index, mc_leveldata);
+        cursor += level_record_bytes;
         index++;
     } while (index < 0x14);
 }

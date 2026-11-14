@@ -9,8 +9,8 @@ extern s32          iSignalSema();
 
 void handle_cd_read_callback(s32 *status) __asm__("FUN_001206d8");
 
-void handle_cd_read_callback(s32 *status) {
-    D_00131314[0] = *status;
+void handle_cd_read_callback(s32 *completed_command_state) {
+    D_00131314[0] = *completed_command_state;
     native_cd_last_command_state[0] = D_00131314[0];
     if (D_00131314[0] == 11) {
         D_00131314[0] = 0;

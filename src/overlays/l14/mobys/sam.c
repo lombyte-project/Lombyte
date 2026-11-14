@@ -126,14 +126,16 @@ void sam_update(L14WatchMoby *moby) {
     attach_big_head_cheat_manipulator_to_matching_moby(moby);
     switch (moby->state) {
     case SAM_STATE_INITIALIZE: {
-        unsigned short id;
+        unsigned short moby_save_state_index;
         if (D_0013DD4F) {
             mark_moby_for_removal(moby);
             return;
         }
-        id = moby->hB2;
-        if (D_L14_001BB930.cleared[(short)id] != 0 ||
-            (D_0014C190_257218[current_level_index][(short)id >> 5] >> (id & 0x1F)) & 1) {
+        moby_save_state_index = moby->hB2;
+        if (D_L14_001BB930.cleared[(short)moby_save_state_index] != 0 ||
+            (D_0014C190_257218[current_level_index][(short)moby_save_state_index >> 5] >>
+             (moby_save_state_index & 0x1F)) &
+                1) {
             mark_moby_for_removal(moby);
             return;
         }

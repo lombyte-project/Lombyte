@@ -11,17 +11,17 @@ s32 disable_intc(s32 intc_cause) {
     enum {
         EE_INTERRUPT_ENABLE_CLEAR = 0
     };
-    u32 status;
+    u32 saved_interrupt_enable_bit;
     s32 result;
 
-    status = CpuReadStatus();
-    status &= 0x10000;
-    if (status != EE_INTERRUPT_ENABLE_CLEAR) {
+    saved_interrupt_enable_bit = CpuReadStatus();
+    saved_interrupt_enable_bit &= 0x10000;
+    if (saved_interrupt_enable_bit != EE_INTERRUPT_ENABLE_CLEAR) {
         DIntr();
     }
     result = _DisableIntc(intc_cause);
     CpuSync();
-    if (status != EE_INTERRUPT_ENABLE_CLEAR) {
+    if (saved_interrupt_enable_bit != EE_INTERRUPT_ENABLE_CLEAR) {
         EnableInterrupts();
     }
     return result;

@@ -48,7 +48,7 @@ void spawn_smoke_puff_trail_with_endpoint_bursts(
     void *unused_moby,
     void *from,
     void *to,
-    int   count,
+    int   trail_puff_count,
     float from_puff_scale,
 
     float to_puff_scale) {
@@ -59,18 +59,18 @@ void spawn_smoke_puff_trail_with_endpoint_bursts(
     int       i;
     int       tint;
     int       grey;
-    float     size;
+    float     puff_scalar_upper_bound;
     Puff     *puff;
     PuffTail *tail;
     int       spin;
 
     fast_vec_sub(&step, to, from);
-    fast_vec_scale(&step, &step, 1.0f / (float)count);
-    grow = (to_puff_scale - from_puff_scale) / (float)count;
+    fast_vec_scale(&step, &step, 1.0f / (float)trail_puff_count);
+    grow = (to_puff_scale - from_puff_scale) / (float)trail_puff_count;
     particle_spawn_velocity.q = 0;
     particle_spawn_velocity.f[3] = 1.0f;
     particle_spawn_velocity.f[2] = 0.01f;
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < trail_puff_count; i++) {
         fast_vec_scale(&at, &step, convert_integer_to_float(i));
         fast_vec_add(&at, from, &at);
         particle_spawn_velocity.f[0] = randf_sym(0.0f, 0.005f);
@@ -81,12 +81,12 @@ void spawn_smoke_puff_trail_with_endpoint_bursts(
         tint = random_int_between(0x40, 0x70);
         grey = random_int_between(0x40, 0x7F);
         grey = grey | (grey << 16 | grey << 8);
-        size = random_float_between(1.0f, 1.02f);
+        puff_scalar_upper_bound = random_float_between(1.0f, 1.02f);
         spin = random_int_between(-2, 2);
         puff = spawn_puff(&at,
                           smoke_trail_puff_position_jitter_scale_gp,
                           1.0f,
-                          size,
+                          puff_scalar_upper_bound,
                           spin,
                           &particle_spawn_velocity,
                           grow + from_puff_scale * 210000.0f,

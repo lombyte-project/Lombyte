@@ -197,10 +197,10 @@ void apply_moby_camera_control(char *moby) {
         char **)(l02_moby_record_table + *(short *)(moby + 0x84) * 32 + 0x1c));
     char              *target;
     unsigned short    *group;
-    int                id;
+    int                encoded_group_target;
     int                index;
     int                duration;
-    int                count;
+    int                wait_or_elapsed_frames;
     int                end;
     int                frames;
     int                active;
@@ -232,11 +232,11 @@ void apply_moby_camera_control(char *moby) {
                 int e = *group;
                 moby_table_base = D_L02_0015FFD8;
                 first_group_target = (char *)(moby_table_base + ((e & 0x7fff) << 8));
-                id = e;
+                encoded_group_target = e;
             }
             if (*(signed char *)(first_group_target + 0x20) < 0) {
                 do {
-                    if ((id << 16) < 0) {
+                    if ((encoded_group_target << 16) < 0) {
                         moby_camera_control_record->active_frames = -1;
                         clear_follow_camera_volume_if_current(moby);
                         return;
@@ -246,7 +246,7 @@ void apply_moby_camera_control(char *moby) {
                         int e = *group;
                         moby_table_base = D_L02_0015FFD8;
                         group_target_candidate = (char *)(moby_table_base + ((e & 0x7fff) << 8));
-                        id = e;
+                        encoded_group_target = e;
                     }
                 } while (*(signed char *)(group_target_candidate + 0x20) < 0);
                 target = group_target_candidate;
@@ -301,23 +301,23 @@ void apply_moby_camera_control(char *moby) {
     moby_camera_control_record->active_frames += 1;
     if (moby_camera_control_record->mode == 1) {
         duration = scale_game_frames(300);
-        count = scale_game_frames(400);
+        wait_or_elapsed_frames = scale_game_frames(400);
         end = scale_game_frames(560);
         frames = scale_game_frames(200);
     } else {
         duration = scale_game_frames(300);
-        count = scale_game_frames(350);
+        wait_or_elapsed_frames = scale_game_frames(350);
         end = scale_game_frames(400);
         frames = scale_game_frames(200);
     }
     if (moby_camera_control_record->mode == 7) {
         if (controller_state.analog[0] != 0.0f)
             moby_camera_control_record->active_frames = duration;
-        count = moby_camera_control_record->active_frames;
-        if (count >= duration) {
+        wait_or_elapsed_frames = moby_camera_control_record->active_frames;
+        if (wait_or_elapsed_frames >= duration) {
             active = 0;
             moby_camera_control_record->idle_frames += 1;
-            if (duration + scale_game_frames(30) < count) {
+            if (duration + scale_game_frames(30) < wait_or_elapsed_frames) {
                 scale = 0.1f;
                 active = 1;
             }
@@ -340,7 +340,7 @@ void apply_moby_camera_control(char *moby) {
         if (moby_camera_control_record->active_frames >= duration) {
             int waited = (unsigned short)moby_camera_control_record->idle_frames + 1;
             moby_camera_control_record->idle_frames = waited;
-            if ((short)waited >= count) {
+            if ((short)waited >= wait_or_elapsed_frames) {
                 if (test_moby_camera_target_angle_limits(moby, 30.0f, 0.0f) != 0)
                     moby_camera_control_record->active_frames = end;
                 else

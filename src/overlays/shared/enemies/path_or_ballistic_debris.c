@@ -311,7 +311,7 @@ void emit_debris_trail_particles(Moby *moby) {
     int                  signed_particle_variation;
     int                  color_intensity;
     int                  alpha;
-    float                size;
+    float                initial_particle_size;
 
     debris_motion_state = *(Vars **)&moby->pvars;
     fast_vec_normalize(&emission_axis_offset, &*(Vec4_2E17B8 *)&moby->rot_row2, 0.2f);
@@ -373,7 +373,7 @@ void emit_debris_trail_particles(Moby *moby) {
     if (func_002140B0_2E17B8(2) != 0) {
         signed_particle_variation = -signed_particle_variation;
     }
-    size = func_002140F8_2E17B8(60000.0f, 140000.0f);
+    initial_particle_size = func_002140F8_2E17B8(60000.0f, 140000.0f);
     color_intensity = random_int_between(0x30, 0xFF);
     alpha = 0x60000000;
     spawned_particle = func_L00_0026DEA0_2E17B8(
@@ -383,7 +383,7 @@ void emit_debris_trail_particles(Moby *moby) {
         1.0f,
         signed_particle_variation,
         &particle_initial_velocity,
-        size,
+        initial_particle_size,
         color_intensity | ((color_intensity << 16) | ((color_intensity << 8) | alpha)));
     if (spawned_particle != 0) {
         ParticleFade_2E17B8 *ef;

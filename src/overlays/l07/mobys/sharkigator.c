@@ -272,7 +272,7 @@ int test_other_group_moby_state_range(unsigned char *moby,
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003109D0), where it is exact; names translated to the US level program. */
 struct WalkerTarget {
     float pos[4];
-    u128  q10;
+    u128  rotation;
     u128  q20;
     u128  q30;
     int   moby;
@@ -474,20 +474,20 @@ void handle_sharkigator_hit(struct Moby *moby, char *x, float *hp) {
 }
 
 void cache_path_segment_lengths(char *path_record) {
-    int i, count;
+    int i, point_count;
     if (path_record != 0) {
-        count = *(int *)path_record;
+        point_count = *(int *)path_record;
         i = 0;
-        if (count > 0) {
+        if (point_count > 0) {
             do {
                 int point_byte_offset = i * 16;
-                int next_point_index = (i + 1) % count;
+                int next_point_index = (i + 1) % point_count;
                 *(float *)(path_record + point_byte_offset + 0x1C) =
                     fast_vec_dist(path_record + (point_byte_offset + 0x10),
                                   path_record + (next_point_index * 16 + 0x10));
                 i++;
-                count = *(int *)path_record;
-            } while (i < count);
+                point_count = *(int *)path_record;
+            } while (i < point_count);
         }
     }
 }
@@ -679,7 +679,7 @@ void handle_sharkigator_contact_attack(struct Moby *moby,
                                        int          seq,
                                        int          frame,
                                        int          state_after_target_hit,
-                                       int          id,
+                                       int          attack_target_moby,
                                        float        lo,
                                        float        hi,
                                        float        hit_direction_length,
@@ -713,7 +713,7 @@ void handle_sharkigator_contact_attack(struct Moby *moby,
     if (collect_mobies_in_sphere(probe_center, radius, 0x21, moby, hit_descriptor) == 0) {
         return;
     }
-    if (D_L07_00173ED8 != id) {
+    if (D_L07_00173ED8 != attack_target_moby) {
         return;
     }
     fast_vec_scale(moby_velocity, moby_velocity, -1.0f);
@@ -725,10 +725,10 @@ void handle_sharkigator_contact_attack(struct Moby *moby,
     moby->state = state_after_target_hit;
 }
 
-int test_sharkigator_target_sphere_collision(void *moby, int id, float scale) {
+int test_sharkigator_target_sphere_collision(void *moby, int target_moby, float scale) {
     char collision_center[16];
     moby_point_position(moby, 0, collision_center);
-    if (coll_sphere(scale, collision_center, 0x21, moby) && D_L07_00173ED8 == id) {
+    if (coll_sphere(scale, collision_center, 0x21, moby) && D_L07_00173ED8 == target_moby) {
         return 1;
     }
     return 0;
@@ -740,9 +740,9 @@ int test_other_group_moby_state_range(unsigned char *moby, int lower, int upper)
         if (group_candidate_moby) {
             do {
                 if (group_candidate_moby != moby) {
-                    int state = group_candidate_moby[0x20];
-                    if (state >= lower) {
-                        if (state <= upper) {
+                    int group_candidate_state = group_candidate_moby[0x20];
+                    if (group_candidate_state >= lower) {
+                        if (group_candidate_state <= upper) {
                             goto found;
                         }
                     }
@@ -768,7 +768,7 @@ void sharkigator_update(unsigned char *moby) {
     char               *sharkigator_instance_vars;
     struct WalkerTarget target;
     float               point[4];
-    float               offset[4];
+    float               attachment_point_offset[4];
     float               goal[4];
     float               delta[4];
     float               previous[4];
@@ -811,14 +811,14 @@ void sharkigator_update(unsigned char *moby) {
         if (vector_distance_xy(moby + 0x10, hero) < 30.0f) {
             target.moby = *(int *)(hero + 0x2000);
             qcopy(&target.pos, hero);
-            qcopy(&target.q10, hero + 0x10);
+            qcopy(&target.rotation, hero + 0x10);
             qcopy(&target.q20, hero + 0x40);
             qcopy(&target.q30, hero + 0x50);
             target.kind = WALKER_TARGET_HERO;
         } else {
             target.moby = 0;
             qzero(&target.pos);
-            qzero(&target.q10);
+            qzero(&target.rotation);
             qzero(&target.q30);
             qzero(&target.q20);
             target.kind = WALKER_TARGET_NONE;
@@ -872,11 +872,12 @@ void sharkigator_update(unsigned char *moby) {
                 D_L07_001612D0, D_L07_001612D8, 1, F(moby, 0x10), F(moby, 0x14), scale, height);
         }
         if (D_L07_0015F5CC % ((rand() & 7) + 20) == 0) {
-            float size = random_float_between(1.5f, 2.4f);
+            float particle_size = random_float_between(1.5f, 2.4f);
             point[0] += random_float_between(-0.15f, 0.15f);
             point[1] += random_float_between(-0.15f, 0.15f);
             point[2] = resolve_camera_surface_height((Vec4 *)&D_L07_00173EE0, 0);
-            spawn_moving_resizing_height_snapped_alpha_fade_particle(point, 0, -1, size, 5250.0f);
+            spawn_moving_resizing_height_snapped_alpha_fade_particle(
+                point, 0, -1, particle_size, 5250.0f);
         }
     }
     if (1.0f <= F(sharkigator_instance_vars, 0x14C)) {
@@ -1078,7 +1079,7 @@ void sharkigator_update(unsigned char *moby) {
         float one;
         FUN_L00_0024f7c8(moby, 0, point);
         mpos = (char *)moby + 0x10;
-        fast_vec_sub(offset, point, mpos);
+        fast_vec_sub(attachment_point_offset, point, mpos);
         angle = fast_arc_tan(target.pos[0] - point[0], target.pos[1] - point[1]);
         func_L00_002592B0_t((char *)moby,
                             angle,
@@ -1089,7 +1090,7 @@ void sharkigator_update(unsigned char *moby) {
         F(moby, 0x44) *= frame_scale * 0.7f;
         F(sharkigator_instance_vars, 0x14C) += 0.028f;
         qcopy(previous, mpos);
-        fast_vec_sub(goal, &target, offset);
+        fast_vec_sub(goal, &target, attachment_point_offset);
         start = sharkigator_instance_vars + 0x100;
         fast_vec_sub(delta, goal, start);
         one = 1.0f;

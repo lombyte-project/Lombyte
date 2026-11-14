@@ -272,16 +272,17 @@ void skids_agent_update(struct Moby *moby) {
     /* A statement expression: retail reuses this scope's stack for the head-tracking block below. */
     ({
         float mtx[16];
-        Vec4  offset;
+        Vec4  prop_world_offset;
         if (skids_agent_vars->carried_prop != 0) {
             moby_point_position(moby, 2, &skids_agent_vars->carried_prop->pos);
             build_moby_bone_transform(moby, 2, mtx);
             copy_matrix3x4(&skids_agent_vars->carried_prop->rot_row0, mtx);
-            transform_vector_by_basis(
-                &offset, skids_agent_prop_local_offset, &skids_agent_vars->carried_prop->rot_row0);
+            transform_vector_by_basis(&prop_world_offset,
+                                      skids_agent_prop_local_offset,
+                                      &skids_agent_vars->carried_prop->rot_row0);
             fast_vec_add(&skids_agent_vars->carried_prop->pos,
                          &skids_agent_vars->carried_prop->pos,
-                         &offset);
+                         &prop_world_offset);
             update_entity(skids_agent_vars->carried_prop);
         }
     });

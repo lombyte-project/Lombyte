@@ -4,12 +4,12 @@
 
 s32 find_or_allocate_moby_render_slot(s32 id) __asm__("FUN_0020cc18");
 
-s32 find_or_allocate_moby_render_slot(s32 id) {
+s32 find_or_allocate_moby_render_slot(s32 resident_object) {
     s32 i;
 
     for (i = 0; i < 16; i++) {
-        if (moby_render_slots[i] == 0 || moby_render_slots[i] == id) {
-            moby_render_slots[i] = id;
+        if (moby_render_slots[i] == 0 || moby_render_slots[i] == resident_object) {
+            moby_render_slots[i] = resident_object;
             return i;
         }
     }

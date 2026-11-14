@@ -12,6 +12,7 @@
 #include "rnc/overlay/shared/camera/swing_volume_camera.h"
 #include "rnc/overlay/shared/camera.h"
 #include "rnc/overlay/shared/camera/follow_camera_set_up_spring.h"
+
 #include "rnc/overlay/shared/rendering/culling/test_point_in_transformed_unit_cylinder.h"
 #include "rnc/rendering/clip_volume.h"
 
@@ -20,7 +21,8 @@ enum {
     SWING_CAMERA_TYPE_ONE_FRAME_SWING = 3,
     SWING_CAMERA_TYPE_RETAIN_ON_CAMERA_REQUEST = 4,
     SWING_CAMERA_TYPE_SNAP_ON_ENTRY = 5,
-    SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END = 10
+    SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END = 10,
+    SWING_CAMERA_TYPE_FORCE_FOLLOW_MODE = 11
 };
 
 typedef float CameraVec[4] __attribute__((aligned(16)));
@@ -151,7 +153,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
     struct UpdateCam  *current_follow_camera_record;
     Vec4f             *pos;
     FollowCamState    *rig;
-    FollowCamState    *state;
+    FollowCamState    *snap_camera_state;
     FollowCamBlock    *follow;
     FollowCamTail     *tail;
     FollowCamSnap     *snap;
@@ -212,25 +214,28 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
         follow = &rig->follow;
         tail = &rig->tail;
         snap = &rig->tail.snap;
-        /* A second pointer to the same state: retail keeps both. */
-        state = rig;
-        reset = &state->reset;
+        /* A second pointer to the same snap_camera_state: retail keeps both. */
+        snap_camera_state = rig;
+        reset = &snap_camera_state->reset;
         fast_vec_normalize(tail->eye_offset, tail->eye_offset, params->distance);
         tail->distance = params->distance;
         tail->pivot_height = params->height;
         follow->look_height = params->offset_scale;
-        qcopy(state->tail.saved_eye_offset, tail->eye_offset);
+        qcopy(snap_camera_state->tail.saved_eye_offset, tail->eye_offset);
         fast_vec_scale(gravity_offset_or_yaw_direction, &hero.gravity_dir, -tail->pivot_height);
         pos = &current_follow_camera_record->pos;
-        fast_vec_add(state->follow.pivot, &hero.motion.pos, gravity_offset_or_yaw_direction);
-        fast_vec_add(pos, state->follow.pivot, tail->eye_offset);
+        fast_vec_add(
+            snap_camera_state->follow.pivot, &hero.motion.pos, gravity_offset_or_yaw_direction);
+        fast_vec_add(pos, snap_camera_state->follow.pivot, tail->eye_offset);
         fast_vec_scale(gravity_offset_or_yaw_direction, &hero.gravity_dir, -follow->look_height);
-        fast_vec_add(state->follow.look_target, &hero.motion.pos, gravity_offset_or_yaw_direction);
-        qcopy(state->follow.snap_look_target, state->follow.look_target);
+        fast_vec_add(snap_camera_state->follow.look_target,
+                     &hero.motion.pos,
+                     gravity_offset_or_yaw_direction);
+        qcopy(snap_camera_state->follow.snap_look_target, snap_camera_state->follow.look_target);
         qcopy(follow->focus, &hero.motion.pos);
-        qcopy(state->follow.offset, follow->focus);
-        qcopy(state->position, pos);
-        qcopy(state->tail.snap.shot_pos, pos);
+        qcopy(snap_camera_state->follow.offset, follow->focus);
+        qcopy(snap_camera_state->position, pos);
+        qcopy(snap_camera_state->tail.snap.shot_pos, pos);
         snap->distance_reduction = tail->distance - fast_vec_length(tail->eye_offset);
         *(s32 *)&reset->pitch_bias = 0;
         reset->look_height = follow->look_height;
@@ -250,7 +255,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
         set_follow_camera_blend_output_flags();
         FOLLOW_CAM_STATE(current_follow_cam)->tail.mode = 0x14D;
     }
-    if (params->type == 11) {
+    if (params->type == SWING_CAMERA_TYPE_FORCE_FOLLOW_MODE) {
         set_follow_camera_blend_output_flags();
         FOLLOW_CAM_STATE(current_follow_cam)->tail.mode = 2;
     }
@@ -384,7 +389,7 @@ s32 volume_camera_swing_check(struct UpdateCam *swing_camera_record) {
     SwingCameraParams *params = camera_descriptors[swing_camera_record->descriptor_index].params;
     if (params->l_buttons_end == 1 && params->done != 0)
         return 0;
-    if (params->type == 11 && D_001413F4 != 2)
+    if (params->type == SWING_CAMERA_TYPE_FORCE_FOLLOW_MODE && D_001413F4 != 2)
         return 0;
     if ((params->type == SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_AT_END ||
          params->type == SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END) &&

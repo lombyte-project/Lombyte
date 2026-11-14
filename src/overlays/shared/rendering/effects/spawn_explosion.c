@@ -425,7 +425,7 @@ s32 FUN_L00_0025df68(s32     *path,
     OvlQuad path_search_points[4];
     s32     current = 0;
     s32     best_segment;
-    s32     start, end, previous, count;
+    s32     start, end, previous, path_vertex_count;
     s32     crossed;
     f32     current_fraction = 0.0f;
     f32     best_fraction;
@@ -485,9 +485,9 @@ s32 FUN_L00_0025df68(s32     *path,
     previous_distance = 1000000000.0f;
     if (best_segment > 0 || wrap) {
         f32 distance;
-        count = *path;
-        previous = count - 1;
-        previous = (best_segment + previous) % count;
+        path_vertex_count = *path;
+        previous = path_vertex_count - 1;
+        previous = (best_segment + previous) % path_vertex_count;
         distance = resolve_level_path_segment_point(nearest,
                                                     point,
                                                     (OvlQuad *)(path + 4 + previous * 4),
@@ -500,13 +500,13 @@ s32 FUN_L00_0025df68(s32     *path,
         *fraction = path_distance_25df68(&path_search_points[1], &path_search_points[2], 0.0f);
         previous_distance = distance;
     }
-    count = *path;
-    if (best_segment < count - 1 || wrap) {
+    path_vertex_count = *path;
+    if (best_segment < path_vertex_count - 1 || wrap) {
         next_distance = resolve_level_path_segment_point(
             &path_search_points[1],
             point,
             (OvlQuad *)(path + 4 + best_segment * 4),
-            (OvlQuad *)(path + 4 + ((best_segment + 1) % count) * 4),
+            (OvlQuad *)(path + 4 + ((best_segment + 1) % path_vertex_count) * 4),
             height_tolerance);
         if (next_distance < previous_distance) {
             qcopy_nc(nearest, &path_search_points[1]);

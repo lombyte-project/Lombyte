@@ -866,7 +866,7 @@ void spawn_bomber_tank_joint_particles(struct Moby *moby, int joint, int count) 
     float spawn_pos[4];
     int   i;
     int   frames1, frames2, frames3;
-    float random_angle, offset;
+    float random_angle, horizontal_spread_offset;
 
     moby_point_position(moby, joint, joint_pos);
     build_moby_bone_transform(moby, joint, joint_transform_buffer);
@@ -889,18 +889,20 @@ void spawn_bomber_tank_joint_particles(struct Moby *moby, int joint, int count) 
                     D_0015ED6C);
             fast_vec_add(velocity, velocity, jitter);
             fast_vec_scale(spread_vector, spread_vector, 0.5f);
-            offset = func_001F9F90_2D6C58(random_angle);
-            offset =
-                offset * (random_float_between(
-                              0.0f, bomber_tank_joint_particle_horizontal_spread_range_end_gp) *
-                          D_0015ED6C);
-            spread_vector[0] = spread_vector[0] + offset;
-            offset = func_001F9FA8_2D6C58(random_angle);
-            offset =
-                offset * (random_float_between(
-                              0.0f, bomber_tank_joint_particle_horizontal_spread_range_end_gp) *
-                          D_0015ED6C);
-            spread_vector[1] = spread_vector[1] + offset;
+            horizontal_spread_offset = func_001F9F90_2D6C58(random_angle);
+            horizontal_spread_offset =
+                horizontal_spread_offset *
+                (random_float_between(0.0f,
+                                      bomber_tank_joint_particle_horizontal_spread_range_end_gp) *
+                 D_0015ED6C);
+            spread_vector[0] = spread_vector[0] + horizontal_spread_offset;
+            horizontal_spread_offset = func_001F9FA8_2D6C58(random_angle);
+            horizontal_spread_offset =
+                horizontal_spread_offset *
+                (random_float_between(0.0f,
+                                      bomber_tank_joint_particle_horizontal_spread_range_end_gp) *
+                 D_0015ED6C);
+            spread_vector[1] = spread_vector[1] + horizontal_spread_offset;
             spread_vector[2] = bomber_tank_joint_particle_vertical_spread_gp * D_0015ED6C;
         } else {
             func_L00_001FF4B0_2D6C58(
@@ -910,18 +912,20 @@ void spawn_bomber_tank_joint_particles(struct Moby *moby, int joint, int count) 
                     D_0015ED6C);
             fast_vec_add(velocity, velocity, jitter);
             fast_vec_scale(spread_vector, spread_vector, 0.5f);
-            offset = func_001F9F90_2D6C58(random_angle);
-            offset = offset *
-                     (random_float_between(
-                          0.0f, bomber_tank_joint_particle_horizontal_spread_range_end_gp * 0.25f) *
-                      D_0015ED6C);
-            spread_vector[0] = spread_vector[0] + offset;
-            offset = func_001F9FA8_2D6C58(random_angle);
-            offset = offset *
-                     (random_float_between(
-                          0.0f, bomber_tank_joint_particle_horizontal_spread_range_end_gp * 0.25f) *
-                      D_0015ED6C);
-            spread_vector[1] = spread_vector[1] + offset;
+            horizontal_spread_offset = func_001F9F90_2D6C58(random_angle);
+            horizontal_spread_offset =
+                horizontal_spread_offset *
+                (random_float_between(
+                     0.0f, bomber_tank_joint_particle_horizontal_spread_range_end_gp * 0.25f) *
+                 D_0015ED6C);
+            spread_vector[0] = spread_vector[0] + horizontal_spread_offset;
+            horizontal_spread_offset = func_001F9FA8_2D6C58(random_angle);
+            horizontal_spread_offset =
+                horizontal_spread_offset *
+                (random_float_between(
+                     0.0f, bomber_tank_joint_particle_horizontal_spread_range_end_gp * 0.25f) *
+                 D_0015ED6C);
+            spread_vector[1] = spread_vector[1] + horizontal_spread_offset;
             spread_vector[2] = bomber_tank_joint_particle_vertical_spread_gp * D_0015ED6C;
         }
         velocity[3] = bomber_tank_joint_particle_velocity_w_gp;

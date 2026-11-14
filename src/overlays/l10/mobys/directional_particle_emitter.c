@@ -50,7 +50,7 @@ void directional_particle_emitter_update(struct Moby *moby) {
         for (; i < ((s32 *)pvars)[3]; ++i) {
             Vec4 position;
             Vec4 velocity;
-            Vec4 offset;
+            Vec4 spawn_position_offset;
             f32  amount;
             f32  radius;
             f32  x;
@@ -68,13 +68,13 @@ void directional_particle_emitter_update(struct Moby *moby) {
             variant = i < directional_particle_variant_threshold_percent_gp;
             i = life;
             qcopy(&position, moby_position);
-            offset.f[0] = fast_cos(fast_add_rotations(moby->rot.z, 1.5707964f)) *
-                          random_float_between(-pvars[4], pvars[4]);
-            offset.f[1] = fast_sin(fast_add_rotations(moby->rot.z, 1.5707964f)) *
-                          random_float_between(-pvars[4], pvars[4]);
-            *(volatile f32 *)&offset.f[2] = 0.0f;
-            offset.f[2] = random_float_between(-pvars[5], pvars[5]);
-            fast_vec_add(&position, &position, &offset);
+            spawn_position_offset.f[0] = fast_cos(fast_add_rotations(moby->rot.z, 1.5707964f)) *
+                                         random_float_between(-pvars[4], pvars[4]);
+            spawn_position_offset.f[1] = fast_sin(fast_add_rotations(moby->rot.z, 1.5707964f)) *
+                                         random_float_between(-pvars[4], pvars[4]);
+            *(volatile f32 *)&spawn_position_offset.f[2] = 0.0f;
+            spawn_position_offset.f[2] = random_float_between(-pvars[5], pvars[5]);
+            fast_vec_add(&position, &position, &spawn_position_offset);
 
             x = random_float_between(directional_particle_speed_range_start_gp,
                                      directional_particle_speed_range_end_gp);

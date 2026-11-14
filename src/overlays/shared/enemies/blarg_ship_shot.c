@@ -39,7 +39,7 @@ char *spawn_blarg_ship_shot(int    owner,
 char *spawn_blarg_ship_shot(int    firing_moby,
                             float *launch_direction,
                             float *spawn_position,
-                            float  size,
+                            float  draw_distance,
                             float  step_length,
 
                             float z) {
@@ -50,7 +50,7 @@ char *spawn_blarg_ship_shot(int    firing_moby,
         MOBY(spawned_moby)->collision = 0;
         *(int *)(moby_vars + 0x1C) = firing_moby;
         MOBY(spawned_moby)->update_dist = 0xFF;
-        MOBY(spawned_moby)->draw_dist = truncate_float_to_s32(size);
+        MOBY(spawned_moby)->draw_dist = truncate_float_to_s32(draw_distance);
         *(int *)(spawned_moby + 0x40) = 0;
         MOBY(spawned_moby)->visible = 1;
         MOBY(spawned_moby)->rot.y =
@@ -64,7 +64,7 @@ char *spawn_blarg_ship_shot(int    firing_moby,
             step_length = fast_vec_length(launch_direction);
         }
         qcopy(&MOBY(spawned_moby)->pos, spawn_position);
-        size_length_ratio = truncate_float_to_s32(size / step_length);
+        size_length_ratio = truncate_float_to_s32(draw_distance / step_length);
         *(int *)(moby_vars + 0x14) = size_length_ratio;
         *(float *)(moby_vars + 0x20) = z;
         *(int *)(moby_vars + 0x18) = size_length_ratio - 13;

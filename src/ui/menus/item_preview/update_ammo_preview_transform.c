@@ -58,7 +58,7 @@ void update_ammo_preview_transform(struct AmmoPreviewMoby *moby) __asm__("FUN_00
 /* The hand-gadget loader installs this callback on its ammo preview Mobys.
    The slot selects a phase and a spring offset around the source Moby. */
 void update_ammo_preview_transform(struct AmmoPreviewMoby *moby) {
-    f32                     offset[4];
+    f32                     preview_position_offset[4];
     f32                     rotation_basis[12];
     f32                     angles[4];
     struct AmmoPreviewMoby *source_moby;
@@ -103,12 +103,13 @@ void update_ammo_preview_transform(struct AmmoPreviewMoby *moby) {
                                    frame_time_sq * 6.0f,
                                    frame_time * 6.0f);
     }
-    offset[0] = fast_cos(orbit_angle);
-    offset[1] = fast_sin(orbit_angle);
-    offset[2] = zero;
-    offset[2] = fast_sin(bob_angle) * 0.25f + 0.5f + ammo_preview_offsets[moby->slot];
-    transform_vector_by_basis(offset, offset, source_moby->basis);
-    fast_vec_add(moby->position, moby->position, offset);
+    preview_position_offset[0] = fast_cos(orbit_angle);
+    preview_position_offset[1] = fast_sin(orbit_angle);
+    preview_position_offset[2] = zero;
+    preview_position_offset[2] =
+        fast_sin(bob_angle) * 0.25f + 0.5f + ammo_preview_offsets[moby->slot];
+    transform_vector_by_basis(preview_position_offset, preview_position_offset, source_moby->basis);
+    fast_vec_add(moby->position, moby->position, preview_position_offset);
     clear_u64_value(angles);
     angles[2] = fast_add_rotations(orbit_angle, 1.5707964f);
     euler_rotation_basis(rotation_basis, angles);

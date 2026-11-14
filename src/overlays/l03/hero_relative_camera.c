@@ -49,7 +49,7 @@ void initialize_hero_relative_camera(void *camera_instance) {
     char  *target;
     char  *pos;
     char  *camera_data;
-    char  *timer;
+    char  *camera_data_for_timer;
     char  *camera_back_direction_data;
     int    camera_table_base;
     float *camera_parameter_values;
@@ -75,8 +75,8 @@ void initialize_hero_relative_camera(void *camera_instance) {
     *(float *)(pos + 0x24) = 0.2f;
     clear_u64_value(pos + 0x10);
     qcopy(pos, &hero.motion.pos);
-    timer = *(char **)(camera + 0x70);
-    ((s32 *)timer)[12] = scale_game_frames(0x78);
+    camera_data_for_timer = *(char **)(camera + 0x70);
+    ((s32 *)camera_data_for_timer)[12] = scale_game_frames(0x78);
     camera_table_base = D_L03_0015EF50;
     camera_back_direction_data = *(char **)(camera + 0x70) + 0xF0;
     *(s32 *)(camera_back_direction_data + 0x30) = 0;

@@ -267,10 +267,10 @@ s32_2e1f28 register_beam_slot(s32_2e1f28 id,
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E34F0), where it is exact; names translated to the US level program. */
 int release_beam_slot_by_id(int id) __asm__("FUN_L00_002e2040");
 
-int release_beam_slot_by_id(int id) {
+int release_beam_slot_by_id(int owner_moby_id) {
     unsigned int i;
     for (i = 0; (int)i < 3; i++) {
-        if (beam_slot_id[i] == id) {
+        if (beam_slot_id[i] == owner_moby_id) {
             beam_slot_state[i] = 0;
             beam_slot_id[i] = 0;
             if (beam_endpoint_light[i] != -1) {
@@ -306,13 +306,13 @@ void release_beam_slot(s32 i) {
 
 s32 set_beam_origin_transform_and_endpoint(s32 id, void *src, void *v) __asm__("FUN_L00_002e2190");
 
-s32 set_beam_origin_transform_and_endpoint(s32   id,
+s32 set_beam_origin_transform_and_endpoint(s32   beam_owner_moby_id,
                                            void *beam_origin_transform,
 
                                            void *endpoint_position) {
     s32 i;
     for (i = 0; i < 3; i++) {
-        if (id == beam_slot_id[i]) {
+        if (beam_owner_moby_id == beam_slot_id[i]) {
             if (beam_slot_state[i] == 1)
                 beam_slot_state[i] = 2;
             else if (beam_slot_state[i] == 4)
@@ -700,6 +700,9 @@ void draw_beam_strand_with_glow(
 void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) __asm__("FUN_L00_002e3388");
 
 void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
+    enum {
+        TEXTURE_CLAMP_UV = 5
+    };
     Q_e3388 geometry_quad;
     f32     endpoint_to_camera_axis[4] __attribute__((aligned(16)));
     f32     endpoint_quad_side_axis[4] __attribute__((aligned(16)));

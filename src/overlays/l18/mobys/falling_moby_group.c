@@ -285,11 +285,11 @@ typedef struct {
 typedef struct L18VD_1cc8 {
     char pad0[0x30];
     char update_data[0x300];
-    int  field330;
+    int  linked_group_transform_progress;
     char pad334[4];
-    int  field338;
+    int  linked_moby_count;
     char pad33C[8];
-    int  field344;
+    int  debris_spawn_bound_accumulator;
 } L18VD_1cc8;
 
 void reset_drek_boss_falling_moby_group(L18VM_1cc8 *moby) __asm__("FUN_L18_002f1cc8");
@@ -298,10 +298,10 @@ void reset_drek_boss_falling_moby_group(L18VM_1cc8 *moby) {
     L18VD_1cc8 *data = moby->data;
     if (moby->class_id == 0x565) {
         moby->state = FALLING_MOBY_GROUP_AWAIT_ACTIVATION;
-        data->field330 = 0;
-        data->field344 = 0;
+        data->linked_group_transform_progress = 0;
+        data->debris_spawn_bound_accumulator = 0;
     }
-    apply_linked_moby_relative_transforms(moby, data->update_data, data->field338);
+    apply_linked_moby_relative_transforms(moby, data->update_data, data->linked_moby_count);
 }
 /* For each entry of block D_L18_001C6480[D_L18_001C6780[A]]: runs func_001F9BF0 /
    func_001F9EC0 against the records at D_L18_001600EC + B * 0x80 (+0x30, +0x40)

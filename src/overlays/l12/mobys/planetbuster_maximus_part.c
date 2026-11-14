@@ -416,7 +416,7 @@ void initialize_planetbuster_maximus_detached_part_motion(struct Moby *moby, int
     char        *motion_owner_pvars = (char *)moby->pvars;
     struct Moby *selected;
     float       *speed;
-    int          offset;
+    int          vertical_step_decrement_byte_offset;
     float        initial_speed;
     float        angle_scale;
     float        first_angle;
@@ -425,17 +425,17 @@ void initialize_planetbuster_maximus_detached_part_motion(struct Moby *moby, int
 
     if (slot == 0x11) {
         selected = moby;
-        offset = 0x44;
+        vertical_step_decrement_byte_offset = 0x44;
     } else {
         selected = (struct Moby *)(D_L12_0015FFD8_p + D_L12_001FB688[slot] * 0x100);
-        offset = slot * 4;
+        vertical_step_decrement_byte_offset = slot * 4;
     }
 
     initial_speed = random_float_between(frame_time_sq * 3.7f, frame_time_sq * 5.0f);
     angle_scale = frame_time;
     {
         char *vertical_step_decrements = motion_owner_pvars + 0x570;
-        speed = (float *)(vertical_step_decrements + offset);
+        speed = (float *)(vertical_step_decrements + vertical_step_decrement_byte_offset);
     }
     *speed = initial_speed;
     first_angle = randf_sym(angle_scale * 0.05235988f, angle_scale * 0.13962634f);

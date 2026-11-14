@@ -13,7 +13,7 @@ typedef struct NextBitContext {
     s32 unk858;
 } NextBitContext;
 
-s32 _nextBit(NextBitContext *ctx, s32 count) {
+s32 _nextBit(NextBitContext *ctx, s32 bit_count) {
     s32 consumed_bits;
     s32 counter;
     u32 word;
@@ -26,14 +26,14 @@ s32 _nextBit(NextBitContext *ctx, s32 count) {
             }
         } while ((*(volatile u32 *)0x10002010 & 0x80004000) == 0x80000000);
     }
-    if (ctx->ipu_command_class != 0 || ctx->available_bit_count < count) {
+    if (ctx->ipu_command_class != 0 || ctx->available_bit_count < bit_count) {
         *(volatile u32 *)0x10002000 = 0x40000000;
         ctx->ipu_command_class = IpuCommandTable[4];
         ctx->cached_bit_window = (s32)(s64)_waitIpuIdle64(ctx);
     }
-    consumed_bits = ((u32)ctx->cached_bit_window) >> (0x20 - count);
+    consumed_bits = ((u32)ctx->cached_bit_window) >> (0x20 - bit_count);
     ctx->available_bit_count = 0x20;
-    word = count | 0x40000000;
+    word = bit_count | 0x40000000;
     *(volatile u32 *)0x10002000 = word;
     ctx->ipu_command_class = IpuCommandTable[word >> 28];
     ctx->cached_bit_window = (s32)(s64)_waitIpuIdle64(ctx);

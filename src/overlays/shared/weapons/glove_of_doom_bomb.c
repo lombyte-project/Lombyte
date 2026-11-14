@@ -253,16 +253,16 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) {
         goto remove;
     }
     case THROWN_MOBY_STATE_MOVE_WITH_COLLISION: {
-        f32          size, speed, rest_speed, sink;
+        f32          size_multiplier, speed, rest_speed, sink;
         f32          half = 0.5f;
         u8          *carry;
         struct Hero *player;
-        size = convert_integer_to_float(D_0013E534) + 1.0f;
+        size_multiplier = convert_integer_to_float(D_0013E534) + 1.0f;
         {
             f32 class_scale = thrown_moby->pclass->scale;
-            if (thrown_moby->scale < class_scale * half * size)
+            if (thrown_moby->scale < class_scale * half * size_multiplier)
                 thrown_moby->scale =
-                    thrown_moby->scale + class_scale * (frame_scale * 0.05f) * size;
+                    thrown_moby->scale + class_scale * (frame_scale * 0.05f) * size_multiplier;
         }
         if (fast_dec_timer(&spawner_throw_vars->effect_timer)) {
             spawner_throw_vars->effect_timer = scale_game_frames(4);
@@ -279,12 +279,12 @@ void doom_bot_spawner_update(struct Moby *thrown_moby) {
         sink = sink / thrown_moby->pclass->scale;
         end.f[2] -= sink;
         qcopy_nc(&probe, &next_pos);
-        probe.f[2] += size * 0.2f;
+        probe.f[2] += size_multiplier * 0.2f;
         player = (struct Hero *)(carry - 0x140);
-        if (coll_sphere(size * 0.3f, &probe, 4, player->moby)) {
+        if (coll_sphere(size_multiplier * 0.3f, &probe, 4, player->moby)) {
             collision_point = coll_hit.pad30;
             qcopy_nc(&thrown_moby->pos, collision_point);
-            thrown_moby->pos.z -= size * 0.2f;
+            thrown_moby->pos.z -= size_multiplier * 0.2f;
             collision_point += 0x10;
             rest_speed = 0.01f;
             reflect_vector(spawner_throw_vars, spawner_throw_vars, collision_point);

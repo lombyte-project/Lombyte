@@ -19,14 +19,14 @@ void topThread(TopThreadQueue *queue) {
         THREAD_COMMAND_SUSPEND = 2
     };
     s32 i;
-    u8  type;
+    u8  command;
 
     for (;;) {
         WaitSema(top_thread_semaphore);
         i = queue->read_index & 0x1FF;
         queue->read_index = i + 1;
-        type = queue->requests[i].command;
-        switch (type) {
+        command = queue->requests[i].command;
+        switch (command) {
         case THREAD_COMMAND_WAKEUP:
             WakeupThread(queue->requests[i].argument);
             break;

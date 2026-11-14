@@ -709,7 +709,7 @@ void asteroid_update(struct Moby *asteroid_moby) {
 char *spawn_radially_scattered_moby(
 
     void *unused, float lower_radius, float upper_radius, void *origin, float *direction) {
-    float offset[4];
+    float direction_velocity_contribution[4];
     char *moby = (char *)create_moby(0x1A1);
     if (moby != 0) {
         float pi = 3.1415927f;
@@ -729,8 +729,9 @@ char *spawn_radially_scattered_moby(
             fast_vec_normalize(spawned_velocity, &MOBY(moby)->pos, difference * speed);
         }
         gap = pi - difference;
-        fast_vec_normalize(offset, direction, gap * gap * 0.25f * frame_time);
-        fast_vec_add(spawned_velocity, spawned_velocity, offset);
+        fast_vec_normalize(
+            direction_velocity_contribution, direction, gap * gap * 0.25f * frame_time);
+        fast_vec_add(spawned_velocity, spawned_velocity, direction_velocity_contribution);
         *(int *)(spawned_velocity + 8) = 0;
         fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, origin);
         fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, direction);

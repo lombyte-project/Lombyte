@@ -19,27 +19,35 @@ s32                    sceDbcReceiveData(s32  rpc_request_word_0,
                                          s32 *byte_count,
 
                                          u8 *destination) {
-    struct DbCState *state = &RpcReceiveData;
+    struct DbCState *rpc_transfer_buffer = &RpcReceiveData;
     s32              i;
 
-    state->unk0 = rpc_request_word_0;
-    state->unk4 = rpc_request_word_1;
-    state->unk8 = *byte_count;
-    if (sceSifCallRpc(&RpcQueueData, 0x8000091A, 0, state, 0x400, state, 0x400, 0, 0) < 0) {
+    rpc_transfer_buffer->unk0 = rpc_request_word_0;
+    rpc_transfer_buffer->unk4 = rpc_request_word_1;
+    rpc_transfer_buffer->unk8 = *byte_count;
+    if (sceSifCallRpc(&RpcQueueData,
+                      0x8000091A,
+                      0,
+                      rpc_transfer_buffer,
+                      0x400,
+                      rpc_transfer_buffer,
+                      0x400,
+                      0,
+                      0) < 0) {
         debug_print_stub(dbc_receive_rpc_error_message);
         return 0;
     }
-    if (state->unk8C < 0) {
-        return state->unk8C;
+    if (rpc_transfer_buffer->unk8C < 0) {
+        return rpc_transfer_buffer->unk8C;
     }
-    *byte_count = state->unk8;
+    *byte_count = rpc_transfer_buffer->unk8;
     i = 0;
-    if (state->unk8 > 0) {
+    if (rpc_transfer_buffer->unk8 > 0) {
         do {
-            destination[i] = state->payload[i];
+            destination[i] = rpc_transfer_buffer->payload[i];
             i++;
-        } while (i < state->unk8);
-        return state->unk8C;
+        } while (i < rpc_transfer_buffer->unk8);
+        return rpc_transfer_buffer->unk8C;
     }
-    return *(volatile s32 *)&state->unk8C;
+    return *(volatile s32 *)&rpc_transfer_buffer->unk8C;
 }

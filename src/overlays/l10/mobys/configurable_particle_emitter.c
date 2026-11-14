@@ -171,7 +171,10 @@ extern int   burst_spark_active_duration_max_gp __asm__("D_L10_00161FB0") __attr
 extern int   burst_spark_pause_duration_min_gp __asm__("D_L10_00161FB4") __attribute__((sda));
 extern int   burst_spark_pause_duration_max_gp __asm__("D_L10_00161FB8") __attribute__((sda));
 
-void emit_burst_spark_particle(void *emission_position, short *timer, short *burst) {
+void emit_burst_spark_particle(void  *emission_position,
+                               short *spark_emission_countdown,
+
+                               short *burst) {
     float visibility_sphere[4];
     float burst_spark_vertical_vector[4];
     float acc[4];
@@ -193,7 +196,7 @@ void emit_burst_spark_particle(void *emission_position, short *timer, short *bur
     visibility_sphere[3] = 2.0f;
     if (fast_bsphere_check((char *)visibility_sphere, 32.0f) == -1 && random_integer_below(3) != 0)
         return;
-    if (!fast_dec_timer_s16(timer))
+    if (!fast_dec_timer_s16(spark_emission_countdown))
         return;
     clear_u64_value(burst_spark_vertical_vector);
     burst_spark_vertical_vector[2] = burst_spark_vertical_vector_z_scale_gp * frame_time;
@@ -225,8 +228,8 @@ void emit_burst_spark_particle(void *emission_position, short *timer, short *bur
                 second_frame_count,
                 third_frame_count,
                 -1);
-    *timer = truncate_float_to_s32(random_float_between((float)burst_spark_timer_reset_min_gp,
-                                                        (float)burst_spark_timer_reset_max_gp));
+    *spark_emission_countdown = truncate_float_to_s32(random_float_between(
+        (float)burst_spark_timer_reset_min_gp, (float)burst_spark_timer_reset_max_gp));
 }
 
 /* Emits a smoke particle from pos on its timer, when the camera is near and the spot is visible. */
@@ -257,7 +260,7 @@ int          l10_timed_spark_second_color_from __asm__("D_L10_00161FF0") = 0x200
 int          l10_timed_spark_second_color_to __asm__("D_L10_00161FF4") = 0x200080ff;
 extern void  clear_u64_value(void *);
 
-void emit_timed_spark_particle(void *emission_position, short *timer) {
+void emit_timed_spark_particle(void *emission_position, short *emission_countdown) {
     float visibility_sphere[4];
     float spark_vertical_vector[4];
     float acc[4];
@@ -270,7 +273,7 @@ void emit_timed_spark_particle(void *emission_position, short *timer) {
     visibility_sphere[3] = 5.0f;
     if (fast_bsphere_check((char *)visibility_sphere, 32.0f) == -1 && random_integer_below(3) != 0)
         return;
-    if (!fast_dec_timer_s16(timer))
+    if (!fast_dec_timer_s16(emission_countdown))
         return;
     clear_u64_value(spark_vertical_vector);
     spark_vertical_vector[2] = timed_spark_vertical_vector_z_scale_gp * frame_time;
@@ -302,8 +305,8 @@ void emit_timed_spark_particle(void *emission_position, short *timer) {
                 second_frame_count,
                 third_frame_count,
                 -1);
-    *timer = truncate_float_to_s32(random_float_between((float)timed_spark_timer_reset_min_gp,
-                                                        (float)timed_spark_timer_reset_max_gp));
+    *emission_countdown = truncate_float_to_s32(random_float_between(
+        (float)timed_spark_timer_reset_min_gp, (float)timed_spark_timer_reset_max_gp));
 }
 
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EBDC8), where it is exact; names translated to the US level program. */
@@ -352,7 +355,7 @@ void emit_height_adjusted_burst_spark_particle(void  *emission_position,
                                                float  height) __asm__("FUN_L10_002eaa08");
 
 void emit_height_adjusted_burst_spark_particle(void  *emission_position,
-                                               short *timer,
+                                               short *particle_emission_countdown,
                                                short *burst,
 
                                                float height) {
@@ -380,7 +383,7 @@ void emit_height_adjusted_burst_spark_particle(void  *emission_position,
     visibility_sphere[2] -= 4.0f;
     if (fast_bsphere_check((char *)visibility_sphere, 32.0f) == -1)
         return;
-    if (!fast_dec_timer_s16(timer))
+    if (!fast_dec_timer_s16(particle_emission_countdown))
         return;
     frame_count_scale =
         random_float_between(1.0f - *(float *)&height_adjusted_spark_frame_count_scale_spread_gp,
@@ -419,7 +422,7 @@ void emit_height_adjusted_burst_spark_particle(void  *emission_position,
                 second_frame_count,
                 third_frame_count,
                 l10_height_adjusted_spark_lookup_index_and_flags);
-    *timer = truncate_float_to_s32(
+    *particle_emission_countdown = truncate_float_to_s32(
         random_float_between((float)*(int *)&height_adjusted_spark_timer_reset_min_gp,
                              (float)*(int *)&height_adjusted_spark_timer_reset_max_gp));
 }

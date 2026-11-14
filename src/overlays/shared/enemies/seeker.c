@@ -107,7 +107,7 @@ void seeker_update(struct Moby *moby) {
     Moby52Vars      *seeker_instance_vars = (Moby52Vars *)moby->pvars;
     struct Moby     *target;
     Vec4             vel;
-    s32              mode;
+    s32              state_dispatch_mode;
     s32              voice;
     f32              target_distance_xy;
     f32              z;
@@ -123,8 +123,8 @@ void seeker_update(struct Moby *moby) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 0x17;
     }
-    mode = seeker_state_dispatch_mode;
-    if (mode == SEEKER_DISPATCH_MODE_SKIP_STATE_UPDATE) {
+    state_dispatch_mode = seeker_state_dispatch_mode;
+    if (state_dispatch_mode == SEEKER_DISPATCH_MODE_SKIP_STATE_UPDATE) {
         return;
     }
     switch (moby->state) {

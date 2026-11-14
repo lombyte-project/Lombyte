@@ -72,7 +72,7 @@ struct L01Moby {
     char           pad36[0x42];
     L01MobyData   *data;
     char           pad7c[0x18];
-    int            field94;
+    int            collision_data;
 };
 
 extern void approach_value(float *, float, float) __asm__("FUN_00213ed8");
@@ -594,7 +594,7 @@ void hide_teleporter_and_children(L01Moby *moby) {
     };
     L01Moby **slots = moby->data->slots;
     int       i;
-    moby->field94 = 0;
+    moby->collision_data = 0;
     moby->flags |= 1;
     moby->state = TELEPORTER_VISIBILITY_HIDDEN;
     for (i = 2; i >= 0; i--, slots++) {

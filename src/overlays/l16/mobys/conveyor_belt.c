@@ -207,7 +207,7 @@ void draw_conveyor_belt_strips(struct Moby *moby) {
     L16RibbonPacket_u packets[2];
     ConveyorBeltVars *conveyor_data = (ConveyorBeltVars *)moby->pvars;
     float scale = fast_vec_length(D_L16_001600EC_m + ((conveyor_data->belt_cuboid) << 7)) * 2.001f;
-    int   count = truncate_float_to_s32(scale);
+    int   interior_strip_count = truncate_float_to_s32(scale);
     float step = 2.0f / scale;
     int   period, tint, color, limit, j;
     float phase;
@@ -220,7 +220,7 @@ void draw_conveyor_belt_strips(struct Moby *moby) {
     modebits = 0x8000000000L;
     period = scale_game_frames(120);
     flags = 0xFF9000000260L;
-    limit = count + 2;
+    limit = interior_strip_count + 2;
     phase = convert_integer_to_float(D_L16_0015F5CC % period);
     phase = phase / convert_integer_to_float(period);
     phase = fast_sin(phase * 6.28318f - 3.14159f) * 0.5f + 0.5f;
@@ -268,7 +268,7 @@ void draw_conveyor_belt_strips(struct Moby *moby) {
                 packets[0].color[0] = 0;
                 packets[1].color[1] = 0;
                 packets[1].color[0] = 0;
-            } else if (strip == count + 1) {
+            } else if (strip == interior_strip_count + 1) {
                 packets[0].color[3] = 0;
                 packets[0].color[2] = 0;
                 packets[1].color[3] = 0;

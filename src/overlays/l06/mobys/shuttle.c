@@ -81,9 +81,9 @@ typedef struct {
 
 typedef struct {
     char         pad0[0x2FC];
-    struct Moby *f2FC;
+    struct Moby *route_request_moby;
     char         pad300[0xE];
-    short        f30E;
+    short        route_request_inhibit;
 } Hero_302578;
 
 typedef struct {
@@ -319,8 +319,8 @@ void shuttle_update(struct Moby *moby) {
                 busy = 1;
             }
         }
-        if ((busy == 0 && ((Hero_302578 *)((char *)&hero))->f2FC == moby &&
-             ((Hero_302578 *)((char *)&hero))->f30E == 0) ||
+        if ((busy == 0 && ((Hero_302578 *)((char *)&hero))->route_request_moby == moby &&
+             ((Hero_302578 *)((char *)&hero))->route_request_inhibit == 0) ||
             shuttle_forced_return_requested_gp != 0) {
             update_shuttle_route_selection_and_prompt((char *)moby);
             now = shuttle_forced_return_requested_gp;
@@ -692,7 +692,7 @@ void spawn_shuttle_explosion_effect(
 
 void spawn_shuttle_explosion_effect(
 
-    float scale, char *moby, char *explosion_origin, char *push, int count) {
+    float scale, char *moby, char *explosion_origin, char *push, int particle_count) {
     float  position[4], direction[4], velocity[4], acceleration[4];
     Colors first_colors, second_colors;
     int    i;
@@ -702,7 +702,7 @@ void spawn_shuttle_explosion_effect(
     second_colors = D_L06_00201960;
     {
         int piece;
-        for (piece = 0; piece < count; piece++) {
+        for (piece = 0; piece < particle_count; piece++) {
             int *first_color = first_colors.v + random_integer_below(6);
             int *second_color;
             int  first_time, second_time;
@@ -732,8 +732,8 @@ void spawn_shuttle_explosion_effect(
                            frame_time * 10.0f * scale);
         }
     }
-    for (i = 0; i < count * D_L06_00162150;) {
-        int color1, color2, life, size, fade;
+    for (i = 0; i < particle_count * D_L06_00162150;) {
+        int color1, color2, life, spark_timing_frames, fade;
         i++;
         random_vector(position, 0.0f, 1.0f);
         fast_vec_add(position, position, explosion_origin);
@@ -769,7 +769,7 @@ void spawn_shuttle_explosion_effect(
         life = truncate_float_to_s32(scale_time(random_float_between(
             (float)l06_shuttle_explosion_spark_timing_random_min_frames,
             (float)(l06_shuttle_explosion_spark_timing_random_min_frames << 1))));
-        size = truncate_float_to_s32(scale_time(
+        spark_timing_frames = truncate_float_to_s32(scale_time(
             random_float_between((float)l06_shuttle_explosion_spark_timing_base_a_frames,
                                  (float)l06_shuttle_explosion_spark_timing_base_a_frames * 1.2f)));
         fade = truncate_float_to_s32(scale_time(
@@ -781,7 +781,7 @@ void spawn_shuttle_explosion_effect(
                     color1,
                     color2,
                     life,
-                    size,
+                    spark_timing_frames,
                     fade,
                     l06_shuttle_explosion_spark_table_index +
                         (l06_shuttle_explosion_spark_alternate_mode_flag << 16));
@@ -800,8 +800,8 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
     float        particle_acceleration[4];
     struct Moby *piece;
     short       *list;
-    short        count;
-    int          id;
+    short        linked_moby_count;
+    int          linked_moby_index;
     int          i;
     float        largest;
     u8          *particle;
@@ -816,35 +816,45 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
     largest = 0.0f;
     clear_u64_value(middle);
     list = D_L06_001ABFC0_03b68[*(int *)(shuttle_linkage_vars + 0xCC)];
-    count = 0;
+    linked_moby_count = 0;
     do {
-        id = *list & 0x7FFF;
+        linked_moby_index = *list & 0x7FFF;
         random_vector(push, 1.0f, 2.0f);
         spawn_shuttle_explosion_effect(
-            30.0f, moby, &((struct Moby *)(D_L06_0015FFD8_03b68 + (id << 8)))->pos, push, 1);
-        fast_vec_add(middle, middle, &((struct Moby *)(D_L06_0015FFD8_03b68 + (id << 8)))->pos);
-        count++;
-        if (largest < ((struct Moby *)((id << 8) + (int)D_L06_0015FFD8_03b68))->bsphere.w) {
-            largest = ((struct Moby *)((id << 8) + (int)D_L06_0015FFD8_03b68))->bsphere.w;
+            30.0f,
+            moby,
+            &((struct Moby *)(D_L06_0015FFD8_03b68 + (linked_moby_index << 8)))->pos,
+            push,
+            1);
+        fast_vec_add(middle,
+                     middle,
+                     &((struct Moby *)(D_L06_0015FFD8_03b68 + (linked_moby_index << 8)))->pos);
+        linked_moby_count++;
+        if (largest <
+            ((struct Moby *)((linked_moby_index << 8) + (int)D_L06_0015FFD8_03b68))->bsphere.w) {
+            largest =
+                ((struct Moby *)((linked_moby_index << 8) + (int)D_L06_0015FFD8_03b68))->bsphere.w;
         }
     } while (*list++ >= 0);
-    fast_vec_scale(middle, middle, 1.0f / convert_integer_to_float(count));
+    fast_vec_scale(middle, middle, 1.0f / convert_integer_to_float(linked_moby_count));
     list = D_L06_001ABFC0_03b68[*(int *)(shuttle_linkage_vars + 0xCC)];
     do {
         float speed;
-        id = *list & 0x7FFF;
-        fast_vec_sub(push, &((struct Moby *)(D_L06_0015FFD8_03b68 + (id << 8)))->pos, middle);
-        piece = (struct Moby *)((id << 8) + (int)D_L06_0015FFD8_03b68);
+        linked_moby_index = *list & 0x7FFF;
+        fast_vec_sub(
+            push, &((struct Moby *)(D_L06_0015FFD8_03b68 + (linked_moby_index << 8)))->pos, middle);
+        piece = (struct Moby *)((linked_moby_index << 8) + (int)D_L06_0015FFD8_03b68);
         speed = frame_time * 30.0f;
         fast_vec_normalize(push, push, -((piece->bsphere.w - largest) / largest) * speed + speed);
         push[3] = 6.0f;
         random_vector(spin, frame_time * 0.2617994f, frame_time * 0.08726646f);
         begin_moby_linear_and_angular_motion(
-            (char *)(D_L06_0015FFD8_03b68 + (id << 8)), push, spin);
+            (char *)(D_L06_0015FFD8_03b68 + (linked_moby_index << 8)), push, spin);
         for (i = 0; i < shuttle_breakup_particles_per_piece_gp; i++) {
-            piece = (struct Moby *)((id << 8) + (int)D_L06_0015FFD8_03b68);
+            piece = (struct Moby *)((linked_moby_index << 8) + (int)D_L06_0015FFD8_03b68);
             random_vector(pos, 0.0f, piece->bsphere.w * 0.00048828125f);
-            fast_vec_add(pos, pos, &((struct Moby *)(D_L06_0015FFD8_03b68 + (id << 8)))->pos);
+            fast_vec_add(
+                pos, pos, &((struct Moby *)(D_L06_0015FFD8_03b68 + (linked_moby_index << 8)))->pos);
             random_vector(
                 particle_velocity, 0.0f, shuttle_breakup_particle_max_speed_gp * frame_time);
             clear_u64_value(particle_acceleration);
@@ -884,7 +894,7 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
             }
         }
     } while (*list++ >= 0);
-    ((struct Moby *)((id << 8) + (int)D_L06_0015FFD8_03b68))->command = 30;
+    ((struct Moby *)((linked_moby_index << 8) + (int)D_L06_0015FFD8_03b68))->command = 30;
 }
 
 /* Marks every moby in the moby's list for removal; the list ends after its first negative entry. */

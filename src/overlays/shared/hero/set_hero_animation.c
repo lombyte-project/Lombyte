@@ -89,9 +89,9 @@ int lookup_hero_slot3_animation_key(int key, int *out_animation_key) {
     } else if (hero_slot_item_id(3) == 3) {
         animation_lookup_table = D_L00_0017BBD0;
     } else {
-        int mode = hero_slot_item_id(3);
+        int slot3_item_id = hero_slot_item_id(3);
         animation_lookup_table = (SeqEntry *)&D_L00_0015F6B8;
-        if (mode != 4) {
+        if (slot3_item_id != 4) {
             animation_lookup_table = 0;
         }
     }
@@ -112,7 +112,10 @@ void blend_hero_slot3_mapped_animation_pair(int   id,
                                             int   frame_index,
                                             float blend_frames) __asm__("FUN_L00_00231e78");
 
-void blend_hero_slot3_mapped_animation_pair(int id, int frame_index, float blend_frames) {
+void blend_hero_slot3_mapped_animation_pair(int requested_hero_animation_id,
+                                            int frame_index,
+
+                                            float blend_frames) {
     struct Hero *hero_slot3_mapped_animation_state = &hero;
     struct Hero *blk2;
     struct Hero *blk3;
@@ -131,7 +134,8 @@ void blend_hero_slot3_mapped_animation_pair(int id, int frame_index, float blend
     if (slot3_moby == 0 || slot3_secondary_moby == 0) {
         return;
     }
-    if (select_hero_slot3_animation_pair(id, &seq0, &seq1) != 0 && id != 0) {
+    if (select_hero_slot3_animation_pair(requested_hero_animation_id, &seq0, &seq1) != 0 &&
+        requested_hero_animation_id != 0) {
         if (MOBY(slot3_moby)->prev_seq == seq0) {
             return;
         }
@@ -142,8 +146,9 @@ void blend_hero_slot3_mapped_animation_pair(int id, int frame_index, float blend
     blk2 = &hero;
     ok = 1;
     if (blk2->state.control_mode == HERO_MODE_IDLE &&
-        lookup_hero_slot3_animation_key(MOBY(slot3_moby)->prev_seq, &id) != 0) {
-        if (id == 0) {
+        lookup_hero_slot3_animation_key(MOBY(slot3_moby)->prev_seq, &requested_hero_animation_id) !=
+            0) {
+        if (requested_hero_animation_id == 0) {
             ok = 0;
         }
     }
@@ -552,11 +557,11 @@ void clear_hero_queued_animation(void) {
 /* Stores id at &hero.queued_frame_request; -1 stands for 5 frames. */
 void hero_set_attack_ticks(int id) __asm__("FUN_L00_00232640");
 
-void hero_set_attack_ticks(int id) {
-    if (id == -1) {
-        id = scale_game_frames(5);
+void hero_set_attack_ticks(int attack_ticks) {
+    if (attack_ticks == -1) {
+        attack_ticks = scale_game_frames(5);
     }
-    hero.queued_frame_request = id;
+    hero.queued_frame_request = attack_ticks;
 }
 
 #include "rnc/sdk/eetypes.h"
@@ -1407,7 +1412,7 @@ typedef struct Hero_234800 {
     char          p188[0x6E];
     short         path_clearance_position_anchor_inhibit;
     char          p1F8[0x104];
-    void         *p2FC;
+    void         *nonresidual_attachment_reference_object;
     char          p300[0xE];
     short         attachment_residual_decay_scale;
     Vec_234800    primary_attachment_local_position;
@@ -1422,7 +1427,7 @@ typedef struct Hero_234800 {
     char          p4E0[0x4];
     float         ledge_attachment_heading;
     char          p4E8[0x10];
-    void         *p4F8;
+    void         *residual_attachment_reference_override;
     char          p4FC[0x1B84];
     int           hero_moby;
     int           i2084;
@@ -1471,28 +1476,28 @@ void update_hero_attachment(void) {
     amt = 0.0f;
     saved_hero_yaw = ((Hero_234800 *)hero_233f80)->v90.z;
     if (((Hero_234800 *)hero_233f80)->attachment_residual_decay_scale == 0) {
-        if (((Hero_234800 *)hero_233f80)->p2FC != 0) {
+        if (((Hero_234800 *)hero_233f80)->nonresidual_attachment_reference_object != 0) {
             mode = HERO_ATTACHMENT_MODE_PROBE;
             if (((Hero_234800 *)hero_233f80)->attachment_reference_object !=
-                ((Hero_234800 *)hero_233f80)->p2FC) {
+                ((Hero_234800 *)hero_233f80)->nonresidual_attachment_reference_object) {
                 ((Hero_234800 *)hero_233f80)->attachment_anchor_flags &= ~1;
             }
             ((Hero_234800 *)hero_233f80)->attachment_reference_object =
-                ((Hero_234800 *)hero_233f80)->p2FC;
+                ((Hero_234800 *)hero_233f80)->nonresidual_attachment_reference_object;
         } else {
             ((Hero_234800 *)hero_233f80)->attachment_reference_object = 0;
             ((Hero_234800 *)hero_233f80)->attachment_anchor_flags &= ~1;
             ((Hero_234800 *)hero_233f80)->attachment_anchor_flags &= ~2;
         }
     } else if (((Hero_234800 *)hero_233f80)->i2084 == 0x1C &&
-               ((Hero_234800 *)hero_233f80)->p4F8 != 0) {
+               ((Hero_234800 *)hero_233f80)->residual_attachment_reference_override != 0) {
         ((Hero_234800 *)hero_233f80)->attachment_reference_object =
-            ((Hero_234800 *)hero_233f80)->p4F8;
+            ((Hero_234800 *)hero_233f80)->residual_attachment_reference_override;
         mode = HERO_ATTACHMENT_MODE_PROBE;
     } else if (((Hero_234800 *)hero_233f80)->i208C == 3 &&
-               ((Hero_234800 *)hero_233f80)->p4F8 != 0) {
+               ((Hero_234800 *)hero_233f80)->residual_attachment_reference_override != 0) {
         ((Hero_234800 *)hero_233f80)->attachment_reference_object =
-            ((Hero_234800 *)hero_233f80)->p4F8;
+            ((Hero_234800 *)hero_233f80)->residual_attachment_reference_override;
         mode = HERO_ATTACHMENT_MODE_PROBE;
     } else if (((Hero_234800 *)hero_233f80)->attachment_reference_object != 0) {
         mode = HERO_ATTACHMENT_MODE_PROBE;

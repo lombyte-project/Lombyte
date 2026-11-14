@@ -42,8 +42,9 @@ enum {
 int is_robot_dog_in_state_5(struct Moby *moby) __asm__("FUN_L03_002c5b78");
 
 int is_robot_dog_in_state_5(struct Moby *moby) {
-    if (moby && moby->state != MOBY_STATE_PENDING_REMOVAL && moby->state != 0xFD &&
-        moby->oclass == 0x23D && moby->state == ROBOT_DOG_FOLLOW_PATH) {
+    if (moby && moby->state != MOBY_STATE_PENDING_REMOVAL &&
+        moby->state != MOBY_STATE_ALTERNATE_REMOVAL_MARKER && moby->oclass == 0x23D &&
+        moby->state == ROBOT_DOG_FOLLOW_PATH) {
         return 1;
     }
     return 0;
@@ -590,11 +591,11 @@ extern int is_kerwan_path_enemy_in_state_9(unsigned char *) __asm__("FUN_L03_002
 
 int is_point_inside_clip_volume_cf(int id) __asm__("FUN_L03_002c6d98");
 
-int is_point_inside_clip_volume_cf(int id) {
+int is_point_inside_clip_volume_cf(int moby_group_index) {
     unsigned char *group_member_moby;
-    if (id == 0xFF)
+    if (moby_group_index == 0xFF)
         goto absent;
-    get_first_moby_in_group((int *)&group_member_moby, id, 0, 0);
+    get_first_moby_in_group((int *)&group_member_moby, moby_group_index, 0, 0);
     while (group_member_moby != 0) {
         if (is_kerwan_path_enemy_in_state_9(group_member_moby))
             return 1;

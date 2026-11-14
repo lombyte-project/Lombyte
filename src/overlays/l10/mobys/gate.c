@@ -28,15 +28,15 @@ void gate_update(unsigned char *gate_moby) {
         GATE_STATE_AT_LOWER_Y = 2
     };
     float         *saved_position = ((float *)MOBY(gate_moby)->pvars);
-    unsigned short id;
+    unsigned short gate_save_id;
     switch (gate_moby[0x20]) {
     case GATE_STATE_WAIT_FOR_SAVE_FLAG:
         *(OvlQuad *)saved_position = *(OvlQuad *)&MOBY(gate_moby)->pos;
-        id = MOBY(gate_moby)->save_id;
-        if (l10_save_state.cleared[(short)id] != 0 ||
+        gate_save_id = MOBY(gate_moby)->save_id;
+        if (l10_save_state.cleared[(short)gate_save_id] != 0 ||
             (*(int *)((unsigned char *)D_0014C190_257218 +
-                      (((short)id >> 5) * 4 + (current_level_index << 8))) >>
-             (id & 0x1F)) &
+                      (((short)gate_save_id >> 5) * 4 + (current_level_index << 8))) >>
+             (gate_save_id & 0x1F)) &
                 1) {
             gate_moby[0x20] = 1;
         }

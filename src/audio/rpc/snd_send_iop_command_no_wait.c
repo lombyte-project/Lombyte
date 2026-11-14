@@ -25,7 +25,7 @@ void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_da
 
 extern s32 snd_batches_held __asm__("D_0015ECC4") __attribute__((sda));
 
-void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_data) {
+void snd_send_iop_command_no_wait(s32 cmd, s32 payload_byte_count, u8 *data, s32 cb, s64 cb_data) {
     s32 need;
     s32 tries;
     s32 held;
@@ -33,7 +33,7 @@ void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_da
     u8 *command_write_cursor;
 
     held = 0;
-    if (snd_batches_held == 0 && snd_current_buffer == 0 && size == 0 && cb == 0) {
+    if (snd_batches_held == 0 && snd_current_buffer == 0 && payload_byte_count == 0 && cb == 0) {
         snd_prepare_return_buffer(snd_sync_buffer, 1);
         while (SceSifCheckStatRpc(sound_command_client) != 0) {
             Printf(snd_non_idle_error_string);
@@ -43,7 +43,7 @@ void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_da
         sceSifCallRpc(sound_command_client, cmd, 1, 0, 0, snd_sync_buffer, 0xC, 0, 0);
         return;
     }
-    need = size + 4;
+    need = payload_byte_count + 4;
     tries = 0;
     if (need % 4 != 0) {
         need += 4 - need % 4;
@@ -73,9 +73,9 @@ void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_da
                            (snd_batch_free_bytes[snd_batch_index] - 0x1000);
     *(s16 *)command_write_cursor = cmd;
     command_write_cursor += 2;
-    *(s16 *)command_write_cursor = size;
+    *(s16 *)command_write_cursor = payload_byte_count;
     command_write_cursor += 2;
-    for (i = 0; i < size; i++) {
+    for (i = 0; i < payload_byte_count; i++) {
         command_write_cursor[i] = data[i];
     }
     snd_batch_free_bytes[snd_batch_index] -= need;

@@ -27,16 +27,17 @@ void garage_door_update(struct Moby *door_moby) {
     };
     Vec4 *target = (Vec4 *)door_moby->pvars;
     s16   save_id_index;
-    u16   id;
+    u16   collection_save_id;
 
     switch (door_moby->state) {
     case GARAGE_DOOR_WAITING_FOR_COLLECTION:
         /* one quadword copy (lq/sq); qcopy() schedules differently */
         target->q = ((Vec4 *)&door_moby->pos)->q;
-        id = door_moby->save_id;
-        save_id_index = id;
+        collection_save_id = door_moby->save_id;
+        save_id_index = collection_save_id;
         if (l03_save_state.cleared[save_id_index] == 0) {
-            if (!((D_0014C190_257218[current_level_index_gp][save_id_index >> 5] >> (id & 0x1F)) &
+            if (!((D_0014C190_257218[current_level_index_gp][save_id_index >> 5] >>
+                   (collection_save_id & 0x1F)) &
                   1))
                 return;
         }

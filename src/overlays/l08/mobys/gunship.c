@@ -252,7 +252,7 @@ void process_gunship_part_hits(struct Moby *moby) {
     char *part_entry_cursor = entries;
     int   i;
     int   score = 0;
-    int   state = -1;
+    int   voice_entry_index = -1;
     int   chosen = 0;
     char *gunship_part_table;
     for (i = 0; i < 34; i++, part_entry_cursor += 16) {
@@ -261,18 +261,18 @@ void process_gunship_part_hits(struct Moby *moby) {
             if (i < 7) {
                 if (score <= 0) {
                     score = 1;
-                    state = GUNSHIP_NON_TARGET_HIT_VOICE_ENTRY;
+                    voice_entry_index = GUNSHIP_NON_TARGET_HIT_VOICE_ENTRY;
                 }
             } else if (i < 10) {
                 if (score < 2) {
                     score = 2;
-                    state = GUNSHIP_NON_TARGET_HIT_VOICE_ENTRY;
+                    voice_entry_index = GUNSHIP_NON_TARGET_HIT_VOICE_ENTRY;
                 }
             } else {
                 if (score < 4) {
                     score += 4;
                     chosen = i;
-                    state = GUNSHIP_TARGET_HIT_VOICE_ENTRY;
+                    voice_entry_index = GUNSHIP_TARGET_HIT_VOICE_ENTRY;
                 }
             }
             (*(unsigned char **)part_entry_cursor)[0xA4] = 0xFF;
@@ -280,7 +280,7 @@ void process_gunship_part_hits(struct Moby *moby) {
     }
     *(short *)(gunship_instance_vars + 0x28C) += score;
     if (*(short *)(gunship_instance_vars + 0x28C) >= 8) {
-        state = GUNSHIP_TARGETS_EXHAUSTED_VOICE_ENTRY;
+        voice_entry_index = GUNSHIP_TARGETS_EXHAUSTED_VOICE_ENTRY;
         *(short *)(gunship_instance_vars + 0x28C) = *(short *)(gunship_instance_vars + 0x28C) % 8;
         if (chosen != 0) {
             int   off = chosen * 16;
@@ -319,8 +319,8 @@ void process_gunship_part_hits(struct Moby *moby) {
             ((char *)moby)[0x20] = 99;
         }
     }
-    if (state >= GUNSHIP_TARGETS_EXHAUSTED_VOICE_ENTRY)
-        allocate_voice_for_target_entry(state, 0, moby);
+    if (voice_entry_index >= GUNSHIP_TARGETS_EXHAUSTED_VOICE_ENTRY)
+        allocate_voice_for_target_entry(voice_entry_index, 0, moby);
 }
 
 /* Moby class 444 */

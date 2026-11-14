@@ -174,7 +174,7 @@ typedef union {
 extern s32 cutscene_mode_gp __asm__("D_L01_0015F5C4") __attribute__((sda));
 void       try_fire_sandmouse_projectile(char *moby, char *state) __asm__("FUN_L01_0030d5f0");
 
-void try_fire_sandmouse_projectile(char *moby, char *state) {
+void try_fire_sandmouse_projectile(char *moby, char *sandmouse_pvars) {
     V4_w22c spawn_position;
     V4_w22c target_aim_position;
     V4_w22c spawn_offset;
@@ -182,10 +182,10 @@ void try_fire_sandmouse_projectile(char *moby, char *state) {
     float   target_yaw, target_pitch, initial_yaw, initial_pitch, target_bearing_yaw,
         spawn_to_target_distance;
 
-    if (fast_dec_timer_s16(state + 0x54) == 0)
+    if (fast_dec_timer_s16(sandmouse_pvars + 0x54) == 0)
         return;
-    moby_point_position(moby, (state[0x56] & 1) + 1, &spawn_position);
-    state[0x56] = state[0x56] ^ 1;
+    moby_point_position(moby, (sandmouse_pvars[0x56] & 1) + 1, &spawn_position);
+    sandmouse_pvars[0x56] = sandmouse_pvars[0x56] ^ 1;
     target_moby = select_sandmouse_projectile_target(
         moby,
         &spawn_position,
@@ -197,7 +197,7 @@ void try_fire_sandmouse_projectile(char *moby, char *state) {
         3.1415927f,
         3.1415927f);
     if (target_moby != 0) {
-        *(char **)(state + 0x60) = target_moby;
+        *(char **)(sandmouse_pvars + 0x60) = target_moby;
         if (hero.motion.pos.f[2] + 1.1f < MOBY(moby)->pos.z) {
             target_bearing_yaw = fast_arc_tan(MOBY(target_moby)->pos.x - MOBY(moby)->pos.x,
                                               MOBY(target_moby)->pos.y - MOBY(moby)->pos.y);
@@ -237,13 +237,13 @@ void try_fire_sandmouse_projectile(char *moby, char *state) {
                                        initial_yaw,
                                        initial_pitch);
                     allocate_voice_for_target_entry(0, 0, (struct VoiceTarget *)moby);
-                    *(short *)(state + 0x54) = scale_game_frames(D_L01_00162080_gp);
-                    *(int *)(state + 0x5C) = *(int *)(state + 0x5C) + 1;
+                    *(short *)(sandmouse_pvars + 0x54) = scale_game_frames(D_L01_00162080_gp);
+                    *(int *)(sandmouse_pvars + 0x5C) = *(int *)(sandmouse_pvars + 0x5C) + 1;
                 }
             }
         }
     } else {
-        *(int *)(state + 0x60) = 0;
+        *(int *)(sandmouse_pvars + 0x60) = 0;
     }
 }
 
@@ -848,7 +848,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
             Vec4 vel = {0};
             int  fade_particle_color_low_byte, fade_particle_color_second_byte,
                 fade_particle_color_third_byte, color, life, spin;
-            f32 size;
+            f32 fade_particle_size;
             qcopy(&pos, &sandmouse_moby->pos);
             add_random_offset_to_vector_xyz(
                 &pos, *(f32 *)&sandmouse_fade_particle_position_offset_distance_gp);
@@ -863,11 +863,11 @@ void sandmouse_update(Moby *sandmouse_moby) {
                 spin = -spin;
             life = FUN_L00_00257b90(*(int *)&sandmouse_fade_particle_min_lifetime_gp,
                                     *(int *)&sandmouse_fade_particle_max_lifetime_gp);
-            size = random_float_between(*(f32 *)&sandmouse_fade_particle_min_size_gp,
-                                        *(f32 *)&sandmouse_fade_particle_max_size_gp);
+            fade_particle_size = random_float_between(*(f32 *)&sandmouse_fade_particle_min_size_gp,
+                                                      *(f32 *)&sandmouse_fade_particle_max_size_gp);
             FUN_L00_00272060(&pos,
                              life,
-                             size,
+                             fade_particle_size,
                              0.001f,
                              color,
                              2,

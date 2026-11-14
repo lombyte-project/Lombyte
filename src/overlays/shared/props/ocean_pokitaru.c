@@ -236,8 +236,8 @@ void draw_pokitaru_ocean(struct Moby *moby) {
         colA = fast_tween_color(0, colA, color_interpolation_scalar);
         colB = fast_tween_color(0, colB, color_interpolation_scalar);
         for (layer = 0; layer < 2; layer++) {
-            int id = layer + 0x28;
-            vu1_add_g_sregister(6, get_effect_texture(ocean_vars->f1C + id));
+            int wave_texture_offset = layer + 0x28;
+            vu1_add_g_sregister(6, get_effect_texture(ocean_vars->f1C + wave_texture_offset));
             for (y = ocean_vars->f18 * -2.0f; y < ocean_vars->f18 * 2.0f; y += ocean_vars->f18) {
                 vertex_count = 0;
                 for (x = ocean_vars->f18 * -2.0f; x < ocean_vars->f18 * 2.0f;

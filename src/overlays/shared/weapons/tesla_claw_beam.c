@@ -911,7 +911,7 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
         float amount;
         int   flag;
     } hit;
-    Vec4         camera_direction, direction, delta, blend, step, offset;
+    Vec4         camera_direction, direction, delta, blend, step, secondary_beam_horizontal_offset;
     struct Moby *collided[128];
     Vec4         target_delta;
     union {
@@ -1147,17 +1147,17 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
             *(float *)((char *)&beam[seg] + 0x148) += x_c;
             x_a = fast_add_rotations(fast_arc_tan(delta.f[0], delta.f[1]), 1.5707964f);
             x_m = secondary_beam_horizontal_wave_amplitude * fast_cos(side_phase);
-            offset.f[0] = fast_cos(x_a) * x_m;
-            offset.f[1] = fast_sin(x_a) * x_m;
-            offset.f[2] = 0.0f;
-            qcopy_nc(&D_L00_001DB890[seg], &offset);
-            fast_vec_add(side, side, &offset);
+            secondary_beam_horizontal_offset.f[0] = fast_cos(x_a) * x_m;
+            secondary_beam_horizontal_offset.f[1] = fast_sin(x_a) * x_m;
+            secondary_beam_horizontal_offset.f[2] = 0.0f;
+            qcopy_nc(&D_L00_001DB890[seg], &secondary_beam_horizontal_offset);
+            fast_vec_add(side, side, &secondary_beam_horizontal_offset);
         } else {
             mirror = 21 - seg;
             qcopy(side, &beam[seg]);
             *(float *)((char *)&beam[seg] + 0x148) += side_waves[mirror];
             fast_vec_add(side, side, &D_L00_001DB890[mirror]);
-            qcopy(&offset, &D_L00_001DB890[seg]);
+            qcopy(&secondary_beam_horizontal_offset, &D_L00_001DB890[seg]);
         }
         if (seg == 1) {
             struct Hero *collision_source_hero = &hero;

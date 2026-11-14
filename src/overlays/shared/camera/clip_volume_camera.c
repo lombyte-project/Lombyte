@@ -14,7 +14,7 @@ typedef struct {
     char  pad0[0x40];
     int   x40;
     char  pad1[8];
-    float x4C;
+    float hero_target_height_offset;
 } CamSub;
 
 typedef struct {
@@ -43,7 +43,7 @@ void initialize_transform_state_from_level_table(char *transform_state) {
     char    *ent;
     int      level_table_entry_index;
     char    *entry_subrecord;
-    camera_subrecord->x4C = 1.5f;
+    camera_subrecord->hero_target_height_offset = 1.5f;
     camera_subrecord->x40 = 0;
     (*(CamInfo **)(transform_state + 0x70))->x80 = 0;
     camera_info = *(CamInfo **)(transform_state + 0x70);
@@ -56,7 +56,7 @@ void initialize_transform_state_from_level_table(char *transform_state) {
     if (level_table_entry_index < 0) {
         RaiseKernelTrap();
     } else {
-        camera_subrecord->x4C = *(float *)(entry_subrecord + 0x18);
+        camera_subrecord->hero_target_height_offset = *(float *)(entry_subrecord + 0x18);
     }
     qcopy(transform_state + 0x30, ent);
     qcopy(entry_euler_angles, ent + 0x10);

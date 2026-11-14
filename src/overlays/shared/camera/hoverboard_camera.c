@@ -487,7 +487,7 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
     V_32B1F8      radial;
     V_32B1F8      camera_position_before_height;
     V_32B1F8      goal;
-    V_32B1F8      offset;
+    V_32B1F8      focus_axis_offset;
     V_32B1F8      probe;
     V_32B1F8      step;
     Orbit_32B1F8 *orbit = camera->orbit;
@@ -514,12 +514,12 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
         fast_vec_sub(&rel, pos = &camera->pos, &focus);
         probe_step = 0;
         along = fast_vec_dot(&rel, &focus_state->axis);
-        fast_vec_normalize(&offset, &focus_state->axis, along);
-        fast_vec_sub(&lateral, &rel, &offset);
+        fast_vec_normalize(&focus_axis_offset, &focus_state->axis, along);
+        fast_vec_sub(&lateral, &rel, &focus_axis_offset);
         fast_vec_normalize(&radial, &lateral, spring->dist);
         fast_vec_add(&camera_position_before_height, &focus, &radial);
-        fast_vec_normalize(&offset, &focus_state->axis, spring->height);
-        fast_vec_add(&goal, &camera_position_before_height, &offset);
+        fast_vec_normalize(&focus_axis_offset, &focus_state->axis, spring->height);
+        fast_vec_add(&goal, &camera_position_before_height, &focus_axis_offset);
         fast_vec_add(&goal, &goal, &orbit->bias);
         camera->pos.x = cam_interp_values(camera->pos.x,
                                           goal.x,
@@ -636,8 +636,8 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
     update_hero_follow_camera_orbit(camera);
     qcopy(&focus_state->pos, &orbit->next);
     qcopy(&focus, &focus_state->pos);
-    fast_vec_normalize(&offset, &focus_state->axis, focus_state->dist);
-    fast_vec_add(&goal, &focus, &offset);
+    fast_vec_normalize(&focus_axis_offset, &focus_state->axis, focus_state->dist);
+    fast_vec_add(&goal, &focus, &focus_axis_offset);
     fast_vec_sub(&rel, &goal, &camera->pos);
     fast_vec_normalize(&rel, &rel, 1.0f);
     along = fast_vec_dot(&camera->fwd, &rel);

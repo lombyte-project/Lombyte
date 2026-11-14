@@ -138,7 +138,7 @@ unsigned char                       *spawn_moving_resizing_height_snapped_alpha_
 
 unsigned char *spawn_moving_resizing_height_snapped_alpha_fade_particle(
 
-    void *initial_position, int x, int color, float size, float size_increment) {
+    void *initial_position, int x, int color, float initial_size_scale, float size_increment) {
     unsigned char *particle = create_part(0x2D);
     if (particle) {
         unsigned char *particle_data;
@@ -158,7 +158,7 @@ unsigned char *spawn_moving_resizing_height_snapped_alpha_fade_particle(
         particle[2] = *D_L00_001B2134;
         particle[8] = rand();
         *(short *)(particle + 0xA) = 4;
-        *(float *)(particle + 0xC) = size * 210000.0f;
+        *(float *)(particle + 0xC) = initial_size_scale * 210000.0f;
         drift_angle_radians = random_angle_radians();
         horizontal_drift_speed = random_float_between(0.0015f, 0.0025f);
         *(float *)(particle_data + 0) = fast_cos(drift_angle_radians) * horizontal_drift_speed;
@@ -322,7 +322,7 @@ typedef union {
 
 typedef struct {
     u8        pad[0xA];
-    s16       xa;
+    s16       lifetime_countdown;
     u8        pc[4];
     V00271d20 pos;
     V00271d20 vel;
@@ -344,11 +344,11 @@ void update_timed_line_collision_particle(O00271d20 *particle) {
     motion_delta_xyz.f[3] = 0.0f;
     fast_vec_add(pos, pos, &motion_delta_xyz);
     fast_vec_add(vel, vel, &motion_delta_xyz);
-    if (fast_dec_timer_s16(&particle->xa)) {
+    if (fast_dec_timer_s16(&particle->lifetime_countdown)) {
         free_effect_particle(particle);
     } else if (coll_line_fix(vel, pos, 0x10, acc->i[3], 0)) {
         particle->pos.q = D_L00_00173E60.q;
-        particle->xa = 0;
+        particle->lifetime_countdown = 0;
     }
 }
 
@@ -427,13 +427,17 @@ FUN_L00_00272060(void *pos, int s, int color, int mode, int b, float *v, float x
 unsigned char *FUN_L00_00272060(void  *initial_position,
                                 int    lifetime_frames,
                                 int    color,
-                                int    mode,
+                                int    initial_rotation_mode,
                                 int    rotation_increment,
                                 float *initial_velocity,
                                 float  x,
                                 float  y,
 
                                 float z) {
+    enum {
+        PARTICLE_INITIAL_ROTATION_MODE_ZERO = 0,
+        PARTICLE_INITIAL_ROTATION_MODE_EIGHTH_TURN_OFFSET = 1
+    };
     unsigned char *particle = create_part(0x35);
     if (particle) {
         unsigned char *particle_data = particle + 0x20;
@@ -446,9 +450,9 @@ unsigned char *FUN_L00_00272060(void  *initial_position,
         particle[2] = *D_L00_001B2154;
         *(short *)(particle + 0xA) = lifetime_frames;
         *(float *)(particle + 0xC) = x * 210000.0f;
-        if (mode == 0) {
+        if (initial_rotation_mode == PARTICLE_INITIAL_ROTATION_MODE_ZERO) {
             particle[8] = 0;
-        } else if (mode == 1) {
+        } else if (initial_rotation_mode == PARTICLE_INITIAL_ROTATION_MODE_EIGHTH_TURN_OFFSET) {
             particle[8] = 0x20;
         } else {
             particle[8] = random_integer_below(0xFF);
@@ -657,9 +661,9 @@ typedef unsigned int u128_2726d8 __attribute__((mode(TI), aligned(16)));
 
 typedef struct {
     u8 *owner;
-    s32 x4;
-    s32 x8;
-    f32 xC;
+    s32 moby_point_selector;
+    s32 attached_owner_identity;
+    f32 initial_primary_position_w;
 } Q_2726d8;
 
 typedef struct {
@@ -676,15 +680,16 @@ void update_moby_point_attached_particle(P_2726d8 *particle) {
     Q_2726d8   *q = &particle->q;
     u128_2726d8 position_delta;
     f32         save, sc, length_jitter, target_length;
-    if (particle->q.owner == 0 || *(s16 *)(particle->q.owner + 0xA6) != q->x8 ||
+    if (particle->q.owner == 0 ||
+        *(s16 *)(particle->q.owner + 0xA6) != q->attached_owner_identity ||
         particle->q.owner[0x20] == 0xFE || particle->q.owner[0x20] == 0xFD) {
         free_effect_particle(particle);
         return;
     }
-    sc = q->xC * random_float_between(0.5f, 1.0f);
+    sc = q->initial_primary_position_w * random_float_between(0.5f, 1.0f);
     save = particle->secondary_position_w;
     qcopy(&position_delta, &particle->pos);
-    moby_point_position(particle->q.owner, q->x4, &particle->pos);
+    moby_point_position(particle->q.owner, q->moby_point_selector, &particle->pos);
     fast_vec_sub(&position_delta, &position_delta, &particle->pos);
     length_jitter = random_float_between(-0.021f, 0.021f);
     if (fast_vec_length(&position_delta) < 0.0625f) {
@@ -937,7 +942,7 @@ unsigned char *spawn_timed_hero_relative_particle(u128         *position,
                                                   int           particle_texture_index,
                                                   int           flag,
                                                   int           lifetime_frames,
-                                                  int           mode,
+                                                  int           position_mode,
 
                                                   float size_scale) {
     enum {
@@ -946,8 +951,8 @@ unsigned char *spawn_timed_hero_relative_particle(u128         *position,
     unsigned char *particle = create_part(0x3B);
     if (particle) {
         int *particle_data = (int *)(particle + 0x20);
-        particle_data[4] = mode;
-        if (mode == PARTICLE_MODE_HERO_RELATIVE)
+        particle_data[4] = position_mode;
+        if (position_mode == PARTICLE_MODE_HERO_RELATIVE)
             fast_vec_sub(particle_data, position, D_0013F3D0);
         qcopy(particle + 0x10, position);
         *(int *)(particle + 4) = packed_color;

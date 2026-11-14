@@ -13,7 +13,7 @@ void send_to_spu(struct AudioDec *dec,
 
 void send_to_spu(struct AudioDec *dec,
                  s32              adpcm_source_address,
-                 s32              size,
+                 s32              transfer_byte_count,
 
                  s32 staging_byte_offset) {
     u32 descriptor[4];
@@ -22,14 +22,14 @@ void send_to_spu(struct AudioDec *dec,
     FlushCache(0);
     descriptor[0] = adpcm_source_address;
     descriptor[1] = dec->iopBuff;
-    descriptor[2] = size;
+    descriptor[2] = transfer_byte_count;
     descriptor[3] = 0;
     do {
         dma_id = sceSifSetDma(descriptor, 1);
     } while (dma_id == 0);
     while (sceSifDmaStat(dma_id) >= 0) {
     }
-    snd_update_movie_adpcm(size, staging_byte_offset);
+    snd_update_movie_adpcm(transfer_byte_count, staging_byte_offset);
 }
 
 extern __typeof__(send_to_spu) func_0023AF18 __attribute__((alias("FUN_0023af18")));

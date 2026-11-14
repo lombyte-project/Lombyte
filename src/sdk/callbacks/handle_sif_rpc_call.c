@@ -9,7 +9,7 @@
 
 void handle_sif_rpc_call(u32 *packet, void *state) __asm__("FUN_0011b138");
 
-void handle_sif_rpc_call(u32 *packet, void *state) {
+void handle_sif_rpc_call(u32 *packet, void *unused_rpc_state) {
     u32 *server = (u32 *)packet[13]; /* packet + 0x34 */
     u32 *queue = (u32 *)server[16];  /* server + 0x40 */
 

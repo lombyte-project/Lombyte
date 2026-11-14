@@ -281,14 +281,14 @@ void *select_sand_mouse_spawn_target(void *moby,
 
 void update_sand_mouse_targeted_spawning(char *moby, char *state) __asm__("FUN_L01_002e35a8");
 
-void update_sand_mouse_targeted_spawning(char *moby, char *state) {
+void update_sand_mouse_targeted_spawning(char *moby, char *sand_mouse_instance_vars) {
     V4_w22c spawn_position;
     V4_w22c target_aim_position;
     V4_w22c spawn_offset;
     char   *target_moby;
     float   aim_yaw, aim_pitch, initial_yaw, initial_pitch, target_yaw, spawn_to_target_distance;
 
-    if (fast_dec_timer_s16(state + 0x4E) == 0)
+    if (fast_dec_timer_s16(sand_mouse_instance_vars + 0x4E) == 0)
         return;
     qzero(&spawn_position);
     fast_vec_add(&spawn_position, &spawn_position, &MOBY(moby)->pos);
@@ -304,7 +304,7 @@ void update_sand_mouse_targeted_spawning(char *moby, char *state) {
                                        3.1415927f,
                                        3.1415927f);
     if (target_moby != 0) {
-        *(char **)(state + 0x68) = target_moby;
+        *(char **)(sand_mouse_instance_vars + 0x68) = target_moby;
         if (hero.motion.pos.f[2] + 1.1f < MOBY(moby)->pos.z) {
             target_yaw = fast_arc_tan(MOBY(target_moby)->pos.x - MOBY(moby)->pos.x,
                                       MOBY(target_moby)->pos.y - MOBY(moby)->pos.y);
@@ -339,14 +339,15 @@ void update_sand_mouse_targeted_spawning(char *moby, char *state) {
                                                   target_aim_position.f[2] - spawn_position.f[2]);
                     spawn_sandmouse_projectile(
                         moby, &spawn_position, aim_yaw, aim_pitch, initial_yaw, initial_pitch);
-                    *(short *)(state + 0x4E) =
+                    *(short *)(sand_mouse_instance_vars + 0x4E) =
                         scale_game_frames(sand_mouse_projectile_spawn_interval_frames_gp);
-                    *(int *)(state + 0x64) = *(int *)(state + 0x64) + 1;
+                    *(int *)(sand_mouse_instance_vars + 0x64) =
+                        *(int *)(sand_mouse_instance_vars + 0x64) + 1;
                 }
             }
         }
     } else {
-        *(int *)(state + 0x68) = 0;
+        *(int *)(sand_mouse_instance_vars + 0x68) = 0;
     }
 }
 
@@ -534,13 +535,14 @@ void sand_mouse_update(struct Moby *moby) {
         moby->update_dist = 0xFF;
         moby->draw_dist = 0xFF;
         if (sand_mouse_vars->parent != -1) {
-            unsigned short id;
+            unsigned short moby_save_id;
             qcopy(((float *)&moby->pos),
                   ((float *)&((struct Moby *)ents)[sand_mouse_vars->parent].pos));
             moby->pos.z = moby->pos.z + 0.02f;
-            if (l01_save_state.cleared[(short)(id = moby->save_id)] != 0 ||
-                (*(int *)((char *)D_0014C190_257218 + (((short)id >> 5) * 4 + (D_0015ED84 << 8))) >>
-                 (id & 0x1F)) &
+            if (l01_save_state.cleared[(short)(moby_save_id = moby->save_id)] != 0 ||
+                (*(int *)((char *)D_0014C190_257218 +
+                          (((short)moby_save_id >> 5) * 4 + (D_0015ED84 << 8))) >>
+                 (moby_save_id & 0x1F)) &
                     1) {
                 debug_print(sand_mouse_already_completed_message);
                 mark_moby_for_removal(moby);

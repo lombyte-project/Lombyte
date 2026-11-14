@@ -91,7 +91,7 @@ typedef struct {
     char      padc[0x14];
     int       x20;
     short     x24;
-    short     x26;
+    short     audio_selection_base_index;
     char      pad28[4];
     short     x2c;
 } E_28e9c8;
@@ -149,21 +149,22 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
             moby->flags |= 0x80;
     }
     if (audio_selection_mode == AUDIO_SELECTION_MODE_ALWAYS_FADE) {
-        base_audio_selection_index = D_0013E030_28e9c8.x26;
+        base_audio_selection_index = D_0013E030_28e9c8.audio_selection_base_index;
         audio_stream_table_index = base_audio_selection_index + 1;
         secondary_track_index = base_audio_selection_index + 6;
         if (current_level_index == LEVEL_ORXON && base_audio_selection_index == 1 &&
             D_0013D4C6_lui == 0) {
             audio_stream_table_index = 0;
             secondary_track_index = 11;
-        } else if (current_level_index == LEVEL_OLTANIS && D_0013E030_28e9c8.x26 == 2) {
+        } else if (current_level_index == LEVEL_OLTANIS &&
+                   D_0013E030_28e9c8.audio_selection_base_index == 2) {
             audio_stream_table_index = 8;
             secondary_track_index = 14;
         }
         load_chunks_with_optional_fade(audio_stream_table_index, scale_game_frames(6));
     } else {
         int k, fade_frame_count;
-        base_audio_selection_index = D_0013E030_28e9c8.x26;
+        base_audio_selection_index = D_0013E030_28e9c8.audio_selection_base_index;
         k = D_0013E030_28e9c8.x2c;
         secondary_track_index = base_audio_selection_index + 3;
         if (k)
@@ -175,7 +176,8 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
             if (k)
                 secondary_track_index = 9;
             alternate_audio_stream_table_index = 4;
-        } else if (current_level_index == LEVEL_OLTANIS && D_0013E030_28e9c8.x26 == 2) {
+        } else if (current_level_index == LEVEL_OLTANIS &&
+                   D_0013E030_28e9c8.audio_selection_base_index == 2) {
             secondary_track_index = 13;
             if (D_0013E030_28e9c8.x2c)
                 secondary_track_index = 12;

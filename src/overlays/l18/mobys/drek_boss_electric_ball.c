@@ -474,7 +474,7 @@ extern unsigned char D_L18_00161FE1[3] MACRO_ADDR;
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EBBF0). */
 void spawn_explosion_burst(void *source_moby) {
     float        velocity[4] __attribute__((aligned(16)));
-    float        offset[4] __attribute__((aligned(16)));
+    float        second_spark_vector_or_particle_position[4] __attribute__((aligned(16)));
     struct Moby *moby = source_moby;
     int          i = 0;
     int          j;
@@ -492,10 +492,14 @@ void spawn_explosion_burst(void *source_moby) {
             speed = random_float_between(explosion_burst_spark_speed_min_gp,
                                          explosion_burst_spark_speed_max_gp);
             build_spherical_offset(velocity, speed * frame_time, angle, elevation);
-            fast_vec_scale(offset, velocity, explosion_burst_spark_second_vector_scale_gp);
+            fast_vec_scale(second_spark_vector_or_particle_position,
+                           velocity,
+                           explosion_burst_spark_second_vector_scale_gp);
             scale = random_float_between(0.8f, 1.2f);
-            offset[3] = velocity[3] = explosion_burst_spark_vector_w_gp;
-            offset[2] += explosion_burst_spark_second_vector_z_rate_gp * scale * frame_time;
+            second_spark_vector_or_particle_position[3] = velocity[3] =
+                explosion_burst_spark_vector_w_gp;
+            second_spark_vector_or_particle_position[2] +=
+                explosion_burst_spark_second_vector_z_rate_gp * scale * frame_time;
             scale = random_float_between(0.8f, 1.2f);
             a = truncate_float_to_s32(
                 (float)scale_game_frames(explosion_burst_spark_frame_count_gp) * scale);
@@ -505,7 +509,7 @@ void spawn_explosion_burst(void *source_moby) {
                 (float)scale_game_frames(explosion_burst_spark_third_frame_count_gp) * scale);
             spawn_spark(&moby->pos,
                         velocity,
-                        offset,
+                        second_spark_vector_or_particle_position,
                         explosion_burst_spark_initial_color_gp,
                         explosion_burst_spark_second_color_gp,
                         a,
@@ -529,15 +533,19 @@ void spawn_explosion_burst(void *source_moby) {
             build_spherical_offset(velocity, speed, angle, elevation);
             angle = random_angle_radians();
             offset_x = fast_cos(angle);
-            offset[0] = random_float_between(0.0f, explosion_burst_particle_xy_offset_limit_gp);
-            offset_x *= offset[0];
-            offset[0] = offset_x;
+            second_spark_vector_or_particle_position[0] =
+                random_float_between(0.0f, explosion_burst_particle_xy_offset_limit_gp);
+            offset_x *= second_spark_vector_or_particle_position[0];
+            second_spark_vector_or_particle_position[0] = offset_x;
             offset_y = fast_sin(angle);
-            offset[1] = random_float_between(0.0f, explosion_burst_particle_xy_offset_limit_gp);
-            offset_y *= offset[1];
-            offset[1] = offset_y;
-            offset[2] = 0.0f;
-            fast_vec_add(offset, offset, &moby->pos);
+            second_spark_vector_or_particle_position[1] =
+                random_float_between(0.0f, explosion_burst_particle_xy_offset_limit_gp);
+            offset_y *= second_spark_vector_or_particle_position[1];
+            second_spark_vector_or_particle_position[1] = offset_y;
+            second_spark_vector_or_particle_position[2] = 0.0f;
+            fast_vec_add(second_spark_vector_or_particle_position,
+                         second_spark_vector_or_particle_position,
+                         &moby->pos);
             color1 = explosion_burst_particle_first_color_choices[random_integer_below(6)];
             color2 = explosion_burst_particle_second_color_choices[random_integer_below(6)];
             scale = explosion_burst_particle_scale_multiplier_gp * 400000.0f;
@@ -547,7 +555,16 @@ void spawn_explosion_burst(void *source_moby) {
             b = scale_game_frames(
                 random_int_between(explosion_burst_particle_second_frame_count_range_start_gp,
                                    explosion_burst_particle_second_frame_count_range_end_gp));
-            spawn_particle(offset, velocity, color1, color2, scale, a, b, speed, 0, 0);
+            spawn_particle(second_spark_vector_or_particle_position,
+                           velocity,
+                           color1,
+                           color2,
+                           scale,
+                           a,
+                           b,
+                           speed,
+                           0,
+                           0);
         } while (j < explosion_burst_particle_count_gp);
     }
     if (explosion_burst_first_glow_scale_multiplier_gp > 0.0f) {

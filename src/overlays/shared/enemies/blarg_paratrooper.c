@@ -163,6 +163,9 @@ void blarg_paratrooper_update(char *moby) {
     enum {
         PARATROOPER_TARGET_UNAVAILABLE = 2
     };
+    enum {
+        PARATROOPER_REMOVAL_REQUESTED = 2
+    };
     Paratrooper302618 *paratrooper_private_state =
         (Paratrooper302618 *)(*(char **)((char *)(moby) + 0x78));
     char       *path;
@@ -199,7 +202,7 @@ void blarg_paratrooper_update(char *moby) {
         (*(unsigned char *)((char *)(moby) + 0x20)) = 8;
     }
     if ((*(unsigned char *)((char *)(moby) + 0x20)) != 0 &&
-        paratrooper_private_state->removal_status == 2) {
+        paratrooper_private_state->removal_status == PARATROOPER_REMOVAL_REQUESTED) {
         mark_moby_for_removal(moby);
         if (paratrooper_private_state->bone_attachment_moby)
             mark_moby_for_removal(paratrooper_private_state->bone_attachment_moby);
@@ -549,8 +552,8 @@ void blarg_paratrooper_update(char *moby) {
         }
         break;
     case PARATROOPER_STATE_KNOCKBACK_RECOVERY: {
-        int flags = step_moby_motion(moby, (char *)paratrooper_private_state + 0x70);
-        if (flags & 0x40) {
+        int motion_result_flags = step_moby_motion(moby, (char *)paratrooper_private_state + 0x70);
+        if (motion_result_flags & 0x40) {
             if (vector_distance_xy(&MOBY(moby)->pos, target + 0x10) < melee302618) {
             melee_state:
                 (*(unsigned char *)((char *)(moby) + 0x20)) = 7;
@@ -568,7 +571,7 @@ void blarg_paratrooper_update(char *moby) {
                         moby, 6, 0, ticks + random_int_between(0, scale_game_frames(7)));
                 }
             }
-        } else if (flags & 0x120) {
+        } else if (motion_result_flags & 0x120) {
         delete_moby:
             mark_moby_for_removal(moby);
         }
@@ -615,6 +618,9 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
     };
     enum {
         PARATROOPER_HIT_STATUS_NO_HIT_OR_SUPPRESSED = 1
+    };
+    enum {
+        PARATROOPER_TARGET_UNAVAILABLE = 2
     };
     Paratrooper302618 *paratrooper_instance_state;
     char              *target, *child, *attached, *chased;
@@ -807,7 +813,7 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
             qcopy(&paratrooper_instance_state->path_search_point, chased + 0x10);
         } else {
             paratrooper_instance_state->target_moby = 0;
-            paratrooper_instance_state->target_selection_status = 2;
+            paratrooper_instance_state->target_selection_status = PARATROOPER_TARGET_UNAVAILABLE;
         }
     }
     if (*(int *)&paratrooper_instance_state->target_moby == 0)

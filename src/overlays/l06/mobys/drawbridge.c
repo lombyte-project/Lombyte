@@ -137,8 +137,8 @@ void drawbridge_update(Moby *moby) {
 
     switch (moby->state) {
     case INITIALIZE_DRAWBRIDGE_SEGMENTS: {
-        int status = visited52[moby->mission + (current_level_index << 4)];
-        if (status == DRAWBRIDGE_MISSION_ALREADY_COMPLETE) {
+        int mission_status = visited52[moby->mission + (current_level_index << 4)];
+        if (mission_status == DRAWBRIDGE_MISSION_ALREADY_COMPLETE) {
             moby->state = DRAWBRIDGE_COMPLETE;
             drawbridge_extension_gp = 20.0f;
             drawbridge_pitch_degrees_gp = 1000.0f;

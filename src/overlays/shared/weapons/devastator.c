@@ -315,7 +315,7 @@ void devastator_update(struct Moby *devastator_moby) {
     UsageStat_2b2100  *stats;
     Hit_2b2100        *hit;
     float              height, limit, yaw, pitch, yaw0, pitch0;
-    float              size;
+    float              target_reticle_scale;
     float              muzzle_light_color_x, muzzle_light_color_y, muzzle_light_color_z;
     int                i;
 
@@ -364,11 +364,11 @@ void devastator_update(struct Moby *devastator_moby) {
                 fast_vec_dist(view_origin_2b2100, &devastator_vars->target->pos) / 100.0f;
             qcopy(&point, &devastator_vars->target->pos);
             point.f.z += devastator_vars->target_height;
-            size = absolute_float(0.9f - scaled_target_distance * 0.57f);
+            target_reticle_scale = absolute_float(0.9f - scaled_target_distance * 0.57f);
             suck_draw_reticle(
                 (int)devastator_moby,
                 0xFF0FFF0F,
-                size,
+                target_reticle_scale,
                 &point,
                 fast_normalize_angle(
                     convert_integer_to_float(D_L00_0015F5CC_2b2100 % scale_game_frames(240)) *

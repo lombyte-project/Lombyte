@@ -13,7 +13,7 @@ void decode_map_rle_row(u8 *decoded_row_dst, s32 row, u8 *compressed_data_base, 
     u8  *packed_run_src;
     u32  lo;
     u32  hi;
-    s32  count;
+    s32  remaining_run_nibbles;
     u32  pair;
 
     decoded_row_cursor = decoded_row_dst;
@@ -35,23 +35,23 @@ void decode_map_rle_row(u8 *decoded_row_dst, s32 row, u8 *compressed_data_base, 
             hi = ((hi << 4) | (lo >> 4)) & 0xFF;
             lo = lo & 0xF;
         }
-        count = 0x100;
+        remaining_run_nibbles = 0x100;
         if (hi != 0) {
-            count = hi;
+            remaining_run_nibbles = hi;
         }
         pair = (lo | (lo << 4)) & 0xFF;
         if (half) {
             *decoded_row_cursor = *decoded_row_cursor | (lo << 4);
             half = 0;
-            count--;
+            remaining_run_nibbles--;
             decoded_row_cursor++;
         }
-        if (count != 0) {
+        if (remaining_run_nibbles != 0) {
             do {
                 *decoded_row_cursor++ = pair;
-                count -= 2;
-            } while (count > 0);
-            if (count != 0) {
+                remaining_run_nibbles -= 2;
+            } while (remaining_run_nibbles > 0);
+            if (remaining_run_nibbles != 0) {
                 decoded_row_cursor--;
                 half = 1;
                 *decoded_row_cursor = lo;

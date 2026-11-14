@@ -72,7 +72,7 @@ s32 resolve_moby_hit_response(O_25a478 *obj,
 s32 resolve_moby_hit_response(O_25a478 *hit_recipient_moby,
                               P_25a478 *hit_record,
                               Q_25a478 *q,
-                              u32       flags,
+                              u32       cooldown_override_flags,
                               s32      *hit_status_output,
                               f32      *fp,
                               s32      *kp,
@@ -281,21 +281,21 @@ s32 resolve_moby_hit_response(O_25a478 *hit_recipient_moby,
         switch (hit_response_index) {
         case KIND_GATED_HIT_RESPONSE:
         case DEFAULT_HIT_RESPONSE:
-            if (!(flags & 0x10))
+            if (!(cooldown_override_flags & 0x10))
                 hit_response_code = 0xB;
-            if (!(flags & 0x20))
+            if (!(cooldown_override_flags & 0x20))
                 *hit_status_output = 1;
             goto z;
         case AUXILIARY_FLAG_SETTING_HIT_RESPONSE:
-            if (!(flags & 1))
+            if (!(cooldown_override_flags & 1))
                 hit_response_code = 0xB;
-            if (!(flags & 2))
+            if (!(cooldown_override_flags & 2))
                 *hit_status_output = 1;
             goto z;
         case CONDITIONAL_DURATION_HIT_RESPONSE:
-            if (!(flags & 4))
+            if (!(cooldown_override_flags & 4))
                 hit_response_code = 0xB;
-            if (!(flags & 8))
+            if (!(cooldown_override_flags & 8))
                 *hit_status_output = 1;
         z:
             hit_record->f2C = 0;

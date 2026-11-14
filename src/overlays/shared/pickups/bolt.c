@@ -1,3 +1,4 @@
+#include "rnc/mobys/moby_state.h"
 /* Shared moby class bolt (and bolt_hexnut, bolt_starnut, bolt_circlenut): bolts dropped and collected. */
 #include "types.h"
 #include "rnc/game/level_progress.h"
@@ -470,7 +471,7 @@ void collect_bolt(struct Moby *bolt) {
     s32         bolt_value;
     s32         spin;
     f32         k;
-    f32         size;
+    f32         sparkle_size;
     BoltSource *bolt_source;
 
     switch (bolt->oclass) {
@@ -513,11 +514,11 @@ void collect_bolt(struct Moby *bolt) {
     spin = random_integer_below(2);
     if (spin == 0)
         spin--;
-    size = random_float_between(0.4f, 0.5f);
+    sparkle_size = random_float_between(0.4f, 0.5f);
     FUN_L00_00272060(&pos,
                      scale_game_frames(0x19),
-                     size * 0.2f,
-                     size,
+                     sparkle_size * 0.2f,
+                     sparkle_size,
                      0x7F207F7F,
                      0,
                      spin,
@@ -526,8 +527,8 @@ void collect_bolt(struct Moby *bolt) {
     spin = -spin;
     FUN_L00_00272060(&pos,
                      scale_game_frames(0x19),
-                     size * 0.14f,
-                     size * k,
+                     sparkle_size * 0.14f,
+                     sparkle_size * k,
                      0x7F7F7F7F,
                      1,
                      spin,
@@ -623,7 +624,7 @@ void update_bolt_grounded_pose(char *moby, void *base_position_output, void *bas
         if (ground_moby != 0 && *(unsigned char *)(grounded_bolt_vars + 0x57) == 0) {
             int   should_detach_from_ground;
             char *x;
-            if ((unsigned char)MOBY(ground_moby)->state == 0xFE ||
+            if ((unsigned char)MOBY(ground_moby)->state == MOBY_STATE_REMOVAL_MARKER ||
                 (*(unsigned char **)(grounded_bolt_vars + 0x5C))[0x20] == 0xFD) {
                 should_detach_from_ground = 1;
             } else {

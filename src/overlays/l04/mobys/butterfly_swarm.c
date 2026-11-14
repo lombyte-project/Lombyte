@@ -11,11 +11,11 @@
 
 int find_nearest_point_index_xy(char *moby, char *points, int count) __asm__("FUN_L04_001f3038");
 
-int find_nearest_point_index_xy(char *moby, char *points, int count) {
+int find_nearest_point_index_xy(char *moby, char *points, int point_count) {
     int   best = -1;
     int   i;
     float best_distance = 32767.0f;
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < point_count; i++) {
         float distance = vector_distance_xy(moby + 0x10, points + i * 0x10);
         if (distance < best_distance) {
             best_distance = distance;
@@ -560,7 +560,7 @@ void butterfly_swarm_update(struct Moby *moby) {
     f32           angle;
     f32           angle2;
     f32           speed;
-    f32           size;
+    f32           spawn_radius;
     f32           average;
     f32           effect[8];
 
@@ -634,10 +634,10 @@ void butterfly_swarm_update(struct Moby *moby) {
                 qcopy(&child->pos, &moby->pos);
                 angle = random_angle_radians();
                 angle2 = random_angle_radians();
-                size = random_float_between(0.6f, 0.9f);
-                child->pos.x += fast_cos(angle) * fast_sin(angle2) * size;
-                child->pos.y += fast_sin(angle) * fast_sin(angle2) * size;
-                child->pos.z += fast_cos(angle2) * size;
+                spawn_radius = random_float_between(0.6f, 0.9f);
+                child->pos.x += fast_cos(angle) * fast_sin(angle2) * spawn_radius;
+                child->pos.y += fast_sin(angle) * fast_sin(angle2) * spawn_radius;
+                child->pos.z += fast_cos(angle2) * spawn_radius;
                 part->unk50 = 0;
                 part->leader_pos = &moby->pos;
                 part->unk58 = 0;

@@ -30,15 +30,15 @@ void blend_moby_animation_ex(
 
     MobyAnim *moby, int new_seq, int frame_index, int blend_frames, int options) {
     int           slot;
-    int           flags;
+    int           pose_slot_and_flags;
     unsigned char oldSeq;
     float         scale;
 
     if (moby->anim_time > 0.025f || moby->pose_layers != 0 || moby->manips != 0 || (options & 4)) {
         slot = find_or_allocate_moby_render_slot((int)moby);
         if (slot >= 0) {
-            flags = (options & 1) ? (slot | 0x100) : slot;
-            FUN_0020ede8(moby, (options & 2) ? (flags | 0x200) : flags);
+            pose_slot_and_flags = (options & 1) ? (slot | 0x100) : slot;
+            FUN_0020ede8(moby, (options & 2) ? (pose_slot_and_flags | 0x200) : pose_slot_and_flags);
             qcopy(D_001B2C00 + slot * 0x10, moby->unkF0);
             oldSeq = moby->seq;
             if (oldSeq != 0xFF) {

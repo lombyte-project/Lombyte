@@ -84,7 +84,7 @@ void sandmouse_projectile_update(char *moby) {
     char     *moby_vars = ((char *)MOBY(moby)->pvars);
     f32      *moby_position;
     OvlVec4   old_pos;
-    OvlVec4   offset;
+    OvlVec4   movement_delta;
     DropProbe probe;
     f32       desired_yaw, desired_pitch;
     f32       pitch_k, pitch_d, pitch_max;
@@ -116,10 +116,10 @@ void sandmouse_projectile_update(char *moby) {
             (f32 *)(moby_vars + 4), MOBY(moby)->rot.y, desired_pitch, pitch_k, pitch_d, pitch_max);
         pitch_max = frame_time * 40.0f;
         MOBY(moby)->rot.y = pitch_result;
-        build_spherical_offset(offset.f, pitch_max, MOBY(moby)->rot.z, -pitch_result);
+        build_spherical_offset(movement_delta.f, pitch_max, MOBY(moby)->rot.z, -pitch_result);
     }
     qcopy(&old_pos, moby_position);
-    fast_vec_add(moby_position, moby_position, &offset);
+    fast_vec_add(moby_position, moby_position, &movement_delta);
     if (MOBY(moby)->pos.x < 2.0f || MOBY(moby)->pos.x > 1021.0f || MOBY(moby)->pos.y < 2.0f ||
         MOBY(moby)->pos.y > 1021.0f || MOBY(moby)->pos.z < 2.0f || MOBY(moby)->pos.z > 1021.0f ||
         MOBY(moby)->pos.x < 0.0f || MOBY(moby)->pos.y < 0.0f || MOBY(moby)->pos.z < 0.0f ||

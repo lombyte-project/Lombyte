@@ -36,7 +36,7 @@ typedef union {
 static s8 *cvt(struct _reent *reentrancy_state,
                f64            number_to_format,
                s32            ndigits,
-               s32            flags,
+               s32            format_flags,
                s8            *sign,
                s32           *decpt,
                s32            ch,
@@ -46,17 +46,17 @@ static s8 *cvt(struct _reent *reentrancy_state,
         DTOA_MODE_SIGNIFICANT_DIGITS = 2,
         DTOA_MODE_FRACTIONAL_DIGITS = 3
     };
-    s32          mode, dsgn;
+    s32          dtoa_mode, dsgn;
     s8          *digits, *bp, *rve;
     double_union value_bits;
 
     if (ch == 'f') {
-        mode = DTOA_MODE_FRACTIONAL_DIGITS;
+        dtoa_mode = DTOA_MODE_FRACTIONAL_DIGITS;
     } else {
         if (ch == 'e' || ch == 'E') {
             ndigits++;
         }
-        mode = DTOA_MODE_SIGNIFICANT_DIGITS;
+        dtoa_mode = DTOA_MODE_SIGNIFICANT_DIGITS;
     }
     value_bits.d = number_to_format;
     if (word0(value_bits) & Sign_bit) {
@@ -65,8 +65,8 @@ static s8 *cvt(struct _reent *reentrancy_state,
     } else {
         *sign = '\000';
     }
-    digits = _dtoa_r(reentrancy_state, number_to_format, mode, ndigits, decpt, &dsgn, &rve);
-    if ((ch != 'g' && ch != 'G') || (flags & ALT)) {
+    digits = _dtoa_r(reentrancy_state, number_to_format, dtoa_mode, ndigits, decpt, &dsgn, &rve);
+    if ((ch != 'g' && ch != 'G') || (format_flags & ALT)) {
         bp = digits + ndigits;
         if (ch == 'f') {
             if (*digits == '0' && number_to_format) {

@@ -132,7 +132,7 @@ int refresh_spawner_population_and_find_free_slot(int unused, char *spawner_vars
         char *slot_moby = *slot;
         if (slot_moby != 0 && MOBY(slot_moby)->oclass == 0x75E &&
             (unsigned char)MOBY(slot_moby)->state != MOBY_STATE_REMOVAL_MARKER &&
-            (unsigned char)MOBY(slot_moby)->state != 0xFD) {
+            (unsigned char)MOBY(slot_moby)->state != MOBY_STATE_ALTERNATE_REMOVAL_MARKER) {
             spawner_vars[0x91]++;
         } else {
             last = i;
@@ -152,7 +152,7 @@ void spawner_update(char *moby) {
     float        target[4];
     float        launch_velocity[4];
     float        spawn_position[4];
-    float        offset[4];
+    float        spawn_position_offset[4];
 
     process_spawner_hit_record(moby, spawner_vars);
     switch ((unsigned char)MOBY(moby)->state) {
@@ -194,7 +194,7 @@ void spawner_update(char *moby) {
             char *target_moby = *(char **)((char *)spawner_vars + 0x140);
             if (target_moby != 0 &&
                 (unsigned char)MOBY(target_moby)->state != MOBY_STATE_REMOVAL_MARKER &&
-                (unsigned char)MOBY(target_moby)->state != 0xFD) {
+                (unsigned char)MOBY(target_moby)->state != MOBY_STATE_ALTERNATE_REMOVAL_MARKER) {
                 qcopy((char *)spawner_vars + 0x100, &MOBY(target_moby)->pos);
             } else {
                 *(int *)((char *)spawner_vars + 0x140) = 0;
@@ -275,9 +275,9 @@ void spawner_update(char *moby) {
                 float speed = target_distance * (frame_time_macro * 0.6f);
                 fast_vec_normalize(launch_velocity, launch_velocity, speed);
                 moby_point_position(moby, 0, spawn_position);
-                fast_vec_normalize(offset, launch_velocity, 0.05f);
-                add_random_offset_to_vector_xyz(offset, 0.025f);
-                fast_vec_add(spawn_position, spawn_position, offset);
+                fast_vec_normalize(spawn_position_offset, launch_velocity, 0.05f);
+                add_random_offset_to_vector_xyz(spawn_position_offset, 0.025f);
+                fast_vec_add(spawn_position, spawn_position, spawn_position_offset);
                 launch_velocity[2] = FUN_L00_0025abf0_30ab80(
                     spawn_position, target, 0, speed, -(frame_time_sq_macro * 9.8f));
             }

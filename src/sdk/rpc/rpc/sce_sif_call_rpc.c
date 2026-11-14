@@ -46,7 +46,7 @@ extern s32 sceSifSendCmd();
 extern s32 sceSifWriteBackDCache();
 s32        sceSifCallRpc(struct SifRpcClient *client,
                          s32                  rpc_number,
-                         s32                  mode,
+                         s32                  call_options,
                          s32                  send_buf,
                          s32                  send_size,
                          s32                  recv_buf,
@@ -70,7 +70,7 @@ s32        sceSifCallRpc(struct SifRpcClient *client,
         return allocation_failure_result;
     }
     request_id = packet->request_id;
-    skip_cache_writeback = mode & 2;
+    skip_cache_writeback = call_options & 2;
     client->end_argument = end_data;
     client->packet = (s32)packet;
     client->request_id = request_id;
@@ -94,7 +94,7 @@ s32        sceSifCallRpc(struct SifRpcClient *client,
             }
         }
     }
-    if (mode & 1) {
+    if (call_options & 1) {
         if (end_func == 0) {
             packet->completion_mode = RPC_COMPLETION_DISABLED;
         } else {

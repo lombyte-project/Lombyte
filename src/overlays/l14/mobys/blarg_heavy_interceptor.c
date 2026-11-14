@@ -756,14 +756,14 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
                     60000.0f);
         for (i = 0; i < 2; i++) {
             int            signed_puff_random_value = random_integer_below(6);
-            float          size;
+            float          puff_size;
             int            puff_rgb_component;
             unsigned char *p;
 
             if (random_integer_below(2)) {
                 signed_puff_random_value = -signed_puff_random_value;
             }
-            size = random_float_between(40000.0f, 100000.0f);
+            puff_size = random_float_between(40000.0f, 100000.0f);
             puff_rgb_component = random_int_between(0x30, 0xFF);
             p = FUN_L00_0026d000_c618(
                 &moby->pos,
@@ -772,7 +772,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
                 1.0f,
                 signed_puff_random_value,
                 D_L14_0015F580,
-                size,
+                puff_size,
                 puff_rgb_component |
                     (0x60000000 | (puff_rgb_component << 16) | (puff_rgb_component << 8)));
             if (p != 0) {
@@ -1260,7 +1260,7 @@ void draw_blarg_heavy_interceptor_spinning_beam(struct Moby *moby) {
     float                      beam_to_camera_vector[4];
     float                      camera_facing_angles[4];
     float                      rm[3][4];
-    float                      size;
+    float                      quad_scale;
     float                      step;
     int                        r, g, b, a;
     u32                        col;
@@ -1301,7 +1301,7 @@ void draw_blarg_heavy_interceptor_spinning_beam(struct Moby *moby) {
     pk.uv[5] = 0.0f;
     pk.uv[6] = 0.0f;
     pk.uv[7] = 0.0f;
-    size = blarg_heavy_interceptor_spinning_beam_initial_quad_scale_gp;
+    quad_scale = blarg_heavy_interceptor_spinning_beam_initial_quad_scale_gp;
     step = blarg_heavy_interceptor_spinning_beam_initial_offset_scale_gp;
     r = blarg_heavy_interceptor_spinning_beam_initial_red_gp;
     g = blarg_heavy_interceptor_spinning_beam_initial_green_gp;
@@ -1316,7 +1316,7 @@ void draw_blarg_heavy_interceptor_spinning_beam(struct Moby *moby) {
         pk.col[0] = col;
         fast_vec_scale(quad_translation_offset, beam_offset_direction, step);
         for (j = 0; j < 4; j++) {
-            fast_vec_scale(pk.m[j], D_L14_001D8600[j], size);
+            fast_vec_scale(pk.m[j], D_L14_001D8600[j], quad_scale);
             transform_vector(pk.m[j], pk.m[j], beam_quad_transform);
             fast_vec_add(pk.m[j], pk.m[j], quad_translation_offset);
         }
@@ -1330,7 +1330,7 @@ void draw_blarg_heavy_interceptor_spinning_beam(struct Moby *moby) {
         g -= blarg_heavy_interceptor_spinning_beam_green_decrement_per_pair_gp;
         b -= blarg_heavy_interceptor_spinning_beam_blue_decrement_per_pair_gp;
         a -= blarg_heavy_interceptor_spinning_beam_alpha_decrement_per_pair_gp;
-        size += blarg_heavy_interceptor_spinning_beam_quad_scale_increment_per_pair_gp;
+        quad_scale += blarg_heavy_interceptor_spinning_beam_quad_scale_increment_per_pair_gp;
         step += blarg_heavy_interceptor_spinning_beam_offset_scale_increment_per_pair_gp;
         if (r < 0)
             r = 0;
@@ -2066,8 +2066,11 @@ int try_retract_turret_group(int index) {
 extern char *D_L14_ffd0_e[] __asm__("D_L14_0015FFD0") MACRO_ADDR;
 
 int is_turret_group_activated_or_empty(int index) {
+    enum {
+        TURRET_STATE_LIVE_MINIMUM = 0
+    };
     unsigned short *list = (unsigned short *)D_L14_001AC2C0_2B0168[index];
-    int             count = 0;
+    int             live_member_count = 0;
     char           *moby_pool_base;
     if (list)
         goto scan;
@@ -2080,13 +2083,13 @@ scan:
         char          *moby = moby_pool_base + ((id & 0x7FFF) << 8);
         int            state = ((signed char)MOBY(moby)->state);
         char          *group_member_vars = ((char *)MOBY(moby)->pvars);
-        if (state >= 0)
-            count++;
-        if (state >= 0 && *(short *)(group_member_vars + 0x88))
+        if (state >= TURRET_STATE_LIVE_MINIMUM)
+            live_member_count++;
+        if (state >= TURRET_STATE_LIVE_MINIMUM && *(short *)(group_member_vars + 0x88))
             goto success;
         list++;
         if ((short)id < 0)
-            return count == 0;
+            return live_member_count == 0;
     } while (1);
 }
 

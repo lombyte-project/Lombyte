@@ -36,7 +36,7 @@ s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *e
     OvlVec4             *current;
     SegmentPath_261968 **path_slot;
     s32                  i;
-    s32                  offset;
+    s32                  current_path_point_byte_offset;
     f32                  crossing;
     f32                  zero;
 
@@ -55,10 +55,11 @@ s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *e
     previous = &transformed_previous_point;
     current = &transformed_current_point;
     if (i < (*path_slot)->count) {
-        offset = 0x20;
+        current_path_point_byte_offset = 0x20;
         zero = 0.0f;
         do {
-            fast_vec_sub(current, (OvlVec4 *)((u8 *)*path_slot + offset), start);
+            fast_vec_sub(
+                current, (OvlVec4 *)((u8 *)*path_slot + current_path_point_byte_offset), start);
             transform_vector_by_basis(current, current, &direction);
             if (transformed_previous_point.f[3] != zero || transformed_current_point.f[3] != zero) {
                 if (transformed_current_point.f[1] * transformed_previous_point.f[1] < 0.0f) {
@@ -73,7 +74,7 @@ s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *e
             }
             qcopy(previous, current);
             i++;
-            offset += 0x10;
+            current_path_point_byte_offset += 0x10;
         } while (i < (*path_slot)->count);
     }
     return 0;
@@ -120,7 +121,7 @@ int path_8808(int   segment_path_index,
     float  zero;
     int    found = 0;
     int    i = 1;
-    int    offset;
+    int    path_vertex_byte_offset;
     float *previous_path_point_slot;
     float *current_path_point_slot;
     fast_vec_sub(v, segment_end, segment_start);
@@ -139,12 +140,12 @@ int path_8808(int   segment_path_index,
     previous_path_point_slot = previous_path_point_in_basis;
     current_path_point_slot = u;
     if (i < ((SegmentPath **)D_L00_001B04B0_261968)[segment_path_index]->count) {
-        offset = 0x20;
+        path_vertex_byte_offset = 0x20;
         zero = 0.0f;
         do {
             fast_vec_sub(current_path_point_slot,
                          (char *)((SegmentPath **)D_L00_001B04B0_261968)[segment_path_index] +
-                             offset,
+                             path_vertex_byte_offset,
                          segment_start);
             transform_vector_by_basis(current_path_point_slot, current_path_point_slot, v);
             if (previous_path_point_in_basis[3] != zero || u[3] != zero) {
@@ -163,7 +164,7 @@ int path_8808(int   segment_path_index,
             qcopy(previous_path_point_slot, current_path_point_slot);
         next:
             i++;
-            offset += 0x10;
+            path_vertex_byte_offset += 0x10;
         } while (i < ((SegmentPath **)D_L00_001B04B0_261968)[segment_path_index]->count);
     }
     lerp_vector(adjusted_endpoint, segment_start, segment_end, best);
@@ -273,7 +274,7 @@ s32 resolve_point_path_segment_clearance(f32      distance,
     OvlVec4            *current;
     s32                 next_point_index;
     s32                 i;
-    s32                 offset;
+    s32                 axis_address_or_point_byte_offset;
     OvlVec4            *saved_out;
     s32                 found;
     f32                 original_height;
@@ -284,19 +285,24 @@ s32 resolve_point_path_segment_clearance(f32      distance,
     saved_out = clearance_adjusted_point;
     qcopy(&working, point);
     segment_path = D_L00_001B04B0_262030[path_index];
-    offset = (s32) & (*(OvlVec4 *)D_0013F5E0);
-    original_height = fast_vec_dot(&working, (OvlVec4 *)offset);
+    axis_address_or_point_byte_offset = (s32) & (*(OvlVec4 *)D_0013F5E0);
+    original_height = fast_vec_dot(&working, (OvlVec4 *)axis_address_or_point_byte_offset);
     i = 0;
     if (segment_path->count - 1 > found) {
-        height_axis = (OvlVec4 *)offset;
+        height_axis = (OvlVec4 *)axis_address_or_point_byte_offset;
         do {
-            offset = i << 4;
+            axis_address_or_point_byte_offset = i << 4;
             next_point_index = i + 1;
-            if (((OvlVec4 *)((u8 *)segment_path + offset + 0x10))->f[3] != 0.0f ||
+            if (((OvlVec4 *)((u8 *)segment_path + axis_address_or_point_byte_offset + 0x10))
+                        ->f[3] != 0.0f ||
                 segment_path->points[next_point_index].f[3] != 0.0f) {
-                current = (OvlVec4 *)((u8 *)segment_path + (offset + 0x10));
+                current =
+                    (OvlVec4 *)((u8 *)segment_path + (axis_address_or_point_byte_offset + 0x10));
                 fast_vec_sub(&difference, &working, current);
-                fast_vec_sub(&segment, (OvlVec4 *)((u8 *)segment_path + (offset + 0x20)), current);
+                fast_vec_sub(
+                    &segment,
+                    (OvlVec4 *)((u8 *)segment_path + (axis_address_or_point_byte_offset + 0x20)),
+                    current);
                 projection = fast_vec_dot(&difference, height_axis);
                 FUN_001ff500_262030(projection, &scaled_cross, height_axis);
                 fast_vec_sub(&difference, &difference, &scaled_cross);
@@ -426,7 +432,7 @@ void initialize_moby_transform_history(int source_moby, char *history_state) {
 
 typedef struct {
     u8  p0[0x23];
-    u8  x23;
+    u8  history_decay_value;
     u8  p24[0xC];
     u8  x30;
     u8  x31;
@@ -439,17 +445,17 @@ typedef struct {
     u8  p73[0x21];
     s32 x94;
     u8  p98[0xE];
-    s16 xa6;
+    s16 spawn_class_id;
 } E00262528;
 
 typedef struct {
     u8         p0[0x100];
-    s32        x100[4];
-    s32        x110[4];
-    E00262528 *x120[4];
+    s32        initial_decay_values[4];
+    s32        sample_delays[4];
+    E00262528 *history_mobys[4];
     u8         p130[4];
-    E00262528 *x134;
-    s32        x138;
+    E00262528 *history_source_moby;
+    s32        history_entry_count;
 } O00262528;
 
 void create_moby_transform_history_entry(O00262528 *history_state,
@@ -461,26 +467,26 @@ void create_moby_transform_history_entry(O00262528 *history_state,
 
                                          s32 sample_delay) {
     E00262528 *spawned_moby;
-    if (history_state->x138 == 4)
+    if (history_state->history_entry_count == 4)
         return;
     if (sample_delay >= 9)
         return;
-    spawned_moby = create_moby(history_state->x134->xa6);
+    spawned_moby = create_moby(history_state->history_source_moby->spawn_class_id);
     if (spawned_moby == 0)
         return;
-    spawned_moby->x32 = history_state->x134->x32;
-    spawned_moby->x38 = history_state->x134->x38;
+    spawned_moby->x32 = history_state->history_source_moby->x32;
+    spawned_moby->x38 = history_state->history_source_moby->x38;
     spawned_moby->x31 = 1;
     spawned_moby->x34 = 0x80A;
     spawned_moby->x30 = 0;
     spawned_moby->x94 = 0;
-    if (spawned_moby->xa6 == 0)
+    if (spawned_moby->spawn_class_id == 0)
         spawned_moby->x72 = 0;
-    spawned_moby->x23 = initial_decay_value;
-    history_state->x110[history_state->x138] = sample_delay;
-    history_state->x100[history_state->x138] = initial_decay_value;
-    history_state->x120[history_state->x138] = spawned_moby;
-    history_state->x138++;
+    spawned_moby->history_decay_value = initial_decay_value;
+    history_state->sample_delays[history_state->history_entry_count] = sample_delay;
+    history_state->initial_decay_values[history_state->history_entry_count] = initial_decay_value;
+    history_state->history_mobys[history_state->history_entry_count] = spawned_moby;
+    history_state->history_entry_count++;
 }
 
 typedef struct {

@@ -73,7 +73,7 @@ void exploding_prop_update(struct Moby *moby) {
         EXPLODING_PROP_STATE_INITIALIZED = 1
     };
     char *hit = 0;
-    Vec4  velocity, hit_direction, push, offset, center;
+    Vec4  velocity, hit_direction, push, effect_spawn_position, center;
     u32   palette[4];
     u32   colors[4];
     Vec4  delta;
@@ -112,15 +112,15 @@ void exploding_prop_update(struct Moby *moby) {
             angle = random_float_between(moby->rot.z, 1.5707963267948966f);
             radius = fast_cos(angle);
             radius *= random_float_between(-3.0f, 3.0f);
-            offset.f[0] = radius;
+            effect_spawn_position.f[0] = radius;
             angle = random_float_between(moby->rot.z, 1.5707963267948966f);
             radius = fast_sin(angle);
             radius *= random_float_between(-3.0f, 3.0f);
-            offset.f[1] = radius;
-            offset.f[2] = 0.0f;
-            offset.f[2] = random_float_between(1.0f, 7.0f);
-            add_vectors(colors, &offset, &moby->pos);
-            fast_vec_sub(colors, &center, &offset);
+            effect_spawn_position.f[1] = radius;
+            effect_spawn_position.f[2] = 0.0f;
+            effect_spawn_position.f[2] = random_float_between(1.0f, 7.0f);
+            add_vectors(colors, &effect_spawn_position, &moby->pos);
+            fast_vec_sub(colors, &center, &effect_spawn_position);
             velocity.q = *(u128 *)colors;
             fast_vec_normalize(&velocity, &velocity, frame_time * 5.0f);
             add_vectors(colors, &velocity, &push);
@@ -132,7 +132,8 @@ void exploding_prop_update(struct Moby *moby) {
             radius = random_float_between(0.1f, 0.3f);
             life = random_int_between(100, 160);
             size = random_float_between(3.0f, 7.0f);
-            spawn_debris_chunk(&offset, &velocity, *color, radius, life, size, 0.15f, 2.0f, 1);
+            spawn_debris_chunk(
+                &effect_spawn_position, &velocity, *color, radius, life, size, 0.15f, 2.0f, 1);
         }
         clear_u64_value(&velocity);
         spawn_explosion(moby,
@@ -161,15 +162,15 @@ void exploding_prop_update(struct Moby *moby) {
             angle = random_float_between(moby->rot.z, 1.5707963267948966f);
             radius = fast_cos(angle);
             radius *= random_float_between(-3.0f, 3.0f);
-            offset.f[0] = radius;
+            effect_spawn_position.f[0] = radius;
             angle = random_float_between(moby->rot.z, 1.5707963267948966f);
             radius = fast_sin(angle);
             radius *= random_float_between(-3.0f, 3.0f);
-            offset.f[1] = radius;
-            offset.f[2] = 0.0f;
-            fast_vec_add(&offset, &offset, &moby->pos);
-            offset.f[2] += random_float_between(1.0f, 5.5f);
-            fast_vec_sub(&delta, &center, &offset);
+            effect_spawn_position.f[1] = radius;
+            effect_spawn_position.f[2] = 0.0f;
+            fast_vec_add(&effect_spawn_position, &effect_spawn_position, &moby->pos);
+            effect_spawn_position.f[2] += random_float_between(1.0f, 5.5f);
+            fast_vec_sub(&delta, &center, &effect_spawn_position);
             velocity.q = delta.q;
             fast_vec_normalize(&velocity, &velocity, frame_time * 5.0f);
             add_vectors(&delta, &velocity, &hit_direction);
@@ -182,7 +183,8 @@ void exploding_prop_update(struct Moby *moby) {
             size = random_float_between(1.0f, 3.0f) * 210000.0f;
             life = scale_game_frames(180);
             pick = random_integer_below(3);
-            debris = mine_debris(&offset, &velocity, color1, color2, size, life, colors[pick]);
+            debris = mine_debris(
+                &effect_spawn_position, &velocity, color1, color2, size, life, colors[pick]);
             if (debris != 0)
                 *(float *)((char *)debris + 0x2c) = moby->pos.z - 0.5f;
         }

@@ -123,11 +123,11 @@ void draw_electric_gate_beams(struct Moby *moby) {
     struct GeometryQuad quads[2][5];
     char                matrix[0x40];
     u64                 texture;
-    int                 i, j, k, vertex_index, outer_color, inner_color, offset;
+    int                 i, j, k, vertex_index, outer_color, inner_color, moby_table_byte_offset;
     float               angle, blend;
     unsigned short     *list;
     unsigned short     *next_moby_index_ptr;
-    short               id;
+    short               moby_list_entry;
 
     angle = convert_integer_to_float(frame_number & 0x3F) / 63.0f * 6.28318f;
     for (i = 0; i < 5; i++) {
@@ -170,22 +170,22 @@ void draw_electric_gate_beams(struct Moby *moby) {
     list = (unsigned short *)D_L05_001ABCC0[moby->group];
     do {
         char *listed_moby;
-        offset = (*list & 0x7FFF) << 8;
-        listed_moby = (char *)(offset + (int)l05_moby_array);
+        moby_table_byte_offset = (*list & 0x7FFF) << 8;
+        listed_moby = (char *)(moby_table_byte_offset + (int)l05_moby_array);
         next_moby_index_ptr = list + 1;
         if (*(short *)(listed_moby + 0xA6) == 0x346 &&
             *(unsigned char *)(listed_moby + 0x20) == 1) {
             copy_matrix_rotation(matrix, listed_moby + 0xC0);
-            qcopy(matrix + 0x30, (char *)(offset + (int)l05_moby_array) + 0x10);
+            qcopy(matrix + 0x30, (char *)(moby_table_byte_offset + (int)l05_moby_array) + 0x10);
             *(float *)(matrix + 0x3C) = 1.0f;
             for (k = 0; k < 5; k++) {
                 draw_geometry_quad(&quads[0][k], matrix, 0);
                 draw_geometry_quad(&quads[1][k], matrix, 0);
             }
         }
-        id = *(short *)list;
+        moby_list_entry = *(short *)list;
         list = next_moby_index_ptr;
-    } while (id >= 0);
+    } while (moby_list_entry >= 0);
 }
 
 float D_L05_0020B740[4][2] = {

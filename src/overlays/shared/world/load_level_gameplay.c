@@ -932,7 +932,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     {
         char *p = (char *)hdr + hdr->f44;
         int   n2;
-        int   count = 0;
+        int   loaded_moby_count = 0;
         int   n;
         char *next_moby_record;
         int   i;
@@ -945,7 +945,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         FillTransferWords(mem, 0, (n + n2) << 8);
         for (i = 0; i < n; i++) {
             int           mission;
-            int           flags;
+            int           moby_load_flags;
             int           uid;
             int           bolts;
             int           bolts2;
@@ -958,7 +958,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             p += 4;
             mission = *(int *)p;
             p += 4;
-            flags = *(int *)p;
+            moby_load_flags = *(int *)p;
             p += 4;
             uid = *(int *)p;
             p += 4;
@@ -968,18 +968,18 @@ char *load_level_gameplay(int skip_gameplay_read) {
             p += 4;
             selected_bolt_count = bolts;
             adjusted_bolt_count = selected_bolt_count;
-            if (flags != 0) {
+            if (moby_load_flags != 0) {
                 level_or_group_scratch = D_0015ED84; /* read before the test: see the group loop */
-                if (flags & 0x10) {
+                if (moby_load_flags & 0x10) {
                     vis = find_or_assign_bolt_source_slot(level_or_group_scratch, uid);
                 } else {
                     vis = 0xFF;
                 }
                 if (l00_moby_load_exclusion_flags_by_uid[uid] != 0) {
                     skip = 1;
-                } else if (flags & 3) {
+                } else if (moby_load_flags & 3) {
                     if (mission_state[mission] == 0xFF) {
-                        if (flags & 2) {
+                        if (moby_load_flags & 2) {
                             selected_bolt_count = bolts2;
                             if ((D_L00_001BA4D0[uid >> 5] >> (uid & 0x1F)) & 1) {
                                 adjusted_bolt_count = (selected_bolt_count + 1) / 2;
@@ -990,7 +990,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                             skip = 1;
                         }
                     } else {
-                        if (flags & 1) {
+                        if (moby_load_flags & 1) {
                             if ((D_0014C190_257218[D_0015ED84][uid >> 5] >> (uid & 0x1F)) & 1) {
                                 adjusted_bolt_count = (bolts + 1) / 2;
                             }
@@ -998,11 +998,11 @@ char *load_level_gameplay(int skip_gameplay_read) {
                             skip = 1;
                         }
                     }
-                } else if (flags & 8) {
+                } else if (moby_load_flags & 8) {
                     if ((D_L00_001BA4D0[uid >> 5] >> (uid & 0x1F)) & 1) {
                         skip = 1;
                     }
-                } else if ((flags & 0xC) == 4) {
+                } else if ((moby_load_flags & 0xC) == 4) {
                     if ((D_0014C190_257218[D_0015ED84][uid >> 5] >> (uid & 0x1F)) & 1) {
                         skip = 1;
                     }
@@ -1022,9 +1022,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
 
                 {
                     short *slot = moby_index_remap + i;
-                    *slot = count;
+                    *slot = loaded_moby_count;
                 }
-                m = moby_table + count;
+                m = moby_table + loaded_moby_count;
                 init_moby_instance(m, *(int *)p);
                 p += 4;
                 m->bolt_source_slot = vis;
@@ -1092,17 +1092,17 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 if (*(int *)p != -1) {
                     store_current_level_table_value((int)m, *(int *)p);
                 }
-                count++;
+                loaded_moby_count++;
             }
             p = next_moby_record;
         }
-        D_L00_0015FFDC = moby_table + count;
+        D_L00_0015FFDC = moby_table + loaded_moby_count;
         D_L00_0015FFDC->f20 = 0xFF;
-        mem += (count + n2) << 8;
+        mem += (loaded_moby_count + n2) << 8;
         D_L00_0015FFE8_macro = mem;
         mem += n2 << 7;
         mem = (char *)(((u32)mem + 0x3F) & 0xFFFFFFC0);
-        D_L00_0015FFE0 = (MobyInst *)((int)moby_table + ((count + n2) << 8) - 0x100);
+        D_L00_0015FFE0 = (MobyInst *)((int)moby_table + ((loaded_moby_count + n2) << 8) - 0x100);
     }
     if (hdr->f58 != 0) {
         char      *pv = (char *)hdr + hdr->f58;
@@ -2161,19 +2161,19 @@ s32 start_cutscene_chunk_read(s32 i) __asm__("FUN_L00_002451b8");
 s32 start_cutscene_chunk_read(s32 i) {
     u8 *buf = D_L00_0016C860.buf;
     s32 start;
-    s32 size;
+    s32 sector_count;
 
     if (pal_mode != FALSE) {
-        size = disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i + 1] -
-               disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i];
+        sector_count = disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i + 1] -
+                       disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i];
         start = disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i];
     } else {
-        size = disc_table.sector_lists[D_L00_0016C860.list].sectors[i + 1] -
-               disc_table.sector_lists[D_L00_0016C860.list].sectors[i];
+        sector_count = disc_table.sector_lists[D_L00_0016C860.list].sectors[i + 1] -
+                       disc_table.sector_lists[D_L00_0016C860.list].sectors[i];
         start = disc_table.sector_lists[D_L00_0016C860.list].sectors[i];
     }
-    if (size > 0) {
-        start_audio_stream_read(buf, start, size);
+    if (sector_count > 0) {
+        start_audio_stream_read(buf, start, sector_count);
         update_audio_stream_until_idle(0);
     }
     return 1;

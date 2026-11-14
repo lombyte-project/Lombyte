@@ -343,6 +343,10 @@ extern int  l01_hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 
 void update_hero_ground_material_effects(void) {
+    enum {
+        GROUND_MATERIAL_SLIP = 8,
+        GROUND_MATERIAL_SLIP_NO_LEDGE = 0xC
+    };
     struct Hero  *hero_ptr = &hero;
     int           saved_ground_type;
     int           x;
@@ -404,7 +408,7 @@ void update_hero_ground_material_effects(void) {
         struct Hero *q = &hero;
         q->selector_13 = 1;
     }
-    if (saved_ground_type == 8) {
+    if (saved_ground_type == GROUND_MATERIAL_SLIP) {
         struct Hero *q = &hero;
         q->on_slip_ground = 1;
     }
@@ -412,7 +416,7 @@ void update_hero_ground_material_effects(void) {
         struct Hero *q = &hero;
         q->grind_jump_block = 1;
     }
-    if (saved_ground_type == 0xC) {
+    if (saved_ground_type == GROUND_MATERIAL_SLIP_NO_LEDGE) {
         struct Hero *q = &hero;
         q->on_slip_ground = 1;
     }
@@ -834,7 +838,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
     OvlMobyEntry40 *hero_moby_entry;
     u8             *mob;
     s32             flag;
-    s32             id;
+    s32             hit_response_state;
     f32             horizontal_scale, vertical_amount, cached_frame_time;
     OvlVec4         motion_delta;
 
@@ -889,9 +893,9 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
     case HERO_VEHICLE_MODE_ON_FOOT:
         mob = (u8 *)G.damage_source_moby;
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
-            id = 0x80;
+            hit_response_state = HERO_STATE_DYING_SPEED_LIMITED;
         call_ret:
-            l01_hero_set_state(id, 1);
+            l01_hero_set_state(hit_response_state, 1);
             return 1;
         }
         if (G.state.control_mode == 0x16) {
@@ -902,14 +906,14 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
         if (G.state.control_mode == HERO_MODE_WATER_SURFACE) {
             mob = (u8 *)G.damage_source_moby;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
-                id = 0x82;
+                hit_response_state = HERO_STATE_DYING_ZERO_HEALTH;
                 goto call_ret;
             }
             l01_hero_set_state(0x75, 1);
         } else if (G.state.control_mode == HERO_MODE_SWIM) {
             mob = (u8 *)G.damage_source_moby;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
-                id = 0x82;
+                hit_response_state = HERO_STATE_DYING_ZERO_HEALTH;
                 goto call_ret;
             }
             if (current_level_index == LEVEL_QUARTU || current_level_index == LEVEL_VELDIN_ORBIT) {
@@ -923,7 +927,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
         } else if (G.state.control_mode == HERO_MODE_LEDGE) {
             mob = (u8 *)G.damage_source_moby;
             if (mob != 0) {
-                id = 0x82;
+                hit_response_state = HERO_STATE_DYING_ZERO_HEALTH;
                 if (*(s16 *)(mob + 0xA6) == 0x28F) {
                     goto call_ret;
                 }
@@ -1345,7 +1349,10 @@ extern s32         coll3_233940(void *, f32) __asm__("FUN_L00_001f3170");
 extern u128_233940 D_L01_001742F0[] NOT_SDA;
 s32 resolve_hero_position_with_collision_queries(s32 mode) __asm__("FUN_L01_00233940");
 
-s32 resolve_hero_position_with_collision_queries(s32 mode) {
+s32 resolve_hero_position_with_collision_queries(s32 large_correction_mode) {
+    enum {
+        HERO_LARGE_CORRECTION_LIMIT_TO_CAPSULE_RADIUS = 0xF
+    };
     V_233940     pre_collision_position;
     V_233940     collision_query_offset;
     V_233940     resolved_position_delta;
@@ -1412,7 +1419,7 @@ s32 resolve_hero_position_with_collision_queries(s32 mode) {
     fast_vec_sub(&resolved_position_delta, &hero.motion.pos.q, &pre_collision_position);
     query_height_or_displacement_length = fast_vec_length(&resolved_position_delta);
     if (hero.capsule_radius * 1.5f < query_height_or_displacement_length) {
-        if (mode == 0xF) {
+        if (large_correction_mode == HERO_LARGE_CORRECTION_LIMIT_TO_CAPSULE_RADIUS) {
             if (512.0f < resolved_position_delta.f[0])
                 resolved_position_delta.f[0] = 512.0f;
             else if (resolved_position_delta.f[0] < -512.0f)

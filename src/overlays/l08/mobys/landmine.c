@@ -198,10 +198,10 @@ void landmine_update(struct Moby *moby) {
         return;
     }
     case PATH_FOLLOWER_FADE_OUT: {
-        Vec4 timer;
-        timer.f[0] = (f32)moby->alpha;
-        approach_value(&timer, 0.0f, 128.0f / (f32)scale_game_frames(30));
-        moby->alpha = (u8)(s32)timer.f[0];
+        Vec4 fade_alpha;
+        fade_alpha.f[0] = (f32)moby->alpha;
+        approach_value(&fade_alpha, 0.0f, 128.0f / (f32)scale_game_frames(30));
+        moby->alpha = (u8)(s32)fade_alpha.f[0];
         if (moby->alpha == 0)
             mark_moby_for_removal(moby);
     }

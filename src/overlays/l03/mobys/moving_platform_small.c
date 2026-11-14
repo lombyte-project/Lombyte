@@ -72,7 +72,7 @@ void moving_platform_small_update(char *moby) {
     int                      easing_frame_count;
     int                      next_path_node_index;
     int                      end;
-    int                      count;
+    int                      path_node_count;
     int                      next_path_node_byte_offset;
     int                      node_off;
     signed char              path_node_step;
@@ -164,9 +164,10 @@ void moving_platform_small_update(char *moby) {
         pc = &platform_pvars->path_cursor;
         path = *(int **)(pc + 0x10);
         path_node_step = pc[4];
-        count = *path;
-        end = path_node_step < 0 ? 0 : count - 1;
-        next_path_node_index = (platform_pvars->path_cursor + count + path_node_step) % count;
+        path_node_count = *path;
+        end = path_node_step < 0 ? 0 : path_node_count - 1;
+        next_path_node_index =
+            (platform_pvars->path_cursor + path_node_count + path_node_step) % path_node_count;
         node_off = next_path_node_index * 0x10;
         platform_position = moby + 0x10;
         fast_vec_sub(

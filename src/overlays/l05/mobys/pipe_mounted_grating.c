@@ -72,7 +72,7 @@ void pipe_mounted_grating_update(struct Moby *moby) {
                     transform_vector_by_basis(
                         particle_spawn_offset, particle_spawn_offset, &moby->rot_row0);
                     for (j = 0; j < 10; j++) {
-                        float size;
+                        float particle_size_scale;
                         random_vector(drift, frame_time * 1.5f, frame_time * 2.0f);
                         fast_vec_scale(pos, drift, 5.0f);
                         fast_vec_add(pos, pos, particle_spawn_offset);
@@ -81,11 +81,11 @@ void pipe_mounted_grating_update(struct Moby *moby) {
                         if (spin == 0) {
                             spin--;
                         }
-                        size = random_float_between(0.4f, 0.5f);
+                        particle_size_scale = random_float_between(0.4f, 0.5f);
                         FUN_L00_00272060(pos,
                                          scale_game_frames(25),
-                                         size * 0.2f,
-                                         size,
+                                         particle_size_scale * 0.2f,
+                                         particle_size_scale,
                                          0x7F207F7F,
                                          0,
                                          spin,
@@ -94,8 +94,8 @@ void pipe_mounted_grating_update(struct Moby *moby) {
                         spin = -spin;
                         FUN_L00_00272060(pos,
                                          scale_game_frames(25),
-                                         size * 0.14f,
-                                         size * 0.7f,
+                                         particle_size_scale * 0.14f,
+                                         particle_size_scale * 0.7f,
                                          0x7F7F7F7F,
                                          1,
                                          spin,

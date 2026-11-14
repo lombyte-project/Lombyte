@@ -13,7 +13,7 @@ extern void font_print_large(int, int, u64, char *, int) __asm__("FUN_001f6530")
 
 void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char *text) __asm__("FUN_L00_001fcb28");
 
-void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char *text) {
+void draw_timed_text_line(int x, int y, int alignment, float scale, float alpha, char *text) {
     enum {
         TEXT_ALIGN_CENTER = 0,
         TEXT_ALIGN_RIGHT = 1
@@ -24,7 +24,7 @@ void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char
     width = measure_text_width_regular(text, -1) * scale;
     left = x;
     right = left;
-    switch (mode) {
+    switch (alignment) {
     case TEXT_ALIGN_CENTER:
         left -= width >> 1;
         right = x + (width >> 1);

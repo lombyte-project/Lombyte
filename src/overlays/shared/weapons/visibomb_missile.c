@@ -724,7 +724,7 @@ void spawn_moby_particle_and_glow_burst(char *source_moby, int flag) {
     V6    A;
     V6    B;
     float view_origin_distance, extra, sc;
-    int   count, i, j;
+    int   particle_count, i, j;
 
     qcopy(elevated_spawn_position, &MOBY(source_moby)->pos);
     elevated_spawn_position[2] += 0.3f;
@@ -739,15 +739,15 @@ void spawn_moby_particle_and_glow_burst(char *source_moby, int flag) {
         clear_u64_value(particle_velocity);
         view_origin_distance = fast_vec_length(view_origin_delta);
         if (view_origin_distance < 8.0f) {
-            count = truncate_float_to_s32(view_origin_distance) + 2;
+            particle_count = truncate_float_to_s32(view_origin_distance) + 2;
         } else {
-            count = 10;
+            particle_count = 10;
         }
         extra = 0.0f;
         if (view_origin_distance < 7.0f)
             extra = 7.0f - view_origin_distance;
-        if (count > 0) {
-            i = count;
+        if (particle_count > 0) {
+            i = particle_count;
             do {
                 int *pa, *pb;
                 int  particle_frame_count, particle_random_frame_value;
@@ -868,11 +868,12 @@ void visibomb_missile_update(struct Moby *missile_moby) {
         return;
     }
     {
-        float t = visibomb_missile_default_speed_gp * frame_time_macro;
+        float requested_speed_target = visibomb_missile_default_speed_gp * frame_time_macro;
         if (controller_state.held & 0x40)
-            t = visibomb_missile_max_speed_gp * frame_time_macro;
-        missile_vars->smoothed_speed_target += (t - missile_vars->smoothed_speed_target) *
-                                               visibomb_missile_speed_target_blend_factor_gp;
+            requested_speed_target = visibomb_missile_max_speed_gp * frame_time_macro;
+        missile_vars->smoothed_speed_target +=
+            (requested_speed_target - missile_vars->smoothed_speed_target) *
+            visibomb_missile_speed_target_blend_factor_gp;
         missile_vars->f4 += (missile_vars->smoothed_speed_target - missile_vars->f4) *
                             visibomb_missile_speed_blend_factor_gp;
         if (visibomb_missile_max_speed_gp * frame_time_macro < missile_vars->f4)
@@ -912,14 +913,16 @@ void visibomb_missile_update(struct Moby *missile_moby) {
     qcopy(&v20, &missile_moby->pos);
     fast_vec_add(&missile_moby->pos, &missile_moby->pos, &v50);
     if (scale_game_frames(0xBB8) - scale_game_frames(0x3C) < missile_vars->f10) {
-        float t = probe_ground_height(&missile_moby->pos, 0, 0.5f) +
-                  missile_vars->launch_ground_clearance;
-        if (missile_moby->pos.z < t) {
+        float launch_clearance_target_height = probe_ground_height(&missile_moby->pos, 0, 0.5f) +
+                                               missile_vars->launch_ground_clearance;
+        if (missile_moby->pos.z < launch_clearance_target_height) {
             if (coll_hit_moby == 0 ||
                 (coll_hit_moby->pclass != 0 && coll_hit_moby->pclass->type == 5)) {
                 float ground_clearance_pitch_adjustment =
                     fast_arc_tan(missile_vars->f4,
-                                 approach_value(&missile_moby->pos.z, t, frame_time_macro * 6.0f));
+                                 approach_value(&missile_moby->pos.z,
+                                                launch_clearance_target_height,
+                                                frame_time_macro * 6.0f));
                 if (frame_time_macro * 1.57079637f < ground_clearance_pitch_adjustment)
                     ground_clearance_pitch_adjustment = frame_time_macro * 1.57079637f;
                 missile_moby->rot.y -= ground_clearance_pitch_adjustment;

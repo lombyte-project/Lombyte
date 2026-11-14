@@ -414,7 +414,7 @@ void draw_drek_fight_missile_group_trails(struct Moby *moby) {
     short              *group_entry;
     struct Moby        *missile_moby;
     char               *missile_trail_private_vars;
-    float               offset;
+    float               frame_color_blend_offset;
     float               color_blend_factor;
     int                 i;
     int                 j;
@@ -434,11 +434,12 @@ void draw_drek_fight_missile_group_trails(struct Moby *moby) {
                              ((u64)drek_missile_trail_blend_factor_selector_gp << 4) |
                              ((u64)drek_missile_trail_blend_addend_selector_gp << 6) |
                              0x8000000000ULL;
-        offset = convert_integer_to_float((game_frame + 3) & 3) * 0.0625f;
+        frame_color_blend_offset = convert_integer_to_float((game_frame + 3) & 3) * 0.0625f;
         for (j = 0; j < 4; j++) {
             quads[i].texture_coordinates[j][0] = drek_missile_trail_texture_coordinates[j][0];
             quads[i].texture_coordinates[j][1] = drek_missile_trail_texture_coordinates[j][1];
-            color_blend_factor = convert_integer_to_float(i + 1 - (j >> 1)) * 0.25f + offset;
+            color_blend_factor =
+                convert_integer_to_float(i + 1 - (j >> 1)) * 0.25f + frame_color_blend_offset;
             if (color_blend_factor > 1.0f) {
                 color_blend_factor = 1.0f;
             } else if (color_blend_factor < 0.0f) {

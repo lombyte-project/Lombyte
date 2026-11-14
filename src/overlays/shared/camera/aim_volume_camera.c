@@ -11,6 +11,7 @@
 #include "rnc/overlay/shared/camera/swing_volume_camera.h"
 #include "rnc/overlay/shared/camera.h"
 #include "rnc/overlay/shared/camera/follow_camera_set_up_spring.h"
+
 #include "rnc/overlay/shared/rendering/culling/test_point_in_transformed_unit_cylinder.h"
 #include "rnc/rendering/clip_volume.h"
 
@@ -93,7 +94,7 @@ void volume_camera_aim(struct UpdateCam *aim_camera_record) {
     struct UpdateCam *current_follow_camera_record;
     Vec4f            *rec_pos;
     FollowCamState   *rig;
-    FollowCamState   *state;
+    FollowCamState   *current_follow_camera_state;
     FollowCamBlock   *follow;
     FollowCamTail    *tail;
     FollowCamSnap    *snap;
@@ -147,24 +148,26 @@ run:
         follow = &rig->follow;
         tail = &rig->tail;
         snap = &rig->tail.snap;
-        /* A second pointer to the same state: retail keeps both. */
-        state = rig;
-        reset = &state->reset;
+        /* A second pointer to the same current_follow_camera_state: retail keeps both. */
+        current_follow_camera_state = rig;
+        reset = &current_follow_camera_state->reset;
         qcopy(rec_pos, pos);
         tail->distance = params->distance;
         tail->pivot_height = params->height;
         follow->look_height = params->offset_scale;
         fast_vec_scale(gravity_offset, &hero.gravity_dir, -tail->pivot_height);
-        fast_vec_add(state->follow.pivot, &hero.motion.pos, gravity_offset);
-        fast_vec_sub(tail->eye_offset, pos, state->follow.pivot);
-        qcopy(state->tail.saved_eye_offset, tail->eye_offset);
+        fast_vec_add(current_follow_camera_state->follow.pivot, &hero.motion.pos, gravity_offset);
+        fast_vec_sub(tail->eye_offset, pos, current_follow_camera_state->follow.pivot);
+        qcopy(current_follow_camera_state->tail.saved_eye_offset, tail->eye_offset);
         fast_vec_scale(gravity_offset, &hero.gravity_dir, -follow->look_height);
-        fast_vec_add(state->follow.look_target, &hero.motion.pos, gravity_offset);
-        qcopy(state->follow.snap_look_target, state->follow.look_target);
+        fast_vec_add(
+            current_follow_camera_state->follow.look_target, &hero.motion.pos, gravity_offset);
+        qcopy(current_follow_camera_state->follow.snap_look_target,
+              current_follow_camera_state->follow.look_target);
         qcopy(follow->focus, &hero.motion.pos);
-        qcopy(state->follow.offset, follow->focus);
-        qcopy(state->position, rec_pos);
-        qcopy(state->tail.snap.shot_pos, rec_pos);
+        qcopy(current_follow_camera_state->follow.offset, follow->focus);
+        qcopy(current_follow_camera_state->position, rec_pos);
+        qcopy(current_follow_camera_state->tail.snap.shot_pos, rec_pos);
         *(s32 *)&snap->distance_reduction = 0;
         *(s32 *)&reset->pitch_bias = 0;
         reset->look_height = follow->look_height;

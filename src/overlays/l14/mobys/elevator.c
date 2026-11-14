@@ -108,15 +108,18 @@ void elevator_update(struct Moby *elevator_moby) {
     qcopy(&rot, &elevator_moby->rot);
     switch (elevator_moby->state) {
     case ELEVATOR_STATE_INITIALIZE: {
-        u16 id;
+        u16 elevator_save_id;
         elevator_moby->command = 0;
         elevator_moby->state = ELEVATOR_STATE_WAIT_FOR_RIDER;
         initialize_elevator_path_state(elevator_moby);
         qcopy(&elevator_moby->pos, ((char *)l14_paths[elevator_vars->path]) + 0x10);
         qcopy(&elevator_moby->rot, elevator_vars->rot);
-        id = elevator_moby->save_id;
-        if (D_L14_001BB930.cleared[(short)id] == 0 &&
-            (((D_0014C190_257218[current_level_index][(short)id >> 5] >> (id & 0x1F)) ^ 1) & 1) &&
+        elevator_save_id = elevator_moby->save_id;
+        if (D_L14_001BB930.cleared[(short)elevator_save_id] == 0 &&
+            (((D_0014C190_257218[current_level_index][(short)elevator_save_id >> 5] >>
+               (elevator_save_id & 0x1F)) ^
+              1) &
+             1) &&
             visited52[elevator_vars->item + current_level_index * 16] == 0xFF)
             elevator_vars->bought = 1;
         else

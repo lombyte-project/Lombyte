@@ -330,14 +330,14 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
     CameraPreset *camera_path_preset =
         l01_camera_preset_rows_macro[camera_to_update->preset].preset;
     float rate = 0.01f;
-    int   mode = camera_path_preset->kind;
+    int   preset_kind = camera_path_preset->kind;
     int   path_index = camera_path_preset->track_path;
     float lead = camera_path_preset->lead;
     float pitch_error;
     float look_length;
     float pitch_step;
 
-    if (mode == CAMERA_PRESET_KIND_RAIL_SEGMENT_SYNC) {
+    if (preset_kind == CAMERA_PRESET_KIND_RAIL_SEGMENT_SYNC) {
         Path *path;
         float dist;
 
@@ -361,7 +361,7 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
             camera_to_update->pos[1], rail_point[1], &data->vel[1], rate, 0.175f, 0.0f);
         camera_to_update->pos[2] = cam_interp_values(
             camera_to_update->pos[2], rail_point[2], &data->vel[2], rate, 0.175f, 0.0f);
-    } else if (mode == CAMERA_PRESET_KIND_MAPPED_PATHS) {
+    } else if (preset_kind == CAMERA_PRESET_KIND_MAPPED_PATHS) {
         Path *pathA = ((Path *)l01_paths[path_index]);
         Path *pathD = (Path *)l01_splines_macro[camera_path_preset->target].path;
         Path *pathC = ((Path *)l01_paths[camera_path_preset->path]);
@@ -371,7 +371,7 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
         int   range_start = 0;
         int   range_end = 0;
         int   j = 0;
-        int   count;
+        int   hero_path_segment_count;
         int   hero_path_range_start_segment;
         int   camera_path_sample_segment;
         float node_fraction;
@@ -407,11 +407,12 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
             lead = pathB->nodes[j].x;
         }
         hero_path_range_start_segment = truncate_float_to_s32(pathB->nodes[j].w);
-        count = ((Hero *)(((char *)((char *)&hero))))->rail_segment - hero_path_range_start_segment;
-        if (count < 0) {
-            count += pathD->n;
+        hero_path_segment_count =
+            ((Hero *)(((char *)((char *)&hero))))->rail_segment - hero_path_range_start_segment;
+        if (hero_path_segment_count < 0) {
+            hero_path_segment_count += pathD->n;
         }
-        for (i = 0; i < count; i++) {
+        for (i = 0; i < hero_path_segment_count; i++) {
             sum += pathD->nodes[(hero_path_range_start_segment + i) % pathD->n].w;
         }
         sum += ((Hero *)(((char *)((char *)&hero))))->rail_seg_frac;

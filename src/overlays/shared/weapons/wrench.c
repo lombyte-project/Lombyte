@@ -818,11 +818,11 @@ void wrench_update(WrenchMoby *wrench_moby) {
                 spawn_wrench_impact_effects((char *)wrench_moby);
         }
         if (active) {
-            int   count = 1;
+            int   hit_descriptor_amount = 1;
             float scale = 1.0f, radius;
             if (wrench_hero()->state == 20) {
                 scale = 1.55f;
-                count = 2;
+                hit_descriptor_amount = 2;
             }
             wrench_collision_scratch.v[3][0] = fast_cos(yaw);
             wrench_collision_scratch.v[3][1] = fast_sin(yaw);
@@ -830,7 +830,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
             make_hit_descriptor(wrench_collision_scratch.v[0],
                                 wrench_moby,
                                 0x10000,
-                                (float)count,
+                                (float)hit_descriptor_amount,
                                 wrench_collision_scratch.v[3]);
             set_vector_length_xy(
                 wrench_collision_scratch.v[0], wrench_collision_scratch.v[0], scale);

@@ -43,7 +43,7 @@ typedef struct {
 
 typedef struct {
     u8  pad[0x50];
-    u8  x50[0x20];
+    u8  orbit_parameters[0x20];
     u8 *m;
 } O002ebb00;
 
@@ -132,6 +132,9 @@ void initialize_orbit_camera_from_parameters(char *camera_object,
 void initialize_orbit_camera_state(S002eb3b0 *camera_object) __asm__("FUN_L00_002eb3b0");
 
 void initialize_orbit_camera_state(S002eb3b0 *camera_object) {
+    enum {
+        CAMERA_SELECTION_MODE_USE_PRESET_TRANSITION = 0
+    };
     Moby002eb3b0 *m;
     camera_object->m->fF0 = 0;
     m = camera_object->m;
@@ -154,7 +157,7 @@ void initialize_orbit_camera_state(S002eb3b0 *camera_object) {
     zero_five_words(m);
     clear_twelve_bytes((u8 *)m + 0x90);
     initialize_orbit_camera_pose(camera_object);
-    camera_object->camera_selection_mode = 0;
+    camera_object->camera_selection_mode = CAMERA_SELECTION_MODE_USE_PRESET_TRANSITION;
 }
 
 void update_orbit_camera_pose(char *camera_object) __asm__("FUN_L00_002eb480");
@@ -360,6 +363,7 @@ void initialize_orbit_camera_from_hero(O002ebb00 *camera_object) {
     qcopy(camera_state + 0x80, raised_hero_position);
     zero_five_words(camera_state + 0x14);
     *(f32 *)(camera_state + 0x1C) = 4.64f;
-    copy_five_floats_with_rotation_offset(camera_object->x50, camera_state + 0x14, 0.0f);
+    copy_five_floats_with_rotation_offset(
+        camera_object->orbit_parameters, camera_state + 0x14, 0.0f);
     initialize_orbit_camera_state(camera_object);
 }

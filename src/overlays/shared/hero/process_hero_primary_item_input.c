@@ -72,12 +72,12 @@ void smooth_and_clamp_value_pair(float *clamped_values, float *smoothed_values, 
 
 int hero_anim_tilt_lookup(int id, float *out) __asm__("FUN_L05_0023b378");
 
-int hero_anim_tilt_lookup(int id, float *out_tilt_radians) {
+int hero_anim_tilt_lookup(int tilt_selector, float *out_tilt_radians) {
     *out_tilt_radians = 0.0f;
     if (hero.state.control_mode == 0x16 && hero.race_ammo &&
         (unsigned)(hero.moby->prev_seq - 0x69) < 4)
         return 1;
-    switch (id) {
+    switch (tilt_selector) {
     case 0x37:
         *out_tilt_radians = -0.95993108f; /* -55 degrees */
         return 1;
@@ -474,7 +474,7 @@ void update_hero_movement_and_collision_probes(void) {
     float start[4], end[4], probe[4];
     u128  moby_rotation[4], rotation[4], combined[4];
     float distance;
-    float offset;
+    float edge_probe_scan_offset;
     int   hit;
     if (hero.tilt_disabled == 0) {
         integrate_hero_motion_with_collisions();
@@ -505,15 +505,17 @@ void update_hero_movement_and_collision_probes(void) {
             distance = 20.0f;
             hit = collision_line(start, end, 2, hero.moby, 0);
             if (!hit || (distance = fast_vec_dist(start, D_L05_00174260), distance > 3.0f)) {
-                for (offset = -0.4f; offset < 0.5f; offset += 0.1f) {
-                    transform_hero_local_offset_to_world(probe, 1.1f + offset, 0.0f, 0.0f);
+                for (edge_probe_scan_offset = -0.4f; edge_probe_scan_offset < 0.5f;
+                     edge_probe_scan_offset += 0.1f) {
+                    transform_hero_local_offset_to_world(
+                        probe, 1.1f + edge_probe_scan_offset, 0.0f, 0.0f);
                     if (!coll_sphere(hero.capsule_radius, probe, 2, 0)) {
                         hero.edge_ahead = 1;
                         if (!hit)
                             hero.edge_drop_depth = 20.0f;
                         else
                             hero.edge_drop_depth = distance;
-                        hero.edge_probe_offset = hero.capsule_radius + offset;
+                        hero.edge_probe_offset = hero.capsule_radius + edge_probe_scan_offset;
                         if (hero.edge_probe_offset < 0.0f)
                             hero.edge_probe_offset = 0.0f;
                         break;
@@ -1069,15 +1071,15 @@ int process_hero_primary_item_input(void) {
 
             i = 0;
             while (i < 5) {
-                int   id = pv->f2C[i];
+                int   target_moby_index = pv->f2C[i];
                 Moby *candidate;
                 float yaw_error, pitch_error, distance, score;
 
-                if (id == -1) {
+                if (target_moby_index == -1) {
                     i++;
                     continue;
                 }
-                candidate = (Moby *)((char *)D_L05_0015FFD8_macro + (id << 8));
+                candidate = (Moby *)((char *)D_L05_0015FFD8_macro + (target_moby_index << 8));
                 yaw_error = fast_difference_between_rotations(
                     (*(Hero *)((char *)&hero)).motion.rot.f[2],
                     fast_arc_tan(candidate->pos.x - (*(Hero *)((char *)&hero)).motion.pos.f[0],
@@ -1249,21 +1251,22 @@ extern s32  weapon_ammo_counts[37] __asm__("D_0013D428");
 void process_hero_race_object_interactions(void) __asm__("FUN_L05_00253b48");
 
 void process_hero_race_object_interactions(void) {
-    u8 *state;
+    u8 *hoverboard_pvars;
     u8 *moby;
     u8 *boost_trigger_moby;
     u8 *ground_boost_trigger_moby;
     u8 *third;
     f32 delta[4];
     f32 matrix[16];
-    s32 count, red, green, blue;
+    s32 color_pulse_period_frames, red, green, blue;
     f32 period, wave, ratio;
 
     if (hero.hoverboard_moby == 0)
         return;
-    state = *(u8 **)(hero.hoverboard_moby + 0x78);
-    if (*(s32 *)(state + 0x44) != -1) {
-        get_first_moby_in_group((void **)&boost_trigger_moby, *(s32 *)(state + 0x44), 0, 0);
+    hoverboard_pvars = *(u8 **)(hero.hoverboard_moby + 0x78);
+    if (*(s32 *)(hoverboard_pvars + 0x44) != -1) {
+        get_first_moby_in_group(
+            (void **)&boost_trigger_moby, *(s32 *)(hoverboard_pvars + 0x44), 0, 0);
         if (boost_trigger_moby != 0) {
             do {
                 if (*(s16 *)(boost_trigger_moby + 0xA6) == 0x473 &&
@@ -1284,9 +1287,9 @@ void process_hero_race_object_interactions(void) {
             } while (boost_trigger_moby != 0);
         }
     }
-    count = scale_game_frames(0x32);
-    period = convert_integer_to_float(count);
-    ratio = (f32)(D_L00_0015F5CC % count) / period;
+    color_pulse_period_frames = scale_game_frames(0x32);
+    period = convert_integer_to_float(color_pulse_period_frames);
+    ratio = (f32)(D_L00_0015F5CC % color_pulse_period_frames) / period;
     ratio += ratio;
     wave = fast_sin(ratio * 3.1415927f + -3.1415927f);
     red = truncate_float_to_s32(wave * 48.0f) + 0x68;
@@ -1294,10 +1297,10 @@ void process_hero_race_object_interactions(void) {
     blue = truncate_float_to_s32(wave * 24.0f) + 0x3C;
     if (green > 0xFF)
         green = 0xFF;
-    if (*(s32 *)(state + 0x48) != -1) {
+    if (*(s32 *)(hoverboard_pvars + 0x48) != -1) {
         if (hero.hoverboard_airborne == 0) {
             get_first_moby_in_group(
-                (void **)&ground_boost_trigger_moby, *(s32 *)(state + 0x48), 0, 0);
+                (void **)&ground_boost_trigger_moby, *(s32 *)(hoverboard_pvars + 0x48), 0, 0);
             if (ground_boost_trigger_moby != 0) {
                 u32 color = (blue << 16) | (0x80000000U | (green << 8)) | red;
                 do {
@@ -1326,8 +1329,8 @@ void process_hero_race_object_interactions(void) {
             }
         }
     }
-    if (*(s32 *)(state + 0x4C) != -1) {
-        get_first_moby_in_group((void **)&third, *(s32 *)(state + 0x4C), 0, 0);
+    if (*(s32 *)(hoverboard_pvars + 0x4C) != -1) {
+        get_first_moby_in_group((void **)&third, *(s32 *)(hoverboard_pvars + 0x4C), 0, 0);
         while (third != 0) {
             if (*(s16 *)(third + 0xA6) == 0x1D6 && fast_subtract_rotations_cf(third + 0xBC) != 0 &&
                 fast_vec_dist(&hero.motion.body_center, third + 0x10) < 1.5f) {

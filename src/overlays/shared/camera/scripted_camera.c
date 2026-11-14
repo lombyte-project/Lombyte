@@ -129,14 +129,14 @@ void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 transition_duration_fra
 
 void jet_end_mount(int mode) __asm__("FUN_L00_002eac18");
 
-void jet_end_mount(int mode) {
+void jet_end_mount(int camera_handoff_request) {
     enum {
         JET_END_MOUNT_REPOSITION_BEHIND_HERO = 0
     };
     LevelCamera *camera_globals = &l00_camera_lui;
     char        *current_follow_camera = ((char *)camera_globals->current_camera);
     initialize_camera_record_handoff_defaults();
-    if (mode == JET_END_MOUNT_REPOSITION_BEHIND_HERO) {
+    if (camera_handoff_request == JET_END_MOUNT_REPOSITION_BEHIND_HERO) {
         float camera_up_offset[4] __attribute__((aligned(16)));
         float camera_backward_offset[4] __attribute__((aligned(16)));
         float hero_rotation_matrix[16] __attribute__((aligned(16)));
@@ -149,14 +149,14 @@ void jet_end_mount(int mode) {
         FUN_001f9a10_2eac18(camera_position, hero_rotation - 0x10, camera_up_offset);
         FUN_001f9a10_2eac18(camera_position, camera_position, camera_backward_offset);
         *(short *)(((char *)camera_globals->current_camera) + 0x8A) = 1;
-    } else if (mode == 2) {
+    } else if (camera_handoff_request == 2) {
         *(char *)&camera_globals->transition_requested_kind = 0;
         *(short *)(current_follow_camera + 0x7E) = 2;
         camera_globals->transition_position_rate = 0.018f;
         camera_globals->transition_rotation_rate = 0.018f;
-    } else if (mode == 1) {
+    } else if (camera_handoff_request == 1) {
         *(short *)(current_follow_camera + 0x7E) = 3;
-    } else if (mode == 4) {
+    } else if (camera_handoff_request == 4) {
         *(char *)&camera_globals->transition_requested_kind = 0;
         *(short *)(current_follow_camera + 0x7E) = 5;
         camera_globals->transition_position_rate = 0.018f;

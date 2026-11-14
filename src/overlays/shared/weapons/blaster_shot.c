@@ -1,3 +1,4 @@
+#include "rnc/mobys/moby_state.h"
 /* Shared moby class 0x131: a homing shot, and the function that spawns it. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
@@ -133,7 +134,7 @@ char *spawn_homing_shot(
     char          *trail;
     unsigned char *variant;
     int            collision_hit_lifetime_min_and_alpha_scratch;
-    int            timer;
+    int            shot_lifetime_and_spark_lifetime_max_frames;
     int            lifetime;
     int            i;
     int            sparks;
@@ -174,12 +175,13 @@ char *spawn_homing_shot(
         *(float *)(homing_shot_vars + 0x1C) = vy;
         *(int *)(homing_shot_vars + 0x10) = 0;
         *(int *)(homing_shot_vars + 0x14) = 0;
-        timer = scale_game_frames(0x23);
+        shot_lifetime_and_spark_lifetime_max_frames = scale_game_frames(0x23);
         variant = item_text_variant;
-        timer = timer + variant[0xF] * 10;
+        shot_lifetime_and_spark_lifetime_max_frames =
+            shot_lifetime_and_spark_lifetime_max_frames + variant[0xF] * 10;
         *(int *)(homing_shot_vars + 0x28) = 0;
-        *(short *)(homing_shot_vars + 0x24) = timer;
-        *(short *)(homing_shot_vars + 0x26) = timer;
+        *(short *)(homing_shot_vars + 0x24) = shot_lifetime_and_spark_lifetime_max_frames;
+        *(short *)(homing_shot_vars + 0x26) = shot_lifetime_and_spark_lifetime_max_frames;
         *(w128 *)probe = *(w128 *)&MOBY(firing_moby)->pos;
         probe[2] = start[2];
         collision_hit_lifetime_min_and_alpha_scratch =
@@ -204,8 +206,9 @@ char *spawn_homing_shot(
                 fast_vec_normalize(
                     spark, spark, random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 6.0f));
                 collision_hit_lifetime_min_and_alpha_scratch = scale_game_frames(10);
-                timer = scale_game_frames(15);
-                lifetime = random_int_between(collision_hit_lifetime_min_and_alpha_scratch, timer);
+                shot_lifetime_and_spark_lifetime_max_frames = scale_game_frames(15);
+                lifetime = random_int_between(collision_hit_lifetime_min_and_alpha_scratch,
+                                              shot_lifetime_and_spark_lifetime_max_frames);
                 FUN_L00_0026dd20(moby + 0x10, (char *)spark, 0x7F2F4F6F, lifetime, 30000.0f);
             } while (sparks >= 0);
             variant = item_text_variant;
@@ -409,7 +412,8 @@ void homing_shot_update(Moby *shot_moby) {
             add_vector_xyz_2cb418(
                 (Vec4A *)&shot_moby->pos, ((char *)D_L00_00173E60), &spark_and_pushout_scratch);
             if (D_001403E0_lui != 0 && D_001403E0_lui->oclass == 0xA8 &&
-                D_001403E0_lui->state != 0xFE && D_001403E0_lui->state != 0xFD) {
+                D_001403E0_lui->state != MOBY_STATE_REMOVAL_MARKER &&
+                D_001403E0_lui->state != 0xFD) {
                 allocate_voice_for_target_entry(4, 0, D_001403E0_lui);
             }
         }

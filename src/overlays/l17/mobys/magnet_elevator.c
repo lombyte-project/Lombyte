@@ -80,7 +80,7 @@ void magnet_elevator_update(struct Moby *moby) {
         MAGNET_ELEVATOR_STATE_WAIT_FOR_HERO_TO_LEAVE_FIRST_STOP = 8,
         MAGNET_ELEVATOR_STATE_WAIT_FOR_HERO_TO_LEAVE_SECOND_STOP = 9
     };
-    char *state = P(moby, 0x78);
+    char *elevator_runtime_state = P(moby, 0x78);
     float delta[4];
     float rot[4];
     float camera_position_offset[4];
@@ -89,11 +89,11 @@ void magnet_elevator_update(struct Moby *moby) {
 
     fast_vec_scale(delta, &moby->pos, -1.0f);
     qcopy(rot, &moby->rot);
-    if (W(state, 0x7C) == 0) {
-        float f =
-            1.0f -
-            ((*(float *)((char *)(moby) + (0x18))) - (*(float *)((char *)(state) + (0x64)))) /
-                ((*(float *)((char *)(state) + (0x60))) - (*(float *)((char *)(state) + (0x64))));
+    if (W(elevator_runtime_state, 0x7C) == 0) {
+        float f = 1.0f - ((*(float *)((char *)(moby) + (0x18))) -
+                          (*(float *)((char *)(elevator_runtime_state) + (0x64)))) /
+                             ((*(float *)((char *)(elevator_runtime_state) + (0x60))) -
+                              (*(float *)((char *)(elevator_runtime_state) + (0x64))));
         if (f > 1.0f) {
             f = 1.0f;
         } else if (f < 0.0f) {
@@ -104,25 +104,28 @@ void magnet_elevator_update(struct Moby *moby) {
     }
     switch (B(moby, 0x20)) {
     case MAGNET_ELEVATOR_STATE_INITIALIZE:
-        (*(float *)((char *)(state) + (0x78))) = random_angle_radians();
-        W(state, 0x6C) = -1;
-        if (W(state, 0x80) == -1 || **(int **)(D_L17_001B0DB0 + W(state, 0x80) * 4) != 0xB) {
+        (*(float *)((char *)(elevator_runtime_state) + (0x78))) = random_angle_radians();
+        W(elevator_runtime_state, 0x6C) = -1;
+        if (W(elevator_runtime_state, 0x80) == -1 ||
+            **(int **)(D_L17_001B0DB0 + W(elevator_runtime_state, 0x80) * 4) != 0xB) {
             mark_moby_for_removal(moby);
             return;
         }
         B(moby, 0x20) = 6;
         break;
     case MAGNET_ELEVATOR_STATE_BLEND_CAMERA: {
-        float previous_camera_blend_progress = (*(float *)((char *)(state) + (0x70)));
-        advance_accelerated_scalar((float *)(state + 0x70),
-                                   (float *)(state + 0x74),
+        float previous_camera_blend_progress =
+            (*(float *)((char *)(elevator_runtime_state) + (0x70)));
+        advance_accelerated_scalar((float *)(elevator_runtime_state + 0x70),
+                                   (float *)(elevator_runtime_state + 0x74),
                                    1.0f,
                                    frame_time_sq * 4.0f,
                                    frame_time_sq * 4.0f,
                                    frame_time * 4.0f);
-        if ((*(float *)((char *)(state) + (0x70))) < 1.0f) {
-            float remaining_camera_blend_ratio = (1.0f - (*(float *)((char *)(state) + (0x70)))) /
-                                                 (1.0f - previous_camera_blend_progress);
+        if ((*(float *)((char *)(elevator_runtime_state) + (0x70))) < 1.0f) {
+            float remaining_camera_blend_ratio =
+                (1.0f - (*(float *)((char *)(elevator_runtime_state) + (0x70)))) /
+                (1.0f - previous_camera_blend_progress);
             char *camera_pose_base;
             FUN_L17_002ee9c0_c(moby, (char *)camera_position, (char *)camera_rotation);
             fast_vec_sub(camera_position_offset, D_L17_001676C0, camera_position);
@@ -163,16 +166,16 @@ void magnet_elevator_update(struct Moby *moby) {
         if (B(moby, 0x20) == 3 && P(D_0013E533_u, 0x1119) != moby) {
             B(moby, 0x20) = 5;
         }
-        if (!voice_is_playing(moby, W(state, 0x6C))) {
-            W(state, 0x6C) = allocate_voice_for_target_entry(0, 4, (int)moby);
+        if (!voice_is_playing(moby, W(elevator_runtime_state, 0x6C))) {
+            W(elevator_runtime_state, 0x6C) = allocate_voice_for_target_entry(0, 4, (int)moby);
         }
         if (B(moby, 0x20) == 2 || B(moby, 0x20) == 4) {
-            target = (*(float *)((char *)(state) + (0x60)));
+            target = (*(float *)((char *)(elevator_runtime_state) + (0x60)));
         } else {
-            target = (*(float *)((char *)(state) + (0x64)));
+            target = (*(float *)((char *)(elevator_runtime_state) + (0x64)));
         }
         advance_accelerated_scalar(&moby->pos.z,
-                                   (float *)(state + 0x68),
+                                   (float *)(elevator_runtime_state + 0x68),
                                    target,
                                    frame_time_sq * 0.3f,
                                    frame_time_sq * 0.3f,
@@ -191,18 +194,18 @@ void magnet_elevator_update(struct Moby *moby) {
             if (B(moby, 0xBC) != 0) {
                 hero_set_state(HERO_STATE_IDLE, 0);
             }
-            if (voice_is_playing(moby, W(state, 0x6C))) {
-                release_voice_slot(W(state, 0x6C));
-                W(state, 0x6C) = -1;
+            if (voice_is_playing(moby, W(elevator_runtime_state, 0x6C))) {
+                release_voice_slot(W(elevator_runtime_state, 0x6C));
+                W(elevator_runtime_state, 0x6C) = -1;
             }
         }
         break;
     }
     case MAGNET_ELEVATOR_STATE_WAIT_FOR_HERO_TO_LEAVE_FIRST_STOP:
     case MAGNET_ELEVATOR_STATE_WAIT_FOR_HERO_TO_LEAVE_SECOND_STOP:
-        if (voice_is_playing(moby, W(state, 0x6C))) {
-            release_voice_slot(W(state, 0x6C));
-            W(state, 0x6C) = -1;
+        if (voice_is_playing(moby, W(elevator_runtime_state, 0x6C))) {
+            release_voice_slot(W(elevator_runtime_state, 0x6C));
+            W(elevator_runtime_state, 0x6C) = -1;
         }
         if (P(D_0013E533_u, 0x1119) != moby) {
             if (B(moby, 0x20) == 9) {
@@ -216,10 +219,11 @@ void magnet_elevator_update(struct Moby *moby) {
     case MAGNET_ELEVATOR_STATE_WAIT_AT_SECOND_STOP: {
         int   i;
         char *hero_state;
-        (*(float *)((char *)(state) + (0x78))) =
-            fast_add_rotations((*(float *)((char *)(state) + (0x78))), frame_time * 6.2831855f);
-        i = truncate_float_to_s32((fast_sin((*(float *)((char *)(state) + (0x78)))) * 4.0f - 3.0f) *
-                                  128.0f);
+        (*(float *)((char *)(elevator_runtime_state) + (0x78))) = fast_add_rotations(
+            (*(float *)((char *)(elevator_runtime_state) + (0x78))), frame_time * 6.2831855f);
+        i = truncate_float_to_s32(
+            (fast_sin((*(float *)((char *)(elevator_runtime_state) + (0x78)))) * 4.0f - 3.0f) *
+            128.0f);
         if (i > 0x80) {
             i = 0x80;
         } else if (i < 0x20) {
@@ -230,7 +234,7 @@ void magnet_elevator_update(struct Moby *moby) {
             W(moby, 0x90) = (i << 16) | pulse_color_green_alpha_bits | i;
         }
         hero_state = (char *)((char *)&hero);
-        if (H(hero_state, 0x308) != 0 || W(state, 0x7C) == 0) {
+        if (H(hero_state, 0x308) != 0 || W(elevator_runtime_state, 0x7C) == 0) {
             if (P(hero_state, 0x2FC) == moby && H(hero_state, 0x30E) == 0 &&
                 vector_distance_xy(hero_state + 0x80, &moby->pos) < 0.5f) {
                 allocate_voice_for_target_entry(1, 0, (int)moby);
@@ -243,27 +247,27 @@ void magnet_elevator_update(struct Moby *moby) {
                 char *p = (char *)(&hero.motion.pos);
                 float d = vector_distance_xy(&moby->pos, p);
                 float e = absolute_float((*(float *)((char *)(p) + (0x258))) -
-                                         (*(float *)((char *)(state) + (0x64))));
-                if (e < absolute_float((*(float *)((char *)(state) + (0x60))) -
-                                       (*(float *)((char *)(state) + (0x64)))) *
+                                         (*(float *)((char *)(elevator_runtime_state) + (0x64))));
+                if (e < absolute_float((*(float *)((char *)(elevator_runtime_state) + (0x60))) -
+                                       (*(float *)((char *)(elevator_runtime_state) + (0x64)))) *
                             0.5f &&
                     d < 32.0f && d > 2.0f) {
                     B(moby, 0xBC) = 0;
                     B(moby, 0x20) = 3;
-                    W(state, 0x68) = 0;
+                    W(elevator_runtime_state, 0x68) = 0;
                 }
             } else if (B(moby, 0x20) == 7) {
                 char *p = (char *)(&hero.motion.pos);
                 float d = vector_distance_xy(&moby->pos, p);
                 float e = absolute_float((*(float *)((char *)(p) + (0x258))) -
-                                         (*(float *)((char *)(state) + (0x60))));
-                if (e < absolute_float((*(float *)((char *)(state) + (0x60))) -
-                                       (*(float *)((char *)(state) + (0x64)))) *
+                                         (*(float *)((char *)(elevator_runtime_state) + (0x60))));
+                if (e < absolute_float((*(float *)((char *)(elevator_runtime_state) + (0x60))) -
+                                       (*(float *)((char *)(elevator_runtime_state) + (0x64)))) *
                             0.5f &&
                     d < 32.0f && d > 2.0f) {
                     B(moby, 0xBC) = 0;
                     B(moby, 0x20) = 2;
-                    W(state, 0x68) = 0;
+                    W(elevator_runtime_state, 0x68) = 0;
                 }
             }
         }
@@ -271,7 +275,7 @@ void magnet_elevator_update(struct Moby *moby) {
     }
     }
     fast_vec_add(delta, delta, &moby->pos);
-    update_entity_matrix(state + 0x20, delta, rot, &moby->rot);
+    update_entity_matrix(elevator_runtime_state + 0x20, delta, rot, &moby->rot);
 }
 
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002F04D0), where it is exact; names translated to the US level program. */
@@ -280,16 +284,19 @@ void build_magnet_elevator_camera_pose(struct Moby *moby,
                                        char        *camera_position,
                                        char        *state) __asm__("FUN_L17_002ee9c0");
 
-void build_magnet_elevator_camera_pose(struct Moby *moby, char *camera_position, char *state) {
+void build_magnet_elevator_camera_pose(struct Moby *moby,
+                                       char        *camera_position,
+
+                                       char *camera_rotation) {
     fast_vec_sub(camera_position, D_L17_001676C0, &moby->pos);
     set_vector_length_xy(camera_position, camera_position, 2.5f);
     *(float *)(camera_position + 8) = 1.5f;
     fast_vec_add(camera_position, camera_position, &moby->pos);
-    clear_u64_value(state);
-    *(float *)(state + 8) =
+    clear_u64_value(camera_rotation);
+    *(float *)(camera_rotation + 8) =
         fast_arc_tan(hero.motion.body_center.f[0] - *(float *)camera_position,
                      hero.motion.body_center.f[1] - *(float *)(camera_position + 4));
-    *(int *)(state + 4) = 0;
+    *(int *)(camera_rotation + 4) = 0;
 }
 
 extern void transform_vector_by_basis(void *, void *, void *);

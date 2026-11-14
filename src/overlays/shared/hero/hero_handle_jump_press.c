@@ -28,12 +28,12 @@ s32 pick_idle_fidget(s32 *index) {
     Vec4              start;
     HeroTableEntry70 *fidget_candidate;
     Vec4             *startp, *endp;
-    s32               i, slot_zero_item_id, count, j;
+    s32               i, slot_zero_item_id, eligible_fidget_count, j;
     s32              *choice_write_cursor;
     HeroTableEntry70 *table;
     f32               total, pick;
 
-    count = 0;
+    eligible_fidget_count = 0;
     if (hero.fidget_cooldown != 0)
         return 0;
     if (hero.health.hp == 1) {
@@ -81,19 +81,19 @@ s32 pick_idle_fidget(s32 *index) {
                 continue;
         }
         *choice_write_cursor = i;
-        count++;
+        eligible_fidget_count++;
         choice_write_cursor++;
     }
-    if (count == 0)
+    if (eligible_fidget_count == 0)
         return 0;
     total = 0.0f;
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < eligible_fidget_count; i++) {
         HeroTableEntry70 *choice = &idle_fidgets[choices[i]];
         total += 1.0f / (f32)(s32)(scale_time(choice->interval) * 60.0f);
     }
     pick = random_float_between(0.0f, 1.0f);
     if (pick < total) {
-        for (j = 0; j < count; j++) {
+        for (j = 0; j < eligible_fidget_count; j++) {
             s32               picked = choices[j];
             HeroTableEntry70 *choice;
             *index = picked;
@@ -284,16 +284,16 @@ s32  try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 
 s32 try_start_hero_item_idle_animation(void) {
     struct Hero *hero_ptr = &hero;
-    s32          id, k;
+    s32          slot_zero_item_id, k;
     if (hero_ptr->item_anim_active == 0 || hero_ptr->weapon_up == 0 ||
         hero_ptr->weapon_lowered != 0)
         return 0;
-    id = hero_slot_item_id(0);
-    if (id != hero_ptr->item_anim_item_id) {
+    slot_zero_item_id = hero_slot_item_id(0);
+    if (slot_zero_item_id != hero_ptr->item_anim_item_id) {
         cancel_hero_item_animation();
         return 0;
     }
-    k = item_defs[id].hero_animation;
+    k = item_defs[slot_zero_item_id].hero_animation;
     if (hero_set_state(HERO_STATE_IDLE, 0) == 0)
         return 0;
     set_hero_animation(k, 0, (f32)scale_game_frames(0xB));
