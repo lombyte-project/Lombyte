@@ -1,0 +1,73 @@
+{
+  "replacements": [
+    {
+      "file": "src/overlays/shared/ui/hud/hud_keep_visible.c",
+      "why": "K&R definition with the asm label on the parameter declaration; clang cannot parse it.",
+      "find": "void hud_update_counter(e) HudElem *e __asm__(\"FUN_L00_00235ea0\");\n\n{",
+      "replace": "void hud_update_counter(HudElem *e) __asm__(\"FUN_L00_00235ea0\");\n\nvoid hud_update_counter(HudElem *e) {"
+    },
+    {
+      "file": "src/overlays/shared/ui/hud/hud_keep_visible.c",
+      "why": "The update callback receives the element in $a0 and forwards it by calling with no argument. WebAssembly has no leftover registers, so the parameter is named and passed.",
+      "find": "void hud_update_particles(void) __asm__(\"FUN_L00_00236458\");\n\nvoid hud_update_particles(void) {\n    Star *hud_star;\n    int   i;\n    float boundary_inset, hx, hy, nhx, nhy;\n\n    hud_update_counter();",
+      "replace": "void hud_update_particles(HudElem *forwarded_element) __asm__(\"FUN_L00_00236458\");\n\nvoid hud_update_particles(HudElem *forwarded_element) {\n    Star *hud_star;\n    int   i;\n    float boundary_inset, hx, hy, nhx, nhy;\n\n    hud_update_counter(forwarded_element);"
+    },
+    {
+      "file": "src/overlays/shared/ui/hud/hud_keep_visible.c",
+      "why": "Same $a0 forwarding in the class-482 update.",
+      "find": "void hud_counter_update(void) __asm__(\"FUN_L00_002371e0\");\n\n/* Moby class 482 */\nvoid hud_counter_update(void) {\n    hud_update_counter();",
+      "replace": "void hud_counter_update(HudElem *forwarded_element) __asm__(\"FUN_L00_002371e0\");\n\n/* Moby class 482 */\nvoid hud_counter_update(HudElem *forwarded_element) {\n    hud_update_counter(forwarded_element);"
+    },
+    {
+      "file": "include/rnc/overlay/shared/ui/hud/hud_keep_visible.h",
+      "why": "Unspecified parameters: the definition now takes the forwarded element. Novalis callers that still call it with no argument compile, and trap in wasm until they get their own fix.",
+      "find": "void hud_counter_update(void) __asm__(\"FUN_L00_002371e0\");",
+      "replace": "void hud_counter_update() __asm__(\"FUN_L00_002371e0\");"
+    },
+    {
+      "file": "include/rnc/overlay/shared/ui/hud/hud_keep_visible.h",
+      "why": "Unspecified parameters: the definition now takes the forwarded element. Novalis callers that still call it with no argument compile, and trap in wasm until they get their own fix.",
+      "find": "void hud_update_particles(void) __asm__(\"FUN_L00_00236458\");",
+      "replace": "void hud_update_particles() __asm__(\"FUN_L00_00236458\");"
+    },
+    {
+      "file": "src/world/loaders/relocate_asset_entry_pointers.c",
+      "why": "The third parameter `on` is never read; it records a register the matching build needed. Callers pass two arguments, so the definition is given the two-parameter signature they use.",
+      "find": "s32 animation_index, s32 on) {",
+      "replace": "s32 animation_index) {"
+    },
+    {
+      "file": "src/world/loaders/relocate_asset_entry_pointers.c",
+      "why": "Prototype for the definition above.",
+      "find": "s32 animation_index,\n                                   s32 on) __asm__",
+      "replace": "s32 animation_index) __asm__"
+    }
+  ],
+  "prototypes": [
+    {
+      "symbol": "FlushCache",
+      "returns": "void",
+      "parameters": "s32",
+      "why": "Recovered callers declare it 20 ways (void or s32 result, with or without the parameter). WebAssembly needs one signature per function; no caller uses the result."
+    },
+    {
+      "symbol": "fptodp",
+      "label": "FUN_00120478",
+      "returns": "f64",
+      "parameters": "f32",
+      "why": "libgcc's float-to-double conversion. Half the callers declare the result as int (the EE returns the double's bits in $v0); every call site passes it straight to a debug print. One signature is required, and the value is a double."
+    }
+  ],
+  "empty_functions": [
+    {
+      "label": "FUN_001e93e8",
+      "result": null,
+      "why": "Retail body is `jr ra; nop`: a debug hook compiled out. Recovered callers pass it different argument lists, which one WebAssembly function cannot accept, so each file gets its own empty static copy with the prototype it declares."
+    },
+    {
+      "label": "FUN_001e9448",
+      "result": "0",
+      "why": "Retail body is `jr ra; daddu v0, zero, zero`: returns 0. Same treatment."
+    }
+  ]
+}

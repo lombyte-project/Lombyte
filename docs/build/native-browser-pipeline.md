@@ -20,10 +20,10 @@ browser-port functionality.
 | --- | --- | --- |
 | Browser build/launch | `make browser-game` builds local WASM modules; the page loads a user-selected ISO. | Replace the prototype startup path with the selected original initialization/update slice; keep launch a static browser workflow. |
 | Disc/assets | Bounded ISO reads, WAD decode, and Veldin core extraction work. Veldin geometry has 24,520 terrain triangles across 460 fragments; collision has 5,783 cells. | Generalize archive discovery and loading beyond the hardcoded Veldin entry; inventory required level resources per world. |
-| Rendering/actors | Veldin terrain/sky and one skinned Ratchet model (6,856 triangles) render. | Load world actors/effects and use original scene/render behavior; verify visual parity instead of treating a static scene as a completed level. |
+| Rendering/actors | Veldin terrain, sky, one skinned Ratchet model, placed actors, 1,114 static scenery pieces (ties), and the level's fog and background colour render. Scenery is unlit; shrubs (1,697 on Veldin) are not drawn. | Shrubs; the baked tie lighting (`light_ties`); lower levels of detail and culling; then original scene/render behaviour and visual parity checks. |
 | Hero/gameplay | One native `Hero` global plus a bounded browser controller supports movement, jump/double-jump, crouch, and slam motion. Selected original poses are decoded; JavaScript selects and plays clips. Static collision is tested. | Port the original hero/gameplay state flow, full combat and damage, dynamic collision, and original gameplay camera. |
 | Mission catalog/flow | 68 per-level mission-menu records resolve to 67 distinct USA-English labels. No browser mission menu, objective state, actor mapping, or completion loop. | Automate catalog extraction, map labels to mission nodes/actors and completion conditions, then implement the Veldin objective. |
-| Audio | No browser audio playback or sound-bank/stream integration. Recovered source exists under `src/audio/voices/`, `src/audio/music/`, and `src/audio/streaming/`. | Inventory the level sound banks and playback paths; implement and test one effects/voice/music path through browser audio before expanding. |
+| Audio | Level music plays: Veldin's intro and body tracks are read from the level header's `music_tracks[]`, decoded by a native PS2 ADPCM decoder, and played through Web Audio. No sound effects, voices, or original music state machine. | Run the original music state (pause/unpause, transitions) instead of the fixed intro-then-loop adapter; then sound banks and effects. |
 | HUD/menus | No browser HUD or game menus. | Port the required in-level HUD and mission UI from original text IDs, resources, and state. |
 | Saves/transitions | No browser save adapter, mission restart, or level transition. | Define browser persistence and port the selected level's save/death/restart/exit flow. |
 | Local multiplayer | None. Hero state is one global `struct Hero`. | Separate two hero/input contexts and define shared-world, camera, death, and progression rules. |
@@ -399,6 +399,217 @@ Validation:
 Not yet verified: the console's actual visibility culling (`update_dist`),
 animation playback (wings do not flap; advance_moby_animation is the next
 port), and the retail heap addresses.
+
+### Whole-Tree Spike And Mission Work Lists (2026-11-13)
+
+A measurement build under [browser/spike](../../browser/spike), separate from
+the gated targets. It writes only to ignored `build/spike/` and is not loaded
+by the game page. It changes no file under `src/`, `include/`, `scripts/`, or
+`config/`.
+
+`make browser-spike` compiles every recovered C file, unchanged, to a wasm32
+object and reports the symbols the Veldin link set (boot + shared overlay +
+l00) still needs:
+
+- **2,106 of 2,421 files compile (87%).** This needs two browser shims, the
+  existing `qcopy.h` and a new `browser/include/qzero.h`, plus clang's legacy-C
+  conversion errors downgraded to warnings.
+- **315 files do not compile.** 243 are `src/assembly` `INCLUDE_ASM` units.
+  The other 72 hold inline MIPS (`sync.l`, `ei`/`di`, COP0/COP2 moves) or SDK
+  constructs: 27 overlay, 22 sdk, 7 rendering, 5 camera, 5 ui, 4 mobys,
+  1 input, 1 movies.
+- **3,528 undefined symbols in the Veldin link set**, against 25,018 defined:
+  - 2,955 fixed-address globals (`D_XXXXXXXX`) that no C file defines.
+  - 327 address-named functions with no compiled definition.
+  - 197 assembly-only functions. The most used are small math and timing
+    helpers (`scale_game_frames`, `fast_vec_add`/`sub`/`scale`, `fast_sin`/`cos`).
+  - 21 functions in inline-MIPS files, 22 other named symbols, and one SDK call.
+
+**Fixed-address globals can keep their PS2 addresses.** wasm32 has no absolute
+symbols, and the assembler rejects them. `ram-image.mjs` instead generates one
+data segment with a label at each original address. Linked first with
+`--global-base=0x100000`, `D_0013F350` (the hero) sits at `0x13F350` in linear
+memory; `run-closure.mjs` asserts the base. This supplies all 2,955 in one
+generated file, with no per-symbol mirror. Label sizes are unknown, so each
+runs to the next label. C-defined globals are placed after the image, not at
+their PS2 addresses.
+
+**Per-mission work list.** `closure.mjs <root>` walks relocations from one
+function and lists what it reaches and what is missing. For the Veldin
+objective actor, `clank_cutscene_trigger_update` (`FUN_L00_002d9dc8`), it
+reaches 230 compiled functions in 181 recovered files and is missing 256
+symbols: 159 fixed-address globals, 37 assembly-only functions, 17 address-named
+functions, 16 in inline-MIPS files, and 27 others. The reach includes the
+cutscene playback, HUD, and text paths, which is why this objective cannot be
+finished one hand-wrapped function at a time.
+
+**Run until it traps.** `make browser-spike-mission` links that closure
+against the RAM image and `browser/level-math.c`, then runs it in Node. Every
+other missing function is an import that throws its symbol name. Result:
+
+- Call 1 runs the original update and `initialize_npc_dialogue`: moby state
+  0 → 1, alpha 255.
+- With hero HP poked to 100 at `0x1415F8`, call 2 runs `update_npc_dialogue`
+  through the distance check and `process_menu_entry`, then stops at
+  `FUN_001fa688` (`fast_difference_between_rotations`, assembly-only).
+
+This is **not** a game frame. RAM starts zeroed apart from the poke: no ELF or
+overlay data is loaded, the moby and its pvars are zeroed scratch blocks, and
+no dialogue table is filled. It shows that the original code links and executes
+at PS2 addresses and that the next blocker is named. It does not show a correct
+result.
+
+Hazards measured on this closure:
+
+- 17 missing functions are declared with different prototypes by different
+  recovered callers (listed in `build/spike/clank-conflicts.txt`), so each
+  needs one agreed signature.
+- The linker reports 84 caller/definition signature mismatches, each of which
+  traps at the call (hazard 1 above).
+- The spike links with `--allow-undefined` and `--allow-multiple-definition`.
+  The gated targets must keep forbidding both.
+
+**Second pass (same day).** The counts above are from the first pass. Three
+build-time changes followed, again without editing `src/` or `include/`:
+
+- `normalize-sources.py` compiles a generated copy under `build/spike/tree/`
+  in which each address-named function has one spelling. The tree calls the
+  same function `FUN_001f9ab0` in one file and `func_001F9AB0` in another;
+  1,468 files are rewritten and 629 self-aliases dropped.
+- `browser/include/moby_update.h` replaces the asm `MOBY_CALL_UPDATE` with an
+  indirect C call.
+- `browser/spike/ee-helpers.c` adds 18 assembly-only helpers, decoded from the
+  boot ELF with the listing tool `ee-disasm.py` (it prints instructions; it
+  executes nothing). `fast_sin`/`fast_cos` are **not** decoded: they call a VU0
+  microprogram, and the spike uses host `sinf`/`cosf` instead.
+
+Result: 2,128 of 2,421 files compile (293 fail: 243 `src/assembly`, 25
+overlay, 22 sdk, 3 others). The Veldin link set has 3,470 undefined symbols.
+The Clank closure's named traps drop from 80 to 51. With the hero alive at
+the trigger, call 2 now passes the distance and facing checks and stops at
+`hud_keep_visible` (`FUN_L00_00235e18`). Its file,
+`src/overlays/shared/ui/hud/hud_keep_visible.c`, does not compile: it has a
+K&R definition carrying an asm label and calls `hud_update_counter()` with no
+argument, relying on `$a0` still holding the caller's parameter. That needs a
+per-file wrapper, not a bulk rule. The linker now reports 113 signature
+mismatches on this closure, more than before because helpers that were
+imports now have one definition for disagreeing callers to mismatch.
+
+**Third pass (2026-11-13/14): the original loaders on real data.** Run with
+`browser/spike/scenario-veldin-level.mjs` (see its header for the command). Further
+build-time rules, all on the generated copy:
+
+- `-fwrapv-pointer`: removes hazard 2 (negative index off a fixed-address global) tree-wide.
+- `long` widened to 64 bits, the scratchpad `0x7000xxxx` mapped to `0x000Fxxxx`, named labels
+  rewritten to address labels from `symbol_addrs.txt`, name-only declarations bound to their
+  label, 550 declarations rewritten to match their definitions, and retail-empty functions
+  (`FUN_001e93e8`, `FUN_001e9448`) given per-file empty definitions.
+- Every address-named global is pinned in the RAM image (21,173 C-defined ones included),
+  except data holding function pointers (283 symbols in 5 objects).
+- `exe-data-map.py`: a level program holds its own copy of the executable's data at other
+  addresses. Comparing the 812 executable functions with their Veldin copies gives 826 moved
+  addresses, including `0x1E8B80 -> 0x1EA300` (the class table this document already noted)
+  and `0x1D80B0 -> 0x1BC1B0`. Executable-named globals are pinned at the level address.
+- `scripts/overlay-extract.py` was run, so `config/us/overlays/level_NN/` now holds the level
+  programs (ignored). The runner loads Veldin's `.lit`, `.data`, and vtbl records.
+- Browser services in `browser/spike/services.c`: GS image upload as a texture store,
+  `sceCdRead` to the host disc, the IOP stash (server 0x11) as local memory, vsync counting.
+  Audio and renderer calls are listed as NOT DONE on every run.
+
+Results, all in Node:
+
+- `load_level_assets_and_gameplay(1, 0)` alone, with hand-staged buffers, ran the whole asset
+  stage (789 texture uploads recorded, core decoded to 16,766,912 bytes, gameplay to
+  1,113,280) and the placed-moby loop, making 286 `update_entity` calls: the same count the
+  hand-written mirror in `level.c` records.
+- `update_entity` (`FUN_L00_00250df8`) is decoded but not ported: it builds the rotation matrix
+  through a VU0 microprogram, so matrices and bounding spheres are not computed.
+- With the boot prelude added (`initialize_level_runtime`, `init_stash`,
+  `init_level_runtime_state`), those three complete and the buffer layout comes from the
+  game's own `init_mem_slots`. The level load then stops at `load_level_gameplay.c:2070`.
+- **Open problem.** `initialize_level_runtime` is probably the wrong prelude for a level: it
+  unpacks the resident archive at an address the level's asset stage then overwrites, and it
+  sets up the space scene. `src/game/transitions/transition_load_wad.c` also resets the class
+  counter and registers classes, and looks like the real predecessor. Trace the call path
+  into `run_level_main_loop` before staging anything else.
+
+Next steps for the mission path, in order:
+
+0. Resolve the open problem above: find what runs before `run_level_main_loop` on a level
+   load, and run that instead of `initialize_level_runtime`.
+1. Wrap `hud_keep_visible.c` for wasm, then keep supplying the helpers this
+   closure hits, each decoded from its EE instructions as in `level-math.c`.
+   Rerun until the next trap.
+2. Load real state into the image: the boot ELF's segments (`run-closure.mjs
+   --elf`, untested), the L00 overlay data, and the level tables the existing
+   `level.c` already builds.
+3. Resolve the 17 prototype conflicts and the mismatches on the executed path.
+4. Move the tick in `level.c` onto this build once the Clank trigger reaches
+   `start_scene` on real data.
+
+### Scenery, Fog, And The Interim Page Layer (2026-11-14)
+
+**Scenery (ties).** [tie-geometry.mjs](../../browser/tie-geometry.mjs) decodes tie classes
+from the level core and placements from the gameplay file (header word `0x34`, `0xE0`-byte
+records); its header comment gives the layout. It is a format decoder for the browser
+renderer, not recovered code: the console sends these packets to VU1 microcode.
+
+- The split between 16-byte and 24-byte vertex records is not read from a header field. The
+  decoder accepts the one split for which every record is well formed and every strip slot is
+  filled exactly once, and refuses a packet otherwise.
+- Veldin: 63 classes, 964 of 965 packets verify (one packet of class 2215 does not and is left
+  out), 40,668 triangles, 1,114 placements, 396,700 placed triangles, 131 textures.
+- Not decoded: the two lower levels of detail, normals, and the baked lighting, so scenery is
+  drawn at uniform brightness. Nothing is culled.
+
+**Fog and background.** `readLevelFog` reads the gameplay file's first block in the order
+`load_level_gameplay.c` does. Veldin: background (71, 66, 58), fog (47, 26, 15), near
+distance 0, far distance 235 units, far intensity 53.55 of 255. The page uses a linear
+per-pixel ramp between those end points; the console fogs per vertex.
+
+**Interim page layer.** [interim-game.mjs](../../browser/interim-game.mjs) and the menu/HUD
+markup in `game.html` are **not** game code. The owner approved them on 2026-11-14 as a
+temporary exception to AGENTS.md so the page is playable: a start menu, pause, a HUD (objective,
+bolts, health), crate breaking, bolt pickup, and an objective that completes within 6 units of
+the class-834 actor. Positions, class ids, and the objective label are from the disc; reach
+distances, bolt values, health, and fall damage are invented. Delete each rule when the
+original update for that class runs in the page. Whether the crash site can be walked to is
+unverified: a straight-line test walker fell out of the level near (135, 145).
+
+Validation: `RNC_ISO_PATH=... node --test browser/*.test.mjs` gives 67 pass, 2 skipped. In
+headless Chrome the page shows the scenery (1,114 pieces), the HUD, and the pause panel.
+Frame rate is unmeasured on real hardware: software-rendered headless Chrome managed 6 fps.
+
+### Level Music (2026-11-14)
+
+First audio path, in the game page.
+
+- **Source data.** `music_tracks[]` is 21 sector numbers at `disc_table + 0x2AA8`, which is
+  0x148 into the level header bytes the original `read_file_entry_with_retry` copies.
+  `runtime_disc_music_track_sector` reads it from that copy. Veldin has two entries:
+  sectors 1544390 and 1544485.
+- **Format, checked against the disc.** Each track is a `VAGp` stream: a 0x30-byte big-endian
+  header, then 16-byte SPU2 ADPCM blocks. Both Veldin tracks are mono at 44,100 Hz, 7.7 s and
+  122.9 s. Decoding the data as one contiguous channel is continuous across 0x2000-byte
+  boundaries; de-interleaving it as stereo is not.
+- **Order.** `music_start_track` plays `music_tracks[track]` and `music_start_track_body`
+  replaces it with `music_tracks[track + 1]`; `run_level_main_loop` starts track 0.
+- **Native decoder.** [audio.c](../../browser/audio.c) builds `audio.wasm` (`make
+  browser-audio`): bounded input chunks, history carried between chunks, guard bytes. It
+  replaces the SPU2's own decoding, so it is a hardware replacement, not recovered game code.
+- **Adapter, not original logic.** [music.mjs](../../browser/music.mjs) decodes both tracks
+  up front and plays intro then body, looping the body. Looping is an assumption. The
+  original music state machine (`music_update.c`), `music_pause`/`music_unpause`, fades,
+  transitions, and volume 0x400 are not run. `M` toggles mute.
+
+Validation: `RNC_ISO_PATH=... make browser-audio-test` passes 5 of 5. The synthetic tests
+compare every filter and shift with an independent reference decoder, and cover chunked
+decoding, end blocks, and malformed input. The disc test checks the track table, both
+streams' rates and lengths, signal level, and the first 64 blocks against the reference.
+All browser suites: 62 pass, 2 skipped. In headless Chrome the page reaches `rendering`,
+reports 131 s of music, shows "music on", and `M` switches the status to muted. **Not
+verified by ear:** nobody has listened to it, and headless Chrome proves the audio graph was
+built, not that it sounds right.
 
 ### World And Mission Task Template
 

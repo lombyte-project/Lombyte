@@ -15,7 +15,7 @@ export default [
     rules: js.configs.recommended.rules,
   },
   {
-    files: ['browser/**/*.test.mjs'],
+    files: ['browser/**/*.test.mjs', 'browser/spike/*.mjs'],
     languageOptions: {
       globals: globals.node,
     },

@@ -4,10 +4,14 @@ import { IsoReader } from './iso-reader.mjs';
 import { initializeDiscTable } from './disc-loader.mjs';
 import { readSkyGeometry, readSkyTextures } from './sky-geometry.mjs';
 import { loadPlanetCore, VELDIN_ARCHIVE, initializePlanetCollision } from './level-loader.mjs';
-import { readTerrainGeometry, readTerrainTextures, readMobyTextures } from './terrain-geometry.mjs';
+import { readTerrainGeometry, readTerrainTextures, readMobyTextures, readShrubTextures, readTieTextures } from './terrain-geometry.mjs';
+import { readShrubClasses, readShrubInstances } from './shrub-geometry.mjs';
+import { readTieClasses, readTieInstances } from './tie-geometry.mjs';
 import { readMobyGeometry } from './moby-geometry.mjs';
-import { loadLevelGameplay, VELDIN_LEVEL } from './gameplay-loader.mjs';
+import { loadLevelGameplay, readLevelFog, VELDIN_LEVEL } from './gameplay-loader.mjs';
 import { initializeLevelActors, tickLevelActors } from './level-actors.mjs';
+import { loadLevelMusic, MusicPlayer } from './music.mjs';
+import { InterimGame, MAX_HEALTH, OBJECTIVE_TEXT } from './interim-game.mjs';
 import { HeroSwingState, readHeroAnimationRig, sampleHeroAnimationFrame } from './moby-animation.mjs';
 
 const canvas = document.querySelector('canvas');
@@ -31,13 +35,19 @@ const skyGroup = new THREE.Group();
 const terrainGroup = new THREE.Group();
 const characterGroup = new THREE.Group();
 const actorGroup = new THREE.Group();
+const tieGroup = new THREE.Group();
 skyScene.add(skyGroup);
-scene.add(terrainGroup, actorGroup, characterGroup);
+scene.add(terrainGroup, tieGroup, actorGroup, characterGroup);
 let api;
 let decoder;
 let planetDecoder;
 let collision;
 let level;
+let audio;
+let musicLabel = '';
+let musicTracks = null;
+let interim = null; // InterimGame, once a level is loaded
+let play = 'menu'; // menu | playing | paused | ended: the interim page flow, not game state
 let currentJob;
 let textures = [];
 let terrainRadius = 0;
@@ -47,6 +57,8 @@ let tickRemainder = 0;
 let jumpQueued = false;
 let swingRequested = false;
 let heroAnimation;
+const music = new MusicPlayer();
+const LEVEL_START_TRACK = 0; // run_level_main_loop starts music_stream_state.primary.track, which it sets to 0
 const keys = new Set();
 const touchKeys = new Map();
 const spawn = new THREE.Vector3();
@@ -70,6 +82,19 @@ function releaseInput() {
   previousTime = undefined;
 }
 
+// Browsers keep audio suspended until a user gesture; any key or pointer press resumes it.
+addEventListener('keydown', event => {
+  music.resume();
+  if (event.code === 'KeyM' && !event.repeat &&
+      !(event.target instanceof Element && event.target.closest('input, select, textarea'))) {
+    toggleMusic();
+  }
+  if (event.code === 'Escape' && !event.repeat) {
+    if (play === 'playing') pauseGame();
+    else if (play === 'paused') resumeGame();
+  }
+});
+addEventListener('pointerdown', () => music.resume());
 addEventListener('keydown', event => {
   if (!heroActive || !controlKeys.has(event.code) || event.target !== canvas &&
       event.target instanceof Element && event.target.closest('input, button, select, textarea')) return;
@@ -108,6 +133,150 @@ for (const button of document.querySelectorAll('[data-control]')) {
     });
   }
 }
+
+let shownAudioState = '';
+setInterval(() => {
+  const { state, level: output, time } = music.probe();
+  document.body.dataset.audioState = state;
+  document.body.dataset.audioLevel = output.toFixed(4);
+  document.body.dataset.audioTime = time.toFixed(2);
+  // The browser decides when audio may start; keep the status line in step with it.
+  if (state !== shownAudioState && document.body.dataset.state === 'rendering' && music.playing) {
+    shownAudioState = state;
+    if (play === 'playing') status.textContent = `Veldin / Ratchet${musicStatus()}`;
+  }
+}, 250);
+
+function musicStatus() {
+  if (!music.playing) return musicLabel;
+  if (music.probe().state !== 'running') return ' / click or press a key to start the music';
+  return music.muted ? ' / music muted (M)' : ' / music playing (M mutes)';
+}
+
+// ---- Interim page flow: menu, HUD, pause, level result (see interim-game.mjs) -------------------
+const ui = Object.fromEntries(['menu-main', 'menu-controls-panel', 'menu-pause', 'menu-end', 'menu-hint', 'menu-disc',
+  'menu-start', 'menu-controls', 'menu-music', 'pause-objective', 'pause-resume', 'pause-restart', 'pause-controls',
+  'pause-quit', 'end-title', 'end-text', 'end-again', 'end-quit', 'end-note', 'hud-objective', 'hud-distance',
+  'hud-bolts', 'hud-health', 'toast', 'toast-text'].map(id => [id, document.getElementById(id)]));
+let controlsReturn = 'menu-main';
+let toastTimer;
+
+function openPanel(id) {
+  for (const panel of document.querySelectorAll('.panel')) panel.classList.toggle('open', panel.id === id);
+  if (id) document.querySelector(`#${id} button:not(:disabled)`)?.focus({ preventScroll: true });
+}
+
+function setPlay(next) {
+  play = next;
+  document.body.dataset.play = next;
+  if (next !== 'playing') releaseInput();
+}
+
+function setMenuReady(ready) {
+  ui['menu-start'].disabled = !ready;
+  ui['menu-hint'].textContent = ready ? 'Veldin is loaded.'
+    : 'Choose your USA disc image to begin. It stays on this computer.';
+}
+
+function showToast(text) {
+  ui['toast-text'].textContent = text;
+  ui.toast.classList.add('open');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => ui.toast.classList.remove('open'), 2200);
+}
+
+function toggleMusic() {
+  music.setMuted(!music.muted);
+  ui['menu-music'].textContent = `Music: ${music.muted ? 'off' : 'on'}`;
+  if (play === 'playing') status.textContent = `Veldin / Ratchet${musicStatus()}`;
+}
+
+function restoreActors() {
+  for (const actor of liveActors?.groups ?? []) actor.visible = true;
+}
+
+function startLevel() {
+  if (!interim) return;
+  interim.reset();
+  restoreActors();
+  resetHero();
+  openPanel('');
+  setPlay('playing');
+  if (musicTracks) music.play(musicTracks);
+  music.resume();
+  status.textContent = `Veldin / Ratchet${musicStatus()}`;
+  showToast(`Objective: ${OBJECTIVE_TEXT}`);
+  updateHud();
+  canvas.focus({ preventScroll: true });
+}
+
+function pauseGame() {
+  setPlay('paused');
+  ui['pause-objective'].textContent = `Objective: ${OBJECTIVE_TEXT}`;
+  openPanel('menu-pause');
+}
+
+function resumeGame() {
+  openPanel('');
+  setPlay('playing');
+  music.resume();
+  canvas.focus({ preventScroll: true });
+}
+
+function quitToMenu() {
+  music.stop();
+  setPlay('menu');
+  openPanel('menu-main');
+  status.textContent = interim ? 'Veldin loaded. Choose New game.' : 'No disc selected';
+}
+
+function endLevel() {
+  const won = interim.state === 'complete';
+  setPlay('ended');
+  ui['end-title'].textContent = won ? 'Crash site reached' : 'Ratchet is down';
+  ui['end-text'].textContent = won
+    ? `Time ${Math.floor(interim.seconds / 60)}:${String(Math.floor(interim.seconds % 60)).padStart(2, '0')} / ` +
+      `${interim.bolts} bolts / ${interim.cratesBroken} of ${interim.crateTotal} crates`
+    : 'You ran out of health.';
+  ui['end-note'].textContent = won
+    ? 'In the game, Clank\'s cutscene and the flight to Novalis follow here. Neither is ported yet.'
+    : '';
+  openPanel('menu-end');
+}
+
+function applyInterimEvents(events) {
+  for (const event of events) {
+    if (event.type === 'complete') { endLevel(); continue; }
+    const actor = liveActors?.groups.find(group => group.userData.index === event.index);
+    if (actor) actor.visible = false;
+    if (event.type === 'crate') showToast('Crate smashed');
+  }
+}
+
+function updateHud() {
+  if (!interim || play !== 'playing') return;
+  ui['hud-objective'].textContent = OBJECTIVE_TEXT;
+  ui['hud-distance'].textContent = `${Math.round(interim.objectiveDistance(characterGroup.position.toArray()))} m away`;
+  ui['hud-bolts'].textContent = String(interim.bolts);
+  if (ui['hud-health'].childElementCount !== MAX_HEALTH) {
+    ui['hud-health'].replaceChildren(...Array.from({ length: MAX_HEALTH }, () => document.createElement('span')));
+  }
+  [...ui['hud-health'].children].forEach((orb, index) => orb.classList.toggle('on', index < interim.health));
+}
+
+ui['menu-disc'].addEventListener('click', () => disc.click());
+ui['menu-start'].addEventListener('click', startLevel);
+ui['menu-music'].addEventListener('click', toggleMusic);
+ui['menu-controls'].addEventListener('click', () => { controlsReturn = 'menu-main'; openPanel('menu-controls-panel'); });
+ui['pause-controls'].addEventListener('click', () => { controlsReturn = 'menu-pause'; openPanel('menu-controls-panel'); });
+document.querySelector('#menu-controls-panel [data-close]').addEventListener('click', () => openPanel(controlsReturn));
+ui['pause-resume'].addEventListener('click', resumeGame);
+ui['pause-restart'].addEventListener('click', startLevel);
+ui['pause-quit'].addEventListener('click', quitToMenu);
+ui['end-again'].addEventListener('click', startLevel);
+ui['end-quit'].addEventListener('click', quitToMenu);
+document.body.dataset.play = play;
+ui['menu-disc'].disabled = true; // until the native modules are ready
 
 function pressed(code) { return keys.has(code) || [...touchKeys.values()].includes(code); }
 
@@ -154,7 +323,7 @@ function updateHero(time) {
   if (previousTime === undefined) previousTime = time;
   const elapsed = Math.min(Math.max((time - previousTime) / 1000, 0), 0.1);
   previousTime = time;
-  if (!heroActive || document.hidden) { tickRemainder = 0; return; }
+  if (!heroActive || document.hidden || play !== 'playing') { tickRemainder = 0; return; }
   tickRemainder += elapsed;
   camera.getWorldDirection(forward);
   forward.z = 0;
@@ -189,10 +358,20 @@ function updateHero(time) {
       swingRequested = false;
     }
     tickRemainder -= 1 / 60;
+    if (interim) {
+      const hero = [0, 1, 2].map(axis => collision.runtime_hero_collision_position(axis));
+      applyInterimEvents(interim.update(hero, heroAnimation?.swing.sequence !== undefined, 1 / 60));
+    }
   }
   syncHero();
   updateHeroAnimation(elapsed);
-  if (characterGroup.position.z < spawn.z - 40) resetHero();
+  if (characterGroup.position.z < spawn.z - 40) {
+    interim?.fall();
+    resetHero();
+    if (interim?.state === 'dead') endLevel();
+    else if (interim) showToast('You fell. Health lost.');
+  }
+  updateHud();
 }
 
 function updateHeroAnimation(elapsed) {
@@ -324,6 +503,7 @@ function updateActors(time) {
   }
   if (!frame) return;
   for (const actor of liveActors.groups) {
+    if (!actor.visible) continue;
     const moby = frame.mobys[actor.userData.index];
     actor.position.fromArray(moby.position);
     actor.rotation.set(moby.rotation[0], moby.rotation[1], moby.rotation[2], 'ZYX');
@@ -357,7 +537,12 @@ function clearTerrain() {
     mesh.material.dispose();
   }
   actorGroup.clear();
-  for (const mesh of [...terrainGroup.children, ...characterGroup.children]) {
+  scene.fog = null;
+  delete document.body.dataset.ties;
+  delete document.body.dataset.tieTriangles;
+  delete document.body.dataset.shrubs;
+  delete document.body.dataset.shrubTriangles;
+  for (const mesh of [...terrainGroup.children, ...characterGroup.children, ...tieGroup.children]) {
     mesh.geometry.dispose();
     mesh.material.map?.dispose();
     mesh.material.dispose();
@@ -381,6 +566,81 @@ function mobyMaterial(image) {
 // Bind-pose display of the moby table built by the original class registration
 // and init_moby_instance (level.wasm). updateActors moves them as ported class
 // updates run; classes without model data are logic-only.
+// The level's own fog, as a linear ramp: no fog at the near distance, and at the far distance
+// the share of fog the far intensity implies. The PS2 computes fog per vertex in VU1; this uses
+// the browser's per-pixel linear fog with the same end points.
+function showFog(gameplay) {
+  const fog = readLevelFog(gameplay.bytes);
+  const farShare = 1 - Math.min(Math.max(fog.farIntensity, 0), 255) / 255;
+  const colour = new THREE.Color().setRGB(fog.fog[0] / 255, fog.fog[1] / 255, fog.fog[2] / 255, THREE.SRGBColorSpace);
+  renderer.setClearColor(new THREE.Color().setRGB(
+    fog.background[0] / 255, fog.background[1] / 255, fog.background[2] / 255, THREE.SRGBColorSpace));
+  if (farShare > 0 && fog.farDistance > fog.nearDistance) {
+    scene.fog = new THREE.Fog(colour, fog.nearDistance, fog.nearDistance + (fog.farDistance - fog.nearDistance) / farShare);
+  }
+  document.body.dataset.fog = `${fog.fog.join(',')} to ${Math.round(fog.farDistance)} units`;
+}
+
+// Static scenery. One instanced mesh per class and texture; see tie-geometry.mjs for what is and
+// is not decoded. Brightness is uniform because the baked lighting is not computed yet.
+function showTies(planet, gameplay) {
+  const failures = [];
+  const drawn = showScenery(readTieClasses(planet, failures), readTieInstances(gameplay.bytes), readTieTextures(planet));
+  if (failures.length) console.info('Scenery packets left out:', failures);
+  document.body.dataset.ties = String(drawn.placed);
+  document.body.dataset.tieTriangles = String(drawn.triangles);
+}
+
+// Plants, rocks and small props; see shrub-geometry.mjs.
+function showShrubs(planet, gameplay) {
+  const failures = [];
+  const drawn = showScenery(readShrubClasses(planet, failures), readShrubInstances(gameplay.bytes), readShrubTextures(planet));
+  if (failures.length) console.info('Shrub packets left out:', failures);
+  document.body.dataset.shrubs = String(drawn.placed);
+  document.body.dataset.shrubTriangles = String(drawn.triangles);
+}
+
+function showScenery(classes, instances, images) {
+  const byClass = new Map();
+  for (const instance of instances) {
+    if (!byClass.has(instance.classId)) byClass.set(instance.classId, []);
+    byClass.get(instance.classId).push(instance);
+  }
+  const materials = new Map();
+  const matrix = new THREE.Matrix4();
+  const scale = new THREE.Matrix4();
+  let triangles = 0;
+  let placed = 0;
+  for (const [classId, placedInstances] of byClass) {
+    const sceneryClass = classes.get(classId);
+    if (!sceneryClass) continue;
+    for (const batch of sceneryClass.batches) {
+      const image = images[batch.texture];
+      if (!image) continue;
+      if (!materials.has(batch.texture)) materials.set(batch.texture, mobyMaterial(image));
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.BufferAttribute(batch.positions, 3));
+      geometry.setAttribute('uv', new THREE.BufferAttribute(batch.uvs, 2));
+      const mesh = new THREE.InstancedMesh(geometry, materials.get(batch.texture), placedInstances.length);
+      placedInstances.forEach((instance, index) => {
+        // The record's rows are the basis vectors and the position; the loader overwrites the
+        // last element with the class scale, which the vertices are multiplied by.
+        matrix.fromArray(instance.matrix);
+        matrix.elements[3] = matrix.elements[7] = matrix.elements[11] = 0;
+        matrix.elements[15] = 1;
+        scale.makeScale(sceneryClass.scale, sceneryClass.scale, sceneryClass.scale);
+        mesh.setMatrixAt(index, matrix.multiply(scale));
+      });
+      mesh.instanceMatrix.needsUpdate = true;
+      mesh.frustumCulled = false;
+      tieGroup.add(mesh);
+      triangles += batch.positions.length / 9 * placedInstances.length;
+    }
+    placed += placedInstances.length;
+  }
+  return { placed, triangles };
+}
+
 function showPlacedMobys(planet, actors) {
   const images = readMobyTextures(planet);
   const models = new Map();
@@ -580,6 +840,11 @@ disc.addEventListener('change', async () => {
   currentJob?.abort();
   const job = new AbortController();
   currentJob = job;
+  music.stop();
+  musicLabel = '';
+  musicTracks = null;
+  interim = null;
+  setMenuReady(false);
   clearSky();
   clearTerrain();
   skyGroup.scale.setScalar(1);
@@ -611,6 +876,9 @@ disc.addEventListener('change', async () => {
     const gameplay = await loadLevelGameplay(api, reader, decoder, VELDIN_LEVEL, job.signal);
     job.signal.throwIfAborted();
     if (currentJob !== job) return;
+    showFog(gameplay);
+    showTies(planet, gameplay);
+    showShrubs(planet, gameplay);
     status.textContent = 'Initializing Veldin actors...';
     const actors = initializeLevelActors(level, planet, gameplay);
     const groups = showPlacedMobys(planet, actors);
@@ -621,10 +889,30 @@ disc.addEventListener('change', async () => {
     document.body.dataset.collisionFaces = String(world.faces);
     liveActors = { count: actors.count, groups };
     document.body.dataset.state = 'rendering';
-    status.textContent = 'Veldin / Ratchet';
-    canvas.focus({ preventScroll: true });
+    interim = new InterimGame(actors.mobys);
+    status.textContent = 'Veldin loaded / loading music...';
+    setMenuReady(true);
+    // Music loads after the level is ready; a failure here leaves the level playable.
+    try {
+      musicTracks = await loadLevelMusic(api, reader, audio, LEVEL_START_TRACK, job.signal);
+      if (currentJob !== job) return;
+      if (musicTracks) {
+        document.body.dataset.musicSeconds = String(Math.round(
+          musicTracks.intro.samples.length / musicTracks.intro.sampleRate +
+          (musicTracks.body ? musicTracks.body.samples.length / musicTracks.body.sampleRate : 0)));
+        if (play === 'playing') music.play(musicTracks);
+      } else {
+        musicLabel = ' / no music track';
+      }
+    } catch (error) {
+      if (currentJob !== job || error.name === 'AbortError') return;
+      musicLabel = ' / music unavailable';
+      console.error(error);
+    }
+    status.textContent = play === 'playing' ? `Veldin / Ratchet${musicStatus()}` : 'Veldin loaded. Choose New game.';
   } catch (error) {
     if (currentJob !== job) return;
+    music.stop();
     clearSky();
     clearTerrain();
     document.body.dataset.state = 'error';
@@ -634,11 +922,13 @@ disc.addEventListener('change', async () => {
 });
 
 try {
-  [api, decoder, planetDecoder, collision, level] = await Promise.all([
+  [api, decoder, planetDecoder, collision, level, audio] = await Promise.all([
     loadWasm('runtime'), loadWasm('wad'), loadWasm('planet-wad'), loadWasm('hero-locomotion'), loadWasm('level'),
+    loadWasm('audio'),
   ]);
   if (api.runtime_init() !== 0) throw new Error('Native initialization failed.');
   disc.disabled = false;
+  ui['menu-disc'].disabled = false;
   document.body.dataset.state = 'ready';
   status.textContent = 'No disc selected';
   renderer.setAnimationLoop(time => {

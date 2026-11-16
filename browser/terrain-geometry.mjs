@@ -148,6 +148,17 @@ export function readTerrainTextures(planet) {
   return readIndexedTextures(planet, 48);
 }
 
+// Tie (scenery) textures: core header words 0x10 (count) and 0x11 (definitions), the table
+// load_level_assets_and_gameplay packs into tie_packed_texture_refs.
+export function readTieTextures(planet) {
+  return readIndexedTextures(planet, 64);
+}
+
+// Shrub textures: core header words 0x12 (count) and 0x13 (definitions).
+export function readShrubTextures(planet) {
+  return readIndexedTextures(planet, 72);
+}
+
 export function readMobyTextures(planet) {
   return readIndexedTextures(planet, 56);
 }

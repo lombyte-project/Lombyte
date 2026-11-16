@@ -91,3 +91,17 @@ export function findHeroStart(placed) {
   if (!hero) throw new Error('Gameplay data has no class-0 hero start.');
   return { position: hero.position, rotation: hero.rotation };
 }
+
+// Background colour and fog from the gameplay file's first block (header word 0), in the order
+// load_level_gameplay.c reads it: background r, g, b; fog r, g, b; then fog near distance, far
+// distance, near intensity and far intensity as floats. Distances are in 1/1024 world units.
+// Intensity is how much of the scene still shows through: 255 is no fog.
+export function readLevelFog(bytes) {
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  const block = view.getUint32(0, true);
+  if (block + 44 > bytes.length) throw new Error('Level settings block is outside the gameplay file.');
+  const colour = at => [0, 1, 2].map(index => view.getInt32(block + (at + index) * 4, true) & 0xFF);
+  const number = at => view.getFloat32(block + at * 4, true);
+  return { background: colour(0), fog: colour(3), nearDistance: number(6) / 1024, farDistance: number(7) / 1024,
+    nearIntensity: number(8), farIntensity: number(9) };
+}

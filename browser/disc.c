@@ -262,6 +262,19 @@ s32 runtime_disc_level_slot_sector(u32 slot) {
     return entry ? (s32)entry[0] : -1;
 }
 
+/* music_tracks[] of the loaded level header: disc_table + 0x2AA8, which is 0x148 into the bytes
+   copied to D_0013A4E0. Each entry is the first sector of a track's VAG stream, or 0 for none
+   (src/audio/music/music_start_track.c reads it this way). Returns -1 for an invalid request,
+   0 for an empty slot, or the sector. */
+s32 runtime_disc_music_track_sector(u32 track) {
+    enum { MUSIC_TRACKS_OFFSET = 0x2AA8 - 0x2960, MUSIC_TRACK_SLOTS = 21 };
+    u32 sector;
+    if (header_level < 0 || track >= MUSIC_TRACK_SLOTS) return -1;
+    __builtin_memcpy(&sector, level_header_storage + MUSIC_TRACKS_OFFSET + track * 4, 4);
+    if (sector == 0) return 0;
+    return sector_range_valid(sector, 1) ? (s32)sector : -1;
+}
+
 s32 runtime_disc_level_slot_count(u32 slot) {
     const u32 *entry = level_slot(slot);
     return entry ? (s32)entry[1] : -1;

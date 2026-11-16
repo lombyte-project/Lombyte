@@ -27,6 +27,28 @@
     .touch-actions [data-control="Space"] { width: 56px; height: 56px; }
     @media (max-width: 600px), (pointer: coarse) { body[data-state="rendering"] .touch-controls { display: flex; } }
     body[data-state="error"] #status { color: #ff9a87; }
+    /* Interim page menu and HUD (browser/interim-game.mjs): not the game's own UI. */
+    .panel { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; background: #070a0ccc; z-index: 3; }
+    .panel.open { display: flex; }
+    .panel > div { width: min(420px, calc(100% - 32px)); padding: 28px 28px 22px; border: 1px solid #6c9586; border-radius: 6px; background: #0d1715f2; text-align: center; }
+    .panel h2 { margin: 0 0 4px; font-size: 30px; letter-spacing: 1px; }
+    .panel p { margin: 6px 0 16px; font-size: 13px; color: #b8cdc5; line-height: 1.45; }
+    .panel button, .panel label.file { display: block; width: 100%; margin: 8px 0; padding: 12px 14px; font: 700 15px "Trebuchet MS", sans-serif; color: #edf5f2; background: #142823; border: 1px solid #6c9586; border-radius: 4px; cursor: pointer; }
+    .panel button:hover:not(:disabled), .panel button:focus-visible, .panel label.file:hover { background: #38745f; outline: none; }
+    .panel button:disabled { opacity: .45; cursor: default; }
+    .panel .note { margin: 14px 0 0; font-size: 11px; color: #7f988f; }
+    .panel dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 0 0 14px; font-size: 13px; text-align: left; }
+    .panel dt { color: #9fd8c4; font-weight: 700; } .panel dd { margin: 0; }
+    #hud { position: absolute; inset: 64px 20px auto; display: none; justify-content: space-between; align-items: flex-start; gap: 12px; pointer-events: none; z-index: 2; font-weight: 700; text-shadow: 0 1px 3px #000; }
+    body[data-play="playing"] #hud { display: flex; }
+    #hud .box { padding: 8px 12px; border: 1px solid #6c958688; border-radius: 4px; background: #070a0c99; font-size: 14px; }
+    #hud .objective small { display: block; font-weight: 400; font-size: 11px; color: #b8cdc5; }
+    #hud .orbs span { display: inline-block; width: 14px; height: 14px; margin-left: 4px; border-radius: 50%; background: #2a3d38; border: 1px solid #6c9586; }
+    #hud .orbs span.on { background: #4fd6ff; box-shadow: 0 0 6px #4fd6ff; }
+    #toast { position: absolute; inset: auto 0 84px; display: none; justify-content: center; pointer-events: none; z-index: 2; }
+    #toast.open { display: flex; }
+    #toast span { padding: 8px 16px; border-radius: 4px; background: #070a0cd9; border: 1px solid #6c9586; font-size: 14px; }
+    @media (max-width: 600px) { #hud { inset: 96px 12px auto; } #hud .box { font-size: 12px; padding: 6px 9px; } }
     @media (max-width: 600px) { header { align-items: flex-start; flex-direction: column; padding: 14px 16px; gap: 10px; } h1 { font-size: 20px; } footer { padding: 14px 16px; } }
   </style>
   <script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js"}}</script>
@@ -34,6 +56,57 @@
 <body data-state="starting">
   <canvas aria-label="Ratchet and Clank native game viewport"></canvas>
   <header><h1>Ratchet &amp; Clank</h1><input id="disc" aria-label="Local USA disc image" type="file" accept=".iso" disabled></header>
+  <div id="hud" aria-label="Interim heads-up display">
+    <div class="box objective"><span id="hud-objective"></span><small id="hud-distance"></small></div>
+    <div class="box"><span id="hud-bolts">0</span> bolts <span class="orbs" id="hud-health" aria-label="Health"></span></div>
+  </div>
+  <div id="toast" role="status"><span id="toast-text"></span></div>
+  <div class="panel open" id="menu-main" role="dialog" aria-label="Main menu">
+    <div>
+      <h2>Ratchet &amp; Clank</h2>
+      <p id="menu-hint">Choose your USA disc image to begin. It stays on this computer.</p>
+      <button type="button" id="menu-disc">Choose disc image</button>
+      <button type="button" id="menu-start" disabled>New game: Veldin</button>
+      <button type="button" id="menu-controls">Controls</button>
+      <button type="button" id="menu-music">Music: on</button>
+      <p class="note">Interim browser menu. The game's own title screen is not ported yet.</p>
+    </div>
+  </div>
+  <div class="panel" id="menu-controls-panel" role="dialog" aria-label="Controls">
+    <div>
+      <h2>Controls</h2>
+      <dl>
+        <dt>W A S D</dt><dd>Move (arrow keys also work)</dd>
+        <dt>Space</dt><dd>Jump, press again in the air to double jump</dd>
+        <dt>F</dt><dd>Swing the wrench; in the air, slam</dd>
+        <dt>C</dt><dd>Crouch</dd>
+        <dt>Shift</dt><dd>Walk</dd>
+        <dt>Mouse drag</dt><dd>Turn the camera; wheel zooms</dd>
+        <dt>Esc</dt><dd>Pause</dd>
+        <dt>M</dt><dd>Mute music</dd>
+      </dl>
+      <button type="button" data-close>Back</button>
+    </div>
+  </div>
+  <div class="panel" id="menu-pause" role="dialog" aria-label="Paused">
+    <div>
+      <h2>Paused</h2>
+      <p id="pause-objective"></p>
+      <button type="button" id="pause-resume">Resume</button>
+      <button type="button" id="pause-restart">Restart level</button>
+      <button type="button" id="pause-controls">Controls</button>
+      <button type="button" id="pause-quit">Quit to main menu</button>
+    </div>
+  </div>
+  <div class="panel" id="menu-end" role="dialog" aria-label="Level result">
+    <div>
+      <h2 id="end-title"></h2>
+      <p id="end-text"></p>
+      <button type="button" id="end-again">Play again</button>
+      <button type="button" id="end-quit">Main menu</button>
+      <p class="note" id="end-note"></p>
+    </div>
+  </div>
   <footer><p id="status" role="status">Starting native runtime...</p></footer>
   <div class="touch-controls" aria-label="Character controls">
     <div class="direction-pad">

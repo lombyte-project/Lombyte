@@ -12,6 +12,7 @@
 .PHONY: elf iso clean-iso check progress overlays format lint browser-smoke browser-assets browser-assets-test
 .PHONY: browser-runtime browser-runtime-test browser-gameplay-test browser-level browser-planet-wad
 .PHONY: browser-wad browser-wad-test browser-game browser-hero browser-collision browser-collision-test
+.PHONY: browser-spike browser-spike-mission browser-audio browser-audio-test
 
 EMCC ?= emcc
 EMCC_VERSION ?= 6.0.13-git
@@ -91,7 +92,7 @@ browser-runtime: browser-wad ## Build native state, original disc loader, and bo
 	  build/browser/scene-reset.o build/browser/disc-loader.o build/browser/level-header-reader.o browser/count_vsync.c browser/runtime.c browser/disc.c \
 	  src/world/loaders/relocate_sky_definition.c browser/sky.c \
 	  --no-entry -sSTANDALONE_WASM=1 -sFILESYSTEM=0 -sERROR_ON_UNDEFINED_SYMBOLS=1 \
-	  -sEXPORTED_FUNCTIONS='["_runtime_init","_runtime_reset_scene","_runtime_guards_valid","_runtime_buffer_address","_runtime_buffer_size","_runtime_fill","_runtime_step","_runtime_frame_count","_runtime_time","_runtime_disc_reset","_runtime_disc_guards_valid","_runtime_disc_stage_address","_runtime_disc_stage_size","_runtime_disc_table_address","_runtime_disc_table_size","_runtime_disc_load","_runtime_disc_ready","_runtime_disc_entry_sector","_runtime_disc_entry_count","_runtime_disc_service_calls","_runtime_disc_level_header_sector","_runtime_disc_level_header_load","_runtime_disc_level_header_ready","_runtime_disc_level_slot_sector","_runtime_disc_level_slot_count","_runtime_sky_reset","_runtime_sky_guards_valid","_runtime_sky_stage_address","_runtime_sky_capacity","_runtime_sky_ready","_runtime_sky_load"]' \
+	  -sEXPORTED_FUNCTIONS='["_runtime_init","_runtime_reset_scene","_runtime_guards_valid","_runtime_buffer_address","_runtime_buffer_size","_runtime_fill","_runtime_step","_runtime_frame_count","_runtime_time","_runtime_disc_reset","_runtime_disc_guards_valid","_runtime_disc_stage_address","_runtime_disc_stage_size","_runtime_disc_table_address","_runtime_disc_table_size","_runtime_disc_load","_runtime_disc_ready","_runtime_disc_entry_sector","_runtime_disc_entry_count","_runtime_disc_service_calls","_runtime_disc_level_header_sector","_runtime_disc_level_header_load","_runtime_disc_level_header_ready","_runtime_disc_level_slot_sector","_runtime_disc_level_slot_count","_runtime_disc_music_track_sector","_runtime_sky_reset","_runtime_sky_guards_valid","_runtime_sky_stage_address","_runtime_sky_capacity","_runtime_sky_ready","_runtime_sky_load"]' \
 	  -o build/browser/runtime.wasm
 	cp browser/runtime.html build/browser/runtime.html
 	cp browser/iso-reader.mjs browser/disc-loader.mjs build/browser/
@@ -103,9 +104,19 @@ browser-planet-wad: ## Build the WAD decoder sized for whole planet cores
 	  -sINITIAL_MEMORY=67108864 \
 	  -sEXPORTED_FUNCTIONS='["_wad_reset","_wad_guards_valid","_wad_input_address","_wad_input_capacity","_wad_output_address","_wad_output_capacity","_wad_output_size","_wad_ready","_wad_decode"]' \
 	  -o build/browser/planet-wad.wasm
-browser-game: browser-runtime browser-hero browser-level browser-planet-wad ## Build the native game viewport with local Three.js
+browser-audio: ## Build the native PS2 ADPCM (VAG) decoder used for level music
+	mkdir -p build/browser
+	$(EMCC) -O2 -Wall -Wextra -Werror browser/audio.c \
+	  --no-entry -sSTANDALONE_WASM=1 -sFILESYSTEM=0 -sERROR_ON_UNDEFINED_SYMBOLS=1 \
+	  -sEXPORTED_FUNCTIONS='["_audio_reset","_audio_guards_valid","_audio_input_address","_audio_input_capacity","_audio_output_address","_audio_header_bytes","_audio_data_bytes","_audio_sample_rate","_audio_ended","_audio_odd_shift_blocks","_audio_begin","_audio_decode"]' \
+	  -o build/browser/audio.wasm
+
+browser-audio-test: browser-runtime browser-audio ## Test the ADPCM decoder and level music loading; set RNC_ISO_PATH for Veldin
+	$(NODE) --test browser/audio.test.mjs
+
+browser-game: browser-runtime browser-hero browser-level browser-planet-wad browser-audio ## Build the native game viewport with local Three.js
 	@test -f build/browser/node_modules/three/build/three.module.js || npm install --prefix build/browser --no-save --ignore-scripts --package-lock=false three@0.180.0
-	cp browser/game.html browser/game.mjs browser/gameplay-loader.mjs browser/level-actors.mjs browser/sky-geometry.mjs browser/level-loader.mjs browser/terrain-geometry.mjs browser/moby-geometry.mjs browser/moby-animation.mjs build/browser/
+	cp browser/game.html browser/game.mjs browser/gameplay-loader.mjs browser/level-actors.mjs browser/sky-geometry.mjs browser/level-loader.mjs browser/terrain-geometry.mjs browser/moby-geometry.mjs browser/moby-animation.mjs browser/music.mjs browser/interim-game.mjs browser/tie-geometry.mjs browser/shrub-geometry.mjs build/browser/
 	cp browser/game.html build/browser/index.html
 
 browser-gameplay-test: browser-runtime browser-level browser-planet-wad ## Test level header/gameplay loading and actor setup; set RNC_ISO_PATH for Veldin
@@ -135,6 +146,18 @@ browser-level: ## Build native level actor setup: original class registration an
 	  -sINITIAL_MEMORY=33554432 \
 	  -sEXPORTED_FUNCTIONS='["_runtime_level_reset","_runtime_level_guards_valid","_runtime_level_header_address","_runtime_level_header_capacity","_runtime_level_core_address","_runtime_level_core_capacity","_runtime_level_gameplay_address","_runtime_level_gameplay_capacity","_runtime_level_register_classes","_runtime_level_spawn_mobys","_runtime_level_class_count","_runtime_level_class_slot","_runtime_level_class_id","_runtime_level_class_has_update","_runtime_level_class_has_data","_runtime_level_moby_count","_runtime_level_placed_count","_runtime_level_skipped_count","_runtime_level_extra_slots","_runtime_level_pending_entity_updates","_runtime_level_table_value_stores","_runtime_level_moby_address","_runtime_level_moby_stride","_runtime_level_unported_name","_runtime_level_attach_pvars_and_paths","_runtime_level_tick","_runtime_level_pvar_users","_runtime_level_pvar_bytes","_runtime_level_pending_pvar_fixups","_runtime_level_relocated_pvar_pointers","_runtime_level_path_count","_runtime_level_path_address","_runtime_level_moby_fixup_pending","_runtime_level_tick_count","_runtime_level_ticked_updates","_runtime_level_unported_update_calls","_runtime_level_pending_animation_advances","_runtime_level_pending_bounds_refreshes"]' \
 	  -o build/browser/level.wasm
+
+browser-spike: ## Measure the whole port: compile every recovered C file to wasm objects and report missing symbols
+	browser/spike/compile-all.sh
+	$(NODE) browser/spike/report.mjs l00 --json build/spike/report-l00.json
+
+# Root defaults to the Veldin objective actor, clank_cutscene_trigger_update (class 834).
+SPIKE_ROOT ?= FUN_L00_002d9dc8
+SPIKE_NAME ?= clank
+browser-spike-mission: ## After browser-spike: list, link, and run everything one mission root reaches until a missing service traps
+	$(NODE) browser/spike/closure.mjs $(SPIKE_ROOT)
+	browser/spike/link-closure.sh $(SPIKE_ROOT) $(SPIKE_NAME)
+	$(NODE) browser/spike/run-closure.mjs $(SPIKE_NAME) $(SPIKE_ROOT) --poke32 0x1415F8=100
 
 browser-runtime-test: browser-runtime ## Execute the original scene and frame-counter checks
 	$(NODE) --test browser/runtime.test.mjs
