@@ -101,6 +101,72 @@
       "why": "Camera priority handler: the engine calls every check_priority slot with (candidate, current) (camera_activation_check_priority.c). This handler reads only the first; on the EE the second register is ignored, in WebAssembly a two-argument indirect call to a one-parameter function traps. The unused second parameter is named.",
       "find": "s32 volume_camera_swing_check(struct UpdateCam *) __asm__(\"FUN_L00_002ed230\");",
       "replace": "s32 volume_camera_swing_check(struct UpdateCam *, void *current_camera_unused) __asm__(\"FUN_L00_002ed230\");"
+    },
+    {
+      "file": "src/overlays/shared/camera/follow_camera_set_distance.c",
+      "why": "Takes one argument: the retail body (level 0x2e83c0) overwrites $a1 with lui at 0x2e840c before any read, and all four recovered callers pass only the candidate. On the EE the extra parameter is harmless; in WebAssembly a one-argument call to a two-parameter definition is a signature mismatch and traps. The unused parameter is dropped.",
+      "find": "int try_select_follow_camera_volume(int candidate_object, int unused) __asm__(\"FUN_L00_002e83c0\");",
+      "replace": "int try_select_follow_camera_volume(int candidate_object) __asm__(\"FUN_L00_002e83c0\");"
+    },
+    {
+      "file": "src/overlays/shared/camera/follow_camera_set_distance.c",
+      "why": "Takes one argument: the retail body (level 0x2e83c0) overwrites $a1 with lui at 0x2e840c before any read, and all four recovered callers pass only the candidate. On the EE the extra parameter is harmless; in WebAssembly a one-argument call to a two-parameter definition is a signature mismatch and traps. The unused parameter is dropped.",
+      "find": "int try_select_follow_camera_volume(int candidate_object, int unused) {",
+      "replace": "int try_select_follow_camera_volume(int candidate_object) {"
+    },
+    {
+      "file": "src/overlays/shared/camera/follow_camera_update.c",
+      "why": "Register forwarding: follow_camera_update (level 0x2e9c28) never writes $a0 before `jal 0x2e46b8`, so the callee receives camera_moby, which its definition (follow_camera_springs.c) reads as `camera`. WebAssembly has no leftover registers; the call with no argument is a signature mismatch and traps. The argument is passed explicitly.",
+      "find": "void         apply_follow_camera_translation() __asm__(\"FUN_L00_002e46b8\");",
+      "replace": "void         apply_follow_camera_translation(u8 *camera) __asm__(\"FUN_L00_002e46b8\");"
+    },
+    {
+      "file": "src/overlays/shared/camera/follow_camera_update.c",
+      "why": "Register forwarding: follow_camera_update (level 0x2e9c28) never writes $a0 before `jal 0x2e46b8`, so the callee receives camera_moby, which its definition (follow_camera_springs.c) reads as `camera`. WebAssembly has no leftover registers; the call with no argument is a signature mismatch and traps. The argument is passed explicitly.",
+      "find": "    apply_follow_camera_translation();\n",
+      "replace": "    apply_follow_camera_translation(camera_moby);\n"
+    },
+    {
+      "file": "src/overlays/shared/camera/follow_camera_springs.c",
+      "why": "Register forwarding: compute_follow_camera_radial_collision_positions (level 0x2e4180) only copies $f12 to $f22 before `jal 0x1ee1b0`, so find_camera_collision_volume_for_point receives the caller's radial_distance_extension as its radius. The recovered call omits it; in WebAssembly that is a signature mismatch and traps. The argument is passed explicitly.",
+      "find": "extern char *FUN_L00_001ee1b0_002e4180(void *) __asm__(\"FUN_L00_001ee1b0\");",
+      "replace": "extern char *FUN_L00_001ee1b0_002e4180(void *, f32) __asm__(\"FUN_L00_001ee1b0\");"
+    },
+    {
+      "file": "src/overlays/shared/camera/follow_camera_springs.c",
+      "why": "Register forwarding: compute_follow_camera_radial_collision_positions (level 0x2e4180) only copies $f12 to $f22 before `jal 0x1ee1b0`, so find_camera_collision_volume_for_point receives the caller's radial_distance_extension as its radius. The recovered call omits it; in WebAssembly that is a signature mismatch and traps. The argument is passed explicitly.",
+      "find": "(int *)FUN_L00_001ee1b0_002e4180(&lookup_position_copy);",
+      "replace": "(int *)FUN_L00_001ee1b0_002e4180(&lookup_position_copy, radial_distance_extension);"
+    },
+    {
+      "file": "src/overlays/shared/math/interpolation/spring_turn.c",
+      "why": "Second, never-called name for FUN_L00_001f0d60 declared with unspecified parameters. The file's other binding of the label (FUN_L00_001f0d60_258490) is reordered to the ported definition; an unprototyped name bound to the same label blocks that, so it gets the same prototype.",
+      "find": "extern int    coll_sphere() __asm__(\"FUN_L00_001f0d60\");",
+      "replace": "extern int    coll_sphere(void *, float, int, void *) __asm__(\"FUN_L00_001f0d60\");"
+    },
+    {
+      "file": "src/math/interpolation/cosine_interpolate.c",
+      "why": "Takes three floats: the retail body (0x2133d0) reads $f12, $f13 and $f14 and no integer register. The unused leading s32 makes a (i32, f32, f32, f32) WebAssembly signature that every recovered caller, declaring (f32, f32, f32), traps on. It is dropped.",
+      "find": "f32 cosine_interpolate(s32 unused_arg,\n                       f32 from,\n                       f32 to,\n                       f32 interpolation_progress) __asm__(\"FUN_002133d0\");",
+      "replace": "f32 cosine_interpolate(f32 from, f32 to, f32 interpolation_progress) __asm__(\"FUN_002133d0\");"
+    },
+    {
+      "file": "src/math/interpolation/cosine_interpolate.c",
+      "why": "Takes three floats: the retail body (0x2133d0) reads $f12, $f13 and $f14 and no integer register. The unused leading s32 makes a (i32, f32, f32, f32) WebAssembly signature that every recovered caller, declaring (f32, f32, f32), traps on. It is dropped.",
+      "find": "f32 cosine_interpolate(s32 unused_arg, f32 from, f32 to, f32 interpolation_progress) {",
+      "replace": "f32 cosine_interpolate(f32 from, f32 to, f32 interpolation_progress) {"
+    },
+    {
+      "file": "src/overlays/shared/camera/follow_camera_set_distance.c",
+      "why": "Retail body (level 0x2e8378) is `addiu sp, -0x50; jr ra; addiu sp, 0x50` and reads no register. Its one caller, follow_camera_update, passes the camera moby; on the EE the extra register is ignored, in WebAssembly a one-argument call to a no-parameter function traps. The unused parameter is named.",
+      "find": "void run_follow_camera_noop(void) __asm__(\"FUN_L00_002e8378\");",
+      "replace": "void run_follow_camera_noop(void *camera_unused) __asm__(\"FUN_L00_002e8378\");"
+    },
+    {
+      "file": "src/overlays/shared/camera/follow_camera_set_distance.c",
+      "why": "Retail body (level 0x2e8378) is `addiu sp, -0x50; jr ra; addiu sp, 0x50` and reads no register. Its one caller, follow_camera_update, passes the camera moby; on the EE the extra register is ignored, in WebAssembly a one-argument call to a no-parameter function traps. The unused parameter is named.",
+      "find": "void run_follow_camera_noop(void) {",
+      "replace": "void run_follow_camera_noop(void *camera_unused) {"
     }
   ],
   "prototypes": [
@@ -135,6 +201,14 @@
       "label": "FUN_001e9448",
       "result": "0",
       "why": "Retail body is `jr ra; daddu v0, zero, zero`: returns 0. Same treatment."
+    }
+  ],
+  "signatures": [
+    {
+      "label": "FUN_L00_001f2868",
+      "returns": "s32",
+      "parameters": "void *, s32, void *, void *, f32",
+      "why": "collect_mobies_in_sphere: hand-written EE/VU0 assembly with no C definition. Decoded register use: $a0 the sphere centre (lqc2 vf31, 0($a0)), $a1 a flag mask (kept in $s3, tested with andi 4), $a2 a moby to skip (kept in $s2, compared with each candidate), $a3 kept in $s5, $f12 the radius (mfc1 at 0x1f2884); the count of mobys found returns in $v0 and the list is written at D_L00_00177F00. Recovered callers list the float in different positions, which the EE ignores (floats travel in $f12); in WebAssembly each order is a different signature. This order is the register order."
     }
   ]
 }

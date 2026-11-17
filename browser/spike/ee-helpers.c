@@ -152,6 +152,8 @@ void fast_vec_normalize(void *out, void *a, f32 length) {
     }
     store_vec(out, v);
 }
+/* The level program's copy at 0x1ff500 (level 0 text): its 20 instruction words equal these. */
+ALIAS(fast_vec_normalize, FUN_L00_001ff500, FUN_001f9bf8)
 
 /* 0x1f9cf8: ACC = m[0]*v.x + m[1]*v.y + m[2]*v.z; vmaddw out = ACC + vf0 * v.w, and vf0 is
    (0, 0, 0, 1), so only w gains v.w. */
@@ -198,6 +200,31 @@ ALIAS(fast_cos, func_001F9DC8, FUN_001f9dc8)
 f32 fast_sin(f32 radians) __asm__("FUN_001f9de0");
 f32 fast_sin(f32 radians) { return sinf(radians); }
 ALIAS(fast_sin, func_001F9DE0, FUN_001f9de0)
+
+/* 0x1f9df8: s = 1.0, or -1.0 with x = |x| when x < 0; vsqrt Q = sqrt(1 - x);
+   ACC = c0 (adda.s), then madda.s x * c1, madda.s x^2 * c2 (the two raw words 0x4605601e and
+   0x4606101e), madd.s p = ACC + x^3 * c3; result s * (pi/2 - p * Q). The four coefficients are
+   read from gp - 0x6560 (gp = 0x166c00, config/us/rnc1.us.yaml), bits 0x3fc90da4 0xbe593484
+   0x3d981627 0xbc996e30 in the boot ELF. vsqrt takes the root of |ft|, so |x| > 1 gives
+   sqrt(|1 - x|), not NaN. pi/2 is the lui/ori pair 0x3fc90fdb. */
+f32 fast_arc_sin(f32 x) __asm__("FUN_001f9df8");
+f32 fast_arc_sin(f32 x) {
+    static const u32 coefficient_bits[4] = { 0x3fc90da4, 0xbe593484, 0x3d981627, 0xbc996e30 };
+    f32 c[4];
+    f32 sign = 1.0f;
+    f32 polynomial;
+    __builtin_memcpy(c, coefficient_bits, sizeof(c));
+    if (x < 0.0f) {
+        sign = -1.0f;
+        x = __builtin_fabsf(x);
+    }
+    polynomial = ((c[0] + x * c[1]) + (x * x) * c[2]) + (x * (x * x)) * c[3];
+    return sign * (1.57079637f - polynomial * __builtin_sqrtf(__builtin_fabsf(1.0f - x)));
+}
+ALIAS(fast_arc_sin, func_001F9DF8, FUN_001f9df8)
+/* The level program's copy at 0x1ff818 (level 0 text) differs only in its branch target and in
+   reading the same four coefficient words from gp - 0x64a0 (0x160760 in the level's lit). */
+ALIAS(fast_arc_sin, FUN_L00_001ff818, FUN_001f9df8)
 
 /* 0x1f99c8: max.s. */
 f32 max_float(f32 a, f32 b) __asm__("FUN_001f99c8");
@@ -286,6 +313,68 @@ void transpose_rotation_matrix(void *out, void *in) {
     store_vec((u8 *)out + 0x10, r1);
     store_vec((u8 *)out + 0x20, r2);
 }
+
+/* 0x1fa3c0: a = *a1, b = *a2 (listing order fd, fs, ft, checked against the raw fields).
+   vmulw.xyz b * a.w and a * b.w; vopmula/vopmsub a x b; vadday/vmaddz d = (b.x*a.x + b.y*a.y)
+   + b.z*a.z. out.xyz = (b * a.w + a * b.w) + a x b; out.w = a.w * b.w - d. The quaternion
+   product a * b with w last. */
+void multiply_quaternions(void *out, void *a_in, void *b_in) __asm__("FUN_001fa3c0");
+void multiply_quaternions(void *out, void *a_in, void *b_in) {
+    const Vec4 a = load_vec(a_in);
+    const Vec4 b = load_vec(b_in);
+    const f32 d = (b.x * a.x + b.y * a.y) + b.z * a.z;
+    Vec4 r;
+    r.x = (b.x * a.w + a.x * b.w) + (a.y * b.z - b.y * a.z);
+    r.y = (b.y * a.w + a.y * b.w) + (a.z * b.x - b.z * a.x);
+    r.z = (b.z * a.w + a.z * b.w) + (a.x * b.y - b.x * a.y);
+    r.w = b.w * a.w - d;
+    store_vec(out, r);
+}
+ALIAS(multiply_quaternions, func_001FA3C0, FUN_001fa3c0)
+
+/* 0x212c28 find_camera_environment_region(position, &blend, &index). p = position with w = 1.
+   For i = 0, 1, ... up to and including the count at 0x15fb44 (the `bne` compares the element
+   just tested, before the delay-slot increment), sphere s = 0x19abc0 + 16 * i; the region is hit
+   when (p.x - s.x)^2 + (p.y - s.y)^2 - s.w has its sign bit set (x and y only: vaddy.x). On the
+   first hit only: v = c0 * p.x + c1 * p.y + c2 * p.z + c3 (columns at 0x19adc0 + 0x80 * i,
+   D_0019ADC0 in update_camera_environment_from_regions.c). vclipw.xyz against vf0.w = 1 sets a
+   flag where v exceeds +1 or is below -1; any flag returns 0 without trying later regions.
+   Otherwise *index = i, *blend = 0.5 * (v.x + 1), and 1 is returned. No hit returns 0.
+   A negative count is not reproduced: the console's do-while would test element 0 and then
+   never meet its end pointer; here nothing is tested. */
+extern const s32 camera_environment_region_last __asm__("D_0015FB44");
+extern const u8 camera_environment_spheres[] __asm__("D_0019ABC0");
+extern const u8 camera_environment_region_records[] __asm__("D_0019ADC0");
+s32 find_camera_environment_region(void *position, f32 *blend, s32 *index) __asm__("FUN_00212c28");
+s32 find_camera_environment_region(void *position, f32 *blend, s32 *index) {
+    Vec4 p = load_vec(position);
+    s32 i;
+    p.w = 1.0f;
+    for (i = 0; i <= camera_environment_region_last; i++) {
+        const Vec4 s = load_vec(camera_environment_spheres + 16 * i);
+        const f32 dx = p.x - s.x;
+        const f32 dy = p.y - s.y;
+        const f32 inside = (dx * dx + dy * dy) - s.w;
+        u32 bits;
+        __builtin_memcpy(&bits, &inside, 4);
+        if (bits >> 31) {
+            const u8 *columns = camera_environment_region_records + 0x80 * i;
+            const Vec4 c0 = load_vec(columns), c1 = load_vec(columns + 0x10);
+            const Vec4 c2 = load_vec(columns + 0x20), c3 = load_vec(columns + 0x30);
+            const f32 vx = ((c0.x * p.x + c1.x * p.y) + c2.x * p.z) + c3.x * p.w;
+            const f32 vy = ((c0.y * p.x + c1.y * p.y) + c2.y * p.z) + c3.y * p.w;
+            const f32 vz = ((c0.z * p.x + c1.z * p.y) + c2.z * p.z) + c3.z * p.w;
+            if (vx > 1.0f || vx < -1.0f || vy > 1.0f || vy < -1.0f || vz > 1.0f || vz < -1.0f) {
+                return 0;
+            }
+            *index = i;
+            *blend = 0.5f * (vx + 1.0f);
+            return 1;
+        }
+    }
+    return 0;
+}
+ALIAS(find_camera_environment_region, func_00212C28, FUN_00212c28)
 
 /* 0x1fa378: load the four columns of m; for each of the four vectors v of n, in order,
    out[i] = m0*v.x + m1*v.y + m2*v.z + m3*v.w, stored before the next v is loaded. */

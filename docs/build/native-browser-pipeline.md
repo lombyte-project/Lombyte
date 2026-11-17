@@ -640,6 +640,72 @@ What stands between this and the original menus and HUD on screen:
 4. The assembly-only animation path (`0x20ede8`, `advance_moby_animation`, `moby_anim_proc`).
 5. Input (`update_primary_pad_state` from browser input), then sound banks and saves.
 
+### Fifth pass (2026-11-17): the first camera update completes
+
+Same scenario and commands as the fourth pass:
+
+```
+export RNC_ISO_PATH=".../Ratchet & Clank (USA) (En,Fr,De,Es,It).iso"
+browser/spike/compile-all.sh 8
+browser/spike/link-closure.sh FUN_00230f60,FUN_00232d00,FUN_L00_0023d028,FUN_L00_00244110 level
+node browser/spike/run-closure.mjs level FUN_00230f60 --scenario browser/spike/scenario-veldin-level.mjs \
+  --elf build/rea/SCUS_971.99 --level 0
+```
+
+Nothing under `src/`, `include/`, `scripts/` or `config/` changed.
+
+The first `update_camera` now returns: `update_all_cameras` runs the whole original follow-camera
+update (setup, springs, orbit, collision probes against the Veldin mesh, look-at matrix), and
+`update_camera_environment_from_regions` runs. `load_level_assets_and_gameplay(1, 0)` then clears
+the scene buffers and enters its last call, `link_and_update_all_mobys`, which stops on the
+missing `FUN_L00_00250480`: the level copy of `advance_moby_animation` (executable `0x20d580`;
+370 of its 392 words are identical, the rest are relocated jumps and data addresses).
+**Still not a game frame**: the level load has not returned, nothing is drawn, no input is read.
+
+Measured on this run (fourth pass in brackets): 2,382 of 2,421 files compile (2,120); the level
+closure links 544 files (540) with 159 missing functions as named traps (164), 12 stubbed
+prototype conflicts (17) and 93 caller/definition signature mismatches (150).
+
+Build changes, all in `browser/` (the matching build does not read them):
+
+- `browser/include/asm.h` shadows `include/asm.h` for WebAssembly builds: `INCLUDE_ASM` expands
+  to nothing, so the C functions in mixed C/assembly files compile and the assembly-only ones
+  become named traps. This accounts for most of the 262 newly compiling files.
+- `normalize-sources.py`, each rule general and documented in place:
+  - canonical signatures also come from the ported helpers (`level-math.c`, `ee-helpers.c`,
+    `collision.c`) and from a new `signatures` list in `source-fixes.json` for functions with no
+    C definition; a recovered definition wins over a helper;
+  - declarations split as `extern <type>` / name on the next line are matched;
+  - a file binding one label under several names gets adapters when every binding can take one;
+  - an adapter named after its own label is renamed (it was a local symbol with the label's name,
+    which captured the file's other bindings: 88 files);
+  - an unused `name()` in a `.c` file takes the definition's prototype; a block-scope repeat of an
+    adapted declaration is dropped;
+  - a declared result the definition does not return becomes `void` when every call in the `.c`
+    file is a bare statement (headers excluded: their includers use the name);
+  - per-file replacements now run before the unify pass, so it sees the corrected prototypes.
+- Per-file fixes in `source-fixes.json`, each with its decoded reason: two register-forwarding
+  calls (`apply_follow_camera_translation` gets `$a0`, `find_camera_collision_volume_for_point`
+  gets `$f12`), the unused second parameter of `try_select_follow_camera_volume`, the unused `s32`
+  of `cosine_interpolate`, a parameter for the empty `run_follow_camera_noop`, and a prototype for
+  an uncalled `coll_sphere()` in `spring_turn.c`.
+- New helpers in `ee-helpers.c`, each decoded from its instructions: `fast_arc_sin` (coefficients
+  read from the boot ELF at `gp - 0x6560`, `gp = 0x166c00` from `config/us/rnc1.us.yaml`; the
+  level copy at `0x1ff818` reads the same four words from its own table), `multiply_quaternions`,
+  `find_camera_environment_region`, and an alias for the level's word-identical copy of
+  `fast_vec_normalize` at `0x1ff500`. **None is compared against console output**; there are no
+  test vectors yet. `fast_cos`/`fast_sin` remain host stand-ins, as before.
+
+Newly deferred, reported as NOT DONE on every run: `collect_mobies_in_sphere`
+(`FUN_L00_001f2868`, about 2,300 bytes of EE/VU0 assembly). It is **not** output-only: it is
+answered as "0 mobys found", because the moby collision grid it searches is built by
+`update_entity`'s undecoded microprogram. Callers take the nothing-found branch wherever a moby
+is in range. The collision spike counted 17 unverified queries on this run (6 before), each
+answered from the static world only.
+
+Next: port `advance_moby_animation` (`0x20d580`) and alias its level copy; it writes the
+animation end/loop flags at moby `+0x70` that moby updates read, so it cannot be deferred.
+
 ### Scenery, Fog, And The Interim Page Layer (2026-11-14)
 
 **Scenery (ties).** [tie-geometry.mjs](../../browser/tie-geometry.mjs) decodes tie classes

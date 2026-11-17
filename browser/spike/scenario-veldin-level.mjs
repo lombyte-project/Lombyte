@@ -117,6 +117,7 @@ export const deferred = {
   FUN_L00_00251ce8: 'the level copy of executable 0x20ede8 (3,236 bytes of EE/VU0 assembly, unnamed): called as (moby, slot | 0x300) when an animation is set; it fills the moby\'s cached pose in that render slot. Not decoded, so no joint matrices exist for any animated model.',
   FUN_00234f98: 'light_tfrags: the same bake for terrain fragments (assembly-only)',
   FUN_001f4a58: 'fade_to_black: screen fade (renderer)',
+  FUN_L00_001f2868: 'collect_mobies_in_sphere (about 2,300 bytes of EE/VU0 assembly from 0x1f2868, not decoded): NOT output-only. It searches the moby collision grid, whose entries update_entity (FUN_L00_00250df8, below) has not built, and is answered as 0 mobys found. Wherever a moby is in range, callers take the nothing-found branch the console would not.',
   FUN_L00_00250df8: 'update_entity: builds each moby\'s rotation matrix (+0xC0), bounding sphere (+0x00) and collision-grid entry; calls a VU0 microprogram that is not decoded. Positions, rotations and scales are unaffected; matrices and bounds stay zero.',
 };
 

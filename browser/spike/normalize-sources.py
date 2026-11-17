@@ -32,6 +32,9 @@ Then applies browser/spike/source-fixes.json, each entry with its reason:
   - "empty_functions": address-named functions whose retail body is empty (decoded with
     ee-disasm.py). Each declaration becomes a file-local empty definition with the prototype that
     file declares, because callers disagree on the arguments.
+  - "signatures": for functions with no C definition whose signature was decoded from their
+    instructions, the canonical (returns, parameters) that unify_with_definitions treats as the
+    definition, so mismatched declarations are rewritten or get reordering adapters.
   - "prototypes": for functions with no C definition, one agreed declaration for a function that recovered callers declare
     inconsistently. Every `extern` declaration of that symbol in the copy is rewritten to it; a
     caller that no longer type-checks then fails to compile instead of trapping at run time.
@@ -71,8 +74,11 @@ BASIC = {'void', 'char', 'short', 'int', 'long', 'float', 'double', 'signed', 'u
 FLOATS = {'float', 'double', 'f32', 'f64'}
 NOT_A_TYPE = {'return', 'else', 'goto', 'case', 'do', 'sizeof', 'typedef', 'static', 'inline', 'if', 'while'}
 DEFINITION = re.compile(r'^([A-Za-z_][\w \t\*]*?)\b(\w+)\(([^;{}()]*)\)\s*\{', re.M)
+# The return type may also sit alone on the line after `extern`, with the name starting the next
+# line, optionally indented (`extern void\nname(...)`), a layout the recovered tree uses; nothing looser.
 DECLARATION = re.compile(
-    r'^([ \t]*(?:extern[ \t]+)?)([A-Za-z_][\w \t\*]*?)\b(\w+)[ \t]*\(([^;{}()]*)\)(\s*__asm__\("([^"]+)"\))?[ \t]*;',
+    r'^([ \t]*(?:extern[ \t]+)?)((?<=extern )[A-Za-z_][\w \t\*]*?\n[ \t]*|[A-Za-z_][\w \t\*]*?)\b(\w+)[ \t]*\(([^;{}()]*)\)'
+    r'(\s*__asm__\("([^"]+)"\))?[ \t]*;',
     re.M)
 
 
@@ -114,6 +120,9 @@ def classes(types):
     return ''.join('f' if kind in FLOATS else 'i' for kind in types)
 
 
+PORTED_HELPERS = ('browser/level-math.c', 'browser/spike/ee-helpers.c', 'browser/collision.c')
+
+
 def unify_with_definitions():
     """Rewrites prototypes of a function, in files other than the one that defines it, to the
     definition's types, changing only parameters and results whose WebAssembly type differs.
@@ -145,13 +154,60 @@ def unify_with_definitions():
                 canon[symbol] = None  # defined differently in two files (per-level copies); leave alone
             elif symbol not in canon:
                 canon[symbol] = (result, kinds, path, name)
+    # Assembly-only functions ported as browser helpers (linked by link-closure.sh) define the
+    # label too. Only non-static definitions bound to an original label count.
+    for helper in PORTED_HELPERS:
+        with open(os.path.join(ROOT, helper), encoding='utf-8') as handle:
+            text = handle.read()
+        for match in DEFINITION.finditer(text):
+            returns, name, parameters = match.group(1).strip(), match.group(2), match.group(3)
+            if not returns or returns.split()[0] in NOT_A_TYPE or 'static' in returns.split():
+                continue
+            label = re.search(r'\b' + re.escape(name) + r'\s*\([^;{}]*?\)\s*__asm__\("([^"]+)"\)', text)
+            kinds, result = portable_parameters(parameters), portable_type(returns)
+            if not label or kinds is None or result is None:
+                continue
+            canon.setdefault(label.group(1), (result, kinds, helper, name))  # a recovered definition wins
+    # A function with no C definition can still have a known signature, decoded from its
+    # instructions (source-fixes.json "signatures"). Declarations are then made to agree with it
+    # the same way, reordering adapters included.
+    with open(os.path.join(ROOT, 'browser', 'spike', 'source-fixes.json'), encoding='utf-8') as handle:
+        for rule in json.load(handle).get('signatures', []):
+            if rule['label'] in canon:
+                sys.exit(f"signature rule for {rule['label']} names a function that has a C definition")
+            canon[rule['label']] = (rule['returns'], portable_parameters(rule['parameters']), None, None)
     rewritten = 0
     disagreements = []
 
     def note(symbol, path, why):
         disagreements.append(f"{symbol}\t{os.path.relpath(path, OUT)}\t{' '.join(why.split())}")
 
-    adapted = set()  # (path, C name) that already has an adapter in that file
+    adapted = {}  # (path, C name) that already has an adapter in that file -> its parameter text
+
+    def result_never_read(path, text, name):
+        """True when every use of `name` in a .c file, other than its declarations, is a call that
+        starts a statement, so no caller reads the value it is declared to return. Headers are
+        excluded: the files that include them use the name."""
+        if not path.endswith('.c'):
+            return False
+        declared_at = {m.start(3) for m in DECLARATION.finditer(text) if m.group(3) == name}
+        for use in re.finditer(r'\b' + re.escape(name) + r'\b', text):
+            if use.start() in declared_at:
+                continue
+            if not re.match(r'\s*\(', text[use.end():]):
+                return False  # taken as a function pointer
+            # The previous token, across lines: a statement starts after `{`, `}`, `;`, `else` or
+            # a `(void)` cast. Anything else (an `=`, an operator, an `if (...)`) counts as a read.
+            before = text[max(0, use.start() - 200):use.start()].rstrip()
+            if before and not re.search(r'(?:[{};]|\belse|\(void\))$', before):
+                return False
+        return True
+
+    def unused_unprototyped(path, text, name, parameters):
+        """A `name()` declaration in a .c file whose name appears nowhere else in that file: no
+        call depends on what it leaves unspecified, so it can take the definition's prototype.
+        Headers are excluded: the files that include them use the name."""
+        return path.endswith('.c') and parameters.strip() == '' and len(re.findall(r'\b' + re.escape(name) + r'\b', text)) == 1
 
     def reorder_adapter(path, text, lead, returns, name, parameters, declared, declared_result,
                         result, kinds, symbol, defined_as=None):
@@ -171,9 +227,29 @@ def unify_with_definitions():
             return None
         # A file that binds the same label under two C names would give one symbol two types in
         # one object, which links into a module that fails validation. Leave those listed.
+        # Several names are fine when every declaration of each one also becomes an adapter (or
+        # already has the definition's classes): all of them then call one extern with one type.
         bound = set(re.findall(r'\b(\w+)\s*\([^;{}()]*\)\s*__asm__\("' + re.escape(symbol) + r'"\)', text))
-        if len(bound - {name, defined_as}) > 0:
-            return None
+        for other in bound - {name, defined_as}:
+            for match in DECLARATION.finditer(text):
+                o_lead, o_returns, o_name, o_parameters, _, o_label = match.groups()
+                if o_name != other or (o_label or o_name) != symbol:
+                    continue
+                if unused_unprototyped(path, text, o_name, o_parameters):
+                    continue  # becomes the definition's prototype below
+                o_declared = portable_parameters(o_parameters)
+                o_result = portable_type(o_returns.strip())
+                if o_declared is None or o_result is None or o_lead.strip() not in ('', 'extern') \
+                        or o_lead[:1] in (' ', '\t') or len(o_declared) != len(kinds) \
+                        or sorted(classes(o_declared)) != sorted(classes(kinds)):
+                    return None
+                if o_result != 'void' and (result == 'void' or classes([o_result]) != classes([result])):
+                    return None
+            if not any(match.group(3) == other for match in DECLARATION.finditer(text)):
+                return None  # bound somewhere this pass cannot read (a definition, a cast): leave it
+        if declared_result != 'void' and result == 'void' and result_never_read(path, text, name):
+            declared_result = 'void'  # every call discards it
+            returns = 'void '
         if declared_result != 'void' and (result == 'void' or classes([declared_result]) != classes([result])):
             return None  # the caller reads a register the definition does not set
         if (path, name) in adapted:
@@ -193,13 +269,18 @@ def unify_with_definitions():
         for index, kind in enumerate(classes(declared)):
             order[kind].append(names[index])
         arguments = [order[kind].pop(0) for kind in classes(kinds)]
-        adapted.add((path, name))
+        adapted[(path, name)] = ' '.join(parameters.split())
         inner = f'{name}__definition_order'
         returned = returns.replace('extern', '').strip()
         call = f"{inner}({', '.join(arguments)})"
+        # An adapter named after the label itself would be a local symbol with the label's name,
+        # and every other declaration in the file bound to that label would resolve to it. It gets
+        # its own name, and later uses of the label name are redirected to it.
+        local = f'{name}__caller_order' if name == symbol else name
+        redirect = f"\n#define {name} {local}" if local != name else ''
         return (f"extern {result} {inner}({', '.join(kinds)}) __asm__(\"{symbol}\");\n"
-                f"static inline {returned} {name}({', '.join(pieces)}) "
-                f"{{ {'' if declared_result == 'void' else 'return '}{call}; }}")
+                f"static inline {returned} {local}({', '.join(pieces)}) "
+                f"{{ {'' if declared_result == 'void' else 'return '}{call}; }}{redirect}")
 
     for path, text in sources.items():
         def replace(match):
@@ -227,6 +308,20 @@ def unify_with_definitions():
                     return match.group(0)
                 rewritten += 1
                 return adapter
+            if declared is None and unused_unprototyped(path, text, name, parameters):
+                rewritten += 1
+                return f"{lead}{result} {name}({', '.join(kinds) or 'void'}){asm or ''};"
+            if lead[:1] in (' ', '\t') and adapted.get((path, name)) == ' '.join(parameters.split()):
+                # A block-scope repeat of a declaration the file already adapted at file scope: the
+                # adapter is in scope, and an extern of the same name would conflict with it.
+                rewritten += 1
+                return f"{re.match(r'[ \t]*', lead).group(0)}/* {name}: file-scope adapter above */"
+            if declared is None and parameters.strip() == '' and result == 'void' \
+                    and declared_result not in (None, 'void') and result_never_read(path, text, name):
+                # `()`: the calls still decide the parameters, but none reads the result the
+                # definition does not return, so only the result changes.
+                rewritten += 1
+                return f"{lead}void {name}(){asm or ''};"
             if declared is None:  # `()` or types this pass cannot read: calls decide the signature
                 if parameters.strip() == '':
                     note(symbol, path, f"declared with unspecified parameters; definition ({', '.join(kinds) or 'void'})")
@@ -247,7 +342,9 @@ def unify_with_definitions():
                     pieces[index] = kind
             new_returns = returns
             if declared_result is not None and wasm_type(declared_result) != wasm_type(result):
-                if result == 'void':
+                if result == 'void' and result_never_read(path, text, name):
+                    new_returns = 'void '  # declared with a result, but every call discards it
+                elif result == 'void':
                     # The caller reads a result the definition does not declare (a value left in
                     # $v0). Rewriting would not compile; it stays a link-reported mismatch.
                     note(symbol, path, f"declared to return {declared_result}; definition returns void")
@@ -362,7 +459,7 @@ def main():
                 with open(os.path.join(target, name), 'w', encoding='utf-8', errors='surrogateescape') as handle:
                     handle.write(new)
     label_unlabelled_declarations()
-    unify_with_definitions()
+    # Per-file fixes come before unify_with_definitions, so it sees the corrected prototypes.
     with open(os.path.join(ROOT, 'browser', 'spike', 'source-fixes.json'), encoding='utf-8') as handle:
         fixes = json.load(handle)
     for fix in fixes['replacements']:
@@ -374,6 +471,7 @@ def main():
         with open(path, 'w', encoding='utf-8', errors='surrogateescape') as handle:
             handle.write(text.replace(fix['find'], fix['replace']))
     print(f"applied {len(fixes['replacements'])} source replacements")
+    unify_with_definitions()
     for rule in fixes.get('empty_functions', []):
         total = 0
         for folder, _, names in os.walk(OUT):
