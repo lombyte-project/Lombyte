@@ -3,8 +3,8 @@
   "private": true,
   "scripts": {
     "lint": "npm run lint:js && npm run lint:spelling",
-    "lint:js": "eslint \"browser/**/*.mjs\"",
-    "lint:spelling": "codespell --quiet-level=2 browser docs README.md CONTRIBUTING.md AGENTS.md"
+    "lint:js": "eslint \"browser/**/*.mjs\" \"coop/**/*.mjs\"",
+    "lint:spelling": "codespell --quiet-level=2 browser coop docs README.md CONTRIBUTING.md AGENTS.md"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

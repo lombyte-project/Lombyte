@@ -15,6 +15,15 @@ export default [
     rules: js.configs.recommended.rules,
   },
   {
+    files: ['coop/**/*.mjs'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: globals.node,
+    },
+    rules: js.configs.recommended.rules,
+  },
+  {
     files: ['browser/**/*.test.mjs', 'browser/spike/*.mjs'],
     languageOptions: {
       globals: globals.node,
