@@ -703,8 +703,33 @@ answered as "0 mobys found", because the moby collision grid it searches is buil
 is in range. The collision spike counted 17 unverified queries on this run (6 before), each
 answered from the static world only.
 
-Next: port `advance_moby_animation` (`0x20d580`) and alias its level copy; it writes the
-animation end/loop flags at moby `+0x70` that moby updates read, so it cannot be deferred.
+Then (same day): `advance_moby_animation` is ported in `ee-helpers.c`, decoded from its 186
+instructions (`0x20d580`-`0x20d864`); the level copy at `0x250480` shares the code and differs
+only in two internal jumps, its two callees and its frame counter (`D_L00_0015F5CC`). It advances
+`anim_time` by `anim_speed` times the frame duration, steps frames forward or backward, finishes
+blends, sets the loop/step flags at `+0x70`, and fires animation triggers into the sound code.
+The level's two sound callees (`0x28dbe8`, `0x24ec80`) are reported as NOT DONE (audio).
+**Not compared against console output.** The load now runs mobys' own updates inside
+`link_and_update_all_mobys` and stops in `veldin_ship` → `build_moby_bone_transform` on the
+missing `get_moby_joint_matrices` (`0x210850`). That is the start of the assembly-only pose path:
+`0x210850` (88 instructions), `0x2109b8` (659) and `0x20ede8` (553), with MMI and VU0 code. Until
+it is decoded no moby has a computed pose in this build. 91 signature mismatches remain.
+
+#### What the game page shows today (audited 2026-11-17)
+
+- **Menus and HUD are not the game's.** The main menu, pause, result panel and HUD in
+  `browser/game.html` are HTML written for the page (labelled "Interim" there and in
+  `browser/interim-game.mjs`). The game's own title screen, menus and HUD are original C that
+  builds GS packets; they appear only once the frame loop runs and a GS backend draws them.
+- **Other mobys are frozen in their bind pose.** `showPlacedMobys` in `browser/game.mjs` draws
+  every placed moby as a plain mesh with no skeleton; only position, rotation and scale move, and
+  only for classes whose update runs natively (the pterodactyl). No moby other than Ratchet plays
+  an animation.
+- **Ratchet's poses are real data; which clip plays is not original logic.** `moby-animation.mjs`
+  decodes his joint rotations, translations, scales and frame rates from the disc (uncompressed
+  frames only). The choice of clip (idle/run/jump/crouch/swing in `updateHeroAnimation`), the
+  0.12 s cross-fade and the run-speed time scale are page code. Jump and slam timing comes from the
+  native `runtime_hero_*_animation_speed` calls.
 
 ### Scenery, Fog, And The Interim Page Layer (2026-11-14)
 
