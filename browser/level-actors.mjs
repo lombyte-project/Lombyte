@@ -82,7 +82,8 @@ export function levelTickStats(level) {
   return {
     ticks: level.runtime_level_tick_count(), updates: level.runtime_level_ticked_updates(),
     unportedUpdates: level.runtime_level_unported_update_calls(),
-    pendingAnimationAdvances: level.runtime_level_pending_animation_advances(),
+    animationAdvances: level.runtime_level_animation_advances(),
+    animationSoundCalls: level.runtime_level_animation_sound_calls(),
     pendingBoundsRefreshes: level.runtime_level_pending_bounds_refreshes(),
   };
 }
@@ -105,6 +106,10 @@ export function readMobyTable(level, count) {
       scale: f32(0x2C), position: [f32(0x10), f32(0x14), f32(0x18)], rotation: [f32(0x40), f32(0x44), f32(0x48)],
       uid: view.getInt16(at + 0xB2, true), mission: view.getUint8(at + 0xB0), poolSlot: view.getInt32(at + 0xAC, true),
       pvars: view.getUint32(at + 0x78, true), animFlags: view.getUint8(at + 0x70),
+      // Animation state (struct Moby 0x50-0x6C): what advance_moby_animation reads and writes.
+      frame: view.getUint8(at + 0x50), nextFrame: view.getUint8(at + 0x51), sequence: view.getUint8(at + 0x52),
+      targetSequence: view.getUint8(at + 0x53), animTime: f32(0x54), animSpeed: f32(0x58),
+      frameData: view.getUint32(at + 0x68, true), nextFrameData: view.getUint32(at + 0x6C, true),
     });
   }
   return mobys;

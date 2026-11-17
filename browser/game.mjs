@@ -12,7 +12,7 @@ import { loadLevelGameplay, readLevelFog, VELDIN_LEVEL } from './gameplay-loader
 import { initializeLevelActors, tickLevelActors } from './level-actors.mjs';
 import { loadLevelMusic, MusicPlayer } from './music.mjs';
 import { InterimGame, MAX_HEALTH, OBJECTIVE_TEXT } from './interim-game.mjs';
-import { HeroSwingState, readHeroAnimationRig, sampleHeroAnimationFrame } from './moby-animation.mjs';
+import { HeroSwingState, readHeroAnimationRig, readMobyAnimationRig, sampleHeroAnimationFrame } from './moby-animation.mjs';
 
 const canvas = document.querySelector('canvas');
 const status = document.querySelector('#status');
@@ -509,6 +509,7 @@ function updateActors(time) {
     actor.rotation.set(moby.rotation[0], moby.rotation[1], moby.rotation[2], 'ZYX');
     actor.scale.setScalar(moby.scale / actor.userData.modelScale);
   }
+  updateActorPoses(frame.mobys, liveActors.groups);
   document.body.dataset.actorTicks = String(level.runtime_level_tick_count());
 }
 
@@ -641,12 +642,66 @@ function showScenery(classes, instances, images) {
   return { placed, triangles };
 }
 
+function createActorSkeleton(rig, classId) {
+  const bones = Array.from({ length: rig.jointCount }, (_, joint) => {
+    const bone = new THREE.Bone();
+    bone.name = `class_${classId}_joint_${joint}`;
+    bone.position.fromArray(rig.bindPositions, joint * 3);
+    return bone;
+  });
+  for (let joint = 1; joint < bones.length; joint++) bones[rig.parents[joint]].add(bones[joint]);
+  bones[0].updateMatrixWorld(true);
+  const skeleton = new THREE.Skeleton(bones);
+  skeleton.calculateInverses();
+  return skeleton;
+}
+
+// Poses each skinned actor from its native moby: advance_moby_animation (browser/level.c) keeps
+// the current and next frame addresses at +0x68/+0x6C and the position between them in
+// anim_time. The blend between the two frames (quaternion nlerp, linear translation and scale)
+// is the page's; the console's own pose routine (0x210850 and 0x2109b8) is not decoded yet.
+// A frame the page cannot decode (compressed) leaves the bones where they were and is counted.
+let undecodedPoses = 0;
+const blendQuaternion = new THREE.Quaternion();
+function updateActorPoses(mobys, groups) {
+  const core = level.runtime_level_core_address();
+  let posed = 0;
+  for (const actor of groups) {
+    const { rig, bones, index } = actor.userData;
+    if (!rig) continue;
+    const moby = mobys[index];
+    const current = rig.poseAt(moby.frameData - core);
+    if (!current) { undecodedPoses++; continue; }
+    const next = rig.poseAt(moby.nextFrameData - core) ?? current;
+    const t = Math.min(Math.max(moby.animTime, 0), 1);
+    for (let joint = 0; joint < rig.jointCount; joint++) {
+      const bone = bones[joint];
+      bone.quaternion.fromArray(current.rotations, joint * 4);
+      blendQuaternion.fromArray(next.rotations, joint * 4);
+      if (bone.quaternion.dot(blendQuaternion) < 0) blendQuaternion.set(-blendQuaternion.x, -blendQuaternion.y, -blendQuaternion.z, -blendQuaternion.w);
+      bone.quaternion.set(
+        bone.quaternion.x + (blendQuaternion.x - bone.quaternion.x) * t, bone.quaternion.y + (blendQuaternion.y - bone.quaternion.y) * t,
+        bone.quaternion.z + (blendQuaternion.z - bone.quaternion.z) * t, bone.quaternion.w + (blendQuaternion.w - bone.quaternion.w) * t).normalize();
+      for (let axis = 0; axis < 3; axis++) {
+        const at = joint * 3 + axis;
+        bone.position.setComponent(axis, current.positions[at] + (next.positions[at] - current.positions[at]) * t);
+        bone.scale.setComponent(axis, current.scales[at] + (next.scales[at] - current.scales[at]) * t);
+      }
+    }
+    posed++;
+  }
+  document.body.dataset.posedActors = String(posed);
+  document.body.dataset.undecodedPoses = String(undecodedPoses);
+}
+
 function showPlacedMobys(planet, actors) {
   const images = readMobyTextures(planet);
   const models = new Map();
   const skipped = new Map();
   let rendered = 0;
   const groups = [];
+  const rigs = new Map();
+  const skippedRigs = new Map();
   for (const moby of actors.mobys) {
     if (moby.classId === 0) continue;
     if (!models.has(moby.classId)) {
@@ -662,24 +717,46 @@ function showPlacedMobys(planet, actors) {
     // carries the class scale.
     const scale = model && moby.scale / model.scale;
     if (!model || !(scale > 0 && scale < 100)) continue;
+    if (!rigs.has(moby.classId)) {
+      let rig = null;
+      try { rig = readMobyAnimationRig(planet, moby.classId); } catch (error) { skippedRigs.set(moby.classId, error.message); }
+      rigs.set(moby.classId, rig);
+    }
+    const rig = rigs.get(moby.classId);
     const actor = new THREE.Group();
+    // A class with a skeleton is skinned: its bones take the pose the original animation code
+    // selects each frame (updateActorPoses). Without one it is a rigid mesh.
+    const skeleton = rig && createActorSkeleton(rig, moby.classId);
     for (const batch of model.batches) {
       const image = images[model.textures[batch.material]];
       if (!image) continue;
       const geometry = new THREE.BufferGeometry();
       geometry.setAttribute('position', new THREE.BufferAttribute(batch.positions, 3));
       geometry.setAttribute('uv', new THREE.BufferAttribute(batch.uvs, 2));
-      actor.add(new THREE.Mesh(geometry, mobyMaterial(image)));
+      if (skeleton) {
+        geometry.setAttribute('skinIndex', new THREE.BufferAttribute(batch.joints, 4));
+        geometry.setAttribute('skinWeight', new THREE.BufferAttribute(batch.weights, 4));
+        const mesh = new THREE.SkinnedMesh(geometry, mobyMaterial(image));
+        if (!skeleton.bones[0].parent) mesh.add(skeleton.bones[0]);
+        mesh.bind(skeleton, new THREE.Matrix4());
+        mesh.frustumCulled = false;
+        actor.add(mesh);
+      } else {
+        actor.add(new THREE.Mesh(geometry, mobyMaterial(image)));
+      }
     }
     actor.position.fromArray(moby.position);
     actor.rotation.set(moby.rotation[0], moby.rotation[1], moby.rotation[2], 'ZYX');
     actor.scale.setScalar(scale);
-    actor.userData = { classId: moby.classId, uid: moby.uid, mission: moby.mission, index: moby.index, modelScale: model.scale };
+    actor.userData = { classId: moby.classId, uid: moby.uid, mission: moby.mission, index: moby.index, modelScale: model.scale,
+      rig: skeleton ? rig : null, bones: skeleton ? skeleton.bones : null };
     actorGroup.add(actor);
     groups.push(actor);
     rendered++;
   }
   if (skipped.size) console.info('Placed classes without browser geometry:', Object.fromEntries(skipped));
+  if (skippedRigs.size) console.info('Placed classes drawn unskinned (skeleton not read):', Object.fromEntries(skippedRigs));
+  updateActorPoses(actors.mobys, groups);
   document.body.dataset.placedMobys = String(actors.placed);
   document.body.dataset.initializedMobys = String(actors.count);
   document.body.dataset.renderedActors = String(rendered);

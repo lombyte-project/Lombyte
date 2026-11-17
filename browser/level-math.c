@@ -62,6 +62,11 @@ s32 truncate_float_to_s32(f32 x) {
 }
 ALIAS(truncate_float_to_s32, truncate_float_to_s32, func_001FA6D0, FUN_001fa6d0)
 
+/* 0x1fa6c0: mtc1; cvt.s.w. */
+f32 convert_integer_to_float(s32 i) __asm__("FUN_001fa6c0");
+f32 convert_integer_to_float(s32 i) { return (f32)i; }
+ALIAS(convert_integer_to_float, convert_integer_to_float, func_001FA6C0, FUN_001fa6c0)
+
 /* 0x1f9a28: lqc2 a, b; vsub.xyz out = a - b (w keeps a.w); sqc2. */
 void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 void fast_vec_sub(void *out, void *a, void *b) {

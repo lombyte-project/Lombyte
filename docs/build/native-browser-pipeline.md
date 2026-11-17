@@ -402,9 +402,9 @@ Validation:
   `rendering`, ticks at about 60 Hz with no exceptions, and a pterodactyl
   visibly crosses the sky between screenshots.
 
-Not yet verified: the console's actual visibility culling (`update_dist`),
-animation playback (wings do not flap; advance_moby_animation is the next
-port), and the retail heap addresses.
+Not yet verified: the console's actual visibility culling (`update_dist`)
+and the retail heap addresses. (Animation playback: see "Placed moby animation on the game page"
+below; the pterodactyls now animate.)
 
 ### Whole-Tree Spike And Mission Work Lists (2026-11-13)
 
@@ -721,15 +721,50 @@ it is decoded no moby has a computed pose in this build. 91 signature mismatches
   `browser/game.html` are HTML written for the page (labelled "Interim" there and in
   `browser/interim-game.mjs`). The game's own title screen, menus and HUD are original C that
   builds GS packets; they appear only once the frame loop runs and a GS backend draws them.
-- **Other mobys are frozen in their bind pose.** `showPlacedMobys` in `browser/game.mjs` draws
-  every placed moby as a plain mesh with no skeleton; only position, rotation and scale move, and
-  only for classes whose update runs natively (the pterodactyl). No moby other than Ratchet plays
-  an animation.
+- **Other mobys were frozen in their bind pose** (fixed the same day, below): `showPlacedMobys`
+  drew every placed moby as a plain mesh with no skeleton.
 - **Ratchet's poses are real data; which clip plays is not original logic.** `moby-animation.mjs`
   decodes his joint rotations, translations, scales and frame rates from the disc (uncompressed
   frames only). The choice of clip (idle/run/jump/crouch/swing in `updateHeroAnimation`), the
   0.12 s cross-fade and the run-speed time scale are page code. Jump and slam timing comes from the
   native `runtime_hero_*_animation_speed` calls.
+
+#### Placed moby animation on the game page (2026-11-17)
+
+`browser/moby-animation-advance.c` holds the decoded `advance_moby_animation`; the page's
+`level.wasm` (`browser/level.c`, `runtime_level_tick`) now calls it once per linked moby per frame,
+as `link_and_update_all_mobys` does, and the spike binds the same code to `0x20d580`/`0x250480`.
+`blend_moby_animation` (recovered C) is linked, because the pterodactyl's update reacts to the
+animation flags. Its pose snapshot needs `0x20ede8` (not decoded), so the page's render-slot
+allocator answers "no slot", the original's own fallback; each answer is counted
+(`runtime_level_blend_snapshots_skipped`). The two sound callees are counted, not made
+(`runtime_level_animation_sound_calls`).
+
+On the page, every placed moby whose class has a skeleton (150 on Veldin) is a skinned mesh posed
+each frame from the frame addresses the original code leaves at `+0x68`/`+0x6C`, blended by
+`anim_time`; the frames are decoded from the disc with the hero's decoder (`readMobyAnimationRig`).
+The blend between the two frames (nlerp, linear translation and scale) is the page's; the
+console's pose routine (`0x210850`, `0x2109b8`) is not decoded.
+
+What Veldin does at level start under the original rules (census of the 296 mobys):
+26 animate (sequence 0 has several frames: the 25 pterodactyls, class 1564, and class 1137);
+133 never advance (`init_moby_instance` sets flag 0x40: crates 500/501/511, 834, 1060);
+124 rest on a one-frame sequence 0 until their own update chooses another (bolts 13, 530, 749,
+1440, 1781, 1782), and those updates do not run on the page yet; 10 are logic-only; 3 are not
+linked. The skinned ones that do not advance now show their real first frame, not the bind pose.
+
+Validation:
+
+```
+export RNC_ISO_PATH=".../Ratchet & Clank (USA) (En,Fr,De,Es,It).iso"
+make browser-game          # rebuilds build/browser, which is what the page serves
+make browser-gameplay-test # includes "Veldin animation: 26 animated mobys, all changed frame over 600 ticks"
+```
+
+Headless Chrome on the served `build/browser` page: `posedActors` 150, `undecodedPoses` 0, about
+60 ticks a second, no exceptions. A close-up screenshot of a moving pterodactyl was not taken (the
+play camera follows Ratchet). Clip choice for mobys whose update is unported, and the menus, are
+unchanged.
 
 ### Scenery, Fog, And The Interim Page Layer (2026-11-14)
 

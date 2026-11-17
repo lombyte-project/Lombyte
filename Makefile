@@ -124,7 +124,7 @@ browser-gameplay-test: browser-runtime browser-level browser-planet-wad ## Test 
 
 BROWSER_LEVEL_SOURCES := src/world/loaders/register_moby_class.c src/mobys/assign_moby_class_data.c \
   src/rendering/mobys/prepare_resident_class_render_data.c src/rendering/packets/build_indexed_resident_render_packet.c \
-  src/rendering/packets/set_up_vis_gif_viewer.c src/mobys/animation/update_moby_animation_state.c \
+  src/rendering/packets/set_up_vis_gif_viewer.c src/mobys/animation/update_moby_animation_state.c src/mobys/animation/blend_moby_animation.c \
   src/rendering/packets/pack_render_command_fields.c src/overlays/shared/ui/menus/ensure_menu_cache_entry.c \
   src/overlays/l00/level_class_tables.c src/math/random/random_integer_below.c src/math/absolute_float.c
 
@@ -139,12 +139,12 @@ browser-level: ## Build native level actor setup: original class registration an
 	@# prototype conflicts (see the comments in each wrapper).
 	$(EMCC) $(BROWSER_HERO_CFLAGS) -c browser/level-camera-path.c -o build/browser/level/sample_camera_path.o
 	$(EMCC) $(BROWSER_HERO_CFLAGS) -c browser/level-pterodactyl.c -o build/browser/level/pterodactyl.o
-	$(EMCC) -O2 -flto -Wall -Wextra -Werror -Ibrowser/include -Iinclude browser/level.c browser/level-unported.c browser/level-math.c \
+	$(EMCC) -O2 -flto -Wall -Wextra -Werror -Ibrowser/include -Iinclude browser/level.c browser/level-unported.c browser/level-math.c browser/moby-animation-advance.c \
 	  -Wl,--fatal-warnings \
 	  build/browser/level/*.o \
 	  --no-entry -sSTANDALONE_WASM=1 -sFILESYSTEM=0 -sERROR_ON_UNDEFINED_SYMBOLS=1 \
 	  -sINITIAL_MEMORY=33554432 \
-	  -sEXPORTED_FUNCTIONS='["_runtime_level_reset","_runtime_level_guards_valid","_runtime_level_header_address","_runtime_level_header_capacity","_runtime_level_core_address","_runtime_level_core_capacity","_runtime_level_gameplay_address","_runtime_level_gameplay_capacity","_runtime_level_register_classes","_runtime_level_spawn_mobys","_runtime_level_class_count","_runtime_level_class_slot","_runtime_level_class_id","_runtime_level_class_has_update","_runtime_level_class_has_data","_runtime_level_moby_count","_runtime_level_placed_count","_runtime_level_skipped_count","_runtime_level_extra_slots","_runtime_level_pending_entity_updates","_runtime_level_table_value_stores","_runtime_level_moby_address","_runtime_level_moby_stride","_runtime_level_unported_name","_runtime_level_attach_pvars_and_paths","_runtime_level_tick","_runtime_level_pvar_users","_runtime_level_pvar_bytes","_runtime_level_pending_pvar_fixups","_runtime_level_relocated_pvar_pointers","_runtime_level_path_count","_runtime_level_path_address","_runtime_level_moby_fixup_pending","_runtime_level_tick_count","_runtime_level_ticked_updates","_runtime_level_unported_update_calls","_runtime_level_pending_animation_advances","_runtime_level_pending_bounds_refreshes"]' \
+	  -sEXPORTED_FUNCTIONS='["_runtime_level_reset","_runtime_level_guards_valid","_runtime_level_header_address","_runtime_level_header_capacity","_runtime_level_core_address","_runtime_level_core_capacity","_runtime_level_gameplay_address","_runtime_level_gameplay_capacity","_runtime_level_register_classes","_runtime_level_spawn_mobys","_runtime_level_class_count","_runtime_level_class_slot","_runtime_level_class_id","_runtime_level_class_has_update","_runtime_level_class_has_data","_runtime_level_moby_count","_runtime_level_placed_count","_runtime_level_skipped_count","_runtime_level_extra_slots","_runtime_level_pending_entity_updates","_runtime_level_table_value_stores","_runtime_level_moby_address","_runtime_level_moby_stride","_runtime_level_unported_name","_runtime_level_attach_pvars_and_paths","_runtime_level_tick","_runtime_level_pvar_users","_runtime_level_pvar_bytes","_runtime_level_pending_pvar_fixups","_runtime_level_relocated_pvar_pointers","_runtime_level_path_count","_runtime_level_path_address","_runtime_level_moby_fixup_pending","_runtime_level_tick_count","_runtime_level_ticked_updates","_runtime_level_unported_update_calls","_runtime_level_animation_advances","_runtime_level_animation_sound_calls","_runtime_level_pending_bounds_refreshes"]' \
 	  -o build/browser/level.wasm
 
 browser-spike: ## Measure the whole port: compile every recovered C file to wasm objects and report missing symbols

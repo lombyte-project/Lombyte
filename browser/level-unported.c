@@ -106,8 +106,21 @@ void mark_moby_for_removal_unported(struct Moby *moby) {
     (void)moby;
     level_unported("FUN_0020c828 (src/mobys/mark_moby_for_removal.c; needs update_moby_grids)");
 }
-void blend_moby_animation_unported(void *moby, int seq, int frame, int blend) __asm__("FUN_00212f90");
-void blend_moby_animation_unported(void *moby, int seq, int frame, int blend) {
-    (void)moby, (void)seq, (void)frame, (void)blend;
-    level_unported("FUN_00212f90 (src/mobys/animation/blend_moby_animation.c; needs advance_moby_animation)");
+/* blend_moby_animation (src/mobys/animation/blend_moby_animation.c) is linked. Before it switches
+   sequence it parks the current pose in a render slot so the blend starts from it: that needs
+   0x20ede8 (553 instructions of EE/VU0 assembly, not decoded). The slot allocator answers "no
+   slot", the branch the original takes when every slot is busy, so the blend switches without
+   that snapshot. Each such answer is counted (runtime_level_blend_snapshots_skipped). */
+static int blend_snapshots_skipped;
+int runtime_level_blend_snapshots_skipped(void) { return blend_snapshots_skipped; }
+int find_or_allocate_moby_render_slot_none(int moby) __asm__("func_0020CC18");
+int find_or_allocate_moby_render_slot_none(int moby) {
+    (void)moby;
+    blend_snapshots_skipped++;
+    return -1;
+}
+void park_moby_pose_unported(void *moby, int slot) __asm__("FUN_0020ede8");
+void park_moby_pose_unported(void *moby, int slot) {
+    (void)moby, (void)slot;
+    level_unported("FUN_0020ede8 (assembly only: parks a moby pose in a render slot)");
 }

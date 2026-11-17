@@ -3,6 +3,7 @@
 #include "types.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/mobys/moby_class_tables.h"
+#include "moby_animation_advance.h"
 
 /*
  * Level actor setup for the browser port.
@@ -203,7 +204,23 @@ static s32 relocated_pvar_pointers;
 static s32 tick_count;
 static s32 ticked_updates;
 static s32 unported_update_calls;
-static s32 pending_animation_advances;
+static s32 animation_advances;
+static s32 animation_sound_calls;
+
+/* advance_moby_animation's two sound callees (allocate_voice_for_target_entry when a trigger is
+   crossed, update_moby_voice for a moby with a voice). The page has no sound driver for them,
+   so each call is counted and exported, not made. */
+static s32 animation_trigger_sound(s32 trigger_id, s32 zero, void *moby) {
+    (void)trigger_id;
+    (void)zero;
+    (void)moby;
+    animation_sound_calls++;
+    return 0;
+}
+static void animation_voice_sound(void *moby) {
+    (void)moby;
+    animation_sound_calls++;
+}
 static s32 pending_bounds_refreshes;
 static const char *unported_name;
 
@@ -318,7 +335,8 @@ void runtime_level_reset(void) {
     tick_count = 0;
     ticked_updates = 0;
     unported_update_calls = 0;
-    pending_animation_advances = 0;
+    animation_advances = 0;
+    animation_sound_calls = 0;
     pending_bounds_refreshes = 0;
     level_math_reset();
 }
@@ -732,7 +750,7 @@ static s32 update_is_ported(const LevelMoby *m) {
    only), so this links every live moby the way link_and_update_all_mobys
    does (state without 0x80, flags without 2). Per linked moby with
    state < 0x80:
-     advance_moby_animation unless flags & 0x40 -> not ported, counted;
+     advance_moby_animation unless flags & 0x40 -> called (browser/moby-animation-advance.c);
      the class update                          -> called if ported;
      refresh_moby_spatial_bounds unless flags & 4 -> not ported, counted.
    Returns the number of class updates called. */
@@ -766,7 +784,9 @@ s32 runtime_level_tick(void) {
             continue;
         }
         if (!(current->flags & 0x40)) {
-            pending_animation_advances++;
+            rnc_advance_moby_animation((u8 *)current, tick_count, animation_trigger_sound,
+                                       animation_voice_sound);
+            animation_advances++;
         }
         if (m->update != 0) {
             if (update_is_ported(m) && !moby_fixup_pending[m - storage.mobys]) {
@@ -802,7 +822,8 @@ s32 runtime_level_moby_fixup_pending(s32 index) {
 s32 runtime_level_tick_count(void) { return tick_count; }
 s32 runtime_level_ticked_updates(void) { return ticked_updates; }
 s32 runtime_level_unported_update_calls(void) { return unported_update_calls; }
-s32 runtime_level_pending_animation_advances(void) { return pending_animation_advances; }
+s32 runtime_level_animation_advances(void) { return animation_advances; }
+s32 runtime_level_animation_sound_calls(void) { return animation_sound_calls; }
 s32 runtime_level_pending_bounds_refreshes(void) { return pending_bounds_refreshes; }
 
 s32 runtime_level_class_count(void) { return class_count; }

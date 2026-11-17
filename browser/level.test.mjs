@@ -184,8 +184,30 @@ test('the original pterodactyl update flies each pterodactyl along its path', {
   // Ten more seconds: no trap, nothing written outside storage, and every
   // pterodactyl stays near its path.
   let frame;
-  for (let tick = 0; tick < 600; tick++) frame = tickLevelActors(level, actors.count);
+  const framesSeen = new Map();
+  for (let tick = 0; tick < 600; tick++) {
+    frame = tickLevelActors(level, actors.count);
+    for (const moby of frame.mobys) {
+      if (!framesSeen.has(moby.index)) framesSeen.set(moby.index, new Set());
+      framesSeen.get(moby.index).add(moby.frame);
+    }
+  }
   assert.equal(level.runtime_level_guards_valid(), 1);
+
+  // Animation: advance_moby_animation runs for every linked moby without flags 0x40. Each one
+  // whose sequence has two or more frames and a non-zero speed must show more than one frame.
+  const animated = frame.mobys.filter(moby => {
+    if (!moby.hasClassData || moby.state & 0x80 || moby.flags & 0x42 || moby.animSpeed === 0) return false;
+    const view = memory();
+    const pclass = view.getUint32(level.runtime_level_moby_address(moby.index) + 0x24, true);
+    const sequence = view.getUint32(pclass + 0x48 + 4 * moby.targetSequence, true);
+    return sequence !== 0 && view.getUint8(sequence + 0x10) >= 2;
+  });
+  assert.ok(animated.length > 0, 'no animated moby on Veldin');
+  const frozen = animated.filter(moby => framesSeen.get(moby.index).size < 2);
+  assert.deepEqual(frozen.map(moby => `class ${moby.classId} uid ${moby.uid}`), [], 'animated mobys that never changed frame');
+  console.log(`Veldin animation: ${animated.length} animated mobys, all changed frame over 600 ticks ` +
+    `(classes ${[...new Set(animated.map(moby => moby.classId))].sort((x, y) => x - y).join(', ')})`);
   for (const { moby, points, height } of before) {
     const now = frame.mobys[moby.index];
     const nearest = Math.min(...points.map(point => Math.hypot(...[0, 1, 2].map(axis =>
@@ -199,7 +221,8 @@ test('the original pterodactyl update flies each pterodactyl along its path', {
   assert.equal(stats.ticks, 601);
   assert.equal(stats.updates, 25 * 601);
   console.log(`Veldin tick: ${stats.updates} pterodactyl updates over ${stats.ticks} frames; ` +
-    `${stats.unportedUpdates} unported class updates, ${stats.pendingAnimationAdvances} animation advances and ` +
+    `${stats.animationAdvances} animation advances (${stats.animationSoundCalls} sound calls not made); ` +
+    `${stats.unportedUpdates} unported class updates and ` +
     `${stats.pendingBoundsRefreshes} bounds refreshes not run; ${actors.relocatedPvarPointers} pvar pointers ` +
     `relocated, ${actors.pendingPvarFixups} pvar fixups pending`);
 });

@@ -85,8 +85,8 @@ export function readHeroSequences(planet) {
   return { ...model, sequences };
 }
 
-export function readHeroAnimationRig(planet) {
-  const model = readHeroSequences(planet);
+// The skeleton of any moby class: joint parents and bind translations (class header + 24).
+function readRig(model, what) {
   const { base, view, range, jointCount } = model;
   const translations = range(base + view.getUint32(base + 24, true), jointCount * 16);
   const unit = model.scale / 1024;
@@ -94,50 +94,91 @@ export function readHeroAnimationRig(planet) {
   for (let joint = 0; joint < jointCount; joint++) {
     const record = translations + joint * 16;
     const parent = view.getUint16(record + 12, true) / 64;
-    if (!Number.isInteger(parent) || joint > 0 && parent >= joint) throw new Error('Invalid hero joint parent.');
+    if (!Number.isInteger(parent) || joint > 0 && parent >= joint) throw new Error(`Invalid ${what} joint parent.`);
     parents.push(joint === 0 ? -1 : parent);
     for (let axis = 0; axis < 3; axis++) {
       const position = view.getFloat32(record + axis * 4, true) * unit;
-      if (!Number.isFinite(position) || Math.abs(position) > 10) throw new Error('Invalid hero bind translation.');
+      if (!Number.isFinite(position) || Math.abs(position) > 10) throw new Error(`Invalid ${what} bind translation.`);
       bindPositions[joint * 3 + axis] = position;
     }
   }
+  return { unit, parents, bindPositions };
+}
+
+// One uncompressed pose frame at a planet-core offset: joint quaternions, then scale and
+// translation records (the layout the hero's sequences use; every moby class shares it).
+function decodePoseFrame(model, rig, frameOffset, what, staticAllowed = false) {
+  const { view, range, jointCount } = model;
+  const offset = range(frameOffset, 16);
+  const bytes = view.getUint16(offset + 6, true) * 16;
+  const rotationBytes = view.getUint16(offset + 8, true);
+  const scaleCount = view.getUint16(offset + 10, true);
+  const translationCount = view.getUint16(offset + 14, true);
+  if (rotationBytes !== jointCount * 8 || scaleCount > jointCount || translationCount > jointCount ||
+      rotationBytes + (scaleCount + translationCount) * 8 > bytes) throw new Error(`Invalid ${what} pose layout.`);
+  range(offset + 16, bytes);
+  const rotations = new Float32Array(jointCount * 4);
+  const positions = rig.bindPositions.slice(), scales = new Float32Array(jointCount * 3).fill(1);
+  for (let joint = 0; joint < jointCount; joint++) {
+    let length = 0;
+    for (let axis = 0; axis < 4; axis++) {
+      const value = view.getInt16(offset + 16 + joint * 8 + axis * 2, true) / 32767;
+      rotations[joint * 4 + axis] = axis < 3 ? -value : value;
+      length += value * value;
+    }
+    if (length < 0.9 || length > 1.1) throw new Error(`Invalid ${what} pose quaternion.`);
+    for (let axis = 0; axis < 4; axis++) rotations[joint * 4 + axis] /= Math.sqrt(length);
+  }
+  for (let record = 0; record < scaleCount + translationCount; record++) {
+    const start = offset + 16 + rotationBytes + record * 8;
+    const flags = view.getUint16(start + 6, true);
+    const joint = flags & 0x7FFF;
+    const scale = record < scaleCount;
+    if (joint >= jointCount || Boolean(flags & 0x8000) !== scale) throw new Error(`Invalid ${what} pose transform index.`);
+    for (let axis = 0; axis < 3; axis++) {
+      (scale ? scales : positions)[joint * 3 + axis] = view.getInt16(start + axis * 2, true) * (scale ? 1 / 4096 : rig.unit);
+    }
+  }
+  const rate = view.getFloat32(offset, true);
+  // A rate of 0 marks a frame that never advances (a one-frame sequence); advance_moby_animation
+  // returns early on it. Placed mobys may rest on one; the hero's played clips may not.
+  if (!Number.isFinite(rate) || rate < 0 || rate === 0 && !staticAllowed || rate > 4) {
+    throw new Error(`Invalid ${what} pose frame rate.`);
+  }
+  const sourceFrame = view.getInt16(offset + 4, true) / 16;
+  return { rotations, positions, scales, rate, sourceFrame };
+}
+
+// A placed moby class's skeleton and a pose reader. The frame to show is chosen by the original
+// code: advance_moby_animation leaves the current and next frame addresses at moby + 0x68 and
+// + 0x6C (planet core offsets once the core's load address is subtracted) and the position
+// between them in anim_time (+ 0x54). Compressed frames are not decoded; poseAt returns null.
+export function readMobyAnimationRig(planet, classId) {
+  const model = readMobyClass(planet, classId);
+  if (!model.jointCount) return null;
+  const rig = readRig(model, `class ${classId}`);
+  const poses = new Map();
+  function poseAt(coreOffset) {
+    if (!poses.has(coreOffset)) {
+      let pose = null;
+      if (coreOffset >= 0 && coreOffset < model.view.byteLength) {
+        try { pose = decodePoseFrame(model, rig, coreOffset, `class ${classId}`, true); } catch { pose = null; }
+      }
+      poses.set(coreOffset, pose);
+    }
+    return poses.get(coreOffset);
+  }
+  return { jointCount: model.jointCount, parents: rig.parents, bindPositions: rig.bindPositions, poseAt };
+}
+
+export function readHeroAnimationRig(planet) {
+  const model = readHeroSequences(planet);
+  const { jointCount } = model;
+  const rig = readRig(model, 'hero');
+  const { parents, bindPositions } = rig;
   function readFrame(entry) {
     if (entry.compressed) throw new Error('Compressed hero animation frames are not supported.');
-    const offset = range(entry.offset, 16);
-    const bytes = view.getUint16(offset + 6, true) * 16;
-    const rotationBytes = view.getUint16(offset + 8, true);
-    const scaleCount = view.getUint16(offset + 10, true);
-    const translationCount = view.getUint16(offset + 14, true);
-    if (rotationBytes !== jointCount * 8 || scaleCount > jointCount || translationCount > jointCount ||
-        rotationBytes + (scaleCount + translationCount) * 8 > bytes) throw new Error('Invalid hero pose layout.');
-    range(offset + 16, bytes);
-    const rotations = new Float32Array(jointCount * 4);
-    const positions = bindPositions.slice(), scales = new Float32Array(jointCount * 3).fill(1);
-    for (let joint = 0; joint < jointCount; joint++) {
-      let length = 0;
-      for (let axis = 0; axis < 4; axis++) {
-        const value = view.getInt16(offset + 16 + joint * 8 + axis * 2, true) / 32767;
-        rotations[joint * 4 + axis] = axis < 3 ? -value : value;
-        length += value * value;
-      }
-      if (length < 0.9 || length > 1.1) throw new Error('Invalid hero pose quaternion.');
-      for (let axis = 0; axis < 4; axis++) rotations[joint * 4 + axis] /= Math.sqrt(length);
-    }
-    for (let record = 0; record < scaleCount + translationCount; record++) {
-      const start = offset + 16 + rotationBytes + record * 8;
-      const flags = view.getUint16(start + 6, true);
-      const joint = flags & 0x7FFF;
-      const scale = record < scaleCount;
-      if (joint >= jointCount || Boolean(flags & 0x8000) !== scale) throw new Error('Invalid hero pose transform index.');
-      for (let axis = 0; axis < 3; axis++) {
-        (scale ? scales : positions)[joint * 3 + axis] = view.getInt16(start + axis * 2, true) * (scale ? 1 / 4096 : unit);
-      }
-    }
-    const rate = view.getFloat32(offset, true);
-    if (!Number.isFinite(rate) || rate <= 0 || rate > 4) throw new Error('Invalid hero pose frame rate.');
-    const sourceFrame = view.getInt16(offset + 4, true) / 16;
-    return { rotations, positions, scales, rate, sourceFrame };
+    return decodePoseFrame(model, rig, entry.offset, 'hero');
   }
   const clips = new Map();
   for (const id of [0, 4, 7, 13, 22, 23, 24, 25, 26, 43]) {
