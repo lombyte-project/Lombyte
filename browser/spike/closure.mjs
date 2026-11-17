@@ -31,6 +31,7 @@ const sourceOf = (object) => `src/${object.replace(/\.(o|txt)$/, '').replaceAll(
 // node key: `${object}\0${symbol}` for functions, `${object}\0<data>` for an object's data.
 const definedIn = new Map(); // symbol -> [{ object, data }]
 const edges = new Map(); // node -> Set(symbol)
+const functionNodes = new Set(); // every function body seen, file-local (static) ones included
 const addEdge = (node, symbol) => {
   if (!edges.has(node)) edges.set(node, new Set());
   edges.get(node).add(symbol);
@@ -58,6 +59,26 @@ for (let start = 0; start < objects.length; start += 100) {
       node = null;
     } else if ((match = line.match(/^[0-9a-f]+ <(\S+)>:$/))) {
       node = `${object}\0${match[1]}`;
+      functionNodes.add(node);
+    } else if (node && (match = line.match(/R_WASM_(\w+)\s+(\S+?)(?:[+-]\d+)?$/))) {
+      if (!/^(TYPE_INDEX|GLOBAL_INDEX|SECTION_OFFSET|FUNCTION_OFFSET|TAG_INDEX)/.test(match[1])) addEdge(node, match[2]);
+    }
+  }
+}
+
+// With -d, llvm-objdump prints code relocations inline and omits the data section's records, so
+// function pointers held in data (the level's handler tables) need a second, relocation-only pass.
+for (let start = 0; start < objects.length; start += 100) {
+  const chunk = objects.slice(start, start + 100).map((file) => join(out, 'obj', file));
+  const text = execFileSync(join(llvmRoot, 'llvm-objdump'), ['-r', ...chunk], { encoding: 'utf8', maxBuffer: 1 << 30 });
+  let object = null;
+  let node = null;
+  for (const line of text.split('\n')) {
+    let match;
+    if ((match = line.match(/\/([^/]+\.o):\s+file format/))) {
+      object = match[1]; node = null;
+    } else if ((match = line.match(/^RELOCATION RECORDS FOR \[(.+)\]/))) {
+      node = match[1] === 'DATA' ? `${object}\0<data>` : null;
     } else if (node && (match = line.match(/R_WASM_(\w+)\s+(\S+?)(?:[+-]\d+)?$/))) {
       if (!/^(TYPE_INDEX|GLOBAL_INDEX|SECTION_OFFSET|FUNCTION_OFFSET|TAG_INDEX)/.test(match[1])) addEdge(node, match[2]);
     }
@@ -88,6 +109,13 @@ const missing = new Map(); // symbol -> Set(referencing source)
 const queue = [];
 const visitSymbol = (symbol, from) => {
   const where = definedIn.get(symbol);
+  // A file-local function (static, such as the argument-reordering adapters normalize-sources.py
+  // writes) has no global definition: follow it inside the object that refers to it.
+  const local = from ? `${from.split('\0')[0]}\0${symbol}` : null;
+  if (!where && local && functionNodes.has(local)) {
+    if (!reached.has(local)) { reached.add(local); queue.push(local); }
+    return;
+  }
   if (!where) {
     if (classify(symbol) === null) return;
     if (!missing.has(symbol)) missing.set(symbol, new Set());

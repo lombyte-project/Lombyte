@@ -144,12 +144,62 @@ def unify_with_definitions():
             if symbol in canon and canon[symbol][:2] != (result, kinds):
                 canon[symbol] = None  # defined differently in two files (per-level copies); leave alone
             elif symbol not in canon:
-                canon[symbol] = (result, kinds, path)
+                canon[symbol] = (result, kinds, path, name)
     rewritten = 0
     disagreements = []
 
     def note(symbol, path, why):
         disagreements.append(f"{symbol}\t{os.path.relpath(path, OUT)}\t{' '.join(why.split())}")
+
+    adapted = set()  # (path, C name) that already has an adapter in that file
+
+    def reorder_adapter(path, text, lead, returns, name, parameters, declared, declared_result,
+                        result, kinds, symbol, defined_as=None):
+        """The EE passes integer and float arguments in separate register files, so a caller that
+        lists the same arguments with the integers and floats interleaved differently from the
+        definition still loads the right registers. WebAssembly arguments are positional. For a
+        file-scope declaration in a .c file with the same number of integer and of float
+        parameters as the definition, the declaration becomes a static inline function with the
+        caller's parameter order that calls the definition with the n-th integer in the n-th
+        integer position and the n-th float in the n-th float position. Returns None when that
+        translation does not apply; the declaration then stays a listed disagreement."""
+        if not path.endswith('.c') or lead.strip() not in ('', 'extern') or lead[:1] in (' ', '\t'):
+            return None
+        if len(declared) != len(kinds) or sorted(classes(declared)) != sorted(classes(kinds)):
+            return None
+        if declared_result is None:
+            return None
+        # A file that binds the same label under two C names would give one symbol two types in
+        # one object, which links into a module that fails validation. Leave those listed.
+        bound = set(re.findall(r'\b(\w+)\s*\([^;{}()]*\)\s*__asm__\("' + re.escape(symbol) + r'"\)', text))
+        if len(bound - {name, defined_as}) > 0:
+            return None
+        if declared_result != 'void' and (result == 'void' or classes([declared_result]) != classes([result])):
+            return None  # the caller reads a register the definition does not set
+        if (path, name) in adapted:
+            return ''  # a repeated declaration in the same file: the first adapter serves
+        pieces = [part.strip() for part in parameters.split(',')]
+        names = []
+        for index, piece in enumerate(pieces):
+            last = re.search(r'(\w+)\s*$', piece)
+            has_name = last and last.group(1) not in BASIC and not piece.rstrip().endswith('*') \
+                and len(piece.split()) > 1
+            if has_name:
+                names.append(last.group(1))
+            else:
+                names.append(f'reordered_{index}')
+                pieces[index] = f'{piece} reordered_{index}'
+        order = {'i': [], 'f': []}
+        for index, kind in enumerate(classes(declared)):
+            order[kind].append(names[index])
+        arguments = [order[kind].pop(0) for kind in classes(kinds)]
+        adapted.add((path, name))
+        inner = f'{name}__definition_order'
+        returned = returns.replace('extern', '').strip()
+        call = f"{inner}({', '.join(arguments)})"
+        return (f"extern {result} {inner}({', '.join(kinds)}) __asm__(\"{symbol}\");\n"
+                f"static inline {returned} {name}({', '.join(pieces)}) "
+                f"{{ {'' if declared_result == 'void' else 'return '}{call}; }}")
 
     for path, text in sources.items():
         def replace(match):
@@ -159,16 +209,34 @@ def unify_with_definitions():
                 return match.group(0)
             symbol = label or name
             entry = canon.get(symbol)
-            if not entry or entry[2] == path:
+            if not entry:
                 return match.group(0)
-            result, kinds, _ = entry
+            result, kinds, defined_in, defined_as = entry
             declared = portable_parameters(parameters)
             declared_result = portable_type(returns.strip())
+            if defined_in == path:
+                # The defining file's own prototypes stay. A second C name it binds to the same
+                # label with the integers and floats in another order gets the reordering adapter:
+                # left alone, clang emits a direct call whose signature does not match the body.
+                if name == defined_as or declared is None or len(declared) != len(kinds) \
+                        or classes(declared) == classes(kinds):
+                    return match.group(0)
+                adapter = reorder_adapter(path, text, lead, returns, name, parameters, declared,
+                                          declared_result, result, kinds, symbol, defined_as)
+                if adapter is None:
+                    return match.group(0)
+                rewritten += 1
+                return adapter
             if declared is None:  # `()` or types this pass cannot read: calls decide the signature
                 if parameters.strip() == '':
                     note(symbol, path, f"declared with unspecified parameters; definition ({', '.join(kinds) or 'void'})")
                 return match.group(0)
             if len(declared) != len(kinds) or classes(declared) != classes(kinds):
+                adapter = reorder_adapter(path, text, lead, returns, name, parameters, declared,
+                                          declared_result, result, kinds, symbol)
+                if adapter is not None:
+                    rewritten += 1
+                    return adapter
                 note(symbol, path, f"({parameters}) vs definition ({', '.join(kinds) or 'void'})")
                 return match.group(0)
             # Keep each declared parameter whose WebAssembly type already matches (so pointer
@@ -316,11 +384,16 @@ def main():
                 if rule['label'] not in text:
                     continue
 
-                def define(match, rule=rule):
+                placed = set()
+
+                def define(match, rule=rule, placed=placed):
                     lead, returns, name, parameters, asm, label = match.groups()
                     if (label or name) != rule['label'] or not returns.strip() \
                             or returns.split()[0] in NOT_A_TYPE:
                         return match.group(0)
+                    if name in placed:  # a second declaration in one file: the first copy serves
+                        return lead.replace('extern', '').rstrip()
+                    placed.add(name)
                     pieces = [part.strip() for part in parameters.split(',')] if parameters.strip() not in ('', 'void') else []
                     named = []
                     for index, piece in enumerate(pieces):

@@ -69,7 +69,29 @@ export function services(context) {
       context.bytes().set(new Uint8Array(decoder.memory.buffer, decoder.wad_output_address(), size), destination);
       decoder.wad_reset();
       stats.decompress.push({ source, destination, length, size });
+      stageCollision(destination);
       return size;
+  };
+  // The decoded level assets hold the static collision mesh. Copy it into the collision module's
+  // own checked storage (browser/collision.c) as soon as the assets are decoded, so the original
+  // code's first ground probe (initialize_hero) has a world to query. The range is the one the
+  // game page uses: asset header word 0x14 up to the texture payload at word 0x60.
+  const stageCollision = (destination) => {
+    const view = context.view();
+    // Boot code uses the same descriptor for the resident archive before the level program loads.
+    if (!stats.levelProgram || destination !== view.getUint32(LEVEL_LOAD + 0x14, true)) return; // not the level assets
+    const header = view.getUint32(LEVEL_LOAD + 0x04, true);
+    const start = view.getUint32(header + 0x14, true);
+    const end = view.getUint32(header + 0x60, true);
+    const { runtime_collision_reset: reset, runtime_collision_stage_address: stage,
+      runtime_collision_capacity: capacity, runtime_collision_load: loadMesh } = context.exports;
+    if (!loadMesh) throw new Error('the collision module is not linked');
+    if (!(start > 0 && end > start && end - start <= capacity())) throw new Error(`collision range ${start}-${end} is not usable`);
+    reset();
+    context.bytes().copyWithin(stage(), destination + start, destination + end);
+    const result = loadMesh(end - start);
+    if (result < 0) throw new Error(`collision mesh rejected (${result})`);
+    stats.collision = { bytes: end - start, cells: context.exports.runtime_collision_cells(), faces: context.exports.runtime_collision_faces() };
   };
   return {
     FUN_L00_0024d8d0: decompress, // the level program's copy
@@ -92,6 +114,8 @@ export function services(context) {
 export const deferred = {
   FUN_00237370: 'light_ties: bakes directional-light vertex colours for the PS2 tie renderer (assembly-only)',
   FUN_0022a5e0: 'the same bake for shrub instances (assembly-only, unnamed)',
+  FUN_L00_00251ce8: 'the level copy of executable 0x20ede8 (3,236 bytes of EE/VU0 assembly, unnamed): called as (moby, slot | 0x300) when an animation is set; it fills the moby\'s cached pose in that render slot. Not decoded, so no joint matrices exist for any animated model.',
+  FUN_00234f98: 'light_tfrags: the same bake for terrain fragments (assembly-only)',
   FUN_001f4a58: 'fade_to_black: screen fade (renderer)',
   FUN_L00_00250df8: 'update_entity: builds each moby\'s rotation matrix (+0xC0), bounding sphere (+0x00) and collision-grid entry; calls a VU0 microprogram that is not decoded. Positions, rotations and scales are unaffected; matrices and bounds stay zero.',
 };
@@ -146,6 +170,16 @@ export async function setup(context) {
   console.log(`staged Veldin: disc table ${table.length} bytes, level header from sector ${headerSector}`);
   return { sequence: [
     { symbol: ROOTS[0], args: [] },
+    // The console now loads the level program over 0x15EF00 and up, replacing the boot program's
+    // game code and data there (class tables included). Without this, the three resident classes
+    // registered by call 1 stay in the level's class table, pointing at overwritten memory.
+    { host: (run) => {
+      run.loadLevelProgram();
+      stats.levelProgram = true;
+      // The loaded handler tables hold console code addresses; put the compiled C tables there.
+      if (!run.exports.spike_install_level_tables) throw new Error('level handler tables are not linked');
+      run.exports.spike_install_level_tables();
+    }, label: 'level program data reloaded (the console loads the level program here)' },
     { symbol: ROOTS[1], args: [] },
     { symbol: ROOTS[2], args: [] },
     { symbol: ROOTS[3], args: [1, 0] }, // full load, nothing kept from a previous level
@@ -169,6 +203,9 @@ export function report(context) {
   for (const call of stats.decompress) {
     console.log(`fast_decompress: ${call.length} -> ${call.size} bytes at 0x${call.destination.toString(16)}`);
   }
+  if (stats.collision) console.log(`collision mesh: ${stats.collision.bytes} bytes, ${stats.collision.cells} cells, ${stats.collision.faces} faces`);
+  const unverified = context.exports.spike_collision_unverified?.() ?? 0;
+  if (unverified) console.log(`NOT VERIFIED - ${unverified} collision queries passed a mask, ignored moby or option whose retail meaning is unknown; answered from the static world only`);
   console.log(`disc reads: ${stats.sectorReads} (${stats.sectorsRead} sectors)`);
   if (disc !== null) closeSync(disc);
 }

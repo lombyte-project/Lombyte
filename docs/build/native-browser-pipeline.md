@@ -1,5 +1,11 @@
 # Native Browser Implementation Pipeline
 
+> **Active route.** Briefly paused on 2026-11-15 for the
+> [PCSX2 co-op pipeline](pcsx2-coop-pipeline.md); on 2026-11-17 the owner chose this native
+> browser route, and AGENTS.md was updated to match. Work continues on the
+> `browser-native-wip` branch; see
+> [Fourth pass](#fourth-pass-2026-11-15-level-load-reaches-the-camera-update).
+
 ## Project Summary
 
 Port recovered Ratchet & Clank C to WebAssembly without PS2 emulation, using
@@ -527,7 +533,7 @@ Results, all in Node:
 - With the boot prelude added (`initialize_level_runtime`, `init_stash`,
   `init_level_runtime_state`), those three complete and the buffer layout comes from the
   game's own `init_mem_slots`. The level load then stops at `load_level_gameplay.c:2070`.
-- **Open problem.** `initialize_level_runtime` is probably the wrong prelude for a level: it
+- **Open problem (resolved in the fourth pass below).** `initialize_level_runtime` is probably the wrong prelude for a level: it
   unpacks the resident archive at an address the level's asset stage then overwrites, and it
   sets up the space scene. `src/game/transitions/transition_load_wad.c` also resets the class
   counter and registers classes, and looks like the real predecessor. Trace the call path
@@ -546,6 +552,93 @@ Next steps for the mission path, in order:
 3. Resolve the 17 prototype conflicts and the mismatches on the executed path.
 4. Move the tick in `level.c` onto this build once the Clank trigger reaches
    `start_scene` on real data.
+
+### Fourth pass (2026-11-15): level load reaches the camera update
+
+Run with the same scenario. Nothing under `src/`, `include/`, `scripts/` or `config/` changed.
+
+**The open problem above is resolved.** `initialize_level_runtime` is the right prelude: it is
+what `do_space_transition` calls before the level archives load. What the scenario lacked is the
+step the console takes next. The level program is loaded over `0x15EF00` and up, replacing the
+boot program's game code and data there. The spike pins executable-named globals at their level
+addresses, so the three resident classes that call 1 registers stayed in the level's class table
+and pointed at memory the level assets overwrite. That was the stop at
+`load_level_gameplay.c:2070`. The scenario now reloads the level program data (and zeroes its
+bss) between call 1 and the level's own calls (`context.loadLevelProgram` in `run-closure.mjs`).
+
+How far the original code now runs, in order, inside `load_level_assets_and_gameplay(1, 0)`:
+
+- the whole asset stage and the placed-moby loop, as before (288 `update_entity` calls);
+- `initialize_hero` to completion: its ground probe, `update_hero_ground_contact_and_surface_slopes`
+  and `update_hero_moby` run against the real Veldin collision mesh (5,783 cells, 53,411 faces);
+- the hero's first animation set (`hero_idle_sequence.c:84`);
+- `init_camera_system`, including the original `follow_camera_setup` reached through the level's
+  camera handler table;
+- the first `update_camera`: `update_all_cameras` and `camera_activation_check_priority` run and
+  call `volume_camera_check`, which stops in `aim_volume_camera.c:106` on a call to
+  `FUN_L00_002e83c0` declared `(struct UpdateCam *)` where the definition takes `(int, int)`.
+
+**This is still not a game frame.** `load_level_assets_and_gameplay` has not returned, so
+`run_level_main_loop` has not reached its first frame, nothing is drawn, and no input is read.
+The original HUD and menu code is linked but has not executed. No part of this build is loaded
+by the game page.
+
+What was added, all in `browser/spike/` unless noted:
+
+- **Collision.** `link-closure.sh` links the gated `browser/collision.c`, and the scenario copies
+  the collision block out of the decoded assets when the game decodes them. `collision.c` gains
+  `collision_hit_material` and `collision_hit_sound_class`, decoded from boot `0x1f0b58` and level
+  `0x1f3608`. Both read the face's stored type byte; that this byte equals the console's hit word
+  at `+0x1C` is assumed from the masks, not compared. The gated modules still trap on
+  unverified query arguments. The spike build (`-DRNC_SPIKE_COLLISION`) counts them instead and
+  prints the count: 6 on this run, each answered from the static world only.
+- **Helpers** in `ee-helpers.c`, each decoded from its instructions: `sceVu0Normalize`,
+  `clamp_float`, `fast_dec_timer_s16`, and the Euler-to-matrix family. The matrix is decoded from
+  the EE-only version at `0x1fa070`; `0x1fa030` and `0x1fa050` call an undecoded VU0
+  microprogram and are **assumed** to compute the same matrix.
+- **Handler tables.** The level's `vtbl`, `camvtbl` and `sndvtbl` records hold console code
+  addresses. `level-tables-l00.c` copies the C tables from `src/overlays/l00/level_class_tables.c`
+  over them, so the engine's indirect calls use WebAssembly function references.
+  `closure.mjs` now reads data-section relocations (llvm-objdump omits them with `-d`), so every
+  handler those tables list is linked: 540 recovered files, up from 382.
+- **Argument order.** `normalize-sources.py` turns a declaration that lists the same integer and
+  float parameters in a different order from the definition into a static inline adapter that
+  calls the definition in its own order (hazard 3, handled generally). It applies inside the
+  defining file too, where an unadapted second name produced a module that failed validation.
+  `closure.mjs` follows file-local functions so adapters do not hide their callees.
+- **Per-file fixes** in `source-fixes.json`, each with its reason: `PackRenderCommandFields`,
+  `offset_hero_position_against_gravity` (register forwarding), the level copy of
+  `find_or_allocate_moby_render_slot`, one prototype for `fast_mem_copy`, the two retail-empty
+  table callbacks, and the unused second parameter of the two volume camera checks.
+- `recompile.sh` re-normalizes and recompiles named files in about five seconds.
+- The empty-function rule now places one copy per file, so `run_level_main_loop.c` compiles.
+
+Measured on this run: 2,120 of 2,421 files compile; the level closure has 164 missing functions
+as named traps, 17 stubbed prototype conflicts, and 150 caller/definition signature mismatches
+that trap when called. 2,348 declaration disagreements remain listed in
+`build/spike/prototype-disagreements.txt`.
+
+Tried and reverted: rewriting every level-address spelling of an executable function to the
+executable label. It made ten files fail where one file declares both spellings with different
+prototypes.
+
+Newly deferred, reported as NOT DONE on every run: `light_tfrags`, and the level copy of
+executable `0x20ede8` (3,236 bytes of EE/VU0 assembly), which fills a moby's cached pose when an
+animation is set. Until it is decoded no animated model has joint matrices.
+
+What stands between this and the original menus and HUD on screen:
+
+1. Finish the load: the remaining signature mismatches and missing functions on the path, one
+   stop at a time, starting with `FUN_L00_002e83c0`. Unprototyped `()` declarations are the
+   largest remaining class and need a general rule like the argument-order one.
+2. Run `run_level_main_loop` one frame per call. It is a loop that never returns, so it needs a
+   per-frame entry point, with `sceGsSyncV` as the yield.
+3. **A renderer for what the game submits.** The HUD and menus are drawn by original C that
+   builds GS packets (`draw_hud_sprite`, `put_draw_buffer_*`). They appear only when a GS
+   backend turns those packets into WebGL draws. World geometry goes through VU1 microprograms,
+   which need native replacements; the page's existing Three.js decoders are the stand-in.
+4. The assembly-only animation path (`0x20ede8`, `advance_moby_animation`, `moby_anim_proc`).
+5. Input (`update_primary_pad_state` from browser input), then sound banks and saves.
 
 ### Scenery, Fog, And The Interim Page Layer (2026-11-14)
 

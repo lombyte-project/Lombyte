@@ -27,8 +27,23 @@ emcc -c "$S/ram.s" -o "$S/ram.o"
 emcc -O2 -w -Ibrowser/include -Iinclude -c browser/level-math.c -o "$S/level-math.o"
 emcc -O2 -fno-builtin -Wall -Wextra -Werror -Ibrowser/include -Iinclude -c browser/spike/ee-helpers.c -o "$S/ee-helpers.o"
 emcc -O2 -Wall -Wextra -Werror -Ibrowser/include -Iinclude -c browser/spike/services.c -o "$S/services.o"
+# The static-world collision queries (assembly-only on the console) from the gated collision module.
+# Its hit record and collision_point bind to the original labels, which ram.o pins.
+emcc -O2 -Wall -Wextra -Werror -DRNC_SPIKE_COLLISION -Ibrowser/include -Iinclude -c browser/collision.c -o "$S/collision.o"
+# The level's handler tables with WebAssembly function references (see the file's header).
+TABLES=""
+TABLE_ROOTS=""
+if [ -f "browser/spike/level-tables-$LEVEL.c" ]; then
+  emcc -O1 -Wall -Wextra -Werror -Ibrowser/include -Iinclude -c "browser/spike/level-tables-$LEVEL.c" -o "$S/level-tables.o"
+  TABLES="$S/level-tables.o"
+  # The tables are data, reached at run time through pinned addresses, so no relocation leads the
+  # closure walk to them. Name them as extra closure roots so every handler they list is linked.
+  TABLE_ROOTS="$(grep -o '__asm__("D_L[0-9]*_[0-9A-F]*")' "browser/spike/level-tables-$LEVEL.c" | sed 's/__asm__("//; s/")//' | sort -u | tr '\n' ',' | sed 's/,$//')"
+fi
+# libc for the adapters' math and memcpy calls; only the members they reference are linked.
+LIBC="$(em-config CACHE)/sysroot/lib/wasm32-emscripten/libc.a"
 
-node browser/spike/closure.mjs "$ROOT" "$LEVEL" --list > "$S/$NAME-closure.txt"
+node browser/spike/closure.mjs "$ROOT${TABLE_ROOTS:+,$TABLE_ROOTS}" "$LEVEL" --list > "$S/$NAME-closure.txt"
 sed -n '/^reached files:/,$p' "$S/$NAME-closure.txt" | tail -n +2 \
   | sed -E 's|^ +src/||; s|\.c$||; s|/|__|g; s|^|'"$S"'/obj/|; s|$|.o|' > "$S/$NAME-objects.txt"
 
@@ -50,9 +65,12 @@ while :; do
   if "$LLVM/wasm-ld" --no-entry $EXPORTS --export=ee_ram --export=__stack_pointer \
       --export-if-defined=spike_gs_upload_count --export-if-defined=spike_gs_upload_overflow \
       --export-if-defined=spike_gs_upload_address --export-if-defined=spike_vu0_micro_program_requests --export-if-defined=spike_vsync_waits \
+      --export-if-defined=runtime_collision_reset --export-if-defined=runtime_collision_stage_address \
+      --export-if-defined=runtime_collision_capacity --export-if-defined=runtime_collision_load \
+      --export-if-defined=spike_install_level_tables --export-if-defined=spike_collision_unverified --export-if-defined=runtime_collision_cells --export-if-defined=runtime_collision_faces \
       --gc-sections --allow-undefined --allow-multiple-definition \
       --global-base=1048576 -z stack-size=524288 \
-      -o "$S/$NAME.wasm" "$S/ram.o" "$S/level-math.o" "$S/ee-helpers.o" "$S/services.o" @"$S/$NAME-objects.txt" "$S/$NAME-stubs.o" \
+      -o "$S/$NAME.wasm" "$S/ram.o" "$S/level-math.o" "$S/ee-helpers.o" "$S/services.o" "$S/collision.o" $TABLES @"$S/$NAME-objects.txt" "$S/$NAME-stubs.o" "$LIBC" \
       > "$S/$NAME-link.txt" 2>&1; then
     break
   fi

@@ -347,3 +347,81 @@ s32 RandomNext(void) { return level_rand(); }
 void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 void fast_vec_sub_second_spelling(void *out, void *a, void *b) __asm__("func_001F9A28");
 void fast_vec_sub_second_spelling(void *out, void *a, void *b) { fast_vec_sub(out, a, b); }
+
+/* 0x125180 (SDK sceVu0Normalize): lqc2 vf4,(a1); vf5.x = x*x + y*y + z*z; Q = sqrt(vf5.x);
+   Q = 1 / Q; vf6 = 0; vf6.xyz = vf4.xyz * Q; sqc2 vf6,(a0). w is written as 0. A zero-length input
+   divides by zero: the VU clamps that to the largest float, IEEE gives inf/NaN here. */
+void sce_vu0_normalize(void *out, void *in) __asm__("FUN_00125180");
+void sce_vu0_normalize(void *out, void *in) {
+    Vec4 v = load_vec(in);
+    f32  inverse = 1.0f / __builtin_sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+    Vec4 r = { v.x * inverse, v.y * inverse, v.z * inverse, 0.0f };
+    store_vec(out, r);
+}
+
+/* 0x1f99e8: max.s f0,f12,f13; min.s f0,f0,f14. */
+f32 clamp_float(f32 value, f32 low, f32 high) __asm__("FUN_001f99e8");
+f32 clamp_float(f32 value, f32 low, f32 high) {
+    f32 r = value > low ? value : low;
+    return r < high ? r : high;
+}
+
+/* 0x1f9770: lh at,(a0); if 0 return 1; pmaxw at,at,1 (a negative count becomes 1); at -= 1;
+   sh at,(a0); return at > 0 ? 0 : 2. */
+s32 fast_dec_timer_s16(s16 *timer) __asm__("FUN_001f9770");
+s32 fast_dec_timer_s16(s16 *timer) {
+    s32 t = *timer;
+    if (t == 0) return 1;
+    if (t < 1) t = 1;
+    t -= 1;
+    *timer = (s16)t;
+    return t > 0 ? 0 : 2;
+}
+
+/* Euler angles (x, y, z at +0, +4, +8) to a rotation matrix. Decoded from the EE-only version at
+   0x1fa070: start from identity rows; for z, then y, then x (each skipped when its angle bits are
+   0), replace every row r by r.x * A + r.y * B + r.z * C, where
+     z: A = ( c,  s, 0)  B = (-s, c, 0)  C = (0, 0, 1)
+     y: A = ( c,  0, -s) B = ( 0, 1, 0)  C = (s, 0, c)
+     x: A = ( 1,  0, 0)  B = ( 0, c, s)  C = (0, -s, c)
+   Row w components are 0 and the fourth row is (0, 0, 0, 1). Its sine is a polynomial at
+   0x1fa1a8; host sinf/cosf are used instead, as for fast_sin.
+   0x1fa030 (three rows) and 0x1fa050 (four rows) hand the same input to a VU0 microprogram that is
+   not decoded. ASSUMED to compute the same matrix as the EE version; not compared on a console. */
+static void euler_rows(f32 rows[3][4], const void *angles) {
+    f32 a[3];
+    __builtin_memcpy(a, angles, sizeof(a));
+    for (s32 i = 0; i < 3; i++)
+        for (s32 j = 0; j < 4; j++) rows[i][j] = i == j ? 1.0f : 0.0f;
+    for (s32 axis = 2; axis >= 0; axis--) {
+        if (a[axis] == 0.0f) continue; /* the original tests the bit pattern, which also skips -0 */
+        f32 s = sinf(a[axis]), c = cosf(a[axis]);
+        f32 basis[3][3] = { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 } };
+        if (axis == 2) { basis[0][0] = c; basis[0][1] = s; basis[1][0] = -s; basis[1][1] = c; }
+        if (axis == 1) { basis[0][0] = c; basis[0][2] = -s; basis[2][0] = s; basis[2][2] = c; }
+        if (axis == 0) { basis[1][1] = c; basis[1][2] = s; basis[2][1] = -s; basis[2][2] = c; }
+        for (s32 i = 0; i < 3; i++) {
+            f32 r[3] = { rows[i][0], rows[i][1], rows[i][2] };
+            for (s32 j = 0; j < 3; j++) rows[i][j] = r[0] * basis[0][j] + r[1] * basis[1][j] + r[2] * basis[2][j];
+        }
+    }
+}
+
+void euler_rotation_basis(void *out, void *angles) __asm__("FUN_001fa030");
+void euler_rotation_basis(void *out, void *angles) {
+    f32 rows[3][4];
+    euler_rows(rows, angles);
+    __builtin_memcpy(out, rows, sizeof(rows));
+}
+
+void euler_rotation_matrix(void *out, void *angles) __asm__("FUN_001fa050");
+void euler_rotation_matrix(void *out, void *angles) {
+    f32 rows[4][4] = { { 0 } };
+    euler_rows(rows, angles);
+    rows[3][0] = rows[3][1] = rows[3][2] = 0.0f;
+    rows[3][3] = 1.0f;
+    __builtin_memcpy(out, rows, sizeof(rows));
+}
+
+void euler_to_matrix_ee(void *out, void *angles) __asm__("FUN_001fa070");
+void euler_to_matrix_ee(void *out, void *angles) { euler_rotation_matrix(out, angles); }

@@ -28,6 +28,18 @@ f32 collision_point[4] __asm__("D_00194120");
 
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 
+/* The queries below model the static world only. The gated modules trap on any argument whose
+   retail meaning is unverified (other masks, an ignored moby, options). The whole-tree spike
+   defines RNC_SPIKE_COLLISION instead: such calls are answered from the static world alone and
+   counted, and the runner reports the count on every run. */
+#ifdef RNC_SPIKE_COLLISION
+u32 spike_collision_unverified_calls;
+u32 spike_collision_unverified(void) { return spike_collision_unverified_calls; }
+#define UNSUPPORTED_ARGUMENTS(condition) do { if (condition) spike_collision_unverified_calls++; } while (0)
+#else
+#define UNSUPPORTED_ARGUMENTS(condition) do { if (condition) __builtin_trap(); } while (0)
+#endif
+
 _Static_assert(__builtin_offsetof(CollisionHit, point) == 0x20, "Collision point ABI");
 _Static_assert(__builtin_offsetof(CollisionHit, normal_x) == 0x40, "Collision normal ABI");
 
@@ -458,14 +470,16 @@ s32 collision_rig(f32 *position, s32 flags, f32 radius, s32 ignored_moby, f32 he
 s32 collision_hero_groups(f32 *position, f32 radius) __asm__("FUN_L00_001f3170");
 
 s32 collision_sphere(f32 *position, s32 flags, s32 ignored_moby, f32 radius) {
-    if (!position || flags != 0x24 || ignored_moby) __builtin_trap();
+    if (!position) __builtin_trap();
+    UNSUPPORTED_ARGUMENTS(flags != 0x24 || ignored_moby);
     s32 result = runtime_collision_capsule(position[0], position[1], position[2], 0, radius);
     if (result < 0) __builtin_trap();
     return result;
 }
 
 s32 collision_rig(f32 *position, s32 flags, f32 radius, s32 ignored_moby, f32 height) {
-    if (!position || flags != 0x24 || ignored_moby) __builtin_trap();
+    if (!position) __builtin_trap();
+    UNSUPPORTED_ARGUMENTS(flags != 0x24 || ignored_moby);
     s32 result = runtime_collision_capsule(position[0], position[1], position[2], height, radius);
     if (result < 0) __builtin_trap();
     return result;
@@ -494,10 +508,31 @@ f32 runtime_collision_hit_normal(s32 axis) {
     return axis == 0 ? hit.normal_x : axis == 1 ? hit.normal_y : axis == 2 ? hit.normal_z : NAN;
 }
 
+/* The two accessors the game uses to classify the last hit. On the console both read the word at
+   hit record +0x1C (boot 0x1f0b58 / level 0x1f3608: lw 0x1c; bltz -> none; mask; all-ones -> none):
+   bits 0-4 are the material, bits 5-6 the sound class. This adapter keeps +0x1C as its 0/1 hit
+   flag, so they read the face's stored type byte instead. That the byte equals the retail word is
+   an assumption drawn from the masks, not a compared value. */
+s32 collision_hit_material(void) __asm__("FUN_001f0b58");
+s32 collision_hit_sound_class(void) __asm__("FUN_L00_001f3608");
+
+s32 collision_hit_material(void) {
+    s32 type = hit_material;
+    if (type < 0 || (type & 0x1F) == 0x1F) return -1;
+    return type & 0x1F;
+}
+
+s32 collision_hit_sound_class(void) {
+    s32 type = hit_material;
+    if (type < 0 || (type & 0x60) == 0x60) return 0;
+    return (type & 0x60) >> 5;
+}
+
 s32 collision_line(f32 *start, f32 *end, s32 flags, s32 ignored_moby, s32 options) __asm__("FUN_001efa68");
 
 s32 collision_line(f32 *start, f32 *end, s32 flags, s32 ignored_moby, s32 options) {
-    if (!start || !end || flags != 2 || ignored_moby || options) __builtin_trap();
+    if (!start || !end) __builtin_trap();
+    UNSUPPORTED_ARGUMENTS(flags != 2 || ignored_moby || options);
     s32 result = runtime_collision_segment(start[0], start[1], start[2], end[0], end[1], end[2]);
     if (result < 0) __builtin_trap();
     memcpy(collision_point, hit.point.f, sizeof(collision_point));

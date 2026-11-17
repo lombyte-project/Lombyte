@@ -41,6 +41,66 @@
       "why": "Prototype for the definition above.",
       "find": "s32 animation_index,\n                                   s32 on) __asm__",
       "replace": "s32 animation_index) __asm__"
+    },
+    {
+      "file": "src/overlays/shared/world/load_level_gameplay.c",
+      "why": "Declared by its C name with no asm label and with 32-bit parameters; the definition (pack_render_command_fields.c) takes a pointer and four 64-bit fields. Bound to the definition's label and prototype so the call links and its signature matches.",
+      "find": "extern void PackRenderCommandFields(void *, s32, s32, s32, s32);",
+      "replace": "extern void PackRenderCommandFields(unsigned long long *, unsigned long long, unsigned long long, unsigned long long, unsigned long long) __asm__(\"FUN_0020d4f0\");"
+    },
+    {
+      "file": "src/overlays/shared/hero/set_hero_animation.c",
+      "why": "Level 0x2336e8 is `neg.s f12; jal 0x2334d0`: it negates the float and leaves $a0/$a1 (out, in) untouched for add_hero_gravity_offset. The recovered definition names only the float. WebAssembly has no leftover registers, so the two pointers are named and passed.",
+      "find": "void FUN_L00_002334d0_002336e8(float) __asm__(\"FUN_L00_002334d0\");\n/* Calls FUN_L00_002334d0 with -x. */\nvoid offset_hero_position_against_gravity(float x) __asm__(\"FUN_L00_002336e8\");\n\nvoid offset_hero_position_against_gravity(float x) {\n    FUN_L00_002334d0_002336e8(-x);\n}",
+      "replace": "/* Calls FUN_L00_002334d0 with -x. */\nvoid offset_hero_position_against_gravity(f32 *forwarded_out, f32 *forwarded_in, float x) __asm__(\"FUN_L00_002336e8\");\n\nvoid offset_hero_position_against_gravity(f32 *forwarded_out, f32 *forwarded_in, float x) {\n    add_hero_gravity_offset(forwarded_out, forwarded_in, -x);\n}"
+    },
+    {
+      "file": "src/overlays/shared/hero/set_hero_animation.c",
+      "why": "Level 0x24f698 is the level program's copy of the executable's find_or_allocate_moby_render_slot (config/us/levels/functions.tsv: FUN_0020cc18, place 00:0024F698), whose C is filed under the executable address. One address space holds one copy, so this call is bound to it. A tree-wide version of this rule was tried and reverted: it made ten files fail where one file declares both spellings with different prototypes.",
+      "find": "extern int           FUN_L00_0024f698(void *);",
+      "replace": "extern int           FUN_L00_0024f698(void *) __asm__(\"FUN_0020cc18\");"
+    },
+    {
+      "file": "src/overlays/l00/level_class_tables.c",
+      "why": "The two retail-empty callbacks fill handler-table slots that the engine calls with arguments: a moby update, camera setup/update/exit (one pointer) and a camera priority check (two pointers, int result). Declared with unspecified parameters, their empty copies would be `()` functions and each table call would trap on its signature. They are given the widest shape the tables use; the table initialisers are data, so the slot types are unaffected.",
+      "find": "void noop_callback_l() __asm__(\"FUN_001e9448\");\nvoid noop_main_callback() __asm__(\"FUN_001e93e8\");",
+      "replace": "int noop_callback_l(void *table_argument_0, void *table_argument_1) __asm__(\"FUN_001e9448\");\nvoid noop_main_callback(void *table_argument_0) __asm__(\"FUN_001e93e8\");"
+    },
+    {
+      "file": "src/overlays/shared/camera/swing_volume_camera.c",
+      "why": "Camera priority handler: the engine calls every check_priority slot with (candidate, current) (camera_activation_check_priority.c). This handler reads only the first; on the EE the second register is ignored, in WebAssembly a two-argument indirect call to a one-parameter function traps. The unused second parameter is named.",
+      "find": "s32 volume_camera_swing_check(struct UpdateCam *cam) __asm__(\"FUN_L00_002ed230\");",
+      "replace": "s32 volume_camera_swing_check(struct UpdateCam *cam, void *current_camera_unused) __asm__(\"FUN_L00_002ed230\");"
+    },
+    {
+      "file": "src/overlays/shared/camera/swing_volume_camera.c",
+      "why": "Camera priority handler: the engine calls every check_priority slot with (candidate, current) (camera_activation_check_priority.c). This handler reads only the first; on the EE the second register is ignored, in WebAssembly a two-argument indirect call to a one-parameter function traps. The unused second parameter is named.",
+      "find": "s32 volume_camera_swing_check(struct UpdateCam *swing_camera_record) {",
+      "replace": "s32 volume_camera_swing_check(struct UpdateCam *swing_camera_record, void *current_camera_unused) {"
+    },
+    {
+      "file": "src/overlays/shared/camera/aim_volume_camera.c",
+      "why": "Camera priority handler: the engine calls every check_priority slot with (candidate, current) (camera_activation_check_priority.c). This handler reads only the first; on the EE the second register is ignored, in WebAssembly a two-argument indirect call to a one-parameter function traps. The unused second parameter is named.",
+      "find": "s32 volume_camera_check(struct UpdateCam *cam) __asm__(\"FUN_L00_002ed8b0\");",
+      "replace": "s32 volume_camera_check(struct UpdateCam *cam, void *current_camera_unused) __asm__(\"FUN_L00_002ed8b0\");"
+    },
+    {
+      "file": "src/overlays/shared/camera/aim_volume_camera.c",
+      "why": "Camera priority handler: the engine calls every check_priority slot with (candidate, current) (camera_activation_check_priority.c). This handler reads only the first; on the EE the second register is ignored, in WebAssembly a two-argument indirect call to a one-parameter function traps. The unused second parameter is named.",
+      "find": "s32 volume_camera_check(struct UpdateCam *aim_camera_record) {",
+      "replace": "s32 volume_camera_check(struct UpdateCam *aim_camera_record, void *current_camera_unused) {"
+    },
+    {
+      "file": "include/rnc/overlay/shared/camera.h",
+      "why": "Camera priority handler: the engine calls every check_priority slot with (candidate, current) (camera_activation_check_priority.c). This handler reads only the first; on the EE the second register is ignored, in WebAssembly a two-argument indirect call to a one-parameter function traps. The unused second parameter is named.",
+      "find": "s32  volume_camera_check(struct UpdateCam *) __asm__(\"FUN_L00_002ed8b0\");",
+      "replace": "s32  volume_camera_check(struct UpdateCam *, void *current_camera_unused) __asm__(\"FUN_L00_002ed8b0\");"
+    },
+    {
+      "file": "include/rnc/overlay/shared/camera/swing_volume_camera.h",
+      "why": "Camera priority handler: the engine calls every check_priority slot with (candidate, current) (camera_activation_check_priority.c). This handler reads only the first; on the EE the second register is ignored, in WebAssembly a two-argument indirect call to a one-parameter function traps. The unused second parameter is named.",
+      "find": "s32 volume_camera_swing_check(struct UpdateCam *) __asm__(\"FUN_L00_002ed230\");",
+      "replace": "s32 volume_camera_swing_check(struct UpdateCam *, void *current_camera_unused) __asm__(\"FUN_L00_002ed230\");"
     }
   ],
   "prototypes": [
@@ -56,6 +116,13 @@
       "returns": "f64",
       "parameters": "f32",
       "why": "libgcc's float-to-double conversion. Half the callers declare the result as int (the EE returns the double's bits in $v0); every call site passes it straight to a debug print. One signature is required, and the value is a double."
+    },
+    {
+      "symbol": "fast_mem_copy",
+      "label": "FUN_001f98d0",
+      "returns": "void",
+      "parameters": "void *, void *, s32",
+      "why": "Assembly-only copy helper (ported in ee-helpers.c). Several callers declare it with unspecified parameters or an s32 result; an unprototyped call compiles to an indirect call whose signature differs from the definition and traps. No caller reads a result."
     }
   ],
   "empty_functions": [

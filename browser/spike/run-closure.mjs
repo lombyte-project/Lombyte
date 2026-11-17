@@ -15,7 +15,8 @@
 // A scenario module may export:
 //   services(context)        -> { importName: function }   real services for this run
 //   async setup(context)     -> optional { args } or       stage real state before the calls
-//                               { sequence: [{ symbol, args }] }  to call several roots in order
+//                               { sequence: [{ symbol, args }] }  to call several roots in order;
+//                               a { host, label } step runs a scenario function between calls
 //   deferred                 -> { importName: reason }     output-only work with no consumer yet;
 //                                                           returns 0, is counted, and is listed
 //                                                           at the end of every run as NOT DONE
@@ -106,19 +107,28 @@ if (elfPath) { // copy the boot ELF's loadable segments to their original addres
   console.log(`copied ${copied} bytes of boot ELF segments to their original addresses`);
 }
 
+// Copies level N's program data over RAM, as the console's level-program load does. A scenario
+// calls this again (context.loadLevelProgram) at the point the console loads the level program:
+// boot code that ran before it shares these addresses, and its writes there do not survive.
 const levelOption = option('--level', null);
-if (levelOption !== null) {
+context.loadLevelProgram = () => {
+  if (levelOption === null) throw new Error('loadLevelProgram needs --level N');
   const folder = join(root, 'config/us/overlays', `level_${String(Number(levelOption)).padStart(2, '0')}`);
   const manifest = JSON.parse(readFileSync(join(folder, 'manifest.json'), 'utf8'));
   let copied = 0;
   for (const record of manifest.records) {
-    if (record.name === 'text' || record.name === 'bss' || record.type !== 1) continue;
+    if (record.name === 'text') continue; // code runs from the compiled C
+    if (record.name === 'bss' || record.type !== 1) {
+      context.bytes().fill(0, record.address, record.address + record.bytes);
+      continue;
+    }
     const data = readFileSync(join(folder, `${record.name}.bin`));
     context.bytes().set(data, record.address);
     copied += data.length;
   }
   console.log(`copied ${copied} bytes of level ${Number(levelOption)} program data to their original addresses`);
-}
+};
+if (levelOption !== null) context.loadLevelProgram();
 
 // Scratch objects in RAM the game image does not use on this path.
 const moby = 0x01E00000;
@@ -159,8 +169,9 @@ const results = [];
 const sequence = staged?.sequence
   ?? Array.from({ length: calls }, () => ({ symbol: rootSymbol, args: rootArgs }));
 for (let call = 1; call <= sequence.length; call += 1) {
-  const { symbol, args } = sequence[call - 1];
+  const { symbol, args, host, label } = sequence[call - 1];
   try {
+    if (host) { host(context); console.log(`step ${call}: ${label}`); continue; }
     const result = instance.exports[symbol](...(args ?? [moby]));
     results.push(result);
     console.log(args ? `call ${call} ${symbol}(${args.join(', ')}): returned ${result}` : `call ${call}: returned; moby ${JSON.stringify(readMoby())}`);
