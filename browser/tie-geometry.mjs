@@ -19,7 +19,8 @@
 //     strip tag offset + 1 + 3 * position in the strip. A vertex can fill two slots; a second slot
 //     equal to the first is a repeat, not another vertex.
 // The count of 16-byte records is not read from a header field (its meaning is not established);
-// it is the one split for which every record is well formed and every strip slot is filled once.
+// it is the one split for which every record is well formed and every strip slot is filled once
+// (an identical record repeated into the same slot counts once).
 //
 // Not decoded: the two lower levels of detail, per-vertex normals, and the baked lighting
 // (light_ties computes vertex colours from the level's directional lights). Ties are therefore
@@ -64,7 +65,11 @@ function decodePacket(core, view, streamBase, headerAt, textureMap, classId) {
     for (const strip of strips) {
       const position = (slot - strip.tag - 1) / 3;
       if (Number.isInteger(position) && position >= 0 && position < strip.count) {
-        if (strip.slots[position]) return false;
+        const filled = strip.slots[position];
+        // Writing an identical vertex to a slot again changes nothing (class 2215 on Veldin
+        // repeats one record three times); a different vertex in a filled slot is a conflict.
+        if (filled) return filled.position.every((value, axis) => value === vertex.position[axis]) &&
+          filled.uv[0] === vertex.uv[0] && filled.uv[1] === vertex.uv[1];
         strip.slots[position] = vertex;
         return true;
       }

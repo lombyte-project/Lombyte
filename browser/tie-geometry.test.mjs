@@ -106,10 +106,11 @@ test('Veldin scenery, placements, textures and fog from the local disc', {
     }
   }
   assert.equal(total, 965);
-  assert.equal(decoded, 964, 'one packet (class 2215) is known not to verify');
-  assert.equal(failures.length, 1);
-  assert.match(failures[0], /Tie class 2215/);
-  assert.equal(triangles, 40668);
+  // Class 2215 repeats one vertex record three times into the same slot; identical repeats are
+  // accepted, so every packet now decodes.
+  assert.equal(decoded, 965);
+  assert.deepEqual(failures, []);
+  assert.equal(triangles, 40672);
 
   const instances = readTieInstances(gameplay.bytes);
   assert.equal(instances.length, 1114);
@@ -125,7 +126,7 @@ test('Veldin scenery, placements, textures and fog from the local disc', {
     // Rows 0-2 are a basis: no degenerate placements.
     assert.ok(Math.hypot(instance.matrix[0], instance.matrix[1], instance.matrix[2]) > 0.01);
   }
-  assert.equal(placedTriangles, 396700);
+  assert.equal(placedTriangles, 396708);
 
   const fog = readLevelFog(gameplay.bytes);
   assert.deepEqual(fog.background, [71, 66, 58]);

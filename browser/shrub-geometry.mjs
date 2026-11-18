@@ -73,7 +73,14 @@ function decodePacket(core, view, start, size, textureMap, classId) {
     });
     if (!tag) fail('a vertex is outside every tag');
     const position = (output - tag.output - 1) / 3;
-    if (tag.slots[position]) fail('a tag slot is filled twice');
+    const filled = tag.slots[position];
+    if (filled) {
+      // An identical vertex written again changes nothing; a different one is a conflict.
+      const same = filled.position.every((value, axis) => value === vertex.position[axis]) &&
+        filled.uv[0] === vertex.uv[0] && filled.uv[1] === vertex.uv[1] && filled.restart === vertex.restart;
+      if (!same) fail('a tag slot is filled twice');
+      continue;
+    }
     tag.slots[position] = vertex;
   }
   if (!tags.every(tag => tag.slots.every(Boolean))) fail('a tag slot is empty');
