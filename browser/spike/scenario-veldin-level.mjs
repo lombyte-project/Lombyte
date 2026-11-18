@@ -36,10 +36,18 @@ export const BUFFERS = Object.freeze({
   gameplay: 0x06000000, // +0x18: gameplay arena (moby table and what follows)
   scratch1C: 0x07C00000, // +0x1C
 });
-const MEMORY_BYTES = 0x0A000000;
+// Up to 0x12002000: the EE hardware registers (0x10000000-0x1000FFFF: timers, DMA, VIF, GIF, IPU)
+// and the GS privileged registers (0x12000000-0x12001FFF) are plain memory here, so a register
+// address held in a literal or in game data (sceDmaGetChan's channel table) reaches the same
+// bytes. Writes are kept and reads return the last write; nothing models the hardware.
+const MEMORY_BYTES = 0x12002000;
 const MAIN_HEAP = 0x001940C0; // D_001940C0: +0x14 is the buffer initialize_level_runtime unpacks into
 const RESIDENT_BUFFER = 0x08000000;
-export const ROOTS = ['FUN_00230f60', 'FUN_00232d00', 'FUN_L00_0023d028', 'FUN_L00_00244110'];
+export const ROOTS = ['FUN_00230f60', 'FUN_00232d00', 'FUN_L00_0023d028', 'FUN_L00_00244110', 'FUN_L00_00245c28'];
+// --frames N: after the level program loads, run the original run_level_main_loop (ROOTS[4]),
+// which itself calls init_stash, init_level_runtime_state and the load, for N frames.
+const framesIndex = process.argv.indexOf('--frames');
+const FRAMES = framesIndex > 0 ? Number(process.argv[framesIndex + 1]) : 0;
 const archives = {};
 
 const stats = { decompress: [], sectorReads: 0, sectorsRead: 0 };
@@ -183,13 +191,29 @@ export async function setup(context) {
       if (!run.exports.spike_install_level_tables) throw new Error('level handler tables are not linked');
       run.exports.spike_install_level_tables();
     }, label: 'level program data reloaded (the console loads the level program here)' },
-    { symbol: ROOTS[1], args: [] },
-    { symbol: ROOTS[2], args: [] },
-    { symbol: ROOTS[3], args: [1, 0] }, // full load, nothing kept from a previous level
+    ...(FRAMES ? [{ symbol: ROOTS[4], args: [], frames: FRAMES }] : [
+      { symbol: ROOTS[1], args: [] },
+      { symbol: ROOTS[2], args: [] },
+      { symbol: ROOTS[3], args: [1, 0] }, // full load, nothing kept from a previous level
+    ]),
   ] };
 }
 
 export function report(context) {
+  const runaway = context.exports.rnc_animation_runaway?.value;
+  if (runaway !== undefined && context.view().getUint32(runaway, true)) {
+    const v = context.view(), w = (i) => v.getUint32(runaway + 4 * i, true), f = (i) => v.getFloat32(runaway + 4 * i, true);
+    const moby = w(0);
+    console.log(`animation step did not converge: moby 0x${moby.toString(16)} class ${v.getInt16(moby + 0xA6, true)} ` +
+      `seq ${w(1)}/${w(2)} frame ${w(3)} anim_time ${f(4)} duration ${f(5)} anim_speed ${v.getFloat32(moby + 0x58, true)} ` +
+      `pclass 0x${v.getUint32(moby + 0x24, true).toString(16)} update 0x${v.getUint32(moby + 0x74, true).toString(16)}`);
+  }
+  if (FRAMES) { // where the original main loop is (run_level_main_loop.c)
+    const view = context.view();
+    console.log(`main loop: ${view.getInt32(0x15F3F8, true)} passes (D_L00_0015F3F8), mode ${view.getInt32(0x15F5C4, true)} ` +
+      `(D_L00_0015F5C4; 6 = gameplay), disc read state ${view.getInt16(0x1516D0 + 8, true)} (music_stream_state.read_state; 0 idle), ` +
+      `vsyncs ${context.exports.spike_vsync_waits?.() ?? '?'}, VIF1 display lists sent ${context.exports.spike_vif1_chain_sends?.() ?? '?'}`);
+  }
   const uploads = context.exports.spike_gs_upload_count?.() ?? 0;
   if (uploads) {
     const view = context.view();

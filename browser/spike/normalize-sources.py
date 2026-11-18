@@ -69,6 +69,27 @@ def widen_long(text):
 # A local pinned to an EE register for the matching build (`register f32 x __asm__("$f4")`, a
 # fakematch): the pin only chooses the register, so the copy drops it and keeps the variable.
 REGISTER_PIN = re.compile(r'(\bregister\b[^;=(){}]*?)\s*__asm__\("\$\w+"\)')
+def map_scratchpad(text):
+    """0x7000xxxx literals -> 0x000Fxxxx, outside comments and strings, except where the value is
+    not an address: OR-ed into a colour (`|= 0x70000000`), or stored whole as a DMA END tag
+    (`*write = 0x70000000;`, `tag->tag = 0x70000000;`, vu1_send_chain_render_buffer.c and
+    vu1_chain.c)."""
+    parts = CODE_OR_SKIP.split(text)
+    for index in range(0, len(parts), 2):
+        code = parts[index]
+
+        def replace(m):
+            before = code[max(0, m.start() - 80):m.start()]
+            line = before.split('\n')[-1]
+            if re.search(r'\|=?\s*$', before):
+                return m.group(0)
+            if m.group(1) == '0000' and re.search(r'(^\s*\*\s*\w+|->tag|\.tag)\s*=\s*$', line):
+                return m.group(0)
+            return '0x000F' + m.group(1)
+        parts[index] = SCRATCHPAD.sub(replace, code)
+    return ''.join(parts)
+
+
 SCRATCHPAD = re.compile(r'\b0x7000([0-3][0-9A-Fa-f]{3})\b')
 SELF_ALIAS = re.compile(
     r'extern\b[^;{}]*?\b(\w+)\s*(?:\([^;{}]*?\))?\s*__attribute__\(\(alias\("\1"\)\)\);[ \t]*\n?')
@@ -127,7 +148,56 @@ def classes(types):
     return ''.join('f' if kind in FLOATS else 'i' for kind in types)
 
 
-PORTED_HELPERS = ('browser/level-math.c', 'browser/spike/ee-helpers.c', 'browser/collision.c')
+PORTED_HELPERS = ('browser/level-math.c', 'browser/spike/ee-helpers.c', 'browser/collision.c',
+                  'browser/spike/services.c', 'browser/moby-animation-advance.c', 'browser/moby-joint-matrices.c')
+
+
+def trailing_unused_parameters(text, match, parameters):
+    """How many trailing parameters of the definition at `match` its body never names."""
+    depth, at = 0, match.end() - 1
+    while at < len(text):
+        if text[at] == '{':
+            depth += 1
+        elif text[at] == '}':
+            depth -= 1
+            if depth == 0:
+                break
+        at += 1
+    body = text[match.end():at]
+    pieces = [piece.strip() for piece in parameters.split(',')] if parameters.strip() not in ('', 'void') else []
+    count = 0
+    for piece in reversed(pieces):
+        last = re.search(r'(\w+)\s*$', piece)
+        if not last or last.group(1) in BASIC or len(piece.split()) < 2 and not piece.endswith('*'):
+            break  # unnamed: cannot tell
+        if re.search(r'\b' + re.escape(last.group(1)) + r'\b', body):
+            break
+        count += 1
+    return count
+
+
+def call_argument_counts(text, name):
+    """Argument counts of the calls `name(...)` in text (the declaration excluded: it ends in
+    `;` right after its parentheses and has no expression arguments to count)."""
+    counts = []
+    for m in re.finditer(r'\b' + re.escape(name) + r'\s*\(', text):
+        depth, at, commas, empty = 1, m.end(), 0, True
+        while at < len(text) and depth:
+            ch = text[at]
+            if ch in '([{':
+                depth += 1
+            elif ch in ')]}':
+                depth -= 1
+            elif ch == ',' and depth == 1:
+                commas += 1
+            elif not ch.isspace() and depth >= 1:
+                empty = False
+            at += 1
+        rest = text[at:at + 40].lstrip()
+        if rest.startswith('__asm__') or (rest.startswith(';') and re.match(r'[\w \t\*]*$', text[max(0, m.start() - 60):m.start()].split('\n')[-1]) and 'extern' in text[max(0, m.start() - 60):m.start()].split('\n')[-1]):
+            continue  # the declaration itself
+        counts.append(0 if empty else commas + 1)
+    return counts
 
 
 def unify_with_definitions():
@@ -144,6 +214,7 @@ def unify_with_definitions():
             with open(path, encoding='utf-8', errors='surrogateescape') as handle:
                 sources[path] = handle.read()
     canon = {}
+    unused_tail = {}  # symbol -> how many trailing parameters its body never names
     for path, text in sources.items():
         if not path.endswith('.c'):
             continue
@@ -161,6 +232,7 @@ def unify_with_definitions():
                 canon[symbol] = None  # defined differently in two files (per-level copies); leave alone
             elif symbol not in canon:
                 canon[symbol] = (result, kinds, path, name)
+                unused_tail[symbol] = trailing_unused_parameters(text, match, parameters)
     # Assembly-only functions ported as browser helpers (linked by link-closure.sh) define the
     # label too. Only non-static definitions bound to an original label count.
     for helper in PORTED_HELPERS:
@@ -175,11 +247,13 @@ def unify_with_definitions():
             if not label or kinds is None or result is None:
                 continue
             canon.setdefault(label.group(1), (result, kinds, helper, name))  # a recovered definition wins
+    decoded_signatures = set()
     # A function with no C definition can still have a known signature, decoded from its
     # instructions (source-fixes.json "signatures"). Declarations are then made to agree with it
     # the same way, reordering adapters included.
     with open(os.path.join(ROOT, 'browser', 'spike', 'source-fixes.json'), encoding='utf-8') as handle:
         for rule in json.load(handle).get('signatures', []):
+            decoded_signatures.add(rule['label'])
             if rule['label'] in canon:
                 sys.exit(f"signature rule for {rule['label']} names a function that has a C definition")
             canon[rule['label']] = (rule['returns'], portable_parameters(rule['parameters']), None, None)
@@ -289,6 +363,67 @@ def unify_with_definitions():
                 f"static inline {returned} {local}({', '.join(pieces)}) "
                 f"{{ {'' if declared_result == 'void' else 'return '}{call}; }}{redirect}")
 
+    header_declared = {os.path.normpath(path): {m.group(3) for m in DECLARATION.finditer(text)}
+                       for path, text in sources.items() if path.endswith('.h')}
+    by_normal_path = {os.path.normpath(path): path for path in sources}
+    included_cache = {}
+
+    def included_names(path):
+        """Names declared in the headers `path` includes, transitively (quoted includes resolved
+        against the file's folder, then the tree's include/)."""
+        if path in included_cache:
+            return included_cache[path]
+        included_cache[path] = set()
+        names = set()
+        for header in re.findall(r'#\s*include\s+"([^"]+)"', sources.get(path, '')):
+            for base in (os.path.dirname(path), os.path.join(OUT, 'include')):
+                candidate = os.path.normpath(os.path.join(base, header))
+                if candidate in by_normal_path:
+                    names |= header_declared.get(candidate, set()) | included_names(by_normal_path[candidate])
+                    break
+        included_cache[path] = names
+        return names
+
+    def count_adapter(path, text, lead, returns, name, parameters, declared, declared_result,
+                      result, kinds, symbol):
+        """A caller that passes a different number of arguments, in the definition's order for the
+        ones both list. Extra trailing arguments are dropped: the EE callee never reads those
+        registers. Missing trailing arguments are passed as 0, only when the definition's body
+        never names those parameters (unused_tail). Anything else stays a listed mismatch."""
+        if not path.endswith('.c') or lead.strip() not in ('', 'extern') or lead[:1] in (' ', '\t'):
+            return None
+        shared = min(len(declared), len(kinds))
+        if classes(declared[:shared]) != classes(kinds[:shared]) or declared_result is None:
+            return None
+        if len(declared) < len(kinds) and unused_tail.get(symbol, 0) < len(kinds) - len(declared):
+            return None
+        if declared_result != 'void' and (result == 'void' or classes([declared_result]) != classes([result])):
+            return None
+        bound = set(re.findall(r'\b(\w+)\s*\([^;{}()]*\)\s*__asm__\("' + re.escape(symbol) + r'"\)', text))
+        if bound - {name} or name in included_names(path):
+            return None  # a header may declare the name too: a static adapter would conflict
+        if (path, name) in adapted:
+            return ''
+        pieces = [part.strip() for part in parameters.split(',')] if declared else []
+        names = []
+        for index, piece in enumerate(pieces):
+            last = re.search(r'(\w+)\s*$', piece)
+            if last and last.group(1) not in BASIC and not piece.rstrip().endswith('*') and len(piece.split()) > 1:
+                names.append(last.group(1))
+            else:
+                names.append(f'counted_{index}')
+                pieces[index] = f'{piece} counted_{index}'
+        arguments = names[:shared] + ['0.0f' if kind in FLOATS else '0' for kind in kinds[len(declared):]]
+        adapted[(path, name)] = ' '.join(parameters.split())
+        inner = f'{name}__definition_count'
+        local = f'{name}__caller_count' if name == symbol else name
+        redirect = f"\n#define {name} {local}" if local != name else ''
+        returned = returns.replace('extern', '').strip()
+        call = f"{inner}({', '.join(arguments)})"
+        return (f"extern {result} {inner}({', '.join(kinds) or 'void'}) __asm__(\"{symbol}\");\n"
+                f"static inline {returned} {local}({', '.join(pieces) or 'void'}) "
+                f"{{ {'' if declared_result == 'void' else 'return '}{call}; }}{redirect}")
+
     for path, text in sources.items():
         def replace(match):
             nonlocal rewritten
@@ -329,6 +464,63 @@ def unify_with_definitions():
                 # definition does not return, so only the result changes.
                 rewritten += 1
                 return f"{lead}void {name}(){asm or ''};"
+            if declared is None and parameters.strip() == '' and path.endswith('.c') and kinds \
+                    and symbol in decoded_signatures \
+                    and not any(kind in FLOATS for kind in kinds) and result not in FLOATS:
+                # `()` for a function whose signature was decoded (source-fixes.json "signatures")
+                # and takes only integers or pointers: the prototype converts nothing a caller
+                # could mean differently, and a call with the wrong argument count stops compiling
+                # instead of trapping. Applied to decoded signatures only: callers of recovered C
+                # often pass extra arguments the EE ignores.
+                rewritten += 1
+                return f"{lead}{result} {name}({', '.join(kinds)}){asm or ''};"
+            if declared is None and parameters.strip() == '' and kinds:
+                # `()` whose every call in the file passes no argument: as a (void) declaration,
+                # the argument-count adapter applies (zeros for parameters the body never names).
+                uses = len(re.findall(r'\b' + re.escape(name) + r'\s*\(', text)) - 1
+                empty = len(re.findall(r'\b' + re.escape(name) + r'\s*\(\s*\)', text)) - 1
+                if uses > 0 and uses == empty:
+                    adapter = count_adapter(path, text, lead, returns, name, 'void', [],
+                                            portable_type(returns.strip()), result, kinds, symbol)
+                    if adapter:
+                        rewritten += 1
+                        return adapter
+            if declared is None and parameters.strip() == '' and not kinds and path.endswith('.c') \
+                    and lead[:1] not in (' ', '\t') and name not in included_names(path) and (path, name) not in adapted:
+                # `()` for a definition with no parameters, called with N arguments: the EE callee
+                # never reads them, so an adapter takes N ignored integers.
+                counts = set(call_argument_counts(text, name))
+                if len(counts) == 1 and next(iter(counts)) > 0:
+                    count = next(iter(counts))
+                    adapted[(path, name)] = '()'
+                    rewritten += 1
+                    inner = f'{name}__definition_count'
+                    local = f'{name}__caller_count' if name == symbol else name
+                    redirect = f"\n#define {name} {local}" if local != name else ''
+                    returned = returns.replace('extern', '').strip()
+                    params = ', '.join(f'long long ignored_{i}' for i in range(count))
+                    body = f"{'' if portable_type(returned) == 'void' else 'return '}{inner}();"
+                    return (f"extern {result} {inner}(void) __asm__(\"{symbol}\");\n"
+                            f"static inline {returned} {local}({params}) {{ {body} }}{redirect}")
+            if declared is None and parameters.strip() == '' and kinds and path.endswith('.c') \
+                    and not any(kind in FLOATS for kind in kinds) and lead[:1] not in (' ', '\t') \
+                    and name not in included_names(path) and (path, name) not in adapted:
+                # `()` whose every call passes at least the definition's (integer or pointer)
+                # arguments: a variadic adapter forwards those and drops the rest, which the EE
+                # callee never reads.
+                counts = call_argument_counts(text, name)
+                if counts and min(counts) >= len(kinds) and max(counts) > len(kinds):
+                    adapted[(path, name)] = '()'
+                    rewritten += 1
+                    params = ', '.join(f'{kind} forwarded_{i}' for i, kind in enumerate(kinds))
+                    inner = f'{name}__definition_count'
+                    local = f'{name}__caller_count' if name == symbol else name
+                    redirect = f"\n#define {name} {local}" if local != name else ''
+                    returned = returns.replace('extern', '').strip()
+                    call = f"{inner}({', '.join(f'forwarded_{i}' for i in range(len(kinds)))})"
+                    return (f"extern {result} {inner}({', '.join(kinds)}) __asm__(\"{symbol}\");\n"
+                            f"static inline {returned} {local}({params}, ...) "
+                            f"{{ {'' if portable_type(returned) == 'void' else 'return '}{call}; }}{redirect}")
             if declared is None:  # `()` or types this pass cannot read: calls decide the signature
                 if parameters.strip() == '':
                     note(symbol, path, f"declared with unspecified parameters; definition ({', '.join(kinds) or 'void'})")
@@ -336,6 +528,9 @@ def unify_with_definitions():
             if len(declared) != len(kinds) or classes(declared) != classes(kinds):
                 adapter = reorder_adapter(path, text, lead, returns, name, parameters, declared,
                                           declared_result, result, kinds, symbol)
+                if adapter is None and len(declared) != len(kinds):
+                    adapter = count_adapter(path, text, lead, returns, name, parameters, declared,
+                                            declared_result, result, kinds, symbol)
                 if adapter is not None:
                     rewritten += 1
                     return adapter
@@ -371,6 +566,113 @@ def unify_with_definitions():
     known = sum(1 for entry in canon.values() if entry)
     print(f'prototypes: {known} definitions read, {rewritten} declarations rewritten to match, '
           f'{len(disagreements)} left for per-call fixes -> build/spike/prototype-disagreements.txt')
+
+
+def unify_missing_results():
+    """A function with no C definition (an import the spike runner provides, defers or traps)
+    links as one WebAssembly import, so every declaration must agree. When the prototyped
+    declarations of such a label agree on their parameters and differ only in declaring an integer
+    result or none, the `void` ones are declared `s32`: a caller that ignores the result is
+    unaffected, and one import type remains. Labels with a C definition or float results are
+    left to unify_with_definitions."""
+    sources = {}
+    for folder, _, names in os.walk(OUT):
+        for name in names:
+            path = os.path.join(folder, name)
+            with open(path, encoding='utf-8', errors='surrogateescape') as handle:
+                sources[path] = handle.read()
+    defined_labels = set()
+    declarations = {}
+    for path, text in sources.items():
+        if path.endswith('.c'):
+            defined = {m.group(2) for m in DEFINITION.finditer(text)}
+            for m in re.finditer(r'\b(\w+)\s*\([^;{}()]*\)\s*__asm__\("([^"]+)"\)', text):
+                if m.group(1) in defined:
+                    defined_labels.add(m.group(2))
+            defined_labels |= defined
+        for m in DECLARATION.finditer(text):
+            lead, returns, name, parameters, asm, label = m.groups()
+            if not returns.strip() or returns.split()[0] in NOT_A_TYPE:
+                continue
+            declarations.setdefault(label or name, []).append(
+                (portable_parameters(parameters), portable_type(returns.strip())))
+    with open(os.path.join(ROOT, 'browser', 'spike', 'source-fixes.json'), encoding='utf-8') as handle:
+        fixed = {rule['label'] for rule in json.load(handle).get('signatures', [])}
+    for helper in PORTED_HELPERS + ('browser/moby-animation-advance.c', 'browser/moby-joint-matrices.c'):
+        with open(os.path.join(ROOT, helper), encoding='utf-8') as handle:
+            fixed |= set(re.findall(r'__asm__\("([^"]+)"\)', handle.read()))
+    widen = set()
+    for label, found in declarations.items():
+        if label in defined_labels or label in fixed:
+            continue
+        prototyped = [(kinds, result) for kinds, result in found if kinds is not None]
+        results = {result for _, result in found}
+        if not prototyped or None in results or len(results) < 2 or 'void' not in results:
+            continue
+        if any(wasm_type(result) != 'i32' for result in results if result != 'void'):
+            continue
+        shapes = {tuple(wasm_type(kind) for kind in kinds) for kinds, _ in prototyped}
+        if len(shapes) == 1:
+            widen.add(label)
+    changed = 0
+    for path, text in sources.items():
+        def replace(m):
+            nonlocal changed
+            lead, returns, name, parameters, asm, label = m.groups()
+            if (label or name) not in widen or portable_type(returns.strip()) != 'void':
+                return m.group(0)
+            changed += 1
+            return f"{lead}s32 {name}({parameters}){asm or ''};"
+        new = DECLARATION.sub(replace, text)
+        if new != text:
+            with open(path, 'w', encoding='utf-8', errors='surrogateescape') as handle:
+                handle.write(new)
+    print(f"functions without C whose declarations differed only in a void result: {len(widen)} "
+          f"({changed} declarations now s32)")
+
+
+def functions_declared_as_data():
+    """A function label that one file declares as data only to take its address
+    (`extern u8 D_0023D080[];` passed as a callback) links as two symbol kinds, which wasm-ld
+    rejects. Labels defined as functions anywhere (a definition bound to the label, or a function
+    alias `extern __typeof__(fn) LABEL __attribute__((alias(...)))`) have such array declarations
+    rewritten to `extern void NAME(void)`, keeping any asm label. Uses that only take the address
+    compile unchanged; a read through it would no longer compile, so none can slip through."""
+    sources = {}
+    for folder, _, names in os.walk(OUT):
+        for name in names:
+            path = os.path.join(folder, name)
+            with open(path, encoding='utf-8', errors='surrogateescape') as handle:
+                sources[path] = handle.read()
+    functions = set()
+    for path, text in sources.items():
+        if not path.endswith('.c'):
+            continue
+        defined = {m.group(2) for m in DEFINITION.finditer(text)}
+        for m in re.finditer(r'\b(\w+)\s*\([^;{}()]*\)\s*__asm__\("([^"]+)"\)', text):
+            if m.group(1) in defined:
+                functions.add(m.group(2))
+        functions |= defined
+        for m in re.finditer(r'__typeof__\((\w+)\)\s+(\w+)\s+__attribute__\(\(alias', text):
+            if m.group(1) in defined:
+                functions.add(m.group(2))
+        for m in re.finditer(r'\b(\w+)\s*\([^;{}()]*\)\s*__attribute__\(\(alias', text):
+            functions.add(m.group(1))
+    pattern = re.compile(r'^([ \t]*extern[ \t]+)[A-Za-z_][\w \t]*?\b(\w+)\s*\[\s*\](\s*__asm__\("([^"]+)"\))?\s*;', re.M)
+    rewritten = 0
+    for path, text in sources.items():
+        def replace(m):
+            nonlocal rewritten
+            label = m.group(4) or m.group(2)
+            if label not in functions:
+                return m.group(0)
+            rewritten += 1
+            return f"{m.group(1)}void {m.group(2)}(void){m.group(3) or ''};"
+        new = pattern.sub(replace, text)
+        if new != text:
+            with open(path, 'w', encoding='utf-8', errors='surrogateescape') as handle:
+                handle.write(new)
+    print(f"function labels declared as data, now declared as functions: {rewritten}")
 
 
 def label_unlabelled_declarations():
@@ -418,6 +720,9 @@ def label_unlabelled_declarations():
                 return match.group(0)
             if any(re.match(r'\s*\w+\s*\[', piece) for piece in parameters.split(',')):
                 return match.group(0)  # `a * f(b[6]);` is an expression statement, not a declaration
+            before = match.string[:match.start()].rstrip()
+            if before and before[-1] in '=+-*/%&|^<>?:,(!~':
+                return match.group(0)  # the previous line leaves an expression open: `x =\n a * f(b);`
             if not returns.strip() or returns.split()[0] in NOT_A_TYPE:
                 return match.group(0)
             if re.search(r'\b' + re.escape(name) + r'\s*\([^;{}()]*\)\s*__asm__', text):
@@ -447,6 +752,8 @@ def main():
     shutil.rmtree(OUT, ignore_errors=True)
     by_name = named_labels()
     named = re.compile(r'__asm__\("(' + '|'.join(sorted(map(re.escape, by_name), key=len, reverse=True)) + r')"\)')
+    # alias("Name") targets the same symbol, so it is rewritten with it.
+    named_alias = re.compile(r'alias\("(' + '|'.join(sorted(map(re.escape, by_name), key=len, reverse=True)) + r')"\)')
     files = changed = dropped = 0
     for top in ('src', 'include'):
         for folder, _, names in os.walk(os.path.join(ROOT, top)):
@@ -459,9 +766,10 @@ def main():
                     text = handle.read()
                 new = LABEL.sub(lambda m: f"FUN_{m.group(1) or ''}{m.group(2).lower()}", text)
                 new = named.sub(lambda m: f'__asm__("{by_name[m.group(1)]}")', new)
+                new = named_alias.sub(lambda m: f'alias("{by_name[m.group(1)]}")', new)
                 new, removed = SELF_ALIAS.subn('', new)
                 new = widen_long(new)
-                new = SCRATCHPAD.sub(r'0x000F\1', new)
+                new = map_scratchpad(new)
                 new = REGISTER_PIN.sub(r'\1', new)
                 files += 1
                 changed += new != text
@@ -469,6 +777,8 @@ def main():
                 with open(os.path.join(target, name), 'w', encoding='utf-8', errors='surrogateescape') as handle:
                     handle.write(new)
     label_unlabelled_declarations()
+    functions_declared_as_data()
+    unify_missing_results()
     # Per-file fixes come before unify_with_definitions, so it sees the corrected prototypes.
     with open(os.path.join(ROOT, 'browser', 'spike', 'source-fixes.json'), encoding='utf-8') as handle:
         fixes = json.load(handle)

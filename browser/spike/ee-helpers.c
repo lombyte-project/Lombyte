@@ -593,3 +593,133 @@ u8 *create_part(s32 type) {
     particle[0] = (u8)type;
     return particle;
 }
+
+/* build_resident_visibility_list, level 0 copy at 0x250768 (ends 0x250a38): the frame's list of
+   mobys to update. gp = 0x166c00. Scratchpad (local arrays here; the routine's use of it is
+   private): 224 per-class {head, tail} pairs, a u16 index list, 112 group flags.
+   For each moby in the table at [gp - 0x6c28] (0x15FFD8) until state 0xFF: a state with the sign
+   bit set is skipped; flags & 2 is skipped. It is kept when +0x31 is set, when update_dist (+0x30)
+   is 0xFF, or when update_dist^2 - |pos - camera|^2 has its sign bit clear (vmula/vmsuba, camera
+   position at 0x166c80 + 0x140). A kept moby marks its group (+0x21) when it has one (and is then
+   added with the group); otherwise it is appended to its class slot's list (+0x22, linked through
+   +0x28) and, when flags & 0x1000, its index joins the index list. Then each marked group's member
+   list (u16 indices from the table at 0x1ab840; the entry with bit 15 ends it) adds its live
+   members the same way. The index list is written as moby pointers to 0x1aba00 with a 0 end, and
+   the class lists are joined in slot order; the head is returned. */
+extern u8 *level_moby_table __asm__("D_L00_0015FFD8");
+extern f32 level_camera_block[] __asm__("D_L00_00166C80");
+extern u16 *level_moby_groups[] __asm__("D_L00_001AB840");
+extern u8 *level_flagged_mobys[] __asm__("D_L00_001ABA00");
+u8 *build_resident_visibility_list(void) __asm__("FUN_L00_00250768");
+u8 *build_resident_visibility_list(void) {
+    static u8 *heads[224][2];
+    static u16 indices[0x200];
+    static u8 group_marked[0x80];
+    const f32 *camera = level_camera_block + 0x140 / 4;
+    u8 *table = level_moby_table;
+    s32 kept = 0, index;
+    u8 *head = 0, *tail = 0;
+    __builtin_memset(heads, 0, sizeof(heads));
+    __builtin_memset(group_marked, 0, sizeof(group_marked));
+
+#define APPEND(moby) do { \
+        u8 **slot = heads[(moby)[0x22] % 224]; \
+        indices[kept & 0x1ff] = (u16)index; \
+        if (*(u16 *)((moby) + 0x34) & 0x1000) kept++; \
+        if (slot[1]) *(u8 **)(slot[1] + 0x28) = (moby); else slot[0] = (moby); \
+        slot[1] = (moby); \
+    } while (0)
+
+    for (index = 0;; index++) {
+        u8 *moby = table + 0x100 * index;
+        const s8 state = (s8)moby[0x20];
+        const u16 flags = *(u16 *)(moby + 0x34);
+        s8 group;
+        if (state < 0) {
+            if (state == -1) break;
+            continue;
+        }
+        if (flags & 2) continue;
+        if (moby[0x31] == 0 && moby[0x30] != 0xff) {
+            const f32 dx = *(f32 *)(moby + 0x10) - camera[0];
+            const f32 dy = *(f32 *)(moby + 0x14) - camera[1];
+            const f32 dz = *(f32 *)(moby + 0x18) - camera[2];
+            const f32 limit = (f32)moby[0x30];
+            const f32 left = ((limit * limit - dx * dx) - dy * dy) - dz * dz;
+            u32 bits;
+            __builtin_memcpy(&bits, &left, 4);
+            if (bits >> 31) continue;
+        }
+        group = (s8)moby[0x21];
+        if (group >= 0) {
+            group_marked[group & 0x7f] = 1;
+            continue;
+        }
+        APPEND(moby);
+    }
+    for (s32 group = 0; group < 0x70; group++) {
+        const u16 *member;
+        s16 entry = 0;
+        if (!group_marked[group]) continue;
+        member = level_moby_groups[group];
+        do {
+            u8 *moby;
+            entry = (s16)*member++;
+            index = entry & 0x7fff;
+            moby = table + 0x100 * index;
+            if ((s8)moby[0x20] < 0) continue;
+            APPEND(moby);
+        } while (entry >= 0);
+    }
+#undef APPEND
+    for (s32 i = 0; i < kept; i++) level_flagged_mobys[i] = table + 0x100 * indices[i];
+    level_flagged_mobys[kept] = 0;
+    for (s32 slot = 0; slot < 224; slot++) {
+        if (!heads[slot][0]) continue;
+        if (!head) head = heads[slot][0];
+        else *(u8 **)(tail + 0x28) = heads[slot][0];
+        tail = heads[slot][1];
+        *(u8 **)(tail + 0x28) = 0;
+    }
+    return head;
+}
+
+/* update_all_mobys, level 0 0x264848: head = build_resident_visibility_list(), stored at
+   [gp - 0x6c1c] (0x15FFE4); for each moby (next at +0x28) whose state has the sign bit clear:
+   advance_moby_animation (0x250480) unless flags & 0x40, the class update (+0x74) if any,
+   update_entity (0x250df8) unless flags & 4 (re-read after the update). */
+extern u8 *level_update_list_head __asm__("D_L00_0015FFE4");
+extern void level_advance_moby_animation(void *moby) __asm__("FUN_L00_00250480");
+extern void level_update_entity(void *moby) __asm__("FUN_L00_00250df8");
+void update_all_mobys(void) __asm__("FUN_L00_00264848");
+void update_all_mobys(void) {
+    u8 *moby = build_resident_visibility_list();
+    level_update_list_head = moby;
+    for (; moby != 0; moby = *(u8 **)(moby + 0x28)) {
+        void (*update)(void *);
+        if ((s8)moby[0x20] < 0) continue;
+        if (!(*(u16 *)(moby + 0x34) & 0x40)) level_advance_moby_animation(moby);
+        update = *(void (**)(void *))(moby + 0x74);
+        if (update) update(moby);
+        if (!(*(volatile u16 *)(moby + 0x34) & 4)) level_update_entity(moby);
+    }
+}
+
+/* 0x1fa328 multiply_matrix3x3(out, a, b): rows of a in vf4-vf6, rows of b in vf1-vf3 (raw fields:
+   fs = a's row, ft = b's row, broadcast x/y/z); out row i = (a0 * b[i].x + a1 * b[i].y) + a2 * b[i].z
+   over xyzw. Three rows; out's fourth row is not written. */
+void multiply_matrix3x3(void *out, void *a_in, void *b_in) __asm__("FUN_001fa328");
+void multiply_matrix3x3(void *out, void *a_in, void *b_in) {
+    const u8 *a = a_in, *b = b_in;
+    Vec4 r[3];
+    const Vec4 a0 = load_vec(a), a1 = load_vec(a + 16), a2 = load_vec(a + 32);
+    for (s32 i = 0; i < 3; i++) {
+        const Vec4 bi = load_vec(b + 16 * i);
+        r[i].x = (a0.x * bi.x + a1.x * bi.y) + a2.x * bi.z;
+        r[i].y = (a0.y * bi.x + a1.y * bi.y) + a2.y * bi.z;
+        r[i].z = (a0.z * bi.x + a1.z * bi.y) + a2.z * bi.z;
+        r[i].w = (a0.w * bi.x + a1.w * bi.y) + a2.w * bi.z;
+    }
+    for (s32 i = 0; i < 3; i++) store_vec((u8 *)out + 16 * i, r[i]);
+}
+ALIAS(multiply_matrix3x3, func_001FA328, FUN_001fa328)

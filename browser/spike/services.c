@@ -118,9 +118,13 @@ s32 sceCdSync_by_address(s32 mode) { (void)mode; return 0; }
 __attribute__((import_module("env"), import_name("host_disc_read")))
 extern s32 host_disc_read(u32 lsn, u32 sectors, void *buffer);
 s32 sceCdRead(u32 lsn, u32 sectors, void *buffer, void *mode);
+static s32 cd_read_completed; /* a read finished whose callback has not run yet */
 s32 sceCdRead(u32 lsn, u32 sectors, void *buffer, void *mode) {
+    s32 accepted;
     (void)mode;
-    return host_disc_read(lsn, sectors, buffer);
+    accepted = host_disc_read(lsn, sectors, buffer);
+    if (accepted) cd_read_completed = 1;
+    return accepted;
 }
 s32 sceCdGetError(void);
 s32 sceCdGetError(void) { return 0; }
@@ -133,14 +137,24 @@ void fade_to_black(s32 frames) {
     spike_deferred("fade_to_black", "renderer: full-screen fade over N vsyncs (no GS draw path or frame pacing)");
 }
 
-/* sceGsSyncV (0x122298): blocks until the next vertical sync. Frame pacing belongs to the host
-   (requestAnimationFrame in a page); this build has no frame loop yet, so the wait returns at
-   once. Counted so a run shows how many frame boundaries the code asked for. */
+/* sceGsSyncV (0x122298): blocks until the next vertical sync. This is the frame boundary: it
+   calls the host's spike_vsync_yield, which (in a frames step of run-closure.mjs, after
+   link-closure.sh's Asyncify pass) unwinds to the host and resumes here on the next frame, so
+   run_level_main_loop runs unchanged one frame per host call. Outside a frames step the host
+   returns at once. Counted so a run shows how many frame boundaries the code asked for. */
 static s32 vsync_waits;
+extern void spike_vsync_yield(void);
 s32 sceGsSyncV(s32 mode);
-s32 sceGsSyncV(s32 mode) { (void)mode; vsync_waits += 1; return 0; }
+static void cd_run_completion(void);
+s32 sceGsSyncV(s32 mode) {
+    (void)mode;
+    vsync_waits += 1;
+    spike_vsync_yield();
+    cd_run_completion();
+    return 0;
+}
 s32 sceGsSyncV_by_address(s32 mode) __asm__("FUN_00122298");
-s32 sceGsSyncV_by_address(s32 mode) { (void)mode; vsync_waits += 1; return 0; }
+s32 sceGsSyncV_by_address(s32 mode) { return sceGsSyncV(mode); }
 s32 spike_vsync_waits(void) { return vsync_waits; }
 
 /* ---- Audio: NOT implemented -------------------------------------------------------------------
@@ -270,17 +284,24 @@ u32 sceSifSetDma(struct SifDmaTransfer *transfers, s32 count) {
     return 1;
 }
 
-/* sceCdCallback: registers a function the SDK calls from the disc interrupt when a command
-   completes, and returns the previous one. The game registers its audio-stream callback here.
-   The callback is recorded and returned correctly, but it is NOT invoked: reads complete inside
-   sceCdRead, and the only registered user is audio streaming, which has no backend. */
-static void *cd_callback;
+/* sceCdCallback: registers a function the SDK calls from the disc interrupt with the finished
+   command's code (1 = read), and returns the previous one. The game registers
+   finish_audio_stream_read (0x216950), which marks music_stream_state's read idle; the map and
+   HUD loads wait on that (read_disc_sectors_and_wait). Reads finish inside sceCdRead here, so the
+   callback runs at the next vertical sync (cd_run_completion, from sceGsSyncV), a point the
+   console's interrupt has always passed by. */
+static void (*cd_callback)(s32);
 void *sceCdCallback(void *callback);
 void *sceCdCallback(void *callback) {
-    void *previous = cd_callback;
-    cd_callback = callback;
-    spike_deferred("sceCdCallback", "audio: disc-completion callback recorded but never invoked (only audio streaming uses it)");
+    void *previous = (void *)cd_callback;
+    cd_callback = (void (*)(s32))callback;
     return previous;
+}
+static void cd_run_completion(void) {
+    if (cd_read_completed && cd_callback) {
+        cd_read_completed = 0;
+        cd_callback(1);
+    }
 }
 
 /* src/rendering/vu1/dmac_vif1_enable.c: installs the VIF1 DMA interrupt handler and unmasks the
@@ -290,3 +311,25 @@ void dmac_vif1_enable(void) __asm__("FUN_00233d00");
 void dmac_vif1_enable(void) {
     spike_deferred("dmac_vif1_enable", "renderer: VIF1 DMA channel and interrupt handler (display lists have no consumer)");
 }
+
+/* sceDmaSend (0x1232c8): starts a DMA channel on a chain. VIF1 (registers at 0x10009000) carries
+   the frame's VU1 display list from vu1_send_chain_render_buffer; its address is recorded for a
+   renderer (spike_vif1_chain_address). The transfer completes at once here, so the VIF1 DMA
+   interrupt handler's end state follows: the END tag clears every busy bit of the level's chain
+   flags (D_L00_001611A0, which vu1_send_chain_render_buffer sets to 0x1F and vu1_sync_chain waits
+   on; see vif1_dma_interrupt_handler.c). No VU1 program runs and nothing is drawn. Other channels
+   are reported as not done. */
+extern volatile s32 level_vif_chain_flags __asm__("D_L00_001611A0");
+static u32 vif1_chain_address, vif1_chain_sends;
+void sceDmaSend(void *channel, u32 chain) __asm__("FUN_001232c8");
+void sceDmaSend(void *channel, u32 chain) {
+    if ((u32)channel == 0x10009000u) {
+        vif1_chain_address = chain;
+        vif1_chain_sends += 1;
+        level_vif_chain_flags &= ~0x1f;
+        return;
+    }
+    spike_deferred("sceDmaSend", "DMA: a channel other than VIF1 (no consumer)");
+}
+u32 spike_vif1_chain_address(void) { return vif1_chain_address; }
+u32 spike_vif1_chain_sends(void) { return vif1_chain_sends; }

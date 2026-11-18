@@ -173,6 +173,42 @@
       "why": "Fakematch inline asm computing d0_arg = $sp + 0xD0. Retail's first euler_rotation_basis call in draw_vendor_effects (level 0x2a5064: addiu a1, sp, 0xd0) passes effect_camera_rotation_angles, so slot 0xD0 is that array; MIPS asm cannot compile to WebAssembly.",
       "find": "    __asm__(\"addiu %0,$sp,0xD0\" : \"=r\"(d0_arg) : \"f\"(sparkle_radius) : \"$4\");",
       "replace": "    d0_arg = effect_camera_rotation_angles;"
+    },
+    {
+      "file": "src/audio/streaming/safe_cd/snd_stream_safe_cd_read.c",
+      "why": "Register forwarding: when no stream is active, the retail body (0x12ed58) calls sceCdRead (jal 0x121450) without writing $a3, so the caller's fourth argument (start_audio_stream_read passes &music_stream_state.cd_mode) is the read mode. The recovered definition has three parameters; callers pass four, a WebAssembly signature mismatch. The mode parameter is added and forwarded.",
+      "find": "s32 snd_stream_safe_cd_read(s32 lsn, s32 sector_count, s32 dst) __asm__(\"FUN_0012ed58\");",
+      "replace": "s32 snd_stream_safe_cd_read(s32 lsn, s32 sector_count, s32 dst, void *mode) __asm__(\"FUN_0012ed58\");"
+    },
+    {
+      "file": "src/audio/streaming/safe_cd/snd_stream_safe_cd_read.c",
+      "why": "Register forwarding: when no stream is active, the retail body (0x12ed58) calls sceCdRead (jal 0x121450) without writing $a3, so the caller's fourth argument (start_audio_stream_read passes &music_stream_state.cd_mode) is the read mode. The recovered definition has three parameters; callers pass four, a WebAssembly signature mismatch. The mode parameter is added and forwarded.",
+      "find": "s32 snd_stream_safe_cd_read(s32 lsn, s32 sector_count, s32 read_destination) {",
+      "replace": "s32 snd_stream_safe_cd_read(s32 lsn, s32 sector_count, s32 read_destination, void *mode) {"
+    },
+    {
+      "file": "src/audio/streaming/safe_cd/snd_stream_safe_cd_read.c",
+      "why": "Register forwarding: when no stream is active, the retail body (0x12ed58) calls sceCdRead (jal 0x121450) without writing $a3, so the caller's fourth argument (start_audio_stream_read passes &music_stream_state.cd_mode) is the read mode. The recovered definition has three parameters; callers pass four, a WebAssembly signature mismatch. The mode parameter is added and forwarded.",
+      "find": "        return sceCdRead(lsn, sector_count, read_destination);",
+      "replace": "        return sceCdRead(lsn, sector_count, read_destination, mode);"
+    },
+    {
+      "file": "src/audio/streaming/safe_cd/snd_stream_safe_cd_read.c",
+      "why": "Register forwarding: when no stream is active, the retail body (0x12ed58) calls sceCdRead (jal 0x121450) without writing $a3, so the caller's fourth argument (start_audio_stream_read passes &music_stream_state.cd_mode) is the read mode. The recovered definition has three parameters; callers pass four, a WebAssembly signature mismatch. The mode parameter is added and forwarded.",
+      "find": "extern s32 snd_StreamSafeCdRead(s32 lsn, s32 sector_count, s32 dst)\n    __attribute__((alias(\"FUN_0012ed58\")));",
+      "replace": "extern s32 snd_StreamSafeCdRead(s32 lsn, s32 sector_count, s32 dst, void *mode)\n    __attribute__((alias(\"FUN_0012ed58\")));"
+    },
+    {
+      "file": "src/audio/rpc/snd_reset_state_and_flush_commands.c",
+      "why": "Takes no argument: the retail body (0x12eb00, 7 instructions) never reads $a0, and 8 of 9 recovered declarations say (void) or (). The unused s32 parameter makes a different WebAssembly signature, so calls trap; it is dropped.",
+      "find": "void snd_reset_state_and_flush_commands(s32 unused_arg) __asm__(\"FUN_0012eb00\");",
+      "replace": "void snd_reset_state_and_flush_commands(void) __asm__(\"FUN_0012eb00\");"
+    },
+    {
+      "file": "src/audio/rpc/snd_reset_state_and_flush_commands.c",
+      "why": "Takes no argument: the retail body (0x12eb00, 7 instructions) never reads $a0, and 8 of 9 recovered declarations say (void) or (). The unused s32 parameter makes a different WebAssembly signature, so calls trap; it is dropped.",
+      "find": "void snd_reset_state_and_flush_commands(s32 unused_arg) {",
+      "replace": "void snd_reset_state_and_flush_commands(void) {"
     }
   ],
   "prototypes": [
@@ -221,6 +257,12 @@
       "returns": "s32",
       "parameters": "void *, void *",
       "why": "fast_decompress (level copy, assembly only; the spike runner provides it). load_level_gameplay and include/rnc/overlay/shared/runtime/fast_decompress.h use (source, destination) -> decompressed size; vendor_menu.c declares void (int, int), which links as a second type and replaces the service with a trapping stub."
+    },
+    {
+      "label": "FUN_0020b618",
+      "returns": "s32",
+      "parameters": "void *, void *",
+      "why": "decompress_wad (boot program, assembly only; the spike runner provides it). include/rnc/streaming/decompress_wad.h gives (source, destination) -> size; recovered callers declare it ten ways (void or s32, () or two parameters), which link as several types and replace the service with a trapping stub."
     }
   ]
 }

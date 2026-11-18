@@ -47,6 +47,20 @@ for (let start = 0; start < objects.length; start += 200) {
   }
 }
 
+// Undefined symbols referenced only as functions (`F *UND*` in the symbol table). An
+// address-named function with no C body (`D_0012A5D8`, called as csc_dma_chunk_handler) must stay
+// an import that traps by name, not be pinned as data in the RAM image.
+const undefinedAsData = new Set();
+const undefinedAsFunction = new Set();
+for (let start = 0; start < objects.length; start += 200) {
+  const chunk = objects.slice(start, start + 200).map((file) => join(out, 'obj', file));
+  const text = execFileSync(join(llvmRoot, 'llvm-objdump'), ['-t', ...chunk], { encoding: 'utf8', maxBuffer: 1 << 28 });
+  for (const line of text.split('\n')) {
+    const match = line.match(/\s([FO])\s+\*UND\*\s+[0-9a-f]+\s+(\S+)$/);
+    if (match) (match[1] === 'F' ? undefinedAsFunction : undefinedAsData).add(match[2]);
+  }
+}
+
 // Objects whose data holds function pointers (class tables, callback tables). Their data must
 // stay a C definition: the linker fills in WebAssembly table indices, where the retail bytes hold
 // PS2 code addresses. Every other address-named global can be pinned in the RAM image and take
@@ -90,6 +104,7 @@ for (const file of failed) {
 const classify = (symbol) => {
   if (fromFailed.has(symbol)) return fromFailed.get(symbol).how;
   if (/^(sce|Sif|sif|_?sce|pad[A-Z]|mc[A-Z]|mpeg|ipu|Vif|Gif|Vu0|Vu1|DMA|Dma)/.test(symbol)) return 'PS2 SDK / hardware service';
+  if (undefinedAsFunction.has(symbol) && !undefinedAsData.has(symbol)) return 'address-named function without C';
   if (/^(D|jtbl|jpt|lbl|RO|B)_(L\d\d_)?[0-9A-Fa-f]{6,8}/.test(symbol)) return 'fixed-address data not defined in C';
   if (/^(FUN|func)_(L\d\d_)?[0-9A-Fa-f]{6,8}/.test(symbol)) return 'unnamed function with no compiled definition';
   if (/^(mem(cpy|set|move|cmp)|str\w+|s?printf|v?sn?printf|malloc|free|rand|srand|abs|sinf?|cosf?|sqrtf?|atan2?f?|floorf?|ceilf?|fabsf?|fmodf?|powf?|exit|__\w+)$/.test(symbol)) return 'C library / compiler runtime';

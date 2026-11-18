@@ -6,6 +6,47 @@
 #include "types.h"
 #include "moby_animation_advance.h"
 
+/* EE FPU semantics for the values this routine computes with: the EE has no infinities or NaNs.
+   A bit pattern with an all-ones exponent is an ordinary number of magnitude about 2^128 there,
+   and a result that overflows (or a division by zero) gives +-max-float with the sign it would
+   have had. IEEE arithmetic differs: blend_moby_animation (recovered C) stores 1 / 0 = inf as the
+   frame duration when asked for a 0-frame blend, which the EE makes max-float; with inf, anim_time
+   becomes NaN here and the frame step never ends. So each input and each result is read as the EE
+   would: +-inf and NaN become +-max-float. */
+static f32 ee(f32 x) {
+    u32 b;
+    __builtin_memcpy(&b, &x, 4);
+    if (((b >> 23) & 0xff) == 0xff) {
+        b = (b & 0x80000000u) | 0x7f7fffffu;
+        __builtin_memcpy(&x, &b, 4);
+    }
+    return x;
+}
+static f32 ee_div(f32 a, f32 b) {
+    if (b == 0.0f) {
+        const u32 sign = (*(u32 *)&a ^ *(u32 *)&b) & 0x80000000u;
+        const u32 bits = sign | 0x7f7fffffu;
+        f32 r;
+        __builtin_memcpy(&r, &bits, 4);
+        return r;
+    }
+    return ee(a / b);
+}
+
+/* A frame step that has not converged after this many frames is not something the console's data
+   produces; rather than spin forever, the moby and its state are recorded and the call traps. */
+#define STEP_LIMIT 4096
+u32 rnc_animation_runaway[6]; /* moby, seq52, seq53, frame, anim_time bits, duration bits */
+static void runaway(u8 *m, f32 t, f32 dur) {
+    rnc_animation_runaway[0] = (u32)m;
+    rnc_animation_runaway[1] = m[0x52];
+    rnc_animation_runaway[2] = m[0x53];
+    rnc_animation_runaway[3] = m[0x50];
+    __builtin_memcpy(&rnc_animation_runaway[4], &t, 4);
+    __builtin_memcpy(&rnc_animation_runaway[5], &dur, 4);
+    __builtin_trap();
+}
+
 /* The EE saturates cvt.w.s; wasm's truncation traps out of range. */
 static s32 saturating_s32(f32 x) {
     if (x != x || x >= 2147483648.0f) return 0x7FFFFFFF;
@@ -40,13 +81,13 @@ s32 rnc_advance_moby_animation(u8 *m, s32 frame_counter, RncAnimationTrigger tri
     const u8 *seq;
     s32 s52 = AM_U8(0x52), s53 = AM_U8(0x53);
     s32 frame, next, old_frame;
-    f32 dur = AM_F32(0x5c), t, old_time;
+    f32 dur = ee(AM_F32(0x5c)), t, old_time;
 
     if (AM_U32(0x5c) == 0 || AM_U32(0x58) == 0) goto voice_check;
-    t = s52 != s53 ? AM_F32(0x54) + dur : AM_F32(0x54) + AM_F32(0x58) * dur;
+    t = s52 != s53 ? ee(ee(AM_F32(0x54)) + dur) : ee(ee(AM_F32(0x54)) + ee(ee(AM_F32(0x58)) * dur));
     frame = AM_U8(0x50);
     next = AM_U8(0x51);
-    old_time = AM_F32(0x54);
+    old_time = ee(AM_F32(0x54));
     old_frame = frame;
     seq = *(const u8 **)(*(u8 **)(m + 0x24) + 0x48 + 4 * s53);
 
@@ -62,10 +103,11 @@ s32 rnc_advance_moby_animation(u8 *m, s32 frame_counter, RncAnimationTrigger tri
     return 0;
 
 forward:
-    for (;;) {
+    for (s32 steps = 0;; steps++) {
+        if (steps == STEP_LIMIT) runaway(m, t, dur);
         u32 rate, frame_data;
         s32 nframes;
-        t = t - 1.0f;
+        t = ee(t - 1.0f);
         frame = next;
         next = next + 1;
         frame_data = AM_U32(0x6c);
@@ -74,7 +116,7 @@ forward:
             s52 = s53;
             voice_bytes = voice_none;
         }
-        t = t / dur;
+        t = ee_div(t, dur);
         flags |= 1;
         nframes = seq[0x10];
         rate = *(const u32 *)(seq + 0x18);
@@ -85,8 +127,8 @@ forward:
                 flags |= 2;
                 next_data = *(const u32 *)(seq + 0x1c);
             }
-            dur = rate != 0 ? am_float(rate) : *(const f32 *)frame_data;
-            t = t * dur;
+            dur = ee(rate != 0 ? am_float(rate) : *(const f32 *)frame_data);
+            t = ee(t * dur);
             AM_U8(0x52) = (u8)s52;
             AM_U8(0x50) = (u8)frame;
             AM_U8(0x51) = (u8)next;
@@ -102,9 +144,10 @@ forward:
     return 0;
 
 backward:
-    for (;;) {
+    for (s32 steps = 0;; steps++) {
+        if (steps == STEP_LIMIT) runaway(m, t, dur);
         u32 rate, frame_data, old_data;
-        t = t / dur;
+        t = ee_div(t, dur);
         next = frame;
         frame = frame - 1;
         old_data = AM_U32(0x68);
@@ -115,12 +158,12 @@ backward:
             flags |= 2;
         }
         frame_data = *(const u32 *)(seq + 0x1c + 4 * frame);
-        dur = rate != 0 ? am_float(rate) : *(const f32 *)frame_data;
-        t = t * dur;
+        dur = ee(rate != 0 ? am_float(rate) : *(const f32 *)frame_data);
+        t = ee(t * dur);
         AM_U32(0x68) = frame_data;
         AM_U8(0x50) = (u8)frame;
         AM_U8(0x51) = (u8)next;
-        t = t + 1.0f;
+        t = ee(t + 1.0f);
         AM_U32(0x6c) = old_data;
         AM_F32(0x5c) = dur;
         AM_F32(0x54) = t;

@@ -72,6 +72,8 @@ for (const { module: from, name: symbol, kind } of WebAssembly.Module.imports(mo
       deferred[key] ??= context.cString(reasonAt);
       deferredCalls.set(key, (deferredCalls.get(key) ?? 0) + 1);
     };
+  } else if (symbol === 'spike_vsync_yield') { // the frame boundary (services.c, Asyncify)
+    imports[from][symbol] = () => frameYield();
   } else if (symbol === 'spike_unimplemented_rpc') {
     imports[from][symbol] = (server, fn) => { throw new Error(`IOP RPC server 0x${server.toString(16)} is not implemented (function ${fn})`); };
   } else if (symbol === 'spike_conflict') {
@@ -81,6 +83,32 @@ for (const { module: from, name: symbol, kind } of WebAssembly.Module.imports(mo
     imports[from][symbol] = () => { throw new Error(`missing function: ${symbol}`); };
     trapCount += 1;
   }
+}
+// Asyncify state for frames steps: a vsync inside one unwinds to the host; the next frame
+// rewinds into the same call. Outside a frames step the yield returns at once.
+const ASYNCIFY_DATA = 0x90000, ASYNCIFY_END = 0xE0000;
+let frameMode = 'off'; // off | running | unwinding | rewinding
+function frameYield() {
+  if (frameMode === 'off') return;
+  if (frameMode === 'rewinding') { context.exports.asyncify_stop_rewind(); frameMode = 'running'; return; }
+  const view = context.view();
+  view.setInt32(ASYNCIFY_DATA, ASYNCIFY_DATA + 8, true);
+  view.setInt32(ASYNCIFY_DATA + 4, ASYNCIFY_END, true);
+  context.exports.asyncify_start_unwind(ASYNCIFY_DATA);
+  frameMode = 'unwinding';
+}
+// Runs exports[symbol](...args) for up to `frames` frames; returns { frames, returned, result }.
+function runFrames(symbol, args, frames, onFrame) {
+  let done = 0;
+  for (; done < frames; done += 1) {
+    if (done > 0) { context.exports.asyncify_start_rewind(ASYNCIFY_DATA); frameMode = 'rewinding'; }
+    else frameMode = 'running';
+    const result = instance.exports[symbol](...args);
+    if (frameMode === 'unwinding') { context.exports.asyncify_stop_unwind(); frameMode = 'off'; onFrame?.(done + 1); continue; }
+    frameMode = 'off';
+    return { frames: done + 1, returned: true, result };
+  }
+  return { frames: done, returned: false };
 }
 const instance = new WebAssembly.Instance(module, imports);
 context.memory = instance.exports.memory;
@@ -172,6 +200,12 @@ for (let call = 1; call <= sequence.length; call += 1) {
   const { symbol, args, host, label } = sequence[call - 1];
   try {
     if (host) { host(context); console.log(`step ${call}: ${label}`); continue; }
+    if (sequence[call - 1].frames) {
+      const run = runFrames(symbol, args ?? [], sequence[call - 1].frames, sequence[call - 1].onFrame);
+      results.push(run);
+      console.log(`call ${call} ${symbol}: ${run.returned ? `returned ${run.result} after` : 'still running after'} ${run.frames} frame(s)`);
+      continue;
+    }
     const result = instance.exports[symbol](...(args ?? [moby]));
     results.push(result);
     console.log(args ? `call ${call} ${symbol}(${args.join(', ')}): returned ${result}` : `call ${call}: returned; moby ${JSON.stringify(readMoby())}`);

@@ -66,7 +66,7 @@ while :; do
   # scratchpad is mapped at 0xF0000-0xF3FFF (see normalize-sources.py).
   if "$LLVM/wasm-ld" --no-entry $EXPORTS --export=ee_ram --export=__stack_pointer \
       --export-if-defined=spike_gs_upload_count --export-if-defined=spike_gs_upload_overflow \
-      --export-if-defined=spike_gs_upload_address --export-if-defined=spike_vu0_micro_program_requests --export-if-defined=spike_vsync_waits \
+      --export-if-defined=spike_gs_upload_address --export-if-defined=spike_vu0_micro_program_requests --export-if-defined=spike_vsync_waits --export-if-defined=spike_vif1_chain_address --export-if-defined=spike_vif1_chain_sends --export-if-defined=rnc_animation_runaway \
       --export-if-defined=runtime_collision_reset --export-if-defined=runtime_collision_stage_address \
       --export-if-defined=runtime_collision_capacity --export-if-defined=runtime_collision_load \
       --export-if-defined=spike_install_level_tables --export-if-defined=spike_collision_unverified --export-if-defined=runtime_collision_cells --export-if-defined=runtime_collision_faces \
@@ -85,6 +85,13 @@ while :; do
   echo "$new" >> "$S/$NAME-conflicts.txt"
 done
 
+# A module that reaches sceGsSyncV imports spike_vsync_yield; Asyncify lets that import unwind to
+# the host and resume, so the original main loop runs one frame per host call (run-closure.mjs).
+if grep -q spike_vsync_yield "$S/$NAME.wasm" 2>/dev/null; then
+  "$(em-config BINARYEN_ROOT)/bin/wasm-opt" "$S/$NAME.wasm" -g --asyncify \
+    --pass-arg=asyncify-imports@env.spike_vsync_yield -o "$S/$NAME.wasm"
+  echo "asyncify: sceGsSyncV yields to the host"
+fi
 echo "linked $S/$NAME.wasm from $(wc -l < "$S/$NAME-objects.txt" | tr -d ' ') recovered files"
 echo "prototype conflicts stubbed: $(wc -l < "$S/$NAME-conflicts.txt" | tr -d ' ') ($S/$NAME-conflicts.txt)"
 echo "caller/definition signature mismatches (trap at call): $(grep -c 'warning: function signature mismatch' "$S/$NAME-link.txt" || true)"
