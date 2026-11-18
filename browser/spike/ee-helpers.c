@@ -313,6 +313,14 @@ void transpose_rotation_matrix(void *out, void *in) {
 }
 
 #include "moby_animation_advance.h"
+#include "moby_joint_matrices.h"
+
+/* get_moby_joint_matrices (0x210850), decoded in browser/moby-joint-matrices.c. */
+void get_moby_joint_matrices(void *moby, s32 count, s32 *bones, void *out) __asm__("FUN_00210850");
+void get_moby_joint_matrices(void *moby, s32 count, s32 *bones, void *out) {
+    rnc_get_moby_joint_matrices(moby, count, bones, out);
+}
+ALIAS(get_moby_joint_matrices, func_00210850, FUN_00210850)
 
 
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
@@ -535,3 +543,53 @@ void euler_rotation_matrix(void *out, void *angles) {
 
 void euler_to_matrix_ee(void *out, void *angles) __asm__("FUN_001fa070");
 void euler_to_matrix_ee(void *out, void *angles) { euler_rotation_matrix(out, angles); }
+
+/* create_part, level 0 0x2678b8: `j 0x2678c0` with a1 = 0. 0x2678c0, with gp = 0x166c00:
+   next = [gp - 0x6a90] (0x160170), highest = [gp - 0x6a8c] (0x160174), table = [gp - 0x6a94]
+   (0x16016c), count = [gp - 0x6a88] (0x160178), allocation bits at 0x1b1880 (0x800 particles).
+   If next >= 0x800, return 0. Otherwise set next's bit; then if next > highest, next + 1 becomes
+   the next free index, else the search starts at the byte holding next + 1 and takes the first
+   clear bit (up to 0x800). highest = max(highest, index) (pmaxw, raw word 0x7326c8c8), count + 1.
+   The 64-byte particle at table + 64 * index gets its first 32 bytes zeroed (sq 0x0, then 0x10
+   three times) and the type in byte 0. The paths at 0x2678e8 and 0x2679c0 are not reached from
+   this entry. */
+extern s32 particle_next_free __asm__("D_L00_00160170");
+extern s32 particle_highest __asm__("D_L00_00160174");
+extern u8 *particle_table __asm__("D_L00_0016016C");
+extern s32 particle_count __asm__("D_L00_00160178");
+extern u8 particle_allocated[0x100] __asm__("D_L00_001B1880");
+u8 *create_part(s32 type) __asm__("FUN_L00_002678b8");
+u8 *create_part(s32 type) {
+    const s32 index = particle_next_free;
+    s32 next = index;
+    u8 *particle;
+    if (index - 0x800 >= 0) return 0;
+    particle_allocated[index >> 3] |= (u8)(1u << (index & 7));
+    if (index - particle_highest > 0) {
+        next = index + 1;
+    } else {
+        s32 byte = (index + 1) >> 3;
+        next = byte << 3;
+        while (next - 0x800 < 0) {
+            const u8 bits = particle_allocated[byte];
+            u32 bit = 1;
+            s32 found = 0;
+            while (1) {
+                const u32 taken = bits & bit;
+                bit <<= 1;
+                if (taken == 0) { found = 1; break; }
+                next++;
+                if ((bit & 0xff) == 0) break;
+            }
+            if (found) break;
+            byte++;
+        }
+    }
+    particle_next_free = next;
+    if (index > particle_highest) particle_highest = index;
+    particle_count = particle_count + 1;
+    particle = particle_table + 64 * index;
+    __builtin_memset(particle, 0, 32);
+    particle[0] = (u8)type;
+    return particle;
+}

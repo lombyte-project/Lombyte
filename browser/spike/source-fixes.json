@@ -167,6 +167,12 @@
       "why": "Retail body (level 0x2e8378) is `addiu sp, -0x50; jr ra; addiu sp, 0x50` and reads no register. Its one caller, follow_camera_update, passes the camera moby; on the EE the extra register is ignored, in WebAssembly a one-argument call to a no-parameter function traps. The unused parameter is named.",
       "find": "void run_follow_camera_noop(void) {",
       "replace": "void run_follow_camera_noop(void *camera_unused) {"
+    },
+    {
+      "file": "src/overlays/shared/vendor/vendor.c",
+      "why": "Fakematch inline asm computing d0_arg = $sp + 0xD0. Retail's first euler_rotation_basis call in draw_vendor_effects (level 0x2a5064: addiu a1, sp, 0xd0) passes effect_camera_rotation_angles, so slot 0xD0 is that array; MIPS asm cannot compile to WebAssembly.",
+      "find": "    __asm__(\"addiu %0,$sp,0xD0\" : \"=r\"(d0_arg) : \"f\"(sparkle_radius) : \"$4\");",
+      "replace": "    d0_arg = effect_camera_rotation_angles;"
     }
   ],
   "prototypes": [
@@ -209,6 +215,12 @@
       "returns": "s32",
       "parameters": "void *, s32, void *, void *, f32",
       "why": "collect_mobies_in_sphere: hand-written EE/VU0 assembly with no C definition. Decoded register use: $a0 the sphere centre (lqc2 vf31, 0($a0)), $a1 a flag mask (kept in $s3, tested with andi 4), $a2 a moby to skip (kept in $s2, compared with each candidate), $a3 kept in $s5, $f12 the radius (mfc1 at 0x1f2884); the count of mobys found returns in $v0 and the list is written at D_L00_00177F00. Recovered callers list the float in different positions, which the EE ignores (floats travel in $f12); in WebAssembly each order is a different signature. This order is the register order."
+    },
+    {
+      "label": "FUN_L00_0024d8d0",
+      "returns": "s32",
+      "parameters": "void *, void *",
+      "why": "fast_decompress (level copy, assembly only; the spike runner provides it). load_level_gameplay and include/rnc/overlay/shared/runtime/fast_decompress.h use (source, destination) -> decompressed size; vendor_menu.c declares void (int, int), which links as a second type and replaces the service with a trapping stub."
     }
   ]
 }

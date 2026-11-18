@@ -16,6 +16,8 @@ Also widens `long` to `long long`. The EE ABI's `long` is 64 bits and wasm32's i
 recovered `unsigned long` parameter or field would otherwise change size, layout and call
 signature. `long long` and `long double` are left as they are; comments are not touched.
 
+Also drops register pins (`register T x __asm__("$f4")` keeps `register T x`).
+
 Also maps the scratchpad. The console has 16 KiB of fast RAM at 0x70000000-0x70003FFF, which the
 game addresses with literals. Linear memory does not reach that address, so each such literal
 becomes 0x000Fxxxx: the same offset inside 0x000F0000-0x000F3FFF, which is kernel memory on the
@@ -64,6 +66,9 @@ def widen_long(text):
     return ''.join(parts)
 
 
+# A local pinned to an EE register for the matching build (`register f32 x __asm__("$f4")`, a
+# fakematch): the pin only chooses the register, so the copy drops it and keeps the variable.
+REGISTER_PIN = re.compile(r'(\bregister\b[^;=(){}]*?)\s*__asm__\("\$\w+"\)')
 SCRATCHPAD = re.compile(r'\b0x7000([0-3][0-9A-Fa-f]{3})\b')
 SELF_ALIAS = re.compile(
     r'extern\b[^;{}]*?\b(\w+)\s*(?:\([^;{}]*?\))?\s*__attribute__\(\(alias\("\1"\)\)\);[ \t]*\n?')
@@ -85,6 +90,8 @@ DECLARATION = re.compile(
 def portable_type(text):
     """A parameter or return type reduced to something every file can name: pointers become
     `void *`; scalars must be built-in or types.h names. Returns None when it cannot be reduced."""
+    if '[' in text and '*' not in text and len(text.split('[')[0].split()) < 2:
+        return None  # `name[6]`: an array element in an expression, not a parameter
     if '*' in text or '[' in text:
         return 'void *'
     words = text.split()
@@ -409,6 +416,8 @@ def label_unlabelled_declarations():
                 return f'{lead}{returns}{name}({parameters});'
             if asm or name not in unique or name in defined:
                 return match.group(0)
+            if any(re.match(r'\s*\w+\s*\[', piece) for piece in parameters.split(',')):
+                return match.group(0)  # `a * f(b[6]);` is an expression statement, not a declaration
             if not returns.strip() or returns.split()[0] in NOT_A_TYPE:
                 return match.group(0)
             if re.search(r'\b' + re.escape(name) + r'\s*\([^;{}()]*\)\s*__asm__', text):
@@ -453,6 +462,7 @@ def main():
                 new, removed = SELF_ALIAS.subn('', new)
                 new = widen_long(new)
                 new = SCRATCHPAD.sub(r'0x000F\1', new)
+                new = REGISTER_PIN.sub(r'\1', new)
                 files += 1
                 changed += new != text
                 dropped += removed

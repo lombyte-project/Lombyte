@@ -27,6 +27,7 @@ emcc -c "$S/ram.s" -o "$S/ram.o"
 emcc -O2 -w -Ibrowser/include -Iinclude -c browser/level-math.c -o "$S/level-math.o"
 emcc -O2 -fno-builtin -Wall -Wextra -Werror -Ibrowser/include -Iinclude -c browser/spike/ee-helpers.c -o "$S/ee-helpers.o"
 emcc -O2 -fno-builtin -Wall -Wextra -Werror -Ibrowser/include -Iinclude -c browser/moby-animation-advance.c -o "$S/moby-animation-advance.o"
+emcc -O2 -fno-builtin -Wall -Wextra -Werror -Ibrowser/include -Iinclude -c browser/moby-joint-matrices.c -o "$S/moby-joint-matrices.o"
 emcc -O2 -Wall -Wextra -Werror -Ibrowser/include -Iinclude -c browser/spike/services.c -o "$S/services.o"
 # The static-world collision queries (assembly-only on the console) from the gated collision module.
 # Its hit record and collision_point bind to the original labels, which ram.o pins.
@@ -71,7 +72,7 @@ while :; do
       --export-if-defined=spike_install_level_tables --export-if-defined=spike_collision_unverified --export-if-defined=runtime_collision_cells --export-if-defined=runtime_collision_faces \
       --gc-sections --allow-undefined --allow-multiple-definition \
       --global-base=1048576 -z stack-size=524288 \
-      -o "$S/$NAME.wasm" "$S/ram.o" "$S/level-math.o" "$S/ee-helpers.o" "$S/moby-animation-advance.o" "$S/services.o" "$S/collision.o" $TABLES @"$S/$NAME-objects.txt" "$S/$NAME-stubs.o" "$LIBC" \
+      -o "$S/$NAME.wasm" "$S/ram.o" "$S/level-math.o" "$S/ee-helpers.o" "$S/moby-animation-advance.o" "$S/moby-joint-matrices.o" "$S/services.o" "$S/collision.o" $TABLES @"$S/$NAME-objects.txt" "$S/$NAME-stubs.o" "$LIBC" \
       > "$S/$NAME-link.txt" 2>&1; then
     break
   fi
