@@ -7,7 +7,7 @@ import { loadPlanetCore, VELDIN_ARCHIVE, initializePlanetCollision } from './lev
 import { readTerrainGeometry, readTerrainTextures, readMobyTextures, readShrubTextures, readTieTextures } from './terrain-geometry.mjs';
 import { readShrubClasses, readShrubInstances } from './shrub-geometry.mjs';
 import { readTieClasses, readTieInstances } from './tie-geometry.mjs';
-import { readMobyGeometry } from './moby-geometry.mjs';
+import { readMobyGeometry, UNTEXTURED_MATERIAL } from './moby-geometry.mjs';
 import { loadLevelGameplay, readLevelFog, VELDIN_LEVEL } from './gameplay-loader.mjs';
 import { initializeLevelActors, tickLevelActors } from './level-actors.mjs';
 import { loadLevelMusic, MusicPlayer } from './music.mjs';
@@ -700,6 +700,7 @@ function showPlacedMobys(planet, actors) {
   const skipped = new Map();
   let rendered = 0;
   const groups = [];
+  let untexturedLeftOut = 0;
   const rigs = new Map();
   const skippedRigs = new Map();
   for (const moby of actors.mobys) {
@@ -728,6 +729,10 @@ function showPlacedMobys(planet, actors) {
     // selects each frame (updateActorPoses). Without one it is a rigid mesh.
     const skeleton = rig && createActorSkeleton(rig, moby.classId);
     for (const batch of model.batches) {
+      // Untextured parts take their colour and transparency from per-vertex colours and blend
+      // settings that are not decoded yet (drawn plain, class 1964 by the garage is an opaque white
+      // slab). They are counted and left out; the class's textured parts are drawn.
+      if (batch.material === UNTEXTURED_MATERIAL) { untexturedLeftOut += batch.positions.length / 9; continue; }
       const image = images[model.textures[batch.material]];
       if (!image) continue;
       const geometry = new THREE.BufferGeometry();
@@ -755,6 +760,7 @@ function showPlacedMobys(planet, actors) {
     rendered++;
   }
   if (skipped.size) console.info('Placed classes without browser geometry:', Object.fromEntries(skipped));
+  document.body.dataset.untexturedTrianglesLeftOut = String(untexturedLeftOut);
   if (skippedRigs.size) console.info('Placed classes drawn unskinned (skeleton not read):', Object.fromEntries(skippedRigs));
   updateActorPoses(actors.mobys, groups);
   document.body.dataset.placedMobys = String(actors.placed);
@@ -768,6 +774,7 @@ function showRatchet(planet, start) {
   heroAnimation = createHeroAnimation(readHeroAnimationRig(planet));
   const images = readMobyTextures(planet);
   for (const batch of model.batches) {
+    if (batch.material === UNTEXTURED_MATERIAL) continue; // see showPlacedMobys
     const image = images[model.textures[batch.material]];
     if (!image) throw new Error('Ratchet material references an absent image.');
     const geometry = new THREE.BufferGeometry();

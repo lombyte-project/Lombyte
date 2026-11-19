@@ -1,5 +1,9 @@
 import { packedArrays } from './terrain-geometry.mjs';
 
+// The material of a batch with texture reference 0xFFFFFFFF (untextured; see the note where it
+// is read).
+export const UNTEXTURED_MATERIAL = -1;
+
 export function readMobyClass(planet, classId = 0) {
   const header = new DataView(planet.header.buffer, planet.header.byteOffset, planet.header.byteLength);
   const view = new DataView(planet.core.buffer, planet.core.byteOffset, planet.core.byteLength);
@@ -146,8 +150,13 @@ export function readMobyGeometry(planet, classId = 0) {
           throw new Error('Moby draw index references an absent texture primitive.');
         }
         const material = view.getUint32(textureArray.offset + primitive * 64 + 32, true);
-        if (material >= 16) throw new Error(`Unsupported moby texture reference ${material}.`);
-        activeMaterial = material;
+        // 0xFFFFFFFF is the untextured material: prepare_resident_class_render_data passes a
+        // negative index through, and set_up_vis_gif_viewer / build_indexed_resident_render_packet
+        // then bind the fixed 8x8 texture at GS block 0x3FFB, which init_once fills with
+        // 0x80808080 (neutral grey, opaque: x1.0 under modulate). The vertex colour and blending that
+        // shade such parts are not decoded; game.mjs leaves those batches out.
+        if (material !== 0xFFFFFFFF && material >= 16) throw new Error(`Unsupported moby texture reference ${material}.`);
+        activeMaterial = material === 0xFFFFFFFF ? UNTEXTURED_MATERIAL : material;
         primitive++;
         raw = secrets[secret++];
         restart = true;
