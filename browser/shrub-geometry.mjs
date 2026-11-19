@@ -13,7 +13,12 @@
 //        15 bits are the vertex count, output offset }, then per texture four register words
 //        { +0x0C output offset, +0x20 material index }
 //     1: per vertex { x, y, z, output offset }
-//     2: per vertex { s, t, q, n }; a negative n marks a vertex that starts a new strip
+//     2: per vertex { s, t, q, n }. A negative n is not a strip break: on Veldin 327 of the 333
+//        flagged tags carry it exactly four vertices before the tag's end (the rest one or two),
+//        whatever the tag's length, and the 630 triangles spanning a flag match their strip's
+//        median size (ratio 0.89-1.17 for 80% of them, at most 1.8), so the strip continues
+//        through it. It reads as a loop marker for the shrub microcode. Each tag is drawn as one
+//        strip. Read as a break, it dropped triangles from 333 tags and all of class 574.
 //   A vertex belongs to the tag at (output offset - tag offset - 1) / 3, in that order. Every tag
 //   is a triangle strip. A packet is accepted only if every tag slot is filled exactly once.
 //
@@ -90,7 +95,7 @@ function decodePacket(core, view, start, size, textureMap, classId) {
 // Returns Map(classId -> { scale, batches: [{ texture, positions, uvs }], triangles, packets }).
 // Positions are in class units; multiply by `scale` and the instance matrix. A packet that does
 // not verify is left out and described in `failures` if given, else it throws.
-export function readShrubClasses(planet, failures, restartRule = 'new-strip') {
+export function readShrubClasses(planet, failures, restartRule = 'none') {
   const header = new DataView(planet.header.buffer, planet.header.byteOffset, planet.header.byteLength);
   const core = planet.core;
   const view = new DataView(core.buffer, core.byteOffset, core.byteLength);

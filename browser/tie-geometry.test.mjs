@@ -8,6 +8,7 @@ import { loadLevelGameplay, readLevelFog, VELDIN_LEVEL } from './gameplay-loader
 import { loadPlanetCore, VELDIN_ARCHIVE } from './level-loader.mjs';
 import { readTieTextures } from './terrain-geometry.mjs';
 import { readTieClasses, readTieInstances } from './tie-geometry.mjs';
+import { readShrubClasses } from './shrub-geometry.mjs';
 
 const isoPath = process.env.RNC_ISO_PATH;
 
@@ -88,6 +89,14 @@ test('Veldin scenery, placements, textures and fog from the local disc', {
   await initializeDiscTable(api, reader);
   const gameplay = await loadLevelGameplay(api, reader, decoder, VELDIN_LEVEL);
   const planet = await loadPlanetCore(reader, planetDecoder, VELDIN_ARCHIVE);
+
+  // Shrubs: every packet decodes, and a vertex's negative n does not break its strip. Class 574
+  // (the garage posters) is one 4-vertex strip flagged at its third vertex: one quad.
+  const shrubFailures = [];
+  const shrubs = readShrubClasses(planet, shrubFailures);
+  assert.deepEqual(shrubFailures, []);
+  assert.equal(shrubs.get(574).triangles, 2);
+  for (const [id, shrub] of shrubs) assert.ok(shrub.triangles > 0, `shrub class ${id} draws nothing`);
 
   const failures = [];
   const classes = readTieClasses(planet, failures);
