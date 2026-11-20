@@ -177,6 +177,9 @@ f32 fast_arc_tan(f32 x, f32 y) {
     sum = sum + h3;
     return (0.785398185f + sum) * row[0] + row[1]; /* 0x3f490fdb */
 }
+/* The level 0 copy at 0x1ff8b0: the same 66 instructions with its table address at 0x1c2420,
+   whose 0x60 bytes equal the boot program's at 0x1de320. */
+extern __typeof__(fast_arc_tan) fast_arc_tan_level __asm__("FUN_L00_001ff8b0") __attribute__((alias("FUN_001f9e90")));
 
 /* 0x1160d8, newlib rand: next = next * 0x41c64e6d + 0x3039;
    return next & 0x7fffffff. The seed (_impure_ptr + 0x58) starts at 1; no

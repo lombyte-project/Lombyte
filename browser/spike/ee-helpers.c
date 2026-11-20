@@ -723,3 +723,291 @@ void multiply_matrix3x3(void *out, void *a_in, void *b_in) {
     for (s32 i = 0; i < 3; i++) store_vec((u8 *)out + 16 * i, r[i]);
 }
 ALIAS(multiply_matrix3x3, func_001FA328, FUN_001fa328)
+
+/* 0x1f9c48 set_vector_length_xy(out, in, length): s = x*x + y*y (vaddy.x); vrsqrt Q = length /
+   sqrt(s); if the bits of s are zero, xy = 0, else xy *= Q. z and w keep in's. */
+void set_vector_length_xy(void *out, void *in, f32 length) __asm__("FUN_001f9c48");
+void set_vector_length_xy(void *out, void *in, f32 length) {
+    Vec4 v = load_vec(in);
+    const f32 s = v.x * v.x + v.y * v.y;
+    u32 bits;
+    __builtin_memcpy(&bits, &s, 4);
+    if (bits == 0) {
+        v.x = v.y = 0.0f;
+    } else {
+        const f32 q = length / __builtin_sqrtf(s);
+        v.x *= q; v.y *= q;
+    }
+    store_vec(out, v);
+}
+
+/* Level 0 copies of boot-program helpers. Each listed copy's instruction words equal the boot
+   function's, jumps aside. (0x1ff8b0, fast_arc_tan's copy, is aliased in browser/level-math.c.) */
+ALIAS(fast_dec_timer_s16, FUN_L00_001fef98, FUN_001f9770)
+ALIAS(scale_game_frames, FUN_L00_001fef20, FUN_001f96f8)
+ALIAS(fast_vec_scale, FUN_L00_001ff300, FUN_001f9a68)
+ALIAS(fast_cos, FUN_L00_001ff7e8, FUN_001f9dc8)
+ALIAS(fast_sin, FUN_L00_001ff800, FUN_001f9de0)
+ALIAS(fast_vec_length, FUN_L00_001ff3d8, FUN_001f9af0)
+ALIAS(fast_vec_add, FUN_L00_001ff278, FUN_001f9a10)
+ALIAS(set_vector_length_xy, FUN_L00_001ff550, FUN_001f9c48)
+
+/* Level 0x25c338 / 0x25c368: 0 for a null moby or one without flags & 0x20, else word 0 (resp.
+   word 4) of its pvars (+0x78). */
+extern f32 fast_arc_tan(f32 x, f32 y) __asm__("FUN_001f9e90");
+static u8 *moby_pvar_word(u8 *moby, s32 offset) {
+    if (!moby || !(*(u16 *)(moby + 0x34) & 0x20)) return 0;
+    return *(u8 **)(*(u8 **)(moby + 0x78) + offset);
+}
+u8 *moby_health_block(u8 *moby) __asm__("FUN_L00_0025c338");
+u8 *moby_health_block(u8 *moby) { return moby_pvar_word(moby, 0); }
+u8 *moby_hit_effects_block(u8 *moby) __asm__("FUN_L00_0025c368");
+u8 *moby_hit_effects_block(u8 *moby) { return moby_pvar_word(moby, 0x10); }
+
+/* hit_reaction, level 0 0x25a478 (352 instructions, compiler output; three jump tables at
+   0x1e8f40, 0x1e8f60 and 0x1e8f90 in level data). Arguments: the moby, its hit record (or 0),
+   its health block (0: from moby_health_block), a mask of reactions it ignores, and out-pointers
+   for a status, the damage and the attacker's class; the last argument selects the table row
+   (4: the health block's byte 8). Returns the reaction from the byte table at 0x1b0180.
+   Hit record: +0x10 knockback vector, +0x1c a marker (5627.95: knockback not yet applied),
+   +0x20 attacker moby, +0x28 hit type, +0x29 strength, +0x2a attacker class, +0x2c damage.
+   Health block: +0x08 kind, +0x14/+0x16 last attacker class, +0x1c cooldown timer (s16). */
+extern f32 hit_default_damage[] __asm__("D_L00_00160080");       /* gp - 0x6b80 */
+extern f32 hit_knockback_scale[] __asm__("D_L00_001B01C8");      /* [row][hit type] */
+extern u8 hit_reaction_by_kind[] __asm__("D_L00_001B0180");      /* [reaction * 4 + kind] */
+extern u8 hit_hero_base[] __asm__("D_0013F350");                 /* hero; +0x80 position */
+extern u8 hit_cooldown_switch[] __asm__("D_0013E533");
+s32 hit_reaction(u8 *moby, u8 *hit, u8 *health, s32 ignore, s32 *status, f32 *damage_out,
+                 s32 *attacker_class_out, s32 row) __asm__("FUN_L00_0025a478");
+s32 hit_reaction(u8 *moby, u8 *hit, u8 *health, s32 ignore, s32 *status, f32 *damage_out,
+                 s32 *attacker_class_out, s32 row) {
+    const f32 marker = 5627.9497f; /* 0x45afdf66 */
+    s32 reaction, result, attacker = 0;
+    *status = 0;
+    if (attacker_class_out) *attacker_class_out = -1;
+    if (hit && *(u8 **)(hit + 0x20)) {
+        const s16 source = *(s16 *)(*(u8 **)(hit + 0x20) + 0xa6);
+        if ((source == 0x131 || source == 0xa8) && health) *(f32 *)(hit + 0x2c) = hit_default_damage[health[8]];
+    }
+    if (!moby) {
+        if (health) {
+            *(s16 *)(health + 0x1c) = 0;
+            *(s16 *)(health + 0x14) = -1;
+            *(s16 *)(health + 0x16) = -1;
+        }
+        *status = 0;
+        return 0;
+    }
+    if (!health) {
+        health = moby_health_block(moby);
+        if (!health) { *status = 0; return 0; }
+    }
+    if (row == 4) row = health[8];
+    if (!hit) {
+        fast_dec_timer_s16((s16 *)(health + 0x1c));
+        *(s16 *)(health + 0x16) = -1;
+        *status = 1;
+        if (damage_out) *damage_out = 0.0f;
+        return 0xb;
+    }
+    if (*(f32 *)(hit + 0x1c) == marker) {
+        u8 *knockback = hit + 0x10;
+        fast_vec_scale(knockback, knockback, hit_knockback_scale[row * 8 + hit[0x28]]);
+        attacker = *(u16 *)(hit + 0x2a);
+        *(f32 *)(hit + 0x1c) = marker;
+        if (attacker == 0x47) { /* the hero: push away from it, mostly level */
+            f32 away[4] __attribute__((aligned(16)));
+            f32 sum[4] __attribute__((aligned(16)));
+            const f32 *hero = (const f32 *)(hit_hero_base + 0x80);
+            away[0] = fast_cos(fast_arc_tan(*(f32 *)(moby + 0x10) - hero[0], *(f32 *)(moby + 0x14) - hero[1]));
+            away[1] = fast_sin(fast_arc_tan(*(f32 *)(moby + 0x10) - hero[0], *(f32 *)(moby + 0x14) - hero[1]));
+            away[2] = 1.0f;
+            away[3] = 0.0f; /* retail leaves this stack word unwritten */
+            fast_vec_normalize(away, away, fast_vec_length(knockback) * 0.7f);
+            fast_vec_scale(knockback, knockback, 0.3f);
+            fast_vec_add(sum, knockback, away);
+            __builtin_memcpy(knockback, sum, 16);
+            set_vector_length_xy(knockback, knockback, 1.0f);
+        }
+    } else {
+        u8 *source = *(u8 **)(hit + 0x20);
+        attacker = source ? *(s16 *)(source + 0xa6) : 0x47;
+        hit[0x28] = 8;
+    }
+    switch (hit[0x28]) {
+    case 0: reaction = (u32)(*(u16 *)(hit + 0x2a) - 1) < 2 ? 0 : 1; *status = 2; break;
+    case 1:
+        *status = 2;
+        reaction = hit[0x29] < 2 ? 0xb : hit[0x29] == 2 ? 5 : 9;
+        break;
+    case 2: reaction = hit[0x29] < 2 ? 8 : 0xd; *status = 2; break;
+    case 3:
+        *status = 2;
+        if (hit[0x29] < 2) reaction = 0xa;
+        else if (hit[0x29] < 3) reaction = 0xf;
+        else { reaction = 0x10; *(s16 *)(health + 0x14) = -1; *(s16 *)(health + 0x1c) = 0; }
+        break;
+    case 4: reaction = 0xe; *status = 2; break;
+    case 5:
+        if (hit[0x29] < 2) { reaction = 4; *status = 3; } else { reaction = 7; *status = 4; }
+        break;
+    case 7: reaction = hit[0x29] < 2 ? 0xc : 0x11; *status = 2; break;
+    default: reaction = 1; *status = 2; break; /* 6 and >= 8 */
+    }
+    if (attacker_class_out) *attacker_class_out = attacker;
+    result = hit_reaction_by_kind[health[8] + reaction * 4];
+    if (*(s16 *)(health + 0x14) != attacker) *(s16 *)(health + 0x1c) = 0;
+    if (fast_dec_timer_s16((s16 *)(health + 0x1c))) {
+        s32 frames = 0x1e;
+        switch (reaction) {
+        case 0: frames = 0x25; break;
+        case 1: frames = 0xf; break;
+        case 4: case 11: frames = 0x3c; break;
+        case 7: frames = hit_cooldown_switch[0] ? 0x2d : 0x3c; break;
+        default: break;
+        }
+        *(s16 *)(health + 0x1c) = (s16)scale_game_frames(frames);
+    } else {
+        s32 bits = -1, cleared = 0;
+        switch (reaction) {
+        case 0: case 1: bits = 0x10; cleared = 0x20; break;
+        case 4: bits = 0x1; cleared = 0x2; break;
+        case 7: bits = 0x4; cleared = 0x8; break;
+        case 11: result = 0xc; break;
+        default: *(f32 *)(hit + 0x2c) = 0.0f; result = 0xd; break;
+        }
+        if (bits >= 0) {
+            if (!(ignore & bits)) result = 0xb;
+            if (!(ignore & cleared)) *status = 1;
+            *(f32 *)(hit + 0x2c) = 0.0f;
+        }
+    }
+    *(s16 *)(health + 0x16) = (s16)attacker;
+    *(s16 *)(health + 0x14) = (s16)attacker;
+    if (damage_out) *damage_out = *(f32 *)(hit + 0x2c);
+    {
+        u8 *effects = moby_hit_effects_block(moby);
+        if (effects) effects[0x2e] = reaction == 4;
+    }
+    return result;
+}
+
+/* 0x20ede8 (553 instructions), called by blend_moby_animation as (moby, render slot | 0x300):
+   bakes the moby's current blended pose into an ordinary animation frame at
+   0x1aabc0 + 0x800 * slot (debug_font_buffer), which update_moby_animation_state uses as the
+   frame of a moby whose sequence is 0xFF, so the next sequence blends out of it.
+   The pose is the local stage of 0x2109b8 (rnc_moby_local_pose). Its parked-pose and
+   manipulator pass (taken at 0x20f460 when +0x60 or +0x64 is set, path 0x20f810) is ASSUMED to be
+   that of 0x2109b8; it is not decoded.
+   Encoding (0x20f468-0x20f650; MMI words decoded): per joint, the quaternion as vftoi15, clamped
+   to int16 (pmaxw/pminw) and packed (ppach), 8 bytes; a scale record when the scale, as
+   vftoi15 >> 3 (x4096) clamped to 0..0xFFFF, is not 0x1000 in x, y and z: { x, y, z, joint byte,
+   ((flag word & 0x80) ^ 0x80) }; a translation record when its vftoi0 x, y, z differ from the
+   bind translation's (class joint record): { x, y, z, joint as u16 }. Header: 8 zero bytes
+   (rate 0, source frame 0) then +6 quadwords ((data + 8) >> 4), +8 rotation bytes, +0xA scale
+   count, +0xC rotation + scale bytes, +0xE translation count; the records follow the rotations,
+   then an 8-byte 1. (header quadwords + 1) quadwords are copied out (DMA channel 8). */
+extern u8 parked_pose_frames[] __asm__("D_001AABC0");
+static s32 ee_ftoi(f32 x) {
+    if (x != x) return 0;
+    if (x >= 2147483648.0f) return 0x7fffffff;
+    if (x <= -2147483648.0f) return (s32)0x80000000;
+    return (s32)x;
+}
+static s16 clamp16(s32 v) { return (s16)(v < -0x8000 ? -0x8000 : v > 0x7fff ? 0x7fff : v); }
+void park_moby_pose(u8 *moby, s32 slot) __asm__("FUN_0020ede8");
+void park_moby_pose(u8 *moby, s32 slot) {
+    static u8 frame[0x800] __attribute__((aligned(16)));
+    const u8 *pclass = *(u8 **)(moby + 0x24);
+    const u8 *bind = *(const u8 **)(pclass + 0x18);
+    const s32 joints = pclass[8];
+    u8 scales[0x400], translations[0x400];
+    s32 scale_bytes = 0, translation_bytes = 0, rotation_bytes = joints * 8, quadwords, at;
+    if (joints == 0) return;
+    rnc_moby_local_pose(moby);
+    __builtin_memset(frame, 0, 16);
+    for (s32 j = 0; j < joints; j++) {
+        const f32 *s = rnc_moby_pose_slot(j);
+        s16 rec[4];
+        s32 sx, sy, sz;
+        for (s32 k = 0; k < 4; k++) rec[k] = clamp16(ee_ftoi(s[k] * 32768.0f));
+        __builtin_memcpy(frame + 16 + 8 * j, rec, 8);
+        sx = (s32)((u32)ee_ftoi(s[4] * 32768.0f) >> 3);
+        sy = (s32)((u32)ee_ftoi(s[5] * 32768.0f) >> 3);
+        sz = (s32)((u32)ee_ftoi(s[6] * 32768.0f) >> 3);
+        sx = sx < 0 ? 0 : sx > 0xffff ? 0xffff : sx;
+        sy = sy < 0 ? 0 : sy > 0xffff ? 0xffff : sy;
+        sz = sz < 0 ? 0 : sz > 0xffff ? 0xffff : sz;
+        if (!(sx == 0x1000 && sy == 0x1000 && sz == 0x1000) && scale_bytes < 0x3f8) {
+            u8 *r = scales + scale_bytes;
+            u32 flag;
+            __builtin_memcpy(&flag, s + 7, 4);
+            *(u16 *)(r + 0) = (u16)sx; *(u16 *)(r + 2) = (u16)sy; *(u16 *)(r + 4) = (u16)sz;
+            r[6] = (u8)j; r[7] = (u8)((flag & 0x80) ^ 0x80);
+            scale_bytes += 8;
+        }
+        {
+            const f32 *b = (const f32 *)(bind + 16 * j);
+            const s16 tx = (s16)ee_ftoi(s[8]), ty = (s16)ee_ftoi(s[9]), tz = (s16)ee_ftoi(s[10]);
+            if ((tx != (s16)ee_ftoi(b[0]) || ty != (s16)ee_ftoi(b[1]) || tz != (s16)ee_ftoi(b[2])) && translation_bytes < 0x3f8) {
+                u8 *r = translations + translation_bytes;
+                *(s16 *)(r + 0) = tx; *(s16 *)(r + 2) = ty; *(s16 *)(r + 4) = tz;
+                *(u16 *)(r + 6) = (u16)j;
+                translation_bytes += 8;
+            }
+        }
+    }
+    at = 16 + rotation_bytes;
+    __builtin_memcpy(frame + at, scales, scale_bytes); at += scale_bytes;
+    __builtin_memcpy(frame + at, translations, translation_bytes); at += translation_bytes;
+    *(u64 *)(frame + at) = 1;
+    quadwords = (rotation_bytes + scale_bytes + translation_bytes + 8) >> 4;
+    *(u16 *)(frame + 6) = (u16)quadwords;
+    *(u16 *)(frame + 8) = (u16)rotation_bytes;
+    *(u16 *)(frame + 0xa) = (u16)(scale_bytes >> 3);
+    *(u16 *)(frame + 0xc) = (u16)(rotation_bytes + scale_bytes);
+    *(u16 *)(frame + 0xe) = (u16)(translation_bytes >> 3);
+    __builtin_memcpy(parked_pose_frames + 0x800 * (slot & 0xff), frame, 16 * (quadwords + 1) <= 0x800 ? 16 * (quadwords + 1) : 0x800);
+}
+ALIAS(park_moby_pose, func_0020EDE8, FUN_0020ede8)
+
+/* fast_bsphere_check(sphere, range), boot 0x1fa728 and its level 0 copy at 0x2002e0 (the same 64
+   instructions; the copy's view block is at 0x16ccc0 instead of 0x18cf80). Returns -1 outside the
+   view, 0 crossing its edge, 1 inside. View block T (0x80 bytes): rows 0-2 a rotation, row 3 the
+   camera position with w a scale, rows 4-7 per-axis factors. Decoded with the raw VU fields:
+     p = sphere * T3.w (xyzw); v = (T0 * d.x + T1 * d.y) + T2 * d.z with d = p.xyz - T3.xyz;
+     w = p.w; a = 0 - (w + v.z); b = range * T3.w - (v.z - w)
+     -1 if b's sign bit is set or a's is clear;
+     e = T4.xy * v.z - (|v.xy| - T6.xy * w); f = (T4.xy * v.z) * T5.xy - (|v.xy| + (T6.xy * w) * T6.z)
+     g = ((v.z + w) - T7.x with its sign bit flipped, (v.z - w) - T7.y)
+     -1 if e.y or e.x has its sign bit set; 0 if (f | g).y or (f | g).x does; else 1.
+   Recovered level code names the boot label; the level program's call (e.g. 0x2d71d8,
+   jal 0x2002e0) goes to the copy, and 0x18cf80 is level data once the level is loaded, so both
+   labels use the level's view block here. */
+extern f32 level_view_block[] __asm__("D_L00_0016CCC0");
+static u32 fbits(f32 f) { u32 b; __builtin_memcpy(&b, &f, 4); return b; }
+static s32 bsphere_check(const f32 *sphere, f32 range, const f32 *T) {
+    const f32 s = T[15];
+    const f32 px = sphere[0] * s, py = sphere[1] * s, pz = sphere[2] * s, w = sphere[3] * s;
+    const f32 dx = px - T[12], dy = py - T[13], dz = pz - T[14];
+    const f32 vx = (T[0] * dx + T[4] * dy) + T[8] * dz;
+    const f32 vy = (T[1] * dx + T[5] * dy) + T[9] * dz;
+    const f32 vz = (T[2] * dx + T[6] * dy) + T[10] * dz;
+    const f32 a = 0.0f - (w + vz), b = range * s - (vz + -w);
+    const f32 ax = __builtin_fabsf(vx), ay = __builtin_fabsf(vy);
+    f32 e[2], f[2];
+    u32 g[2];
+    if ((fbits(b) >> 31) || !(fbits(a) >> 31)) return -1;
+    e[0] = T[16] * vz - (ax - T[24] * w);
+    e[1] = T[17] * vz - (ay - T[25] * w);
+    f[0] = (T[16] * vz) * T[20] - (ax + (T[24] * w) * T[26]);
+    f[1] = (T[17] * vz) * T[21] - (ay + (T[25] * w) * T[26]);
+    g[0] = fbits((w + vz) - T[28]) ^ 0x80000000u;
+    g[1] = fbits((vz + -w) - T[29]);
+    if ((fbits(e[1]) >> 31) || (fbits(e[0]) >> 31)) return -1;
+    if (((fbits(f[1]) | g[1]) >> 31) || ((fbits(f[0]) | g[0]) >> 31)) return 0;
+    return 1;
+}
+s32 fast_bsphere_check(void *sphere, f32 range) __asm__("FUN_001fa728");
+s32 fast_bsphere_check(void *sphere, f32 range) { return bsphere_check(sphere, range, level_view_block); }
+ALIAS(fast_bsphere_check, FUN_L00_002002e0, FUN_001fa728)

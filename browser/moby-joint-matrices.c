@@ -73,8 +73,9 @@ static void blend_weighted(f32 *out, const f32 *a, const f32 *b) {
     for (s32 i = 0; i < 4; i++) out[i] = v[i] * inv;
 }
 
-/* 0x2109b8 on the moby at m with the joint flag table (128 bytes; [0x7F] = highest joint + 1). */
-void rnc_compute_moby_joint_slots(u8 *m, const u8 *joint_flags) {
+/* The local-pose stage of 0x2109b8: every slot's rotation, scale and translation, parked poses
+   and manipulators applied, before the matrices. */
+static void compute_local_pose(u8 *m, const u8 *joint_flags) {
     const u8 *pclass = ptr(rd32(m + 0x24));
     const u8 *cur = ptr(rd32(m + 0x68));
     const u8 *next = ptr(rd32(m + 0x6c));
@@ -285,6 +286,13 @@ void rnc_compute_moby_joint_slots(u8 *m, const u8 *joint_flags) {
         *spr_word(slot + 0x1c) = 1;
     }
 
+}
+
+/* 0x2109b8 on the moby at m with the joint flag table (128 bytes; [0x7F] = highest joint + 1). */
+void rnc_compute_moby_joint_slots(u8 *m, const u8 *joint_flags) {
+    s32 n, j;
+    compute_local_pose(m, joint_flags);
+    if (ptr(rd32(m + 0x24))[8] == 0) return;
     /* 0x2112d4: matrices for flagged joints, in order, each in its own slot. Rows from the
        quaternion (2q products), scaled per row when the scale flag is set, translation row
        (t, 1), then multiplied by the parent's matrix (identity for parent word 0):
@@ -371,3 +379,15 @@ s32 rnc_moby_all_joint_matrices(u8 *m, u8 *out, s32 capacity) {
     __builtin_memcpy(out, spr, 64u * (u32)joints);
     return joints;
 }
+
+/* Every joint's local pose (rotation, scale + flag, translation + parent word), left in this
+   module's scratchpad copy; rnc_moby_pose_slot reads joint j's 64-byte slot. */
+void rnc_moby_local_pose(u8 *m) {
+    u8 flags[0x80];
+    const s32 joints = ptr(rd32(m + 0x24))[8];
+    __builtin_memset(flags, 0, sizeof(flags));
+    for (s32 j = 0; j < joints && j < 0x7f; j++) flags[j] = 1;
+    flags[0x7f] = (u8)(joints < 0x7f ? joints : 0x7e);
+    compute_local_pose(m, flags);
+}
+const f32 *rnc_moby_pose_slot(s32 joint) { return spr_vec(64u * (u32)joint); }

@@ -209,6 +209,114 @@
       "why": "Takes no argument: the retail body (0x12eb00, 7 instructions) never reads $a0, and 8 of 9 recovered declarations say (void) or (). The unused s32 parameter makes a different WebAssembly signature, so calls trap; it is dropped.",
       "find": "void snd_reset_state_and_flush_commands(s32 unused_arg) {",
       "replace": "void snd_reset_state_and_flush_commands(void) {"
+    },
+    {
+      "file": "src/overlays/shared/mobys/find_moby_hit.c",
+      "why": "Returns the ground height: the retail body (level 0x259710) tail-calls probe_ground_height(position, 0x20, 0.5f) (0x259698) and returns its $f0 unchanged, and every caller reads it as a float (spring_turn.c, bomb_glove_bomb.c, mine.c and others). The recovered definition returns void, a WebAssembly signature mismatch; it returns the value.",
+      "find": "void FUN_L00_00259710(void *a);",
+      "replace": "float FUN_L00_00259710(void *a);"
+    },
+    {
+      "file": "src/overlays/shared/mobys/find_moby_hit.c",
+      "why": "Returns the ground height: the retail body (level 0x259710) tail-calls probe_ground_height(position, 0x20, 0.5f) (0x259698) and returns its $f0 unchanged, and every caller reads it as a float (spring_turn.c, bomb_glove_bomb.c, mine.c and others). The recovered definition returns void, a WebAssembly signature mismatch; it returns the value.",
+      "find": "void FUN_L00_00259710(void *position) {\n    probe_ground_height(position, 0x20, 0.5f);",
+      "replace": "float FUN_L00_00259710(void *position) {\n    return probe_ground_height(position, 0x20, 0.5f);"
+    },
+    {
+      "file": "src/ui/help/get_help_message_text.c",
+      "why": "Register forwarding: get_help_message_text (0x1fdd10) never writes $a0 before `jal 0x1fdca0`, so find_help_message_index receives the caller's message id; 16 of 17 recovered declarations pass it. The recovered definition takes no parameter and calls with none, a WebAssembly signature mismatch; the id is passed explicitly.",
+      "find": "extern s32   find_help_message_index() __asm__(\"FUN_001fdca0\");",
+      "replace": "extern s32   find_help_message_index(s32) __asm__(\"FUN_001fdca0\");"
+    },
+    {
+      "file": "src/ui/help/get_help_message_text.c",
+      "why": "Register forwarding: get_help_message_text (0x1fdd10) never writes $a0 before `jal 0x1fdca0`, so find_help_message_index receives the caller's message id; 16 of 17 recovered declarations pass it. The recovered definition takes no parameter and calls with none, a WebAssembly signature mismatch; the id is passed explicitly.",
+      "find": "s32 get_help_message_text(void) __asm__(\"FUN_001fdd10\");",
+      "replace": "s32 get_help_message_text(s32 message_id) __asm__(\"FUN_001fdd10\");"
+    },
+    {
+      "file": "src/ui/help/get_help_message_text.c",
+      "why": "Register forwarding: get_help_message_text (0x1fdd10) never writes $a0 before `jal 0x1fdca0`, so find_help_message_index receives the caller's message id; 16 of 17 recovered declarations pass it. The recovered definition takes no parameter and calls with none, a WebAssembly signature mismatch; the id is passed explicitly.",
+      "find": "s32 get_help_message_text(void) {\n    s32 index;\n    index = find_help_message_index();",
+      "replace": "s32 get_help_message_text(s32 message_id) {\n    s32 index;\n    index = find_help_message_index(message_id);"
+    },
+    {
+      "file": "src/sdk/libc/stdio/sprintf.c",
+      "why": "Browser service for libc formatting: the recovered sprintf builds an EE va_list by hand (__builtin_next_arg(format) - 0x30, the EE register-save layout) for the recovered vfprintf, which reads that layout. clang has no __builtin_next_arg and WebAssembly varargs are laid out differently, so the copy formats with the browser C library's vsprintf (same conversions; output written to str, length returned).",
+      "find": "typedef char *va_list;\n\nextern s32 vfprintf(RncFile *file, const s8 *format, va_list arguments) __asm__(\"FUN_00116da8\");\n\n#define __SWR   0x0008\n#define __SSTR  0x0200\n#define INT_MAX 0x7FFFFFFF\n\n",
+      "replace": "#include <stdarg.h>\n\nextern int vsprintf(char *, const char *, va_list);\n\n"
+    },
+    {
+      "file": "src/sdk/libc/stdio/sprintf.c",
+      "why": "Browser service for libc formatting: the recovered sprintf builds an EE va_list by hand (__builtin_next_arg(format) - 0x30, the EE register-save layout) for the recovered vfprintf, which reads that layout. clang has no __builtin_next_arg and WebAssembly varargs are laid out differently, so the copy formats with the browser C library's vsprintf (same conversions; output written to str, length returned).",
+      "find": "s32 sprintf(s8 *str, const s8 *format, ...) {\n    s32     formatter_result;\n    va_list arguments;\n    RncFile output_stream;\n\n    output_stream._flags = (u16)(__SWR | __SSTR);\n    output_stream._bf._base = output_stream._p = (u8 *)str;\n    output_stream._bf._size = output_stream._w = INT_MAX;\n    output_stream._data = _impure_ptr;\n    arguments = __builtin_next_arg(format) - 0x30;\n    formatter_result = vfprintf(&output_stream, format, arguments);\n    *output_stream._p = 0;\n",
+      "replace": "s32 sprintf(s8 *str, const s8 *format, ...) {\n    s32     formatter_result;\n    va_list arguments;\n\n    va_start(arguments, format);\n    formatter_result = vsprintf((char *)str, (const char *)format, arguments);\n    va_end(arguments);\n"
+    },
+    {
+      "file": "src/audio/sound/clamp_voice_position_to_collision.c",
+      "why": "Register forwarding: clamp_voice_position_to_collision (0x22c5a8) does not write $a0 before `jal 0x213358`, so random_spherical_offset writes its offset into the caller's position (its definition takes (out, a, b)). The recovered call passes only the two floats, a WebAssembly signature mismatch; position is passed explicitly.",
+      "find": "extern void random_spherical_offset(f32, f32) __asm__(\"FUN_00213358\");",
+      "replace": "extern void random_spherical_offset(s32, f32, f32) __asm__(\"FUN_00213358\");"
+    },
+    {
+      "file": "src/audio/sound/clamp_voice_position_to_collision.c",
+      "why": "Register forwarding: clamp_voice_position_to_collision (0x22c5a8) does not write $a0 before `jal 0x213358`, so random_spherical_offset writes its offset into the caller's position (its definition takes (out, a, b)). The recovered call passes only the two floats, a WebAssembly signature mismatch; position is passed explicitly.",
+      "find": "    random_spherical_offset(0.5f, 6.0f);",
+      "replace": "    random_spherical_offset(position, 0.5f, 6.0f);"
+    },
+    {
+      "file": "src/sdk/libc/stdio/printf.c",
+      "why": "Browser service for printf (debug output on the EE's stdout through the recovered vfprintf, which reads a hand-built EE va_list: __builtin_next_arg(format) - 0x38). clang has no __builtin_next_arg and WebAssembly varargs differ; the copy formats with the browser C library's vsnprintf and hands the text to the host (spike_debug_print).",
+      "find": "typedef char *va_list;\n\nextern int vfprintf(RncFile *file, const char *format, va_list arguments) __asm__(\"FUN_00116da8\");\n\nint Printf(const char *format, ...) __asm__(\"FUN_00116078\");\n\nint Printf(const char *format, ...) {\n    va_list   arguments;\n    RncReent *reent = _impure_ptr;\n\n    reent->_stdout->_data = reent;\n    arguments = __builtin_next_arg(format) - 0x38;\n    return vfprintf(reent->_stdout, format, arguments);\n}\n",
+      "replace": "#include <stdarg.h>\n\nextern int vsnprintf(char *, unsigned long, const char *, va_list);\n/* The host prints the text (run-closure.mjs logs it; a page may ignore it). */\n__attribute__((import_module(\"env\"), import_name(\"spike_debug_print\"))) extern void spike_debug_print(const char *text);\n\nint Printf(const char *format, ...) __asm__(\"FUN_00116078\");\n\nint Printf(const char *format, ...) {\n    char    text[512];\n    va_list arguments;\n    int     length;\n\n    va_start(arguments, format);\n    length = vsnprintf(text, sizeof(text), format, arguments);\n    va_end(arguments);\n    spike_debug_print(text);\n    return length;\n}\n"
+    },
+    {
+      "file": "src/audio/music/music_start_track_by_id.c",
+      "why": "D_002169C0 is the address of music_secondary_start_callback (0x2169c0, include/rnc/audio/streaming/music_callbacks.h) passed as the stream's completion callback; the matching build binds it as an absolute value. Here a code address is not callable (the spike pinned it as data, so the 989snd flush called a console address); the copy passes the compiled function itself.",
+      "find": "                    D_002169C0,",
+      "replace": "                    (void *)music_secondary_start_callback,"
+    },
+    {
+      "file": "src/audio/music/music_start_track_by_id.c",
+      "why": "D_002169C0 is the address of music_secondary_start_callback (0x2169c0, include/rnc/audio/streaming/music_callbacks.h) passed as the stream's completion callback; the matching build binds it as an absolute value. Here a code address is not callable (the spike pinned it as data, so the 989snd flush called a console address); the copy passes the compiled function itself.",
+      "find": "#include \"rnc/audio/music.h\"\n",
+      "replace": "#include \"rnc/audio/music.h\"\n#include \"rnc/audio/streaming/music_callbacks.h\"\n"
+    },
+    {
+      "file": "src/audio/music/music_start_track_40000.c",
+      "why": "D_002169C0 is the address of music_secondary_start_callback (0x2169c0, include/rnc/audio/streaming/music_callbacks.h) passed as the stream's completion callback; the matching build binds it as an absolute value. Here a code address is not callable (the spike pinned it as data, so the 989snd flush called a console address); the copy passes the compiled function itself.",
+      "find": "                D_002169C0,\n",
+      "replace": "                (void *)music_secondary_start_callback,\n"
+    },
+    {
+      "file": "src/audio/music/music_start_track_40000.c",
+      "why": "D_002169C0 is the address of music_secondary_start_callback (0x2169c0, include/rnc/audio/streaming/music_callbacks.h) passed as the stream's completion callback; the matching build binds it as an absolute value. Here a code address is not callable (the spike pinned it as data, so the 989snd flush called a console address); the copy passes the compiled function itself.",
+      "find": "#include \"rnc/data_labels.h\"\n",
+      "replace": "#include \"rnc/data_labels.h\"\n#include \"rnc/audio/streaming/music_callbacks.h\"\n"
+    },
+    {
+      "file": "src/audio/music/music_start_track_50000.c",
+      "why": "D_002169C0 is the address of music_secondary_start_callback (0x2169c0, include/rnc/audio/streaming/music_callbacks.h) passed as the stream's completion callback; the matching build binds it as an absolute value. Here a code address is not callable (the spike pinned it as data, so the 989snd flush called a console address); the copy passes the compiled function itself.",
+      "find": "                D_002169C0,\n",
+      "replace": "                (void *)music_secondary_start_callback,\n"
+    },
+    {
+      "file": "src/audio/music/music_start_track_50000.c",
+      "why": "D_002169C0 is the address of music_secondary_start_callback (0x2169c0, include/rnc/audio/streaming/music_callbacks.h) passed as the stream's completion callback; the matching build binds it as an absolute value. Here a code address is not callable (the spike pinned it as data, so the 989snd flush called a console address); the copy passes the compiled function itself.",
+      "find": "#include \"rnc/data_labels.h\"\n",
+      "replace": "#include \"rnc/data_labels.h\"\n#include \"rnc/audio/streaming/music_callbacks.h\"\n"
+    },
+    {
+      "file": "src/audio/music/music_start_track_60000.c",
+      "why": "D_002169C0 is the address of music_secondary_start_callback (0x2169c0, include/rnc/audio/streaming/music_callbacks.h) passed as the stream's completion callback; the matching build binds it as an absolute value. Here a code address is not callable (the spike pinned it as data, so the 989snd flush called a console address); the copy passes the compiled function itself.",
+      "find": "                D_002169C0,\n",
+      "replace": "                (void *)music_secondary_start_callback,\n"
+    },
+    {
+      "file": "src/audio/music/music_start_track_60000.c",
+      "why": "D_002169C0 is the address of music_secondary_start_callback (0x2169c0, include/rnc/audio/streaming/music_callbacks.h) passed as the stream's completion callback; the matching build binds it as an absolute value. Here a code address is not callable (the spike pinned it as data, so the 989snd flush called a console address); the copy passes the compiled function itself.",
+      "find": "#include \"rnc/data_labels.h\"\n",
+      "replace": "#include \"rnc/data_labels.h\"\n#include \"rnc/audio/streaming/music_callbacks.h\"\n"
     }
   ],
   "prototypes": [

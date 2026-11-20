@@ -66,7 +66,7 @@ while :; do
   # scratchpad is mapped at 0xF0000-0xF3FFF (see normalize-sources.py).
   if "$LLVM/wasm-ld" --no-entry $EXPORTS --export=ee_ram --export=__stack_pointer \
       --export-if-defined=spike_gs_upload_count --export-if-defined=spike_gs_upload_overflow \
-      --export-if-defined=spike_gs_upload_address --export-if-defined=spike_vu0_micro_program_requests --export-if-defined=spike_vsync_waits --export-if-defined=spike_vif1_chain_address --export-if-defined=spike_vif1_chain_sends --export-if-defined=rnc_animation_runaway \
+      --export-if-defined=spike_gs_upload_address --export-if-defined=spike_vu0_micro_program_requests --export-if-defined=spike_vsync_waits --export-if-defined=spike_vif1_chain_address --export-if-defined=spike_vif1_chain_sends --export-if-defined=rnc_animation_runaway --export-if-defined=spike_sound_batches --export-if-defined=spike_sound_commands \
       --export-if-defined=runtime_collision_reset --export-if-defined=runtime_collision_stage_address \
       --export-if-defined=runtime_collision_capacity --export-if-defined=runtime_collision_load \
       --export-if-defined=spike_install_level_tables --export-if-defined=spike_collision_unverified --export-if-defined=runtime_collision_cells --export-if-defined=runtime_collision_faces \

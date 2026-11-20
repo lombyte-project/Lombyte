@@ -399,9 +399,26 @@ def unify_with_definitions():
             return None
         if declared_result != 'void' and (result == 'void' or classes([declared_result]) != classes([result])):
             return None
-        bound = set(re.findall(r'\b(\w+)\s*\([^;{}()]*\)\s*__asm__\("' + re.escape(symbol) + r'"\)', text))
-        if bound - {name} or name in included_names(path):
+        if name in included_names(path):
             return None  # a header may declare the name too: a static adapter would conflict
+        # Other names bound to the same label (by asm label, or the label used as the name) are
+        # fine when each of their declarations can take an adapter too: all of them then call one
+        # extern of the definition's type.
+        bound = set(re.findall(r'\b(\w+)\s*\([^;{}()]*\)\s*__asm__\("' + re.escape(symbol) + r'"\)', text))
+        if name != symbol and re.search(r'\b' + re.escape(symbol) + r'\s*\(', text):
+            bound.add(symbol)
+        for other in bound - {name}:
+            for m in DECLARATION.finditer(text):
+                if m.group(3) != other:
+                    continue
+                o_declared = portable_parameters(m.group(4))
+                if o_declared is None or m.group(1)[:1] in (' ', '\t'):
+                    return None
+                o_shared = min(len(o_declared), len(kinds))
+                if classes(o_declared[:o_shared]) != classes(kinds[:o_shared]):
+                    return None
+                if len(o_declared) < len(kinds) and unused_tail.get(symbol, 0) < len(kinds) - len(o_declared):
+                    return None
         if (path, name) in adapted:
             return ''
         pieces = [part.strip() for part in parameters.split(',')] if declared else []

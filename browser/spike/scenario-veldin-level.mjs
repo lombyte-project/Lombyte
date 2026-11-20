@@ -43,7 +43,7 @@ export const BUFFERS = Object.freeze({
 const MEMORY_BYTES = 0x12002000;
 const MAIN_HEAP = 0x001940C0; // D_001940C0: +0x14 is the buffer initialize_level_runtime unpacks into
 const RESIDENT_BUFFER = 0x08000000;
-export const ROOTS = ['FUN_00230f60', 'FUN_00232d00', 'FUN_L00_0023d028', 'FUN_L00_00244110', 'FUN_L00_00245c28'];
+export const ROOTS = ['FUN_00230f60', 'FUN_00232d00', 'FUN_L00_0023d028', 'FUN_L00_00244110', 'FUN_L00_00245c28', 'FUN_0012da28'];
 // --frames N: after the level program loads, run the original run_level_main_loop (ROOTS[4]),
 // which itself calls init_stash, init_level_runtime_state and the load, for N frames.
 const framesIndex = process.argv.indexOf('--frames');
@@ -180,6 +180,8 @@ export async function setup(context) {
   }
   console.log(`staged Veldin: disc table ${table.length} bytes, level header from sector ${headerSector}`);
   return { sequence: [
+    // Boot's sound start-up (init_once): the 989snd command buffers and the two SIF binds.
+    ...(FRAMES ? [{ symbol: ROOTS[5], args: [] }] : []),
     { symbol: ROOTS[0], args: [] },
     // The console now loads the level program over 0x15EF00 and up, replacing the boot program's
     // game code and data there (class tables included). Without this, the three resident classes
@@ -200,6 +202,15 @@ export async function setup(context) {
 }
 
 export function report(context) {
+  if (process.env.SPIKE_SOUND_DEBUG) { // queued 989snd command callbacks (snd_stream_buffers, D_0015ECB0)
+    const v = context.view();
+    for (let b = 0; b < 2; b++) {
+      const list = v.getUint32(0x15ECB0 + 4 * b, true), counts = v.getUint32(0x15ECA0 + 4 * b, true);
+      const n = Math.min(v.getInt32(counts, true), 8);
+      const entries = []; for (let i = 0; i < n; i++) entries.push(`fn 0x${v.getUint32(list + 16 * i, true).toString(16)} arg 0x${v.getUint32(list + 16 * i + 8, true).toString(16)}`);
+      console.log(`sound batch ${b}: ${v.getInt32(counts, true)} commands; ${entries.join('; ')}`);
+    }
+  }
   const runaway = context.exports.rnc_animation_runaway?.value;
   if (runaway !== undefined && context.view().getUint32(runaway, true)) {
     const v = context.view(), w = (i) => v.getUint32(runaway + 4 * i, true), f = (i) => v.getFloat32(runaway + 4 * i, true);
@@ -212,7 +223,8 @@ export function report(context) {
     const view = context.view();
     console.log(`main loop: ${view.getInt32(0x15F3F8, true)} passes (D_L00_0015F3F8), mode ${view.getInt32(0x15F5C4, true)} ` +
       `(D_L00_0015F5C4; 6 = gameplay), disc read state ${view.getInt16(0x1516D0 + 8, true)} (music_stream_state.read_state; 0 idle), ` +
-      `vsyncs ${context.exports.spike_vsync_waits?.() ?? '?'}, VIF1 display lists sent ${context.exports.spike_vif1_chain_sends?.() ?? '?'}`);
+      `vsyncs ${context.exports.spike_vsync_waits?.() ?? '?'}, VIF1 display lists sent ${context.exports.spike_vif1_chain_sends?.() ?? '?'}, ` +
+      `sound batches answered ${context.exports.spike_sound_batches?.() ?? '?'} (${context.exports.spike_sound_commands?.() ?? '?'} commands, none played)`);
   }
   const uploads = context.exports.spike_gs_upload_count?.() ?? 0;
   if (uploads) {

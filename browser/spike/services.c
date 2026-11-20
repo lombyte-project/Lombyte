@@ -172,11 +172,8 @@ void snd_bank_load_from_ee_cb(s32 bank, s32 callback, s64 user_data) {
     *(u32 *)(u32)user_data = 0;
     spike_deferred("snd_bank_load_from_ee_cb", "audio: load a sound bank on the IOP (no handle; 0 stored)");
 }
-s32 snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
-s32 snd_flush_sound_commands(void) {
-    spike_deferred("snd_flush_sound_commands", "audio: send queued commands to the IOP sound driver");
-    return 0;
-}
+/* snd_flush_sound_commands (0x12dc80) is the recovered C (src/audio/rpc/snd_flush_sound_commands.c);
+   the IOP side it talks to is the sound server below. */
 void snd_resolve_bank_xrefs(void) __asm__("FUN_0012e1a8");
 void snd_resolve_bank_xrefs(void) {
     spike_deferred("snd_resolve_bank_xrefs", "audio: resolve references between loaded sound banks");
@@ -201,6 +198,8 @@ extern void spike_unimplemented_rpc(s32 server, s32 function);
 
 enum {
     STASH_SERVER = 0x11,
+    SOUND_SERVER = 0x123456,        /* 989snd commands (snd_start_sound_system) */
+    SOUND_STREAM_SERVER = 0x123457, /* 989snd streaming */
     STASH_FETCH = 1,
     STASH_INFO = 2,
     STASH_IOP_BASE = 0x00100000,
@@ -210,6 +209,7 @@ enum {
 static u8 stash_memory[STASH_CAPACITY];
 static struct { void *client; s32 server; } rpc_clients[RPC_CLIENT_CAPACITY];
 static s32 rpc_client_count;
+static s32 sound_batches, sound_commands;
 
 static s32 rpc_server_of(void *client) {
     s32 i;
@@ -227,10 +227,16 @@ static u8 *stash_at(u32 iop_address, u32 bytes) {
     return stash_memory + (iop_address - STASH_IOP_BASE);
 }
 
+/* sceSifInitRpc: sets up the SIF RPC layer (kernel interrupt handlers, DMA buffers, the IOP's
+   server table). The calls above complete inside the call, so there is nothing to set up; the
+   recovered SDK version (src/sdk/rpc/rpc/sce_sif_init_rpc.c) would need the EE kernel. */
+void sceSifInitRpc(s32 mode);
+void sceSifInitRpc(s32 mode) { (void)mode; }
+
 s32 sceSifBindRpc(struct sceSifClientData *client, s32 server, s32 mode);
 s32 sceSifBindRpc(struct sceSifClientData *client, s32 server, s32 mode) {
     (void)mode;
-    if (server != STASH_SERVER) {
+    if (server != STASH_SERVER && server != SOUND_SERVER && server != SOUND_STREAM_SERVER) {
         spike_unimplemented_rpc(server, -1);
         return -1;
     }
@@ -268,9 +274,25 @@ s32 sceSifCallRpc(void *client, s32 function, s32 mode, void *send, s32 send_byt
         __builtin_memcpy(receive, stash_at(iop_address, (u32)receive_bytes), (u32)receive_bytes);
         return 0;
     }
+    if (server == SOUND_SERVER && receive_bytes >= 8) {
+        /* The 989snd driver on the IOP runs each queued command and answers in the reply buffer:
+           a 0xFFFFFFFF marker, one return word per command, then another 0xFFFFFFFF
+           (snd_got_returns checks both markers). There is no sound driver here: every command is
+           accepted and answers 0 (no voice, no handle), so nothing plays. Counted. */
+        const s32 words = receive_bytes / 4;
+        s32 *reply = receive;
+        for (s32 i = 1; i < words - 1; i++) reply[i] = 0;
+        reply[0] = -1;
+        reply[words - 1] = -1;
+        sound_batches += 1;
+        sound_commands += words - 2;
+        return 0;
+    }
     spike_unimplemented_rpc(server, function);
     return -1;
 }
+s32 spike_sound_batches(void) { return sound_batches; }
+s32 spike_sound_commands(void) { return sound_commands; }
 
 /* sceSifSetDma: queue `count` EE-to-IOP transfers {source, IOP address, bytes, mode}. Only the
    stash's address range exists on this side. Returns a nonzero transfer id. */

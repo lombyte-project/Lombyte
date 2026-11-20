@@ -57,6 +57,7 @@ const deferred = { ...(scenario.deferred ?? {}) };
 const deferredCalls = new Map();
 const imports = {};
 let trapCount = 0;
+let debugLines = 0;
 for (const { module: from, name: symbol, kind } of WebAssembly.Module.imports(module)) {
   imports[from] ??= {};
   if (kind !== 'function') throw new Error(`unexpected ${kind} import ${symbol}`);
@@ -72,6 +73,8 @@ for (const { module: from, name: symbol, kind } of WebAssembly.Module.imports(mo
       deferred[key] ??= context.cString(reasonAt);
       deferredCalls.set(key, (deferredCalls.get(key) ?? 0) + 1);
     };
+  } else if (symbol === 'spike_debug_print') { // the game's own printf (debug text)
+    imports[from][symbol] = (address) => { const text = context.cString(address).replace(/\n$/, ''); if (debugLines++ < 40) console.log(`game printf: ${text}`); };
   } else if (symbol === 'spike_vsync_yield') { // the frame boundary (services.c, Asyncify)
     imports[from][symbol] = () => frameYield();
   } else if (symbol === 'spike_unimplemented_rpc') {
@@ -87,9 +90,14 @@ for (const { module: from, name: symbol, kind } of WebAssembly.Module.imports(mo
 // Asyncify state for frames steps: a vsync inside one unwinds to the host; the next frame
 // rewinds into the same call. Outside a frames step the yield returns at once.
 const ASYNCIFY_DATA = 0x90000, ASYNCIFY_END = 0xE0000;
-let frameMode = 'off'; // off | running | unwinding | rewinding
+let frameMode = 'off';
+let lastYieldStack = ''; // off | running | unwinding | rewinding
 function frameYield() {
   if (frameMode === 'off') return;
+  if (process.env.SPIKE_YIELD_STACK && frameMode === 'running') {
+    lastYieldStack = (new Error().stack ?? '').split('\n').filter((l) => l.includes('wasm')).slice(0, 10)
+      .map((l) => l.trim().replace(/\s*\(wasm:.*$/, '').replace(/^at /, '')).join(' <- ');
+  }
   if (frameMode === 'rewinding') { context.exports.asyncify_stop_rewind(); frameMode = 'running'; return; }
   const view = context.view();
   view.setInt32(ASYNCIFY_DATA, ASYNCIFY_DATA + 8, true);
@@ -219,6 +227,7 @@ for (let call = 1; call <= sequence.length; call += 1) {
     break;
   }
 }
+if (lastYieldStack) console.log(`last frame yielded in: ${lastYieldStack}`);
 scenario.report?.(context, results);
 if (deferredCalls.size) {
   console.log('NOT DONE - skipped because the subsystem that consumes it does not exist yet:');

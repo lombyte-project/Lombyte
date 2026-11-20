@@ -11,4 +11,9 @@ void rnc_get_moby_joint_matrices(u8 *moby, s32 count, const s32 *bones, u8 *out)
 /* Every joint's 64-byte matrix to out; returns the joint count, 0 if it exceeds capacity. */
 s32 rnc_moby_all_joint_matrices(u8 *moby, u8 *out, s32 capacity);
 
+/* The local pose of every joint (no matrices); rnc_moby_pose_slot(j) is joint j's 64-byte slot:
+   rotation, scale + flag word, translation + parent word, next translation. */
+void rnc_moby_local_pose(u8 *moby);
+const f32 *rnc_moby_pose_slot(s32 joint);
+
 #endif
