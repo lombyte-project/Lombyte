@@ -60,11 +60,11 @@ typedef struct {
 } CameraBlend;
 
 typedef struct {
-    Vec4         axis;          /* 0x00 */
-    f32          position_rate; /* 0x10: eased toward the path node speed */
+    Vec4         axis;              /* 0x00 */
+    f32          position_rate;     /* 0x10: eased toward the path node speed */
     f32          position_damping;  /* 0x14: the update passes 0.175 with position_rate */
     s32          position_max_step; /* 0x18 */
-    s16          mode;          /* 0x1C */
+    s16          mode;              /* 0x1C */
     u8           pad1E[2];
     f32          unk20; /* 0x20 */
     s32          unk24; /* 0x24 */
