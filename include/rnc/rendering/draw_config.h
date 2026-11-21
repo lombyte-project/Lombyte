@@ -15,13 +15,13 @@ struct DrawPass {
  */
 struct DrawConfig {
     s32             unk0;
-    s32             unk4;
+    s32             sky_gif_paging; /* do_sky_gif_paging flushes the texture uploads */
     s32             sky;
-    struct DrawPass tfrag; /* 0xC */
-    struct DrawPass tie;   /* 0x14 */
-    struct DrawPass shrub; /* 0x1C */
-    struct DrawPass moby;  /* 0x24 */
-    s32             unk2C;
+    struct DrawPass tfrag;           /* 0xC */
+    struct DrawPass tie;             /* 0x14 */
+    struct DrawPass shrub;           /* 0x1C */
+    struct DrawPass moby;            /* 0x24 */
+    s32             gif_paging;      /* do_gif_paging flushes the texture uploads */
     s32             effects_program; /* loads the effects VU1 program */
     s32             effects;         /* effect callbacks, lens flare, light quads */
     s32             particles;

@@ -1,13 +1,13 @@
 #include "types.h"
 
 #include "rnc/rendering/dma_tag.h"
+#include "rnc/rendering/draw_config.h"
 
 struct GifPaging {
     struct DmaTag *start;
     struct DmaTag *end;
 };
 
-extern s32  D_0018A2DC[];
 extern void FUN_0020b4a8(void);
 extern void vu1_tex_flush(void) __asm__("func_00233B68");
 
@@ -26,7 +26,7 @@ void do_gif_paging(void) {
     gif_page_marker.start->addr = (u32)render_packet_cursor.tag;
     gif_page_marker.start->vif0 = 0;
     gif_page_marker.start->vif1 = 0;
-    if (D_0018A2DC[0] != 0) {
+    if (draw_config.gif_paging != 0) {
         FUN_0020b4a8();
         vu1_tex_flush();
     }

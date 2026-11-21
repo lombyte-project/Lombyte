@@ -62,10 +62,10 @@ s32 update_menu_grid_selection(struct MenuScreen *grid) {
                 next_rows = next->data.grid.rows;
                 next_columns = next->data.grid.cols;
                 hidden = 0;
-                if (menu_system.unk134 != 0 && (next->data.grid.flags & 8)) {
+                if (menu_system.head_gadgets_hidden != 0 && (next->data.grid.flags & 8)) {
                     hidden = 1;
                 }
-                if (menu_system.unk138 != 0 && (next->data.grid.flags & 4)) {
+                if (menu_system.pack_gadgets_hidden != 0 && (next->data.grid.flags & 4)) {
                     hidden = 1;
                 }
             } while (hidden);
@@ -97,10 +97,10 @@ s32 update_menu_grid_selection(struct MenuScreen *grid) {
                 next = next->data.grid.down;
                 next_column_count = next->data.grid.cols;
                 hidden = 0;
-                if (menu_system.unk134 != 0 && (next->data.grid.flags & 8)) {
+                if (menu_system.head_gadgets_hidden != 0 && (next->data.grid.flags & 8)) {
                     hidden = 1;
                 }
-                if (menu_system.unk138 != 0 && (next->data.grid.flags & 4)) {
+                if (menu_system.pack_gadgets_hidden != 0 && (next->data.grid.flags & 4)) {
                     hidden = 1;
                 }
             } while (hidden);

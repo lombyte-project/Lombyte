@@ -7,8 +7,8 @@
    count in D_0015F458). Queued by register_8bit_texture, load_texture_file and
    get_frame_texture; the block fields are the TEX0 values they return. */
 struct TextureUpload {
-    s32 clut_data;  /* 0x00: EE address of the CLUT (load_texture_file: texture CLUT pointer) */
-    s16 unk4;       /* 0x04: every writer stores 0 */
+    s32 clut_data; /* 0x00: EE address of the CLUT (load_texture_file: texture CLUT pointer) */
+    s16 clut_psm; /* 0x04: BITBLTBUF.DPSM of the CLUT transfer (FUN_0020b4a8); writers store 0, PSMCT32 */
     s16 cbp;        /* 0x06: GS block of the CLUT, TEX0.CBP */
     s32 image_data; /* 0x08: EE address of the pixels (load_texture_file: texture pixel pointer) */
     u8  tw;         /* 0x0C: log2 width, TEX0.TW */

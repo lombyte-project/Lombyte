@@ -32,7 +32,7 @@ void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blen
         slot = find_or_allocate_moby_render_slot((int)moby);
         if (slot >= 0) {
             FUN_0020ede8(moby, slot | 0x300);
-            qcopy(D_001B2C00 + slot * 0x10, moby->unkF0);
+            qcopy(D_001B2C00 + slot * 0x10, moby->bounding_sphere);
             oldSeq = moby->seq;
             if (oldSeq != 0xFF) {
                 moby->saved_seq = oldSeq;

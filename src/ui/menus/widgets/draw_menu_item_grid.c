@@ -122,10 +122,10 @@ s32 draw_menu_item_grid(struct MenuScreen *grid) {
                     if (frame_offset == 0) {
                         frame_offset = item_text_variant[id] ? 4 : 0;
                     }
-                    if (menu_system.unk134 != 0 && (grid->data.grid.flags & 8)) {
+                    if (menu_system.head_gadgets_hidden != 0 && (grid->data.grid.flags & 8)) {
                         frame_offset = 2;
                     }
-                    if (menu_system.unk138 != 0 && (grid->data.grid.flags & 4)) {
+                    if (menu_system.pack_gadgets_hidden != 0 && (grid->data.grid.flags & 4)) {
                         frame_offset = 2;
                     }
                 }

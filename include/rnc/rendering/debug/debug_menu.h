@@ -45,7 +45,7 @@ typedef struct {
     s32 unknown_94;
     s32 unknown_98;
     s32 unknown_9c;
-    s32 unknown_a0;
+    s32 previous_step_held_buttons; /* single-step input (handle_pause_input) */
     s32 unknown_a4;
     s32 unknown_a8;
     s32 unknown_ac;
@@ -64,7 +64,7 @@ typedef struct {
     s32 unknown_e0;
     s32 unknown_e4;
     s32 unknown_e8;
-    s32 unknown_ec;
+    s32 single_step_mode_countdown; /* frames until single-step mode (update_flags 0x10) */
     s32 battle_camera_enabled;
     s32 actuator_enabled;
     u8  start_capture_status;
