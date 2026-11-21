@@ -18,11 +18,13 @@ void UpdateTempTrackData(struct MpegDecoder *decoder, s32 delta) {
         decoder->unk854 = 0;
         step = delta;
     }
-    reference = decoder->unk84C + delta;
-    decoder->unk1AC = reference;
+    reference = decoder->temporal_reference_base + delta;
+    decoder->temporal_reference = reference;
     if ((wrapped != 0) && (step >= delta)) {
-        decoder->unk1AC = (s32)(reference + 0x400);
+        decoder->temporal_reference = (s32)(reference + 0x400);
     };
-    current = decoder->unk1AC;
-    decoder->unk850 = (s32)((decoder->unk850 < current) ? (current) : (decoder->unk850));
+    current = decoder->temporal_reference;
+    decoder->max_temporal_reference =
+        (s32)((decoder->max_temporal_reference < current) ? (current)
+                                                          : (decoder->max_temporal_reference));
 }

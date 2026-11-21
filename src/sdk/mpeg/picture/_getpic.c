@@ -26,7 +26,7 @@ s32 _getpic(struct sceMpeg *mpeg) {
     start_code = 1;
     decode_or_skip_result = MPEG_DECODE_SCAN_NEXT_HEADER;
     decoder = mpeg->sys;
-    image_addr = decoder->unkD8;
+    image_addr = decoder->image_buffer;
     decoder->is_end = 0;
     if (image_addr & 0x3F) {
         _Error1(decoder, image_buffer_alignment_error_format, image_addr);

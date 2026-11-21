@@ -5,15 +5,17 @@
 #include "rnc/sdk/mpeg/errors.h"
 #include "rnc/sdk/mpeg/macroblock.h"
 
+/* PMV[r][s][t] of the MPEG-2 video standard: the motion vector predictors,
+   r first/second, s forward/backward, t horizontal/vertical. */
 struct MpegMbState {
-    int unk0;
-    int unk4;
-    int unk8;
-    int unkC;
-    int unk10;
-    int unk14;
-    int unk18;
-    int unk1C;
+    int first_forward_x;
+    int first_forward_y;
+    int first_backward_x;
+    int first_backward_y;
+    int second_forward_x;
+    int second_forward_y;
+    int second_backward_x;
+    int second_backward_y;
 };
 
 const char invalid_macroblock_type_error_message[] __asm__("D_00153898") =
@@ -167,7 +169,7 @@ int _decMB0(struct MpegDecoder *decoder,
                                (intra_quantiser_command_bits | dc_reset_command_base) |
                                    ((*dct_type_output) << 0x19));
             } else {
-                decoder->mb_buf[decoder->mb_buf_index].unk13C = 1;
+                decoder->mb_buf[decoder->mb_buf_index].no_coded_blocks = 1;
             }
             decoder->dc_reset = 0;
             if (decoder->slice_error != 0) {
@@ -178,23 +180,24 @@ int _decMB0(struct MpegDecoder *decoder,
             }
             if ((((*mb_type) & 1) || ((decoder->dc_reset = 1, ((*mb_type) & 1) != 0))) &&
                 (decoder->concealment_motion_vectors == 0)) {
-                motion_vector_state->unk14 = 0;
-                motion_vector_state->unk10 = 0;
-                motion_vector_state->unk4 = 0;
-                motion_vector_state->unk0 = 0;
-                motion_vector_state->unk1C = 0;
-                motion_vector_state->unk18 = 0;
-                motion_vector_state->unkC = 0;
-                motion_vector_state->unk8 = 0;
+                motion_vector_state->second_forward_y = 0;
+                motion_vector_state->second_forward_x = 0;
+                motion_vector_state->first_forward_y = 0;
+                motion_vector_state->first_forward_x = 0;
+                motion_vector_state->second_backward_y = 0;
+                motion_vector_state->second_backward_x = 0;
+                motion_vector_state->first_backward_y = 0;
+                motion_vector_state->first_backward_x = 0;
             }
             coding_type = decoder->picture_coding_type;
             decode_success = 1;
             if (coding_type == PICTURE_CODING_TYPE_PREDICTIVE) {
                 decode_success = 1;
                 if (!((*mb_type) & 9)) {
-                    motion_vector_state->unk0 =
-                        (motion_vector_state->unk4 =
-                             (motion_vector_state->unk10 = (motion_vector_state->unk14 = 0)));
+                    motion_vector_state->first_forward_x =
+                        (motion_vector_state->first_forward_y =
+                             (motion_vector_state->second_forward_x =
+                                  (motion_vector_state->second_forward_y = 0)));
                     if (decoder->picture_structure == 3) {
                         *motion_type = coding_type;
                     } else {

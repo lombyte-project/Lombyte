@@ -23,14 +23,14 @@ struct PES_BS {
 };
 
 struct PES_HDR {
-    s64 unk0;
-    s32 unk8;
-    s32 unkC;
-    s64 unk10;
-    s64 unk18;
-    s32 unk20;
-    s32 unk24;
-    s32 unk28;
+    s64 id;         /* stream_id << 32; private streams add their first word */
+    s32 len;        /* PES_packet_length */
+    s32 scrambling; /* PES_scrambling_control */
+    s64 pts;        /* -1 when absent */
+    s64 dts;
+    s32 data;    /* bit position of the payload */
+    s32 datalen; /* payload bytes */
+    s32 header;  /* bit position of the packet start */
 };
 
 struct PES_TBL {
@@ -49,19 +49,19 @@ s32 _PES_packet(s32 error_context, struct PES_BS *bs, struct PES_HDR *hdr) {
     s32 pes_extension_flag;                /* PES_extension_flag */
 
     ctx = error_context;
-    hdr->unk28 = (s32)bs->stamp;
+    hdr->header = (s32)bs->stamp;
     header_skip_bit_counts = *(struct PES_TBL *)pes_header_skip_bit_counts;
     _sysbitGet(bs, 0x18);
-    hdr->unk0 = (s64)_sysbitGet(bs, 8) << 0x20;
-    hdr->unk8 = _sysbitGet(bs, 0x10);
-    hdr->unk18 = -1;
-    hdr->unk10 = -1;
-    if (hdr->unk0 != ((u64)0xBC00 << 0x18) && hdr->unk0 != ((u64)0xBE00 << 0x18) &&
-        hdr->unk0 != ((u64)0xBF00 << 0x18) && hdr->unk0 != ((u64)0xF000 << 0x18) &&
-        hdr->unk0 != ((u64)0xF100 << 0x18) && hdr->unk0 != ((u64)0xFF00 << 0x18) &&
-        hdr->unk0 != ((u64)0xF200 << 0x18) && hdr->unk0 != ((u64)0xF800 << 0x18)) {
+    hdr->id = (s64)_sysbitGet(bs, 8) << 0x20;
+    hdr->len = _sysbitGet(bs, 0x10);
+    hdr->dts = -1;
+    hdr->pts = -1;
+    if (hdr->id != ((u64)0xBC00 << 0x18) && hdr->id != ((u64)0xBE00 << 0x18) &&
+        hdr->id != ((u64)0xBF00 << 0x18) && hdr->id != ((u64)0xF000 << 0x18) &&
+        hdr->id != ((u64)0xF100 << 0x18) && hdr->id != ((u64)0xFF00 << 0x18) &&
+        hdr->id != ((u64)0xF200 << 0x18) && hdr->id != ((u64)0xF800 << 0x18)) {
         _sysbitGet(bs, 2);
-        hdr->unkC = _sysbitGet(bs, 2);
+        hdr->scrambling = _sysbitGet(bs, 2);
         _sysbitGet(bs, 4);
         pts_dts_flags = _sysbitGet(bs, 2);
         flag1 = _sysbitGet(bs, 1);
@@ -78,7 +78,7 @@ s32 _PES_packet(s32 error_context, struct PES_BS *bs, struct PES_HDR *hdr) {
             _sysbitMarker(bs);
             c = _sysbitGet(bs, 0xF);
             _sysbitMarker(bs);
-            hdr->unk10 = ((s64)((a >> 2) & 1) << 0x20) | (s64)(u32)(a << 30 | b << 15 | c);
+            hdr->pts = ((s64)((a >> 2) & 1) << 0x20) | (s64)(u32)(a << 30 | b << 15 | c);
         }
         if (pts_dts_flags == 3) {
             u32 a, b, c;
@@ -89,7 +89,7 @@ s32 _PES_packet(s32 error_context, struct PES_BS *bs, struct PES_HDR *hdr) {
             _sysbitMarker(bs);
             c = _sysbitGet(bs, 0xF);
             _sysbitMarker(bs);
-            hdr->unk18 = ((s64)((a >> 2) & 1) << 0x20) | (s64)(u32)(a << 30 | b << 15 | c);
+            hdr->dts = ((s64)((a >> 2) & 1) << 0x20) | (s64)(u32)(a << 30 | b << 15 | c);
         }
         if (flag1 == 1) {
             _sysbitGet(bs, 0x30);
@@ -142,12 +142,12 @@ s32 _PES_packet(s32 error_context, struct PES_BS *bs, struct PES_HDR *hdr) {
             }
         }
         {
-            s32 n = hdr->unk8 - pes_header_data_length;
+            s32 n = hdr->len - pes_header_data_length;
             s32 payload_bytes_to_skip;
-            hdr->unk24 = n - 3;
-            hdr->unk20 = (s32)bs->stamp;
-            if (hdr->unk0 == ((u64)0xBD00 << 0x18)) {
-                hdr->unk0 |= (u64)(u32)_sysbitGet(bs, 0x20);
+            hdr->datalen = n - 3;
+            hdr->data = (s32)bs->stamp;
+            if (hdr->id == ((u64)0xBD00 << 0x18)) {
+                hdr->id |= (u64)(u32)_sysbitGet(bs, 0x20);
                 payload_bytes_to_skip = n - 7;
             } else {
                 payload_bytes_to_skip = n - 3;
@@ -156,21 +156,21 @@ s32 _PES_packet(s32 error_context, struct PES_BS *bs, struct PES_HDR *hdr) {
                 _sysbitJump(bs, payload_bytes_to_skip);
             }
         }
-    } else if (hdr->unk0 == ((u64)0xBC00 << 0x18) || hdr->unk0 == ((u64)0xBF00 << 0x18) ||
-               hdr->unk0 == ((u64)0xF000 << 0x18) || hdr->unk0 == ((u64)0xF100 << 0x18) ||
-               hdr->unk0 == ((u64)0xFF00 << 0x18) || hdr->unk0 == ((u64)0xF200 << 0x18) ||
-               hdr->unk0 == ((u64)0xF800 << 0x18)) {
-        s32 n = hdr->unk8;
-        if (hdr->unk0 == ((u64)0xBF00 << 0x18)) {
+    } else if (hdr->id == ((u64)0xBC00 << 0x18) || hdr->id == ((u64)0xBF00 << 0x18) ||
+               hdr->id == ((u64)0xF000 << 0x18) || hdr->id == ((u64)0xF100 << 0x18) ||
+               hdr->id == ((u64)0xFF00 << 0x18) || hdr->id == ((u64)0xF200 << 0x18) ||
+               hdr->id == ((u64)0xF800 << 0x18)) {
+        s32 n = hdr->len;
+        if (hdr->id == ((u64)0xBF00 << 0x18)) {
             n -= 4;
-            hdr->unk0 |= (u64)(u32)_sysbitGet(bs, 0x20);
+            hdr->id |= (u64)(u32)_sysbitGet(bs, 0x20);
         }
         if (n != 0) {
             _sysbitJump(bs, n);
         }
-    } else if (hdr->unk0 == ((u64)0xBE00 << 0x18)) {
-        if (hdr->unk8 != 0) {
-            _sysbitJump(bs, hdr->unk8);
+    } else if (hdr->id == ((u64)0xBE00 << 0x18)) {
+        if (hdr->len != 0) {
+            _sysbitJump(bs, hdr->len);
         }
     }
     return 1;

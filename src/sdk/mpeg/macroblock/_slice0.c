@@ -32,7 +32,7 @@ s32 _slice0(struct MpegDecoder *mp, s32 nmb) {
         if (mbx >= nmb) {
             return 0;
         }
-        mp->mb_buf[mp->mb_buf_index].unk13C = 0;
+        mp->mb_buf[mp->mb_buf_index].no_coded_blocks = 0;
         if (_waitBdecOut(mp) == 0) {
             return 2;
         }

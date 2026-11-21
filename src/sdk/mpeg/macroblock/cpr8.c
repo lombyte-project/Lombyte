@@ -3,16 +3,16 @@
 #include "rnc/sdk/interrupts.h"
 
 struct MpegCopyParams {
-    s32 unk0;
+    s32 data;
     u8  pad_4[0x8];
-    s32 unkC;
-    s32 unk10;
+    s32 mb_width;
+    s32 mb_height;
 };
 
 struct MpegDecoderFrame {
     u8  pad_0[0xE0];
-    s32 unkE0;
-    s32 unkE4;
+    s32 out_max_height;
+    s32 out_max_size;
     u8  pad_E8[0x8C];
     s32 transfer_layout_mode;
 };
@@ -39,21 +39,21 @@ void _cpr8(struct MpegDecoder *decoder, struct MpegCopyParams *copy_params) {
     s32                      pass;
 
     decoder_transfer_layout = (struct MpegDecoderFrame *)decoder;
-    source_addr = copy_params->unk0 & 0x0FFFFFFF;
-    destination_pass_base = decoder->unkD8 & 0x0FFFFFFF;
+    source_addr = copy_params->data & 0x0FFFFFFF;
+    destination_pass_base = decoder->image_buffer & 0x0FFFFFFF;
     if (decoder_transfer_layout->transfer_layout_mode == MPEG_TRANSFER_LAYOUT_SINGLE_PASS) {
         goto block_3;
     }
-    layout_width = decoder_transfer_layout->unkE0;
+    layout_width = decoder_transfer_layout->out_max_height;
     dest_width = layout_width;
     if (layout_width != 0) {
         goto block_8;
     }
     goto block_4;
 block_3:
-    dest_width = decoder_transfer_layout->unkE0;
+    dest_width = decoder_transfer_layout->out_max_height;
 block_4:
-    source_stride = copy_params->unk10 * 0x180;
+    source_stride = copy_params->mb_height * 0x180;
     qword_count = source_stride >> 4;
     if (dest_width == 0) {
         goto block_6;
@@ -67,14 +67,14 @@ block_7:
     goto block_9;
 block_8:
     dest_stride = (layout_width >> 4) * 0xC0;
-    source_stride = ((s32)copy_params->unk10 >> 1) * 0x180;
+    source_stride = ((s32)copy_params->mb_height >> 1) * 0x180;
     transfer_pass_count = 2;
     qword_count = source_stride >> 4;
 block_9:
     pass = 0;
     while (pass < transfer_pass_count) {
         dest_addr = destination_pass_base;
-        for (row = 0; row < copy_params->unkC; row++) {
+        for (row = 0; row < copy_params->mb_width; row++) {
             interrupts_on = DIntr();
             *(volatile s32 *)0x1000D480 = 0;
             *(volatile s32 *)0x1000D410 = source_addr;
@@ -105,7 +105,7 @@ block_9:
             source_addr += source_stride;
         }
         pass++;
-        destination_pass_base += decoder_transfer_layout->unkE4 * 0xC0;
+        destination_pass_base += decoder_transfer_layout->out_max_size * 0xC0;
     }
     return;
 }

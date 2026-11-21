@@ -2,17 +2,19 @@
 #include "rnc/sdk/libmpeg.h"
 #include "rnc/sdk/mpeg/errors.h"
 
+/* The forward motion vector predictors PMV[r][0][t] (see _decMB0). */
 struct MpegSkipState {
-    s32 unk0;
-    s32 unk4;
+    s32 first_forward_x;
+    s32 first_forward_y;
     u8  pad_8[0x8];
-    s32 unk10;
-    s32 unk14;
+    s32 second_forward_x;
+    s32 second_forward_y;
 };
 
+/* motion_vertical_field_select[0][s] */
 struct MpegMotionRef {
-    s32 unk0;
-    s32 unk4;
+    s32 forward;
+    s32 backward;
 };
 
 const char skipped_macroblock_in_i_picture_error_message[] __asm__("D_00153868") =
@@ -40,18 +42,18 @@ s32 _skipMB0(struct MpegDecoder   *decoder,
     *(s32 *)((u8 *)(((u8 *)decoder + (buf_offset))) + 0x6CC) = 1;
     decoder->dc_reset = 1;
     if (decoder->picture_coding_type == MPEG_PICTURE_CODING_TYPE_P) {
-        skip_state->unk14 = 0;
-        skip_state->unk10 = 0;
-        skip_state->unk4 = 0;
-        skip_state->unk0 = 0;
+        skip_state->second_forward_y = 0;
+        skip_state->second_forward_x = 0;
+        skip_state->first_forward_y = 0;
+        skip_state->first_forward_x = 0;
     }
     if (decoder->picture_structure == 3) {
         *picture_structure_mode = MPEG_MOTION_TYPE_FRAME;
     } else {
         *picture_structure_mode = MPEG_MOTION_TYPE_FIELD;
         bottom_field = decoder->picture_structure == 2;
-        motion_reference->unk4 = bottom_field;
-        motion_reference->unk0 = bottom_field;
+        motion_reference->backward = bottom_field;
+        motion_reference->forward = bottom_field;
     }
     if (decoder->picture_coding_type == MPEG_PICTURE_CODING_TYPE_I) {
         _Error(decoder, skipped_macroblock_in_i_picture_error_message);

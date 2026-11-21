@@ -10,7 +10,7 @@ typedef struct {
     u8  pad134[0x40];
     s32 pictStruct;
     u8  pad178[0x698];
-    s32 unk810;
+    s32 mb_buf_index;
     s32 unk814;
 } MpegDec;
 
@@ -31,7 +31,7 @@ s32 _pictureData0(MpegDec *decoder) {
     s32 decode_status;
     s32 mbs;
 
-    decoder->unk810 = 0;
+    decoder->mb_buf_index = 0;
     decoder->unk814 = 0;
     mbs = decoder->mbWidth * decoder->mbHeight;
     if (decoder->pictStruct != 3) {
@@ -48,7 +48,7 @@ s32 _pictureData0(MpegDec *decoder) {
     while ((*(volatile u32 *)0x1000D400 >> 8) & 1) {
     }
     if (decode_status == DECODE_STATUS_SUCCESS) {
-        _doMC(decoder, decoder->unk810 == 0);
+        _doMC(decoder, decoder->mb_buf_index == 0);
     }
     if (decode_status == DECODE_STATUS_SLICE_DECODE_ERROR ||
         decode_status == DECODE_STATUS_ABORT_PICTURE) {
