@@ -13,8 +13,8 @@
   "c_fuzzy_percent_of_recoverable": 100.0,
   "data": {
     "bytes_total": 12433372,
-    "bytes_matching_c": 9596104,
-    "c_exact_percent": 77.1802,
+    "bytes_matching_c": 9597496,
+    "c_exact_percent": 77.1914,
     "bytes_matching_c_zero": 5007021
   },
   "boot": {
@@ -9122,8 +9122,8 @@
     ],
     "data": {
       "bytes_total": 11734236,
-      "bytes_matching_c": 9326579,
-      "c_exact_percent": 79.4818,
+      "bytes_matching_c": 9327971,
+      "c_exact_percent": 79.4936,
       "bytes_matching_c_zero": 5007021
     }
   },
@@ -9140,8 +9140,8 @@
     "c_fuzzy_percent_of_recoverable": 100.0,
     "data": {
       "bytes_total": 12433372,
-      "bytes_matching_c": 9596104,
-      "c_exact_percent": 77.1802,
+      "bytes_matching_c": 9597496,
+      "c_exact_percent": 77.1914,
       "bytes_matching_c_zero": 5007021
     }
   }

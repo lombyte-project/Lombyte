@@ -144,7 +144,7 @@
 </g>
 <polygon points="10,10 790,10 790,96 10,96" fill="url(#sheen)" pointer-events="none"/>
 <g clip-path="url(#drawer-clip)" pointer-events="none"><ellipse cx="400.0" cy="53.0" rx="156.0" ry="51.6" fill="url(#drawer-halo)"/><ellipse cx="400.0" cy="57.0" rx="109.2" ry="60.2" fill="url(#panel-glow)"/></g>
-<text x="400.0" y="35" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="10" fill="#e8edf5"><tspan font-size="12" font-weight="800" fill="#c3cbd8">77.2%</tspan> data in C<title>Data in C: 9,596,104 of 12,433,372 B, of which 5,007,021 B are zeros (zero-initialised level data).</title></text>
+<text x="400.0" y="35" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="10" fill="#e8edf5"><tspan font-size="12" font-weight="800" fill="#c3cbd8">77.2%</tspan> data in C<title>Data in C: 9,597,496 of 12,433,372 B, of which 5,007,021 B are zeros (zero-initialised level data).</title></text>
 <text x="400.0" y="67" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="30" font-weight="800" fill="#de812f">100.0%</text>
 <text x="400.0" y="83" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="10" fill="#e8edf5">exe + overlays in C</text>
 <linearGradient id="legend-shade" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#0d1117" stop-opacity="0"/><stop offset="0.4" stop-color="#0d1117" stop-opacity="0.5"/><stop offset="1" stop-color="#0d1117" stop-opacity="0.5"/></linearGradient>
@@ -1367,5 +1367,5 @@
 <rect x="656.01" y="1054" width="15.99" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l18/mobys/gadgebot.c: 9/9 functions matching C, 4,280/4,280 B</title></rect>
 <line x1="10" y1="1082.0" x2="790" y2="1082.0" stroke="#3a3632" stroke-width="1" opacity="0.8"/>
 <text x="10" y="1096" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="9" fill="#a6adc8" opacity="0.85">executable 100.0% &#183; overlays 100.0% &#183; 3,547,932 of 3,641,636 B in C</text>
-<text x="790" y="1096" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="9" fill="#a6adc8" opacity="0.85">generated 2026-11-14 &#183; scripts/progress-map.py</text>
+<text x="790" y="1096" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Noto Sans&#x27;, Helvetica, Arial, sans-serif" font-size="9" fill="#a6adc8" opacity="0.85">generated 2026-11-21 &#183; scripts/progress-map.py</text>
 </svg>
