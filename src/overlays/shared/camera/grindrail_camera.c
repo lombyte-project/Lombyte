@@ -62,8 +62,8 @@ typedef struct {
 typedef struct {
     Vec4         axis;          /* 0x00 */
     f32          position_rate; /* 0x10: eased toward the path node speed */
-    f32          unk14;         /* 0x14 */
-    s32          unk18;         /* 0x18 */
+    f32          position_damping;  /* 0x14: the update passes 0.175 with position_rate */
+    s32          position_max_step; /* 0x18 */
     s16          mode;          /* 0x1C */
     u8           pad1E[2];
     f32          unk20; /* 0x20 */
@@ -150,8 +150,8 @@ void reset_camera_state_and_prepare_preset_paths(Camera *destination_camera) {
     spring->height = 2.0f;
     orbit = destination_camera->orbit;
     orbit->position_rate = 0.01f;
-    orbit->unk14 = 0.175f;
-    orbit->unk18 = 0;
+    orbit->position_damping = 0.175f;
+    orbit->position_max_step = 0;
     orbit->mode = 0;
     orbit->unk20 = 0.0005f;
     orbit->unk24 = 0;
