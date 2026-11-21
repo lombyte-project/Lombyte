@@ -29,7 +29,7 @@ typedef struct FlushBufContext {
     s32 bit_window;
     s32 available_bit_count;
     u8  pad_840[0x18];
-    s32 unk858;
+    s32 mpeg;
 } FlushBufContext;
 
 extern s32 _dispatchMpegCbNodata();
@@ -48,7 +48,7 @@ void _flushBuf(FlushBufContext *decoder_state, s32 bit_count) {
     if ((*(volatile u32 *)0x10002010 & 0x80004000) == 0x80000000) {
         do {
             if (counter++ >= 0x1389) {
-                _dispatchMpegCbNodata(decoder_state->unk858);
+                _dispatchMpegCbNodata(decoder_state->mpeg);
                 counter = 0;
             }
         } while ((*(volatile u32 *)0x10002010 & 0x80004000) == 0x80000000);

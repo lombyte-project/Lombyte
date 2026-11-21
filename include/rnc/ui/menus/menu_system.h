@@ -61,8 +61,9 @@ struct MenuPage {
  *   toggle == 0), then stored negated (load_hand_gadget, update_item_preview_binding);
  *   load_hand_gadget builds the preview moby once preview_loaded_class equals the
  *   selected class.
- * - unk134 / unk138: while set, pages with flags 8 / 4 are skipped
- *   (find_next_pause_page) and grid items with those flags draw frame +2.
+ * - head_gadgets_hidden / pack_gadgets_hidden: while set, the grids flagged 8 / 4
+ *   (pause_head_gadget_grid / pause_pack_gadget_grid) are skipped by
+ *   find_next_pause_page and their cells draw frame +2.
  * - The buffer addresses (graphics_workspace, first_base..stream_buffer_base) are carved from
  *   D_001940C0[1] / [2] by FUN_00218f98.
  */
@@ -124,12 +125,12 @@ struct MenuSystem {
     s32 preview_requested_class; /* 0x11C: an oclass, -1 none */
     s32 preview_loaded_class;    /* 0x120: an oclass, -1 none */
 
-    s32 close_locked;      /* 0x124: nonzero blocks start/back closing the menu */
-    s32 card_op_pending;   /* 0x128: card save/load started, waiting for the card */
-    s32 card_op_text;      /* 0x12C: text shown while pending (0x4FB5 save, 0x4FB6 load) */
-    s32 saved_decode_mode; /* 0x130: decode_mode before a menu movie */
-    s32 unk134;            /* 0x134: hides pages / items with flags 8 */
-    s32 unk138;            /* 0x138: hides pages / items with flags 4 */
+    s32 close_locked;        /* 0x124: nonzero blocks start/back closing the menu */
+    s32 card_op_pending;     /* 0x128: card save/load started, waiting for the card */
+    s32 card_op_text;        /* 0x12C: text shown while pending (0x4FB5 save, 0x4FB6 load) */
+    s32 saved_decode_mode;   /* 0x130: decode_mode before a menu movie */
+    s32 head_gadgets_hidden; /* 0x134: Oltanis Orbit or D_0014161B (pause_all_sounds) */
+    s32 pack_gadgets_hidden; /* 0x138: Veldin 1 or Oltanis (pause_all_sounds) */
     s32 card_icon_hidden; /* 0x13C: set by pause_all_sounds; the level loop skips the busy card icon while set */
     s32 resource_table_class;       /* 0x140: oclass at the last resource table select */
     s32 last_resource_table_toggle; /* 0x144: resource_table_toggle at the last select */

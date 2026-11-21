@@ -4,7 +4,7 @@
 
 struct Pad2Data {
     u8  pad_0[0x2];
-    u8  unk2;
+    u8  data_length;
     u8  pad_3[0x1];
     s32 unk4;
 };
@@ -25,15 +25,16 @@ s32 scePad2Read(s32 port, u8 *pad_input_destination) {
         }
     }
     side = scePad2GetSide(port);
-    if (side->unk2 != 0) {
+    if (side->data_length != 0) {
         pad_input_payload = (u8 *)side + 0x1C;
         if (pad_input_payload != NULL) {
-            memcpy(pad_input_destination, pad_input_payload, side->unk2);
-            scePad2SetButtonOrder((u8 *)side + (side->unk2 + 0x1C), D_0015B550 + port * 0x330);
+            memcpy(pad_input_destination, pad_input_payload, side->data_length);
+            scePad2SetButtonOrder((u8 *)side + (side->data_length + 0x1C),
+                                  D_0015B550 + port * 0x330);
         }
     }
     if (side->unk4 == 0) {
         return -1;
     }
-    return side->unk2;
+    return side->data_length;
 }

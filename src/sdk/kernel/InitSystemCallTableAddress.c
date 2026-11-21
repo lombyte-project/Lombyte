@@ -7,11 +7,12 @@ typedef unsigned int       u32;
 typedef signed long long   s64;
 typedef unsigned long long u64;
 
+/* Two SetSyscall (syscall 116) bindings: syscall number, handler. */
 struct SyscallMidTable {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
+    s32 first_number;
+    s32 first_handler;
+    s32 second_number;
+    s32 second_handler;
 };
 
 extern u32                    D_00130308[];
@@ -27,10 +28,10 @@ void InitSystemCallTableAddress(void) {
     s32 found_before;
     u32 copy_addr;
     u32 find_addr;
-    Rfu116SetSyscallMid(syscall_table_address_init_bindings.unk0,
-                        syscall_table_address_init_bindings.unk4);
-    Rfu116SetSyscallMid(syscall_table_address_init_bindings.unk8,
-                        syscall_table_address_init_bindings.unkC);
+    Rfu116SetSyscallMid(syscall_table_address_init_bindings.first_number,
+                        syscall_table_address_init_bindings.first_handler);
+    Rfu116SetSyscallMid(syscall_table_address_init_bindings.second_number,
+                        syscall_table_address_init_bindings.second_handler);
     find_cursor = FindAddress(0x80000000, 0x80080000, &FindKernelAddress);
     find_addr = find_cursor - 0x20C;
     copy_cursor = FindAddress(0x80000000, 0x80080000, &KernelCopyRdata);

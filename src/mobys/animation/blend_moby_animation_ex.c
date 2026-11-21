@@ -13,7 +13,7 @@ extern void FUN_0020ede8(void *, int);
    find_or_allocate_moby_render_slot) when it hasn't settled yet (anim_time > 0.025, or pose_layers/manips
    nonzero) or the caller forces it (arg4 & 4): builds a flags byte from
    arg4 bits 0/1 (0x100/0x200), hands it to FUN_0020ede8, snapshots this
-   moby's unkF0 vector into the matching D_001B2C00 slot, remembers the
+   moby's bounding_sphere into the matching D_001B2C00 slot, remembers the
    old seq in saved_seq (unless it was already 0xFF), then marks seq 0xFF and
    frame = slot. Either way it then sets nextFrame/prevSeq from arg2/arg1,
    refreshes frame pointers (update_moby_animation_state), arms the timer (anim_speed = 1),
@@ -39,7 +39,7 @@ void blend_moby_animation_ex(
         if (slot >= 0) {
             pose_slot_and_flags = (options & 1) ? (slot | 0x100) : slot;
             FUN_0020ede8(moby, (options & 2) ? (pose_slot_and_flags | 0x200) : pose_slot_and_flags);
-            qcopy(D_001B2C00 + slot * 0x10, moby->unkF0);
+            qcopy(D_001B2C00 + slot * 0x10, moby->bounding_sphere);
             oldSeq = moby->seq;
             if (oldSeq != 0xFF) {
                 moby->saved_seq = oldSeq;

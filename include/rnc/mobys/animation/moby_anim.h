@@ -37,7 +37,8 @@ typedef struct {
     char          _pad7D[0x28];
     unsigned char saved_seq; /* 0xA5: seq before a blend parked the pose */
     char          _padA6[0x4A];
-    char          unkF0[0x10]; /* 0xF0: copied into the pose's D_001B2C00 slot */
+    char          bounding_sphere
+        [0x10]; /* 0xF0: animated bounding sphere, copied into the pose's D_001B2C00 slot */
 } MobyAnim;
 
 #endif /* LOMBYTE_RNC_MOBYS_ANIMATION_MOBY_ANIM_H */

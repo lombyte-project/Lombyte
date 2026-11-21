@@ -26,7 +26,7 @@ long register_8bit_texture(s32 tw, s32 th, s32 clut_data, s32 image_data, s32 cb
     if (pending_texture_upload_count_macro < TEXTURE_UPLOAD_MAX) {
         pending_texture_uploads[pending_texture_upload_count_macro].clut_data = clut_data;
         pending_texture_uploads[pending_texture_upload_count_macro].cbp = cbp;
-        pending_texture_uploads[pending_texture_upload_count_macro].unk4 = 0;
+        pending_texture_uploads[pending_texture_upload_count_macro].clut_psm = 0;
         pending_texture_uploads[pending_texture_upload_count_macro].image_data = image_data;
         pending_texture_uploads[pending_texture_upload_count_macro].tw = tw;
         pending_texture_uploads[pending_texture_upload_count_macro].th = th;

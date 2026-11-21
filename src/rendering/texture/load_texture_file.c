@@ -60,7 +60,7 @@ long load_texture_file(char *texture_file_data) {
         pending_texture_uploads[pending_texture_upload_count_macro].clut_data =
             (int)texture_desc.clut;
         pending_texture_uploads[pending_texture_upload_count_macro].cbp = cbp;
-        pending_texture_uploads[pending_texture_upload_count_macro].unk4 = 0;
+        pending_texture_uploads[pending_texture_upload_count_macro].clut_psm = 0;
         pending_texture_uploads[pending_texture_upload_count_macro].image_data =
             (int)texture_desc.pix;
         pending_texture_uploads[pending_texture_upload_count_macro].tw = texture_desc.tw;

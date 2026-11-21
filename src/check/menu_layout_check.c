@@ -45,7 +45,7 @@ CHECK(MenuSystem, resource_table_toggle, resource_table_toggle, 0x118);
 CHECK(MenuSystem, close_locked, close_locked, 0x124);
 CHECK(MenuSystem, card_op_pending, card_op_pending, 0x128);
 CHECK(MenuSystem, card_op_text, card_op_text, 0x12C);
-CHECK(MenuSystem, unk138, unk138, 0x138);
+CHECK(MenuSystem, pack_gadgets_hidden, pack_gadgets_hidden, 0x138);
 CHECK(MenuSystem, last_resource_table_toggle, last_resource_table_toggle, 0x144);
 SIZE_CHECK(MenuSystem, 0x148);
 

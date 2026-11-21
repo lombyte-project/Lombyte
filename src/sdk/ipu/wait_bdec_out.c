@@ -6,8 +6,8 @@
 
 typedef struct {
     u8    pad0[0x838];
-    s32   unk838;
-    s32   unk83C;
+    s32   bit_window;
+    s32   available_bit_count;
     u8    pad840[0x18];
     void *cbData;
 } MpegDec;
@@ -46,12 +46,12 @@ s32 _waitBdecOut(MpegDec *decoder) {
     }
     bp = *IPU_BP;
     top = *IPU_TOP;
-    decoder->unk838 = top;
+    decoder->bit_window = top;
     if (top < 0) {
         rest = bp & 0x1F;
-        decoder->unk83C = rest ? 32 - rest : 0;
+        decoder->available_bit_count = rest ? 32 - rest : 0;
     } else {
-        decoder->unk83C = 32;
+        decoder->available_bit_count = 32;
     }
     if (*IPU_CTRL & 0x4000) {
         _Error(decoder, bdec_error_message);

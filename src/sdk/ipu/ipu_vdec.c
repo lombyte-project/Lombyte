@@ -4,12 +4,12 @@
 
 typedef struct {
     u8    pad0[0x11C];
-    s32   unk11C;
+    s32   slice_error;
     u8    pad120[0x6F8];
-    s32   unk818;
+    s32   ipu_command_class;
     u8    pad81C[0x1C];
-    s32   unk838;
-    s32   unk83C;
+    s32   bit_window;
+    s32   available_bit_count;
     u8    pad840[0x18];
     void *cbData;
 } MpegDec;
@@ -37,7 +37,7 @@ s32 _ipuVdec(MpegDec *decoder, s32 vlc_table_selector) {
     }
     cmd = (vlc_table_selector << 26) | 0x30000000;
     *(volatile u32 *)IPU_CMD = cmd;
-    decoder->unk818 = IpuCommandTable[(s32)cmd >> 28];
+    decoder->ipu_command_class = IpuCommandTable[(s32)cmd >> 28];
     command_result = *IPU_CMD;
     while (command_result < 0) {
         if (i++ > 5000) {
@@ -48,12 +48,12 @@ s32 _ipuVdec(MpegDec *decoder, s32 vlc_table_selector) {
     }
     bp = *IPU_BP;
     top = *IPU_TOP;
-    decoder->unk838 = top;
+    decoder->bit_window = top;
     if (top < 0) {
-        decoder->unk83C = -(bp & 0x1F) & 0x1F;
+        decoder->available_bit_count = -(bp & 0x1F) & 0x1F;
     } else {
-        decoder->unk83C = 32;
+        decoder->available_bit_count = 32;
     }
-    decoder->unk11C = (s32)command_result == 0;
+    decoder->slice_error = (s32)command_result == 0;
     return (s16)command_result;
 }

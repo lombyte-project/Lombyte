@@ -70,7 +70,7 @@ u64 get_frame_texture(s32 frame_id) {
         palette_source_address = palette_page->source_address;
         initial_packet = pending_texture_uploads + pending_texture_upload_count;
         initial_packet->clut_data = palette_source_address;
-        initial_packet->unk4 = 0;
+        initial_packet->clut_psm = 0;
         initial_packet->cbp = 0x3FF0;
         *(s32 *)((u8 *)pending_texture_uploads + packet_offset + 8) = palette_page->source_address;
         initial_packet->tw = 5;
@@ -85,7 +85,7 @@ u64 get_frame_texture(s32 frame_id) {
             queued_transfer = 1;
             palette_packet = pending_texture_uploads + pending_texture_upload_count;
             palette_packet->clut_data = palette_page->source_address;
-            palette_packet->unk4 = 0;
+            palette_packet->clut_psm = 0;
             palette_packet->cbp = palette_page->gs_block_offset;
         }
     }

@@ -61,8 +61,8 @@ struct MenuMissionListData {
 };
 
 /* Item grid screen (draw_menu_item_grid). Cell frames: +1 equipped,
-   +2 locked, +4 D_0013E520. Locked: flags 4 / 8 with menu_system.unk138 /
-   unk134 set. The up/down/left/right screens take the focus when the cursor
+   +2 locked, +4 D_0013E520. Locked: flags 4 / 8 with menu_system.pack_gadgets_hidden /
+   head_gadgets_hidden set. The up/down/left/right screens take the focus when the cursor
    leaves the grid on that side (update_menu_grid_selection). */
 struct MenuGridCell {
     u16 icon;         /* 0x0: get_icon_frame icon */
@@ -317,12 +317,14 @@ struct MenuLabelData {
 #define MENU_LIST_SHRINK_TO_FIT     0x20000 /* switches to the small font when too wide */
 
 /* MenuItemGridData.flags (update_menu_grid_selection, draw_menu_item_grid). */
-#define MENU_GRID_NO_CONFIRM         0x1
-#define MENU_GRID_FIXED_ROW_STEP     0x2
-#define MENU_GRID_HIDDEN_WITH_UNK138 0x4 /* skipped, cells locked while menu_system.unk138 */
-#define MENU_GRID_HIDDEN_WITH_UNK134 0x8 /* skipped, cells locked while menu_system.unk134 */
-#define MENU_GRID_NO_EQUIPPED_FRAME  0x20
-#define MENU_GRID_NO_WRAP            0x8000
+#define MENU_GRID_NO_CONFIRM     0x1
+#define MENU_GRID_FIXED_ROW_STEP 0x2
+#define MENU_GRID_HIDDEN_WITH_PACK_GADGETS \
+    0x4 /* skipped, cells locked while menu_system.pack_gadgets_hidden */
+#define MENU_GRID_HIDDEN_WITH_HEAD_GADGETS \
+    0x8 /* skipped, cells locked while menu_system.head_gadgets_hidden */
+#define MENU_GRID_NO_EQUIPPED_FRAME 0x20
+#define MENU_GRID_NO_WRAP           0x8000
 
 /* MenuStreamData.flags (update_menu_resource_stream, update_menu_stream_image). */
 #define MENU_STREAM_FIXED_ENTRY       0x1

@@ -39,25 +39,26 @@ Boston, MA 02111-1307, USA.  */
 
 #include "types.h"
 
+/* fp-bit sub(): fp_number_type a, b, tmp and the FLO_union_type au, bu. */
 struct DpsubWork {
-    u8  pad_0[0x20];
-    s32 unk20;
-    s32 unk24;
-    u8  pad_28[0x18];
-    s32 unk40;
-    u8  pad_44[0x1C];
-    s64 unk60;
-    s64 unk68;
+    u8  a[0x20];
+    s32 b_class;
+    s32 b_sign;
+    u8  b_rest[0x18];
+    s32 tmp;
+    u8  tmp_rest[0x1C];
+    s64 au;
+    s64 bu;
 };
 
 void dpsub(s64 minuend, s64 subtrahend) {
     struct DpsubWork subtraction_workspace;
 
-    subtraction_workspace.unk60 = minuend;
-    subtraction_workspace.unk68 = subtrahend;
-    __unpack_d(&subtraction_workspace.unk60, &subtraction_workspace);
-    __unpack_d(&subtraction_workspace.unk68, &subtraction_workspace.unk20);
-    subtraction_workspace.unk24 ^= 1;
+    subtraction_workspace.au = minuend;
+    subtraction_workspace.bu = subtrahend;
+    __unpack_d(&subtraction_workspace.au, &subtraction_workspace);
+    __unpack_d(&subtraction_workspace.bu, &subtraction_workspace.b_class);
+    subtraction_workspace.b_sign ^= 1;
     __pack_d(_fpadd_parts(
-        &subtraction_workspace, &subtraction_workspace.unk20, &subtraction_workspace.unk40));
+        &subtraction_workspace, &subtraction_workspace.b_class, &subtraction_workspace.tmp));
 }

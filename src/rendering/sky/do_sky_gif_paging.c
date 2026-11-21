@@ -1,10 +1,10 @@
 #include "types.h"
 
 #include "rnc/rendering/dma_tag.h"
+#include "rnc/rendering/draw_config.h"
 
 extern struct TagPtr D_00160470;
 extern struct TagPtr sky_gif_paging_bypass_tag __asm__("D_00160474");
-extern s32           D_0018A2B4[];
 
 #include "rnc/globals.h"
 
@@ -24,7 +24,7 @@ void do_sky_gif_paging(void) {
     D_00160470.p->addr = (u32)render_packet_cursor.tag;
     D_00160470.p->vif0 = 0;
     D_00160470.p->vif1 = 0;
-    if (D_0018A2B4[0] != 0) {
+    if (draw_config.sky_gif_paging != 0) {
         FUN_0020b4a8();
         vu1_tex_flush();
     }

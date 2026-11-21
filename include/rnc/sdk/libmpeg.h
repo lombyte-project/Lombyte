@@ -73,12 +73,12 @@ struct MpegMbBuffer {
     MpegMcFunc         chroma_func[4]; /* D_00132E50[] copy routine per fetch */
     struct MpegMcFetch luma[4];
     struct MpegMcFetch chroma[4];
-    s32                unk128;      /* read by _doMC */
+    u8                *output;      /* _doMC writes the macroblock here */
     s32                fetch_count; /* queued fetches; loop count in _doMC */
-    s32                unk130;      /* read by _doMC */
+    s32                intra;       /* "intra && skip MB" is an error in _doMC */
     u8                 pad_134[0x4];
-    s32                unk138; /* _doMC skips the work when 0 */
-    s32                unk13C; /* set 1 by _decMB0/_skipMB0, 0 by _slice0 */
+    s32                unk138;          /* _doMC skips the work when 0 */
+    s32                no_coded_blocks; /* skipped, or neither intra nor pattern (_decMB0) */
 };
 
 struct MpegDecoder {
@@ -88,7 +88,7 @@ struct MpegDecoder {
     u8  pad_C[0x40];
     u8  ipu_dma_state; /* &ipu_dma_state passed to suspend_mpeg_decoder_ipu_dma */
     u8  pad_4D[0x33];
-    s32 unk80;
+    s32 displayed_pts; /* pts low word of the last output picture; -1 after a reset */
     u8  pad_84[0x4];
     u64 unk88;
     u8  pad_90[0x4];
@@ -99,7 +99,7 @@ struct MpegDecoder {
     s32 picture_count_p;
     s32 picture_count_b;
     s32 frame_base; /* sceMpeg.frameCount = frame_count - frame_base (_sceMpegFlush) */
-    s32 unkB0;      /* non-zero: _dispRefImage uses _csc_storeRefImage, else _cpr8 */
+    s32 csc_output; /* non-zero: _dispRefImage converts colour (_csc_storeRefImage), else _cpr8 copies raw */
     s32 unkB4;
     s32 unkB8;
     s32 unkBC;
@@ -109,7 +109,7 @@ struct MpegDecoder {
     s32 unkCC;
     s32 unkD0;
     s32 first_field_structure; /* picture_structure of a frame's first picture; 0 in _sequenceHeader */
-    s32 unkD8;                 /* output address (_cpr8 masks it to physical) */
+    s32 image_buffer;          /* sceMpegGetPicture output; 64-byte aligned (_getpic) */
 
     /* Output size limits, checked by _isOutSizeOK against the picture. */
     s32 out_max_width;  /* >= picture width when out_max_height != 0 */
@@ -158,26 +158,29 @@ struct MpegDecoder {
     s32 repeat_first_field;
     s32 progressive_frame;
 
-    u8  pad_18C[0x20];
-    s32 unk1AC;
-    s32 dc_reset;             /* DCR bit of the IPU BDEC command (_decMB0); set by _skipMB0 */
+    u8 pad_18C[0x20];
+    s32 temporal_reference; /* picture_header temporal_reference plus temporal_reference_base, unwrapped */
+    s32 dc_reset;           /* DCR bit of the IPU BDEC command (_decMB0); set by _skipMB0 */
     s32 quantiser_scale_code; /* 5 bits from the slice header (_sliceB); QSC of BDEC */
     struct MpegRefImage
         *ref_images[12]; /* chosen by picture_structure / picture_coding_type in _outputFrame */
     u8   pad_1E8[0x3A8];
     struct MpegMbBuffer mb_buf[2];
     s32                 mb_buf_index; /* toggled per slice in _slice0 */
-    u8                  pad_814[0x8];
-    u8                 *mc_work;       /* _getRef0: destination of the queued fetches */
-    s32                 picture_ready; /* _getpic returns once a picture is out */
-    u8                  pad_824[0x1C];
+    u8                  pad_814[0x4];
+    s32                 ipu_command_class; /* IpuCommandTable[] of the last IPU command */
+    u8                 *mc_work;           /* _getRef0: destination of the queued fetches */
+    s32                 picture_ready;     /* _getpic returns once a picture is out */
+    u8                  pad_824[0x14];
+    s32                 bit_window;          /* IPU_TOP after the last command */
+    s32                 available_bit_count; /* valid bits in bit_window */
 
     /* quant_matrix_extension / sequence_header */
     s32             load_intra_quantiser_matrix;     /* set -> IPU SETIQ intra (0x50000000) */
     s32             load_non_intra_quantiser_matrix; /* set -> IPU SETIQ non-intra (0x58000000) */
     s32             mpeg2; /* set by sequence_extension; 0: _sequenceHeader loads MPEG-1 defaults */
-    s32             unk84C;
-    s32             unk850;
+    s32             temporal_reference_base;
+    s32             max_temporal_reference;
     s32             unk854;
     struct sceMpeg *mpeg; /* owning sceMpeg (_dispRefImage writes its pts/dts/flags) */
 };

@@ -7,9 +7,9 @@
 /* s32 view of the owning sceMpeg (pts low word at 0x10, flags at 0x20). */
 struct MpegDisplayState {
     u8  pad_0[0x10];
-    s32 unk10;
+    s32 pts_low;
     u8  pad_14[0xC];
-    s64 unk20;
+    u64 flags;
 };
 
 extern u32 display_values_by_picture_flags[] __asm__("D_00132E98");
@@ -29,8 +29,8 @@ void _dispRefImage(struct MpegDecoder *decoder, struct MpegRefImage *ref_image) 
                                      (s32 *)((u8 *)mpeg_words + 0x18),
                                      (s32 *)((u8 *)mpeg_words + 0x20));
     ref_info = (struct MpegDisplayState *)decoder->mpeg;
-    decoder->unk80 = (s32)ref_info->unk10;
-    display_value = display_values_by_picture_flags[(s32)(ref_info->unk20 >> 5) & 0xF];
+    decoder->displayed_pts = (s32)ref_info->pts_low;
+    display_value = display_values_by_picture_flags[(s32)(ref_info->flags >> 5) & 0xF];
     decoder->unkCC = (s32)ref_image->unk5C;
     decoder->unk88 = display_value;
     decoder->unkD0 = (s32)ref_image->unk60;
@@ -42,7 +42,7 @@ void _dispRefImage(struct MpegDecoder *decoder, struct MpegRefImage *ref_image) 
     decoder->unkC8 = (s32)ref_image->unk58;
     if (_isOutSizeOK(decoder, ref_image) != 0) {
         if (ref_image->status == MPEG_REF_IMAGE_STATUS_DISPLAYABLE) {
-            if (decoder->unkB0 != 0) {
+            if (decoder->csc_output != 0) {
                 _csc_storeRefImage(decoder, ref_image);
             } else {
                 _cpr8(decoder, ref_image);

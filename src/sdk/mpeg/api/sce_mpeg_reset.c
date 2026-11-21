@@ -15,7 +15,7 @@ void sceMpegReset(struct sceMpeg *mpeg) {
     decoder->started = 0;
     mpeg->frameCount = 0;
     decoder->frame_base = 0;
-    decoder->unk80 = -1;
+    decoder->displayed_pts = -1;
     _clearEach(decoder);
     decoder->frame_count = 0;
     set_mpeg1_mode(decoder);

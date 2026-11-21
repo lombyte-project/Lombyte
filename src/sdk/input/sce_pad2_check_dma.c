@@ -2,7 +2,7 @@
 
 typedef struct PadPort {
     u8  pad[0xC];
-    u8 *unkC;
+    u8 *dma_buffer;
     u8  pad2[816 - 0x10];
 } PadPort;
 
@@ -20,7 +20,7 @@ s32 scePad2CheckDma(s32 socket_index) {
     u32 dma_buffer_base;
     s32 bank_zero_sequence;
 
-    dma_buffer_base = (u32)D_0015B540[socket_index].unkC;
+    dma_buffer_base = (u32)D_0015B540[socket_index].dma_buffer;
     bank_zero_sequence = *(s32 *)(dma_buffer_base + 0x7C);
     sides[0] = dma_buffer_base;
     sides[1] = dma_buffer_base + 0x80;

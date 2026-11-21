@@ -8,8 +8,8 @@ typedef struct {
     s32   pid;
     void *pkt_table;
     s32   pkt_table_len;
-    s32   unk0C;
-    s32   unk10;
+    s32   unused1;
+    s32   unused2;
     void *rdata_table;
     s32   rdata_table_len;
     void *client_table;
@@ -40,8 +40,8 @@ void sceSifInitRpc(u32 unused_mode) {
     DIntr();
     D_00156800.pkt_table = (void *)((u32)sif_rpc_request_packets | 0x20000000);
     D_00156800.pkt_table_len = 32;
-    D_00156800.unk0C = 0;
-    D_00156800.unk10 = 0;
+    D_00156800.unused1 = 0;
+    D_00156800.unused2 = 0;
     D_00156800.rdata_table = (void *)((u32)sif_rpc_reply_packets | 0x20000000);
     D_00156800.rdata_table_len = 32;
     D_00156800.client_table = (void *)((u32)sif_rpc_client_table | 0x20000000);

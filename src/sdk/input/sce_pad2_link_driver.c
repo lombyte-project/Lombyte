@@ -2,8 +2,8 @@
 
 struct Pad {
     u8  pad[4];
-    s32 unk4;
-    s32 unk8;
+    s32 linked;
+    s32 dep_number;
     u8  rest[0x324];
 };
 
@@ -15,7 +15,7 @@ s32 scePad2LinkDriver(s32 socket_index) {
     dep = sceDbcGetDepNumber();
     if (dep < 0)
         return dep;
-    D_0015B540[socket_index].unk8 = dep;
-    D_0015B540[socket_index].unk4 = 1;
+    D_0015B540[socket_index].dep_number = dep;
+    D_0015B540[socket_index].linked = 1;
     return dep;
 }

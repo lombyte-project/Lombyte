@@ -8,7 +8,7 @@ typedef struct {
 
 typedef struct {
     u8    pad0[0x150];
-    s32   unk150;
+    s32   picture_coding_type;
     u8    pad154[0x6D4];
     s64   pts;
     s64   dts;
@@ -54,7 +54,7 @@ s32 _nextHeader(MpegDec *decoder) {
             _dispatchMpegCallback(decoder->cbData, &cb);
             decoder->dts = cb.dts;
             decoder->pts = cb.pts;
-            return decoder->unk150;
+            return decoder->picture_coding_type;
         case MPEG_SEQUENCE_END_CODE:
             return 0;
         }

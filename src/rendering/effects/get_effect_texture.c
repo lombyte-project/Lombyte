@@ -56,7 +56,7 @@ u64 get_effect_texture(s32 index) {
             upload->clut_data =
                 level_texture_payload_address + texture->palette_offset_quadwords * 0x10;
             upload->cbp = palette_block_offset;
-            upload->unk4 = 0;
+            upload->clut_psm = 0;
             *(s32 *)((u8 *)pending_texture_uploads + pending_texture_upload_count_snapshot * 0x10 +
                      8) = level_texture_payload_address + texture->texel_offset_quadwords * 0x10;
             upload->tw = (u8)texture->width_log2;

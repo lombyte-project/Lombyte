@@ -17,15 +17,15 @@ void _doMC(struct MpegDecoder *decoder, s32 index) {
                 &decoder->mb_buf[index].chroma[i]);
         }
     }
-    if (decoder->mb_buf[index].unk130 != 0 && decoder->mb_buf[index].unk13C != 0) {
+    if (decoder->mb_buf[index].intra != 0 && decoder->mb_buf[index].no_coded_blocks != 0) {
         _Error(decoder, intra_skip_mb_error_message);
     }
-    if (decoder->mb_buf[index].unk130 != 0) {
-        func_001271D8(decoder->mb_buf[index].unk128, decoder->mb_buf[index].ipu_out);
-    } else if (decoder->mb_buf[index].unk13C != 0) {
-        func_001271D8(decoder->mb_buf[index].unk128, decoder->mc_work);
+    if (decoder->mb_buf[index].intra != 0) {
+        func_001271D8(decoder->mb_buf[index].output, decoder->mb_buf[index].ipu_out);
+    } else if (decoder->mb_buf[index].no_coded_blocks != 0) {
+        func_001271D8(decoder->mb_buf[index].output, decoder->mc_work);
     } else {
         func_00127178(
-            decoder->mb_buf[index].unk128, decoder->mc_work, decoder->mb_buf[index].ipu_out);
+            decoder->mb_buf[index].output, decoder->mc_work, decoder->mb_buf[index].ipu_out);
     }
 }

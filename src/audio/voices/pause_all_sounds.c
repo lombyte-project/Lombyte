@@ -54,11 +54,13 @@ void pause_all_sounds(s32 menu_state) {
     }
     {
         struct MenuSystem *g = &menu_system;
-        g->unk134 = *(volatile s32 *)&current_level_index == LEVEL_OLTANIS_ORBIT || D_0014161B != 0;
+        g->head_gadgets_hidden =
+            *(volatile s32 *)&current_level_index == LEVEL_OLTANIS_ORBIT || D_0014161B != 0;
     }
     {
         struct MenuSystem *g = &menu_system;
-        g->unk138 = current_level_index == LEVEL_VELDIN1 || current_level_index == LEVEL_OLTANIS;
+        g->pack_gadgets_hidden =
+            current_level_index == LEVEL_VELDIN1 || current_level_index == LEVEL_OLTANIS;
     }
     {
         struct MenuSystem *g = &menu_system;
@@ -376,7 +378,7 @@ struct MenuGridScreen pause_hand_gadget_grid = {
 
 struct MenuGridScreen pause_pack_gadget_grid = {
     {update_menu_grid_selection, draw_menu_item_grid, find_next_pause_page},
-    {MENU_GRID_HIDDEN_WITH_UNK138,
+    {MENU_GRID_HIDDEN_WITH_PACK_GADGETS,
      0.1f, 0.1f,
      0, 1,
      3, pause_pack_gadget_cells,
@@ -386,7 +388,7 @@ struct MenuGridScreen pause_pack_gadget_grid = {
 
 struct MenuGridScreen pause_head_gadget_grid = {
     {update_menu_grid_selection, draw_menu_item_grid, find_next_pause_page},
-    {MENU_GRID_HIDDEN_WITH_UNK134,
+    {MENU_GRID_HIDDEN_WITH_HEAD_GADGETS,
      0.1f, 0.1f,
      0, 1,
      3, pause_head_gadget_cells,

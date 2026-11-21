@@ -20,7 +20,7 @@ typedef struct {
 } sceMpeg;
 
 typedef struct {
-    u64 unk0;
+    u64 id;
     u64 type;
 } StrTypeEntry;
 
