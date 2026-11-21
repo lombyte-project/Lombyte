@@ -167,10 +167,13 @@ struct MpegDecoder {
     u8   pad_1E8[0x3A8];
     struct MpegMbBuffer mb_buf[2];
     s32                 mb_buf_index; /* toggled per slice in _slice0 */
-    u8                  pad_814[0x8];
-    u8                 *mc_work;       /* _getRef0: destination of the queued fetches */
-    s32                 picture_ready; /* _getpic returns once a picture is out */
-    u8                  pad_824[0x1C];
+    u8                  pad_814[0x4];
+    s32                 ipu_command_class; /* IpuCommandTable[] of the last IPU command */
+    u8                 *mc_work;           /* _getRef0: destination of the queued fetches */
+    s32                 picture_ready;     /* _getpic returns once a picture is out */
+    u8                  pad_824[0x14];
+    s32                 bit_window;          /* IPU_TOP after the last command */
+    s32                 available_bit_count; /* valid bits in bit_window */
 
     /* quant_matrix_extension / sequence_header */
     s32             load_intra_quantiser_matrix;     /* set -> IPU SETIQ intra (0x50000000) */

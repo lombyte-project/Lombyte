@@ -22,8 +22,8 @@ typedef struct SifCmdHeader {
 /* The SIF command state (sceSifInitCmd fills it). */
 typedef struct SifCmdData {
     SifCmdHeader       *packet_buffer;
-    void               *unk4;
-    s32                 unk8;
+    void               *send_buffer;
+    s32                 iop_buffer;
     SifCmdHandlerEntry *system_handlers;
     s32                 system_handler_count;
     SifCmdHandlerEntry *user_handlers;

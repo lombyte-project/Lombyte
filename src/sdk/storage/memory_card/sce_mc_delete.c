@@ -9,7 +9,7 @@ struct MemoryCardNameParam {
     s32  slot;
     s32  flags;
     s32  maxent;
-    s32  unk10;
+    s32  table; /* union { sceMcTblGetDir *table; char *curdir; } in mcNameParam */
     char name[0x400];
 };
 
