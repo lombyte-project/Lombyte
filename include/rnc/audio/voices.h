@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_AUDIO_VOICES_H
-#define LOMBYTE_RNC_AUDIO_VOICES_H
+#ifndef RCP2P_RNC_AUDIO_VOICES_H
+#define RCP2P_RNC_AUDIO_VOICES_H
 
 #include "rnc/audio/voice_pool.h"
 #include "types.h"
@@ -11,4 +11,4 @@ void snd_play_sound_vol_pan_pmpb(s32, s32, s32, s32, s32, s32, s32, s32) __asm__
 void snd_set_sound_params_cb(s32, s32, s32, s32, s32, s32, s32, s32) __asm__("FUN_0012e4c0");
 void snd_sound_is_still_playing_cb(s32, s32, s32) __asm__("FUN_0012e448");
 
-#endif /* LOMBYTE_RNC_AUDIO_VOICES_H */
+#endif /* RCP2P_RNC_AUDIO_VOICES_H */

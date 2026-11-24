@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L08_MOBYS_LAYERED_MESH_EFFECT_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L08_MOBYS_LAYERED_MESH_EFFECT_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L08_MOBYS_LAYERED_MESH_EFFECT_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L08_MOBYS_LAYERED_MESH_EFFECT_GLOBALS_H
 
 #include "types.h"
 
@@ -15,4 +15,4 @@ extern float layered_mesh_effect_center_y __asm__("D_L08_00161DC4");
 extern float layered_mesh_effect_center_z __asm__("D_L08_00161DC8");
 extern float layered_mesh_effect_culling_radius __asm__("D_L08_00161DCC");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L08_MOBYS_LAYERED_MESH_EFFECT_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L08_MOBYS_LAYERED_MESH_EFFECT_GLOBALS_H */

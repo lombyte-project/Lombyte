@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L06_MOBYS_SPARK_EMITTER_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L06_MOBYS_SPARK_EMITTER_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L06_MOBYS_SPARK_EMITTER_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L06_MOBYS_SPARK_EMITTER_GLOBALS_H
 
 #include "types.h"
 
@@ -38,4 +38,4 @@ extern float spark_spray_z_adjusted_vector_w_range_start __asm__("D_L06_0016235C
 extern float spark_spray_z_adjusted_vector_w_range_end __asm__("D_L06_00162360")
     __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L06_MOBYS_SPARK_EMITTER_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L06_MOBYS_SPARK_EMITTER_GLOBALS_H */

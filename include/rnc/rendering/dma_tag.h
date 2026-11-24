@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_DMA_TAG_H
-#define LOMBYTE_RNC_RENDERING_DMA_TAG_H
+#ifndef RCP2P_RNC_RENDERING_DMA_TAG_H
+#define RCP2P_RNC_RENDERING_DMA_TAG_H
 
 #include "types.h"
 
@@ -38,4 +38,4 @@ union PacketCursor {
 #endif
 extern union PacketCursor render_packet_cursor __asm__("D_00160F00") RENDER_PACKET_CURSOR_ATTR;
 
-#endif /* LOMBYTE_RNC_RENDERING_DMA_TAG_H */
+#endif /* RCP2P_RNC_RENDERING_DMA_TAG_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L05_MOBYS_H
-#define LOMBYTE_RNC_OVERLAY_L05_MOBYS_H
+#ifndef RCP2P_RNC_OVERLAY_L05_MOBYS_H
+#define RCP2P_RNC_OVERLAY_L05_MOBYS_H
 
 #include "types.h"
 
@@ -36,4 +36,4 @@ void triggered_slide_update(char *) __asm__("FUN_L05_0030e508");
 void triggered_spray_emitter_update(struct Moby *) __asm__("FUN_L05_003150f0");
 void water_update(struct Moby *) __asm__("FUN_L05_0030ca80");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L05_MOBYS_H */
+#endif /* RCP2P_RNC_OVERLAY_L05_MOBYS_H */

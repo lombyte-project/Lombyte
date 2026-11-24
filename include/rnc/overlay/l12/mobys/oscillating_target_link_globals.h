@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L12_MOBYS_OSCILLATING_TARGET_LINK_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L12_MOBYS_OSCILLATING_TARGET_LINK_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L12_MOBYS_OSCILLATING_TARGET_LINK_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L12_MOBYS_OSCILLATING_TARGET_LINK_GLOBALS_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ extern int   oscillating_link_strip_fade_pivot_ticks __asm__("D_L12_00161E08");
 extern float oscillating_link_strip_scroll_rate __asm__("D_L12_00161DFC");
 extern float oscillating_link_strip_random_delta_magnitude_rate __asm__("D_L12_00161E00");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L12_MOBYS_OSCILLATING_TARGET_LINK_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L12_MOBYS_OSCILLATING_TARGET_LINK_GLOBALS_H */

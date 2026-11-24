@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L16_MOBYS_CHICKEN_RELOCATOR_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L16_MOBYS_CHICKEN_RELOCATOR_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L16_MOBYS_CHICKEN_RELOCATOR_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L16_MOBYS_CHICKEN_RELOCATOR_GLOBALS_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ extern float reposition_effect_spawn_z_offset __asm__("D_L16_001618F4");
 extern float reposition_effect_radius_range_start __asm__("D_L16_001618F8");
 extern float reposition_effect_radius_range_end __asm__("D_L16_001618FC");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L16_MOBYS_CHICKEN_RELOCATOR_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L16_MOBYS_CHICKEN_RELOCATOR_GLOBALS_H */

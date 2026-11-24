@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_EFFECTS_PARTICLES_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_EFFECTS_PARTICLES_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_RENDERING_EFFECTS_PARTICLES_H
+#define RCP2P_RNC_OVERLAY_SHARED_RENDERING_EFFECTS_PARTICLES_H
 
 #include "types.h"
 #include "rnc/overlay/shared/math/quad.h"
@@ -71,4 +71,4 @@ unsigned char *spawn_proximity_corrected_size_alpha_tween_particle(
     OvlQuad *, int, int, int, int, float *, int, float, float) __asm__("FUN_L00_00275910");
 unsigned char *FUN_L00_00272060(void *, int, int, int, int, float *, float, float, float);
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_EFFECTS_PARTICLES_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_RENDERING_EFFECTS_PARTICLES_H */

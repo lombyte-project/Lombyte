@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_GAME_STARTLEVEL_H
-#define LOMBYTE_RNC_GAME_STARTLEVEL_H
+#ifndef RCP2P_RNC_GAME_STARTLEVEL_H
+#define RCP2P_RNC_GAME_STARTLEVEL_H
 
 #include "types.h"
 
@@ -26,4 +26,4 @@ extern volatile SoundDef l00_primary_sound_defs[7] __asm__("D_00186100");
    hands the table to moby class 0x472 with a count of 5. */
 extern volatile SoundDef boot_sound_defs_b[5] __asm__("D_001861E0");
 
-#endif /* LOMBYTE_RNC_GAME_STARTLEVEL_H */
+#endif /* RCP2P_RNC_GAME_STARTLEVEL_H */

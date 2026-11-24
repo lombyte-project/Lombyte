@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_MPEG_REF_IMAGES_H
-#define LOMBYTE_RNC_SDK_MPEG_REF_IMAGES_H
+#ifndef RCP2P_RNC_SDK_MPEG_REF_IMAGES_H
+#define RCP2P_RNC_SDK_MPEG_REF_IMAGES_H
 
 #include "types.h"
 
@@ -29,4 +29,4 @@ s32  InitializeReferenceImage();
 s32  _isOutSizeOK(struct MpegDecoder *, struct MpegRefImage *);
 void _outputFrame(struct MpegDecoder *, s32, s32);
 
-#endif /* LOMBYTE_RNC_SDK_MPEG_REF_IMAGES_H */
+#endif /* RCP2P_RNC_SDK_MPEG_REF_IMAGES_H */

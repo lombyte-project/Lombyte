@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L12_MOBYS_HOVEN_TURRET_DATA_DRAW_HOVEN_TURRET_HUD_H
-#define LOMBYTE_RNC_OVERLAY_L12_MOBYS_HOVEN_TURRET_DATA_DRAW_HOVEN_TURRET_HUD_H
+#ifndef RCP2P_RNC_OVERLAY_L12_MOBYS_HOVEN_TURRET_DATA_DRAW_HOVEN_TURRET_HUD_H
+#define RCP2P_RNC_OVERLAY_L12_MOBYS_HOVEN_TURRET_DATA_DRAW_HOVEN_TURRET_HUD_H
 
 #include "types.h"
 
@@ -21,4 +21,4 @@ extern int hoven_turret_hud_frame_vertex_1_uv __asm__("D_L12_00161F0C") __attrib
 extern int hoven_turret_hud_frame_vertex_2_uv __asm__("D_L12_00161F10") __attribute__((sda));
 extern int hoven_turret_hud_frame_vertex_3_uv __asm__("D_L12_00161F14") __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L12_MOBYS_HOVEN_TURRET_DATA_DRAW_HOVEN_TURRET_HUD_H */
+#endif /* RCP2P_RNC_OVERLAY_L12_MOBYS_HOVEN_TURRET_DATA_DRAW_HOVEN_TURRET_HUD_H */

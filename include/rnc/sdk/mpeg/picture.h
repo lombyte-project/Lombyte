@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_MPEG_PICTURE_H
-#define LOMBYTE_RNC_SDK_MPEG_PICTURE_H
+#ifndef RCP2P_RNC_SDK_MPEG_PICTURE_H
+#define RCP2P_RNC_SDK_MPEG_PICTURE_H
 
 #include "types.h"
 
@@ -16,4 +16,4 @@ s32  _pictureData0();
 s32  _decPicture(struct MpegDecoderState *);
 void UpdateTempTrackData(struct MpegDecoder *, s32);
 
-#endif /* LOMBYTE_RNC_SDK_MPEG_PICTURE_H */
+#endif /* RCP2P_RNC_SDK_MPEG_PICTURE_H */

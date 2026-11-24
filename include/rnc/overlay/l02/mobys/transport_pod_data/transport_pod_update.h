@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L02_MOBYS_TRANSPORT_POD_DATA_TRANSPORT_POD_UPDATE_H
-#define LOMBYTE_RNC_OVERLAY_L02_MOBYS_TRANSPORT_POD_DATA_TRANSPORT_POD_UPDATE_H
+#ifndef RCP2P_RNC_OVERLAY_L02_MOBYS_TRANSPORT_POD_DATA_TRANSPORT_POD_UPDATE_H
+#define RCP2P_RNC_OVERLAY_L02_MOBYS_TRANSPORT_POD_DATA_TRANSPORT_POD_UPDATE_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ extern float transport_pod_configured_rail_b_height_offset_gp __asm__("D_L02_001
 extern float transport_pod_rail_cycle_enabled_gp __asm__("D_L02_00161C40") __attribute__((sda));
 extern float transport_pod_path_markers_enabled_gp __asm__("D_L02_00161C44") __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L02_MOBYS_TRANSPORT_POD_DATA_TRANSPORT_POD_UPDATE_H */
+#endif /* RCP2P_RNC_OVERLAY_L02_MOBYS_TRANSPORT_POD_DATA_TRANSPORT_POD_UPDATE_H */

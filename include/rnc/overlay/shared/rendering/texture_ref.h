@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_TEXTURE_REF_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_TEXTURE_REF_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_RENDERING_TEXTURE_REF_H
+#define RCP2P_RNC_OVERLAY_SHARED_RENDERING_TEXTURE_REF_H
 
 #include "types.h"
 
@@ -17,4 +17,4 @@ typedef struct {
    the texture bank loader overwrites entries one at a time. */
 extern TextureRef moby_texture_table[] __asm__("D_L00_001AEBC0");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_TEXTURE_REF_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_RENDERING_TEXTURE_REF_H */

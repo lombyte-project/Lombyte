@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_MOBYS_MOBY_CLASS_ID_H
-#define LOMBYTE_RNC_MOBYS_MOBY_CLASS_ID_H
+#ifndef RCP2P_RNC_MOBYS_MOBY_CLASS_ID_H
+#define RCP2P_RNC_MOBYS_MOBY_CLASS_ID_H
 
 /* Moby.oclass IDs (+0xA6), shared by class dispatch and effect/pickup helpers.
  * These are class identities, not Moby.state values or offsets from a class ID. */
@@ -59,4 +59,4 @@ enum MobyClassId {
     MOBY_CLASS_HUD_CONTACT_RENDER_BYPASS = 0x53A
 };
 
-#endif /* LOMBYTE_RNC_MOBYS_MOBY_CLASS_ID_H */
+#endif /* RCP2P_RNC_MOBYS_MOBY_CLASS_ID_H */

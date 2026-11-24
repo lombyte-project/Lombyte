@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L13_MOBYS_BLARG_TURRET_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L13_MOBYS_BLARG_TURRET_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L13_MOBYS_BLARG_TURRET_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L13_MOBYS_BLARG_TURRET_GLOBALS_H
 
 #include "types.h"
 
@@ -7,4 +7,4 @@
 /* Explicit _gp views stay in the source at their assembler declaration sites. */
 extern float blarg_turret_launch_displacement_scale __asm__("D_L13_00161388");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L13_MOBYS_BLARG_TURRET_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L13_MOBYS_BLARG_TURRET_GLOBALS_H */

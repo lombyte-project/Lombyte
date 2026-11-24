@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_LIBGRAPH_H
-#define LOMBYTE_RNC_SDK_LIBGRAPH_H
+#ifndef RCP2P_RNC_SDK_LIBGRAPH_H
+#define RCP2P_RNC_SDK_LIBGRAPH_H
 
 #include "types.h"
 
@@ -93,4 +93,4 @@ typedef struct {
     u64 q[12];
 } sceGsLoadImage __attribute__((aligned(16)));
 
-#endif /* LOMBYTE_RNC_SDK_LIBGRAPH_H */
+#endif /* RCP2P_RNC_SDK_LIBGRAPH_H */

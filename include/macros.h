@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_MACROS_H
-#define LOMBYTE_MACROS_H
+#ifndef RCP2P_MACROS_H
+#define RCP2P_MACROS_H
 
 /* Compiler hints that emit no code. Matching code uses them only as marked
    fakematches (docs/contributing/code-cleanup.md). */
@@ -15,4 +15,4 @@
         __asm__ volatile("" : : "r"(reg_live_)); \
     } while (0)
 
-#endif /* LOMBYTE_MACROS_H */
+#endif /* RCP2P_MACROS_H */

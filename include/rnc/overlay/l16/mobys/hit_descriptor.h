@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L16_MOBYS_HIT_DESCRIPTOR_H
-#define LOMBYTE_RNC_OVERLAY_L16_MOBYS_HIT_DESCRIPTOR_H
+#ifndef RCP2P_RNC_OVERLAY_L16_MOBYS_HIT_DESCRIPTOR_H
+#define RCP2P_RNC_OVERLAY_L16_MOBYS_HIT_DESCRIPTOR_H
 
 #include "types.h"
 #include "rnc/overlay/shared/math/quad.h"
@@ -22,4 +22,4 @@ typedef struct {
     int            active;
 } L16HitDescriptor;
 
-#endif /* LOMBYTE_RNC_OVERLAY_L16_MOBYS_HIT_DESCRIPTOR_H */
+#endif /* RCP2P_RNC_OVERLAY_L16_MOBYS_HIT_DESCRIPTOR_H */

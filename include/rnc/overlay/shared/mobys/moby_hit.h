@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_MOBY_HIT_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_MOBY_HIT_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_MOBYS_MOBY_HIT_H
+#define RCP2P_RNC_OVERLAY_SHARED_MOBYS_MOBY_HIT_H
 
 #include "types.h"
 #include "rnc/overlay/shared/math/quad.h"
@@ -23,4 +23,4 @@ typedef struct {
     u8      pad3C[4];
 } MobyHit;
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_MOBY_HIT_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_MOBYS_MOBY_HIT_H */

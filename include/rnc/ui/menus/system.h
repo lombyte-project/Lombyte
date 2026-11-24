@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_MENUS_SYSTEM_H
-#define LOMBYTE_RNC_UI_MENUS_SYSTEM_H
+#ifndef RCP2P_RNC_UI_MENUS_SYSTEM_H
+#define RCP2P_RNC_UI_MENUS_SYSTEM_H
 
 #include "types.h"
 
@@ -22,4 +22,4 @@ s32  update_menu_entry_actions(struct MenuScreen *) __asm__("FUN_0021abf8");
 s32  update_menu_resource_stream(struct MenuScreen *) __asm__("FUN_0021fdc8");
 s32  update_timed_menu_sequence(struct MenuScreen *) __asm__("FUN_002223f0");
 
-#endif /* LOMBYTE_RNC_UI_MENUS_SYSTEM_H */
+#endif /* RCP2P_RNC_UI_MENUS_SYSTEM_H */

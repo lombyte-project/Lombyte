@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_PIXEL_FORMAT_H
-#define LOMBYTE_RNC_RENDERING_PIXEL_FORMAT_H
+#ifndef RCP2P_RNC_RENDERING_PIXEL_FORMAT_H
+#define RCP2P_RNC_RENDERING_PIXEL_FORMAT_H
 
 /* GS pixel storage format IDs shared by texture upload and image transfer. */
 
@@ -19,4 +19,4 @@ enum PixelStorageFormat {
     PIXEL_FORMAT_16_BIT_ALTERNATE_3 = 0x3A
 };
 
-#endif /* LOMBYTE_RNC_RENDERING_PIXEL_FORMAT_H */
+#endif /* RCP2P_RNC_RENDERING_PIXEL_FORMAT_H */

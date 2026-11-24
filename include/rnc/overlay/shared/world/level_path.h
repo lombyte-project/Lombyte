@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_WORLD_LEVEL_PATH_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_WORLD_LEVEL_PATH_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_WORLD_LEVEL_PATH_H
+#define RCP2P_RNC_OVERLAY_SHARED_WORLD_LEVEL_PATH_H
 
 #include "types.h"
 #include "rnc/math/vector.h"
@@ -24,4 +24,4 @@ extern LevelPath *l11_paths[] __asm__("D_L11_001B0EB0");
 extern LevelPath *l12_paths[] __asm__("D_L12_001B0930");
 extern LevelPath *l14_paths[] __asm__("D_L14_001B0BB0");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_WORLD_LEVEL_PATH_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_WORLD_LEVEL_PATH_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_MOBYS_ANIMATION_H
-#define LOMBYTE_RNC_MOBYS_ANIMATION_H
+#ifndef RCP2P_RNC_MOBYS_ANIMATION_H
+#define RCP2P_RNC_MOBYS_ANIMATION_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ extern f32 normal_lut[256][2] __asm__("D_00165500");
 
 s32 queue_animation_update(s32, s32, s32, s32, s32, s32, s32) __asm__("FUN_001ff308");
 
-#endif /* LOMBYTE_RNC_MOBYS_ANIMATION_H */
+#endif /* RCP2P_RNC_MOBYS_ANIMATION_H */

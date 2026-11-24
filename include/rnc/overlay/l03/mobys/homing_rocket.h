@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L03_MOBYS_HOMING_ROCKET_H
-#define LOMBYTE_RNC_OVERLAY_L03_MOBYS_HOMING_ROCKET_H
+#ifndef RCP2P_RNC_OVERLAY_L03_MOBYS_HOMING_ROCKET_H
+#define RCP2P_RNC_OVERLAY_L03_MOBYS_HOMING_ROCKET_H
 
 #include "types.h"
 
@@ -17,4 +17,4 @@ char *spawn_homing_rocket(void        *heading_vector,
 
 void homing_rocket_update(struct Moby *) __asm__("FUN_L03_002d43c8");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L03_MOBYS_HOMING_ROCKET_H */
+#endif /* RCP2P_RNC_OVERLAY_L03_MOBYS_HOMING_ROCKET_H */

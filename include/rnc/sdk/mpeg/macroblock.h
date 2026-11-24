@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_MPEG_MACROBLOCK_H
-#define LOMBYTE_RNC_SDK_MPEG_MACROBLOCK_H
+#ifndef RCP2P_RNC_SDK_MPEG_MACROBLOCK_H
+#define RCP2P_RNC_SDK_MPEG_MACROBLOCK_H
 
 #include "types.h"
 
@@ -23,4 +23,4 @@ void _motionVectors();
 s32  _skipMB0(struct MpegDecoder *, struct MpegSkipState *, s32 *, struct MpegMotionRef *, s32 *);
 s32  _sliceA0(struct MpegSliceDecoder *, s32, s32 *, s32 *, volatile struct MpegMotionState *);
 
-#endif /* LOMBYTE_RNC_SDK_MPEG_MACROBLOCK_H */
+#endif /* RCP2P_RNC_SDK_MPEG_MACROBLOCK_H */

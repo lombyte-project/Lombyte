@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L18_MOBYS_CUTSCENE_EFFECTS_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L18_MOBYS_CUTSCENE_EFFECTS_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L18_MOBYS_CUTSCENE_EFFECTS_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L18_MOBYS_CUTSCENE_EFFECTS_GLOBALS_H
 
 #include "types.h"
 
@@ -31,4 +31,4 @@ extern float deplanetizer_first_quad_local_z_scale __asm__("D_L18_00162514");
 extern float deplanetizer_second_quad_local_z_scale __asm__("D_L18_00162518");
 extern float deplanetizer_third_quad_local_z_scale __asm__("D_L18_0016251C");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L18_MOBYS_CUTSCENE_EFFECTS_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L18_MOBYS_CUTSCENE_EFFECTS_GLOBALS_H */

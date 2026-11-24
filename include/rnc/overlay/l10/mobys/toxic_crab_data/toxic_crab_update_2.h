@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L10_MOBYS_TOXIC_CRAB_DATA_TOXIC_CRAB_UPDATE_2_H
-#define LOMBYTE_RNC_OVERLAY_L10_MOBYS_TOXIC_CRAB_DATA_TOXIC_CRAB_UPDATE_2_H
+#ifndef RCP2P_RNC_OVERLAY_L10_MOBYS_TOXIC_CRAB_DATA_TOXIC_CRAB_UPDATE_2_H
+#define RCP2P_RNC_OVERLAY_L10_MOBYS_TOXIC_CRAB_DATA_TOXIC_CRAB_UPDATE_2_H
 
 #include "types.h"
 
@@ -8,4 +8,4 @@
 extern float toxic_crab_death_knockback_gravity_gp __asm__("D_L10_00161E28") __attribute__((sda));
 extern float toxic_crab_obstacle_pause_distance_gp __asm__("D_L10_00161E34") __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L10_MOBYS_TOXIC_CRAB_DATA_TOXIC_CRAB_UPDATE_2_H */
+#endif /* RCP2P_RNC_OVERLAY_L10_MOBYS_TOXIC_CRAB_DATA_TOXIC_CRAB_UPDATE_2_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_SCF_H
-#define LOMBYTE_RNC_SDK_SCF_H
+#ifndef RCP2P_RNC_SDK_SCF_H
+#define RCP2P_RNC_SDK_SCF_H
 
 #include "types.h"
 
@@ -10,4 +10,4 @@ void sceScfGetLocalTimefromRTC(s32);
 u8   sceScfGetSummerTime(void);
 int  sceScfGetTimeZone(void);
 
-#endif /* LOMBYTE_RNC_SDK_SCF_H */
+#endif /* RCP2P_RNC_SDK_SCF_H */

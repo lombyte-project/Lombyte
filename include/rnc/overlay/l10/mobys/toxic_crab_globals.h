@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L10_MOBYS_TOXIC_CRAB_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L10_MOBYS_TOXIC_CRAB_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L10_MOBYS_TOXIC_CRAB_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L10_MOBYS_TOXIC_CRAB_GLOBALS_H
 
 #include "types.h"
 
@@ -8,4 +8,4 @@
 extern float toxic_crab_hit_knockback_gravity __asm__("D_L10_00161E2C");
 extern float toxic_crab_group_approach_angle_limit_degrees __asm__("D_L10_00161E48");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L10_MOBYS_TOXIC_CRAB_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L10_MOBYS_TOXIC_CRAB_GLOBALS_H */

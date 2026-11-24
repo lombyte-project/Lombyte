@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_MENUS_ITEM_PREVIEW_PREVIEW_ANIMATION_H
-#define LOMBYTE_RNC_UI_MENUS_ITEM_PREVIEW_PREVIEW_ANIMATION_H
+#ifndef RCP2P_RNC_UI_MENUS_ITEM_PREVIEW_PREVIEW_ANIMATION_H
+#define RCP2P_RNC_UI_MENUS_ITEM_PREVIEW_PREVIEW_ANIMATION_H
 
 #include "types.h"
 
@@ -36,4 +36,4 @@ extern PreviewAnimationRequest preview_animation_requests[8] __asm__("D_001D5EC0
 
 extern PreviewAnimationRequest active_preview_animation __asm__("D_001D6080");
 
-#endif /* LOMBYTE_RNC_UI_MENUS_ITEM_PREVIEW_PREVIEW_ANIMATION_H */
+#endif /* RCP2P_RNC_UI_MENUS_ITEM_PREVIEW_PREVIEW_ANIMATION_H */

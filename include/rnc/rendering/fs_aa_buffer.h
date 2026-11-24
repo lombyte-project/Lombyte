@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_FS_AA_BUFFER_H
-#define LOMBYTE_RNC_RENDERING_FS_AA_BUFFER_H
+#ifndef RCP2P_RNC_RENDERING_FS_AA_BUFFER_H
+#define RCP2P_RNC_RENDERING_FS_AA_BUFFER_H
 
 #include "types.h"
 #include "rnc/sdk/libgraph.h"
@@ -36,4 +36,4 @@ struct FsAaBuf {
 
 extern struct FsAaBuf fs_aa_buffer __asm__("D_00151780");
 
-#endif /* LOMBYTE_RNC_RENDERING_FS_AA_BUFFER_H */
+#endif /* RCP2P_RNC_RENDERING_FS_AA_BUFFER_H */

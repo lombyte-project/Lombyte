@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_MAP_MAP_ICON_H
-#define LOMBYTE_RNC_UI_MAP_MAP_ICON_H
+#ifndef RCP2P_RNC_UI_MAP_MAP_ICON_H
+#define RCP2P_RNC_UI_MAP_MAP_ICON_H
 
 #include "types.h"
 
@@ -33,4 +33,4 @@ struct MapMarker {
     s32 texture_variant_or_color; /* 0x0C: rect colour when group is -1, else frame variant */
 }; /* size 0x10 */
 
-#endif /* LOMBYTE_RNC_UI_MAP_MAP_ICON_H */
+#endif /* RCP2P_RNC_UI_MAP_MAP_ICON_H */

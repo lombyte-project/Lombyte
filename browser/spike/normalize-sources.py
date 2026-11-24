@@ -48,7 +48,7 @@ import shutil
 import sys
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
-OUT = os.path.join(ROOT, 'build', 'spike', 'tree')
+OUT = os.environ.get('SPIKE_TREE') or os.path.join(ROOT, 'build', 'spike', 'tree')
 LABEL = re.compile(r'\b(?:FUN|func)_(L\d\d_)?([0-9A-Fa-f]{8})\b')
 # Both forms: `extern __typeof__(f) NAME __attribute__((alias("NAME")));` and
 # `extern T NAME(params) __attribute__((alias("NAME")));`. No `;` may sit between the name and the
@@ -92,7 +92,9 @@ def map_scratchpad(text):
 
 SCRATCHPAD = re.compile(r'\b0x7000([0-3][0-9A-Fa-f]{3})\b')
 SELF_ALIAS = re.compile(
-    r'extern\b[^;{}]*?\b(\w+)\s*(?:\([^;{}]*?\))?\s*__attribute__\(\(alias\("\1"\)\)\);[ \t]*\n?')
+    r'extern\b[^;{}]*?\b(\w+)\s*(?:\([^;{}]*?\))?\s*__attribute__\(\(alias\("\1"\)\)\);[ \t]*\n?'
+    # the attribute may also come first: `__attribute__((alias("NAME"))) extern T NAME(...);`
+    r'|__attribute__\(\(alias\("(\w+)"\)\)\)\s*extern\b[^;{}]*?\b\2\s*(?:\([^;{}]*?\))?\s*;[ \t]*\n?')
 
 
 BASIC = {'void', 'char', 'short', 'int', 'long', 'float', 'double', 'signed', 'unsigned',
@@ -280,7 +282,9 @@ def unify_with_definitions():
             # The previous token, across lines: a statement starts after `{`, `}`, `;`, `else` or
             # a `(void)` cast. Anything else (an `=`, an operator, an `if (...)`) counts as a read.
             before = text[max(0, use.start() - 200):use.start()].rstrip()
-            if before and not re.search(r'(?:[{};]|\belse|\(void\))$', before):
+            # also after a `case ...:`, `default:` or goto label (not the `:` of a `?:`)
+            if before and not re.search(r'(?:[{};]|\belse|\(void\))$', before) \
+                    and not re.search(r'(?:\bcase\b[^;{}?]*|\bdefault\s*|(?:^|[{};])\s*[A-Za-z_]\w*\s*):$', before):
                 return False
         return True
 
@@ -441,6 +445,94 @@ def unify_with_definitions():
                 f"static inline {returned} {local}({', '.join(pieces) or 'void'}) "
                 f"{{ {'' if declared_result == 'void' else 'return '}{call}; }}{redirect}")
 
+    abi_adapted = [0]
+
+    def abi_adapter(path, text, lead, returns, name, parameters, declared, declared_result,
+                    result, kinds, symbol):
+        """The last resort for a file-scope declaration in a .c file whose call cannot be made
+        as written (a different count, integer/float layout, or result). It applies the EE's
+        calling convention: integer and pointer arguments travel in a0-a7 / t0-t3, floats in
+        f12-f19, each counted separately, and results come back in v0 (integers) or f0 (floats).
+        The adapter has the caller's prototype; it passes the caller's n-th integer argument as
+        the definition's n-th integer parameter, the n-th float as the n-th float. ASSUMED: a
+        register the caller never set (a parameter it does not pass, or a result the definition
+        does not produce in the register it reads) is 0 here; on the console it holds whatever
+        was left in it. Extra arguments are dropped (the callee never reads them)."""
+        if not path.endswith('.c') or lead.strip() not in ('', 'extern') or lead[:1] in (' ', '\t'):
+            return None
+        if declared is None or declared_result is None or name in included_names(path):
+            return None
+        # One declaration of the name in the file (a second, e.g. `()`, would be an extern of the
+        # same name as the static adapter), and the type names the adapter writes must exist.
+        if sum(1 for m in DECLARATION.finditer(text) if m.group(3) == name) != 1:
+            return None
+        needed = set(kinds) | {result}
+        if any(kind not in ('void', 'void *', 'int', 'float', 'double', 'char', 'short', 'long', 'long long',
+                            'unsigned int', 'unsigned char', 'unsigned short', 'signed char')
+               for kind in needed) and not re.search(r'#\s*include\s+"(?:types|common)\.h"', text) \
+                and not re.search(r'#\s*include\s+"', text):
+            return None
+        bound = set(re.findall(r'\b(\w+)\s*\([^;{}()]*\)\s*__asm__\("' + re.escape(symbol) + r'"\)', text))
+        if name != symbol and re.search(r'\b' + re.escape(symbol) + r'\s*\(', text):
+            bound.add(symbol)
+        for other in bound - {name}:
+            found = False
+            for m in DECLARATION.finditer(text):
+                if m.group(3) != other:
+                    continue
+                found = True
+                if portable_parameters(m.group(4)) is None or portable_type(m.group(2).strip()) is None \
+                        or m.group(1)[:1] in (' ', '\t') or other in included_names(path):
+                    return None
+            if not found:
+                return None  # bound somewhere this pass cannot read
+        if (path, name) in adapted:
+            return ''
+        pieces = [part.strip() for part in parameters.split(',')] if declared else []
+        names = []
+        for index, piece in enumerate(pieces):
+            last = re.search(r'(\w+)\s*$', piece)
+            if last and last.group(1) not in BASIC and not piece.rstrip().endswith('*') and len(piece.split()) > 1:
+                names.append(last.group(1))
+            else:
+                names.append(f'abi_{index}')
+                pieces[index] = f'{piece} abi_{index}'
+        given = {'i': [], 'f': []}
+        for index, kind in enumerate(declared):
+            given['f' if kind in FLOATS else 'i'].append((names[index], kind))
+        arguments = []
+        for kind in kinds:
+            pool = given['f' if kind in FLOATS else 'i']
+            if not pool:
+                arguments.append('0.0f' if kind in FLOATS else '0')
+                continue
+            arg, arg_kind = pool.pop(0)
+            if kind == 'void *':
+                arguments.append(f'(void *)(long)({arg})')
+            elif arg_kind == 'void *':
+                arguments.append(f'({kind})(long)({arg})')
+            else:
+                arguments.append(f'({kind})({arg})')
+        adapted[(path, name)] = ' '.join(parameters.split())
+        inner = f'{name}__definition_abi'
+        local = f'{name}__caller_abi' if name == symbol else name
+        redirect = f"\n#define {name} {local}" if local != name else ''
+        returned = returns.replace('extern', '').strip()
+        call = f"{inner}({', '.join(arguments)})"
+        if declared_result == 'void':
+            body = f'{call};'
+        elif result == 'void' or classes([declared_result]) != classes([result]):
+            body = f'{call}; return 0; /* ASSUMED: the register this caller reads is not set by the callee */'
+        elif declared_result == 'void *':
+            body = f'return (void *)(long){call};'
+        elif result == 'void *':
+            body = f'return ({returned})(long){call};'
+        else:
+            body = f'return ({returned}){call};'
+        abi_adapted[0] += 1
+        return (f"extern {result} {inner}({', '.join(kinds) or 'void'}) __asm__(\"{symbol}\");\n"
+                f"static inline {returned} {local}({', '.join(pieces) or 'void'}) {{ {body} }}{redirect}")
+
     for path, text in sources.items():
         def replace(match):
             nonlocal rewritten
@@ -454,10 +546,22 @@ def unify_with_definitions():
             result, kinds, defined_in, defined_as = entry
             declared = portable_parameters(parameters)
             declared_result = portable_type(returns.strip())
+            void_only = None
             if defined_in == path:
                 # The defining file's own prototypes stay. A second C name it binds to the same
                 # label with the integers and floats in another order gets the reordering adapter:
                 # left alone, clang emits a direct call whose signature does not match the body.
+                if name != defined_as and declared is not None and len(declared) == len(kinds) \
+                        and classes(declared) == classes(kinds) and declared_result is not None \
+                        and [wasm_type(k) for k in declared] == [wasm_type(k) for k in kinds] \
+                        and (declared_result == 'void') == (result == 'void') \
+                        and (declared != kinds or declared_result != result) \
+                        and ('types.h' in text or 'common.h' in text):
+                    # A second name for this file's own definition, with other C integer types
+                    # (u8 vs int): one symbol with two C types makes the compiler trap the call.
+                    # It takes the definition's types (the EE passes the same registers).
+                    rewritten += 1
+                    return f"{lead}{result} {name}({', '.join(kinds) or 'void'}){asm or ''};"
                 if name == defined_as or declared is None or len(declared) != len(kinds) \
                         or classes(declared) == classes(kinds):
                     return match.group(0)
@@ -478,9 +582,12 @@ def unify_with_definitions():
             if declared is None and parameters.strip() == '' and result == 'void' \
                     and declared_result not in (None, 'void') and result_never_read(path, text, name):
                 # `()`: the calls still decide the parameters, but none reads the result the
-                # definition does not return, so only the result changes.
+                # definition does not return, so the result changes; the parameter rules below
+                # still apply to the same declaration.
                 rewritten += 1
-                return f"{lead}void {name}(){asm or ''};"
+                returns = returns.replace(returns.strip(), 'void') if returns.strip() else 'void'
+                declared_result = 'void'
+                void_only = f"{lead}void {name}(){asm or ''};"
             if declared is None and parameters.strip() == '' and path.endswith('.c') and kinds \
                     and symbol in decoded_signatures \
                     and not any(kind in FLOATS for kind in kinds) and result not in FLOATS:
@@ -538,16 +645,36 @@ def unify_with_definitions():
                     return (f"extern {result} {inner}({', '.join(kinds)}) __asm__(\"{symbol}\");\n"
                             f"static inline {returned} {local}({params}, ...) "
                             f"{{ {'' if portable_type(returned) == 'void' else 'return '}{call}; }}{redirect}")
+            if declared is None and parameters.strip() == '' and kinds and path.endswith('.c') \
+                    and not any(kind in FLOATS for kind in kinds) and result not in FLOATS \
+                    and lead[:1] not in (' ', '\t') and name not in included_names(path) and (path, name) not in adapted:
+                # `()` whose every call passes exactly the definition's integer or pointer
+                # arguments: the definition's prototype converts them as the EE registers would hold
+                # them (an int widened to a 64-bit parameter is sign-extended, as lw/addiu leave it).
+                counts = set(call_argument_counts(text, name))
+                declarations = sum(1 for m in DECLARATION.finditer(text) if m.group(3) == name)
+                if counts == {len(kinds)} and declarations == 1:
+                    rewritten += 1
+                    returned = returns.replace('extern', '').strip()
+                    if void_only or (result == 'void' and result_never_read(path, text, name)):
+                        returned = 'void'
+                    elif result != 'void' and result not in FLOATS and portable_type(returned) not in (None, 'void') \
+                            and portable_type(returned) not in FLOATS and wasm_type(portable_type(returned)) != wasm_type(result):
+                        returned = result  # an integer result of another width (a 64-bit TEX0 read as s32)
+                    return f"{lead}{returned} {name}({', '.join(kinds)}){asm or ''};"
             if declared is None:  # `()` or types this pass cannot read: calls decide the signature
                 if parameters.strip() == '':
                     note(symbol, path, f"declared with unspecified parameters; definition ({', '.join(kinds) or 'void'})")
-                return match.group(0)
+                return void_only or match.group(0)
             if len(declared) != len(kinds) or classes(declared) != classes(kinds):
                 adapter = reorder_adapter(path, text, lead, returns, name, parameters, declared,
                                           declared_result, result, kinds, symbol)
                 if adapter is None and len(declared) != len(kinds):
                     adapter = count_adapter(path, text, lead, returns, name, parameters, declared,
                                             declared_result, result, kinds, symbol)
+                if adapter is None:
+                    adapter = abi_adapter(path, text, lead, returns, name, parameters, declared,
+                                          declared_result, result, kinds, symbol)
                 if adapter is not None:
                     rewritten += 1
                     return adapter
@@ -560,12 +687,26 @@ def unify_with_definitions():
                 if wasm_type(declared[index]) != wasm_type(kind):
                     pieces[index] = kind
             new_returns = returns
-            if declared_result is not None and wasm_type(declared_result) != wasm_type(result):
+            INTEGER = lambda kind: kind not in (None, 'void', 'void *') and kind not in FLOATS
+            if declared_result is not None and wasm_type(declared_result) == wasm_type(result) \
+                    and declared_result != result and INTEGER(declared_result) and INTEGER(result) \
+                    and wasm_type(result) == 'i32' and ('types.h' in text or 'common.h' in text):
+                # The same width in WebAssembly but another C integer type (u8 vs s32): a file that
+                # binds the label under two names with such result types gets a call the compiler
+                # cannot make (it becomes a trap). On the EE the callee returns the value in v0
+                # either way, so the declaration takes the definition's type.
+                new_returns = result + ' '
+            elif declared_result is not None and wasm_type(declared_result) != wasm_type(result):
                 if result == 'void' and result_never_read(path, text, name):
                     new_returns = 'void '  # declared with a result, but every call discards it
                 elif result == 'void':
                     # The caller reads a result the definition does not declare (a value left in
-                    # $v0). Rewriting would not compile; it stays a link-reported mismatch.
+                    # $v0): the register-convention adapter (0 for that value), else listed.
+                    adapter = abi_adapter(path, text, lead, returns, name, parameters, declared,
+                                          declared_result, result, kinds, symbol)
+                    if adapter is not None:
+                        rewritten += 1
+                        return adapter
                     note(symbol, path, f"declared to return {declared_result}; definition returns void")
                 else:
                     new_returns = result + ' '
@@ -582,7 +723,162 @@ def unify_with_definitions():
         handle.write('\n'.join(sorted(disagreements)) + '\n')
     known = sum(1 for entry in canon.values() if entry)
     print(f'prototypes: {known} definitions read, {rewritten} declarations rewritten to match, '
-          f'{len(disagreements)} left for per-call fixes -> build/spike/prototype-disagreements.txt')
+          f'{len(disagreements)} left for per-call fixes -> build/spike/prototype-disagreements.txt; '
+          f'{abi_adapted[0]} register-convention adapters')
+    callback_adapters(canon)
+
+
+# Functions registered through a table the game later calls as `void f(s32 argument)`: on the EE
+# the argument is one register, so callbacks declared with no parameters, a pointer, or extra
+# parameters all work; in WebAssembly the table call checks the callee's exact type.
+CALLBACK_REGISTRARS = {'add_draw_callback': 0}  # registrar -> index of the callback argument
+CALLBACK_NOT_NAMES = {'void', 'int', 's32', 'u32', 'char', 'unsigned', 'signed', 'long', 'short',
+                      'const', 'volatile', 'struct', 'union', 'enum', 'float', 'f32', 'u8', 's8'}
+
+
+def callback_adapters(canon):
+    """For each registration whose callback's definition is not `void (i32)`, a static adapter
+    of that type calls the callback with the argument converted to its first parameter (zero for
+    any further ones) and the registration takes the adapter. Callbacks without a known
+    definition are left alone."""
+    adapted = 0
+    for folder, _, names in os.walk(OUT):
+        for name in names:
+            if not name.endswith('.c'):
+                continue
+            path = os.path.join(folder, name)
+            with open(path, encoding='utf-8', errors='surrogateescape') as handle:
+                text = handle.read()
+            if not any(registrar + '(' in text for registrar in CALLBACK_REGISTRARS):
+                continue
+            adapters = {}
+
+            def swap(match):
+                prefix, casts, callback = match.group(1), match.group(2), match.group(3)
+                line_start = text.rfind('\n', 0, match.start()) + 1
+                line = text[line_start:text.find('\n', match.end()) if text.find('\n', match.end()) >= 0 else len(text)]
+                if callback in CALLBACK_NOT_NAMES or 'extern' in line or '__asm__' in line:
+                    return match.group(0)  # a type in the registrar's own prototype, not a call
+                label = re.search(r'\b' + re.escape(callback) + r'\s*\([^;{}]*?\)\s*__asm__\("([^"]+)"\)', text)
+                entry = canon.get(label.group(1) if label else BY_NAME.get(callback, callback))
+                if not entry:
+                    return match.group(0)
+                result, kinds = entry[0], entry[1]
+                own = re.search(r'\b' + re.escape(callback) + r'\s*\(([^;{}()]*)\)\s*(?:__asm__\("[^"]*"\)\s*)?;', text)
+                if own and portable_parameters(own.group(1)) is not None:
+                    kinds = portable_parameters(own.group(1))  # the call must compile against this file's prototype
+                if result == 'void' and len(kinds) == 1 and wasm_type(kinds[0]) == 'i32':
+                    return match.group(0)
+                if any(kind in FLOATS for kind in kinds[:1]):
+                    return match.group(0)
+                arguments = [f'({kinds[0]})argument'] if kinds else []
+                arguments += ['0.0f' if kind in FLOATS else '0' for kind in kinds[1:]]
+                adapters[callback] = f'static void {callback}__as_callback(s32 argument) {{ {callback}({", ".join(arguments)}); }}'
+                return f'{prefix}{casts}{callback}__as_callback'
+
+            pattern = r'(\b(?:' + '|'.join(CALLBACK_REGISTRARS) + r')\s*\(\s*)((?:\([^()]*(?:\([^()]*\)[^()]*)*\)\s*)*)([A-Za-z_]\w*)'
+            new = re.sub(pattern, swap, text)
+            if not adapters:
+                continue
+            first_include = re.search(r'^#include[^\n]*\n', new, re.M)  # the declaration needs only s32
+            at = first_include.end() if first_include else 0
+            forward = ''.join(f'static void {callback}__as_callback(s32 argument);\n' for callback in adapters)
+            new = new[:at] + forward + new[at:] + '\n/* Table-call adapters (normalize-sources.py, callback_adapters). */\n' + \
+                '\n'.join(adapters.values()) + '\n'
+            with open(path, 'w', encoding='utf-8', errors='surrogateescape') as handle:
+                handle.write(new)
+            adapted += len(adapters)
+    print(f'callbacks registered for a table call, given an adapter of its type: {adapted}')
+    screen_callback_adapters(canon)
+
+
+# Menu screens (include/rnc/ui/menus/menu_screen.h) start with four function pointers the menu
+# system calls through the table: update and draw as s32 (screen), enter and leave as
+# void (screen, s32). The static screen tables name functions of assorted types.
+HEADER_PARAMS = {}  # C name -> parameter lists its header declarations give
+BY_NAME = {}  # C name -> address label (named_labels), for callbacks declared in headers
+SCREEN_SLOTS = [('s32', ['void *']), ('s32', ['void *']), ('void', ['void *', 's32']), ('void', ['void *', 's32'])]
+SCREEN_INITIALIZER = re.compile(r'(\bstruct\s+Menu\w*Screen\w*\s+\w+\s*=\s*\{\s*\{)([^{}]*)(\})')
+
+
+def screen_callback_adapters(canon):
+    """For each function named in a menu screen's callback slots whose definition does not have
+    the slot's type, a static adapter of the slot's type calls it (arguments converted, zero for
+    extra parameters). ASSUMED: a void function in an s32 slot returns 0 (on the EE the caller
+    reads whatever v0 holds)."""
+    adapted = 0
+    # C name -> label from every `name(...) __asm__("LABEL")` in the tree (headers included), where
+    # the name names one label only.
+    seen = {}
+    for folder, _, names in os.walk(OUT):
+        for name in names:
+            if name.endswith(('.c', '.h')):
+                with open(os.path.join(folder, name), encoding='utf-8', errors='surrogateescape') as handle:
+                    for match in re.finditer(r'\b(\w+)\s*\(([^;{}()]*)\)\s*__asm__\("([^"]+)"\)', handle.read()):
+                        seen.setdefault(match.group(1), set()).add(match.group(3))
+                        if name.endswith('.h'):
+                            HEADER_PARAMS.setdefault(match.group(1), set()).add(match.group(2).strip())
+    for c_name, labels in seen.items():
+        if len(labels) == 1 and c_name not in BY_NAME:
+            BY_NAME[c_name] = next(iter(labels))
+    for folder, _, names in os.walk(OUT):
+        for name in names:
+            if not name.endswith('.c'):
+                continue
+            path = os.path.join(folder, name)
+            with open(path, encoding='utf-8', errors='surrogateescape') as handle:
+                text = handle.read()
+            if 'Screen' not in text:
+                continue
+            adapters = {}
+
+            def fix(match):
+                slots = [part.strip() for part in match.group(2).split(',')]
+                for index, callback in enumerate(slots[:4]):
+                    if not re.fullmatch(r'[A-Za-z_]\w*', callback) or callback in CALLBACK_NOT_NAMES:
+                        continue
+                    label = re.search(r'\b' + re.escape(callback) + r'\s*\([^;{}]*?\)\s*__asm__\("([^"]+)"\)', text)
+                    symbol = label.group(1) if label else BY_NAME.get(callback, callback)
+                    entry = canon.get(symbol)
+                    if not entry:
+                        continue
+                    result, kinds = entry[0], entry[1]
+                    want_result, want = SCREEN_SLOTS[index]
+                    own = re.search(r'\b' + re.escape(callback) + r'\s*\(([^;{}()]*)\)\s*(?:__asm__\("[^"]*"\)\s*)?;', text)
+                    if own and portable_parameters(own.group(1)) is not None:
+                        kinds = portable_parameters(own.group(1))
+                    elif len(HEADER_PARAMS.get(callback, ())) == 1 and portable_parameters(next(iter(HEADER_PARAMS[callback]))) is not None:
+                        kinds = portable_parameters(next(iter(HEADER_PARAMS[callback])))  # the call must match what the file sees
+                    same = [wasm_type(k) for k in kinds] == [wasm_type(k) for k in want] and \
+                        (wasm_type(result) if result != 'void' else None) == (wasm_type(want_result) if want_result != 'void' else None)
+                    if same or any(k in FLOATS for k in kinds):
+                        continue
+                    adapter = f'{callback}__as_screen_{index}'
+                    params = ', '.join(f'{k} a{i}' for i, k in enumerate(want))
+                    args = [f'({k})a{i}' if i < len(want) else ('0.0f' if k in FLOATS else '0') for i, k in enumerate(kinds)]
+                    call = f'{callback}({", ".join(args)})'
+                    if want_result == 'void':
+                        body = f'{call};'
+                    elif result == 'void':
+                        body = f'{call}; return 0; /* ASSUMED: v0 is not meaningful here */'
+                    else:
+                        body = f'return ({want_result}){call};'
+                    adapters[adapter] = f'static {want_result} {adapter}({params}) {{ {body} }}'
+                    slots[index] = adapter
+                return match.group(1) + ', '.join(slots) + match.group(3)
+
+            new = SCREEN_INITIALIZER.sub(fix, text)
+            if not adapters:
+                continue
+            first_include = re.search(r'^#include[^\n]*\n', new, re.M)
+            at = first_include.end() if first_include else 0
+            forward = ''.join(re.sub(r' \{.*', ';', code) + '\n' for code in adapters.values())
+            # the adapters call functions declared further down: define them at the end
+            new = new[:at] + forward + new[at:] + '\n/* Menu screen adapters (normalize-sources.py). */\n' + '\n'.join(adapters.values()) + '\n'
+            with open(path, 'w', encoding='utf-8', errors='surrogateescape') as handle:
+                handle.write(new)
+            adapted += len(adapters)
+    print(f'menu screen callbacks given an adapter of their slot type: {adapted}')
 
 
 def unify_missing_results():
@@ -765,9 +1061,44 @@ def named_labels():
     return table
 
 
+# Level functions that copy a boot function word for word (level-copies.json, from
+# level-copies.py): calls to the level copy become calls to the boot function.
+with open(os.path.join(ROOT, 'browser', 'spike', 'level-copies.json'), encoding='utf-8') as _handle:
+    LEVEL_COPIES = json.load(_handle)['level_00']
+LEVEL_COPY = re.compile(r'\b(' + '|'.join(map(re.escape, LEVEL_COPIES)) + r')\b') if LEVEL_COPIES else None
+# Boot sources (outside src/overlays/) that cast an executable data address to a pointer
+# (`*(s32 *)0x15FF18`) name the executable's copy; while a level runs, the level program's copy
+# is used (exe-data-map.py, build/spike/exe-data-l00.json, which compile-all.sh writes first).
+# Such literals take the mapped address, as the labels do in ram-image.mjs.
+try:
+    with open(os.path.join(ROOT, 'build', 'spike', 'exe-data-l00.json'), encoding='utf-8') as _handle:
+        EXE_DATA = {int(k, 16): int(v, 16) for k, v in json.load(_handle).items()}
+except FileNotFoundError:
+    EXE_DATA = {}
+# The boot program's variant (SPIKE_NO_EXE_MAP=1, compile-all.sh): it runs before any level program
+# is loaded, so its literals keep the executable's own addresses.
+if os.environ.get('SPIKE_NO_EXE_MAP'):
+    EXE_DATA = {}
+ADDRESS_LITERAL = re.compile(r'(\*\s*\)\s*\(?\s*)0x([0-9A-Fa-f]{6,8})\b')
+
+
+def map_address_literals(text):
+    def swap(match):
+        address = int(match.group(2), 16)
+        if address not in EXE_DATA:
+            return match.group(0)
+        return f"{match.group(1)}0x{EXE_DATA[address]:08X} /* executable 0x{address:08X} */"
+    return ADDRESS_LITERAL.sub(swap, text)
+
+
+LEVEL_CALLS = json.load(open(os.path.join(ROOT, 'browser', 'spike', 'level-copies.json'), encoding='utf-8'))['level_calls_00']
+LEVEL_CALL = re.compile(r'\b(' + '|'.join(map(re.escape, LEVEL_CALLS)) + r')\b') if LEVEL_CALLS else None
+
+
 def main():
     shutil.rmtree(OUT, ignore_errors=True)
     by_name = named_labels()
+    BY_NAME.update(by_name)
     named = re.compile(r'__asm__\("(' + '|'.join(sorted(map(re.escape, by_name), key=len, reverse=True)) + r')"\)')
     # alias("Name") targets the same symbol, so it is rewritten with it.
     named_alias = re.compile(r'alias\("(' + '|'.join(sorted(map(re.escape, by_name), key=len, reverse=True)) + r')"\)')
@@ -783,6 +1114,11 @@ def main():
                     text = handle.read()
                 new = LABEL.sub(lambda m: f"FUN_{m.group(1) or ''}{m.group(2).lower()}", text)
                 new = named.sub(lambda m: f'__asm__("{by_name[m.group(1)]}")', new)
+                new = LEVEL_COPY.sub(lambda m: LEVEL_COPIES[m.group(0)], new) if LEVEL_COPY else new
+                if top == 'src' and os.path.relpath(folder, ROOT).split(os.sep)[:2] != ['src', 'overlays']:
+                    new = map_address_literals(new)
+                if LEVEL_CALL and top == 'src' and os.path.relpath(folder, ROOT).split(os.sep)[:2] == ['src', 'overlays']:
+                    new = LEVEL_CALL.sub(lambda m: LEVEL_CALLS[m.group(0)], new)
                 new = named_alias.sub(lambda m: f'alias("{by_name[m.group(1)]}")', new)
                 new, removed = SELF_ALIAS.subn('', new)
                 new = widen_long(new)
@@ -808,6 +1144,10 @@ def main():
         with open(path, 'w', encoding='utf-8', errors='surrogateescape') as handle:
             handle.write(text.replace(fix['find'], fix['replace']))
     print(f"applied {len(fixes['replacements'])} source replacements")
+    unify_with_definitions()
+    # A second pass: some declarations only agree in form with their definition once the first
+    # pass has rewritten other declarations in the same file (UNVERIFIED which ordering causes it);
+    # the second pass changes only what still disagrees.
     unify_with_definitions()
     for rule in fixes.get('empty_functions', []):
         total = 0
@@ -868,7 +1208,56 @@ def main():
         if total == 0:
             sys.exit(f"prototype rule for {rule['symbol']} matched no declaration")
         print(f"unified {total} declarations of {rule['symbol']}")
+    adapter_addresses_to_definitions()
     print(f'normalized copy: {files} files, {changed} rewritten, {dropped} self-aliases dropped -> build/spike/tree')
+
+
+ADAPTER = re.compile(r'static inline [^;{}()]*?\b(\w+)\s*\([^;{}]*?\)\s*\{\s*(?:return\s+)?(?:\([^()]*\)\s*)?'
+                     r'(\w+__(?:definition_abi|definition_order|caller_abi|caller_order)\w*)\s*\(')
+
+
+def adapter_addresses_to_definitions():
+    """The adapters above are for calls. Where a file uses an adapter's name as a value (a callback
+    handed to the game, later called through a pointer), the pointer must be the function itself:
+    an adapter has the call site's type, and the game's indirect call uses the definition's, so
+    WebAssembly traps ("function signature mismatch"; the HUD's queued init callbacks after a
+    weapon switch). On the EE both are the same address. Such uses take the adapter's target."""
+    replaced = 0
+    for folder, _, names in os.walk(OUT):
+        for name in names:
+            if not name.endswith('.c'):
+                continue
+            path = os.path.join(folder, name)
+            with open(path, encoding='utf-8', errors='surrogateescape') as handle:
+                text = handle.read()
+            if 'static inline' not in text:
+                continue
+            targets = {m.group(1): (m.group(2), m.end()) for m in ADAPTER.finditer(text)}
+            if not targets:
+                continue
+            # names that #define to an adapter (`#define F F__caller_order`) are used the same way
+            for m in re.finditer(r'^#define\s+(\w+)\s+(\w+)\s*$', text, re.M):
+                if m.group(2) in targets:
+                    targets[m.group(1)] = (targets[m.group(2)][0], m.end())
+            new_lines = []
+            changed = False
+            for line in text.split('\n'):
+                stripped = line.lstrip()
+                if stripped.startswith('#') or stripped.startswith('static inline') or '__asm__' in line:
+                    new_lines.append(line)
+                    continue
+                def value(match):
+                    nonlocal changed
+                    changed = True
+                    return f'{targets[match.group(1)][0]}'
+                pattern = r'(?<![\w.>])\b(' + '|'.join(map(re.escape, targets)) + r')\b(?!\s*\()'
+                new_lines.append(re.sub(pattern, value, line))
+            if changed:
+                new = '\n'.join(new_lines)
+                replaced += 1
+                with open(path, 'w', encoding='utf-8', errors='surrogateescape') as handle:
+                    handle.write(new)
+    print(f'adapter names used as values (callbacks): {replaced} files now pass the function itself')
 
 
 if __name__ == '__main__':

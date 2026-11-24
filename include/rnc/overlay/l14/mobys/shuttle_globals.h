@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L14_MOBYS_SHUTTLE_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L14_MOBYS_SHUTTLE_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L14_MOBYS_SHUTTLE_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L14_MOBYS_SHUTTLE_GLOBALS_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ extern s32 shuttle_enter_riding_transition_frames __asm__("D_L14_00161B8C");
 extern s32 shuttle_exit_riding_transition_frames __asm__("D_L14_00161B90");
 extern f32 shuttle_horizontal_rider_correction_limit_scale __asm__("D_L14_00161B88");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L14_MOBYS_SHUTTLE_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L14_MOBYS_SHUTTLE_GLOBALS_H */

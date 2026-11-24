@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L18_MOBYS_ROCKET_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L18_MOBYS_ROCKET_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L18_MOBYS_ROCKET_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L18_MOBYS_ROCKET_GLOBALS_H
 
 #include "types.h"
 
@@ -11,4 +11,4 @@ extern float rocket_explosion_hit_priority __asm__("D_L18_0016196C");
 extern int   rocket_target_pulse_color_start __asm__("D_L18_00161980");
 extern int   rocket_target_pulse_color_end __asm__("D_L18_00161984");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L18_MOBYS_ROCKET_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L18_MOBYS_ROCKET_GLOBALS_H */

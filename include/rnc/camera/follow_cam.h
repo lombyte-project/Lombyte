@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_CAMERA_FOLLOW_CAM_H
-#define LOMBYTE_RNC_CAMERA_FOLLOW_CAM_H
+#ifndef RCP2P_RNC_CAMERA_FOLLOW_CAM_H
+#define RCP2P_RNC_CAMERA_FOLLOW_CAM_H
 
 #include "types.h"
 #include "rnc/camera/update_cam.h"
@@ -111,4 +111,4 @@ void follow_camera_start_slide(void) __asm__("FUN_L00_002e8648");
 void follow_camera_set_lateral_spring(f32 stiffness, f32 damping) __asm__("FUN_L00_002e8590");
 void follow_camera_set_up_spring(f32 stiffness, f32 damping) __asm__("FUN_L00_002e85d8");
 
-#endif /* LOMBYTE_RNC_CAMERA_FOLLOW_CAM_H */
+#endif /* RCP2P_RNC_CAMERA_FOLLOW_CAM_H */

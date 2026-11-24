@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_MENUS_MENU_SCREEN_H
-#define LOMBYTE_RNC_UI_MENUS_MENU_SCREEN_H
+#ifndef RCP2P_RNC_UI_MENUS_MENU_SCREEN_H
+#define RCP2P_RNC_UI_MENUS_MENU_SCREEN_H
 
 #include "types.h"
 
@@ -533,4 +533,4 @@ struct MenuStreamedMobyScreen {
     u8                    pad_A4[0x1C];
 }; /* size 0xC0 */
 
-#endif /* LOMBYTE_RNC_UI_MENUS_MENU_SCREEN_H */
+#endif /* RCP2P_RNC_UI_MENUS_MENU_SCREEN_H */

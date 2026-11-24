@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L02_MOBYS_SMOKE_VENT_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L02_MOBYS_SMOKE_VENT_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L02_MOBYS_SMOKE_VENT_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L02_MOBYS_SMOKE_VENT_GLOBALS_H
 
 #include "types.h"
 
@@ -10,4 +10,4 @@ extern s32 view_gated_smoke_burst_interval_max __asm__("D_L02_00162110");
 extern s32 alternating_smoke_burst_interval_min __asm__("D_L02_0016215C");
 extern s32 alternating_smoke_burst_interval_max __asm__("D_L02_00162160");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L02_MOBYS_SMOKE_VENT_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L02_MOBYS_SMOKE_VENT_GLOBALS_H */

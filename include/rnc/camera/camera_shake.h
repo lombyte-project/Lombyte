@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_CAMERA_CAMERA_SHAKE_H
-#define LOMBYTE_RNC_CAMERA_CAMERA_SHAKE_H
+#ifndef RCP2P_RNC_CAMERA_CAMERA_SHAKE_H
+#define RCP2P_RNC_CAMERA_CAMERA_SHAKE_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ struct CameraShake {
     s32 frames_max; /* 0xC: the longest count since the shake started */
 };
 
-#endif /* LOMBYTE_RNC_CAMERA_CAMERA_SHAKE_H */
+#endif /* RCP2P_RNC_CAMERA_CAMERA_SHAKE_H */

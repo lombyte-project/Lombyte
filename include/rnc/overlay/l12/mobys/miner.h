@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L12_MOBYS_MINER_H
-#define LOMBYTE_RNC_OVERLAY_L12_MOBYS_MINER_H
+#ifndef RCP2P_RNC_OVERLAY_L12_MOBYS_MINER_H
+#define RCP2P_RNC_OVERLAY_L12_MOBYS_MINER_H
 
 #include "rnc/mobys/moby.h"
 #include "rnc/overlay/l12/mobys/watcher.h"

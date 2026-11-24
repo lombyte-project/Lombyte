@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_UI_HUD_HUD_FRAME_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_UI_HUD_HUD_FRAME_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_UI_HUD_HUD_FRAME_H
+#define RCP2P_RNC_OVERLAY_SHARED_UI_HUD_HUD_FRAME_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ void draw_cropped_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_L00_0023
 
 void hud_weapon_update(void) __asm__("FUN_L00_0023cdb8");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_UI_HUD_HUD_FRAME_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_UI_HUD_HUD_FRAME_H */

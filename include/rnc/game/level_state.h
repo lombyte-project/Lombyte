@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_GAME_LEVEL_STATE_H
-#define LOMBYTE_RNC_GAME_LEVEL_STATE_H
+#ifndef RCP2P_RNC_GAME_LEVEL_STATE_H
+#define RCP2P_RNC_GAME_LEVEL_STATE_H
 
 #include "types.h"
 #include "sda.h"
@@ -13,4 +13,4 @@
 extern u8 level_available[LEVEL_RECORD_COUNT] __asm__("D_0013DD40") NOT_SDA; /* shows the level on the map */
 extern u8 level_visit_state[LEVEL_RECORD_COUNT] __asm__("D_0013DD58") NOT_SDA; /* 0 new, 1 entered, 2 done */
 
-#endif /* LOMBYTE_RNC_GAME_LEVEL_STATE_H */
+#endif /* RCP2P_RNC_GAME_LEVEL_STATE_H */

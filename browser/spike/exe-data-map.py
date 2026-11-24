@@ -11,7 +11,8 @@ address.
 
 This compares each executable function with its level copy (config/us/levels/functions.tsv) and
 pairs the %hi/%lo address constants the two form at the same offsets, using the same pairing as
-overlay_exe_data.py. Static comparison of local files only. Output:
+overlay_exe_data.py, and the gp-relative small-data accesses at the same offsets (the level copy of
+sky_draw_shell_gouraud reads gp - 0x6730 where the executable's reads gp - 0x67f0). Static comparison of local files only. Output:
 build/spike/exe-data-lNN.json = { "0x<executable address>": "0x<level address>", ... }
 
 Usage: browser/spike/exe-data-map.py [level=0] [--elf build/rea/SCUS_971.99]
@@ -24,6 +25,9 @@ import sys
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
 
 
+GP = 0x166c00  # config/us/rnc1.us.yaml; the level programs use the same value (create_part, update_parts)
+
+
 def addresses(code):
     """Offset of each %lo use -> the address its %hi/%lo pair forms."""
     hi = {}
@@ -33,6 +37,9 @@ def addresses(code):
         op, rs, rt, imm = w >> 26, (w >> 21) & 31, (w >> 16) & 31, w & 0xFFFF
         if op == 0x0F:  # lui
             hi[rt] = imm << 16
+            continue
+        if rs == 28 and (op in (0x09,) or op >= 0x20):  # gp-relative small data (gp = 0x166c00 in both)
+            out[off] = (GP + (imm - 0x10000 if imm & 0x8000 else imm)) & 0xFFFFFFFF
             continue
         if rs in hi and (op in (0x09, 0x0D, 0x19) or op >= 0x20):
             lo = imm - 0x10000 if imm & 0x8000 and op != 0x0D else imm

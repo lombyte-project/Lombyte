@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_KERNEL_H
-#define LOMBYTE_RNC_SDK_KERNEL_H
+#ifndef RCP2P_RNC_SDK_KERNEL_H
+#define RCP2P_RNC_SDK_KERNEL_H
 
 #include "types.h"
 #include "rnc/sdk/top_thread.h"
@@ -57,4 +57,4 @@ void  topThread(TopThreadQueue *);
 void  VSync(void);
 s32   write(s32, s32, s32);
 
-#endif /* LOMBYTE_RNC_SDK_KERNEL_H */
+#endif /* RCP2P_RNC_SDK_KERNEL_H */

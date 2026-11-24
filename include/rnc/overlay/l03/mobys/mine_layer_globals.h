@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L03_MOBYS_MINE_LAYER_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L03_MOBYS_MINE_LAYER_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L03_MOBYS_MINE_LAYER_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L03_MOBYS_MINE_LAYER_GLOBALS_H
 
 #include "types.h"
 
@@ -13,4 +13,4 @@ extern f32 mine_layer_projectile_vertical_launch_speed __asm__("D_L03_00161914")
 extern f32 mine_layer_lethal_knockback_speed_scale __asm__("D_L03_001618F8");
 extern f32 mine_layer_nonlethal_knockback_speed_scale __asm__("D_L03_001618FC");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L03_MOBYS_MINE_LAYER_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L03_MOBYS_MINE_LAYER_GLOBALS_H */

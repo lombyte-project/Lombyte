@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_RPC_IOP_H
-#define LOMBYTE_RNC_SDK_RPC_IOP_H
+#ifndef RCP2P_RNC_SDK_RPC_IOP_H
+#define RCP2P_RNC_SDK_RPC_IOP_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ s32 sceSifRebootIop(const char *);
 s32 sceSifResetIop(const char *, s32);
 int sceSifSyncIop(void);
 
-#endif /* LOMBYTE_RNC_SDK_RPC_IOP_H */
+#endif /* RCP2P_RNC_SDK_RPC_IOP_H */

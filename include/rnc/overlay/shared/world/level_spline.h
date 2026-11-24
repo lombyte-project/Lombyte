@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_WORLD_LEVEL_SPLINE_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_WORLD_LEVEL_SPLINE_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_WORLD_LEVEL_SPLINE_H
+#define RCP2P_RNC_OVERLAY_SHARED_WORLD_LEVEL_SPLINE_H
 
 #include "types.h"
 #include "rnc/overlay/shared/world/level_path.h"
@@ -22,4 +22,4 @@ extern LevelSpline *l03_splines __asm__("D_L03_0015F70C");
 extern LevelSpline *l14_splines __asm__("D_L14_0015F70C");
 extern LevelSpline *l18_splines __asm__("D_L18_0015F70C");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_WORLD_LEVEL_SPLINE_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_WORLD_LEVEL_SPLINE_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_MENUS_SAVE_DATA_H
-#define LOMBYTE_RNC_UI_MENUS_SAVE_DATA_H
+#ifndef RCP2P_RNC_UI_MENUS_SAVE_DATA_H
+#define RCP2P_RNC_UI_MENUS_SAVE_DATA_H
 
 #include "types.h"
 
@@ -42,4 +42,4 @@ s32  saving_data_menu(struct MenuScreen *) __asm__("FUN_00222f88");
 s32  saving_data_menu2(struct MenuScreen *) __asm__("FUN_002235b8");
 void start_memory_card_save(s32, s32) __asm__("FUN_00226a70");
 
-#endif /* LOMBYTE_RNC_UI_MENUS_SAVE_DATA_H */
+#endif /* RCP2P_RNC_UI_MENUS_SAVE_DATA_H */

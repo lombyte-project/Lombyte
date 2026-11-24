@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_LIBC_MPREC_H
-#define LOMBYTE_RNC_SDK_LIBC_MPREC_H
+#ifndef RCP2P_RNC_SDK_LIBC_MPREC_H
+#define RCP2P_RNC_SDK_LIBC_MPREC_H
 
 #include "types.h"
 
@@ -11,4 +11,4 @@ s32            CountLeadingZeroBits(s32) __asm__("_hi0bits");
 s32            CountTrailingZeroBits(u32 *) __asm__("_lo0bits");
 struct Bigint *_lshift(s32, struct Bigint *, s32);
 
-#endif /* LOMBYTE_RNC_SDK_LIBC_MPREC_H */
+#endif /* RCP2P_RNC_SDK_LIBC_MPREC_H */

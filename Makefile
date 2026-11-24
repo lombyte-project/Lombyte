@@ -1,4 +1,4 @@
-# Lombyte — Ratchet & Clank (PS2, USA) matching decompilation
+# RatchetAndClank-P2P — Ratchet & Clank (PS2, USA): matching decompilation and native browser port
 #
 # The boot ELF is recompiled and must match retail byte-for-byte (full-ELF
 # SHA gate); `make overlays` proves the level overlay C function by function.
@@ -118,6 +118,31 @@ browser-game: browser-runtime browser-hero browser-level browser-planet-wad brow
 	@test -f build/browser/node_modules/three/build/three.module.js || npm install --prefix build/browser --no-save --ignore-scripts --package-lock=false three@0.180.0
 	cp browser/game.html browser/game.mjs browser/gameplay-loader.mjs browser/level-actors.mjs browser/sky-geometry.mjs browser/level-loader.mjs browser/terrain-geometry.mjs browser/moby-geometry.mjs browser/moby-animation.mjs browser/music.mjs browser/interim-game.mjs browser/tie-geometry.mjs browser/shrub-geometry.mjs build/browser/
 	cp browser/game.html build/browser/index.html
+
+browser-gs: ## Build the GS rasterizer (browser/gs-raster.c) used by gs-renderer.mjs
+	mkdir -p build/browser
+	$(EMCC) -O3 --profiling-funcs -Wall -Wextra -Werror browser/gs-raster.c \
+	  --no-entry -sSTANDALONE_WASM=1 -sFILESYSTEM=0 -sERROR_ON_UNDEFINED_SYMBOLS=1 -sINITIAL_MEMORY=33554432 \
+	  -sEXPORTED_FUNCTIONS='["_gs_table","_gs_read_pixel","_gs_write_pixel","_gs_upload","_gs_draw","_gs_framebuffer","_gs_clut","_gs_memory","_gs_upload_buffer","_gs_out","_gs_state_address","_gs_lodk_address","_gs_vertices_address","_gs_transfer_address","_gs_pixel_count","_gs_blit_rgba","_gs_blit_z"]' \
+	  -o build/browser/gs-raster.wasm
+
+browser-mpeg2: ## Build the MPEG-2 video decoder (browser/mpeg2.c) for the game's movies
+	mkdir -p build/browser
+	$(EMCC) -O3 -Wall -Wextra -Werror browser/mpeg2.c \
+	  --no-entry -sSTANDALONE_WASM=1 -sFILESYSTEM=0 -sERROR_ON_UNDEFINED_SYMBOLS=1 -sINITIAL_MEMORY=134217728 \
+	  -sEXPORTED_FUNCTIONS='["_mpeg2_input","_mpeg2_input_capacity","_mpeg2_output","_mpeg2_start","_mpeg2_next","_mpeg2_error"]' \
+	  -o build/browser/mpeg2.wasm
+
+browser-boot: browser-runtime browser-planet-wad browser-gs browser-mpeg2 ## The game's boot program page (needs build/spike/boot.wasm: browser/spike/link-closure.sh FUN_0012d9d8 boot)
+	@test -f build/spike/boot.wasm || { echo "build/spike/boot.wasm is missing: run browser/spike/compile-all.sh 8 and browser/spike/link-closure.sh FUN_0012d9d8 boot"; exit 1; }
+	mkdir -p build/browser/spike
+	@test -f build/browser/node_modules/three/build/three.module.js || npm install --prefix build/browser --no-save --ignore-scripts --package-lock=false three@0.180.0
+	cp build/spike/boot.wasm browser/boot.html browser/boot-page.mjs browser/boot-runtime.mjs browser/deferred-functions.mjs browser/gs-renderer.mjs browser/iso-reader.mjs browser/pss.mjs browser/ps2-adpcm.mjs browser/world-renderer.mjs browser/level-loader.mjs browser/terrain-geometry.mjs browser/tie-geometry.mjs browser/shrub-geometry.mjs browser/gameplay-loader.mjs browser/disc-loader.mjs browser/moby-geometry.mjs browser/moby-animation.mjs build/browser/
+	cp browser/spike/display-list.mjs build/browser/spike/
+	@if [ -f build/spike/level.wasm ]; then cp build/spike/level.wasm build/browser/level-program.wasm; else echo "note: build/spike/level.wasm is missing (browser/spike/link-closure.sh FUN_00230f60,FUN_00232d00,FUN_L00_0023d028,FUN_L00_00244110,FUN_L00_00245c28,FUN_0012da28 level): New Game will stop at the level load"; fi
+
+browser-serve: ## Serve build/browser at http://127.0.0.1:8777/boot.html with caching off
+	python3 browser/serve.py 8777
 
 browser-gameplay-test: browser-runtime browser-level browser-planet-wad ## Test level header/gameplay loading and actor setup; set RNC_ISO_PATH for Veldin
 	$(NODE) --test browser/gameplay-loader.test.mjs browser/level.test.mjs

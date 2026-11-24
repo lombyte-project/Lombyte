@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_RPC_RPC_H
-#define LOMBYTE_RNC_SDK_RPC_RPC_H
+#ifndef RCP2P_RNC_SDK_RPC_RPC_H
+#define RCP2P_RNC_SDK_RPC_RPC_H
 
 #include "types.h"
 
@@ -18,4 +18,4 @@ s32  SceSifCheckStatRpc(void *);
 void sceSifExitRpc(void) __asm__("InitializeRpcCommand");
 void sceSifInitRpc(u32);
 
-#endif /* LOMBYTE_RNC_SDK_RPC_RPC_H */
+#endif /* RCP2P_RNC_SDK_RPC_RPC_H */

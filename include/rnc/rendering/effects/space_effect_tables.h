@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_EFFECTS_SPACE_EFFECT_TABLES_H
-#define LOMBYTE_RNC_RENDERING_EFFECTS_SPACE_EFFECT_TABLES_H
+#ifndef RCP2P_RNC_RENDERING_EFFECTS_SPACE_EFFECT_TABLES_H
+#define RCP2P_RNC_RENDERING_EFFECTS_SPACE_EFFECT_TABLES_H
 
 #include "types.h"
 #include "rnc/math/vector.h"
@@ -45,4 +45,4 @@ extern f32 spark_spawn_points_by_variant[3][6][4] __asm__("D_001D9B60");
 extern f32 resident_path_companion_a_local_offsets[3][4] __asm__("D_001D9C80");
 extern f32 resident_path_companion_b_local_offsets[3][4] __asm__("D_001D9CB0");
 
-#endif /* LOMBYTE_RNC_RENDERING_EFFECTS_SPACE_EFFECT_TABLES_H */
+#endif /* RCP2P_RNC_RENDERING_EFFECTS_SPACE_EFFECT_TABLES_H */

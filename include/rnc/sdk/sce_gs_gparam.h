@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_SCE_GS_GPARAM_H
-#define LOMBYTE_RNC_SDK_SCE_GS_GPARAM_H
+#ifndef RCP2P_RNC_SDK_SCE_GS_GPARAM_H
+#define RCP2P_RNC_SDK_SCE_GS_GPARAM_H
 
 #include "types.h"
 #include "sda.h"
@@ -16,4 +16,4 @@ typedef struct sceGsGParam {
 
 extern sceGsGParam CoreDataTable __asm__("D_00132D40") NOT_SDA;
 
-#endif /* LOMBYTE_RNC_SDK_SCE_GS_GPARAM_H */
+#endif /* RCP2P_RNC_SDK_SCE_GS_GPARAM_H */

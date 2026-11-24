@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L12_MOBYS_H
-#define LOMBYTE_RNC_OVERLAY_L12_MOBYS_H
+#ifndef RCP2P_RNC_OVERLAY_L12_MOBYS_H
+#define RCP2P_RNC_OVERLAY_L12_MOBYS_H
 
 #include "rnc/overlay/l12/mobys/watcher.h"
 #include "types.h"
@@ -28,4 +28,4 @@ void scrolling_texture_layers_update() __asm__("FUN_L12_0030bff0");
 void water_reservoir_update(struct Moby *) __asm__("FUN_L12_002ec720");
 void level_12_water_tile_update(struct Moby *) __asm__("FUN_L12_002bf140");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L12_MOBYS_H */
+#endif /* RCP2P_RNC_OVERLAY_L12_MOBYS_H */

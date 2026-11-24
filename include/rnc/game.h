@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_GAME_H
-#define LOMBYTE_RNC_GAME_H
+#ifndef RCP2P_RNC_GAME_H
+#define RCP2P_RNC_GAME_H
 
 #include "types.h"
 
@@ -10,4 +10,4 @@ void start_level(int) __asm__("FUN_001e9488");
 void update_mode_freeze(void) __asm__("FUN_001fce28");
 void update_resident_gameplay_state(void) __asm__("FUN_0022f778");
 
-#endif /* LOMBYTE_RNC_GAME_H */
+#endif /* RCP2P_RNC_GAME_H */

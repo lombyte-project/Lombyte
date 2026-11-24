@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L01_MOBYS_WATER_LILY_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L01_MOBYS_WATER_LILY_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L01_MOBYS_WATER_LILY_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L01_MOBYS_WATER_LILY_GLOBALS_H
 
 #include "types.h"
 
@@ -11,4 +11,4 @@ extern f32 water_lily_hero_separation_radius __asm__("D_L01_00161BF8");
 extern f32 water_lily_max_horizontal_speed __asm__("D_L01_00161BFC");
 extern f32 water_lily_collision_radius __asm__("D_L01_00161C00");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L01_MOBYS_WATER_LILY_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L01_MOBYS_WATER_LILY_GLOBALS_H */

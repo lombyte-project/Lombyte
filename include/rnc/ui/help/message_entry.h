@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_HELP_MESSAGE_ENTRY_H
-#define LOMBYTE_RNC_UI_HELP_MESSAGE_ENTRY_H
+#ifndef RCP2P_RNC_UI_HELP_MESSAGE_ENTRY_H
+#define RCP2P_RNC_UI_HELP_MESSAGE_ENTRY_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ typedef struct HelpMessageEntry {
     s32   audio_track_offset; /* 0x08: -1 means no audio */
     s32   unknown_0C;
 } HelpMessageEntry;
-#endif /* LOMBYTE_RNC_UI_HELP_MESSAGE_ENTRY_H */
+#endif /* RCP2P_RNC_UI_HELP_MESSAGE_ENTRY_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SAVE_MEMCARD_RESTORE_DATA_GLOBALS_H
-#define LOMBYTE_RNC_SAVE_MEMCARD_RESTORE_DATA_GLOBALS_H
+#ifndef RCP2P_RNC_SAVE_MEMCARD_RESTORE_DATA_GLOBALS_H
+#define RCP2P_RNC_SAVE_MEMCARD_RESTORE_DATA_GLOBALS_H
 
 #include "types.h"
 
@@ -7,4 +7,4 @@
 /* Explicit _gp views stay in the source at their assembler declaration sites. */
 extern s32 memcard_restore_differing_block_count __asm__("D_0015FE90");
 
-#endif /* LOMBYTE_RNC_SAVE_MEMCARD_RESTORE_DATA_GLOBALS_H */
+#endif /* RCP2P_RNC_SAVE_MEMCARD_RESTORE_DATA_GLOBALS_H */

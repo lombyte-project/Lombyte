@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_LIBMC_H
-#define LOMBYTE_RNC_SDK_LIBMC_H
+#ifndef RCP2P_RNC_SDK_LIBMC_H
+#define RCP2P_RNC_SDK_LIBMC_H
 
 #include "types.h"
 #include "sda.h"
@@ -30,4 +30,4 @@ extern s32                     mc_sema __asm__("D_00132DAC") NOT_SDA;
 extern struct sceSifClientData mc_rpc_client __asm__("D_00159A00");
 extern s32                     mc_rpc_result[] __asm__("D_0015AFC0");
 
-#endif /* LOMBYTE_RNC_SDK_LIBMC_H */
+#endif /* RCP2P_RNC_SDK_LIBMC_H */

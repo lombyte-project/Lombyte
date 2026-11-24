@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_EFFECTS_SPAWN_SPARK_H
-#define LOMBYTE_RNC_RENDERING_EFFECTS_SPAWN_SPARK_H
+#ifndef RCP2P_RNC_RENDERING_EFFECTS_SPAWN_SPARK_H
+#define RCP2P_RNC_RENDERING_EFFECTS_SPAWN_SPARK_H
 
 #include "types.h"
 
@@ -15,4 +15,4 @@ struct Obj *spawn_spark(void *source_quadword,
                         s32   third_frame_count,
                         s32   lookup_index_and_flags) __asm__("FUN_00218888");
 
-#endif /* LOMBYTE_RNC_RENDERING_EFFECTS_SPAWN_SPARK_H */
+#endif /* RCP2P_RNC_RENDERING_EFFECTS_SPAWN_SPARK_H */

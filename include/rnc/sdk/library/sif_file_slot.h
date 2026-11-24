@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_LIBRARY_SIF_FILE_SLOT_H
-#define LOMBYTE_RNC_SDK_LIBRARY_SIF_FILE_SLOT_H
+#ifndef RCP2P_RNC_SDK_LIBRARY_SIF_FILE_SLOT_H
+#define RCP2P_RNC_SDK_LIBRARY_SIF_FILE_SLOT_H
 
 #include "types.h"
 #include "sda.h"
@@ -24,4 +24,4 @@ extern u8  fio_rpc_result[] __asm__("D_001574C0");             /* read through k
 extern struct SifFileSlot      fio_iob[SIF_FILE_SLOT_COUNT] __asm__("D_00157D80");
 extern struct sceSifClientData fio_rpc_client __asm__("D_00157F80");
 
-#endif /* LOMBYTE_RNC_SDK_LIBRARY_SIF_FILE_SLOT_H */
+#endif /* RCP2P_RNC_SDK_LIBRARY_SIF_FILE_SLOT_H */

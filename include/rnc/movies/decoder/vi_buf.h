@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_MOVIES_DECODER_VI_BUF_H
-#define LOMBYTE_RNC_MOVIES_DECODER_VI_BUF_H
+#ifndef RCP2P_RNC_MOVIES_DECODER_VI_BUF_H
+#define RCP2P_RNC_MOVIES_DECODER_VI_BUF_H
 
 #include "types.h"
 #include "rnc/sdk/eetypes.h"
@@ -44,4 +44,4 @@ struct ViBuf {
     s32                    wt_ts;    /* 0x5C: 0 at reset */
 };
 
-#endif /* LOMBYTE_RNC_MOVIES_DECODER_VI_BUF_H */
+#endif /* RCP2P_RNC_MOVIES_DECODER_VI_BUF_H */

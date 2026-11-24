@@ -37,7 +37,7 @@ of 0xFFFF; other writers saturate the count there.
 RC1 functions and callers establish these meanings. `rac1-decomp` at
 `05da3217a4046ac01dec3ac74f051a348f063155` corroborates geometry and request
 offsets in `src/game/help.c` and `src/overlays/shared/help_00203E98.c`.
-Its help-update code derives from Lombyte and is not independent evidence.
+Its help-update code derives from the upstream decompilation this fork is based on and is not independent evidence.
 No PAL addresses or implementation bodies were imported.
 
 The help window and record layout checks in `src/check/` verify EE offsets

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_LIBCDVD_H
-#define LOMBYTE_RNC_SDK_LIBCDVD_H
+#ifndef RCP2P_RNC_SDK_LIBCDVD_H
+#define RCP2P_RNC_SDK_LIBCDVD_H
 
 #include "types.h"
 #include "sda.h"
@@ -29,4 +29,4 @@ extern struct sceSifClientData cd_ncmd_client __asm__("D_00132490");
 extern u8                      cd_scmd_result[] __asm__("D_001324C0"); /* read through kseg1 */
 extern struct sceSifClientData cd_scmd_client __asm__("D_00132D08");
 
-#endif /* LOMBYTE_RNC_SDK_LIBCDVD_H */
+#endif /* RCP2P_RNC_SDK_LIBCDVD_H */

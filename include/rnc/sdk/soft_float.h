@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_SOFT_FLOAT_H
-#define LOMBYTE_RNC_SDK_SOFT_FLOAT_H
+#ifndef RCP2P_RNC_SDK_SOFT_FLOAT_H
+#define RCP2P_RNC_SDK_SOFT_FLOAT_H
 
 #include "rnc/sdk/library/fp_number.h"
 #include "types.h"
@@ -14,4 +14,4 @@ FpNumber *_fpadd_parts(FpNumber *, FpNumber *, FpNumber *);
 u64       __udivdi3(u64, u64);
 u64       __umoddi3(u64, u64);
 
-#endif /* LOMBYTE_RNC_SDK_SOFT_FLOAT_H */
+#endif /* RCP2P_RNC_SDK_SOFT_FLOAT_H */

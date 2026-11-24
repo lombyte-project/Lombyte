@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_CAMERA_CAMERA_GLOBALS_H
-#define LOMBYTE_RNC_CAMERA_CAMERA_GLOBALS_H
+#ifndef RCP2P_RNC_CAMERA_CAMERA_GLOBALS_H
+#define RCP2P_RNC_CAMERA_CAMERA_GLOBALS_H
 
 #include "types.h"
 
@@ -63,4 +63,4 @@ struct OcclCamState {
 
 extern struct OcclCamState occl_cam_state __asm__("D_0018C318");
 
-#endif /* LOMBYTE_RNC_CAMERA_CAMERA_GLOBALS_H */
+#endif /* RCP2P_RNC_CAMERA_CAMERA_GLOBALS_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_WORLD_SWARM_PATH_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_WORLD_SWARM_PATH_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_WORLD_SWARM_PATH_H
+#define RCP2P_RNC_OVERLAY_SHARED_WORLD_SWARM_PATH_H
 
 #include "types.h"
 #include "rnc/math/vector.h"
@@ -31,4 +31,4 @@ typedef struct {
     struct Moby *shots[8];
 } SwarmTargetVars;
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_WORLD_SWARM_PATH_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_WORLD_SWARM_PATH_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_LIBRARY_STDIO_H
-#define LOMBYTE_RNC_SDK_LIBRARY_STDIO_H
+#ifndef RCP2P_RNC_SDK_LIBRARY_STDIO_H
+#define RCP2P_RNC_SDK_LIBRARY_STDIO_H
 
 #include "types.h"
 #include "sda.h"
@@ -71,4 +71,4 @@ typedef struct RncStdioUio {
 /* newlib's reentrancy pointer; reached with %hi/%lo, not through $gp. */
 extern RncReent *_impure_ptr __asm__("D_0012F76C") NOT_SDA;
 
-#endif /* LOMBYTE_RNC_SDK_LIBRARY_STDIO_H */
+#endif /* RCP2P_RNC_SDK_LIBRARY_STDIO_H */

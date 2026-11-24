@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L12_MOBYS_HOVEN_ANKLEBITER_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L12_MOBYS_HOVEN_ANKLEBITER_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L12_MOBYS_HOVEN_ANKLEBITER_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L12_MOBYS_HOVEN_ANKLEBITER_GLOBALS_H
 
 #include "types.h"
 
@@ -22,4 +22,4 @@ extern int   spark_scatter_third_frame_count_range_end __asm__("D_L12_001618C0")
 extern float hoven_anklebiter_leap_launch_speed __asm__("D_L12_001618D8");
 extern float hoven_anklebiter_leap_gravity __asm__("D_L12_001618DC");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L12_MOBYS_HOVEN_ANKLEBITER_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L12_MOBYS_HOVEN_ANKLEBITER_GLOBALS_H */

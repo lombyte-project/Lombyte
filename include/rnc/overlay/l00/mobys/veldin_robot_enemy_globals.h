@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L00_MOBYS_VELDIN_ROBOT_ENEMY_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L00_MOBYS_VELDIN_ROBOT_ENEMY_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L00_MOBYS_VELDIN_ROBOT_ENEMY_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L00_MOBYS_VELDIN_ROBOT_ENEMY_GLOBALS_H
 
 #include "types.h"
 
@@ -15,4 +15,4 @@ extern f32 veldin_robot_knockback_z_scale __asm__("D_L00_00161BE0");
 extern f32 veldin_robot_knockback_gravity_gp __asm__("D_L00_00161BD4") __attribute__((sda));
 extern f32 veldin_robot_knockback_xy_speed_step_gp __asm__("D_L00_00161BD8") __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L00_MOBYS_VELDIN_ROBOT_ENEMY_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L00_MOBYS_VELDIN_ROBOT_ENEMY_GLOBALS_H */

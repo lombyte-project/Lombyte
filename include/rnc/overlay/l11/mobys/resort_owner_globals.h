@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L11_MOBYS_RESORT_OWNER_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L11_MOBYS_RESORT_OWNER_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L11_MOBYS_RESORT_OWNER_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L11_MOBYS_RESORT_OWNER_GLOBALS_H
 
 #include "types.h"
 
@@ -11,4 +11,4 @@ extern float resort_owner_gate_jump_target_local_x_offset __asm__("D_L11_0016141
 extern float resort_owner_follow_hero_speed __asm__("D_L11_001613D0");
 extern float resort_owner_distant_follow_and_path_speed __asm__("D_L11_001613D4");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L11_MOBYS_RESORT_OWNER_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L11_MOBYS_RESORT_OWNER_GLOBALS_H */

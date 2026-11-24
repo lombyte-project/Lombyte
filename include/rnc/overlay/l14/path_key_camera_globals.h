@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L14_PATH_KEY_CAMERA_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L14_PATH_KEY_CAMERA_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L14_PATH_KEY_CAMERA_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L14_PATH_KEY_CAMERA_GLOBALS_H
 
 #include "types.h"
 
@@ -18,4 +18,4 @@ extern float path_key_camera_up_axis_rotation_spring_gain __asm__("D_L14_001624A
 extern float path_key_camera_heading_blend_step_factor __asm__("D_L14_001624A4")
     __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L14_PATH_KEY_CAMERA_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L14_PATH_KEY_CAMERA_GLOBALS_H */

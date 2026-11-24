@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L08_MOBYS_BOMBER_TANK_BOMB_H
-#define LOMBYTE_RNC_OVERLAY_L08_MOBYS_BOMBER_TANK_BOMB_H
+#ifndef RCP2P_RNC_OVERLAY_L08_MOBYS_BOMBER_TANK_BOMB_H
+#define RCP2P_RNC_OVERLAY_L08_MOBYS_BOMBER_TANK_BOMB_H
 
 /* Defined in src/overlays/l08/mobys/bomber_tank_bomb.c. */
 char *spawn_bomber_tank_bomb(char *source_moby,
@@ -10,4 +10,4 @@ struct Moby;
 
 void bomber_tank_bomb_update(struct Moby *) __asm__("FUN_L08_002dc9a8");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L08_MOBYS_BOMBER_TANK_BOMB_H */
+#endif /* RCP2P_RNC_OVERLAY_L08_MOBYS_BOMBER_TANK_BOMB_H */

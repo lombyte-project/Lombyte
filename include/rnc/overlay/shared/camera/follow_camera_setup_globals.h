@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_CAMERA_FOLLOW_CAMERA_SETUP_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_CAMERA_FOLLOW_CAMERA_SETUP_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_CAMERA_FOLLOW_CAMERA_SETUP_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_SHARED_CAMERA_FOLLOW_CAMERA_SETUP_GLOBALS_H
 
 #include "types.h"
 
@@ -13,4 +13,4 @@ extern f32   follow_camera_vehicle_orbit_height __asm__("D_L00_00161DA0");
 extern float follow_camera_collision_retraction_rate __asm__("D_L00_00161CB8");
 extern f32   follow_camera_minimum_retracted_orbit_distance __asm__("D_L00_00161CD0");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_CAMERA_FOLLOW_CAMERA_SETUP_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_CAMERA_FOLLOW_CAMERA_SETUP_GLOBALS_H */

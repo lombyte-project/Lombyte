@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_GAME_LEVEL_OBJECT_STATES_H
-#define LOMBYTE_RNC_GAME_LEVEL_OBJECT_STATES_H
+#ifndef RCP2P_RNC_GAME_LEVEL_OBJECT_STATES_H
+#define RCP2P_RNC_GAME_LEVEL_OBJECT_STATES_H
 
 #include "types.h"
 
@@ -20,4 +20,4 @@ struct LevelObjectState {
 #define LEVEL_OBJECT_STATE_COUNT 121
 extern struct LevelObjectState level_object_states[LEVEL_OBJECT_STATE_COUNT] __asm__("D_0013D5B0");
 
-#endif /* LOMBYTE_RNC_GAME_LEVEL_OBJECT_STATES_H */
+#endif /* RCP2P_RNC_GAME_LEVEL_OBJECT_STATES_H */

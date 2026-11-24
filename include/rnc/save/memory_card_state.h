@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SAVE_MEMORY_CARD_STATE_H
-#define LOMBYTE_RNC_SAVE_MEMORY_CARD_STATE_H
+#ifndef RCP2P_RNC_SAVE_MEMORY_CARD_STATE_H
+#define RCP2P_RNC_SAVE_MEMORY_CARD_STATE_H
 
 #include "types.h"
 
@@ -205,4 +205,4 @@ extern char save_icon_path[] __asm__("D_0013D220");
 extern char save_main_file_path[] __asm__("D_0013D240");
 extern char save_slot_path_format[] __asm__("D_0013D270");
 
-#endif /* LOMBYTE_RNC_SAVE_MEMORY_CARD_STATE_H */
+#endif /* RCP2P_RNC_SAVE_MEMORY_CARD_STATE_H */

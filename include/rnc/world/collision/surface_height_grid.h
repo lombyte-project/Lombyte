@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_WORLD_COLLISION_SURFACE_HEIGHT_GRID_H
-#define LOMBYTE_RNC_WORLD_COLLISION_SURFACE_HEIGHT_GRID_H
+#ifndef RCP2P_RNC_WORLD_COLLISION_SURFACE_HEIGHT_GRID_H
+#define RCP2P_RNC_WORLD_COLLISION_SURFACE_HEIGHT_GRID_H
 
 #include "types.h"
 
@@ -48,4 +48,4 @@ extern SurfaceHeightTile *surface_height_tiles __asm__("D_00161190");
 extern ZoneBox           *occl_cell_table __asm__("D_00161194");
 extern s32                occl_cell_count __asm__("D_00161198");
 
-#endif /* LOMBYTE_RNC_WORLD_COLLISION_SURFACE_HEIGHT_GRID_H */
+#endif /* RCP2P_RNC_WORLD_COLLISION_SURFACE_HEIGHT_GRID_H */

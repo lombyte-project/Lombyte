@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_SHRUB_RENDER_CLASS_H
-#define LOMBYTE_RNC_RENDERING_SHRUB_RENDER_CLASS_H
+#ifndef RCP2P_RNC_RENDERING_SHRUB_RENDER_CLASS_H
+#define RCP2P_RNC_RENDERING_SHRUB_RENDER_CLASS_H
 
 #include "types.h"
 #include "rnc/rendering/resident_class.h"
@@ -84,4 +84,4 @@ extern u8          shrub_render_class_slot_by_id[0x400] __asm__("D_001D80B0");
 extern s32         shrub_render_class_fixed_thresholds[64] __asm__("D_001D8CB0");
 extern MaterialMap shrub_render_class_material_maps[64] __asm__("D_001D92B0");
 
-#endif /* LOMBYTE_RNC_RENDERING_SHRUB_RENDER_CLASS_H */
+#endif /* RCP2P_RNC_RENDERING_SHRUB_RENDER_CLASS_H */

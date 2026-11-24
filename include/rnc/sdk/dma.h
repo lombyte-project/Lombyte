@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_DMA_H
-#define LOMBYTE_RNC_SDK_DMA_H
+#ifndef RCP2P_RNC_SDK_DMA_H
+#define RCP2P_RNC_SDK_DMA_H
 
 #include "rnc/sdk/sce_dma_chan.h"
 #include "types.h"
@@ -16,4 +16,4 @@ void        SetD4Chcr(s32);
 void        SetD4ChcrVariant(s32);
 void        WaitDma(volatile u32 *);
 
-#endif /* LOMBYTE_RNC_SDK_DMA_H */
+#endif /* RCP2P_RNC_SDK_DMA_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_HUD_HUD_STATE_H
-#define LOMBYTE_RNC_UI_HUD_HUD_STATE_H
+#ifndef RCP2P_RNC_UI_HUD_HUD_STATE_H
+#define RCP2P_RNC_UI_HUD_HUD_STATE_H
 
 #include "types.h"
 
@@ -94,4 +94,4 @@ HUD_STATE_OFFSET_CHECK(unk30, 0x30);
 
 extern struct HudState hud_state __asm__("D_0019A3E8");
 
-#endif /* LOMBYTE_RNC_UI_HUD_HUD_STATE_H */
+#endif /* RCP2P_RNC_UI_HUD_HUD_STATE_H */

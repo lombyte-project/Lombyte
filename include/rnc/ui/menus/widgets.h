@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_MENUS_WIDGETS_H
-#define LOMBYTE_RNC_UI_MENUS_WIDGETS_H
+#ifndef RCP2P_RNC_UI_MENUS_WIDGETS_H
+#define RCP2P_RNC_UI_MENUS_WIDGETS_H
 
 #include "types.h"
 
@@ -27,4 +27,4 @@ s32 restore_menu_help_text(struct MenuScreen *) __asm__("FUN_0021d2c8");
 s32 update_menu_choice_list(struct MenuScreen *) __asm__("FUN_002212b8");
 int update_menu_help_text_load(struct MenuScreen *) __asm__("FUN_0021d338");
 
-#endif /* LOMBYTE_RNC_UI_MENUS_WIDGETS_H */
+#endif /* RCP2P_RNC_UI_MENUS_WIDGETS_H */

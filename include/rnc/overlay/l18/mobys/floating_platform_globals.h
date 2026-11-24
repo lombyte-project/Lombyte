@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L18_MOBYS_FLOATING_PLATFORM_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L18_MOBYS_FLOATING_PLATFORM_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L18_MOBYS_FLOATING_PLATFORM_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L18_MOBYS_FLOATING_PLATFORM_GLOBALS_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ extern float floating_platform_bob_amplitude __asm__("D_L18_00161A48");
 extern float floating_platform_bob_phase_rate __asm__("D_L18_00161A4C");
 extern float floating_platform_sink_trigger_distance __asm__("D_L18_00161A5C");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L18_MOBYS_FLOATING_PLATFORM_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L18_MOBYS_FLOATING_PLATFORM_GLOBALS_H */

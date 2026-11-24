@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_TEXT_FONT_PALETTE_H
-#define LOMBYTE_RNC_UI_TEXT_FONT_PALETTE_H
+#ifndef RCP2P_RNC_UI_TEXT_FONT_PALETTE_H
+#define RCP2P_RNC_UI_TEXT_FONT_PALETTE_H
 
 #include "types.h"
 
@@ -8,4 +8,4 @@
    not locked) and OR each selected entry's RGB into the running color. */
 extern s32 font_palette_colors[8] __asm__("D_0018CAF8");
 
-#endif /* LOMBYTE_RNC_UI_TEXT_FONT_PALETTE_H */
+#endif /* RCP2P_RNC_UI_TEXT_FONT_PALETTE_H */

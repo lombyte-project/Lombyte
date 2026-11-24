@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_RENDER_GLOBALS_H
-#define LOMBYTE_RNC_RENDERING_RENDER_GLOBALS_H
+#ifndef RCP2P_RNC_RENDERING_RENDER_GLOBALS_H
+#define RCP2P_RNC_RENDERING_RENDER_GLOBALS_H
 
 #include "types.h"
 
@@ -43,4 +43,4 @@ extern u8 hud_chan_slots[] __asm__("D_00199B60");
 extern u8 point_light_data[] __asm__("D_0019C3C0");
 extern u8 tie_light_data[] __asm__("D_001E3200");
 
-#endif /* LOMBYTE_RNC_RENDERING_RENDER_GLOBALS_H */
+#endif /* RCP2P_RNC_RENDERING_RENDER_GLOBALS_H */

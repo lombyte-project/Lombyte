@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_WORLD_COLLISION_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_WORLD_COLLISION_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_WORLD_COLLISION_H
+#define RCP2P_RNC_OVERLAY_SHARED_WORLD_COLLISION_H
 
 #include "types.h"
 #include "rnc/overlay/shared/math/quad.h"
@@ -35,4 +35,4 @@ extern OvlVec4 coll_hit_position __asm__("D_L00_00173E70") NOT_SDA;    /* positi
 extern OvlVec4
     coll_hit_normal __asm__("D_L00_00173E80") NOT_SDA; /* coll_hit.normal_x .. normal_z */
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_WORLD_COLLISION_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_WORLD_COLLISION_H */

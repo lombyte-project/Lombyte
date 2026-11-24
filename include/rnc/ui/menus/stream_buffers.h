@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_MENUS_STREAM_BUFFERS_H
-#define LOMBYTE_RNC_UI_MENUS_STREAM_BUFFERS_H
+#ifndef RCP2P_RNC_UI_MENUS_STREAM_BUFFERS_H
+#define RCP2P_RNC_UI_MENUS_STREAM_BUFFERS_H
 
 #include "types.h"
 #include "types.h"
@@ -20,4 +20,4 @@ extern struct MenuStreamBuffer menu_stream_buffers[MENU_STREAM_BUFFER_COUNT] __a
 
 s32 release_menu_stream_buffer(s32) __asm__("FUN_00225cd8");
 
-#endif /* LOMBYTE_RNC_UI_MENUS_STREAM_BUFFERS_H */
+#endif /* RCP2P_RNC_UI_MENUS_STREAM_BUFFERS_H */

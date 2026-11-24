@@ -25,6 +25,12 @@
    slot pointers of parked-pose records and manipulators) are taken modulo 16 KiB, which is what
    both 0x70000000 and the spike's remapped 0x000F0000 reduce to.
 
+   Build with -fno-strict-aliasing (link-closure.sh does): a slot's words are written both as
+   floats (spr_vec) and as integers (spr_word) at overlapping offsets, in an order that matters
+   (a translation written with w = 1, then its parent word restored over that w; a scale written,
+   then its flag word over the scale's w). Under strict aliasing the compiler may reorder those
+   stores, which loses every parent link: the menu panels' corners then come out as garbage.
+
    The real scratchpad is not written: callers only read the matrices this returns. EE float
    rounding (round toward zero, no denormals) is not reproduced; the last bit can differ. */
 #include "types.h"
@@ -361,10 +367,38 @@ void rnc_get_moby_joint_matrices(u8 *m, s32 count, const s32 *bones, u8 *out) {
         requested[i] = (u8)joint;
         if (joint > highest) highest = joint;
     }
+    /* 0x210914-0x210920: flags[0x7F] = highest + 1, then 0xFF over the highest joint's own flag
+       (add t6, t6, t7; sb at, 0(t6) with t6 the highest joint). */
     flags[0x7f] = (u8)(highest + 1);
-    if (highest + 1 < 0x7f) flags[highest + 1] = 0xff;
+    flags[highest & 0x7f] = 0xff;
     rnc_compute_moby_joint_slots(m, flags);
     for (s32 i = 0; i < count && i < 0x7f; i++) __builtin_memcpy(out + 64 * i, spr_vec(64u * requested[i]), 64);
+}
+
+/* EE 0x2106f8 (moby attachment points): the same joint selection as 0x210850, then for each
+   point only its joint matrix's translation row (+0x30), 16 bytes per point, to out. */
+void rnc_get_moby_point_positions(u8 *m, s32 count, const s32 *points, u8 *out) {
+    u8 flags[0x80];
+    u8 requested[0x80];
+    const u8 *chains = ptr(rd32(ptr(rd32(m + 0x24)) + 0x1c));
+    s32 highest = 0;
+    __builtin_memset(flags, 0, sizeof(flags));
+    for (s32 i = 0; i < count && i < 0x7f; i++) {
+        const u8 *chain = ptr(rd32(chains + 4 * points[i] + 4));
+        s32 left = rd16(chain);
+        s32 joint = 0;
+        for (const u8 *at = chain + 4; ; at++) {
+            joint = *at;
+            flags[joint & 0x7f] = 1;
+            if (--left <= 0) break;
+        }
+        requested[i] = (u8)joint;
+        if (joint > highest) highest = joint;
+    }
+    flags[0x7f] = (u8)(highest + 1);
+    flags[highest & 0x7f] = 0xff;
+    rnc_compute_moby_joint_slots(m, flags);
+    for (s32 i = 0; i < count && i < 0x7f; i++) __builtin_memcpy(out + 16 * i, spr_vec(64u * requested[i] + 0x30), 16);
 }
 
 /* For the page: every joint's matrix (flags set for joints 0 .. count - 1), copied to out. */
@@ -391,3 +425,46 @@ void rnc_moby_local_pose(u8 *m) {
     compute_local_pose(m, flags);
 }
 const f32 *rnc_moby_pose_slot(s32 joint) { return spr_vec(64u * (u32)joint); }
+
+/* Level 0 0x252990 (532 instructions of EE/VU0 assembly, level code only), called at the end of
+   advance_moby_animation_blend (0x24f190) with an animation-layer record, which is also a
+   parked-pose record (0x211080 above): +0x2 count, +0xC the list of joints (bytes), +0x10 the
+   48-byte entries, +0x14 the class, +0x24 the blend time, +0x38 / +0x3C this frame's and the next
+   frame's data. It decodes the two frames for the class's joints in the scratchpad as the local
+   stage above does (frame 0x252a58-0x252fcc: scales u16 / 4096 with flag ((bits >> 14) & 3) - 1,
+   integer translations, bind translations from the class's joint records), blends rotations
+   with the sign test and normalisation of 0x2530f8 (the !same_run path above), then writes, for
+   each listed joint j in order, { quaternion, scale + flag word, translation + 0x70000000 + 64 j }
+   to the entries (0x252fd0-0x253084: compacted to 48 bytes, DMA channel 8 to [+0x10]).
+   Taken from compute_local_pose with a stand-in moby; ASSUMED equal beyond the parts named. */
+u32 rnc_layer_pose_nan, rnc_layer_pose_calls;
+void rnc_animation_layer_pose(u8 *state) {
+    u8 stand_in[0x100], flags[0x80];
+    const u8 *pclass = ptr(rd32(state + 0x14));
+    const u8 *list = ptr(rd32(state + 0xc));
+    u8 *out = (u8 *)ptr(rd32(state + 0x10));
+    const s32 joints = pclass ? pclass[8] : 0, count = rd16(state + 2);
+    if (!pclass || joints <= 0 || !list || !out) return;
+    __builtin_memset(stand_in, 0, sizeof(stand_in));
+    __builtin_memcpy(stand_in + 0x24, state + 0x14, 4);
+    __builtin_memcpy(stand_in + 0x68, state + 0x38, 4);
+    __builtin_memcpy(stand_in + 0x6c, state + 0x3c, 4);
+    __builtin_memcpy(stand_in + 0x54, state + 0x24, 4);
+    stand_in[0x51] = 2; /* not a same-run blend: sign test and normalisation, as 0x2530f8 */
+    __builtin_memset(flags, 0, sizeof(flags));
+    for (s32 j = 0; j < joints && j < 0x7f; j++) flags[j] = 1;
+    flags[0x7f] = (u8)(joints < 0x7f ? joints : 0x7e);
+    compute_local_pose(stand_in, flags);
+    for (s32 k = 0; k < count; k++) {
+        const u32 slot = 64u * list[k];
+        const u32 address = SPR_MARK | slot;
+        __builtin_memcpy(out + 0x30 * k, spr + (slot & (SPR_BYTES - 1)), 0x30);
+        __builtin_memcpy(out + 0x30 * k + 0x2c, &address, 4);
+        for (s32 i = 0; i < 11; i++) {
+            f32 x;
+            __builtin_memcpy(&x, out + 0x30 * k + 4 * i, 4);
+            if (i != 7 && x != x) { rnc_layer_pose_nan++; break; }
+        }
+    }
+    rnc_layer_pose_calls++;
+}

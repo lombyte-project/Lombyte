@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_TEST_PATH_SEGMENT_STRICT_CROSSING_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_TEST_PATH_SEGMENT_STRICT_CROSSING_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_MOBYS_TEST_PATH_SEGMENT_STRICT_CROSSING_H
+#define RCP2P_RNC_OVERLAY_SHARED_MOBYS_TEST_PATH_SEGMENT_STRICT_CROSSING_H
 
 #include "types.h"
 
@@ -10,4 +10,4 @@ void initialize_moby_transform_history(int   source_moby,
 int  path_8808(int, void *, void *, void *) __asm__("FUN_L00_00261b48");
 void path_sample_at_distance(int, float *, float *, void *, float, float) __asm__("FUN_L00_00262360");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_TEST_PATH_SEGMENT_STRICT_CROSSING_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_MOBYS_TEST_PATH_SEGMENT_STRICT_CROSSING_H */

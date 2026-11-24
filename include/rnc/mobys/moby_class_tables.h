@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_MOBYS_MOBY_CLASS_TABLES_H
-#define LOMBYTE_RNC_MOBYS_MOBY_CLASS_TABLES_H
+#ifndef RCP2P_RNC_MOBYS_MOBY_CLASS_TABLES_H
+#define RCP2P_RNC_MOBYS_MOBY_CLASS_TABLES_H
 
 #include "types.h"
 #include "rnc/rendering/tex_remap.h"
@@ -52,4 +52,4 @@ extern s32 D_001B6180[224];
    texture DMA builder, read by patch_moby_gifs); one per class slot (0xE0). */
 extern s32 moby_class_rectify[224] __asm__("D_001B6500");
 
-#endif /* LOMBYTE_RNC_MOBYS_MOBY_CLASS_TABLES_H */
+#endif /* RCP2P_RNC_MOBYS_MOBY_CLASS_TABLES_H */

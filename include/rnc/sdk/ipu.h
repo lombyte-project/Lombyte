@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_IPU_H
-#define LOMBYTE_RNC_SDK_IPU_H
+#ifndef RCP2P_RNC_SDK_IPU_H
+#define RCP2P_RNC_SDK_IPU_H
 
 #include "types.h"
 
@@ -16,4 +16,4 @@ s32  _waitBdecOut();
 void _waitIpuIdle(s32 *);
 s64  _waitIpuIdle64(s32 *);
 
-#endif /* LOMBYTE_RNC_SDK_IPU_H */
+#endif /* RCP2P_RNC_SDK_IPU_H */

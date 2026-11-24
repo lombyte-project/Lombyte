@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L02_HUD_COUNTER_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L02_HUD_COUNTER_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L02_HUD_COUNTER_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L02_HUD_COUNTER_GLOBALS_H
 
 #include "types.h"
 
@@ -8,4 +8,4 @@
 extern s32 hud_counter_bar_growth_divisor __asm__("D_L02_0015F91C");
 extern s32 hud_counter_text_shade_divisor __asm__("D_L02_0015F920");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L02_HUD_COUNTER_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L02_HUD_COUNTER_GLOBALS_H */

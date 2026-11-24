@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L05_MOBYS_DRAIN_COVER_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L05_MOBYS_DRAIN_COVER_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L05_MOBYS_DRAIN_COVER_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L05_MOBYS_DRAIN_COVER_GLOBALS_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ extern float drain_cover_tilt_acceleration __asm__("D_L05_00161DDC");
 extern float drain_cover_tilt_deceleration __asm__("D_L05_00161DE0");
 extern float drain_cover_tilt_max_speed __asm__("D_L05_00161DE4");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L05_MOBYS_DRAIN_COVER_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L05_MOBYS_DRAIN_COVER_GLOBALS_H */

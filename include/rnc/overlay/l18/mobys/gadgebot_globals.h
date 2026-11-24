@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L18_MOBYS_GADGEBOT_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L18_MOBYS_GADGEBOT_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L18_MOBYS_GADGEBOT_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L18_MOBYS_GADGEBOT_GLOBALS_H
 
 #include "types.h"
 
@@ -21,4 +21,4 @@ extern float gadgebot_launch_glow_z_offset __asm__("D_L18_00162648");
 extern float gadgebot_launch_glow_vertical_scale_adjustment __asm__("D_L18_0016264C");
 extern float gadgebot_launch_glow_horizontal_scale_adjustment __asm__("D_L18_00162650");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L18_MOBYS_GADGEBOT_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L18_MOBYS_GADGEBOT_GLOBALS_H */

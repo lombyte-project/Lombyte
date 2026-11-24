@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_TOP_THREAD_H
-#define LOMBYTE_RNC_SDK_TOP_THREAD_H
+#ifndef RCP2P_RNC_SDK_TOP_THREAD_H
+#define RCP2P_RNC_SDK_TOP_THREAD_H
 
 #include "types.h"
 
@@ -24,4 +24,4 @@ extern s32            top_thread_id __asm__("D_0012FBF8") __attribute__((section
 extern s32            top_thread_semaphore __asm__("D_00154500") __attribute__((section(".data")));
 extern TopThreadQueue top_thread_queue __asm__("D_00154508");
 
-#endif /* LOMBYTE_RNC_SDK_TOP_THREAD_H */
+#endif /* RCP2P_RNC_SDK_TOP_THREAD_H */

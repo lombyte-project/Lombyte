@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L10_MOBYS_BLARG_SHIP_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L10_MOBYS_BLARG_SHIP_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L10_MOBYS_BLARG_SHIP_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L10_MOBYS_BLARG_SHIP_GLOBALS_H
 
 #include "types.h"
 
@@ -8,4 +8,4 @@
 extern float blarg_ship_rocket_speed __asm__("D_L10_00161EE8");
 extern float blarg_ship_firing_animation_speed __asm__("D_L10_00161EEC");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L10_MOBYS_BLARG_SHIP_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L10_MOBYS_BLARG_SHIP_GLOBALS_H */

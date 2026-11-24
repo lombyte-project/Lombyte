@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L14_CUTSCENE_STATE_H
-#define LOMBYTE_RNC_OVERLAY_L14_CUTSCENE_STATE_H
+#ifndef RCP2P_RNC_OVERLAY_L14_CUTSCENE_STATE_H
+#define RCP2P_RNC_OVERLAY_L14_CUTSCENE_STATE_H
 
 /* Level 14 cutscene state, read by src/overlays/l14/mobys/cutscene_effects.c and group_clear_trigger.c. */
 typedef struct {

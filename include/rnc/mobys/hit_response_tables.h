@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_MOBYS_HIT_RESPONSE_TABLES_H
-#define LOMBYTE_RNC_MOBYS_HIT_RESPONSE_TABLES_H
+#ifndef RCP2P_RNC_MOBYS_HIT_RESPONSE_TABLES_H
+#define RCP2P_RNC_MOBYS_HIT_RESPONSE_TABLES_H
 
 #include "types.h"
 
@@ -13,4 +13,4 @@ extern HitResponseCode hit_response_code_table[18][4] __asm__("D_001CC080");
    and hit state (0..7). */
 extern f32 hit_vector_scale_table[4][8] __asm__("D_001CC0C8");
 
-#endif /* LOMBYTE_RNC_MOBYS_HIT_RESPONSE_TABLES_H */
+#endif /* RCP2P_RNC_MOBYS_HIT_RESPONSE_TABLES_H */

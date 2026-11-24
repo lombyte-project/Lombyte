@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L06_MOBYS_H
-#define LOMBYTE_RNC_OVERLAY_L06_MOBYS_H
+#ifndef RCP2P_RNC_OVERLAY_L06_MOBYS_H
+#define RCP2P_RNC_OVERLAY_L06_MOBYS_H
 
 #include "types.h"
 
@@ -29,4 +29,4 @@ void split_door_update(char *) __asm__("FUN_L06_002fbfb0");
 void switchable_beam_barrier_update(char *) __asm__("FUN_L06_003049f8");
 void toxic_gas_vent_update(char *) __asm__("FUN_L06_002f3ad8");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L06_MOBYS_H */
+#endif /* RCP2P_RNC_OVERLAY_L06_MOBYS_H */

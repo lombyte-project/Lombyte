@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_DOOR_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_DOOR_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_DOOR_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_DOOR_GLOBALS_H
 
 #include "types.h"
 
@@ -8,4 +8,4 @@
 extern float test_dummy_door_height_offset __asm__("D_L16_00161A84");
 extern int   last_test_dummy_door_sound_request_frame __asm__("D_L16_00161A88");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_DOOR_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_DOOR_GLOBALS_H */

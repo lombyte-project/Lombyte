@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_BLARG_SPACE_COMMANDO_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_BLARG_SPACE_COMMANDO_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_ENEMIES_BLARG_SPACE_COMMANDO_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_SHARED_ENEMIES_BLARG_SPACE_COMMANDO_GLOBALS_H
 
 #include "types.h"
 
@@ -46,4 +46,4 @@ extern int   beam_spark_initial_word_gp __asm__("D_L06_00162004") __attribute__(
 extern int   beam_spark_second_word_gp __asm__("D_L06_00162008") __attribute__((sda));
 extern int   beam_spark_lookup_index_and_flags_gp __asm__("D_L06_00162040") __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_BLARG_SPACE_COMMANDO_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_ENEMIES_BLARG_SPACE_COMMANDO_GLOBALS_H */

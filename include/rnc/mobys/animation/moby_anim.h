@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_MOBYS_ANIMATION_MOBY_ANIM_H
-#define LOMBYTE_RNC_MOBYS_ANIMATION_MOBY_ANIM_H
+#ifndef RCP2P_RNC_MOBYS_ANIMATION_MOBY_ANIM_H
+#define RCP2P_RNC_MOBYS_ANIMATION_MOBY_ANIM_H
 
 #include "types.h"
 
@@ -40,4 +40,4 @@ typedef struct {
     char          unkF0[0x10]; /* 0xF0: copied into the pose's D_001B2C00 slot */
 } MobyAnim;
 
-#endif /* LOMBYTE_RNC_MOBYS_ANIMATION_MOBY_ANIM_H */
+#endif /* RCP2P_RNC_MOBYS_ANIMATION_MOBY_ANIM_H */

@@ -29,7 +29,7 @@ your own disc image and runs the first build (Windows, macOS and manual setup:
 
 | Work                     | Where to start                                                                 |
 | :----------------------- | :----------------------------------------------------------------------------- |
-| Name a function or value | the [Naming Desk](https://lombyte-project.github.io/namingdesk), `fun_<address>.c` files |
+| Name a function or value | `fun_<address>.c` files                                                       |
 | Turn offsets into fields | `*(s32 *)(p + 0x40)` reads in `src/`; [structs](docs/contributing/code-cleanup.md#structs-and-data) |
 | Move data to C           | [Data](#data) below                                                            |
 | Explain a system         | a page in [docs/game/](docs/game/)                                             |

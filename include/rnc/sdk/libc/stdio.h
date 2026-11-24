@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_LIBC_STDIO_H
-#define LOMBYTE_RNC_SDK_LIBC_STDIO_H
+#ifndef RCP2P_RNC_SDK_LIBC_STDIO_H
+#define RCP2P_RNC_SDK_LIBC_STDIO_H
 
 #include "rnc/sdk/library/stdio.h"
 #include "types.h"
@@ -16,4 +16,4 @@ void __smakebuf(RncFile *);
 s32  sprintf(s8 *, const s8 *, ...);
 void std();
 
-#endif /* LOMBYTE_RNC_SDK_LIBC_STDIO_H */
+#endif /* RCP2P_RNC_SDK_LIBC_STDIO_H */

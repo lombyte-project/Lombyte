@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_CAMERA_H
-#define LOMBYTE_RNC_CAMERA_H
+#ifndef RCP2P_RNC_CAMERA_H
+#define RCP2P_RNC_CAMERA_H
 
 #include "types.h"
 
@@ -16,4 +16,4 @@ s32  update_all_cameras(void) __asm__("FUN_001ec420");
 void update_camera_blend(char *) __asm__("FUN_001ed2b0");
 void update_camera_environment_from_regions(void *) __asm__("FUN_001ee4b0");
 
-#endif /* LOMBYTE_RNC_CAMERA_H */
+#endif /* RCP2P_RNC_CAMERA_H */

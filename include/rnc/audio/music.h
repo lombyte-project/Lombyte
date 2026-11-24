@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_AUDIO_MUSIC_H
-#define LOMBYTE_RNC_AUDIO_MUSIC_H
+#ifndef RCP2P_RNC_AUDIO_MUSIC_H
+#define RCP2P_RNC_AUDIO_MUSIC_H
 
 #include "types.h"
 
@@ -14,4 +14,4 @@ void music_start_track_60000(s32, s32, s32) __asm__("FUN_00215440");
 void music_update(void) __asm__("FUN_00216290");
 void reset_music(void) __asm__("FUN_00215390");
 
-#endif /* LOMBYTE_RNC_AUDIO_MUSIC_H */
+#endif /* RCP2P_RNC_AUDIO_MUSIC_H */

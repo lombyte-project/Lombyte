@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L03_MOBYS_ROBOT_DOG_H
-#define LOMBYTE_RNC_OVERLAY_L03_MOBYS_ROBOT_DOG_H
+#ifndef RCP2P_RNC_OVERLAY_L03_MOBYS_ROBOT_DOG_H
+#define RCP2P_RNC_OVERLAY_L03_MOBYS_ROBOT_DOG_H
 
 #include "types.h"
 
@@ -8,4 +8,4 @@ extern int is_point_inside_clip_volume_cf(int id) __asm__("FUN_L03_002c6d98");
 
 void robot_dog_update(char *) __asm__("FUN_L03_002c5bb8");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L03_MOBYS_ROBOT_DOG_H */
+#endif /* RCP2P_RNC_OVERLAY_L03_MOBYS_ROBOT_DOG_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_GAME_UNLOCK_PLANET_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_GAME_UNLOCK_PLANET_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_GAME_UNLOCK_PLANET_H
+#define RCP2P_RNC_OVERLAY_SHARED_GAME_UNLOCK_PLANET_H
 
 #include "types.h"
 
@@ -14,4 +14,4 @@ int convert_pose_to_reference_local(int, char *, float *, float *, float *, floa
 int  FUN_L00_00260400(int, char *, void *, void *, float *, void *);
 void spawn_randomized_bolt_drop(struct Moby *, int, int, int, int) __asm__("FUN_L00_00260a88");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_GAME_UNLOCK_PLANET_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_GAME_UNLOCK_PLANET_H */

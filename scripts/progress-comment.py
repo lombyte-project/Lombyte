@@ -19,7 +19,7 @@ import json
 import sys
 from pathlib import Path
 
-MARKER = "<!-- lombyte-progress-report -->"
+MARKER = "<!-- rcp2p-progress-report -->"
 ROWS = (("total", "All code"), ("boot", "Boot executable"), ("game", "Game"),
         ("sdk", "SDK"), ("overlays", "Level overlays"),
         ("shared", "Shared level code"), ("levels", "Per-level code"))

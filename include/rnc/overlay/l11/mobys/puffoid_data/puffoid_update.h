@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L11_MOBYS_PUFFOID_DATA_PUFFOID_UPDATE_H
-#define LOMBYTE_RNC_OVERLAY_L11_MOBYS_PUFFOID_DATA_PUFFOID_UPDATE_H
+#ifndef RCP2P_RNC_OVERLAY_L11_MOBYS_PUFFOID_DATA_PUFFOID_UPDATE_H
+#define RCP2P_RNC_OVERLAY_L11_MOBYS_PUFFOID_DATA_PUFFOID_UPDATE_H
 
 #include "types.h"
 
@@ -11,4 +11,4 @@ extern float puffoid_chase_heading_offset_limit_degrees_gp __asm__("D_L11_001622
     __attribute__((sda));
 extern float puffoid_jump_horizontal_speed_gp __asm__("D_L11_001622EC") __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L11_MOBYS_PUFFOID_DATA_PUFFOID_UPDATE_H */
+#endif /* RCP2P_RNC_OVERLAY_L11_MOBYS_PUFFOID_DATA_PUFFOID_UPDATE_H */

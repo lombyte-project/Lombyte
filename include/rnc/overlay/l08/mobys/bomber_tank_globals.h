@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L08_MOBYS_BOMBER_TANK_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L08_MOBYS_BOMBER_TANK_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L08_MOBYS_BOMBER_TANK_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L08_MOBYS_BOMBER_TANK_GLOBALS_H
 
 #include "types.h"
 
@@ -13,4 +13,4 @@ extern float bomber_tank_joint_particle_vertical_spread __asm__("D_L08_001618E0"
 extern float bomber_tank_joint_particle_horizontal_spread_range_end __asm__("D_L08_001618E8");
 extern int   available_moby_slot_count __asm__("D_L08_0015FFBC");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L08_MOBYS_BOMBER_TANK_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L08_MOBYS_BOMBER_TANK_GLOBALS_H */

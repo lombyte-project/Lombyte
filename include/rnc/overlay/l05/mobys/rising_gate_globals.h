@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L05_MOBYS_RISING_GATE_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L05_MOBYS_RISING_GATE_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L05_MOBYS_RISING_GATE_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L05_MOBYS_RISING_GATE_GLOBALS_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ extern float gate_swing_acceleration __asm__("D_L05_00161E8C");
 extern float gate_swing_deceleration __asm__("D_L05_00161E90");
 extern float gate_swing_max_speed __asm__("D_L05_00161E94");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L05_MOBYS_RISING_GATE_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L05_MOBYS_RISING_GATE_GLOBALS_H */

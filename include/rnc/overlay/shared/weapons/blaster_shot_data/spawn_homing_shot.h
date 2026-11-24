@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_BLASTER_SHOT_DATA_SPAWN_HOMING_SHOT_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_BLASTER_SHOT_DATA_SPAWN_HOMING_SHOT_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_WEAPONS_BLASTER_SHOT_DATA_SPAWN_HOMING_SHOT_H
+#define RCP2P_RNC_OVERLAY_SHARED_WEAPONS_BLASTER_SHOT_DATA_SPAWN_HOMING_SHOT_H
 
 #include "types.h"
 
@@ -10,4 +10,4 @@ extern float homing_shot_trail_initial_size_max __asm__("D_L00_00161874") __attr
 extern float homing_shot_trail_size_blend_target __asm__("D_L00_00161878") __attribute__((sda));
 extern float homing_shot_attached_particle_size __asm__("D_L00_00161888") __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_BLASTER_SHOT_DATA_SPAWN_HOMING_SHOT_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_WEAPONS_BLASTER_SHOT_DATA_SPAWN_HOMING_SHOT_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L11_MOBYS_LAYERED_SCROLL_EFFECT_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L11_MOBYS_LAYERED_SCROLL_EFFECT_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L11_MOBYS_LAYERED_SCROLL_EFFECT_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L11_MOBYS_LAYERED_SCROLL_EFFECT_GLOBALS_H
 
 #include "types.h"
 
@@ -15,4 +15,4 @@ extern float layered_effect_position_y __asm__("D_L11_001624EC");
 extern float layered_effect_position_z __asm__("D_L11_001624F0");
 extern int   layered_effect_color_tables_initialized __asm__("D_L11_0016252C");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L11_MOBYS_LAYERED_SCROLL_EFFECT_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L11_MOBYS_LAYERED_SCROLL_EFFECT_GLOBALS_H */

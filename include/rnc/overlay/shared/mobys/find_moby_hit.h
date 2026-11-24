@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_FIND_MOBY_HIT_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_FIND_MOBY_HIT_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_MOBYS_FIND_MOBY_HIT_H
+#define RCP2P_RNC_OVERLAY_SHARED_MOBYS_FIND_MOBY_HIT_H
 
 #include "types.h"
 
@@ -22,4 +22,4 @@ f32   interpolate_scalar_linear(f32, f32, f32) __asm__("FUN_L00_0025b6a8");
 float interpolate_angle(float, float, float) __asm__("FUN_L00_0025b750");
 void  advance_damped_scalar_velocity(float *, float, float, float, float) __asm__("FUN_L00_0025b798");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_FIND_MOBY_HIT_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_MOBYS_FIND_MOBY_HIT_H */

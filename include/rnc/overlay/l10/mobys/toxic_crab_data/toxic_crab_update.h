@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L10_MOBYS_TOXIC_CRAB_DATA_TOXIC_CRAB_UPDATE_H
-#define LOMBYTE_RNC_OVERLAY_L10_MOBYS_TOXIC_CRAB_DATA_TOXIC_CRAB_UPDATE_H
+#ifndef RCP2P_RNC_OVERLAY_L10_MOBYS_TOXIC_CRAB_DATA_TOXIC_CRAB_UPDATE_H
+#define RCP2P_RNC_OVERLAY_L10_MOBYS_TOXIC_CRAB_DATA_TOXIC_CRAB_UPDATE_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ extern float toxic_crab_back_away_distance_limit_gp __asm__("D_L10_00161E44") __
 extern float toxic_crab_pursuit_heading_threshold_degrees_gp __asm__("D_L10_00161E4C")
     __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L10_MOBYS_TOXIC_CRAB_DATA_TOXIC_CRAB_UPDATE_H */
+#endif /* RCP2P_RNC_OVERLAY_L10_MOBYS_TOXIC_CRAB_DATA_TOXIC_CRAB_UPDATE_H */

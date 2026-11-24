@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L15_MOBYS_CONSTRUCTION_ARM_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L15_MOBYS_CONSTRUCTION_ARM_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L15_MOBYS_CONSTRUCTION_ARM_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L15_MOBYS_CONSTRUCTION_ARM_GLOBALS_H
 
 #include "types.h"
 
@@ -11,4 +11,4 @@ extern float construction_arm_effect_speed_max __asm__("D_L15_001619FC");
 extern float construction_arm_wait_time_min __asm__("D_L15_00161A00");
 extern float construction_arm_wait_time_max __asm__("D_L15_00161A04");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L15_MOBYS_CONSTRUCTION_ARM_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L15_MOBYS_CONSTRUCTION_ARM_GLOBALS_H */

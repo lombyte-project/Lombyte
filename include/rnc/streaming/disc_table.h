@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_STREAMING_DISC_TABLE_H
-#define LOMBYTE_RNC_STREAMING_DISC_TABLE_H
+#ifndef RCP2P_RNC_STREAMING_DISC_TABLE_H
+#define RCP2P_RNC_STREAMING_DISC_TABLE_H
 
 #include "types.h"
 
@@ -83,4 +83,4 @@ struct DiscTable {
 
 extern struct DiscTable disc_table __asm__("D_00137B80");
 
-#endif /* LOMBYTE_RNC_STREAMING_DISC_TABLE_H */
+#endif /* RCP2P_RNC_STREAMING_DISC_TABLE_H */

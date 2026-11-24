@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_MATERIAL_TEMPLATES_H
-#define LOMBYTE_RNC_RENDERING_MATERIAL_TEMPLATES_H
+#ifndef RCP2P_RNC_RENDERING_MATERIAL_TEMPLATES_H
+#define RCP2P_RNC_RENDERING_MATERIAL_TEMPLATES_H
 
 #include "types.h"
 
@@ -11,4 +11,4 @@ extern u64 special_material_template[3] __asm__("D_0019E6C0");
 extern u64 alternate_special_material_template[3] __asm__("D_0019E6D8");
 extern u64 gold_weapon_texture_state[3] __asm__("D_0019E6F0");
 
-#endif /* LOMBYTE_RNC_RENDERING_MATERIAL_TEMPLATES_H */
+#endif /* RCP2P_RNC_RENDERING_MATERIAL_TEMPLATES_H */

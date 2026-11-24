@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_PROPS_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_PROPS_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_PROPS_H
+#define RCP2P_RNC_OVERLAY_SHARED_PROPS_H
 
 #include "types.h"
 
@@ -49,4 +49,4 @@ void           underwater_door_update(struct Moby *) __asm__("FUN_L15_002bddb0")
 void           underwater_ring_update(struct Moby *) __asm__("FUN_L15_002e5958");
 void           updraft_vent_update(unsigned char *) __asm__("FUN_L10_002e9028");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_PROPS_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_PROPS_H */

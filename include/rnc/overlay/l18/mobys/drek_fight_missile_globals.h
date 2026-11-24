@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L18_MOBYS_DREK_FIGHT_MISSILE_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L18_MOBYS_DREK_FIGHT_MISSILE_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L18_MOBYS_DREK_FIGHT_MISSILE_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L18_MOBYS_DREK_FIGHT_MISSILE_GLOBALS_H
 
 #include "types.h"
 
@@ -19,4 +19,4 @@ extern int   drek_missile_effect_blend_end_color __asm__("D_L18_00162264");
 extern float drek_missile_effect_quad_scale __asm__("D_L18_00162268");
 extern float drek_missile_effect_position_offset_length __asm__("D_L18_0016226C");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L18_MOBYS_DREK_FIGHT_MISSILE_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L18_MOBYS_DREK_FIGHT_MISSILE_GLOBALS_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_VIEW_SKY_VIEW_MATRIX_H
-#define LOMBYTE_RNC_RENDERING_VIEW_SKY_VIEW_MATRIX_H
+#ifndef RCP2P_RNC_RENDERING_VIEW_SKY_VIEW_MATRIX_H
+#define RCP2P_RNC_RENDERING_VIEW_SKY_VIEW_MATRIX_H
 
 #include "types.h"
 
@@ -8,4 +8,4 @@
    fourth row (w = 1024). Read by the sky and bounding sphere checks. */
 extern f32 sky_view_mtx[4][4] __asm__("D_0018CF80");
 
-#endif /* LOMBYTE_RNC_RENDERING_VIEW_SKY_VIEW_MATRIX_H */
+#endif /* RCP2P_RNC_RENDERING_VIEW_SKY_VIEW_MATRIX_H */

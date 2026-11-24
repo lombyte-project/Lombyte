@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_VENDOR_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_VENDOR_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_VENDOR_H
+#define RCP2P_RNC_OVERLAY_SHARED_VENDOR_H
 
 #include "types.h"
 
@@ -10,4 +10,4 @@ void flag_vendor_item(int) __asm__("FUN_L13_00316f48");
 void vendor_update() __asm__("FUN_L00_002a57a8");
 void vendor_orb_update(unsigned char *) __asm__("FUN_L00_002df730");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_VENDOR_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_VENDOR_H */

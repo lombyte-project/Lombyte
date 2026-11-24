@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_MOBYS_MOBY_GRIDS_H
-#define LOMBYTE_RNC_RENDERING_MOBYS_MOBY_GRIDS_H
+#ifndef RCP2P_RNC_RENDERING_MOBYS_MOBY_GRIDS_H
+#define RCP2P_RNC_RENDERING_MOBYS_MOBY_GRIDS_H
 
 #include "types.h"
 
@@ -29,4 +29,4 @@ extern MobyGrids moby_grids __asm__("D_001B76E0");
    initialize_level_render_state clears its 0x60 bytes. */
 extern u32 moby_grid_block_bitmap[24] __asm__("D_001C76E0");
 
-#endif /* LOMBYTE_RNC_RENDERING_MOBYS_MOBY_GRIDS_H */
+#endif /* RCP2P_RNC_RENDERING_MOBYS_MOBY_GRIDS_H */

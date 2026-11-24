@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_ENTITIES_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_ENTITIES_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_MOBYS_ENTITIES_H
+#define RCP2P_RNC_OVERLAY_SHARED_MOBYS_ENTITIES_H
 
 #include "types.h"
 #include "rnc/overlay/shared/math/quad.h"
@@ -37,4 +37,4 @@ typedef struct {
     int a, b;
 } Pair;
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_ENTITIES_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_MOBYS_ENTITIES_H */

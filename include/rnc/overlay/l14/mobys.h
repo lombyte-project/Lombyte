@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L14_MOBYS_H
-#define LOMBYTE_RNC_OVERLAY_L14_MOBYS_H
+#ifndef RCP2P_RNC_OVERLAY_L14_MOBYS_H
+#define RCP2P_RNC_OVERLAY_L14_MOBYS_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ void advance_moby_along_path(struct Moby *) __asm__("FUN_L14_002d7198");
 void update_moby_joint_visual_effects(struct Moby *) __asm__("FUN_L14_002d7490");
 void reset_racer_group_to_hero_path_position(struct Moby *) __asm__("FUN_L14_002d6570");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L14_MOBYS_H */
+#endif /* RCP2P_RNC_OVERLAY_L14_MOBYS_H */

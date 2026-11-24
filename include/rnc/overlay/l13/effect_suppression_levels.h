@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L13_EFFECT_SUPPRESSION_LEVELS_H
-#define LOMBYTE_RNC_OVERLAY_L13_EFFECT_SUPPRESSION_LEVELS_H
+#ifndef RCP2P_RNC_OVERLAY_L13_EFFECT_SUPPRESSION_LEVELS_H
+#define RCP2P_RNC_OVERLAY_L13_EFFECT_SUPPRESSION_LEVELS_H
 
 #include "types.h"
 
@@ -8,4 +8,4 @@
 extern float optional_glow_suppression_level __asm__("D_L13_0015F5D0");
 extern float blarg_space_fighter_fire_suppression_level __asm__("D_L13_0015F5D4");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L13_EFFECT_SUPPRESSION_LEVELS_H */
+#endif /* RCP2P_RNC_OVERLAY_L13_EFFECT_SUPPRESSION_LEVELS_H */

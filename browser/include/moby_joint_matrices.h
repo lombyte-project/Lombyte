@@ -8,6 +8,8 @@
 void rnc_compute_moby_joint_slots(u8 *moby, const u8 *joint_flags);
 /* EE 0x210850 get_moby_joint_matrices(moby, count, bones, out): 64-byte matrices to out. */
 void rnc_get_moby_joint_matrices(u8 *moby, s32 count, const s32 *bones, u8 *out);
+/* EE 0x2106f8: each point's joint translation (16 bytes) to out. */
+void rnc_get_moby_point_positions(u8 *moby, s32 count, const s32 *points, u8 *out);
 /* Every joint's 64-byte matrix to out; returns the joint count, 0 if it exceeds capacity. */
 s32 rnc_moby_all_joint_matrices(u8 *moby, u8 *out, s32 capacity);
 
@@ -15,5 +17,7 @@ s32 rnc_moby_all_joint_matrices(u8 *moby, u8 *out, s32 capacity);
    rotation, scale + flag word, translation + parent word, next translation. */
 void rnc_moby_local_pose(u8 *moby);
 const f32 *rnc_moby_pose_slot(s32 joint);
+/* Level 0x252990: an animation layer's pose for its listed joints, as parked-pose entries. */
+void rnc_animation_layer_pose(u8 *state);
 
 #endif

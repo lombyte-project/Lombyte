@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_MAP_MAP_STATE_H
-#define LOMBYTE_RNC_UI_MAP_MAP_STATE_H
+#ifndef RCP2P_RNC_UI_MAP_MAP_STATE_H
+#define RCP2P_RNC_UI_MAP_MAP_STATE_H
 
 #include "types.h"
 
@@ -74,4 +74,4 @@ struct MapState {
 
 extern struct MapState level_map_selection __asm__("D_001A00F0");
 
-#endif /* LOMBYTE_RNC_UI_MAP_MAP_STATE_H */
+#endif /* RCP2P_RNC_UI_MAP_MAP_STATE_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_GAME_LEVEL_SAVE_STATE_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_GAME_LEVEL_SAVE_STATE_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_GAME_LEVEL_SAVE_STATE_H
+#define RCP2P_RNC_OVERLAY_SHARED_GAME_LEVEL_SAVE_STATE_H
 
 #include "types.h"
 
@@ -16,4 +16,4 @@ extern LevelSaveState l03_save_state __asm__("D_L03_001BB330");
 extern LevelSaveState l10_save_state __asm__("D_L10_001BB6B0");
 extern LevelSaveState l15_save_state __asm__("D_L15_001BB830");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_GAME_LEVEL_SAVE_STATE_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_GAME_LEVEL_SAVE_STATE_H */

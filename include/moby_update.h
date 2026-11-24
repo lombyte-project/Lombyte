@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_MOBY_UPDATE_H
-#define LOMBYTE_MOBY_UPDATE_H
+#ifndef RCP2P_MOBY_UPDATE_H
+#define RCP2P_MOBY_UPDATE_H
 
 /* The engine's moby update call: `if (update) update(moby);` written as asm
    in the original. Retail leaves both delay slots empty
@@ -28,4 +28,4 @@
                            "$31",                                    \
                            "memory")
 
-#endif /* LOMBYTE_MOBY_UPDATE_H */
+#endif /* RCP2P_MOBY_UPDATE_H */

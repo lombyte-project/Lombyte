@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L04_MOBYS_H
-#define LOMBYTE_RNC_OVERLAY_L04_MOBYS_H
+#ifndef RCP2P_RNC_OVERLAY_L04_MOBYS_H
+#define RCP2P_RNC_OVERLAY_L04_MOBYS_H
 
 #include "types.h"
 
@@ -32,4 +32,4 @@ void upper_door_update(struct Moby *) __asm__("FUN_L04_002e17d8");
 void woodcut_bot_update() __asm__("FUN_L04_002d16b8");
 void woodcut_bot_debris_update() __asm__("FUN_L04_002e5178");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L04_MOBYS_H */
+#endif /* RCP2P_RNC_OVERLAY_L04_MOBYS_H */

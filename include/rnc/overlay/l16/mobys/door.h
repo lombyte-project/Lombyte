@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L16_MOBYS_DOOR_H
-#define LOMBYTE_RNC_OVERLAY_L16_MOBYS_DOOR_H
+#ifndef RCP2P_RNC_OVERLAY_L16_MOBYS_DOOR_H
+#define RCP2P_RNC_OVERLAY_L16_MOBYS_DOOR_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ void *activate_class_0287_group_and_find_nearest(int index,
 
 void door_update(unsigned char *) __asm__("FUN_L16_002d59e0");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L16_MOBYS_DOOR_H */
+#endif /* RCP2P_RNC_OVERLAY_L16_MOBYS_DOOR_H */

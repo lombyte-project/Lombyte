@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_PROPS_ELECTRIC_WATER_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_PROPS_ELECTRIC_WATER_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_PROPS_ELECTRIC_WATER_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_SHARED_PROPS_ELECTRIC_WATER_GLOBALS_H
 
 #include "types.h"
 
@@ -18,4 +18,4 @@ extern int   fourth_side_arc_fade_level __asm__("D_L15_00161CCE");
 /* Additional scalar data read by this unit. */
 extern float electric_water_path_arc_inhibit_gp __asm__("D_L15_00161BD0") __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_PROPS_ELECTRIC_WATER_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_PROPS_ELECTRIC_WATER_GLOBALS_H */

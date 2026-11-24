@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L12_MOBYS_WATER_TILE_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L12_MOBYS_WATER_TILE_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L12_MOBYS_WATER_TILE_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L12_MOBYS_WATER_TILE_GLOBALS_H
 
 #include "types.h"
 
@@ -7,4 +7,4 @@
 /* Explicit _gp views stay in the source at their assembler declaration sites. */
 extern int next_water_tile_index __asm__("D_L12_00151388");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L12_MOBYS_WATER_TILE_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L12_MOBYS_WATER_TILE_GLOBALS_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L11_MOBYS_JET_FIGHTER_DATA_UPDATE_PLAYER_SHIP_FLIGHT_14_H
-#define LOMBYTE_RNC_OVERLAY_L11_MOBYS_JET_FIGHTER_DATA_UPDATE_PLAYER_SHIP_FLIGHT_14_H
+#ifndef RCP2P_RNC_OVERLAY_L11_MOBYS_JET_FIGHTER_DATA_UPDATE_PLAYER_SHIP_FLIGHT_14_H
+#define RCP2P_RNC_OVERLAY_L11_MOBYS_JET_FIGHTER_DATA_UPDATE_PLAYER_SHIP_FLIGHT_14_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ extern float jet_fighter_cruise_speed_relaxation_factor_gp __asm__("D_L11_001620
 extern float jet_fighter_yaw_deflection_scale_gp __asm__("D_L11_00162008") __attribute__((sda));
 extern float jet_fighter_pitch_deflection_scale_gp __asm__("D_L11_0016200C") __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L11_MOBYS_JET_FIGHTER_DATA_UPDATE_PLAYER_SHIP_FLIGHT_14_H */
+#endif /* RCP2P_RNC_OVERLAY_L11_MOBYS_JET_FIGHTER_DATA_UPDATE_PLAYER_SHIP_FLIGHT_14_H */

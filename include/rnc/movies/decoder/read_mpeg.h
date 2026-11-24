@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_MOVIES_DECODER_READ_MPEG_H
-#define LOMBYTE_RNC_MOVIES_DECODER_READ_MPEG_H
+#ifndef RCP2P_RNC_MOVIES_DECODER_READ_MPEG_H
+#define RCP2P_RNC_MOVIES_DECODER_READ_MPEG_H
 
 #include "types.h"
 #include "rnc/input/pad_state.h"
@@ -16,4 +16,4 @@ struct MpegCdStream {
 /* Defined in rnc/movies/decoder/video_dec.h. */
 struct VideoDec;
 
-#endif /* LOMBYTE_RNC_MOVIES_DECODER_READ_MPEG_H */
+#endif /* RCP2P_RNC_MOVIES_DECODER_READ_MPEG_H */

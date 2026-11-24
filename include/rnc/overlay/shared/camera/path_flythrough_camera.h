@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_CAMERA_PATH_FLYTHROUGH_CAMERA_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_CAMERA_PATH_FLYTHROUGH_CAMERA_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_CAMERA_PATH_FLYTHROUGH_CAMERA_H
+#define RCP2P_RNC_OVERLAY_SHARED_CAMERA_PATH_FLYTHROUGH_CAMERA_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ void initialize_path_camera(struct UpdateCam *path_camera) __asm__("FUN_L10_002f
 int  evaluate_descriptor_eligibility(char *descriptor_owner,
                                      char *comparison_object) __asm__("FUN_L10_002f65f8");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_CAMERA_PATH_FLYTHROUGH_CAMERA_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_CAMERA_PATH_FLYTHROUGH_CAMERA_H */

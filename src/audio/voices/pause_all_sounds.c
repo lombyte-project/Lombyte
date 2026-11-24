@@ -115,7 +115,7 @@ s32 D_0015F674 MACRO_ADDR = 0;
  * screens' draw functions; list lengths from their 0 terminators, grid cells from
  * rows * cols, label text tables from the list or grid they follow. Text ids are
  * help message ids; the English quoted next to some is from the port's reading of
- * the same graph in level01 (Lombyte-Tools docs/port/rerac/plan/menus.md).
+ * the same graph in level01 (upstream tooling notes on the menu graph).
  */
 #define SCREEN(screen) ((struct MenuScreen *)&(screen))
 

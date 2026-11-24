@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_AUDIO_VOICE_POOL_H
-#define LOMBYTE_RNC_AUDIO_VOICE_POOL_H
+#ifndef RCP2P_RNC_AUDIO_VOICE_POOL_H
+#define RCP2P_RNC_AUDIO_VOICE_POOL_H
 
 #include "types.h"
 #include "rnc/sdk/eetypes.h"
@@ -95,4 +95,4 @@ typedef struct {
 /* The sound voice pool (D_0013E550). */
 extern VoicePool voice_pool __asm__("D_0013E550");
 
-#endif /* LOMBYTE_RNC_AUDIO_VOICE_POOL_H */
+#endif /* RCP2P_RNC_AUDIO_VOICE_POOL_H */

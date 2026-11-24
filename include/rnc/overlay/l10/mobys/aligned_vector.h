@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L10_MOBYS_ALIGNED_VECTOR_H
-#define LOMBYTE_RNC_OVERLAY_L10_MOBYS_ALIGNED_VECTOR_H
+#ifndef RCP2P_RNC_OVERLAY_L10_MOBYS_ALIGNED_VECTOR_H
+#define RCP2P_RNC_OVERLAY_L10_MOBYS_ALIGNED_VECTOR_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) AlignedVec4f;
 
-#endif /* LOMBYTE_RNC_OVERLAY_L10_MOBYS_ALIGNED_VECTOR_H */
+#endif /* RCP2P_RNC_OVERLAY_L10_MOBYS_ALIGNED_VECTOR_H */

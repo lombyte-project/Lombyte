@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_ASM_H
-#define LOMBYTE_ASM_H
+#ifndef RCP2P_ASM_H
+#define RCP2P_ASM_H
 
 /*
  * Browser replacement for include/asm.h. It shadows the original only for WebAssembly builds,
@@ -13,4 +13,4 @@
  */
 #define INCLUDE_ASM(path, symbol)
 
-#endif /* LOMBYTE_ASM_H */
+#endif /* RCP2P_ASM_H */

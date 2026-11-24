@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_DRAW_CONFIG_H
-#define LOMBYTE_RNC_RENDERING_DRAW_CONFIG_H
+#ifndef RCP2P_RNC_RENDERING_DRAW_CONFIG_H
+#define RCP2P_RNC_RENDERING_DRAW_CONFIG_H
 
 #include "types.h"
 
@@ -34,4 +34,4 @@ struct DrawConfig {
 
 extern struct DrawConfig draw_config __asm__("D_0018A2B0");
 
-#endif /* LOMBYTE_RNC_RENDERING_DRAW_CONFIG_H */
+#endif /* RCP2P_RNC_RENDERING_DRAW_CONFIG_H */

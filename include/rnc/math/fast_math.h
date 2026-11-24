@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_MATH_FAST_MATH_H
-#define LOMBYTE_RNC_MATH_FAST_MATH_H
+#ifndef RCP2P_RNC_MATH_FAST_MATH_H
+#define RCP2P_RNC_MATH_FAST_MATH_H
 
 #include "types.h"
 
@@ -26,4 +26,4 @@ f32 fast_difference_between_rotations(f32 a, f32 b) __asm__("FUN_001fa688");
 /* frames * a global float factor + 0.25, truncated. */
 s32 scale_game_frames(s32 frames) __asm__("FUN_001f96f8");
 
-#endif /* LOMBYTE_RNC_MATH_FAST_MATH_H */
+#endif /* RCP2P_RNC_MATH_FAST_MATH_H */

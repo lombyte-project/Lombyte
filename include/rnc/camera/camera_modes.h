@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_CAMERA_CAMERA_MODES_H
-#define LOMBYTE_RNC_CAMERA_CAMERA_MODES_H
+#ifndef RCP2P_RNC_CAMERA_CAMERA_MODES_H
+#define RCP2P_RNC_CAMERA_CAMERA_MODES_H
 
 /* Distinct camera selectors: activation at record +0x74, and attach mode
  * at the saved-state record +0x104. Equal values do not join these domains. */
@@ -25,4 +25,4 @@ enum CameraAttachMode {
     CAM_ATTACH_CONTINUE_BLEND_PROJECTED_HERO_FOCUS_VELOCITY = 0xA
 };
 
-#endif /* LOMBYTE_RNC_CAMERA_CAMERA_MODES_H */
+#endif /* RCP2P_RNC_CAMERA_CAMERA_MODES_H */

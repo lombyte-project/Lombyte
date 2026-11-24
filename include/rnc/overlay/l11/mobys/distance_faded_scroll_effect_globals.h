@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L11_MOBYS_DISTANCE_FADED_SCROLL_EFFECT_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L11_MOBYS_DISTANCE_FADED_SCROLL_EFFECT_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L11_MOBYS_DISTANCE_FADED_SCROLL_EFFECT_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L11_MOBYS_DISTANCE_FADED_SCROLL_EFFECT_GLOBALS_H
 
 #include "types.h"
 #include "rnc/overlay/shared/rendering/mesh_batch.h"
@@ -18,4 +18,4 @@ extern int   distance_faded_effect_color_tables_initialized __asm__("D_L11_00162
 extern s32  oil_tanker_front_texture_2b_batch_vertex_counts[5] __asm__("D_L11_00215268");
 extern u32 *oil_tanker_front_texture_2b_batch_color_tables[5] __asm__("D_L11_00217740");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L11_MOBYS_DISTANCE_FADED_SCROLL_EFFECT_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L11_MOBYS_DISTANCE_FADED_SCROLL_EFFECT_GLOBALS_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L17_MOBYS_H
-#define LOMBYTE_RNC_OVERLAY_L17_MOBYS_H
+#ifndef RCP2P_RNC_OVERLAY_L17_MOBYS_H
+#define RCP2P_RNC_OVERLAY_L17_MOBYS_H
 
 #include "types.h"
 
@@ -25,4 +25,4 @@ void  robot_dog_update(unsigned char *) __asm__("FUN_L17_002eeb68");
 void  shattering_prop_update(struct Moby *) __asm__("FUN_L17_002f5260");
 void  shuttle_update(struct Moby *) __asm__("FUN_L17_002f1940");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L17_MOBYS_H */
+#endif /* RCP2P_RNC_OVERLAY_L17_MOBYS_H */

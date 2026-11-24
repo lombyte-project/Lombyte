@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_EEREGS_H
-#define LOMBYTE_RNC_SDK_EEREGS_H
+#ifndef RCP2P_RNC_SDK_EEREGS_H
+#define RCP2P_RNC_SDK_EEREGS_H
 
 #include "types.h"
 
@@ -29,4 +29,4 @@
 #define VU1_MICRO_ADDR ((u32)0x11008000)
 #define VU1_MEM_ADDR   ((u32)0x1100c000)
 
-#endif /* LOMBYTE_RNC_SDK_EEREGS_H */
+#endif /* RCP2P_RNC_SDK_EEREGS_H */

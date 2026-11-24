@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L11_MOBYS_WATCHER_H
-#define LOMBYTE_RNC_OVERLAY_L11_MOBYS_WATCHER_H
+#ifndef RCP2P_RNC_OVERLAY_L11_MOBYS_WATCHER_H
+#define RCP2P_RNC_OVERLAY_L11_MOBYS_WATCHER_H
 
 #include "types.h"
 
@@ -16,4 +16,4 @@ typedef struct {
     char         *data;
 } WatcherMoby;
 
-#endif /* LOMBYTE_RNC_OVERLAY_L11_MOBYS_WATCHER_H */
+#endif /* RCP2P_RNC_OVERLAY_L11_MOBYS_WATCHER_H */

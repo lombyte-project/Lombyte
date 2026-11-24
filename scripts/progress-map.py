@@ -78,7 +78,7 @@ from progress_groups import (  # noqa: E402
 
 # Ratchet & Clank (2002) logo palette: Ratchet's bolt orange, Clank's chrome,
 # and the dark riveted plate behind them. The plate is the warm gunmetal of
-# assets/lombyte-logo.png; text stays neutral white. The canvas is a card like
+# the project's accent colour; text stays neutral white. The canvas is a card like
 # assets/naming-desk-card.svg: GitHub dark with a warm top-left corner.
 ORANGE = "#de812f"
 CHROME = "#c3cbd8"

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_VENDOR_VENDOR_CAPTURE_H
-#define LOMBYTE_RNC_UI_VENDOR_VENDOR_CAPTURE_H
+#ifndef RCP2P_RNC_UI_VENDOR_VENDOR_CAPTURE_H
+#define RCP2P_RNC_UI_VENDOR_VENDOR_CAPTURE_H
 
 #include "types.h"
 
@@ -30,4 +30,4 @@ extern struct CaptureBoundsAdjustment capture_bounds_adjustments[6] __asm__("D_0
 extern s32 vendor_flash_timers[8] __asm__("D_001E6620");
 extern s32 vendor_scroll_timers[8] __asm__("D_001E6640");
 
-#endif /* LOMBYTE_RNC_UI_VENDOR_VENDOR_CAPTURE_H */
+#endif /* RCP2P_RNC_UI_VENDOR_VENDOR_CAPTURE_H */

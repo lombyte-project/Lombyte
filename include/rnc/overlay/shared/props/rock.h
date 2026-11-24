@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_PROPS_ROCK_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_PROPS_ROCK_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_PROPS_ROCK_H
+#define RCP2P_RNC_OVERLAY_SHARED_PROPS_ROCK_H
 
 #include "types.h"
 
@@ -16,4 +16,4 @@ void rail_hero_motion_update(struct Moby *) __asm__("FUN_L01_002f6328");
 
 void rock_update(struct Moby *) __asm__("FUN_L01_002f8718");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_PROPS_ROCK_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_PROPS_ROCK_H */

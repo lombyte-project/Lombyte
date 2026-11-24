@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L13_MOBYS_ROBOSQUAWKER_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L13_MOBYS_ROBOSQUAWKER_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L13_MOBYS_ROBOSQUAWKER_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L13_MOBYS_ROBOSQUAWKER_GLOBALS_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ extern float robosquawker_damage_knockback_vertical_speed __asm__("D_L13_0016139
 extern float robosquawker_damage_knockback_horizontal_speed __asm__("D_L13_00161394");
 extern float robosquawker_home_hop_horizontal_speed __asm__("D_L13_00161398");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L13_MOBYS_ROBOSQUAWKER_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L13_MOBYS_ROBOSQUAWKER_GLOBALS_H */

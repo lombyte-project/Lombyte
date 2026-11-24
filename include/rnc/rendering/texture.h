@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_TEXTURE_H
-#define LOMBYTE_RNC_RENDERING_TEXTURE_H
+#ifndef RCP2P_RNC_RENDERING_TEXTURE_H
+#define RCP2P_RNC_RENDERING_TEXTURE_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ void pack_image_descriptor(struct Descriptor *, struct MenuScreen *);
 void parse_particle_textures(struct ParticleHdr *, s32, s32 *, s32) __asm__("FUN_002026c8");
 void reset_gs_texture_allocation(void);
 
-#endif /* LOMBYTE_RNC_RENDERING_TEXTURE_H */
+#endif /* RCP2P_RNC_RENDERING_TEXTURE_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L03_MOBYS_HELGA_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L03_MOBYS_HELGA_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L03_MOBYS_HELGA_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L03_MOBYS_HELGA_GLOBALS_H
 
 #include "types.h"
 
@@ -8,4 +8,4 @@
 extern float helga_big_head_cutscene_adjustment __asm__("D_L03_0015F5A0");
 extern float helga_big_head_attachment_uniform_value __asm__("D_L03_00161BB4");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L03_MOBYS_HELGA_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L03_MOBYS_HELGA_GLOBALS_H */

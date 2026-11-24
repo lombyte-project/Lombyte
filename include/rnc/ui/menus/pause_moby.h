@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_MENUS_PAUSE_MOBY_H
-#define LOMBYTE_RNC_UI_MENUS_PAUSE_MOBY_H
+#ifndef RCP2P_RNC_UI_MENUS_PAUSE_MOBY_H
+#define RCP2P_RNC_UI_MENUS_PAUSE_MOBY_H
 
 #include "types.h"
 
@@ -25,4 +25,4 @@ typedef struct {
     f32    cached_vector[4];
 } PauseMoby;
 
-#endif /* LOMBYTE_RNC_UI_MENUS_PAUSE_MOBY_H */
+#endif /* RCP2P_RNC_UI_MENUS_PAUSE_MOBY_H */

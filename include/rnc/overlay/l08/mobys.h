@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L08_MOBYS_H
-#define LOMBYTE_RNC_OVERLAY_L08_MOBYS_H
+#ifndef RCP2P_RNC_OVERLAY_L08_MOBYS_H
+#define RCP2P_RNC_OVERLAY_L08_MOBYS_H
 
 #include "rnc/sdk/eetypes.h"
 #include "types.h"
@@ -35,4 +35,4 @@ void swing_gate_update(struct Moby *) __asm__("FUN_L08_002ea4c0");
 void the_plumber_batalia_update() __asm__("FUN_L08_003065d8");
 void water_surface_update(struct Moby *) __asm__("FUN_L08_002da0f0");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L08_MOBYS_H */
+#endif /* RCP2P_RNC_OVERLAY_L08_MOBYS_H */

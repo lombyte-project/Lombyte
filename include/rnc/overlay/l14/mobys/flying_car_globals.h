@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L14_MOBYS_FLYING_CAR_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L14_MOBYS_FLYING_CAR_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L14_MOBYS_FLYING_CAR_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L14_MOBYS_FLYING_CAR_GLOBALS_H
 
 #include "types.h"
 
@@ -19,4 +19,4 @@ extern float flying_car_max_sink_offset_rate_gp __asm__("D_L14_00162280") __attr
 extern float flying_car_sink_offset_recovery_rate_gp __asm__("D_L14_00162288") __attribute__((sda));
 extern float flying_car_burst_height_threshold_gp __asm__("D_L14_0016228C") __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L14_MOBYS_FLYING_CAR_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L14_MOBYS_FLYING_CAR_GLOBALS_H */

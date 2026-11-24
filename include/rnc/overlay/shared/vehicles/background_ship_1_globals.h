@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_VEHICLES_BACKGROUND_SHIP_1_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_VEHICLES_BACKGROUND_SHIP_1_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_VEHICLES_BACKGROUND_SHIP_1_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_SHARED_VEHICLES_BACKGROUND_SHIP_1_GLOBALS_H
 
 #include "types.h"
 
@@ -24,4 +24,4 @@ extern float background_ship_2_removal_effect_vector_scale_gp __asm__("D_L02_001
 extern float background_ship_2_removal_effect_vector_z_bias_gp __asm__("D_L02_00161FD4")
     __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_VEHICLES_BACKGROUND_SHIP_1_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_VEHICLES_BACKGROUND_SHIP_1_GLOBALS_H */

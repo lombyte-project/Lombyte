@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_STREAMING_STASH_STASH_H
-#define LOMBYTE_RNC_STREAMING_STASH_STASH_H
+#ifndef RCP2P_RNC_STREAMING_STASH_STASH_H
+#define RCP2P_RNC_STREAMING_STASH_STASH_H
 
 #include "types.h"
 #include "rnc/sdk/sifrpc.h"
@@ -36,4 +36,4 @@ extern u8 stash_rpc_client_address[] __asm__("D_001DD1A8");
 
 s32 stash_get_reserved_qwords(s32 slot) __asm__("LookupResourceEntry");
 
-#endif /* LOMBYTE_RNC_STREAMING_STASH_STASH_H */
+#endif /* RCP2P_RNC_STREAMING_STASH_STASH_H */

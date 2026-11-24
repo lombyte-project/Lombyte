@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_TIE_INSTANCE_H
-#define LOMBYTE_RNC_RENDERING_TIE_INSTANCE_H
+#ifndef RCP2P_RNC_RENDERING_TIE_INSTANCE_H
+#define RCP2P_RNC_RENDERING_TIE_INSTANCE_H
 
 #include "types.h"
 
@@ -21,4 +21,4 @@ typedef struct TieInstance {
 extern TieInstance *ties __asm__("D_00160F50");
 extern TieInstance *ties_end __asm__("D_00160F54");
 
-#endif /* LOMBYTE_RNC_RENDERING_TIE_INSTANCE_H */
+#endif /* RCP2P_RNC_RENDERING_TIE_INSTANCE_H */

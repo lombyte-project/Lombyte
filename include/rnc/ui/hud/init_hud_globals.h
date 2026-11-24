@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_HUD_INIT_HUD_GLOBALS_H
-#define LOMBYTE_RNC_UI_HUD_INIT_HUD_GLOBALS_H
+#ifndef RCP2P_RNC_UI_HUD_INIT_HUD_GLOBALS_H
+#define RCP2P_RNC_UI_HUD_INIT_HUD_GLOBALS_H
 
 #include "types.h"
 
@@ -7,4 +7,4 @@
 /* Explicit _gp views stay in the source at their assembler declaration sites. */
 extern s32 hud_bank_main_start __asm__("D_0015FA04");
 
-#endif /* LOMBYTE_RNC_UI_HUD_INIT_HUD_GLOBALS_H */
+#endif /* RCP2P_RNC_UI_HUD_INIT_HUD_GLOBALS_H */

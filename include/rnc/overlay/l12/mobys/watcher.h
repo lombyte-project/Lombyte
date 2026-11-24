@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L12_MOBYS_WATCHER_H
-#define LOMBYTE_RNC_OVERLAY_L12_MOBYS_WATCHER_H
+#ifndef RCP2P_RNC_OVERLAY_L12_MOBYS_WATCHER_H
+#define RCP2P_RNC_OVERLAY_L12_MOBYS_WATCHER_H
 
 #include "types.h"
 #include "rnc/mobys/moby.h"
@@ -49,4 +49,4 @@ typedef struct {
     unsigned char widget;
 } L16WatchMoby;
 
-#endif /* LOMBYTE_RNC_OVERLAY_L12_MOBYS_WATCHER_H */
+#endif /* RCP2P_RNC_OVERLAY_L12_MOBYS_WATCHER_H */

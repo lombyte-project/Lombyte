@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_SIFRPC_H
-#define LOMBYTE_RNC_SDK_SIFRPC_H
+#ifndef RCP2P_RNC_SDK_SIFRPC_H
+#define RCP2P_RNC_SDK_SIFRPC_H
 
 #include "types.h"
 
@@ -25,4 +25,4 @@ struct sceSifClientData {
     void *serve;                  /* 0x24: server bound by sceSifBindRpc; 0 until bound */
 };
 
-#endif /* LOMBYTE_RNC_SDK_SIFRPC_H */
+#endif /* RCP2P_RNC_SDK_SIFRPC_H */

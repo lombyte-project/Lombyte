@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L02_MOBYS_SMOKE_VENT_DATA_UPDATE_SMOKE_VENT_6_H
-#define LOMBYTE_RNC_OVERLAY_L02_MOBYS_SMOKE_VENT_DATA_UPDATE_SMOKE_VENT_6_H
+#ifndef RCP2P_RNC_OVERLAY_L02_MOBYS_SMOKE_VENT_DATA_UPDATE_SMOKE_VENT_6_H
+#define RCP2P_RNC_OVERLAY_L02_MOBYS_SMOKE_VENT_DATA_UPDATE_SMOKE_VENT_6_H
 
 #include "types.h"
 
@@ -16,4 +16,4 @@ extern f32 view_gated_smoke_puff_motion_variation_fraction_gp __asm__("D_L02_001
 extern s32 view_gated_smoke_puff_timing_random_span_gp __asm__("D_L02_00162098")
     __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L02_MOBYS_SMOKE_VENT_DATA_UPDATE_SMOKE_VENT_6_H */
+#endif /* RCP2P_RNC_OVERLAY_L02_MOBYS_SMOKE_VENT_DATA_UPDATE_SMOKE_VENT_6_H */

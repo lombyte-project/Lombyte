@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RUNTIME_CORE_STATE_H
-#define LOMBYTE_RNC_RUNTIME_CORE_STATE_H
+#ifndef RCP2P_RNC_RUNTIME_CORE_STATE_H
+#define RCP2P_RNC_RUNTIME_CORE_STATE_H
 
 #include "types.h"
 #include "sda.h"
@@ -9,4 +9,4 @@
 extern s32 tty_initialized __asm__("D_0012FBF0") NOT_SDA;
 extern s32 RpcCommandState __asm__("D_0012FC08") NOT_SDA;
 
-#endif /* LOMBYTE_RNC_RUNTIME_CORE_STATE_H */
+#endif /* RCP2P_RNC_RUNTIME_CORE_STATE_H */

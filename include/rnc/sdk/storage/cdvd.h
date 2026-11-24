@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_STORAGE_CDVD_H
-#define LOMBYTE_RNC_SDK_STORAGE_CDVD_H
+#ifndef RCP2P_RNC_SDK_STORAGE_CDVD_H
+#define RCP2P_RNC_SDK_STORAGE_CDVD_H
 
 #include "types.h"
 
@@ -24,4 +24,4 @@ s32  sceCdReadClock(u64 *);
 s32  sceCdSync(s32);
 void signal_native_cd_delay_alarm(s32, u32, s32) __asm__("FUN_001205e8");
 
-#endif /* LOMBYTE_RNC_SDK_STORAGE_CDVD_H */
+#endif /* RCP2P_RNC_SDK_STORAGE_CDVD_H */

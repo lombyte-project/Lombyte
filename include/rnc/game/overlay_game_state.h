@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_GAME_OVERLAY_GAME_STATE_H
-#define LOMBYTE_RNC_GAME_OVERLAY_GAME_STATE_H
+#ifndef RCP2P_RNC_GAME_OVERLAY_GAME_STATE_H
+#define RCP2P_RNC_GAME_OVERLAY_GAME_STATE_H
 
 #include "types.h"
 #include "rnc/math/vector.h"

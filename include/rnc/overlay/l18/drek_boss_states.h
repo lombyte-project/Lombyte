@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L18_DREK_BOSS_STATES_H
-#define LOMBYTE_RNC_OVERLAY_L18_DREK_BOSS_STATES_H
+#ifndef RCP2P_RNC_OVERLAY_L18_DREK_BOSS_STATES_H
+#define RCP2P_RNC_OVERLAY_L18_DREK_BOSS_STATES_H
 
 /* Moby state IDs shared by the final boss update and its supporting handlers. */
 enum {
@@ -28,4 +28,4 @@ enum {
     DREK_BOSS_RUN_ENDING_SEQUENCE = 0x1B
 };
 
-#endif /* LOMBYTE_RNC_OVERLAY_L18_DREK_BOSS_STATES_H */
+#endif /* RCP2P_RNC_OVERLAY_L18_DREK_BOSS_STATES_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_CAMERA_LEVEL_CAMERA_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_CAMERA_LEVEL_CAMERA_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_CAMERA_LEVEL_CAMERA_H
+#define RCP2P_RNC_OVERLAY_SHARED_CAMERA_LEVEL_CAMERA_H
 
 #include "types.h"
 #include "rnc/math/vector.h"
@@ -72,4 +72,4 @@ extern LevelCamera l16_camera __asm__("D_L16_00167080");
 extern LevelCamera l17_camera __asm__("D_L17_00167580");
 extern LevelCamera l18_camera __asm__("D_L18_00167680");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_CAMERA_LEVEL_CAMERA_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_CAMERA_LEVEL_CAMERA_H */

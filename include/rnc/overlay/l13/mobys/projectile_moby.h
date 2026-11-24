@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L13_MOBYS_PROJECTILE_MOBY_H
-#define LOMBYTE_RNC_OVERLAY_L13_MOBYS_PROJECTILE_MOBY_H
+#ifndef RCP2P_RNC_OVERLAY_L13_MOBYS_PROJECTILE_MOBY_H
+#define RCP2P_RNC_OVERLAY_L13_MOBYS_PROJECTILE_MOBY_H
 
 /* The moby, class and hero fields that the level 13 homing rocket and mine
    classes read (homing_rocket.c, mine.c). */
@@ -40,4 +40,4 @@ typedef struct {
     ProjectileMoby *veh;
 } ProjectileHero;
 
-#endif /* LOMBYTE_RNC_OVERLAY_L13_MOBYS_PROJECTILE_MOBY_H */
+#endif /* RCP2P_RNC_OVERLAY_L13_MOBYS_PROJECTILE_MOBY_H */

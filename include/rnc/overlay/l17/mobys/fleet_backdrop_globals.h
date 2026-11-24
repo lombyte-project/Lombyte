@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L17_MOBYS_FLEET_BACKDROP_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L17_MOBYS_FLEET_BACKDROP_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L17_MOBYS_FLEET_BACKDROP_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L17_MOBYS_FLEET_BACKDROP_GLOBALS_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ extern float backdrop_shared_radius_numerator __asm__("D_L17_001623D0");
 extern float backdrop_offset_radius_divisor __asm__("D_L17_001623D8");
 extern float backdrop_heading_radius_numerator_addend __asm__("D_L17_001623D4");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L17_MOBYS_FLEET_BACKDROP_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L17_MOBYS_FLEET_BACKDROP_GLOBALS_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_EFFECTS_UPDATE_FOG_GLOBALS_H
-#define LOMBYTE_RNC_RENDERING_EFFECTS_UPDATE_FOG_GLOBALS_H
+#ifndef RCP2P_RNC_RENDERING_EFFECTS_UPDATE_FOG_GLOBALS_H
+#define RCP2P_RNC_RENDERING_EFFECTS_UPDATE_FOG_GLOBALS_H
 
 #include "types.h"
 
@@ -8,4 +8,4 @@ extern u8 water_fog_color_red __asm__("D_001610C4");
 extern u8 water_fog_color_green __asm__("D_001610C5");
 extern u8 water_fog_color_blue __asm__("D_001610C6");
 
-#endif /* LOMBYTE_RNC_RENDERING_EFFECTS_UPDATE_FOG_GLOBALS_H */
+#endif /* RCP2P_RNC_RENDERING_EFFECTS_UPDATE_FOG_GLOBALS_H */

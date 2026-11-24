@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_GAME_BOLT_SOURCES_H
-#define LOMBYTE_RNC_GAME_BOLT_SOURCES_H
+#ifndef RCP2P_RNC_GAME_BOLT_SOURCES_H
+#define RCP2P_RNC_GAME_BOLT_SOURCES_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ typedef struct BoltSourceStats {
 /* One row per level record (20), see rnc/game/level_progress.h. */
 extern BoltSourceStats bolt_source_stats[20][64] __asm__("D_0014D590");
 
-#endif /* LOMBYTE_RNC_GAME_BOLT_SOURCES_H */
+#endif /* RCP2P_RNC_GAME_BOLT_SOURCES_H */

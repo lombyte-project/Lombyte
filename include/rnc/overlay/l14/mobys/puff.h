@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L14_MOBYS_PUFF_H
-#define LOMBYTE_RNC_OVERLAY_L14_MOBYS_PUFF_H
+#ifndef RCP2P_RNC_OVERLAY_L14_MOBYS_PUFF_H
+#define RCP2P_RNC_OVERLAY_L14_MOBYS_PUFF_H
 
 /* The smoke puff particle that spawn_puff (FUN_L00_0026d000) returns, as the
    level 14 enemy fighter, rocket strike fighter, rocket, minibomber and flying debris code sets it up. */
@@ -27,4 +27,4 @@ typedef struct {
 
 L14Puff *spawn_puff(void *, f32, f32, f32, int, void *, f32, int) __asm__("FUN_L00_0026d000");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L14_MOBYS_PUFF_H */
+#endif /* RCP2P_RNC_OVERLAY_L14_MOBYS_PUFF_H */

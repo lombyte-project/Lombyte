@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_LIBRARY_FP_NUMBER_H
-#define LOMBYTE_RNC_SDK_LIBRARY_FP_NUMBER_H
+#ifndef RCP2P_RNC_SDK_LIBRARY_FP_NUMBER_H
+#define RCP2P_RNC_SDK_LIBRARY_FP_NUMBER_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ typedef struct FpNumber {
     u64 fraction;
 } FpNumber;
 
-#endif /* LOMBYTE_RNC_SDK_LIBRARY_FP_NUMBER_H */
+#endif /* RCP2P_RNC_SDK_LIBRARY_FP_NUMBER_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_AUDIO_SOUND_H
-#define LOMBYTE_RNC_AUDIO_SOUND_H
+#ifndef RCP2P_RNC_AUDIO_SOUND_H
+#define RCP2P_RNC_AUDIO_SOUND_H
 
 #include "rnc/audio/voice_pool.h"
 #include "types.h"
@@ -19,4 +19,4 @@ int  test_voice_occlusion(VoiceSlot *, void *) __asm__("FUN_0022c658");
 void voice_start_callback(int, long) __asm__("FUN_0022dd90");
 void voice_update_callback(int, long) __asm__("FUN_0022ddd8");
 
-#endif /* LOMBYTE_RNC_AUDIO_SOUND_H */
+#endif /* RCP2P_RNC_AUDIO_SOUND_H */

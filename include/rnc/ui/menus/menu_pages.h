@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_MENUS_MENU_PAGES_H
-#define LOMBYTE_RNC_UI_MENUS_MENU_PAGES_H
+#ifndef RCP2P_RNC_UI_MENUS_MENU_PAGES_H
+#define RCP2P_RNC_UI_MENUS_MENU_PAGES_H
 
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
@@ -293,4 +293,4 @@ extern struct MenuPage             challenge_confirm_page __asm__("D_001D4F98");
 extern s32 gadget_help_name_text_ids[14] __asm__("D_001D6248");
 extern s32 gadget_help_text_ids[14] __asm__("D_001D6280");
 
-#endif /* LOMBYTE_RNC_UI_MENUS_MENU_PAGES_H */
+#endif /* RCP2P_RNC_UI_MENUS_MENU_PAGES_H */

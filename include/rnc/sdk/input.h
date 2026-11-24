@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_INPUT_H
-#define LOMBYTE_RNC_SDK_INPUT_H
+#ifndef RCP2P_RNC_SDK_INPUT_H
+#define RCP2P_RNC_SDK_INPUT_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ s32   scePad2Read(s32, u8 *);
 s32   scePad2SetButtonOrder(u8 *, s32 *);
 s32   sceVibGetProfile(s32, u8 *);
 
-#endif /* LOMBYTE_RNC_SDK_INPUT_H */
+#endif /* RCP2P_RNC_SDK_INPUT_H */

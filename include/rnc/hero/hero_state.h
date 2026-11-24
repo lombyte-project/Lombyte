@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_HERO_HERO_STATE_H
-#define LOMBYTE_RNC_HERO_HERO_STATE_H
+#ifndef RCP2P_RNC_HERO_HERO_STATE_H
+#define RCP2P_RNC_HERO_HERO_STATE_H
 
 /* Hero state IDs and the separate mode selectors used by hero code.
  * Each state ID has one canonical member shared by its consumers.
@@ -174,4 +174,4 @@ enum HeroGravityMode {
     HERO_GRAVITY_TOWARD_REFERENCE_POINT = 0x2
 };
 
-#endif /* LOMBYTE_RNC_HERO_HERO_STATE_H */
+#endif /* RCP2P_RNC_HERO_HERO_STATE_H */

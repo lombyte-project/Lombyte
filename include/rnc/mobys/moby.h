@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_MOBYS_MOBY_H
-#define LOMBYTE_RNC_MOBYS_MOBY_H
+#ifndef RCP2P_RNC_MOBYS_MOBY_H
+#define RCP2P_RNC_MOBYS_MOBY_H
 
 #include "types.h"
 #include "rnc/math/vector.h"
@@ -95,4 +95,4 @@ struct Moby {
 /* A moby pointer held as bytes or as an int, read as a struct Moby. */
 #define MOBY(p) ((struct Moby *)(p))
 
-#endif /* LOMBYTE_RNC_MOBYS_MOBY_H */
+#endif /* RCP2P_RNC_MOBYS_MOBY_H */

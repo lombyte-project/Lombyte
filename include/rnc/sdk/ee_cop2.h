@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_EE_COP2_H
-#define LOMBYTE_RNC_SDK_EE_COP2_H
+#ifndef RCP2P_RNC_SDK_EE_COP2_H
+#define RCP2P_RNC_SDK_EE_COP2_H
 
 #include "types.h"
 
@@ -16,4 +16,4 @@ static __inline__ u32 ee_read_vpu_stat(void) {
     return value;
 }
 
-#endif /* LOMBYTE_RNC_SDK_EE_COP2_H */
+#endif /* RCP2P_RNC_SDK_EE_COP2_H */

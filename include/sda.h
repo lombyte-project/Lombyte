@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_SDA_H
-#define LOMBYTE_SDA_H
+#ifndef RCP2P_SDA_H
+#define RCP2P_SDA_H
 
 /*
  * Small-data placement for externals, per declaration.
@@ -20,4 +20,4 @@
 #define NOT_SDA    __attribute__((section(".data")))
 #define MACRO_ADDR __attribute__((section(".sdata")))
 
-#endif /* LOMBYTE_SDA_H */
+#endif /* RCP2P_SDA_H */

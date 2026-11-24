@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_MATH_INTERPOLATION_SPRING_TURN_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_MATH_INTERPOLATION_SPRING_TURN_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_MATH_INTERPOLATION_SPRING_TURN_H
+#define RCP2P_RNC_OVERLAY_SHARED_MATH_INTERPOLATION_SPRING_TURN_H
 
 #include "types.h"
 
@@ -15,4 +15,4 @@ float calculate_triangular_corrected_scalar(float *,
                                             int *,
                                             float) __asm__("FUN_L00_00259468");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_MATH_INTERPOLATION_SPRING_TURN_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_MATH_INTERPOLATION_SPRING_TURN_H */

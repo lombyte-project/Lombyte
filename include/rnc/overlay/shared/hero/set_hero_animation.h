@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_HERO_SET_HERO_ANIMATION_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_HERO_SET_HERO_ANIMATION_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_HERO_SET_HERO_ANIMATION_H
+#define RCP2P_RNC_OVERLAY_SHARED_HERO_SET_HERO_ANIMATION_H
 
 #include "types.h"
 
@@ -16,4 +16,4 @@ void set_hero_item_moby_flag_bit0(void) __asm__("FUN_L00_00232fe8");
 void update_hero_item_moby_flags(void) __asm__("FUN_L00_002330d0");
 s32  use_ammo(s32, s32) __asm__("FUN_L00_00233db8");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_HERO_SET_HERO_ANIMATION_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_HERO_SET_HERO_ANIMATION_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_VEHICLES_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_VEHICLES_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_VEHICLES_H
+#define RCP2P_RNC_OVERLAY_SHARED_VEHICLES_H
 
 #include "types.h"
 
@@ -17,4 +17,4 @@ void hoverboard_update(unsigned char *) __asm__("FUN_L05_002f87a8");
 void ship_rocket_update(struct Moby *) __asm__("FUN_L11_003094f8");
 void veldin_ship_update() __asm__("FUN_L00_002d1e80");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_VEHICLES_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_VEHICLES_H */

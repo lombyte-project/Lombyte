@@ -41,6 +41,9 @@ const define = (symbol, object, data) => {
   definedIn.get(symbol).push({ object, data });
 };
 
+// Functions at one address in one object (a name and its alias("...") names): objdump labels the
+// body with one of them, so their edges are shared below.
+const aliasGroups = new Map();
 for (let start = 0; start < objects.length; start += 100) {
   const chunk = objects.slice(start, start + 100).map((file) => join(out, 'obj', file));
   const text = execFileSync(join(llvmRoot, 'llvm-objdump'), ['-d', '-r', '-t', '--no-show-raw-insn', ...chunk],
@@ -51,8 +54,13 @@ for (let start = 0; start < objects.length; start += 100) {
     let match;
     if ((match = line.match(/\/([^/]+\.o):\s+file format/))) {
       object = match[1]; node = null;
-    } else if ((match = line.match(/^[0-9a-f]+ (g|w)\s+(F|O) (CODE|DATA)\s+[0-9a-f]+ (?:\.hidden )?(\S+)$/))) {
-      define(match[4], object, match[2] === 'O');
+    } else if ((match = line.match(/^([0-9a-f]+) (g|w|l)\s+(F|O) (CODE|DATA)\s+[0-9a-f]+ (?:\.hidden )?(\S+)$/))) {
+      if (match[2] !== 'l') define(match[5], object, match[3] === 'O');
+      if (match[3] === 'F') {
+        const key = `${object}\0${match[1]}`;
+        if (!aliasGroups.has(key)) aliasGroups.set(key, []);
+        aliasGroups.get(key).push(`${object}\0${match[5]}`);
+      }
     } else if ((match = line.match(/^RELOCATION RECORDS FOR \[(\w+)\]/))) {
       node = match[1] === 'DATA' ? `${object}\0<data>` : null;
     } else if (/^Disassembly of section/.test(line)) {
@@ -83,6 +91,12 @@ for (let start = 0; start < objects.length; start += 100) {
       if (!/^(TYPE_INDEX|GLOBAL_INDEX|SECTION_OFFSET|FUNCTION_OFFSET|TAG_INDEX)/.test(match[1])) addEdge(node, match[2]);
     }
   }
+}
+
+for (const names of aliasGroups.values()) {
+  if (names.length < 2) continue;
+  const union = new Set(names.flatMap((name) => [...(edges.get(name) ?? [])]));
+  for (const name of names) { edges.set(name, union); functionNodes.add(name); }
 }
 
 const fromFailed = new Map();

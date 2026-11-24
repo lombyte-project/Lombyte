@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L11_MOBYS_SEESAW_PLATFORM_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L11_MOBYS_SEESAW_PLATFORM_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L11_MOBYS_SEESAW_PLATFORM_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L11_MOBYS_SEESAW_PLATFORM_GLOBALS_H
 
 #include "types.h"
 
@@ -14,4 +14,4 @@ extern float seesaw_tilt_feedback_gain_degrees __asm__("D_L11_00161F7C");
 extern float seesaw_spin_feedback_gain_degrees __asm__("D_L11_00161F80");
 extern float seesaw_fall_tilt_threshold_degrees __asm__("D_L11_00161F84");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L11_MOBYS_SEESAW_PLATFORM_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L11_MOBYS_SEESAW_PLATFORM_GLOBALS_H */

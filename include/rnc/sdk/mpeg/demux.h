@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_MPEG_DEMUX_H
-#define LOMBYTE_RNC_SDK_MPEG_DEMUX_H
+#ifndef RCP2P_RNC_SDK_MPEG_DEMUX_H
+#define RCP2P_RNC_SDK_MPEG_DEMUX_H
 
 #include "types.h"
 
@@ -18,4 +18,4 @@ void GetMpegPictureTimestampsAndFlags(struct MpegTimestampState *,
 s32  _pack_header(s32, struct PackHeaderInfo *);
 u64  _type2id(s32, s32);
 
-#endif /* LOMBYTE_RNC_SDK_MPEG_DEMUX_H */
+#endif /* RCP2P_RNC_SDK_MPEG_DEMUX_H */

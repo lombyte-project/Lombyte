@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L07_MOBYS_H
-#define LOMBYTE_RNC_OVERLAY_L07_MOBYS_H
+#ifndef RCP2P_RNC_OVERLAY_L07_MOBYS_H
+#define RCP2P_RNC_OVERLAY_L07_MOBYS_H
 
 #include "types.h"
 
@@ -8,4 +8,4 @@ char *spawn_growing_ballistic_moby(char *, char *, int) __asm__("FUN_L07_0030e37
 unsigned char *
 spawn_machinegun_turret_projectile(void *, float *, int, int) __asm__("FUN_L07_0030b538");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L07_MOBYS_H */
+#endif /* RCP2P_RNC_OVERLAY_L07_MOBYS_H */

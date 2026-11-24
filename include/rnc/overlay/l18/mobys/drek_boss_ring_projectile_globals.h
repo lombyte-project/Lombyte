@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L18_MOBYS_DREK_BOSS_RING_PROJECTILE_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L18_MOBYS_DREK_BOSS_RING_PROJECTILE_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L18_MOBYS_DREK_BOSS_RING_PROJECTILE_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L18_MOBYS_DREK_BOSS_RING_PROJECTILE_GLOBALS_H
 
 #include "types.h"
 
@@ -26,4 +26,4 @@ extern int   ring_segment_radial_particle_lifetime_frames __asm__("D_L18_00161C8
 extern int   ring_segment_horizontal_particle_lifetime_frames __asm__("D_L18_00161C90");
 extern float ring_segment_particle_spawn_probability __asm__("D_L18_00161C98");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L18_MOBYS_DREK_BOSS_RING_PROJECTILE_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L18_MOBYS_DREK_BOSS_RING_PROJECTILE_GLOBALS_H */

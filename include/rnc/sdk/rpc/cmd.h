@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_RPC_CMD_H
-#define LOMBYTE_RNC_SDK_RPC_CMD_H
+#ifndef RCP2P_RNC_SDK_RPC_CMD_H
+#define RCP2P_RNC_SDK_RPC_CMD_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ void sceSifRemoveCmdHandler(s32);
 s32  _sceSifSendCmd(void *, s32, void *, void *, s32, void *, s32);
 s32  sceSifSendCmd(void *, void *, void *, s32, void *, s32);
 
-#endif /* LOMBYTE_RNC_SDK_RPC_CMD_H */
+#endif /* RCP2P_RNC_SDK_RPC_CMD_H */

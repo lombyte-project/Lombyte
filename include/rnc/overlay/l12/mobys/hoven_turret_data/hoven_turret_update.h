@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L12_MOBYS_HOVEN_TURRET_DATA_HOVEN_TURRET_UPDATE_H
-#define LOMBYTE_RNC_OVERLAY_L12_MOBYS_HOVEN_TURRET_DATA_HOVEN_TURRET_UPDATE_H
+#ifndef RCP2P_RNC_OVERLAY_L12_MOBYS_HOVEN_TURRET_DATA_HOVEN_TURRET_UPDATE_H
+#define RCP2P_RNC_OVERLAY_L12_MOBYS_HOVEN_TURRET_DATA_HOVEN_TURRET_UPDATE_H
 
 #include "types.h"
 
@@ -19,4 +19,4 @@ extern float hoven_turret_yaw_braking_rate __asm__("D_L12_00161EE0") __attribute
 extern float hoven_turret_pitch_braking_rate __asm__("D_L12_00161EE4") __attribute__((sda));
 extern float hoven_turret_firing_offset_rate __asm__("D_L12_00161EE8") __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L12_MOBYS_HOVEN_TURRET_DATA_HOVEN_TURRET_UPDATE_H */
+#endif /* RCP2P_RNC_OVERLAY_L12_MOBYS_HOVEN_TURRET_DATA_HOVEN_TURRET_UPDATE_H */

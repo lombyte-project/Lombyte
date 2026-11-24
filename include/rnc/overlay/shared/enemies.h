@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_ENEMIES_H
+#define RCP2P_RNC_OVERLAY_SHARED_ENEMIES_H
 
 #include "types.h"
 
@@ -58,4 +58,4 @@ void  smoke_trail_projectile_update(char *) __asm__("FUN_L01_002eda00");
 void  spawner_update(char *) __asm__("FUN_L09_0030ab80");
 void  spiderbot_update(unsigned char *) __asm__("FUN_L15_002a6e68");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_ENEMIES_H */

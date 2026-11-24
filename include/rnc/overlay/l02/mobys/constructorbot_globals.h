@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L02_MOBYS_CONSTRUCTORBOT_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L02_MOBYS_CONSTRUCTORBOT_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L02_MOBYS_CONSTRUCTORBOT_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L02_MOBYS_CONSTRUCTORBOT_GLOBALS_H
 
 #include "types.h"
 
@@ -11,4 +11,4 @@ extern float constructorbot_death_knockback_vertical_speed __asm__("D_L02_00161A
 extern float constructorbot_hit_knockback_horizontal_speed __asm__("D_L02_00161A6C");
 extern float constructorbot_hit_knockback_vertical_speed __asm__("D_L02_00161A70");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L02_MOBYS_CONSTRUCTORBOT_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L02_MOBYS_CONSTRUCTORBOT_GLOBALS_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L04_LEG_RIG_H
-#define LOMBYTE_RNC_OVERLAY_L04_LEG_RIG_H
+#ifndef RCP2P_RNC_OVERLAY_L04_LEG_RIG_H
+#define RCP2P_RNC_OVERLAY_L04_LEG_RIG_H
 
 #include "types.h"
 
@@ -84,4 +84,4 @@ typedef struct {
     /* 0x0F0 */ LegRigLeg   legs[2];
 } LegRig;
 
-#endif /* LOMBYTE_RNC_OVERLAY_L04_LEG_RIG_H */
+#endif /* RCP2P_RNC_OVERLAY_L04_LEG_RIG_H */

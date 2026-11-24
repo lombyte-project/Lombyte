@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L18_MOBYS_FALLING_MOBY_GROUP_H
-#define LOMBYTE_RNC_OVERLAY_L18_MOBYS_FALLING_MOBY_GROUP_H
+#ifndef RCP2P_RNC_OVERLAY_L18_MOBYS_FALLING_MOBY_GROUP_H
+#define RCP2P_RNC_OVERLAY_L18_MOBYS_FALLING_MOBY_GROUP_H
 
 #include "types.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
@@ -12,4 +12,4 @@ void activate_drek_boss_class_0565_moby(struct Moby *moby) __asm__("FUN_L18_002f
 
 void falling_moby_group_update(struct Moby *) __asm__("FUN_L18_002f16f0");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L18_MOBYS_FALLING_MOBY_GROUP_H */
+#endif /* RCP2P_RNC_OVERLAY_L18_MOBYS_FALLING_MOBY_GROUP_H */

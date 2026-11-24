@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_LIGHTS_POINT_LIGHT_H
-#define LOMBYTE_RNC_RENDERING_LIGHTS_POINT_LIGHT_H
+#ifndef RCP2P_RNC_RENDERING_LIGHTS_POINT_LIGHT_H
+#define RCP2P_RNC_RENDERING_LIGHTS_POINT_LIGHT_H
 
 #include "types.h"
 
@@ -27,4 +27,4 @@ struct PointLightSlot {
     f32  linked_sphere[4]; /* 0x20: the light's sphere when its links were built */
 };
 
-#endif /* LOMBYTE_RNC_RENDERING_LIGHTS_POINT_LIGHT_H */
+#endif /* RCP2P_RNC_RENDERING_LIGHTS_POINT_LIGHT_H */

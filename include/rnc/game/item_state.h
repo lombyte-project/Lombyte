@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_GAME_ITEM_STATE_H
-#define LOMBYTE_RNC_GAME_ITEM_STATE_H
+#ifndef RCP2P_RNC_GAME_ITEM_STATE_H
+#define RCP2P_RNC_GAME_ITEM_STATE_H
 
 #include "types.h"
 #include "sda.h"
@@ -29,4 +29,4 @@ extern s32 weapon_ammo_used_counts[37] __asm__("D_0013DEA0");
 extern s32 pause_iop_sprite_lists[8] __asm__("D_00141EA0");
 extern s32 D_00141660;
 
-#endif /* LOMBYTE_RNC_GAME_ITEM_STATE_H */
+#endif /* RCP2P_RNC_GAME_ITEM_STATE_H */

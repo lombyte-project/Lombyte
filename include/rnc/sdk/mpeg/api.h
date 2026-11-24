@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_MPEG_API_H
-#define LOMBYTE_RNC_SDK_MPEG_API_H
+#ifndef RCP2P_RNC_SDK_MPEG_API_H
+#define RCP2P_RNC_SDK_MPEG_API_H
 
 #include "types.h"
 
@@ -21,4 +21,4 @@ s32  sceMpegIsEnd(struct sceMpeg *) __asm__("func_0012BA48");
 s32  sceMpegIsRefBuffEmpty(struct sceMpeg *) __asm__("func_0012BA58");
 void sceMpegReset(struct sceMpeg *);
 
-#endif /* LOMBYTE_RNC_SDK_MPEG_API_H */
+#endif /* RCP2P_RNC_SDK_MPEG_API_H */

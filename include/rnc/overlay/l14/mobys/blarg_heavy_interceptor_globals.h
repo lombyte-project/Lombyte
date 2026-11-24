@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L14_MOBYS_BLARG_HEAVY_INTERCEPTOR_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L14_MOBYS_BLARG_HEAVY_INTERCEPTOR_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L14_MOBYS_BLARG_HEAVY_INTERCEPTOR_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L14_MOBYS_BLARG_HEAVY_INTERCEPTOR_GLOBALS_H
 
 #include "types.h"
 
@@ -36,4 +36,4 @@ extern f32 blarg_heavy_interceptor_patrol_heading_error_gain __asm__("D_L14_0016
 extern f32 blarg_heavy_interceptor_patrol_heading_damping_coefficient __asm__("D_L14_001613C8");
 extern f32 blarg_heavy_interceptor_patrol_heading_snap_threshold_scale __asm__("D_L14_001613CC");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L14_MOBYS_BLARG_HEAVY_INTERCEPTOR_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L14_MOBYS_BLARG_HEAVY_INTERCEPTOR_GLOBALS_H */

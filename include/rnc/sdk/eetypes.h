@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_EETYPES_H
-#define LOMBYTE_RNC_SDK_EETYPES_H
+#ifndef RCP2P_RNC_SDK_EETYPES_H
+#define RCP2P_RNC_SDK_EETYPES_H
 
 #include "types.h"
 
@@ -24,4 +24,4 @@ typedef union {
     sceVu0IVECTOR iv;
 } Q_WORDDATA;
 
-#endif /* LOMBYTE_RNC_SDK_EETYPES_H */
+#endif /* RCP2P_RNC_SDK_EETYPES_H */

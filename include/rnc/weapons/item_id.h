@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_WEAPONS_ITEM_ID_H
-#define LOMBYTE_RNC_WEAPONS_ITEM_ID_H
+#ifndef RCP2P_RNC_WEAPONS_ITEM_ID_H
+#define RCP2P_RNC_WEAPONS_ITEM_ID_H
 
 /* Item IDs dispatched by the hero item-use handlers. */
 enum ItemId {
@@ -9,4 +9,4 @@ enum ItemId {
     ITEM_REMOTE_VENDOR = 32
 };
 
-#endif /* LOMBYTE_RNC_WEAPONS_ITEM_ID_H */
+#endif /* RCP2P_RNC_WEAPONS_ITEM_ID_H */

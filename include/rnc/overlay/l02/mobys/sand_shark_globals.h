@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L02_MOBYS_SAND_SHARK_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L02_MOBYS_SAND_SHARK_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L02_MOBYS_SAND_SHARK_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L02_MOBYS_SAND_SHARK_GLOBALS_H
 
 #include "types.h"
 
@@ -36,4 +36,4 @@ extern s32   sand_shark_single_particle_second_frame_count_range_end __asm__("D_
 extern s32   sand_shark_single_particle_third_frame_count_range_start __asm__("D_L02_00161994");
 extern s32   sand_shark_single_particle_third_frame_count_range_end __asm__("D_L02_00161998");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L02_MOBYS_SAND_SHARK_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L02_MOBYS_SAND_SHARK_GLOBALS_H */

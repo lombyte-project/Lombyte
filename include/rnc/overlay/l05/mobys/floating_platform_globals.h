@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L05_MOBYS_FLOATING_PLATFORM_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L05_MOBYS_FLOATING_PLATFORM_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L05_MOBYS_FLOATING_PLATFORM_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L05_MOBYS_FLOATING_PLATFORM_GLOBALS_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ extern float floating_platform_rotation_x_amplitude_degrees __asm__("D_L05_00161
 extern int   floating_platform_voice_interval_min __asm__("D_L05_00161CE4");
 extern int   floating_platform_voice_interval_max __asm__("D_L05_00161CE8");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L05_MOBYS_FLOATING_PLATFORM_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L05_MOBYS_FLOATING_PLATFORM_GLOBALS_H */

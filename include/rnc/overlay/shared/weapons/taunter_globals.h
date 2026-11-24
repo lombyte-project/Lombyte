@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_TAUNTER_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_TAUNTER_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_WEAPONS_TAUNTER_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_SHARED_WEAPONS_TAUNTER_GLOBALS_H
 
 #include "types.h"
 
@@ -8,4 +8,4 @@ extern s32 taunter_effect_reset_pending __asm__("D_L00_001614CC");
 extern s32 taunter_effect_emission_disabled __asm__("D_L00_001614D4");
 extern int taunter_effect_lifetime_frames __asm__("D_L00_001614D8");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_TAUNTER_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_WEAPONS_TAUNTER_GLOBALS_H */

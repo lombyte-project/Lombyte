@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_TEXT_FONT_STATE_H
-#define LOMBYTE_RNC_UI_TEXT_FONT_STATE_H
+#ifndef RCP2P_RNC_UI_TEXT_FONT_STATE_H
+#define RCP2P_RNC_UI_TEXT_FONT_STATE_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ extern s32            text_shadow_x __asm__("D_001601B8") __attribute__((sda));
 extern s32            text_shadow_y __asm__("D_001601BC") __attribute__((sda));
 extern u8             debug_font_buffer[] __asm__("D_001AABC0");
 
-#endif /* LOMBYTE_RNC_UI_TEXT_FONT_STATE_H */
+#endif /* RCP2P_RNC_UI_TEXT_FONT_STATE_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L17_MOBYS_RADIAL_RIPPLE_MESH_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L17_MOBYS_RADIAL_RIPPLE_MESH_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L17_MOBYS_RADIAL_RIPPLE_MESH_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L17_MOBYS_RADIAL_RIPPLE_MESH_GLOBALS_H
 
 #include "types.h"
 
@@ -14,4 +14,4 @@ extern float ripple_radial_phase_distance_scale __asm__("D_L17_00162380");
 extern float ripple_phase_period __asm__("D_L17_00162384");
 extern float ripple_z_amplitude __asm__("D_L17_00162388");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L17_MOBYS_RADIAL_RIPPLE_MESH_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L17_MOBYS_RADIAL_RIPPLE_MESH_GLOBALS_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_GRAPH_H
-#define LOMBYTE_RNC_SDK_GRAPH_H
+#ifndef RCP2P_RNC_SDK_GRAPH_H
+#define RCP2P_RNC_SDK_GRAPH_H
 
 #include "rnc/sdk/libgraph.h"
 #include "types.h"
@@ -18,4 +18,4 @@ s32  sceGsSetDefLoadImage(sceGsLoadImage *, s16, s16, s16, s16, s16, s16, s16);
 s32  sceGsSyncV(s32);
 s32  sceGsSyncVCallback(s32);
 
-#endif /* LOMBYTE_RNC_SDK_GRAPH_H */
+#endif /* RCP2P_RNC_SDK_GRAPH_H */

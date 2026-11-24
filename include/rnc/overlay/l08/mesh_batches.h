@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L08_MESH_BATCHES_H
-#define LOMBYTE_RNC_OVERLAY_L08_MESH_BATCHES_H
+#ifndef RCP2P_RNC_OVERLAY_L08_MESH_BATCHES_H
+#define RCP2P_RNC_OVERLAY_L08_MESH_BATCHES_H
 
 #include "types.h"
 #include "rnc/overlay/shared/rendering/mesh_batch.h"
@@ -182,4 +182,4 @@ extern f32 batalia_offset_batch_1_uvs[35][2] __asm__("D_L08_001EFC40");
 extern int batalia_offset_batch_0_colours[35] __asm__("D_L08_001F00A8");
 extern int batalia_offset_batch_1_colours[35] __asm__("D_L08_001F0138");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L08_MESH_BATCHES_H */
+#endif /* RCP2P_RNC_OVERLAY_L08_MESH_BATCHES_H */

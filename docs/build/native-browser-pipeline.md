@@ -766,6 +766,483 @@ Headless Chrome on the served `build/browser` page: `posedActors` 150, `undecode
 play camera follows Ratchet). Clip choice for mobys whose update is unported, and the menus, are
 unchanged.
 
+### Sixth pass (2026-11-20/21): the opening cutscene frame through the moby pass
+
+Same scenario, now run for frames (`--frames 300`; link roots `FUN_00230f60,FUN_00232d00,
+FUN_L00_0023d028,FUN_L00_00244110,FUN_L00_00245c28,FUN_0012da28`):
+
+```
+export RNC_ISO_PATH=".../Ratchet & Clank (USA) (En,Fr,De,Es,It).iso"
+browser/spike/compile-all.sh 8
+browser/spike/link-closure.sh FUN_00230f60,FUN_00232d00,FUN_L00_0023d028,FUN_L00_00244110,FUN_L00_00245c28,FUN_0012da28 level
+node browser/spike/run-closure.mjs level FUN_00230f60 --scenario browser/spike/scenario-veldin-level.mjs \
+  --elf build/rea/SCUS_971.99 --level 0 --frames 300
+```
+
+Result: the first cutscene frame's update half completes in original code (hero, particles,
+sound, the cutscene controller), and its draw half runs through sky, terrain, ties, shrubs, the
+glow sprites and the moby pass. It stops in the draw callbacks: `fast_draw_quad_real` (`0x1f7d30`,
+level copy `0x1fd228`, assembly, with helpers `0x1fd85c`, `0x1fd89c`, `0x1fd7dc`), called by the
+class `0x212` environment-mapped mesh callback. **No frame has completed yet**, so nothing about
+the cutscene has been seen; the main loop counter is still 0.
+
+What changed, by kind:
+
+- **Sound streams.** `services.c` answers the 989snd stream commands from a model: `0x2C` play
+  (a handle), `0x4F` buffered, `0x19` still playing and `0x32` time remaining, from the VAGp
+  header at the stream's disc location. This is what `start_scene` waited on. Assumed, not read
+  from the IOP module: that the location is a sector and that time remaining is in 48 kHz samples.
+- **Tooling fixes.** `closure.mjs` missed calls made from functions that also have an
+  `alias(...)` name (objdump labels the body with one name); edges are now shared.
+  `level-copies.py` finds level functions that copy a boot function word for word (16 on Veldin;
+  `level-copies.json`, renamed by the normalizer). `exe-data-map.py` now pairs gp-relative
+  accesses as well as `%hi`/`%lo` ones: 79 more boot small-data globals are pinned at their level
+  address (for example the sky's scratchpad buffer table). Boot sources' pointer-cast literals
+  (`*(s32 *)0x15FF18`) take the same mapping. A `()` declaration whose unused result was dropped
+  now also gets the argument-count adapter. Registrations through `add_draw_callback` get a
+  `void (s32)` adapter when the callback's definition has another type (37).
+  `ee-disasm.py` decodes MMI and `lq`/`sq`.
+- **Calls that name the boot copy where the level program calls its own** (update_parts
+  `0x267c08`, update_visible_mobys `0x264848`): `level-copies.json` / `source-fixes.json`.
+- **Decoded from assembly** (`ee-helpers.c`, each with its derivation): moby lighting and light
+  direction, particle update and free, the menu image decoder, axis quaternions, sceVu0
+  unit/rotation matrices, clamp_vector_length, sky bounding spheres, sky vertex transform and both
+  sky GIF builders, the sky sprite pass, the texture upload flush, the tfrag/tie/shrub/moby texture
+  DMA builders, the glow sprite setup, set_scale_matrix, and the class `0x212` draw callback
+  (compiled code missing from the recovered tree). Hardware services: DMA channels 8 and 9
+  (scratchpad copies).
+- **VU1 world passes handed to the browser renderer** (stage 4: "replace the relevant PS2
+  rendering passes with a browser graphics backend"): `tfrag_proc`, `tie_proc`, `shrub_proc`, the
+  glow sprite VU1 data pass (`0x1f89a4`) and the packet half of `moby_proc`. Each is counted and
+  leaves the display list unchanged; the results later code reads are made consistent: an empty
+  fragment list, every tie/shrub class "not visible" to the PS2 texture path, an empty animation
+  queue. **`moby_proc`'s culling is not handed off**: it writes moby `+0x31` (visible), which 194
+  gameplay files read, so that half is ported operation by operation. Assumed, not verified:
+  nothing outside rendering reads the animation queue or its skinning matrices.
+- Unverified: none of the ported routines has been compared against console output.
+
+### Seventh pass (2026-11-21): the boot program, its title and main menu, in the browser
+
+The game now runs from `main` the way the PS2 starts it: `run_game_main_loop` (`0x12d9d8`,
+what crt0 calls) → `startlevel` → `init_once` → the intro movie request → `transition_do_transition`
+(the title flyby and "PRESS START") → `enter_main_menu` → the real main menu. All of it is the
+recovered C, with PS2 services replaced by browser ones. Pressing START (Enter in the page) enters
+the menu through the game's own `update_gameplay_frame`.
+
+**Two programs, as on the console.** The boot program and a level program occupy the same memory
+above `0x15EF00` on the PS2, never at once. The boot program is now its own link, `boot.wasm`
+(`browser/spike/link-closure.sh FUN_0012d9d8 boot`): executable names keep their own addresses
+(no exe-data map; `ram-image.mjs` with `SPIKE_NO_EXE_MAP`), the files whose literals the normalizer
+remaps get boot variants (`compile-all.sh`, `build/spike/obj-boot`, 10 files), and no level data is
+copied in. `level.wasm` is unchanged. The handover at `parse_bin` (New Game → Veldin) is not built
+yet. The ports and services name fixed-address tables by executable labels (`exe_XXXXXXXX` →
+`D_00XXXXXX`), so `ram-image.mjs` pins them correctly in each program (it now also pins labels
+that only `ee-helpers.c` / `services.c` name).
+
+**Browser services for start-up** (`services.c`): VIF1/GIF reset (`sceGsResetPath`), the CD library
+at its API (init, disc ready, media mode), the IOP at its API (reboot, sync, heap with its own
+backing memory, module loads counted), the controller (`sceDbcInit`, `scePad2*`: one DualShock 2,
+report from `spike_pad_buttons`), the memory card (one formatted card with no save; file calls
+not modelled and stop by name), kernel GS calls (`GsPutIMR`, `SetGsCrt`), interrupt handlers (the
+vertical-blank handler `count_vsync` runs once per frame from `sceGsSyncV`), DMA controller set-up,
+the sound bank load by location (a handle, nothing loaded: no audio engine yet), and movies
+(`play_mpeg_movie` hands `(sector, bytes)` to the host; **not decoded or shown yet**).
+`load_hud_banks` was wrongly replaced by an "audio" stub in an earlier pass; it loads the HUD and
+menu graphics and now runs as recovered C (that stub is why the menu panels were blank).
+
+**GS backend** (`browser/gs-renderer.mjs`): the GS's 4 MiB local memory and register state in
+software, fed by every VIF1 DIRECT / GIF-channel packet and every `sceGsExecLoadImage` upload:
+PACKED/REGLIST/IMAGE tags (a tag's data may continue in the next packet), the drawing registers,
+all primitive types, PSMCT32/24/16, PSMT8/4/8H/4HL/4HH textures with CSM1 palettes and the exact
+CLD rules, TFX modes, alpha blend/test, Z test, scissor, frame-buffer masks, and display from
+DISPFB. Swizzle tables follow the GS User's Manual; a texture that round-trips through two
+formats has not been checked. Not yet: bilinear filtering, mipmaps, fog, dithering. VU1
+microprograms (moby models, the ship flyby on the title) are not run; the menu frame starts 9 of
+them.
+
+**Also fixed**: `get_moby_joint_matrices`' end marker (`flags[highest] = 0xFF`, it was one joint
+off; shared with the game page), `update_entity` / `update_moby_grids` and the grid block allocator
+ported (the moby collision grid now exists, so `collect_mobies_in_sphere` can be ported next), the
+point-position routine `0x2106f8`, the integer absolute value `0x1f99a8`, Sony VU0 names, the GIF
+display-list reader's quadword alignment and scratchpad sources, a normalizer rule for `()`
+declarations called with exactly the definition's integer arguments.
+
+Commands:
+
+```
+browser/spike/compile-all.sh 8
+browser/spike/link-closure.sh FUN_0012d9d8 boot
+node browser/spike/run-closure.mjs boot FUN_0012d9d8 --scenario browser/spike/scenario-veldin-level.mjs \
+  --elf build/rea/SCUS_971.99 --boot --frames 600 --pad 300:start --png 590:menu.png
+make browser-boot    # copies boot.wasm and the page into build/browser; open boot.html
+```
+
+Node: 440 frames to the main menu in 13 s. Headless Chrome (software): the page shows the title and,
+after Enter, the main menu, at about 25-30 frames a second. Not verified against a console capture.
+
+### Eighth pass (2026-11-23): New Game, the memory card, and the jump into Veldin's program
+
+From main, with only the disc and the ELF image staged, New Game now runs the way the console runs
+it. The sequence:
+
+1. The player answers the memory card dialogs ("No Ratchet and Clank save data ...", Yes).
+2. The game creates the save, picks a slot and confirms.
+3. It requests the three opening movies.
+4. `do_space_transition` loads Veldin.
+5. `run_game_main_loop` jumps into the level program through `parse_bin`.
+6. The level program runs its own main loop: the opening cutscene, then the hero's update and the
+   HUD draw. It ran 2,347 level frames (4,000 in all) without a stop.
+
+**Memory card.** In `services.c`, libmc at its API is an in-memory filesystem: one formatted 8 MB
+card in port 0 slot 0, empty at start, with directories, files and descriptors.
+- `sceMcChdir` returns 0 or -4.
+- `Open`, `Mkdir` and `Delete` follow the libmc result codes.
+- `GetDir` returns 64-byte entries.
+- `sceMcSync` reports each command's function code and result.
+- Port 1 reports no card.
+- The card is not persisted yet: it is empty on every run.
+
+**The hand-over.** On the console, `parse_bin` copies the level file's chunks over the boot program,
+`FlushCache(2)` follows, and the returned chunk id (0x245c28 for Veldin) is called. Here the two
+programs are separate modules (`boot.wasm`; the level program is
+`link-closure.sh FUN_00230f60,FUN_00232d00,FUN_L00_0023d028,FUN_L00_00244110,FUN_L00_00245c28,FUN_0012da28 level`).
+- `FlushCache(2)` calls the host import `spike_program_loaded`.
+- The host hands over only when `level_root`'s first chunk is already at its destination. `FlushCache(2)`
+  also runs during movie decoding, so this check is what makes the signal unambiguous.
+- At the hand-over the host instantiates the level module and copies EE RAM
+  (0x100000-0x2000000), the scratchpad and the EE / GS register pages into it.
+- It installs the level handler tables, translates the level copy of the sky's scratchpad
+  pointers, and calls `FUN_L00_00245c28`.
+- Each module's own C statics sit above 0x2000000 and are not copied, so `services.c` state
+  starts fresh.
+- SIF clients bound by the boot program keep their binding: `sceSifCallRpc` falls back to the
+  client's `serve` field in EE RAM, as the IOP side would.
+- Implemented in `run-closure.mjs --handover level` and in `boot-runtime.mjs`, which loads
+  `level-program.wasm`; `make browser-boot` copies it from `build/spike/level.wasm`.
+
+**Ported this pass.**
+
+`ee-helpers.c`:
+- `fast_draw_quad_real` (0x1f7d30): the unclipped path is exact; the clipped path uses the routine's
+  6-plane clip and per-byte colour rounding.
+  ASSUMED: for clipped polygons with more than three points, the fan starts at the first point.
+  The assembly picks the start by distance and may add a point (0x1f7cd0 / 0x1f7c10); the covered
+  pixels are the same.
+- `scale_time` and `0x1f96e8`.
+- `refresh_moby_spatial_bounds_from_basis` (0x20e098, `update_entity` with the basis kept).
+- Vector multiply, the clip test, sphere overlap, `fast_mem_or16`, packed-char conversions,
+  quaternion to matrix (three and four rows) and quaternion nlerp.
+- `menu_screen_confirm_or_back` (0x219d80).
+
+`services.c`:
+- `sceCdReadClock`, filled from the host clock.
+- `sceScfGetLocalTimefromRTC`.
+- `RemoveDmacHandler` and `DisableDmac`.
+
+**Normalizer and fixes.**
+- Menu screen tables get adapters of their slot types (44 callbacks).
+- `measure_text_width_*` return their value.
+- Self-aliases written attribute-first are removed: `update_hud` now compiles.
+- `particle_spawner_smoke_fire.c` calls `get_effect_texture` directly instead of through an
+  `int (*)(int)` cast.
+- `level-copies.py` now considers every level function named in the sources. Functions outside
+  0x1fxxxx must be at least 12 words long, with every call the same distance away. This adds 18
+  pairs, including `allocate_voice_for_target_entry`'s level copy, which had been a `void(void)`
+  stub.
+
+**Not done.**
+- The terrain, ties, shrubs and models are VU1 microcode passes; this page's GS backend draws only
+  what the game sends to the GS directly (the sky, quads, text). So the level shows its sky and
+  fog colour, not its world.
+- The movies are requested but not decoded.
+- No audio.
+- The camera after the cutscene was not driven with the controller in this pass.
+
+Commands:
+
+```
+browser/spike/compile-all.sh 8
+browser/spike/link-closure.sh FUN_0012d9d8 boot
+browser/spike/link-closure.sh FUN_00230f60,FUN_00232d00,FUN_L00_0023d028,FUN_L00_00244110,FUN_L00_00245c28,FUN_0012da28 level
+node browser/spike/run-closure.mjs boot FUN_0012d9d8 --scenario browser/spike/scenario-veldin-level.mjs \
+  --elf build/rea/SCUS_971.99 --boot --handover level --frames 4000 \
+  --pad 300:start,420:cross,620:circle,950:cross,1100:cross,1250:cross
+make browser-boot    # boot.wasm, level-program.wasm and the page into build/browser
+```
+
+Results:
+- Node: 4,000 frames in about 2.5 minutes, still running at the end.
+- Headless Chrome: the page with the same inputs switches to the level program at frame 1630 and
+  ran to frame 2908 (the test's end) with no error.
+- `make browser-gameplay-test`: 8/8 pass.
+- Not compared against a console capture.
+
+**Follow-up (same day): menu artifacts and "unreachable" stops.**
+- The striped menu panels are the game's own hologram effect: a 16 x 16 scanline texture (alpha
+  rows 0 / 70) tiled over each panel. They looked harsh because the GS backend had no bilinear
+  filtering. The game's full-screen pass after the menu draw (16 sprites reading the frame buffer,
+  TEX1 bilinear) and the text copies rely on it.
+  - `gs-renderer.mjs` now samples bilinearly when TEX1 asks for it: MMAG at LOD <= 0, MMIN 1/4/5
+    above, 4-bit fractions, level 0 only.
+  - Verified on frame 361 in Node and on the page.
+- "unreachable" on the page is how a call between mismatched C prototypes fails: wasm-ld replaces
+  it with a trap.
+  - The normalizer gained `abi_adapter`, the fallback after the reorder and count adapters. It
+    applies the EE register convention: integers in order to integer parameters, floats in order
+    to float parameters, results from v0 or f0.
+  - ASSUMED: a register the caller never set is 0.
+  - `result_never_read` accepts `case`/`default`/goto labels, and the prototype pass runs twice.
+- Five recovered calls that pass no arguments were checked in the disassembly: at the `jal` the
+  callee's argument registers still hold the caller's own arguments. Source fixes name them:
+  - `delete_moby` -> `mark_moby_for_removal`;
+  - `refresh_point_light`;
+  - `force_help_message`;
+  - `is_value_within_interpolated_window`;
+  - the level's manipulator attach.
+- `debug_print` (empty, variadic) takes the variadic prototype at all 59 declarations.
+- Menu screen tables: the `MenuPlainScreen*` types now get adapters (52 callbacks), and 0x221800,
+  0x21d168 and 0x221ab8 (planet list, reverse text list, confirm prompt) are ported. Options no
+  longer stops.
+- Mismatched calls left: boot 50 -> 34, level 78 -> 42. Most are in the movie decoder and SDK
+  internals, not reached yet. Each one that is reached stops with "unreachable" and the function
+  stack, which the page now prints.
+- The page's `.wasm` fetches revalidate (`cache: 'no-cache'`), so a rebuild is not hidden by the
+  browser cache.
+
+### Ninth pass (2026-11-23): speed, and the game's movies
+
+**GS rasterizer in WebAssembly.**
+- `browser/gs-raster.c` (`make browser-gs`) is `gs-renderer.mjs`'s pixel pipeline ported line for
+  line: memory, swizzles, uploads, sampling (nearest / bilinear), sprite / line / triangle /
+  point, alpha and Z tests, blending, and the display read-out.
+- The JavaScript renderer keeps the GIF and register front end and stays the reference (`GS_JS=1`
+  in Node).
+- Bit-identical frames: frames 120, 361 and 650 of the boot path compare equal byte for byte.
+- Changes made only for speed:
+  - the swizzle tables are folded (in both renderers);
+  - the level of detail is computed only when MMAG and MMIN differ;
+  - bilinear filtering uses integer sixteenths, which is exact for the 4-bit weights.
+- Headless Chrome, title and menu: 11 fps before, about 30 fps after.
+
+**Movies.** `play_mpeg_movie` (services.c) passes the disc extent and the caller's audio channel
+(its fifth argument, `init_all`'s third) to `spike_play_movie`, now an Asyncify import, so the game
+waits during playback, as it does on the console. The page (`boot-runtime.mjs` `playMovie`):
+- reads the PSS file;
+- splits it (`browser/pss.mjs`): video stream 0xE0, and audio as private stream 1 with per-packet
+  `ff a1 00 NN` headers. The track NN is the channel (0, 2, 3, 4, 5: one per language); each
+  track starts with `SShd` (type 16 = PS2 ADPCM, rate, channels, interleave 32) and then `SSbd`;
+- decodes the audio (`browser/ps2-adpcm.mjs`; a 32-byte interleave decodes without clipping,
+  other interleaves do not) and plays it through Web Audio;
+- decodes the video with `browser/mpeg2.c` (`make browser-mpeg2`), an MPEG-2 video decoder written
+  from ISO/IEC 13818-2 for what these movies use: 4:2:0 Main Profile, progressive frame pictures,
+  frame_pred_frame_dct = 1, I/P/B. Its VLC tables are checked prefix-free at start-up, and any
+  other coding mode stops with an error code;
+- shows each frame at 30 fps against the audio clock.
+
+Results:
+- The intro (436 frames) and the first opening cinematic (740 frames) decode without an error in
+  0.64 s and 1.5 s, and the frames are correct pictures.
+- On the page, New Game plays the intro and the three opening cinematics in real time, then loads
+  Veldin.
+- ASSUMED: START skips a movie (a convenience; the original player's pad handling is not
+  reproduced).
+- Not checked: audio by ear (the page test runs headless).
+
+**Follow-up: the save-slot screen.** New Game's slot screen drew nothing: its panels are animated
+"quad" mobys whose four corner points (`update_instance_attachment_points_and_lengths`) size the
+screen boxes.
+- Once a panel's opening animation finishes, the pose takes the one-frame path, and there every
+  joint lost its parent link.
+- `browser/moby-joint-matrices.c` writes a translation with w = 1 through a float pointer, then
+  restores the parent word over that w through an integer pointer. Under strict aliasing the
+  compiler may reorder the two stores.
+- Found with a WebAssembly harness running the port on a RAM dump from frame 800.
+- Fixed by compiling the file with `-fno-strict-aliasing` (link-closure.sh; the reason is in its
+  header).
+- The slot screen now shows its five slots, the highlight, the info panels and the button hints.
+
+### Tenth pass (2026-11-23): Veldin drawn from the game's camera, and Ratchet under control
+
+**World renderer.** `browser/world-renderer.mjs`.
+- `tfrag_proc` (services.c) calls the host import `spike_world_pass`. The page draws Veldin's
+  terrain, ties and shrubs with WebGL (three.js), with meshes from the existing decoders.
+- The camera is the game's own, read each frame from the level's camera blocks: the view rows
+  and camera position (view block 0x166C80), G (0x160BE0), B (0x160BF0), the screen offset
+  (0x16CA40 + 0x1A0) and `XYOFFSET`. The maths is `fast_draw_quad_real`'s, turned into a clip
+  matrix (v.w is negative in front). It was checked first in Node by projecting the terrain onto
+  a captured frame.
+- The picture goes into the GS frame buffer at that point of the frame (`gs_blit_rgba`, where its
+  alpha is set), so the GS sky stays behind and later GS drawing lands on top.
+- Mobys come from the game's moby table (`D_L00_0015FFD8` .. `0015FFDC`, 0x100 each):
+  - their position, basis rows and scale, and the game's own joint matrices
+    (`spike_moby_matrices`, the ported pose code);
+  - each bone's world matrix is position · basis · (scale / class scale) · [rotation rows |
+    translation · class scale / 1024];
+  - untextured parts and classes the decoders cannot read are left out.
+- Headless Chrome (SwiftShader): about 25-60 fps in the level.
+
+**Input in gameplay. Three faults were found:**
+- `run_level_main_loop`'s ten per-mode calls named `register_audio_stream_callback` go to
+  0x267898 in level 0's code. That is the level's `update_primary_pad_state`; the functions table
+  pairs the two because their shapes match. Fixed with a source fix in that file only.
+  `init_level_runtime_state`'s call really goes to the level's `register_audio_stream_callback`
+  (0x264bf8).
+- The level module starts with no vsync handler. The host now calls
+  `spike_resume_after_handover(vsync, cd)` with what the boot module had installed:
+  `count_vsync`, plus the CD completion callback.
+- The analog sticks (`spike_pad_sticks`): WASD or the arrows for the left stick, IJKL for the
+  right, or a gamepad.
+- Result: the hero state goes to RUN and his position moves (132.1, 115.5 → 147.6, 131.6 in
+  Node).
+- `coll_line_fix`'s level copy (0x1efc70) aliases the ported `collision_line`.
+- Node: running in four directions, a jump and a wrench swing, up to frame 3800, with no stop.
+
+**Not done.**
+- The terrain's fog, the lighting bakes for ties and shrubs, particles, and untextured moby parts.
+- Mobys the decoders cannot read are not drawn.
+- No audio in gameplay.
+- Depth is not shared with GS-drawn effects.
+
+### Eleventh pass (2026-11-24): gameplay stops, frame rate and picture
+
+**Stops found in long play sessions (headless Chrome, New Game → Veldin, varied input).**
+Each one was a WebAssembly call the compiler or linker could not make. It became a trap or an
+out-of-bounds access.
+- Two declarations of one label with different C integer results (`u8` vs `s32`, crate.c's
+  `scale_game_frames`): the compiler made the call a trap (`*_bitcast_invalid`).
+  - `normalize-sources.py` now gives such declarations the definition's integer type, and gives
+    a second name for a file's own definition the definition's types.
+  - Bitcast traps: boot 0, level 0.
+- `sprintf` (0x116248), used for the HUD bolt count after a bolt pickup:
+  - the boot ELF's newlib copy walks the EE register-save area;
+  - the browser build uses the existing `vsprintf` fix, and three non-variadic declarations
+    were made variadic.
+- `FUN_L00_002371e0` covers five byte-identical 28-byte wrappers in `functions.tsv`; they differ
+  only in their `jal` target. Particle and mine code reach the copy at 0x25A400, which forwards
+  to `fast_tween_color` (0x1FA6E0). Five declarations are now bound to that function.
+- Pass-through and argument-order fixes from the linker's signature-mismatch list:
+  - `grow_and_fade_out` (moby), `release_point_light_slot` (index),
+    `extract_matrix_rotation_quaternion` (matrix);
+  - `spawn_explosion`'s particle spawn (float position);
+  - `copy_hero_moby_field_38` (header adapter, used by ammo pickups and the drone);
+  - `pick_map_slot_to_evict` (the map screen);
+  - `advance_moby_animation`'s port now returns `s32`, as its header declares.
+  - The level's remaining mismatches are SDK, movie-decoder and audio internals that the
+    browser replaces.
+
+**Frame rate.**
+- The recovered C now compiles at `-O2 -fno-strict-aliasing` (it was `-O0`).
+- Gameplay profile (`gs_draw` was about 65% of the frame): per primitive kind, nearly all GS time
+  is the sky (drawn before the world pass) and two full-screen passes at the end of the frame.
+- The page now skips the two end-of-frame passes:
+  - the softening pass (sprites sampling the buffer they draw into, `skipFrameFeedback`);
+  - the copy from the 512×416 draw buffer to the 512×448 display buffer
+    (`displaySourceTbp`, set at the world pass).
+- In gameplay the page shows the draw buffer. The background and the foreground are then the
+  same buffer at the same size, so the HUD layer is "every pixel changed after the world pass",
+  exactly.
+  - Before, the foreground came from the stretched display buffer read as 416 lines. It sat
+    vertically off from the background, which made HUD icons patchy and needed a threshold.
+- `gs-raster.c`:
+  - edge functions and attributes stepped along a row;
+  - one run per triangle row;
+  - the drawing state copied per draw;
+  - one texel when a bilinear sample falls on a texel centre;
+  - a shared swizzle offset for a 32-bit frame and a 32/24-bit Z buffer.
+  - It no longer matches the JavaScript reference bit for bit (stepping rounds differently);
+    `GS_JS=1` still selects the reference.
+- Headless Chrome, gameplay: 43 fps → 59 fps, with 18% idle. The page holds the 60 Hz pace.
+  The Node microbenchmark of the sky fill is in the session's tooling only.
+
+**Picture.** The stage fills the window at 4:3 (it was capped at 1280 px), and F toggles
+fullscreen. The world layer renders at the stage size times `devicePixelRatio`, antialiased. The
+sky and HUD layers stay at the game's 512×416 and are scaled by the browser.
+
+**Validation that ran.**
+- Node: `run-closure` through New Game → Veldin with a stick and button script to frame 4400:
+  no stop.
+- `make browser-gameplay-test`: 8 pass.
+- Page sessions: see the latest run in the session report.
+
+### Eleventh pass, continued (2026-11-24): switching weapons
+
+The user reported "missing function FUN_L00_00254b58". Switching to a held item (the gloves 10,
+17, 20 and 25, headgear 5–7, boots 28 and 29) runs `hero_switch_item`, which builds the item's
+pose with `pack_pose`. Two stops were on that path:
+- **`FUN_L00_00254b58`.** This is VU0 assembly with no C and no boot copy. Its opening matches
+  0x2109b8's local stage for every joint, without the joint-flag argument. It is ported
+  (`ee-helpers.c`, ASSUMED past its first 30 instructions) as `rnc_moby_local_pose`, with the
+  slots copied to the spike's scratchpad at 0xF0000, where `pack_pose` reads them. The count is
+  exported as `spike_local_pose_calls`.
+- **The ammo HUD's queued callbacks.** `apply_pending_animation` calls a HUD element's init
+  callback through a pointer. `hero_update_transitions.c` and 51 other files passed the
+  normalizer's call adapter (a `static inline` with the call site's type) as the callback, so
+  the indirect call trapped with "function signature mismatch". `normalize-sources.py`
+  (`adapter_addresses_to_definitions`) now passes the function itself wherever an adapter's name
+  is used as a value.
+
+**Missing functions in level.wasm: 56 → 48.**
+- Seven level copies were added to `level-copies.json` (`why_functions_tsv`), among them
+  `blend_moby_animation` and `park_moby_pose`. `functions.tsv` lists each as level 0's copy of a
+  boot function; the words differ only in call targets and in data addresses that
+  `exe-data-l00.json` moves (checked by rebuilding each `lui` + offset).
+- `level_advance_moby_animation`'s voice allocator is now the boot function (its level copy
+  0x28dbe8 is listed there already).
+- Left out: 0x2852c0, whose data difference is a function pointer.
+- The rest are still missing. Among them: `collect_mobies_in_sphere` (deferred, so explosions
+  find no mobys), `find_moby_hit`, `spawn_spark`, the lighting bakes, glove-of-doom and
+  suck-cannon callbacks, and parts of the particle code.
+
+**Validation.**
+- Node: New Game → Veldin, then △ held with the stick in four directions (quick select), to
+  frame 4600: no stop, 1205 pose evaluations.
+- The standing regression run to frame 4400: no stop.
+- `make browser-gameplay-test`: 8 pass.
+
+### Eleventh pass, bombs (2026-11-24)
+
+- **Throwing a bomb.** `spawn_spark` (0x218888) calls the boot program's `create_part`
+  (0x217a30). It is now an alias of the existing port of the level copy (0x2678b8); the code is
+  the same, and the level build maps the data labels.
+- **The throw's arm animation.** `advance_moby_animation_blend` ends with level 0x252990 (532
+  instructions, level code only). Its record is a parked-pose record (the format 0x211080
+  reads). It is implemented as `rnc_animation_layer_pose` (moby-joint-matrices.c): the class's
+  two frames are decoded and blended by `compute_local_pose` on a stand-in moby, and the listed
+  joints are written as 48-byte entries to [+0x10]. The output format is checked against its
+  reader; the routine is not decoded line by line.
+- **Wrench sweeps after a weapon switch.** The sweep end points are not finite: on the page,
+  65 of them in a 50,000-frame session, all NaN as IEEE floats. `collision_line` (spike build)
+  now answers "no hit", as the EE's query would for such huge values. The first segment is kept
+  in `spike_collision_first_bad_segment`.
+  - The arm-layer routine did not run in that session, so it is not the source.
+  - That the words are the game's own "unset" fill (EE: ordinary numbers) is ASSUMED; their raw
+    bits were not read.
+- **Page sessions.** With weapon switching, bomb throws and wrench swings, two runs of 102 steps
+  (50,277 and 52,078 frames) went with no stop, at 45-60 fps.
+
+### Eleventh pass, layering (2026-11-24)
+
+- **Order within a frame.** Traced on the page: each frame the game sends its whole draw list
+  first, then reaches its world pass (`tfrag_proc` → `spike_world_pass`). The list is 37 GIF
+  packets (the sky), a VU1 program start, 35 packets, another VU1 start, then 114 packets.
+  The sky snapshot taken at the world pass therefore held the HUD, which ended up under the
+  WebGL world. The sky layer is now the frame buffer at the frame's first VU1 program start
+  (`skyLayer`, boot-runtime.mjs); the rest of the list composites in front.
+- **Depth.** The game's own 3D drawing after that point must still hide behind the world, so the
+  world's depth is written into the GS Z buffer at the same point (`gs_blit_z`).
+  - The game's XYZF depth is `B * v.z / v.w + offset.z`, with B = D_00160B30.x (level 0x160BF0)
+    and offset.z at screen block + 0x1A8, as in `fast_draw_quad_real`; Z24 keeps it modulo 2^24.
+  - The view's z column is Kz times its w column, so the depth is affine in 1 / v.w, as WebGL's
+    depth is. `WorldRenderer.gsDepth` renders a 512×416 depth pass, packs it, reads it back
+    asynchronously (a synchronous `readPixels` cost about 38% of the frame), and converts it.
+  - Measured: 89% of the frame covered. Values run from about 132,000 near the hero to 3,400 far
+    away; B varies with the camera.
+  - The depth used is at most two frames old.
+- **Mouse.** Clicking the picture captures the mouse; its movement feeds the right stick. Only
+  camera modes that read the right stick respond (`hero_aligned_camera.c` reads analog[2..3]);
+  the follow camera reads the left stick (`follow_camera_setup.c`).
+- Headless Chrome, gameplay: 58 fps with the depth pass.
+
 ### Scenery, Fog, And The Interim Page Layer (2026-11-14)
 
 **Scenery (ties).** [tie-geometry.mjs](../../browser/tie-geometry.mjs) decodes tie classes

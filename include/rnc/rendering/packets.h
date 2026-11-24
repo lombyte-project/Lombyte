@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_PACKETS_H
-#define LOMBYTE_RNC_RENDERING_PACKETS_H
+#ifndef RCP2P_RNC_RENDERING_PACKETS_H
+#define RCP2P_RNC_RENDERING_PACKETS_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ void put_disp_buffer(void) __asm__("FUN_001fb2a8");
 void set_up_vis_gif_viewer(u64 *, s32, s32, s32, s32, s32) __asm__("FUN_00202fd0");
 void write_vif_unpack_packet(s32, void *, s32) __asm__("FUN_00233888");
 
-#endif /* LOMBYTE_RNC_RENDERING_PACKETS_H */
+#endif /* RCP2P_RNC_RENDERING_PACKETS_H */

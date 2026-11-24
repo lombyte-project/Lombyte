@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_LIBRARY_MALLOC_CHUNK_H
-#define LOMBYTE_RNC_SDK_LIBRARY_MALLOC_CHUNK_H
+#ifndef RCP2P_RNC_SDK_LIBRARY_MALLOC_CHUNK_H
+#define RCP2P_RNC_SDK_LIBRARY_MALLOC_CHUNK_H
 
 #include "types.h"
 
@@ -11,4 +11,4 @@ struct malloc_chunk {
     struct malloc_chunk *bk;
 };
 
-#endif /* LOMBYTE_RNC_SDK_LIBRARY_MALLOC_CHUNK_H */
+#endif /* RCP2P_RNC_SDK_LIBRARY_MALLOC_CHUNK_H */

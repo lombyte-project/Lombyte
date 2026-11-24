@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_GLOBALS_H
-#define LOMBYTE_RNC_GLOBALS_H
+#ifndef RCP2P_RNC_GLOBALS_H
+#define RCP2P_RNC_GLOBALS_H
 
 #include "types.h"
 #include "rnc/world/level_id.h"
@@ -62,4 +62,4 @@ extern struct GsTextureAllocation gs_texture_allocation __asm__("D_0015EE74");
 
 extern f32 warp_texture_coordinates[4][2] __asm__("D_001D9A10");
 
-#endif /* LOMBYTE_RNC_GLOBALS_H */
+#endif /* RCP2P_RNC_GLOBALS_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_TEXT_DRAW_DIALOG_TEXT_GLOBALS_H
-#define LOMBYTE_RNC_UI_TEXT_DRAW_DIALOG_TEXT_GLOBALS_H
+#ifndef RCP2P_RNC_UI_TEXT_DRAW_DIALOG_TEXT_GLOBALS_H
+#define RCP2P_RNC_UI_TEXT_DRAW_DIALOG_TEXT_GLOBALS_H
 
 #include "types.h"
 
@@ -24,4 +24,4 @@ extern s32 freeze_unmatched_record_text_base_color __asm__("D_0015F53C") __attri
 extern s32 freeze_unmatched_record_text_blend_target_color __asm__("D_0015F540")
     __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_UI_TEXT_DRAW_DIALOG_TEXT_GLOBALS_H */
+#endif /* RCP2P_RNC_UI_TEXT_DRAW_DIALOG_TEXT_GLOBALS_H */

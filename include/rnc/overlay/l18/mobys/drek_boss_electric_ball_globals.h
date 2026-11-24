@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L18_MOBYS_DREK_BOSS_ELECTRIC_BALL_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L18_MOBYS_DREK_BOSS_ELECTRIC_BALL_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L18_MOBYS_DREK_BOSS_ELECTRIC_BALL_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L18_MOBYS_DREK_BOSS_ELECTRIC_BALL_GLOBALS_H
 
 #include "types.h"
 
@@ -33,4 +33,4 @@ extern float secondary_bolt_z_phase_increment __asm__("D_L18_00162028");
 extern float secondary_bolt_z_phase_step __asm__("D_L18_0016202C");
 extern float primary_bolt_random_step_blend_weight __asm__("D_L18_0016208C");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L18_MOBYS_DREK_BOSS_ELECTRIC_BALL_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L18_MOBYS_DREK_BOSS_ELECTRIC_BALL_GLOBALS_H */

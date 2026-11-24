@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_GAME_LEVEL_PROGRESS_H
-#define LOMBYTE_RNC_GAME_LEVEL_PROGRESS_H
+#ifndef RCP2P_RNC_GAME_LEVEL_PROGRESS_H
+#define RCP2P_RNC_GAME_LEVEL_PROGRESS_H
 
 #include "types.h"
 #include "rnc/game/bolt_sources.h"
@@ -36,4 +36,4 @@ extern s32
 /* Per-mission counters the level loader clears (16 slots). */
 extern s32 D_0014EE90[16];
 
-#endif /* LOMBYTE_RNC_GAME_LEVEL_PROGRESS_H */
+#endif /* RCP2P_RNC_GAME_LEVEL_PROGRESS_H */

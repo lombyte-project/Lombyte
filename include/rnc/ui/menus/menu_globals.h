@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_MENUS_MENU_GLOBALS_H
-#define LOMBYTE_RNC_UI_MENUS_MENU_GLOBALS_H
+#ifndef RCP2P_RNC_UI_MENUS_MENU_GLOBALS_H
+#define RCP2P_RNC_UI_MENUS_MENU_GLOBALS_H
 
 #include "types.h"
 #include "rnc/math/vector.h"
@@ -72,4 +72,4 @@ extern s32          help_msg_count[] __asm__("D_001996FC");
 extern s32          selected_level_index[] __asm__("D_001A0314");
 extern u8           preview_resource_bindings[] __asm__("D_001D59D8");
 
-#endif /* LOMBYTE_RNC_UI_MENUS_MENU_GLOBALS_H */
+#endif /* RCP2P_RNC_UI_MENUS_MENU_GLOBALS_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L09_MOBYS_AIRSHIP_PART_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L09_MOBYS_AIRSHIP_PART_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L09_MOBYS_AIRSHIP_PART_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L09_MOBYS_AIRSHIP_PART_GLOBALS_H
 
 #include "types.h"
 
@@ -10,4 +10,4 @@ extern float airship_part_initial_tumble_x_speed_limit_degrees __asm__("D_L09_00
 extern float airship_part_initial_tumble_y_speed_limit_degrees __asm__("D_L09_001613B4");
 extern float airship_hull_breakup_wait_x_rotation_speed_degrees __asm__("D_L09_001613BC");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L09_MOBYS_AIRSHIP_PART_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L09_MOBYS_AIRSHIP_PART_GLOBALS_H */

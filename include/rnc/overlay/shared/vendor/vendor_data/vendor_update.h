@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_VENDOR_VENDOR_DATA_VENDOR_UPDATE_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_VENDOR_VENDOR_DATA_VENDOR_UPDATE_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_VENDOR_VENDOR_DATA_VENDOR_UPDATE_H
+#define RCP2P_RNC_OVERLAY_SHARED_VENDOR_VENDOR_DATA_VENDOR_UPDATE_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ extern f32 vendor_color_pulse_phase __asm__("D_L00_001613A4") __attribute__((sda
 extern f32 vendor_manipulator_rotation_phase __asm__("D_L00_0016139C") __attribute__((sda));
 extern f32 vendor_manipulator_counter_rotation_phase __asm__("D_L00_001613A0") __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_VENDOR_VENDOR_DATA_VENDOR_UPDATE_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_VENDOR_VENDOR_DATA_VENDOR_UPDATE_H */

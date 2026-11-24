@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L11_MOBYS_JET_FIGHTER_DATA_JET_FIGHTER_UPDATE_2_H
-#define LOMBYTE_RNC_OVERLAY_L11_MOBYS_JET_FIGHTER_DATA_JET_FIGHTER_UPDATE_2_H
+#ifndef RCP2P_RNC_OVERLAY_L11_MOBYS_JET_FIGHTER_DATA_JET_FIGHTER_UPDATE_2_H
+#define RCP2P_RNC_OVERLAY_L11_MOBYS_JET_FIGHTER_DATA_JET_FIGHTER_UPDATE_2_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ extern float jet_fighter_boarding_distance_gp __asm__("D_L11_00161FD0") __attrib
 extern float jet_fighter_initial_flight_speed_gp __asm__("D_L11_00161FD4") __attribute__((sda));
 extern float jet_fighter_initial_health_gp __asm__("D_L11_00162048") __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L11_MOBYS_JET_FIGHTER_DATA_JET_FIGHTER_UPDATE_2_H */
+#endif /* RCP2P_RNC_OVERLAY_L11_MOBYS_JET_FIGHTER_DATA_JET_FIGHTER_UPDATE_2_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_TIES_H
-#define LOMBYTE_RNC_RENDERING_TIES_H
+#ifndef RCP2P_RNC_RENDERING_TIES_H
+#define RCP2P_RNC_RENDERING_TIES_H
 
 #include "rnc/rendering/object_render_class.h"
 #include "rnc/rendering/resident_class.h"
@@ -11,4 +11,4 @@ void register_object_render_class(ObjectRenderClass *,
                                   u128 *,
                                   s32) __asm__("FUN_00203730");
 
-#endif /* LOMBYTE_RNC_RENDERING_TIES_H */
+#endif /* RCP2P_RNC_RENDERING_TIES_H */

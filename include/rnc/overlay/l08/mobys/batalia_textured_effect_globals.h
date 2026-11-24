@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L08_MOBYS_BATALIA_TEXTURED_EFFECT_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L08_MOBYS_BATALIA_TEXTURED_EFFECT_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L08_MOBYS_BATALIA_TEXTURED_EFFECT_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L08_MOBYS_BATALIA_TEXTURED_EFFECT_GLOBALS_H
 
 #include "types.h"
 
@@ -15,4 +15,4 @@ extern int   batalia_texture_3c_pair_zero_blend_factor __asm__("D_L08_001623B0")
 extern int   batalia_texture_3c_pair_one_blend_factor __asm__("D_L08_001623B4");
 extern int   batalia_texture_3d_blend_factor __asm__("D_L08_001623C0");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L08_MOBYS_BATALIA_TEXTURED_EFFECT_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L08_MOBYS_BATALIA_TEXTURED_EFFECT_GLOBALS_H */

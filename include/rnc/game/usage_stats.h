@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_GAME_USAGE_STATS_H
-#define LOMBYTE_RNC_GAME_USAGE_STATS_H
+#ifndef RCP2P_RNC_GAME_USAGE_STATS_H
+#define RCP2P_RNC_GAME_USAGE_STATS_H
 
 #include "types.h"
 
@@ -23,4 +23,4 @@ struct UsageStats {
 
 extern struct UsageStats usage_stats __asm__("D_00141848");
 
-#endif /* LOMBYTE_RNC_GAME_USAGE_STATS_H */
+#endif /* RCP2P_RNC_GAME_USAGE_STATS_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_EFFECTS_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_EFFECTS_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_RENDERING_EFFECTS_H
+#define RCP2P_RNC_OVERLAY_SHARED_RENDERING_EFFECTS_H
 
 #include "types.h"
 
@@ -17,4 +17,4 @@ unsigned char *create_type_47_particle(
     void *, float *, float *, int, int, int, int, int, char *) __asm__("FUN_L15_002647f0");
 void timed_sprite_effect_update(struct Moby *) __asm__("FUN_L06_0030be60");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_EFFECTS_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_RENDERING_EFFECTS_H */

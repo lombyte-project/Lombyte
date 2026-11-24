@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L13_MOBYS_BLARG_SPACE_COMMANDO_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L13_MOBYS_BLARG_SPACE_COMMANDO_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L13_MOBYS_BLARG_SPACE_COMMANDO_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L13_MOBYS_BLARG_SPACE_COMMANDO_GLOBALS_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ extern int   blarg_space_commando_face_target_wait_frames __asm__("D_L13_00161E7
 extern float gemlik_trail_spread_degrees __asm__("D_L13_00161E80");
 extern float gemlik_trail_point_radial_speed __asm__("D_L13_00161E7C");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L13_MOBYS_BLARG_SPACE_COMMANDO_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L13_MOBYS_BLARG_SPACE_COMMANDO_GLOBALS_H */

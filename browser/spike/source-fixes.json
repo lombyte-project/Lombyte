@@ -317,6 +317,276 @@
       "why": "D_002169C0 is the address of music_secondary_start_callback (0x2169c0, include/rnc/audio/streaming/music_callbacks.h) passed as the stream's completion callback; the matching build binds it as an absolute value. Here a code address is not callable (the spike pinned it as data, so the 989snd flush called a console address); the copy passes the compiled function itself.",
       "find": "#include \"rnc/data_labels.h\"\n",
       "replace": "#include \"rnc/data_labels.h\"\n#include \"rnc/audio/streaming/music_callbacks.h\"\n"
+    },
+    {
+      "file": "src/audio/music/music_update_stream.c",
+      "why": "The 989snd *_cb queries take (handle, callback, context) as three s32 (their definitions in src/audio/streaming/vag and src/audio/voices pass the context on as a 32-bit word); this file declares the context as EE `long` (64-bit, widened to long long here), a WebAssembly signature mismatch. The declarations take s32 context; the values are 32-bit addresses.",
+      "find": "snd_get_vag_stream_time_remaining_cb(int, void (*)(int, long long), long long)",
+      "replace": "snd_get_vag_stream_time_remaining_cb(int, void (*)(int, long long), s32)"
+    },
+    {
+      "file": "src/audio/music/music_update_stream.c",
+      "why": "The 989snd *_cb queries take (handle, callback, context) as three s32 (their definitions in src/audio/streaming/vag and src/audio/voices pass the context on as a 32-bit word); this file declares the context as EE `long` (64-bit, widened to long long here), a WebAssembly signature mismatch. The declarations take s32 context; the values are 32-bit addresses.",
+      "find": "snd_sound_is_still_playing_cb(int, void (*)(int, long long), long long)",
+      "replace": "snd_sound_is_still_playing_cb(int, void (*)(int, long long), s32)"
+    },
+    {
+      "file": "src/audio/music/music_update_stream.c",
+      "why": "The 989snd *_cb queries take (handle, callback, context) as three s32 (their definitions in src/audio/streaming/vag and src/audio/voices pass the context on as a 32-bit word); this file declares the context as EE `long` (64-bit, widened to long long here), a WebAssembly signature mismatch. The declarations take s32 context; the values are 32-bit addresses.",
+      "find": "snd_is_vag_stream_buffered_cb(int, void (*)(int, long long), long long)",
+      "replace": "snd_is_vag_stream_buffered_cb(int, void (*)(int, long long), s32)"
+    },
+    {
+      "file": "src/audio/banks/snd_resolve_bank_xrefs.c",
+      "why": "snd_send_iop_command_no_wait is declared here without a prototype (`()`), so the integer arguments link as an all-i32 type that differs from its definition in src/audio/rpc/snd_send_iop_command_no_wait.c (the fifth argument, the callback data, is s64) and the call becomes a trapping stub. The declaration takes the definition's prototype.",
+      "find": "extern s32 snd_send_iop_command_no_wait() __asm__(\"FUN_0012e6e0\");",
+      "replace": "extern void snd_send_iop_command_no_wait(s32, s32, void *, s32, s64) __asm__(\"FUN_0012e6e0\");"
+    },
+    {
+      "file": "src/audio/effects/snd_set_reverb_ex.c",
+      "why": "snd_send_iop_command_no_wait is declared here without a prototype (`()`), so the integer arguments link as an all-i32 type that differs from its definition in src/audio/rpc/snd_send_iop_command_no_wait.c (the fifth argument, the callback data, is s64) and the call becomes a trapping stub. The declaration takes the definition's prototype.",
+      "find": "extern s32 snd_send_iop_command_no_wait() __asm__(\"FUN_0012e6e0\");",
+      "replace": "extern void snd_send_iop_command_no_wait(s32, s32, void *, s32, s64) __asm__(\"FUN_0012e6e0\");"
+    },
+    {
+      "file": "src/audio/mixer/snd_set_mixer_mode.c",
+      "why": "snd_send_iop_command_no_wait is declared here without a prototype (`()`), so the integer arguments link as an all-i32 type that differs from its definition in src/audio/rpc/snd_send_iop_command_no_wait.c (the fifth argument, the callback data, is s64) and the call becomes a trapping stub. The declaration takes the definition's prototype.",
+      "find": "extern s32 snd_send_iop_command_no_wait() __asm__(\"FUN_0012e6e0\");",
+      "replace": "extern void snd_send_iop_command_no_wait(s32, s32, void *, s32, s64) __asm__(\"FUN_0012e6e0\");"
+    },
+    {
+      "file": "src/audio/streaming/safe_cd/snd_stream_safe_cd_break.c",
+      "why": "snd_send_iop_command_no_wait is declared here without a prototype (`()`), so the integer arguments link as an all-i32 type that differs from its definition in src/audio/rpc/snd_send_iop_command_no_wait.c (the fifth argument, the callback data, is s64) and the call becomes a trapping stub. The declaration takes the definition's prototype.",
+      "find": "extern s32 snd_send_iop_command_no_wait() __asm__(\"FUN_0012e6e0\");",
+      "replace": "extern void snd_send_iop_command_no_wait(s32, s32, void *, s32, s64) __asm__(\"FUN_0012e6e0\");"
+    },
+    {
+      "file": "src/audio/streaming/safe_cd/snd_stream_safe_cd_read.c",
+      "why": "snd_send_iop_command_no_wait is declared here without a prototype (`()`), so the integer arguments link as an all-i32 type that differs from its definition in src/audio/rpc/snd_send_iop_command_no_wait.c (the fifth argument, the callback data, is s64) and the call becomes a trapping stub. The declaration takes the definition's prototype.",
+      "find": "extern s32 snd_send_iop_command_no_wait() __asm__(\"FUN_0012e6e0\");",
+      "replace": "extern void snd_send_iop_command_no_wait(s32, s32, void *, s32, s64) __asm__(\"FUN_0012e6e0\");"
+    },
+    {
+      "file": "src/audio/voices/snd_play_sound_vol_pan_pmpb.c",
+      "why": "snd_send_iop_command_no_wait is declared here without a prototype (`()`), so the integer arguments link as an all-i32 type that differs from its definition in src/audio/rpc/snd_send_iop_command_no_wait.c (the fifth argument, the callback data, is s64) and the call becomes a trapping stub. The declaration takes the definition's prototype.",
+      "find": "extern s32 snd_send_iop_command_no_wait() __asm__(\"FUN_0012e6e0\");",
+      "replace": "extern void snd_send_iop_command_no_wait(s32, s32, void *, s32, s64) __asm__(\"FUN_0012e6e0\");"
+    },
+    {
+      "file": "src/audio/voices/snd_set_sound_params_cb.c",
+      "why": "snd_send_iop_command_no_wait is declared here without a prototype (`()`), so the integer arguments link as an all-i32 type that differs from its definition in src/audio/rpc/snd_send_iop_command_no_wait.c (the fifth argument, the callback data, is s64) and the call becomes a trapping stub. The declaration takes the definition's prototype.",
+      "find": "extern s32 snd_send_iop_command_no_wait() __asm__(\"FUN_0012e6e0\");",
+      "replace": "extern void snd_send_iop_command_no_wait(s32, s32, void *, s32, s64) __asm__(\"FUN_0012e6e0\");"
+    },
+    {
+      "file": "src/audio/voices/snd_stop_all_sounds.c",
+      "why": "snd_send_iop_command_no_wait is declared here without a prototype (`()`), so the integer arguments link as an all-i32 type that differs from its definition in src/audio/rpc/snd_send_iop_command_no_wait.c (the fifth argument, the callback data, is s64) and the call becomes a trapping stub. The declaration takes the definition's prototype.",
+      "find": "extern s32 snd_send_iop_command_no_wait() __asm__(\"FUN_0012e6e0\");",
+      "replace": "extern void snd_send_iop_command_no_wait(s32, s32, void *, s32, s64) __asm__(\"FUN_0012e6e0\");"
+    },
+    {
+      "file": "src/audio/voices/snd_stop_sound.c",
+      "why": "snd_send_iop_command_no_wait is declared here without a prototype (`()`), so the integer arguments link as an all-i32 type that differs from its definition in src/audio/rpc/snd_send_iop_command_no_wait.c (the fifth argument, the callback data, is s64) and the call becomes a trapping stub. The declaration takes the definition's prototype.",
+      "find": "extern s32 snd_send_iop_command_no_wait() __asm__(\"FUN_0012e6e0\");",
+      "replace": "extern void snd_send_iop_command_no_wait(s32, s32, void *, s32, s64) __asm__(\"FUN_0012e6e0\");"
+    },
+    {
+      "file": "src/overlays/shared/cutscenes/update_cutscene_playback.c",
+      "why": "The level program's jal here goes to 0x264848, its own copy of update_visible_mobys (update_all_mobys, ported in browser/spike/ee-helpers.c, on the level's moby globals); the source names the boot copy 0x212e28 through include/rnc/mobys/update_visible_mobys.h, which boot code also uses.",
+      "find": "        update_visible_mobys();\n        enqueue_voice_request();",
+      "replace": "        {\n            extern void level_update_visible_mobys(void) __asm__(\"FUN_L00_00264848\");\n            level_update_visible_mobys();\n        }\n        enqueue_voice_request();"
+    },
+    {
+      "file": "src/rendering/packets/transform_scaled_vertex_batch.c",
+      "why": "0x2106f8 (assembly: attachment point positions) reads its inputs from a0..a3, which here still hold transform_scaled_vertex_batch's own arguments (render instance, count, point indices, cursor); the recovered C calls it with no arguments. In WebAssembly the arguments are passed explicitly.",
+      "find": "extern void FUN_002106f8(void);",
+      "replace": "extern void FUN_002106f8(void *, s32, s32, u8 *);"
+    },
+    {
+      "file": "src/rendering/packets/transform_scaled_vertex_batch.c",
+      "why": "0x2106f8 (assembly: attachment point positions) reads its inputs from a0..a3, which here still hold transform_scaled_vertex_batch's own arguments (render instance, count, point indices, cursor); the recovered C calls it with no arguments. In WebAssembly the arguments are passed explicitly.",
+      "find": "    FUN_002106f8();",
+      "replace": "    FUN_002106f8(render_instance, count, point_indices, cursor);"
+    },
+    {
+      "file": "src/ui/text/font/measure_text_width_large.c",
+      "why": "The recovered C declares this wrapper void, but the routine returns measure_text_width's result (it leaves v0 untouched: jal then jr ra); font_print_center and others read it to centre text. In WebAssembly the value has to be returned explicitly.",
+      "find": "void measure_text_width_large(s32 text, s32 max_chars) {\n    measure_text_width(",
+      "replace": "s32 measure_text_width_large(s32 text, s32 max_chars) {\n    return measure_text_width("
+    },
+    {
+      "file": "src/ui/text/font/measure_text_width_large.c",
+      "why": "The recovered C declares this wrapper void, but the routine returns measure_text_width's result (it leaves v0 untouched: jal then jr ra); font_print_center and others read it to centre text. In WebAssembly the value has to be returned explicitly.",
+      "find": "void measure_text_width_large(s32 text, s32 max_chars) __asm__(",
+      "replace": "s32 measure_text_width_large(s32 text, s32 max_chars) __asm__("
+    },
+    {
+      "file": "src/ui/text/font/measure_text_width_regular.c",
+      "why": "The recovered C declares this wrapper void, but the routine returns measure_text_width's result (it leaves v0 untouched: jal then jr ra); font_print_center and others read it to centre text. In WebAssembly the value has to be returned explicitly.",
+      "find": "void measure_text_width_regular(s32 text, s32 max_chars) {\n    measure_text_width(",
+      "replace": "s32 measure_text_width_regular(s32 text, s32 max_chars) {\n    return measure_text_width("
+    },
+    {
+      "file": "src/ui/text/font/measure_text_width_regular.c",
+      "why": "The recovered C declares this wrapper void, but the routine returns measure_text_width's result (it leaves v0 untouched: jal then jr ra); font_print_center and others read it to centre text. In WebAssembly the value has to be returned explicitly.",
+      "find": "void measure_text_width_regular(s32 text, s32 max_chars) __asm__(",
+      "replace": "s32 measure_text_width_regular(s32 text, s32 max_chars) __asm__("
+    },
+    {
+      "file": "src/ui/text/font/measure_text_width_small.c",
+      "why": "The recovered C declares this wrapper void, but the routine returns measure_text_width's result (it leaves v0 untouched: jal then jr ra); font_print_center and others read it to centre text. In WebAssembly the value has to be returned explicitly.",
+      "find": "void measure_text_width_small(s32 text, s32 max_chars) {\n    measure_text_width(",
+      "replace": "s32 measure_text_width_small(s32 text, s32 max_chars) {\n    return measure_text_width("
+    },
+    {
+      "file": "src/ui/text/font/measure_text_width_small.c",
+      "why": "The recovered C declares this wrapper void, but the routine returns measure_text_width's result (it leaves v0 untouched: jal then jr ra); font_print_center and others read it to centre text. In WebAssembly the value has to be returned explicitly.",
+      "find": "void measure_text_width_small(s32 text, s32 max_chars) __asm__(",
+      "replace": "s32 measure_text_width_small(s32 text, s32 max_chars) __asm__("
+    },
+    {
+      "file": "src/overlays/shared/props/particle_spawner_smoke_fire.c",
+      "why": "Calls get_effect_texture (u64 result) through a cast to int (*)(int); on the EE the caller just keeps v0's low word. A WebAssembly call through a pointer of another type cannot link (the linker makes it unreachable), so call it directly and keep the low 32 bits.",
+      "find": "quad.texture = ((int (*)(int))get_effect_texture)(q->texture + 0x28);",
+      "replace": "quad.texture = (int)get_effect_texture(q->texture + 0x28);"
+    },
+    {
+      "file": "src/overlays/shared/props/particle_spawner_smoke_fire.c",
+      "why": "Calls get_effect_texture (u64 result) through a cast to int (*)(int); on the EE the caller just keeps v0's low word. A WebAssembly call through a pointer of another type cannot link (the linker makes it unreachable), so call it directly and keep the low 32 bits.",
+      "find": "quad.texture = ((int (*)(int))get_effect_texture)(q->mesh_texture + 0x28);",
+      "replace": "quad.texture = (int)get_effect_texture(q->mesh_texture + 0x28);"
+    },
+    {
+      "file": "src/mobys/delete_moby.c",
+      "why": "The recovered call passes no arguments, but at the jal the callee's argument registers still hold this function's own arguments (a0 = moby; checked in the disassembly at 0x225530), so on the EE the callee receives them. WebAssembly passes only what the call names, so the call names them.",
+      "find": "    mark_moby_for_removal();",
+      "replace": "    mark_moby_for_removal(moby);"
+    },
+    {
+      "file": "src/rendering/lights/refresh_point_light.c",
+      "why": "The recovered call passes no arguments, but at the jal the callee's argument registers still hold this function's own arguments (a0 = point_light_index; checked in the disassembly at 0x201f58), so on the EE the callee receives them. WebAssembly passes only what the call names, so the call names them.",
+      "find": "    detach_point_light();",
+      "replace": "    detach_point_light(point_light_index);"
+    },
+    {
+      "file": "src/ui/help/force_help_message.c",
+      "why": "The recovered call passes no arguments, but at the jal the callee's argument registers still hold this function's own arguments (a0, a1 = owner, message_id; checked in the disassembly at 0x2151d8), so on the EE the callee receives them. WebAssembly passes only what the call names, so the call names them.",
+      "find": "help_message_status = try_set_help_message();",
+      "replace": "help_message_status = try_set_help_message(help_message_selector, message_id);"
+    },
+    {
+      "file": "src/mobys/animation/is_value_within_interpolated_window.c",
+      "why": "The recovered call passes no arguments, but at the jal the callee's argument registers still hold this function's own arguments (a0 = anim; checked in the disassembly at 0x214cc8), so on the EE the callee receives them. WebAssembly passes only what the call names, so the call names them.",
+      "find": "interp_value = compute_interpolated_record_value();",
+      "replace": "interp_value = compute_interpolated_record_value(anim);"
+    },
+    {
+      "file": "src/overlays/shared/mobys/select_auto_aim_target_moby.c",
+      "why": "The recovered call passes no arguments, but at the jal the callee's argument registers still hold this function's own arguments (a0-a2 = owner_moby, slot_index, manipulator; checked in the disassembly at level 0 0x263ac8), so on the EE the callee receives them. WebAssembly passes only what the call names, so the call names them.",
+      "find": "            attach_manipulator();",
+      "replace": "            attach_manipulator(owner_moby, slot_index, manipulator);"
+    },
+    {
+      "file": "src/overlays/shared/game/run_level_main_loop.c",
+      "why": "run_level_main_loop's ten calls to this name are calls to 0x267898 in level 0's code (each mode), which is its copy of update_primary_pad_state (0x217a10: poll_pad_device_state(&controller_state)), not register_audio_stream_callback (0x215420): the two have the same shape (lui a0; jal; addiu), which is why config/us/levels/functions.tsv pairs them. Bound to the executable's update_primary_pad_state, the level reads the controller each frame as on the console; with the audio routine, gameplay never read the pad. (init_level_runtime_state's call is the real one: it goes to 0x264bf8, the level's register_audio_stream_callback.)",
+      "find": "#include \"rnc/audio/streaming/register_audio_stream_callback.h\"",
+      "replace": "/* level 0x267898 = update_primary_pad_state (source-fixes.json) */\nextern void register_audio_stream_callback(void) __asm__(\"FUN_00217a10\");"
+    },
+    {
+      "file": "src/overlays/shared/ui/hud/draw_hud_item_selector_panel.c",
+      "why": "sprintf (0x116248) is variadic; the browser version (ee-helpers.c) is a C variadic function, and in WebAssembly a call through a non-variadic declaration cannot reach it (the linker makes it a trap). On the EE the call loads the same registers.",
+      "find": "extern int  sprintf_alt() __asm__(\"FUN_00116248\");",
+      "replace": "extern int  sprintf_alt(char *, const char *, ...) __asm__(\"FUN_00116248\");"
+    },
+    {
+      "file": "src/overlays/shared/mobys/remove_when_near_hero_update.c",
+      "why": "sprintf (0x116248) is variadic; the browser version (ee-helpers.c) is a C variadic function, and in WebAssembly a call through a non-variadic declaration cannot reach it (the linker makes it a trap). On the EE the call loads the same registers.",
+      "find": "extern int FUN_00116248_b7(void *, void *) __asm__(\"FUN_00116248\");",
+      "replace": "extern int FUN_00116248_b7(void *, const char *, ...) __asm__(\"FUN_00116248\");"
+    },
+    {
+      "file": "src/overlays/shared/mobys/select_auto_aim_target_moby.c",
+      "why": "sprintf (0x116248) is variadic; the browser version (ee-helpers.c) is a C variadic function, and in WebAssembly a call through a non-variadic declaration cannot reach it (the linker makes it a trap). On the EE the call loads the same registers. (An earlier pass removes this declaration's label because the recovered libc defines sprintf by name, which cannot run in WebAssembly; the fix restores it.)",
+      "find": "void       sprintf();",
+      "replace": "int        sprintf(char *, const char *, ...) __asm__(\"FUN_00116248\");"
+    },
+    {
+      "file": "src/overlays/shared/rendering/effects/update_three_phase_effect_particle.c",
+      "why": "This file's call reaches the level copy at 0x25A400 (level 0), a 28-byte wrapper that forwards its arguments to fast_tween_color (0x1FA6E0, level copy 0x200298). functions.tsv groups it with four other byte-identical wrappers (they differ only in the jal target) under the first one's label, FUN_L00_002371e0, which is hud_counter_update (calls hud_update_counter, takes nothing). The browser links that label to the HUD wrapper, so the call trapped; it is bound to the function the wrapper forwards to.",
+      "find": "s32        hud_counter_update(s32, s32, f32) __asm__(\"FUN_L00_002371e0\");",
+      "replace": "s32        hud_counter_update(s32, s32, f32) __asm__(\"FUN_001fa6e0\");"
+    },
+    {
+      "file": "src/overlays/shared/rendering/effects/update_three_phase_effect_particle.c",
+      "why": "This file's call reaches the level copy at 0x25A400 (level 0), a 28-byte wrapper that forwards its arguments to fast_tween_color (0x1FA6E0, level copy 0x200298). functions.tsv groups it with four other byte-identical wrappers (they differ only in the jal target) under the first one's label, FUN_L00_002371e0, which is hud_counter_update (calls hud_update_counter, takes nothing). The browser links that label to the HUD wrapper, so the call trapped; it is bound to the function the wrapper forwards to.",
+      "find": "int            hud_counter_update(int, int, float) __asm__(\"FUN_L00_002371e0\");",
+      "replace": "int            hud_counter_update(int, int, float) __asm__(\"FUN_001fa6e0\");"
+    },
+    {
+      "file": "src/overlays/shared/rendering/effects/update_three_phase_effect_particle.c",
+      "why": "This file's call reaches the level copy at 0x25A400 (level 0), a 28-byte wrapper that forwards its arguments to fast_tween_color (0x1FA6E0, level copy 0x200298). functions.tsv groups it with four other byte-identical wrappers (they differ only in the jal target) under the first one's label, FUN_L00_002371e0, which is hud_counter_update (calls hud_update_counter, takes nothing). The browser links that label to the HUD wrapper, so the call trapped; it is bound to the function the wrapper forwards to.",
+      "find": "extern int hud_counter_update(int, int, float) __asm__(\"FUN_L00_002371e0\");",
+      "replace": "extern int hud_counter_update(int, int, float) __asm__(\"FUN_001fa6e0\");"
+    },
+    {
+      "file": "src/overlays/shared/weapons/mine.c",
+      "why": "This file's call reaches the level copy at 0x25A400 (level 0), a 28-byte wrapper that forwards its arguments to fast_tween_color (0x1FA6E0, level copy 0x200298). functions.tsv groups it with four other byte-identical wrappers (they differ only in the jal target) under the first one's label, FUN_L00_002371e0, which is hud_counter_update (calls hud_update_counter, takes nothing). The browser links that label to the HUD wrapper, so the call trapped; it is bound to the function the wrapper forwards to.",
+      "find": "extern int hud_counter_update(int, int, float) __asm__(\"FUN_L00_002371e0\");",
+      "replace": "extern int hud_counter_update(int, int, float) __asm__(\"FUN_001fa6e0\");"
+    },
+    {
+      "file": "src/overlays/shared/rendering/effects/particles.c",
+      "why": "This file's call reaches the level copy at 0x25A400 (level 0), a 28-byte wrapper that forwards its arguments to fast_tween_color (0x1FA6E0, level copy 0x200298). functions.tsv groups it with four other byte-identical wrappers (they differ only in the jal target) under the first one's label, FUN_L00_002371e0, which is hud_counter_update (calls hud_update_counter, takes nothing). The browser links that label to the HUD wrapper, so the call trapped; it is bound to the function the wrapper forwards to.",
+      "find": "extern int  hud_counter_update(float, int, int) __asm__(\"FUN_L00_002371e0\");",
+      "replace": "extern int  hud_counter_update(float, int, int) __asm__(\"FUN_001fa6e0\");"
+    },
+    {
+      "file": "src/overlays/shared/props/grow_and_fade_out.c",
+      "why": "Pass-through argument: on the EE the moby is still in a0 from the update's own argument; in WebAssembly the call must pass it (mark_moby_for_removal takes the moby).",
+      "find": "        mark_moby_for_removal();",
+      "replace": "        mark_moby_for_removal(moby);"
+    },
+    {
+      "file": "src/overlays/shared/rendering/effects/glow_quads_draw.c",
+      "why": "Pass-through argument: on the EE the light index is still in a0; detach_point_light (0x201F88) takes it.",
+      "find": "    detach_point_light();",
+      "replace": "    detach_point_light(i);"
+    },
+    {
+      "file": "src/overlays/shared/rendering/effects/spawn_explosion.c",
+      "why": "The declaration lists the float (f12) last; the definition (update_three_phase_effect_particle.c) has it fifth. On the EE the float travels in f12 and the integers in a0-a3/t0-t3 either way; in WebAssembly the order is positional, so the call is reordered.",
+      "find": "extern void *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(\n    void *, void *, int, int, int, int, int, int, float) __asm__(\"FUN_L00_0026bb70\");",
+      "replace": "extern void *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns__definition_order(\n    void *, void *, int, int, float, int, int, int, int) __asm__(\"FUN_L00_0026bb70\");\nstatic inline void *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(\n    void *a0, void *a1, int a2, int a3, int a4, int a5, int a6, int a7, float f12) {\n    return spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns__definition_order(a0, a1, a2, a3, f12, a4, a5, a6, a7);\n}"
+    },
+    {
+      "file": "include/rnc/overlay/shared/hero/copy_hero_moby_field_38.h",
+      "why": "The definition (copy_hero_moby_field_38.c) is (S *, s64) and ignores the s64 it is given; the header's one-argument declaration is the EE call. In WebAssembly the call passes the unused value as 0.",
+      "find": "void copy_hero_moby_field_38(void *) __asm__(\"FUN_L00_0025d1b8\");",
+      "replace": "void copy_hero_moby_field_38__definition_abi(void *, s64) __asm__(\"FUN_L00_0025d1b8\");\n/* The definition takes a second (s64) argument it overwrites before use; the EE call leaves a1 as it was. */\nstatic inline void copy_hero_moby_field_38(void *p) { copy_hero_moby_field_38__definition_abi(p, 0); }"
+    },
+    {
+      "file": "src/overlays/shared/weapons/drone.c",
+      "why": "The definition (copy_hero_moby_field_38.c) is (S *, s64) and ignores the s64; the header's browser adapter passes 0 for it.",
+      "find": "void         copy_hero_moby_field_38(void *) __asm__(\"FUN_L00_0025d1b8\");",
+      "replace": "#include \"rnc/overlay/shared/hero/copy_hero_moby_field_38.h\""
+    },
+    {
+      "file": "src/overlays/shared/weapons/drone.c",
+      "why": "Second copy of the declaration above (now the header's adapter).",
+      "find": "extern void copy_hero_moby_field_38(void *) __asm__(\"FUN_L00_0025d1b8\");",
+      "replace": ""
+    },
+    {
+      "file": "src/ui/map/draw_map_screen.c",
+      "why": "pick_map_slot_to_evict (0x205278) takes two arguments it never reads; this file calls it with none and with one. In WebAssembly the calls pass the definition's two (unused) arguments.",
+      "find": "extern s32  pick_map_slot_to_evict() __asm__(\"FUN_00205278\");",
+      "replace": "extern s32  pick_map_slot_to_evict__definition_abi(s32, s32) __asm__(\"FUN_00205278\");\n#define pick_map_slot_to_evict(...) pick_map_slot_to_evict__definition_abi(0, 0)"
+    },
+    {
+      "file": "src/math/rotations/extract_matrix_rotation_quaternion.c",
+      "find": "    copy_matrix_rotation(temporary_rotation_matrix);",
+      "replace": "    copy_matrix_rotation(temporary_rotation_matrix, (void *)(long)destination_matrix);",
+      "why": "Pass-through argument: copy_matrix_rotation (0x1FA298) copies the rotation rows of the matrix in a1, which on the EE still holds this function's destination_matrix argument."
     }
   ],
   "prototypes": [
@@ -339,6 +609,27 @@
       "returns": "void",
       "parameters": "void *, void *, s32",
       "why": "Assembly-only copy helper (ported in ee-helpers.c). Several callers declare it with unspecified parameters or an s32 result; an unprototyped call compiles to an indirect call whose signature differs from the definition and traps. No caller reads a result."
+    },
+    {
+      "symbol": "debug_print",
+      "label": "FUN_001e93b0",
+      "returns": "void",
+      "parameters": "const char *, ...",
+      "why": "0x1e93b0 (debug_print) is ported variadic with an empty body (retail prints nothing; it only spills the argument registers). A variadic function's WebAssembly signature is (format, argument list), so every declaration bound to it takes the variadic prototype; callers declared otherwise trap."
+    },
+    {
+      "symbol": "FUN_001e93b0_002da660",
+      "label": "FUN_001e93b0",
+      "returns": "void",
+      "parameters": "const char *, ...",
+      "why": "0x1e93b0 (debug_print) is ported variadic with an empty body (retail prints nothing; it only spills the argument registers). A variadic function's WebAssembly signature is (format, argument list), so every declaration bound to it takes the variadic prototype; callers declared otherwise trap."
+    },
+    {
+      "symbol": "func_001E9730_2DDEA0",
+      "label": "FUN_001e93b0",
+      "returns": "void",
+      "parameters": "const char *, ...",
+      "why": "0x1e93b0 (debug_print) is ported variadic with an empty body (retail prints nothing; it only spills the argument registers). A variadic function's WebAssembly signature is (format, argument list), so every declaration bound to it takes the variadic prototype; callers declared otherwise trap."
     }
   ],
   "empty_functions": [

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_CAMERA_CAMERA_SPRING_H
-#define LOMBYTE_RNC_CAMERA_CAMERA_SPRING_H
+#ifndef RCP2P_RNC_CAMERA_CAMERA_SPRING_H
+#define RCP2P_RNC_CAMERA_CAMERA_SPRING_H
 
 #include "types.h"
 
@@ -11,4 +11,4 @@ typedef struct {
     u8  pad14[0xC];
 } CameraSpring;
 
-#endif /* LOMBYTE_RNC_CAMERA_CAMERA_SPRING_H */
+#endif /* RCP2P_RNC_CAMERA_CAMERA_SPRING_H */

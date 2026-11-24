@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_DEBUG_DEBUG_FONT_H
-#define LOMBYTE_RNC_RENDERING_DEBUG_DEBUG_FONT_H
+#ifndef RCP2P_RNC_RENDERING_DEBUG_DEBUG_FONT_H
+#define RCP2P_RNC_RENDERING_DEBUG_DEBUG_FONT_H
 
 #include "types.h"
 
@@ -7,4 +7,4 @@
    (print_debug_text_centered clamps the index below 0x60). */
 extern s32 font_char_widths[0x60] __asm__("D_00189DC0");
 
-#endif /* LOMBYTE_RNC_RENDERING_DEBUG_DEBUG_FONT_H */
+#endif /* RCP2P_RNC_RENDERING_DEBUG_DEBUG_FONT_H */

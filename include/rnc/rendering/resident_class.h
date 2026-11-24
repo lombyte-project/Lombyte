@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_RESIDENT_CLASS_H
-#define LOMBYTE_RNC_RENDERING_RESIDENT_CLASS_H
+#ifndef RCP2P_RNC_RENDERING_RESIDENT_CLASS_H
+#define RCP2P_RNC_RENDERING_RESIDENT_CLASS_H
 
 #include "types.h"
 #include "rnc/sdk/eetypes.h"
@@ -38,4 +38,4 @@ extern s32  compressed_class_resources[0x18] __asm__("D_001CBB20");
 extern char class_material_maps[0x18][0x10] __asm__("D_001CBBE0");
 extern s16  class_runtime_indices[0x18][0x10] __asm__("D_001CBD60");
 
-#endif /* LOMBYTE_RNC_RENDERING_RESIDENT_CLASS_H */
+#endif /* RCP2P_RNC_RENDERING_RESIDENT_CLASS_H */

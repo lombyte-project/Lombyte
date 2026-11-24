@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_WORLD_LEVEL_ID_H
-#define LOMBYTE_RNC_WORLD_LEVEL_ID_H
+#ifndef RCP2P_RNC_WORLD_LEVEL_ID_H
+#define RCP2P_RNC_WORLD_LEVEL_ID_H
 
 /* Values of current_level_index, in the order of the level table
  * (config/us/levels/levels.json). Folders src/overlays/lNN use the same numbers. */
@@ -26,4 +26,4 @@ enum LevelId {
     LEVEL_COUNT = 0x13
 };
 
-#endif /* LOMBYTE_RNC_WORLD_LEVEL_ID_H */
+#endif /* RCP2P_RNC_WORLD_LEVEL_ID_H */

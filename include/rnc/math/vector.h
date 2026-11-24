@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_MATH_VECTOR_H
-#define LOMBYTE_RNC_MATH_VECTOR_H
+#ifndef RCP2P_RNC_MATH_VECTOR_H
+#define RCP2P_RNC_MATH_VECTOR_H
 
 #include "types.h"
 #include "rnc/sdk/eetypes.h"
@@ -26,4 +26,4 @@ typedef union {
     s32  i[4];
 } Vec4;
 
-#endif /* LOMBYTE_RNC_MATH_VECTOR_H */
+#endif /* RCP2P_RNC_MATH_VECTOR_H */

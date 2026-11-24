@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_QCOPY_H
-#define LOMBYTE_QCOPY_H
+#ifndef RCP2P_QCOPY_H
+#define RCP2P_QCOPY_H
 
 /*
  * Copies one 16-byte quadword from src to dst through $2, the way the
@@ -23,4 +23,4 @@ static __inline__ void qcopy_nc(void *dst, void *src) {
     __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)" : : "r"(dst), "r"(src) : "$2");
 }
 
-#endif /* LOMBYTE_QCOPY_H */
+#endif /* RCP2P_QCOPY_H */

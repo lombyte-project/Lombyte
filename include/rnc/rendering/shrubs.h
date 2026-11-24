@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_SHRUBS_H
-#define LOMBYTE_RNC_RENDERING_SHRUBS_H
+#ifndef RCP2P_RNC_RENDERING_SHRUBS_H
+#define RCP2P_RNC_RENDERING_SHRUBS_H
 
 #include "rnc/rendering/resident_class.h"
 #include "rnc/rendering/shrub_render_class.h"
@@ -12,4 +12,4 @@ void register_shrub_render_class(ShrubRenderClass *,
                                  ShrubMipTextureDefinition *,
                                  s32) __asm__("FUN_00203b08");
 
-#endif /* LOMBYTE_RNC_RENDERING_SHRUBS_H */
+#endif /* RCP2P_RNC_RENDERING_SHRUBS_H */

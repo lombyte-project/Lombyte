@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_FS_AA_PACKETS_H
-#define LOMBYTE_RNC_RENDERING_FS_AA_PACKETS_H
+#ifndef RCP2P_RNC_RENDERING_FS_AA_PACKETS_H
+#define RCP2P_RNC_RENDERING_FS_AA_PACKETS_H
 
 #include "types.h"
 #include "sda.h"
@@ -18,4 +18,4 @@ extern u64
 extern u64 fs_aa_resample_packet[74] __asm__("D_00151DF0") NOT_SDA; /* 10 header words + 64 */
 extern u64 fs_aa_clear_packet[42] __asm__("D_00152040") NOT_SDA;    /* 10 header words + 32 */
 
-#endif /* LOMBYTE_RNC_RENDERING_FS_AA_PACKETS_H */
+#endif /* RCP2P_RNC_RENDERING_FS_AA_PACKETS_H */

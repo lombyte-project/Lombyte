@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One-command contributor setup for Lombyte.
+# One-command contributor setup for RatchetAndClank-P2P.
 #
 #   ./setup.sh                 # install everything, then rebuild and verify the ELF
 #   ./setup.sh --iso game.iso  # also take the boot ELF and level overlays from your own disc image
@@ -28,7 +28,7 @@ ELF_TARGET="$ROOT/config/us/SCUS_971.99"
 ELF_SHA=e050581032e4bb3f20341307da5b69b76f1574910519155380ea771e55c3c0c9
 
 # Pinned public downloads (SHA-256 checked before anything is installed).
-# A dead upstream link falls back to our copy of the open-source files
+# A dead upstream link falls back to the upstream decompilation's mirror of the open-source files
 # (github.com/lombyte-project/toolchain-mirror), pinned to a commit.
 MIRROR_URL=https://raw.githubusercontent.com/lombyte-project/toolchain-mirror/915a96d32d1b23d58558b82e4b2ba7a4f2820f51
 BINUTILS_URL=https://github.com/decompals/binutils-mips-ps2-decompals/releases/download/v0.10/binutils-mips-ps2-decompals-linux-x86-64.tar.gz
@@ -57,14 +57,14 @@ SDK_MIRROR_VA_MIPS_SHA=af46841480f84b4620ca62c3f955cce20aac166928db5cdf17109ed71
 SDK_HEADERS_FILE=gcc-2.95.2-ee-include.tar.xz
 SDK_HEADERS_SHA=237d1e6ba8bf9c40272f235ad062cba5ebe3d9677895b64efbdc6942a72860b6
 
-DOCKER_IMAGE=lombyte-dev
+DOCKER_IMAGE=ratchetandclank-p2p-dev
 DOCKER_BASE=ubuntu:24.04
 
 ISO=""
 ELF=""
 BUILD=1
 MODE=native
-IN_CONTAINER=${LOMBYTE_IN_CONTAINER:-0}
+IN_CONTAINER=${RCP2P_IN_CONTAINER:-0}
 
 usage() {
     sed -n '2,16p' "$ROOT/setup.sh" | sed 's/^# \{0,1\}//'
@@ -161,7 +161,7 @@ docker_build_image() {
     say "building the $DOCKER_IMAGE container image"
     docker build --platform linux/amd64 --tag "$DOCKER_IMAGE" - <<EOF
 FROM --platform=linux/amd64 $DOCKER_BASE
-ENV DEBIAN_FRONTEND=noninteractive LOMBYTE_IN_CONTAINER=1 WINEDEBUG=-all
+ENV DEBIAN_FRONTEND=noninteractive RCP2P_IN_CONTAINER=1 WINEDEBUG=-all
 RUN dpkg --add-architecture i386 && apt-get update && apt-get install -y --no-install-recommends \\
     ca-certificates curl file git make tar unzip xz-utils build-essential gcc-multilib \\
     libc6-i386 lib32gcc-s1 lib32stdc++6 python3 python3-venv python3-pip ninja-build flex \\
@@ -180,7 +180,7 @@ docker_run() { # args...
     docker run --rm ${tty[@]+"${tty[@]}"} --platform linux/amd64 \
         --volume "$ROOT:/work" --volume "$DOCKER_IMAGE-home:/root" \
         ${DOCKER_MOUNTS[@]+"${DOCKER_MOUNTS[@]}"} \
-        --workdir /work --env LOMBYTE_IN_CONTAINER=1 \
+        --workdir /work --env RCP2P_IN_CONTAINER=1 \
         "$DOCKER_IMAGE" "$@"
 }
 
@@ -208,7 +208,7 @@ if [[ "$MODE" == shell ]]; then
     docker image inspect "$DOCKER_IMAGE" >/dev/null 2>&1 || docker_build_image
     exec docker run --rm -it --platform linux/amd64 \
         --volume "$ROOT:/work" --volume "$DOCKER_IMAGE-home:/root" \
-        --workdir /work --env LOMBYTE_IN_CONTAINER=1 "$DOCKER_IMAGE" \
+        --workdir /work --env RCP2P_IN_CONTAINER=1 "$DOCKER_IMAGE" \
         bash -c 'export PATH="/work/.venv/bin:/work/tools/binutils-mips-ps2-decompals:$PATH"; exec bash'
 fi
 
@@ -223,7 +223,7 @@ esac
 [[ "$(uname -m)" == x86_64 ]] || die "an x86-64 host is required (found $(uname -m)); on other machines use ./setup.sh --docker"
 case "$ROOT" in
     /mnt/[A-Za-z]/*)
-        die "this folder is on a Windows drive, which is slow. Copy the project to the Linux disk (e.g. ~/lombyte) and run it there." ;;
+        die "this folder is on a Windows drive, which is slow. Copy the project to the Linux disk (e.g. ~/RatchetAndClank-P2P) and run it there." ;;
 esac
 
 # ------------------------------------------------------------------ check
@@ -515,7 +515,7 @@ install_overlays() {
 
 # --------------------------------------------------------------------- run
 mkdir -p "$DOWNLOADS" "$STAGE"
-say "Lombyte setup in $ROOT"
+say "RatchetAndClank-P2P setup in $ROOT"
 install_packages
 install_binutils
 install_objdiff

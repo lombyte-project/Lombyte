@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_LEVEL_RENDER_STATE_H
-#define LOMBYTE_RNC_RENDERING_LEVEL_RENDER_STATE_H
+#ifndef RCP2P_RNC_RENDERING_LEVEL_RENDER_STATE_H
+#define RCP2P_RNC_RENDERING_LEVEL_RENDER_STATE_H
 
 #include "types.h"
 #include "rnc/math/vector.h"
@@ -50,4 +50,4 @@ typedef struct LevelRenderState {
 
 extern LevelRenderState level_render_state __asm__("D_0013E030");
 
-#endif /* LOMBYTE_RNC_RENDERING_LEVEL_RENDER_STATE_H */
+#endif /* RCP2P_RNC_RENDERING_LEVEL_RENDER_STATE_H */

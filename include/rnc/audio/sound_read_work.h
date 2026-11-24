@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_AUDIO_SOUND_READ_WORK_H
-#define LOMBYTE_RNC_AUDIO_SOUND_READ_WORK_H
+#ifndef RCP2P_RNC_AUDIO_SOUND_READ_WORK_H
+#define RCP2P_RNC_AUDIO_SOUND_READ_WORK_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ struct StartSoundWork {
 
 extern struct StartSoundWork sound_read_work __asm__("D_00137B00");
 
-#endif /* LOMBYTE_RNC_AUDIO_SOUND_READ_WORK_H */
+#endif /* RCP2P_RNC_AUDIO_SOUND_READ_WORK_H */

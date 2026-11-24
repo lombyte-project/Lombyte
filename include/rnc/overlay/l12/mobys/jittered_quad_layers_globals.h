@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L12_MOBYS_JITTERED_QUAD_LAYERS_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L12_MOBYS_JITTERED_QUAD_LAYERS_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L12_MOBYS_JITTERED_QUAD_LAYERS_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L12_MOBYS_JITTERED_QUAD_LAYERS_GLOBALS_H
 
 #include "types.h"
 
@@ -16,4 +16,4 @@ extern int hoven_jittered_second_packet_blend_subtrahend_selector __asm__("D_L12
 extern int hoven_jittered_second_packet_blend_alpha_factor_selector __asm__("D_L12_00161FD4");
 extern int hoven_jittered_second_packet_blend_addend_selector __asm__("D_L12_00161FD8");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L12_MOBYS_JITTERED_QUAD_LAYERS_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L12_MOBYS_JITTERED_QUAD_LAYERS_GLOBALS_H */

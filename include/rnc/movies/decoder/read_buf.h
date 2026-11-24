@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_MOVIES_DECODER_READ_BUF_H
-#define LOMBYTE_RNC_MOVIES_DECODER_READ_BUF_H
+#ifndef RCP2P_RNC_MOVIES_DECODER_READ_BUF_H
+#define RCP2P_RNC_MOVIES_DECODER_READ_BUF_H
 
 #include "types.h"
 
@@ -23,4 +23,4 @@ void read_buf_end_put(struct ReadBuf *buf, s32 size) __asm__("FUN_0023b990");
 s32  read_buf_begin_get(struct ReadBuf *buf, u8 **ptr) __asm__("FUN_0023b9d8");
 s32  read_buf_end_get(struct ReadBuf *buf, s32 size) __asm__("GetStateTableWord");
 
-#endif /* LOMBYTE_RNC_MOVIES_DECODER_READ_BUF_H */
+#endif /* RCP2P_RNC_MOVIES_DECODER_READ_BUF_H */

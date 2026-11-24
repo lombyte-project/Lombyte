@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_DECI2_H
-#define LOMBYTE_RNC_SDK_DECI2_H
+#ifndef RCP2P_RNC_SDK_DECI2_H
+#define RCP2P_RNC_SDK_DECI2_H
 
 #include "types.h"
 
@@ -19,4 +19,4 @@ s32  sceTtyInit(void);
 s32  sceTtyRead(s8 *, s32);
 s32  sceTtyWrite(s8 *, s32);
 
-#endif /* LOMBYTE_RNC_SDK_DECI2_H */
+#endif /* RCP2P_RNC_SDK_DECI2_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_MINE_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_MINE_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_WEAPONS_MINE_H
+#define RCP2P_RNC_OVERLAY_SHARED_WEAPONS_MINE_H
 
 #include "types.h"
 #include "rnc/overlay/shared/math/quad.h"
@@ -100,4 +100,4 @@ typedef struct {
 
 void mine_update(M910 *) __asm__("FUN_L00_002aa670");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_MINE_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_WEAPONS_MINE_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_MOVIES_DECODER_VIDEO_DEC_H
-#define LOMBYTE_RNC_MOVIES_DECODER_VIDEO_DEC_H
+#ifndef RCP2P_RNC_MOVIES_DECODER_VIDEO_DEC_H
+#define RCP2P_RNC_MOVIES_DECODER_VIDEO_DEC_H
 
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
@@ -30,4 +30,4 @@ s32  video_dec_abort(struct VideoDec *vd) __asm__("func_0023CC70");
 s32  video_dec_get_state(struct VideoDec *vd) __asm__("func_0023CC80");
 s32  video_dec_set_state(struct VideoDec *vd, s32 state) __asm__("func_0023CC88");
 
-#endif /* LOMBYTE_RNC_MOVIES_DECODER_VIDEO_DEC_H */
+#endif /* RCP2P_RNC_MOVIES_DECODER_VIDEO_DEC_H */

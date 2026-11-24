@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L02_MOBYS_SMOKE_VENT_DATA_UPDATE_SMOKE_VENT_8_H
-#define LOMBYTE_RNC_OVERLAY_L02_MOBYS_SMOKE_VENT_DATA_UPDATE_SMOKE_VENT_8_H
+#ifndef RCP2P_RNC_OVERLAY_L02_MOBYS_SMOKE_VENT_DATA_UPDATE_SMOKE_VENT_8_H
+#define RCP2P_RNC_OVERLAY_L02_MOBYS_SMOKE_VENT_DATA_UPDATE_SMOKE_VENT_8_H
 
 #include "types.h"
 
@@ -14,4 +14,4 @@ extern f32 alternating_smoke_puff_lateral_acceleration_magnitude_bound_gp __asm_
 extern f32 alternating_smoke_puff_motion_variation_fraction_gp __asm__("D_L02_00162054")
     __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L02_MOBYS_SMOKE_VENT_DATA_UPDATE_SMOKE_VENT_8_H */
+#endif /* RCP2P_RNC_OVERLAY_L02_MOBYS_SMOKE_VENT_DATA_UPDATE_SMOKE_VENT_8_H */

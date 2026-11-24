@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_TEXTURE_UPLOAD_H
-#define LOMBYTE_RNC_RENDERING_TEXTURE_UPLOAD_H
+#ifndef RCP2P_RNC_RENDERING_TEXTURE_UPLOAD_H
+#define RCP2P_RNC_RENDERING_TEXTURE_UPLOAD_H
 
 #include "types.h"
 
@@ -32,4 +32,4 @@ struct ClutImage {
     u8  pixels[1];   /* 0x420: width * height indices */
 };
 
-#endif /* LOMBYTE_RNC_RENDERING_TEXTURE_UPLOAD_H */
+#endif /* RCP2P_RNC_RENDERING_TEXTURE_UPLOAD_H */

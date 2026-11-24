@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L02_MOBYS_ELEVATOR_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L02_MOBYS_ELEVATOR_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L02_MOBYS_ELEVATOR_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L02_MOBYS_ELEVATOR_GLOBALS_H
 
 #include "types.h"
 
@@ -13,4 +13,4 @@ extern float level02_elevator_ring_vertical_spacing __asm__("D_L02_00161BE8");
 extern float level02_elevator_ring_segment_half_height __asm__("D_L02_00161BF0");
 extern float level02_elevator_ring_segment_angle_degrees __asm__("D_L02_00161C10");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L02_MOBYS_ELEVATOR_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L02_MOBYS_ELEVATOR_GLOBALS_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L12_MOBYS_PLATFORM_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L12_MOBYS_PLATFORM_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L12_MOBYS_PLATFORM_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L12_MOBYS_PLATFORM_GLOBALS_H
 
 #include "types.h"
 
@@ -8,4 +8,4 @@
 extern float platform_tilt_approach_divisor __asm__("D_L12_00161918");
 extern float platform_tilt_offset_divisor __asm__("D_L12_00161914");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L12_MOBYS_PLATFORM_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L12_MOBYS_PLATFORM_GLOBALS_H */

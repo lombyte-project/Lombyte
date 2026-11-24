@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_PROPS_POOL_SET_SCALE_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_PROPS_POOL_SET_SCALE_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_PROPS_POOL_SET_SCALE_H
+#define RCP2P_RNC_OVERLAY_SHARED_PROPS_POOL_SET_SCALE_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ void pool_ripple(void *, f32, f32, f32, void *, s32) __asm__("FUN_L01_002b8288")
 
 void update_animated_offset_pairs(float *) __asm__("FUN_L01_002b80d0");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_PROPS_POOL_SET_SCALE_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_PROPS_POOL_SET_SCALE_H */

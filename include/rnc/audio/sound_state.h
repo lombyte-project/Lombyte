@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_AUDIO_SOUND_STATE_H
-#define LOMBYTE_RNC_AUDIO_SOUND_STATE_H
+#ifndef RCP2P_RNC_AUDIO_SOUND_STATE_H
+#define RCP2P_RNC_AUDIO_SOUND_STATE_H
 
 #include "types.h"
 
@@ -16,4 +16,4 @@ extern int  sound_bank_handle __asm__("D_0015ED5C");
 extern s32  level_sound_def_count __asm__("D_0015F630");
 extern u8  *level_sound_defs __asm__("D_0015F634");
 
-#endif /* LOMBYTE_RNC_AUDIO_SOUND_STATE_H */
+#endif /* RCP2P_RNC_AUDIO_SOUND_STATE_H */

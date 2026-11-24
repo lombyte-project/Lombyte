@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L17_MOBYS_FIGHTER_JET_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L17_MOBYS_FIGHTER_JET_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L17_MOBYS_FIGHTER_JET_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L17_MOBYS_FIGHTER_JET_GLOBALS_H
 
 #include "types.h"
 
@@ -10,4 +10,4 @@ extern float fighter_jet_initial_flight_speed __asm__("D_L17_00161FE4");
 extern float fighter_jet_starting_hp __asm__("D_L17_00162058");
 extern float fighter_jet_max_hp __asm__("D_L17_00162084");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L17_MOBYS_FIGHTER_JET_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L17_MOBYS_FIGHTER_JET_GLOBALS_H */

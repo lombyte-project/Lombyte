@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L15_MOBYS_POISON_VESSEL_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L15_MOBYS_POISON_VESSEL_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L15_MOBYS_POISON_VESSEL_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L15_MOBYS_POISON_VESSEL_GLOBALS_H
 
 #include "types.h"
 
@@ -7,4 +7,4 @@
 /* Explicit _gp views stay in the source at their assembler declaration sites. */
 extern float poison_vessel_gravity __asm__("D_L15_00161FBC");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L15_MOBYS_POISON_VESSEL_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L15_MOBYS_POISON_VESSEL_GLOBALS_H */

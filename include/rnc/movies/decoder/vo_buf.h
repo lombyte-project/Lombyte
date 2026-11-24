@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_MOVIES_DECODER_VO_BUF_H
-#define LOMBYTE_RNC_MOVIES_DECODER_VO_BUF_H
+#ifndef RCP2P_RNC_MOVIES_DECODER_VO_BUF_H
+#define RCP2P_RNC_MOVIES_DECODER_VO_BUF_H
 
 #include "types.h"
 
@@ -38,4 +38,4 @@ s32            vo_buf_is_empty(struct VoBuf *buf) __asm__("func_0023D2C8");
 struct VoTag  *vo_buf_get_tag(struct VoBuf *buf) __asm__("FUN_0023d2d8");
 void           vo_buf_dec_count(struct VoBuf *buf) __asm__("func_0023D340");
 
-#endif /* LOMBYTE_RNC_MOVIES_DECODER_VO_BUF_H */
+#endif /* RCP2P_RNC_MOVIES_DECODER_VO_BUF_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L12_MOBYS_HELICOPTER_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L12_MOBYS_HELICOPTER_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L12_MOBYS_HELICOPTER_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L12_MOBYS_HELICOPTER_GLOBALS_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ extern int   helicopter_help_message_hit_count __asm__("D_0015EE04");
 extern float helicopter_path_speed __asm__("D_L12_001619A8");
 extern float helicopter_rotation_smoothing_divisor __asm__("D_L12_001619B0");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L12_MOBYS_HELICOPTER_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L12_MOBYS_HELICOPTER_GLOBALS_H */

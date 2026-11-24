@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_SCE_DMA_CHAN_H
-#define LOMBYTE_RNC_SDK_SCE_DMA_CHAN_H
+#ifndef RCP2P_RNC_SDK_SCE_DMA_CHAN_H
+#define RCP2P_RNC_SDK_SCE_DMA_CHAN_H
 
 #include "types.h"
 #include "sda.h"
@@ -22,4 +22,4 @@ typedef struct sceDmaChan {
 /* Register block of each of the ten DMA channels. */
 extern sceDmaChan *DmaChannels[10] __asm__("D_00132D70") NOT_SDA;
 
-#endif /* LOMBYTE_RNC_SDK_SCE_DMA_CHAN_H */
+#endif /* RCP2P_RNC_SDK_SCE_DMA_CHAN_H */

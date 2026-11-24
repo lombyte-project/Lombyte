@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L18_MOBYS_H
-#define LOMBYTE_RNC_OVERLAY_L18_MOBYS_H
+#ifndef RCP2P_RNC_OVERLAY_L18_MOBYS_H
+#define RCP2P_RNC_OVERLAY_L18_MOBYS_H
 
 #include "types.h"
 
@@ -35,4 +35,4 @@ void thruster_pack_lock_green_update(char *) __asm__("FUN_L18_002d6600");
 void thruster_pack_lock_red_update(struct Moby *) __asm__("FUN_L18_002d7b20");
 void trespasser_barrier_update(struct Moby *) __asm__("FUN_L18_002f1e68");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L18_MOBYS_H */
+#endif /* RCP2P_RNC_OVERLAY_L18_MOBYS_H */

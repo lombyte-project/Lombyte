@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L10_MOBYS_GADGEBOT_TELEPOT_PAD_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L10_MOBYS_GADGEBOT_TELEPOT_PAD_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L10_MOBYS_GADGEBOT_TELEPOT_PAD_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L10_MOBYS_GADGEBOT_TELEPOT_PAD_GLOBALS_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ extern int gadgebot_telepot_camera_effect_duration_frames __asm__("D_L10_001618A
 extern int gadgebot_telepot_camera_spring_decay_frames __asm__("D_L10_001618A4");
 extern int gadgebot_telepot_camera_effect_remaining_frames __asm__("D_L10_001618A8");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L10_MOBYS_GADGEBOT_TELEPOT_PAD_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L10_MOBYS_GADGEBOT_TELEPOT_PAD_GLOBALS_H */

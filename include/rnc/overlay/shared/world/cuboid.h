@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_WORLD_CUBOID_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_WORLD_CUBOID_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_WORLD_CUBOID_H
+#define RCP2P_RNC_OVERLAY_SHARED_WORLD_CUBOID_H
 
 #include "types.h"
 #include "rnc/math/vector.h"
@@ -29,4 +29,4 @@ extern LevelCuboid *l11_cuboids __asm__("D_L11_001600EC");
 extern LevelCuboid *l13_cuboids __asm__("D_L13_001600EC");
 extern LevelCuboid *l14_cuboids __asm__("D_L14_001600EC");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_WORLD_CUBOID_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_WORLD_CUBOID_H */

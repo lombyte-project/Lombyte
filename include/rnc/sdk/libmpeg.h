@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_LIBMPEG_H
-#define LOMBYTE_RNC_SDK_LIBMPEG_H
+#ifndef RCP2P_RNC_SDK_LIBMPEG_H
+#define RCP2P_RNC_SDK_LIBMPEG_H
 
 #include "types.h"
 

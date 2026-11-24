@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L06_MOBYS_ALIEN_QUEEN_H
-#define LOMBYTE_RNC_OVERLAY_L06_MOBYS_ALIEN_QUEEN_H
+#ifndef RCP2P_RNC_OVERLAY_L06_MOBYS_ALIEN_QUEEN_H
+#define RCP2P_RNC_OVERLAY_L06_MOBYS_ALIEN_QUEEN_H
 
 #include "types.h"
 
@@ -14,4 +14,4 @@ void clear_moby_list_state_18(int index) __asm__("FUN_L06_002f99b0");
 
 void alien_queen_update(unsigned char *) __asm__("FUN_L06_002f9a28");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L06_MOBYS_ALIEN_QUEEN_H */
+#endif /* RCP2P_RNC_OVERLAY_L06_MOBYS_ALIEN_QUEEN_H */

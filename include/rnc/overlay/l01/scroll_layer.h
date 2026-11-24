@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L01_SCROLL_LAYER_H
-#define LOMBYTE_RNC_OVERLAY_L01_SCROLL_LAYER_H
+#ifndef RCP2P_RNC_OVERLAY_L01_SCROLL_LAYER_H
+#define RCP2P_RNC_OVERLAY_L01_SCROLL_LAYER_H
 
 #include "types.h"
 #include "rnc/math/vector.h"
@@ -106,4 +106,4 @@ extern f32   l01_sine_modulated_scroll_layer_2_uvs[0x52][2] __asm__("D_L01_00202
 /* pulsing_scroll_layers: 3 layers (loop i = 2..0, draw count 3). */
 extern ScrollLayer l01_sine_modulated_scroll_layers[3] __asm__("D_L01_00202D80");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L01_SCROLL_LAYER_H */
+#endif /* RCP2P_RNC_OVERLAY_L01_SCROLL_LAYER_H */

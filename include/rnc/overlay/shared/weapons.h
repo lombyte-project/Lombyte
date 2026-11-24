@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_WEAPONS_H
+#define RCP2P_RNC_OVERLAY_SHARED_WEAPONS_H
 
 #include "rnc/overlay/shared/math/quad.h"
 #include "rnc/overlay/shared/weapons/mine.h"
@@ -56,4 +56,4 @@ s32          spawn_visibomb_missile(void *, void *, f32, f32) __asm__("FUN_L00_0
 void         terminate_visibomb_missile(void *, char **) __asm__("FUN_L00_002b5b20");
 void         walloper_update(char *) __asm__("FUN_L00_002bb558");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_WEAPONS_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_CAMERA_SCRIPTED_CAMERA_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_CAMERA_SCRIPTED_CAMERA_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_CAMERA_SCRIPTED_CAMERA_H
+#define RCP2P_RNC_OVERLAY_SHARED_CAMERA_SCRIPTED_CAMERA_H
 
 #include "types.h"
 
@@ -11,4 +11,4 @@ void initialize_camera_pose_springs(char *) __asm__("FUN_L00_002ead60");
 void update_camera_pose_with_optional_collision(char *) __asm__("FUN_L00_002eb218");
 void set_camera_5_track_acceleration_yz(float, float) __asm__("FUN_L01_00316e88");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_CAMERA_SCRIPTED_CAMERA_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_CAMERA_SCRIPTED_CAMERA_H */

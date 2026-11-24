@@ -13,10 +13,11 @@
 // Staged by hand, standing in for startup code not run here: the work-buffer pointers in
 // D_L00_00173E00. Those buffers live above the 32 MiB RAM image, so they are NOT the console's
 // addresses.
-import { closeSync, openAsBlob, openSync, readSync } from 'node:fs';
+import { closeSync, openAsBlob, openSync, readSync, writeFileSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { IsoReader, SECTOR_BYTES } from '../iso-reader.mjs';
 import { initializeDiscTable } from '../disc-loader.mjs';
+import { parseVif, readChain, summarize } from './display-list.mjs';
 
 const DISC_TABLE = 0x00137B80;
 const LEVEL_HEADER = 0x0013A4E0; // disc_table + 0x2960: the 0x2434 bytes read_file_entry_with_retry copies
@@ -46,6 +47,11 @@ const RESIDENT_BUFFER = 0x08000000;
 export const ROOTS = ['FUN_00230f60', 'FUN_00232d00', 'FUN_L00_0023d028', 'FUN_L00_00244110', 'FUN_L00_00245c28', 'FUN_0012da28'];
 // --frames N: after the level program loads, run the original run_level_main_loop (ROOTS[4]),
 // which itself calls init_stash, init_level_runtime_state and the load, for N frames.
+// --boot: run the game from main (run_game_main_loop, 0x12d9d8, what crt0 calls) for --frames
+// frames: startlevel's boot screens, the intro movie and the title and main menu
+// (transition_do_transition), with nothing staged by hand but the disc and the ELF image.
+const BOOT = process.argv.includes('--boot');
+const BOOT_ROOT = 'FUN_0012d9d8';
 const framesIndex = process.argv.indexOf('--frames');
 const FRAMES = framesIndex > 0 ? Number(process.argv[framesIndex + 1]) : 0;
 const archives = {};
@@ -119,17 +125,7 @@ export function services(context) {
 }
 
 // Output-only work with no consumer in this build yet. Reported as NOT DONE on every run.
-export const deferred = {
-  FUN_00237370: 'light_ties: bakes directional-light vertex colours for the PS2 tie renderer (assembly-only)',
-  FUN_0022a5e0: 'the same bake for shrub instances (assembly-only, unnamed)',
-  FUN_L00_00251ce8: 'the level copy of executable 0x20ede8 (3,236 bytes of EE/VU0 assembly, unnamed): called as (moby, slot | 0x300) when an animation is set; it fills the moby\'s cached pose in that render slot. Not decoded, so no joint matrices exist for any animated model.',
-  FUN_00234f98: 'light_tfrags: the same bake for terrain fragments (assembly-only)',
-  FUN_001f4a58: 'fade_to_black: screen fade (renderer)',
-  FUN_L00_0028dbe8: 'audio: the level copy of allocate_voice_for_target_entry (0x22da68), called by advance_moby_animation when an animation trigger is crossed; starts the trigger\'s sound (no browser audio backend; the result is not read)',
-  FUN_L00_0024ec80: 'audio: the level copy of update_moby_voice (0x20c940), called by advance_moby_animation for a moby with a voice; updates its looping sound (no browser audio backend)',
-  FUN_L00_001f2868: 'collect_mobies_in_sphere (about 2,300 bytes of EE/VU0 assembly from 0x1f2868, not decoded): NOT output-only. It searches the moby collision grid, whose entries update_entity (FUN_L00_00250df8, below) has not built, and is answered as 0 mobys found. Wherever a moby is in range, callers take the nothing-found branch the console would not.',
-  FUN_L00_00250df8: 'update_entity: builds each moby\'s rotation matrix (+0xC0), bounding sphere (+0x00) and collision-grid entry; calls a VU0 microprogram that is not decoded. Positions, rotations and scales are unaffected; matrices and bounds stay zero.',
-};
+export { deferredFunctions as deferred } from '../deferred-functions.mjs';
 
 export async function setup(context) {
   const isoPath = process.env.RNC_ISO_PATH;
@@ -140,6 +136,17 @@ export async function setup(context) {
   const runtime = await load('runtime');
   decoder = await load('planet-wad');
   runtime.runtime_init();
+  if (BOOT) {
+    console.log('boot: running main (run_game_main_loop) from the ELF image; nothing staged');
+    // The sky's two scratchpad buffers, held in data (D_00160408 in the boot program; see the level
+    // program's copy below): console scratchpad addresses; the scratchpad is at 0xF0000 here.
+    const bootView = context.view();
+    for (const at of [0x160408, 0x16040C]) {
+      const value = bootView.getUint32(at, true);
+      if ((value & 0xFFFFC000) === 0x70000000) bootView.setUint32(at, 0xF0000 + (value & 0x3FFF), true);
+    }
+    return { sequence: [{ symbol: BOOT_ROOT, args: [], frames: FRAMES || 60 }] };
+  }
   const reader = new IsoReader(await openAsBlob(isoPath));
   await reader.open();
   await initializeDiscTable(runtime, reader);
@@ -192,6 +199,13 @@ export async function setup(context) {
       // The loaded handler tables hold console code addresses; put the compiled C tables there.
       if (!run.exports.spike_install_level_tables) throw new Error('level handler tables are not linked');
       run.exports.spike_install_level_tables();
+      // The sky's two scratchpad buffers (D_00160408, the level copy at 0x1604C8 by gp pairing) are
+      // console scratchpad addresses held in data; the scratchpad is at 0xF0000 here.
+      const view = run.view();
+      for (const at of [0x1604C8, 0x1604CC]) {
+        const value = view.getUint32(at, true);
+        if ((value & 0xFFFFC000) === 0x70000000) view.setUint32(at, 0xF0000 + (value & 0x3FFF), true);
+      }
     }, label: 'level program data reloaded (the console loads the level program here)' },
     ...(FRAMES ? [{ symbol: ROOTS[4], args: [], frames: FRAMES }] : [
       { symbol: ROOTS[1], args: [] },
@@ -201,7 +215,57 @@ export async function setup(context) {
   ] };
 }
 
+// --boot with --handover level: the boot program has loaded the level program (parse_bin) and the
+// runner moved RAM into the level module. What the load means in this build, as in the staged
+// sequence above: the loaded handler tables hold console code addresses (the compiled C tables go
+// there), and the level copy of the sky's scratchpad pointers is translated.
+export function onHandover(context, level) {
+  stats.levelProgram = true;
+  if (!context.exports.spike_install_level_tables) throw new Error('level handler tables are not linked');
+  context.exports.spike_install_level_tables();
+  // The vsync interrupt handler (count_vsync: it polls the pads) keeps running across the jump.
+  context.exports.spike_resume_after_handover?.(context.previousVblankRuns > 0 ? 1 : 0, context.previousCdCallback ?? 0);
+  const view = context.view();
+  for (const at of [0x1604C8, 0x1604CC]) {
+    const value = view.getUint32(at, true);
+    if ((value & 0xFFFFC000) === 0x70000000) view.setUint32(at, 0xF0000 + (value & 0x3FFF), true);
+  }
+  console.log(`hand-over to level ${level}: RAM copied, handler tables installed`);
+}
+
 export function report(context) {
+  if (process.env.HUD_DUMP) {
+    const v = context.view();
+    for (let i = 0; i < 13; i++) { const e = 0x17DC50 + i * 0x90; console.log(`hud ${i}: key 0x${v.getInt32(e + 0x64, true).toString(16)} fn ${v.getUint32(e + 0x10, true)} next_id 0x${v.getInt32(e + 0x20, true).toString(16)} next_fn ${v.getUint32(e + 0x30, true)} update ${v.getUint32(e + 0x14, true)} pending ${v.getInt32(e + 0x68, true)} t6C ${v.getInt32(e + 0x6C, true)}`); }
+  }
+  const word = (name) => context.exports[name] ? context.view().getUint32(context.exports[name].value, true) : '?';
+  console.log(`layer poses ${word('rnc_layer_pose_calls')}, with NaN ${word('rnc_layer_pose_nan')}; bad collision segments ${word('spike_collision_bad_segments')}`);
+  console.log(`local pose evaluations (level 0x254b58): ${context.exports.spike_local_pose_calls ? context.view().getUint32(context.exports.spike_local_pose_calls.value, true) : '?'}`);
+  if (BOOT) { // the boot program's front end (its own addresses)
+    const v = context.view();
+    const modes = { 0: 'title (press start)', 3: 'main menu', 4: 'freeze' };
+    const mode = v.getInt32(0x15F604, true);
+    const mc = (o) => v.getInt32(0x13D290 + o, true);
+    console.log(`memory card: state 0x${mc(0xD4).toString(16)} sub ${mc(0xD8)} pending ${mc(0xDC)} err 0x${mc(0xE4).toString(16)} busy ${mc(0xCC)} cmd ${mc(0xB8)} result ${mc(0xBC)} calls ${context.exports.spike_mc_calls?.() ?? '?'}`);
+    console.log(`boot front end: game_mode ${mode} (${modes[mode] ?? '?'}), menu_system.state 0x${v.getInt32(0x1D5BF0, true).toString(16)}, menu page 0x${v.getUint32(0x1D5BF4, true).toString(16)}; pad reads ${context.exports.spike_pad_reads?.() ?? '?'}, movies ${context.exports.spike_movies_played?.() ?? '?'}, IOP modules ${context.exports.spike_iop_modules?.() ?? '?'}`);
+  }
+  if (context.exports.spike_world_passes) {
+    console.log(`world rendering passes handed to the browser renderer: tfrag ${context.exports.spike_world_passes(0)}, tie ${context.exports.spike_world_passes(1)}, shrub ${context.exports.spike_world_passes(2)}, glow sprites ${context.exports.spike_world_passes(3)}; scratchpad DMA transfers ${context.exports.spike_spr_transfers?.() ?? '?'}`);
+  }
+  const chain = context.exports.spike_vif1_chain_address?.() ?? 0;
+  if (process.env.SPIKE_DUMP) { // EE RAM (0 .. 32 MiB) and the last chain address, for offline display-list work
+    writeFileSync(process.env.SPIKE_DUMP, context.bytes().subarray(0, 0x02000000));
+    writeFileSync(`${process.env.SPIKE_DUMP}.json`, JSON.stringify({ chain, gs: Array.from({ length: context.exports.spike_gs_upload_count?.() ?? 0 }, (_, i) => context.exports.spike_gs_upload_address(i)) }));
+  }
+  if (chain) { // the last VU1 display list the game sent (display-list.mjs)
+    try {
+      const records = parseVif(readChain(context.bytes(), chain));
+      const { counts, directBytes } = summarize(records);
+      console.log(`last display list at 0x${chain.toString(16)}: ${records.length} VIF codes ${JSON.stringify(counts)}, ${directBytes} bytes of DIRECT GIF data`);
+    } catch (error) {
+      console.log(`last display list at 0x${chain.toString(16)}: unreadable (${error.message})`);
+    }
+  }
   if (process.env.SPIKE_SOUND_DEBUG) { // queued 989snd command callbacks (snd_stream_buffers, D_0015ECB0)
     const v = context.view();
     for (let b = 0; b < 2; b++) {
@@ -224,7 +288,7 @@ export function report(context) {
     console.log(`main loop: ${view.getInt32(0x15F3F8, true)} passes (D_L00_0015F3F8), mode ${view.getInt32(0x15F5C4, true)} ` +
       `(D_L00_0015F5C4; 6 = gameplay), disc read state ${view.getInt16(0x1516D0 + 8, true)} (music_stream_state.read_state; 0 idle), ` +
       `vsyncs ${context.exports.spike_vsync_waits?.() ?? '?'}, VIF1 display lists sent ${context.exports.spike_vif1_chain_sends?.() ?? '?'}, ` +
-      `sound batches answered ${context.exports.spike_sound_batches?.() ?? '?'} (${context.exports.spike_sound_commands?.() ?? '?'} commands, none played)`);
+      `sound batches answered ${context.exports.spike_sound_batches?.() ?? '?'} (${context.exports.spike_sound_commands?.() ?? "?"} commands, ${context.exports.spike_sound_stream_starts?.() ?? "?"} streams, none played)`);
   }
   const uploads = context.exports.spike_gs_upload_count?.() ?? 0;
   if (uploads) {

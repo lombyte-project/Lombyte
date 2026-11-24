@@ -21,9 +21,14 @@ const report = JSON.parse(readFileSync(process.argv[2] ?? join(root, 'build/spik
 // the two names separate storage. ram.o is linked first with --allow-multiple-definition, so its
 // label wins and the C initializer is dropped; the retail ELF and level program data, copied in
 // at run time, supply the initial bytes instead.
+// Also the fixed-address labels that only the browser's own ports and services name
+// (browser/spike/ee-helpers.c, services.c): `__asm__("D_...")` declarations there.
+const portLabels = ['ee-helpers.c', 'services.c'].flatMap((file) =>
+  [...readFileSync(join(root, 'browser/spike', file), 'utf8').matchAll(/__asm__\("(D_(?:L\d\d_)?[0-9A-F]{8})"\)/g)].map((m) => m[1]));
 const symbols = [...new Set([
   ...(report.undefined['fixed-address data not defined in C'] ?? []).map((entry) => entry.symbol),
   ...(report.pinnedData ?? []),
+  ...portLabels,
 ])];
 
 // The level program keeps its own copy of the executable's data at other addresses
@@ -31,7 +36,10 @@ const symbols = [...new Set([
 // the level keeps that object, so it is the same storage the level's `D_Lnn_` name refers to.
 // An address between two mapped addresses that move by the same amount moves with them.
 let moves = [];
+// SPIKE_NO_EXE_MAP=1: the boot program's image (boot.wasm), which runs before a level program
+// exists, so executable names keep their own addresses.
 try {
+  if (process.env.SPIKE_NO_EXE_MAP) throw new Error('boot program: no map');
   const mapping = JSON.parse(readFileSync(join(root, `build/spike/exe-data-${report.level}.json`), 'utf8'));
   moves = Object.entries(mapping).map(([from, to]) => [Number(from), Number(to)]).sort((a, b) => a[0] - b[0]);
 } catch { /* no mapping generated: executable names keep their own addresses */ }
@@ -80,7 +88,7 @@ for (let index = 0; index < placed.length; index += 1) {
   sizes.push(`\t.size\t${symbol}, ${size}`);
 }
 lines.push(`\t.skip\t${end - cursor}`, `\t.size\tee_ram, ${end - RAM_BASE}`, ...sizes, '');
-writeFileSync(join(root, 'build/spike/ram.s'), lines.join('\n'));
+writeFileSync(join(root, process.env.SPIKE_RAM_OUT || 'build/spike/ram.s'), lines.join('\n'));
 writeFileSync(join(root, 'build/spike/ram-outside.txt'), `${outside.join('\n')}\n`);
 console.log(`ram.s: ${placed.length} labels, 0x${RAM_BASE.toString(16)}..0x${end.toString(16)} (${((end - RAM_BASE) / 1048576).toFixed(1)} MiB)`);
 console.log(`executable-named globals pinned at their level address: ${moved}`);

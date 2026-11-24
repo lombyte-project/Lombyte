@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_HELP_HELP_RECORD_H
-#define LOMBYTE_RNC_UI_HELP_HELP_RECORD_H
+#ifndef RCP2P_RNC_UI_HELP_HELP_RECORD_H
+#define RCP2P_RNC_UI_HELP_HELP_RECORD_H
 
 #include "types.h"
 
@@ -15,4 +15,4 @@ typedef struct {
 
 extern HelpRecord D_00141968[HELP_RECORD_COUNT];
 
-#endif /* LOMBYTE_RNC_UI_HELP_HELP_RECORD_H */
+#endif /* RCP2P_RNC_UI_HELP_HELP_RECORD_H */

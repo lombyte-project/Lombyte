@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L11_MOBYS_PSYTCOPUS_DATA_PSYTCOPUS_UPDATE_H
-#define LOMBYTE_RNC_OVERLAY_L11_MOBYS_PSYTCOPUS_DATA_PSYTCOPUS_UPDATE_H
+#ifndef RCP2P_RNC_OVERLAY_L11_MOBYS_PSYTCOPUS_DATA_PSYTCOPUS_UPDATE_H
+#define RCP2P_RNC_OVERLAY_L11_MOBYS_PSYTCOPUS_DATA_PSYTCOPUS_UPDATE_H
 
 #include "types.h"
 
@@ -15,4 +15,4 @@ extern float psytcopus_death_knockback_base_vertical_speed_gp __asm__("D_L11_001
 extern float psytcopus_death_knockback_base_horizontal_speed_gp __asm__("D_L11_00161F98")
     __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L11_MOBYS_PSYTCOPUS_DATA_PSYTCOPUS_UPDATE_H */
+#endif /* RCP2P_RNC_OVERLAY_L11_MOBYS_PSYTCOPUS_DATA_PSYTCOPUS_UPDATE_H */

@@ -84,6 +84,58 @@ def s16(value):
     return value - 0x10000 if value & 0x8000 else value
 
 
+# EE MMI (opcode 0x1C; EE Core Instruction Set Manual): funct names, and the sa-field tables of
+# MMI0 (funct 0x08), MMI1 (0x28), MMI2 (0x09) and MMI3 (0x29).
+MMI = {0x00: 'madd', 0x01: 'maddu', 0x04: 'plzcw', 0x10: 'mfhi1', 0x11: 'mthi1', 0x12: 'mflo1',
+       0x13: 'mtlo1', 0x18: 'mult1', 0x19: 'multu1', 0x1A: 'div1', 0x1B: 'divu1', 0x20: 'madd1',
+       0x21: 'maddu1', 0x30: 'pmfhl', 0x31: 'pmthl', 0x34: 'psllh', 0x36: 'psrlh', 0x37: 'psrah',
+       0x3C: 'psllw', 0x3E: 'psrlw', 0x3F: 'psraw'}
+MMI_SA = {
+    0x08: {0: 'paddw', 1: 'psubw', 2: 'pcgtw', 3: 'pmaxw', 4: 'paddh', 5: 'psubh', 6: 'pcgth',
+           7: 'pmaxh', 8: 'paddb', 9: 'psubb', 10: 'pcgtb', 16: 'paddsw', 17: 'psubsw', 18: 'pextlw',
+           19: 'ppacw', 20: 'paddsh', 21: 'psubsh', 22: 'pextlh', 23: 'ppach', 24: 'paddsb',
+           25: 'psubsb', 26: 'pextlb', 27: 'ppacb', 30: 'pext5', 31: 'ppac5'},
+    0x28: {1: 'pabsw', 2: 'pceqw', 3: 'pminw', 4: 'padsbh', 5: 'pabsh', 6: 'pceqh', 7: 'pminh',
+           10: 'pceqb', 16: 'padduw', 17: 'psubuw', 18: 'pextuw', 20: 'padduh', 21: 'psubuh',
+           22: 'pextuh', 24: 'paddub', 25: 'psubub', 26: 'pextub', 27: 'qfsrv'},
+    0x09: {0: 'pmaddw', 2: 'psllvw', 3: 'psrlvw', 4: 'pmsubw', 8: 'pmfhi', 9: 'pmflo', 10: 'pinth',
+           12: 'pmultw', 13: 'pdivw', 14: 'pcpyld', 16: 'pmaddh', 17: 'phmadh', 18: 'pand',
+           19: 'pxor', 20: 'pmsubh', 21: 'phmsbh', 26: 'pexeh', 27: 'prevh', 28: 'pmulth',
+           29: 'pdivbw', 30: 'pexew', 31: 'prot3w'},
+    0x29: {0: 'pmadduw', 3: 'psravw', 8: 'pmthi', 9: 'pmtlo', 10: 'pinteh', 12: 'pmultuw',
+           13: 'pdivuw', 14: 'pcpyud', 18: 'por', 19: 'pnor', 26: 'pexch', 27: 'pcpyh', 30: 'pexcw'},
+}
+
+
+def decode_mmi(word):
+    rs, rt, rd = (word >> 21) & 31, (word >> 16) & 31, (word >> 11) & 31
+    sa, fn = (word >> 6) & 31, word & 63
+    if fn in MMI_SA and sa in MMI_SA[fn]:
+        name = MMI_SA[fn][sa]
+        if name in ('pmfhi', 'pmflo'):
+            return f'{name} {R[rd]}'
+        if name in ('pmthi', 'pmtlo'):
+            return f'{name} {R[rs]}'
+        if name in ('pabsw', 'pabsh', 'pext5', 'ppac5', 'prevh', 'pexeh', 'pexew', 'prot3w', 'pexch',
+                    'pcpyh', 'pexcw'):
+            return f'{name} {R[rd]}, {R[rt]}'
+        return f'{name} {R[rd]}, {R[rs]}, {R[rt]}'
+    if fn in MMI:
+        name = MMI[fn]
+        if name in ('psllh', 'psrlh', 'psrah', 'psllw', 'psrlw', 'psraw'):
+            return f'{name} {R[rd]}, {R[rt]}, {sa}'
+        if name == 'pmfhl':
+            return f'pmfhl.{["lw", "uw", "slw", "lh", "sh"][sa] if sa < 5 else sa} {R[rd]}'
+        if name in ('mfhi1', 'mflo1'):
+            return f'{name} {R[rd]}'
+        if name in ('mthi1', 'mtlo1'):
+            return f'{name} {R[rs]}'
+        if name == 'plzcw':
+            return f'plzcw {R[rd]}, {R[rs]}'
+        return f'{name} {R[rd]}, {R[rs]}, {R[rt]}'
+    return None
+
+
 def decode(word, pc):
     op, rs, rt, rd = word >> 26, (word >> 21) & 31, (word >> 16) & 31, (word >> 11) & 31
     sa, fn, imm = (word >> 6) & 31, word & 63, word & 0xFFFF
@@ -103,6 +155,12 @@ def decode(word, pc):
         if name in ('mult', 'multu', 'div', 'divu'):
             return f'{name} {R[rs]}, {R[rt]}' + (f' -> {R[rd]}' if rd else '')
         return f'{name} {R[rd]}, {R[rs]}, {R[rt]}'
+    if op == 0x1C:
+        mmi = decode_mmi(word)
+        if mmi:
+            return mmi
+    if op in (0x1E, 0x1F):
+        return f"{'lq' if op == 0x1E else 'sq'} {R[rt]}, {s16(imm):#x}({R[rs]})"
     if op == 1 and rt in REGIMM:
         return f'{REGIMM[rt]} {R[rs]}, 0x{target:x}'
     if op in (2, 3):

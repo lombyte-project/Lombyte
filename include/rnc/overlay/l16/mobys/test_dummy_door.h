@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_DOOR_H
-#define LOMBYTE_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_DOOR_H
+#ifndef RCP2P_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_DOOR_H
+#define RCP2P_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_DOOR_H
 
 #include "types.h"
 #include "rnc/overlay/shared/camera/level_camera.h"
@@ -13,4 +13,4 @@ void refresh_test_dummy_door_timer(struct Moby *moby) __asm__("FUN_L16_002d5e80"
 
 void test_dummy_door_update(struct Moby *) __asm__("FUN_L16_002d5cb8");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_DOOR_H */
+#endif /* RCP2P_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_DOOR_H */

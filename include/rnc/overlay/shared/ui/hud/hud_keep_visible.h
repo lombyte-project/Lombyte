@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_UI_HUD_HUD_KEEP_VISIBLE_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_UI_HUD_HUD_KEEP_VISIBLE_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_UI_HUD_HUD_KEEP_VISIBLE_H
+#define RCP2P_RNC_OVERLAY_SHARED_UI_HUD_HUD_KEEP_VISIBLE_H
 
 #include "types.h"
 #include "rnc/overlay/shared/ui/hud.h"
@@ -14,4 +14,4 @@ void reset_hud_animation_channels(void) __asm__("FUN_L00_00235878");
 int  draw_uniform_size_hud_stars(HudElem *) __asm__("FUN_L00_00236e50");
 void hud_update_particles(void) __asm__("FUN_L00_00236458");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_UI_HUD_HUD_KEEP_VISIBLE_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_UI_HUD_HUD_KEEP_VISIBLE_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_LIBC_STDLIB_H
-#define LOMBYTE_RNC_SDK_LIBC_STDLIB_H
+#ifndef RCP2P_RNC_SDK_LIBC_STDLIB_H
+#define RCP2P_RNC_SDK_LIBC_STDLIB_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ s32  isnan(f64) __asm__("ClassifyDoubleNaN");
 s32  RandomNext(void) __asm__("rand");
 void srand(int) __asm__("func_001160C8");
 
-#endif /* LOMBYTE_RNC_SDK_LIBC_STDLIB_H */
+#endif /* RCP2P_RNC_SDK_LIBC_STDLIB_H */

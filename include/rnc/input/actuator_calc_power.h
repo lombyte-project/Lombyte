@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_INPUT_ACTUATOR_CALC_POWER_H
-#define LOMBYTE_RNC_INPUT_ACTUATOR_CALC_POWER_H
+#ifndef RCP2P_RNC_INPUT_ACTUATOR_CALC_POWER_H
+#define RCP2P_RNC_INPUT_ACTUATOR_CALC_POWER_H
 
 #include "types.h"
 
@@ -21,4 +21,4 @@ typedef struct {
 /* The 8 wave slots actuator_calc_power walks. */
 extern ActuatorWave actuator_wave[8] __asm__("D_00165480");
 
-#endif /* LOMBYTE_RNC_INPUT_ACTUATOR_CALC_POWER_H */
+#endif /* RCP2P_RNC_INPUT_ACTUATOR_CALC_POWER_H */

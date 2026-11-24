@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L10_MOBYS_BOMBTHROWER_GRASS_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L10_MOBYS_BOMBTHROWER_GRASS_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L10_MOBYS_BOMBTHROWER_GRASS_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L10_MOBYS_BOMBTHROWER_GRASS_GLOBALS_H
 
 #include "types.h"
 
@@ -11,4 +11,4 @@ extern float bombthrower_grass_launch_elevation_max_degrees __asm__("D_L10_00161
 extern float bombthrower_grass_launch_speed_min __asm__("D_L10_00161C04");
 extern float bombthrower_grass_launch_speed_max __asm__("D_L10_00161C08");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L10_MOBYS_BOMBTHROWER_GRASS_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L10_MOBYS_BOMBTHROWER_GRASS_GLOBALS_H */

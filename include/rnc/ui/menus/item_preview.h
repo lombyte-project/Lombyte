@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_MENUS_ITEM_PREVIEW_H
-#define LOMBYTE_RNC_UI_MENUS_ITEM_PREVIEW_H
+#ifndef RCP2P_RNC_UI_MENUS_ITEM_PREVIEW_H
+#define RCP2P_RNC_UI_MENUS_ITEM_PREVIEW_H
 
 #include "types.h"
 
@@ -28,4 +28,4 @@ void rotate_preview_moby_x(struct RotatingPreviewMoby *) __asm__("FUN_0021f120")
 s32  update_item_preview_binding(struct ItemPreviewBinding *) __asm__("FUN_0021e230");
 int  update_item_preview_moby(struct MenuScreen *) __asm__("FUN_0021df98");
 
-#endif /* LOMBYTE_RNC_UI_MENUS_ITEM_PREVIEW_H */
+#endif /* RCP2P_RNC_UI_MENUS_ITEM_PREVIEW_H */

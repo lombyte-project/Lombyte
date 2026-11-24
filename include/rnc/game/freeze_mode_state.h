@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_GAME_FREEZE_MODE_STATE_H
-#define LOMBYTE_RNC_GAME_FREEZE_MODE_STATE_H
+#ifndef RCP2P_RNC_GAME_FREEZE_MODE_STATE_H
+#define RCP2P_RNC_GAME_FREEZE_MODE_STATE_H
 
 #include "types.h"
 
@@ -22,4 +22,4 @@ typedef struct FreezeModeState {
 
 extern FreezeModeState freeze __asm__("D_00193300");
 
-#endif /* LOMBYTE_RNC_GAME_FREEZE_MODE_STATE_H */
+#endif /* RCP2P_RNC_GAME_FREEZE_MODE_STATE_H */

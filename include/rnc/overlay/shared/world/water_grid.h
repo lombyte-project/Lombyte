@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_WORLD_WATER_GRID_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_WORLD_WATER_GRID_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_WORLD_WATER_GRID_H
+#define RCP2P_RNC_OVERLAY_SHARED_WORLD_WATER_GRID_H
 
 #include "types.h"
 
@@ -23,4 +23,4 @@ extern WaterGrid l05_water_grids[48] __asm__("D_L05_001D6880");
 extern WaterGrid l07_water_grids[36] __asm__("D_L07_001DCE40");
 extern WaterGrid l11_water_grids[20] __asm__("D_L11_001DA880");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_WORLD_WATER_GRID_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_WORLD_WATER_GRID_H */

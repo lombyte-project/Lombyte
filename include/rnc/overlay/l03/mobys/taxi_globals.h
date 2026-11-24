@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L03_MOBYS_TAXI_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L03_MOBYS_TAXI_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L03_MOBYS_TAXI_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L03_MOBYS_TAXI_GLOBALS_H
 
 #include "types.h"
 
@@ -17,4 +17,4 @@ extern f32   rail_flyer_roll_acceleration_degrees __asm__("D_L03_00161B18");
 extern f32   rail_flyer_speed_acceleration __asm__("D_L03_00161B0C");
 extern f32   rail_flyer_yaw_acceleration_degrees __asm__("D_L03_00161B14");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L03_MOBYS_TAXI_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L03_MOBYS_TAXI_GLOBALS_H */

@@ -36,6 +36,8 @@ extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 u32 spike_collision_unverified_calls;
 u32 spike_collision_unverified(void) { return spike_collision_unverified_calls; }
 #define UNSUPPORTED_ARGUMENTS(condition) do { if (condition) spike_collision_unverified_calls++; } while (0)
+u32 spike_collision_bad_segments;
+f32 spike_collision_first_bad_segment[6];
 #else
 #define UNSUPPORTED_ARGUMENTS(condition) do { if (condition) __builtin_trap(); } while (0)
 #endif
@@ -534,10 +536,28 @@ s32 collision_line(f32 *start, f32 *end, s32 flags, s32 ignored_moby, s32 option
     if (!start || !end) __builtin_trap();
     UNSUPPORTED_ARGUMENTS(flags != 2 || ignored_moby || options);
     s32 result = runtime_collision_segment(start[0], start[1], start[2], end[0], end[1], end[2]);
+#ifdef RNC_SPIKE_COLLISION
+    /* A segment with a non-finite or far-out end (-2). The EE has no NaN or infinity, so the
+       retail query sees ordinary (huge) numbers and finds no face; here it answers "no hit" and
+       keeps the first such segment for diagnosis (first seen: a wrench swing's hit sweep after a
+       weapon switch, find_moby_hit 0x259d08). */
+    if (result == -2) {
+        if (spike_collision_bad_segments++ == 0)
+            for (u32 i = 0; i < 3; i++) { spike_collision_first_bad_segment[i] = start[i]; spike_collision_first_bad_segment[3 + i] = end[i]; }
+        result = 0;
+    }
+#endif
     if (result < 0) __builtin_trap();
     memcpy(collision_point, hit.point.f, sizeof(collision_point));
     return result;
 }
+#ifdef RNC_SPIKE_COLLISION
+/* Level 0's copy of coll_line_fix (0x1efc70; config/us/levels/functions.tsv places FUN_001efa68
+   there). Its own data references are the level's load descriptor; the query here reads the
+   staged static world either way. */
+s32 collision_line_level0(f32 *start, f32 *end, s32 flags, s32 ignored_moby, s32 options)
+    __asm__("FUN_L00_001efc70") __attribute__((alias("FUN_001efa68")));
+#endif
 
 f32 runtime_collision_ground_height(f32 pos_x, f32 pos_y, f32 pos_z, f32 height_offset) {
     f32 position[4] = { pos_x, pos_y, pos_z, 0 };

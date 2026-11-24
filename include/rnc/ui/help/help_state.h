@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_HELP_HELP_STATE_H
-#define LOMBYTE_RNC_UI_HELP_HELP_STATE_H
+#ifndef RCP2P_RNC_UI_HELP_HELP_STATE_H
+#define RCP2P_RNC_UI_HELP_HELP_STATE_H
 
 #include "types.h"
 
@@ -27,4 +27,4 @@ typedef struct {
 
 extern HelpState help_state __asm__("D_001996D0");
 
-#endif /* LOMBYTE_RNC_UI_HELP_HELP_STATE_H */
+#endif /* RCP2P_RNC_UI_HELP_HELP_STATE_H */

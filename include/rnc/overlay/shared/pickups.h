@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_PICKUPS_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_PICKUPS_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_PICKUPS_H
+#define RCP2P_RNC_OVERLAY_SHARED_PICKUPS_H
 
 #include "types.h"
 
@@ -18,4 +18,4 @@ void           nanotech_ball_update() __asm__("FUN_L00_002d89f0");
 void           pilots_helmet_update() __asm__("FUN_L00_002e03a0");
 void           devestator_ammo_update(struct Moby *) __asm__("FUN_L00_002c53c0");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_PICKUPS_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_PICKUPS_H */

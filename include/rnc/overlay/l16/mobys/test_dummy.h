@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_H
-#define LOMBYTE_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_H
+#ifndef RCP2P_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_H
+#define RCP2P_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ void activate_test_dummy_group(int moby_group_index) __asm__("FUN_L16_002ceca8")
 
 void test_dummy_update(unsigned char *) __asm__("FUN_L16_002cddb8");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_H */
+#endif /* RCP2P_RNC_OVERLAY_L16_MOBYS_TEST_DUMMY_H */

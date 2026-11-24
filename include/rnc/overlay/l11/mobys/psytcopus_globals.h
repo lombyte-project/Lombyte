@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L11_MOBYS_PSYTCOPUS_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L11_MOBYS_PSYTCOPUS_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L11_MOBYS_PSYTCOPUS_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L11_MOBYS_PSYTCOPUS_GLOBALS_H
 
 #include "types.h"
 
@@ -8,4 +8,4 @@
 extern float psytcopus_projectile_forward_offset_length __asm__("D_L11_00161FC8");
 extern float psytcopus_projectile_z_offset __asm__("D_L11_00161FCC");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L11_MOBYS_PSYTCOPUS_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L11_MOBYS_PSYTCOPUS_GLOBALS_H */

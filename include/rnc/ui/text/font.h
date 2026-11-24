@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_TEXT_FONT_H
-#define LOMBYTE_RNC_UI_TEXT_FONT_H
+#ifndef RCP2P_RNC_UI_TEXT_FONT_H
+#define RCP2P_RNC_UI_TEXT_FONT_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ s32  font_print_wrapped(s32, s32, s32, s32, u64, u8 *, s32, u64, struct Glyph *)
 void font_set_window(void *, int, int, int, int, int, int, int, int);
 void load_debug_font(void) __asm__("FUN_001e9338");
 
-#endif /* LOMBYTE_RNC_UI_TEXT_FONT_H */
+#endif /* RCP2P_RNC_UI_TEXT_FONT_H */

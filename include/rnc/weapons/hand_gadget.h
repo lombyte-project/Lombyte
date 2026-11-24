@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_WEAPONS_HAND_GADGET_H
-#define LOMBYTE_RNC_WEAPONS_HAND_GADGET_H
+#ifndef RCP2P_RNC_WEAPONS_HAND_GADGET_H
+#define RCP2P_RNC_WEAPONS_HAND_GADGET_H
 
 #include "types.h"
 
@@ -36,4 +36,4 @@ extern HandGadgetManipulator class_pose_manipulator __asm__("D_001D5DD0");
 extern HandGadgetManipulator first_attachment_manipulator __asm__("D_001D5E10");
 extern HandGadgetManipulator second_attachment_manipulator __asm__("D_001D5E50");
 
-#endif /* LOMBYTE_RNC_WEAPONS_HAND_GADGET_H */
+#endif /* RCP2P_RNC_WEAPONS_HAND_GADGET_H */

@@ -1,8 +1,8 @@
-#ifndef LOMBYTE_RNC_SDK_GRAPH_SCE_GS_GET_GPARAM_H
-#define LOMBYTE_RNC_SDK_GRAPH_SCE_GS_GET_GPARAM_H
+#ifndef RCP2P_RNC_SDK_GRAPH_SCE_GS_GET_GPARAM_H
+#define RCP2P_RNC_SDK_GRAPH_SCE_GS_GET_GPARAM_H
 
 #include "types.h"
 
 void *sceGsGetGParam(void) __asm__("GetCoreDataTable");
 
-#endif /* LOMBYTE_RNC_SDK_GRAPH_SCE_GS_GET_GPARAM_H */
+#endif /* RCP2P_RNC_SDK_GRAPH_SCE_GS_GET_GPARAM_H */

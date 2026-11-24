@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_DATA_LABELS_H
-#define LOMBYTE_RNC_DATA_LABELS_H
+#ifndef RCP2P_RNC_DATA_LABELS_H
+#define RCP2P_RNC_DATA_LABELS_H
 
 #include "types.h"
 #include "rnc/game/level_progress.h"

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_HERO_HERO_SWITCH_ITEM_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_HERO_HERO_SWITCH_ITEM_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_HERO_HERO_SWITCH_ITEM_H
+#define RCP2P_RNC_OVERLAY_SHARED_HERO_HERO_SWITCH_ITEM_H
 
 #include "types.h"
 
@@ -20,4 +20,4 @@ void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FU
 void clear_hero_item_slot(int, int) __asm__("FUN_L00_0020fca8");
 void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_HERO_HERO_SWITCH_ITEM_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_HERO_HERO_SWITCH_ITEM_H */

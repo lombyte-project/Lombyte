@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L11_MOBYS_CHILD_GRID_CONTROLLER_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L11_MOBYS_CHILD_GRID_CONTROLLER_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L11_MOBYS_CHILD_GRID_CONTROLLER_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L11_MOBYS_CHILD_GRID_CONTROLLER_GLOBALS_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ extern float child_grid_parent_axis0_offset_length __asm__("D_L11_00161F40");
 extern float child_grid_parent_axis1_offset_length __asm__("D_L11_00161F44");
 extern float child_grid_child_axis1_offset_length __asm__("D_L11_00161F48");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L11_MOBYS_CHILD_GRID_CONTROLLER_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L11_MOBYS_CHILD_GRID_CONTROLLER_GLOBALS_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L06_MOBYS_BREAKABLE_WINDOW_DATA_DRAW_BACKDROP_MESH_2_H
-#define LOMBYTE_RNC_OVERLAY_L06_MOBYS_BREAKABLE_WINDOW_DATA_DRAW_BACKDROP_MESH_2_H
+#ifndef RCP2P_RNC_OVERLAY_L06_MOBYS_BREAKABLE_WINDOW_DATA_DRAW_BACKDROP_MESH_2_H
+#define RCP2P_RNC_OVERLAY_L06_MOBYS_BREAKABLE_WINDOW_DATA_DRAW_BACKDROP_MESH_2_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ extern int backdrop_mesh_blend_color_d_selector_gp __asm__("D_L06_00162060") __a
 extern int backdrop_mesh_effect_texture_index_gp __asm__("D_L06_00162064") __attribute__((sda));
 extern int backdrop_mesh_blend_fixed_alpha_gp __asm__("D_L06_00162068") __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L06_MOBYS_BREAKABLE_WINDOW_DATA_DRAW_BACKDROP_MESH_2_H */
+#endif /* RCP2P_RNC_OVERLAY_L06_MOBYS_BREAKABLE_WINDOW_DATA_DRAW_BACKDROP_MESH_2_H */

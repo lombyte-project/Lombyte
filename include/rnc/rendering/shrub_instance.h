@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_SHRUB_INSTANCE_H
-#define LOMBYTE_RNC_RENDERING_SHRUB_INSTANCE_H
+#ifndef RCP2P_RNC_RENDERING_SHRUB_INSTANCE_H
+#define RCP2P_RNC_RENDERING_SHRUB_INSTANCE_H
 
 #include "types.h"
 
@@ -21,4 +21,4 @@ extern s32            shrub_count __asm__("D_001603D0");
 extern ShrubInstance *shrubs __asm__("D_001603D4");
 extern ShrubInstance *shrubs_end __asm__("D_001603D8");
 
-#endif /* LOMBYTE_RNC_RENDERING_SHRUB_INSTANCE_H */
+#endif /* RCP2P_RNC_RENDERING_SHRUB_INSTANCE_H */

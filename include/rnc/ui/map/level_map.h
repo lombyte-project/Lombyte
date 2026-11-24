@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_MAP_LEVEL_MAP_H
-#define LOMBYTE_RNC_UI_MAP_LEVEL_MAP_H
+#ifndef RCP2P_RNC_UI_MAP_LEVEL_MAP_H
+#define RCP2P_RNC_UI_MAP_LEVEL_MAP_H
 
 #include "types.h"
 
@@ -21,4 +21,4 @@ typedef struct {
 extern LevelSelectText level_select_texts[19] __asm__("D_001DDD40");
 extern LevelMapMarker  level_map_markers[20] __asm__("D_001DDE28");
 
-#endif /* LOMBYTE_RNC_UI_MAP_LEVEL_MAP_H */
+#endif /* RCP2P_RNC_UI_MAP_LEVEL_MAP_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L14_MOBYS_BOUNCING_SPARK_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L14_MOBYS_BOUNCING_SPARK_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L14_MOBYS_BOUNCING_SPARK_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L14_MOBYS_BOUNCING_SPARK_GLOBALS_H
 
 #include "types.h"
 
@@ -11,4 +11,4 @@ extern float spark_rolling_speed_factor __asm__("D_L14_00162094");
 extern float spark_initial_moby_value_multiplier __asm__("D_L14_00162098");
 extern float spark_first_bounce_horizontal_speed_gp __asm__("D_L14_001620A4") __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L14_MOBYS_BOUNCING_SPARK_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L14_MOBYS_BOUNCING_SPARK_GLOBALS_H */

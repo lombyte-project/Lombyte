@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_HERO_HERO_IDLE_SEQUENCE_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_HERO_HERO_IDLE_SEQUENCE_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_HERO_HERO_IDLE_SEQUENCE_H
+#define RCP2P_RNC_OVERLAY_SHARED_HERO_HERO_IDLE_SEQUENCE_H
 
 #include "types.h"
 
@@ -28,4 +28,4 @@ void update_hero_easing_targets_and_point_effects(void) __asm__("FUN_L00_0020b1d
 void jet_camera_mode(void) __asm__("FUN_L00_00203b18");
 void reset_hero_to_idle(void) __asm__("FUN_L00_00204f80");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_HERO_HERO_IDLE_SEQUENCE_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_HERO_HERO_IDLE_SEQUENCE_H */

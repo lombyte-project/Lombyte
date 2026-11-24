@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_UI_HUD_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_UI_HUD_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_UI_HUD_H
+#define RCP2P_RNC_OVERLAY_SHARED_UI_HUD_H
 
 #include "types.h"
 
@@ -40,4 +40,4 @@ typedef struct HudElem {
 
 extern HudElem hud_elements[13] __asm__("D_L00_0017DC50") __attribute__((section(".data")));
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_UI_HUD_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_UI_HUD_H */

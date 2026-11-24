@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L03_MOBYS_H
-#define LOMBYTE_RNC_OVERLAY_L03_MOBYS_H
+#ifndef RCP2P_RNC_OVERLAY_L03_MOBYS_H
+#define RCP2P_RNC_OVERLAY_L03_MOBYS_H
 
 #include "types.h"
 
@@ -24,4 +24,4 @@ void red_ship_1_update(char *) __asm__("FUN_L03_0029dba8");
 void robo_shack_sign_update(struct Moby *) __asm__("FUN_L03_002d3e58");
 void robot_qwark_update(struct Moby *) __asm__("FUN_L03_002dbd90");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L03_MOBYS_H */
+#endif /* RCP2P_RNC_OVERLAY_L03_MOBYS_H */

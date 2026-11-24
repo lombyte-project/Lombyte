@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L16_MOBYS_CONVEYOR_BELT_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L16_MOBYS_CONVEYOR_BELT_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L16_MOBYS_CONVEYOR_BELT_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L16_MOBYS_CONVEYOR_BELT_GLOBALS_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ extern int   conveyor_belt_pulse_color_start __asm__("D_L16_001619A8");
 extern int   conveyor_belt_pulse_color_end __asm__("D_L16_001619AC");
 extern int   conveyor_belt_scrolling_vertex_color __asm__("D_L16_001619B0");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L16_MOBYS_CONVEYOR_BELT_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L16_MOBYS_CONVEYOR_BELT_GLOBALS_H */

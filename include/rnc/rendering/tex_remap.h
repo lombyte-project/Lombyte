@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_TEX_REMAP_H
-#define LOMBYTE_RNC_RENDERING_TEX_REMAP_H
+#ifndef RCP2P_RNC_RENDERING_TEX_REMAP_H
+#define RCP2P_RNC_RENDERING_TEX_REMAP_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ struct TexRemap {
     s16 hi;
 };
 
-#endif /* LOMBYTE_RNC_RENDERING_TEX_REMAP_H */
+#endif /* RCP2P_RNC_RENDERING_TEX_REMAP_H */

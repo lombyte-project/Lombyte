@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_TYPES_H
-#define LOMBYTE_TYPES_H
+#ifndef RCP2P_TYPES_H
+#define RCP2P_TYPES_H
 
 /* Project-owned EE scalar types.  Keep these independent of host ABI widths. */
 typedef signed char        s8;
@@ -36,4 +36,4 @@ typedef s32    b32;
 #define ARRAY_COUNT(array)  ((s32)(sizeof(array) / sizeof((array)[0])))
 #define ARRAY_COUNTU(array) ((u32)(sizeof(array) / sizeof((array)[0])))
 
-#endif /* LOMBYTE_TYPES_H */
+#endif /* RCP2P_TYPES_H */

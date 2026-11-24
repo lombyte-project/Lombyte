@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_MATH_CIRCLE_OFFSET_H
-#define LOMBYTE_RNC_MATH_CIRCLE_OFFSET_H
+#ifndef RCP2P_RNC_MATH_CIRCLE_OFFSET_H
+#define RCP2P_RNC_MATH_CIRCLE_OFFSET_H
 
 #include "types.h"
 #include "rnc/math/vector.h"
@@ -13,4 +13,4 @@ static inline void circle_offset(Vec4 *v, f32 ang, f32 r) {
     v->f[1] += fast_sin(ang) * r;
 }
 
-#endif /* LOMBYTE_RNC_MATH_CIRCLE_OFFSET_H */
+#endif /* RCP2P_RNC_MATH_CIRCLE_OFFSET_H */

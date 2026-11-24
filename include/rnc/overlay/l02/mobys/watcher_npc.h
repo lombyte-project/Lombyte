@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L02_MOBYS_WATCHER_NPC_H
-#define LOMBYTE_RNC_OVERLAY_L02_MOBYS_WATCHER_NPC_H
+#ifndef RCP2P_RNC_OVERLAY_L02_MOBYS_WATCHER_NPC_H
+#define RCP2P_RNC_OVERLAY_L02_MOBYS_WATCHER_NPC_H
 
 #include "types.h"
 #include "rnc/math/vector.h"
@@ -50,4 +50,4 @@ typedef struct {
     Vec4f delta;
 } WatcherLook;
 
-#endif /* LOMBYTE_RNC_OVERLAY_L02_MOBYS_WATCHER_NPC_H */
+#endif /* RCP2P_RNC_OVERLAY_L02_MOBYS_WATCHER_NPC_H */

@@ -1,8 +1,8 @@
-#ifndef LOMBYTE_RNC_SDK_INTERRUPTS_H
-#define LOMBYTE_RNC_SDK_INTERRUPTS_H
+#ifndef RCP2P_RNC_SDK_INTERRUPTS_H
+#define RCP2P_RNC_SDK_INTERRUPTS_H
 
 #include "types.h"
 
 s32 EnableInterrupts(void);
 
-#endif /* LOMBYTE_RNC_SDK_INTERRUPTS_H */
+#endif /* RCP2P_RNC_SDK_INTERRUPTS_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_VENDOR_VENDOR_MENU_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_VENDOR_VENDOR_MENU_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_VENDOR_VENDOR_MENU_H
+#define RCP2P_RNC_OVERLAY_SHARED_VENDOR_VENDOR_MENU_H
 
 #include "types.h"
 #include "rnc/math/vector.h"
@@ -86,4 +86,4 @@ void open_vendor_menu(void *) __asm__("FUN_L00_0029a6b0");
 void update_vendor_menu(void) __asm__("FUN_L00_0029c648");
 void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_VENDOR_VENDOR_MENU_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_VENDOR_VENDOR_MENU_H */

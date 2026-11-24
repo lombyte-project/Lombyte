@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L03_H
-#define LOMBYTE_RNC_OVERLAY_L03_H
+#ifndef RCP2P_RNC_OVERLAY_L03_H
+#define RCP2P_RNC_OVERLAY_L03_H
 
 #include "types.h"
 
@@ -8,4 +8,4 @@ int  FUN_L03_002ebd70(void);
 void update_camera_position_and_orientation(void *) __asm__("FUN_L03_002ebdb0");
 void update_camera_state_outside_clip_volume(char *) __asm__("FUN_L03_002ebde8");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L03_H */
+#endif /* RCP2P_RNC_OVERLAY_L03_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_IMAGE_CLEAR_BUFFER_H
-#define LOMBYTE_RNC_RENDERING_IMAGE_CLEAR_BUFFER_H
+#ifndef RCP2P_RNC_RENDERING_IMAGE_CLEAR_BUFFER_H
+#define RCP2P_RNC_RENDERING_IMAGE_CLEAR_BUFFER_H
 
 #include "types.h"
 
@@ -8,4 +8,4 @@
    fill_transfer_words counts bytes. */
 extern u8 image_clear_buffer[0x1000] __asm__("D_001941C0");
 
-#endif /* LOMBYTE_RNC_RENDERING_IMAGE_CLEAR_BUFFER_H */
+#endif /* RCP2P_RNC_RENDERING_IMAGE_CLEAR_BUFFER_H */

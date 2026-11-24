@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_MATH_ASM_HELPERS_H
-#define LOMBYTE_RNC_MATH_ASM_HELPERS_H
+#ifndef RCP2P_RNC_MATH_ASM_HELPERS_H
+#define RCP2P_RNC_MATH_ASM_HELPERS_H
 
 #include "types.h"
 
@@ -46,4 +46,4 @@ f32  max_float(f32, f32) __asm__("FUN_001f99c8");
 u32  is_vector_outside_clip(void *) __asm__("FUN_001f9958");
 f32  min_float(f32, f32) __asm__("FUN_001f99d0");
 
-#endif /* LOMBYTE_RNC_MATH_ASM_HELPERS_H */
+#endif /* RCP2P_RNC_MATH_ASM_HELPERS_H */

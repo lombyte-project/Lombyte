@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L09_MOBYS_PLATFORM_DATA_PLATFORM_UPDATE_H
-#define LOMBYTE_RNC_OVERLAY_L09_MOBYS_PLATFORM_DATA_PLATFORM_UPDATE_H
+#ifndef RCP2P_RNC_OVERLAY_L09_MOBYS_PLATFORM_DATA_PLATFORM_UPDATE_H
+#define RCP2P_RNC_OVERLAY_L09_MOBYS_PLATFORM_DATA_PLATFORM_UPDATE_H
 
 #include "types.h"
 
@@ -14,4 +14,4 @@ extern float platform_return_tilt_velocity_damping_gp __asm__("D_L09_00161A14")
     __attribute__((sda));
 extern float platform_return_tilt_velocity_limit_gp __asm__("D_L09_00161A18") __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L09_MOBYS_PLATFORM_DATA_PLATFORM_UPDATE_H */
+#endif /* RCP2P_RNC_OVERLAY_L09_MOBYS_PLATFORM_DATA_PLATFORM_UPDATE_H */

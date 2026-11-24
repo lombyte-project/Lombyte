@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_AUDIO_MUSIC_MUSIC_STREAM_STATE_H
-#define LOMBYTE_RNC_AUDIO_MUSIC_MUSIC_STREAM_STATE_H
+#ifndef RCP2P_RNC_AUDIO_MUSIC_MUSIC_STREAM_STATE_H
+#define RCP2P_RNC_AUDIO_MUSIC_MUSIC_STREAM_STATE_H
 
 #include "types.h"
 
@@ -62,4 +62,4 @@ struct MusicStreamState {
 
 extern struct MusicStreamState music_stream_state __asm__("D_001516D0");
 
-#endif /* LOMBYTE_RNC_AUDIO_MUSIC_MUSIC_STREAM_STATE_H */
+#endif /* RCP2P_RNC_AUDIO_MUSIC_MUSIC_STREAM_STATE_H */

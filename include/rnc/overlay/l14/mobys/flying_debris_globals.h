@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L14_MOBYS_FLYING_DEBRIS_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L14_MOBYS_FLYING_DEBRIS_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L14_MOBYS_FLYING_DEBRIS_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L14_MOBYS_FLYING_DEBRIS_GLOBALS_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ extern f32 flying_debris_gravity __asm__("D_L14_001615D0");
 extern f32 flying_debris_velocity_retention_factor __asm__("D_L14_001615D4");
 extern f32 flying_debris_horizontal_drag_speed_threshold __asm__("D_L14_001615D8");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L14_MOBYS_FLYING_DEBRIS_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L14_MOBYS_FLYING_DEBRIS_GLOBALS_H */

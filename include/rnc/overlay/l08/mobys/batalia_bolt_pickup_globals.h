@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L08_MOBYS_BATALIA_BOLT_PICKUP_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L08_MOBYS_BATALIA_BOLT_PICKUP_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L08_MOBYS_BATALIA_BOLT_PICKUP_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L08_MOBYS_BATALIA_BOLT_PICKUP_GLOBALS_H
 
 #include "types.h"
 
@@ -20,4 +20,4 @@ extern float ten_bolt_pickup_surface_base_tilt_degrees __asm__("D_L08_00161C6C")
 extern float bolt_pickup_default_surface_normal_offset_per_scale __asm__("D_L08_00161C70");
 extern float five_bolt_pickup_surface_normal_offset_per_scale __asm__("D_L08_00161C74");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L08_MOBYS_BATALIA_BOLT_PICKUP_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L08_MOBYS_BATALIA_BOLT_PICKUP_GLOBALS_H */

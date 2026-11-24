@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L05_MOBYS_EXTERMIBOT_DATA_EXTERMIBOT_UPDATE_H
-#define LOMBYTE_RNC_OVERLAY_L05_MOBYS_EXTERMIBOT_DATA_EXTERMIBOT_UPDATE_H
+#ifndef RCP2P_RNC_OVERLAY_L05_MOBYS_EXTERMIBOT_DATA_EXTERMIBOT_UPDATE_H
+#define RCP2P_RNC_OVERLAY_L05_MOBYS_EXTERMIBOT_DATA_EXTERMIBOT_UPDATE_H
 
 #include "types.h"
 
@@ -11,4 +11,4 @@ extern float extermibot_spark_facing_vector_w_gp __asm__("D_L05_00161AC0") __att
 extern float extermibot_spark_random_vector_w_gp __asm__("D_L05_00161AC4") __attribute__((sda));
 extern int   extermibot_pre_strike_delay_frames_gp __asm__("D_L05_00161AC8") __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L05_MOBYS_EXTERMIBOT_DATA_EXTERMIBOT_UPDATE_H */
+#endif /* RCP2P_RNC_OVERLAY_L05_MOBYS_EXTERMIBOT_DATA_EXTERMIBOT_UPDATE_H */

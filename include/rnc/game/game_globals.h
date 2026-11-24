@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_GAME_GAME_GLOBALS_H
-#define LOMBYTE_RNC_GAME_GAME_GLOBALS_H
+#ifndef RCP2P_RNC_GAME_GAME_GLOBALS_H
+#define RCP2P_RNC_GAME_GAME_GLOBALS_H
 
 #include "types.h"
 #include "rnc/game/level_progress.h"
@@ -28,4 +28,4 @@ extern s32   moby_occl_cluster_count __asm__("D_0016119C");
 extern s32   moby_render_slots[16] __asm__("D_001B2BC0");
 extern f32   moby_backup_buffer[0x380 / 4] __asm__("D_001B2E80");
 
-#endif /* LOMBYTE_RNC_GAME_GAME_GLOBALS_H */
+#endif /* RCP2P_RNC_GAME_GAME_GLOBALS_H */

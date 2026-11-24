@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L11_MOBYS_PUFFOID_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L11_MOBYS_PUFFOID_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L11_MOBYS_PUFFOID_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L11_MOBYS_PUFFOID_GLOBALS_H
 
 #include "types.h"
 
@@ -8,4 +8,4 @@
 extern float puffoid_hit_knockback_vertical_scale __asm__("D_L11_001622D4");
 extern float puffoid_death_knockback_vertical_scale __asm__("D_L11_001622DC");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L11_MOBYS_PUFFOID_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L11_MOBYS_PUFFOID_GLOBALS_H */

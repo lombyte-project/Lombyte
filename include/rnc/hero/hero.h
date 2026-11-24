@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_HERO_HERO_H
-#define LOMBYTE_RNC_HERO_HERO_H
+#ifndef RCP2P_RNC_HERO_HERO_H
+#define RCP2P_RNC_HERO_HERO_H
 
 #include "types.h"
 #include "rnc/math/vector.h"
@@ -859,4 +859,4 @@ struct Hero {
 /* Offsets are checked in src/check/hero_layout_check.c (make check). */
 extern struct Hero hero __asm__("D_0013F350");
 
-#endif /* LOMBYTE_RNC_HERO_HERO_H */
+#endif /* RCP2P_RNC_HERO_HERO_H */

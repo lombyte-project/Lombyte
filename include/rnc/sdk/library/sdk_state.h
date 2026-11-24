@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_LIBRARY_SDK_STATE_H
-#define LOMBYTE_RNC_SDK_LIBRARY_SDK_STATE_H
+#ifndef RCP2P_RNC_SDK_LIBRARY_SDK_STATE_H
+#define RCP2P_RNC_SDK_LIBRARY_SDK_STATE_H
 
 #include "types.h"
 #include "sda.h"
@@ -24,4 +24,4 @@ struct RomNameState {
 
 extern struct RomNameState RomNameStateData __asm__("D_001330D8");
 
-#endif /* LOMBYTE_RNC_SDK_LIBRARY_SDK_STATE_H */
+#endif /* RCP2P_RNC_SDK_LIBRARY_SDK_STATE_H */

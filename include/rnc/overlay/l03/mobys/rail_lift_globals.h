@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L03_MOBYS_RAIL_LIFT_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L03_MOBYS_RAIL_LIFT_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L03_MOBYS_RAIL_LIFT_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L03_MOBYS_RAIL_LIFT_GLOBALS_H
 
 #include "types.h"
 
@@ -11,4 +11,4 @@ extern float moby_rotation_oscillation_amplitude __asm__("D_L03_00161BE0");
 extern float moby_rotation_oscillation_first_phase_rate __asm__("D_L03_00161BE4");
 extern float moby_rotation_oscillation_second_phase_rate __asm__("D_L03_00161BE8");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L03_MOBYS_RAIL_LIFT_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L03_MOBYS_RAIL_LIFT_GLOBALS_H */

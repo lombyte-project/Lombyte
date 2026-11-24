@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_MPEG_WORK_AREA_H
-#define LOMBYTE_RNC_SDK_MPEG_WORK_AREA_H
+#ifndef RCP2P_RNC_SDK_MPEG_WORK_AREA_H
+#define RCP2P_RNC_SDK_MPEG_WORK_AREA_H
 
 #include "types.h"
 
@@ -12,4 +12,4 @@ struct MpegWorkArea {
     s32 mark;   /* cursor saved by mark_work_area, restored by reset_work_area */
 };
 
-#endif /* LOMBYTE_RNC_SDK_MPEG_WORK_AREA_H */
+#endif /* RCP2P_RNC_SDK_MPEG_WORK_AREA_H */

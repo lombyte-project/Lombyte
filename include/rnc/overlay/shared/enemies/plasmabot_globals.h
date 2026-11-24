@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_PLASMABOT_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_PLASMABOT_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_ENEMIES_PLASMABOT_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_SHARED_ENEMIES_PLASMABOT_GLOBALS_H
 
 #include "types.h"
 
@@ -33,4 +33,4 @@ extern float particle_trio_moby_c0_offset_scale __asm__("D_L14_00161FD4");
 extern float particle_trio_moby_e0_offset_scale __asm__("D_L14_00161FD8");
 extern int   particle_pair_color __asm__("D_L14_00161FE4");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_ENEMIES_PLASMABOT_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_ENEMIES_PLASMABOT_GLOBALS_H */

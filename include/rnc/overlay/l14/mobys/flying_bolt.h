@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L14_MOBYS_FLYING_BOLT_H
-#define LOMBYTE_RNC_OVERLAY_L14_MOBYS_FLYING_BOLT_H
+#ifndef RCP2P_RNC_OVERLAY_L14_MOBYS_FLYING_BOLT_H
+#define RCP2P_RNC_OVERLAY_L14_MOBYS_FLYING_BOLT_H
 
 /* Types and functions of l14/mobys/flying_bolt.c that other level files use. */
 
@@ -10,4 +10,4 @@ char *spawn_flying_bolt(void  *spawn_position,
                         int    collision_ignore_moby,
                         int    collision_mode) __asm__("FUN_L14_002eccf0");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L14_MOBYS_FLYING_BOLT_H */
+#endif /* RCP2P_RNC_OVERLAY_L14_MOBYS_FLYING_BOLT_H */

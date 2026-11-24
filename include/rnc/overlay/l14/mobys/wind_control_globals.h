@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L14_MOBYS_WIND_CONTROL_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L14_MOBYS_WIND_CONTROL_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L14_MOBYS_WIND_CONTROL_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L14_MOBYS_WIND_CONTROL_GLOBALS_H
 
 #include "types.h"
 
@@ -15,4 +15,4 @@ extern int   wind_spark_peak_alpha __asm__("D_L14_00161C10");
 extern int   wind_spark_fade_in_frames __asm__("D_L14_00161C2C");
 extern int   wind_spark_base_color __asm__("D_L14_00161C0C");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L14_MOBYS_WIND_CONTROL_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L14_MOBYS_WIND_CONTROL_GLOBALS_H */

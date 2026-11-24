@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_MOVIES_DECODER_DECODER_GLOBALS_H
-#define LOMBYTE_RNC_MOVIES_DECODER_DECODER_GLOBALS_H
+#ifndef RCP2P_RNC_MOVIES_DECODER_DECODER_GLOBALS_H
+#define RCP2P_RNC_MOVIES_DECODER_DECODER_GLOBALS_H
 
 #include "types.h"
 
@@ -10,4 +10,4 @@ struct MoviePlayer;
 extern struct MoviePlayer *movie_player __asm__("D_0016120C");
 extern s32                 decoder_thread __asm__("D_00161210");
 
-#endif /* LOMBYTE_RNC_MOVIES_DECODER_DECODER_GLOBALS_H */
+#endif /* RCP2P_RNC_MOVIES_DECODER_DECODER_GLOBALS_H */

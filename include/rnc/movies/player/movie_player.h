@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_MOVIES_PLAYER_MOVIE_PLAYER_H
-#define LOMBYTE_RNC_MOVIES_PLAYER_MOVIE_PLAYER_H
+#ifndef RCP2P_RNC_MOVIES_PLAYER_MOVIE_PLAYER_H
+#define RCP2P_RNC_MOVIES_PLAYER_MOVIE_PLAYER_H
 
 #include "types.h"
 #include "rnc/audio/decoder/audio_dec.h"
@@ -30,4 +30,4 @@ struct MoviePlayer {
     struct VoBuf          vo_buf; /* 0xD9168 */
 };
 
-#endif /* LOMBYTE_RNC_MOVIES_PLAYER_MOVIE_PLAYER_H */
+#endif /* RCP2P_RNC_MOVIES_PLAYER_MOVIE_PLAYER_H */

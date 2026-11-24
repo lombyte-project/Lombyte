@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L12_MOBYS_HOVEN_ANKLEBITER_H
-#define LOMBYTE_RNC_OVERLAY_L12_MOBYS_HOVEN_ANKLEBITER_H
+#ifndef RCP2P_RNC_OVERLAY_L12_MOBYS_HOVEN_ANKLEBITER_H
+#define RCP2P_RNC_OVERLAY_L12_MOBYS_HOVEN_ANKLEBITER_H
 
 #include "types.h"
 #include "rnc/mobys/moby.h"
@@ -95,4 +95,4 @@ void hoven_anklebiter_update(AnklebiterMoby *) __asm__("FUN_L12_002e1be0");
 int  process_hoven_anklebiter_suck_cannon_suction(struct Moby *) __asm__("FUN_L12_002e16b8");
 int  store_hoven_anklebiter_in_suck_cannon(struct Moby *) __asm__("FUN_L12_002e1758");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L12_MOBYS_HOVEN_ANKLEBITER_H */
+#endif /* RCP2P_RNC_OVERLAY_L12_MOBYS_HOVEN_ANKLEBITER_H */

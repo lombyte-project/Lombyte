@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_STORAGE_FILEIO_H
-#define LOMBYTE_RNC_SDK_STORAGE_FILEIO_H
+#ifndef RCP2P_RNC_SDK_STORAGE_FILEIO_H
+#define RCP2P_RNC_SDK_STORAGE_FILEIO_H
 
 #include "types.h"
 
@@ -13,4 +13,4 @@ s32  sceLseek(s32, s32, s32);
 void _sceFsSemInit(void);
 s32  sceWrite(s32, u8 *, s32);
 
-#endif /* LOMBYTE_RNC_SDK_STORAGE_FILEIO_H */
+#endif /* RCP2P_RNC_SDK_STORAGE_FILEIO_H */

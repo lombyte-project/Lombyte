@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L08_MOBYS_ROCKET_DATA_UPDATE_ROCKET_2_H
-#define LOMBYTE_RNC_OVERLAY_L08_MOBYS_ROCKET_DATA_UPDATE_ROCKET_2_H
+#ifndef RCP2P_RNC_OVERLAY_L08_MOBYS_ROCKET_DATA_UPDATE_ROCKET_2_H
+#define RCP2P_RNC_OVERLAY_L08_MOBYS_ROCKET_DATA_UPDATE_ROCKET_2_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ extern float rocket_guidance_effect_velocity_w_gp __asm__("D_L08_00161A24") __at
 extern float rocket_guidance_effect_auxiliary_vector_w_gp __asm__("D_L08_00161A28")
     __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L08_MOBYS_ROCKET_DATA_UPDATE_ROCKET_2_H */
+#endif /* RCP2P_RNC_OVERLAY_L08_MOBYS_ROCKET_DATA_UPDATE_ROCKET_2_H */

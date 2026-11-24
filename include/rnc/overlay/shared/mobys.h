@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_H
+#ifndef RCP2P_RNC_OVERLAY_SHARED_MOBYS_H
+#define RCP2P_RNC_OVERLAY_SHARED_MOBYS_H
 
 #include "types.h"
 
@@ -24,4 +24,4 @@ void  spawn_nearby_effect_without_direction(unsigned char *, int, int, void *, f
 int  test_linked_moby_turn_trigger(struct Moby *) __asm__("FUN_L11_0030f270");
 void update_moby_proximity_interaction(unsigned char *) __asm__("FUN_L00_0028e180");
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_H */
+#endif /* RCP2P_RNC_OVERLAY_SHARED_MOBYS_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_SDK_STORAGE_MEMORY_CARD_H
-#define LOMBYTE_RNC_SDK_STORAGE_MEMORY_CARD_H
+#ifndef RCP2P_RNC_SDK_STORAGE_MEMORY_CARD_H
+#define RCP2P_RNC_SDK_STORAGE_MEMORY_CARD_H
 
 #include "types.h"
 
@@ -20,4 +20,4 @@ s32  sceMcSync(s32, s32 *, s32 *);
 s32  SceMcUnformat(s32, s32);
 s32  sceMcWrite(s32, u8 *, s32);
 
-#endif /* LOMBYTE_RNC_SDK_STORAGE_MEMORY_CARD_H */
+#endif /* RCP2P_RNC_SDK_STORAGE_MEMORY_CARD_H */

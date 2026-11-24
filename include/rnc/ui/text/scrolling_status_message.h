@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_TEXT_SCROLLING_STATUS_MESSAGE_H
-#define LOMBYTE_RNC_UI_TEXT_SCROLLING_STATUS_MESSAGE_H
+#ifndef RCP2P_RNC_UI_TEXT_SCROLLING_STATUS_MESSAGE_H
+#define RCP2P_RNC_UI_TEXT_SCROLLING_STATUS_MESSAGE_H
 
 #include "types.h"
 
@@ -7,4 +7,4 @@
    message has scrolled out (update_scrolling_status_message: random_integer_below(0x18)). */
 extern s32 scrolling_status_message_ids[24] __asm__("D_001E5FB8");
 
-#endif /* LOMBYTE_RNC_UI_TEXT_SCROLLING_STATUS_MESSAGE_H */
+#endif /* RCP2P_RNC_UI_TEXT_SCROLLING_STATUS_MESSAGE_H */

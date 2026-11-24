@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_GAME_OPTIONS_H
-#define LOMBYTE_RNC_GAME_OPTIONS_H
+#ifndef RCP2P_RNC_GAME_OPTIONS_H
+#define RCP2P_RNC_GAME_OPTIONS_H
 
 #include "types.h"
 
@@ -15,4 +15,4 @@ extern s32           alternate_animation_sequence __asm__("D_0015EE20");
 extern s32           selected_save_slot __asm__("D_0015EE34");
 extern s32           boot_level_active __asm__("D_0015F5E8");
 
-#endif /* LOMBYTE_RNC_GAME_OPTIONS_H */
+#endif /* RCP2P_RNC_GAME_OPTIONS_H */

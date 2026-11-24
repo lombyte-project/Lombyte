@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L14_MOBYS_ROCKET_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L14_MOBYS_ROCKET_GLOBALS_H
+#ifndef RCP2P_RNC_OVERLAY_L14_MOBYS_ROCKET_GLOBALS_H
+#define RCP2P_RNC_OVERLAY_L14_MOBYS_ROCKET_GLOBALS_H
 
 #include "types.h"
 
@@ -14,4 +14,4 @@ extern s32   rocket_initial_timer_frames __asm__("D_L14_00161FB0");
 extern f32   rocket_travel_speed __asm__("D_L14_00161FA8");
 extern f32   rocket_steering_blend_fraction __asm__("D_L14_00161FAC");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L14_MOBYS_ROCKET_GLOBALS_H */
+#endif /* RCP2P_RNC_OVERLAY_L14_MOBYS_ROCKET_GLOBALS_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_MENUS_PAUSE_H
-#define LOMBYTE_RNC_UI_MENUS_PAUSE_H
+#ifndef RCP2P_RNC_UI_MENUS_PAUSE_H
+#define RCP2P_RNC_UI_MENUS_PAUSE_H
 
 #include "types.h"
 
@@ -17,4 +17,4 @@ int pause_stage_sprite_lists(u32 *) __asm__("FUN_0021ca60");
 int set_menu_pause_flag_state(struct MenuScreen *) __asm__("FUN_0021ddd0");
 int set_pause_action_list(int *) __asm__("FUN_0021a1b0");
 
-#endif /* LOMBYTE_RNC_UI_MENUS_PAUSE_H */
+#endif /* RCP2P_RNC_UI_MENUS_PAUSE_H */

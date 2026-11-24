@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_MOBYS_RENDER_ENVIRONMENT_MAPPED_OBJECT_GLOBALS_H
-#define LOMBYTE_RNC_RENDERING_MOBYS_RENDER_ENVIRONMENT_MAPPED_OBJECT_GLOBALS_H
+#ifndef RCP2P_RNC_RENDERING_MOBYS_RENDER_ENVIRONMENT_MAPPED_OBJECT_GLOBALS_H
+#define RCP2P_RNC_RENDERING_MOBYS_RENDER_ENVIRONMENT_MAPPED_OBJECT_GLOBALS_H
 
 #include "types.h"
 #include "rnc/math/vector.h"
@@ -43,4 +43,4 @@ extern Vec4  environment_mapping_transformed_vertex_positions[102] __asm__("D_00
 extern float environment_mapping_vertex_uvs[102][2] __asm__("D_001DCB40");
 extern float environment_mapping_saved_vertex_uvs[102][2] __asm__("D_001DCE70");
 
-#endif /* LOMBYTE_RNC_RENDERING_MOBYS_RENDER_ENVIRONMENT_MAPPED_OBJECT_GLOBALS_H */
+#endif /* RCP2P_RNC_RENDERING_MOBYS_RENDER_ENVIRONMENT_MAPPED_OBJECT_GLOBALS_H */

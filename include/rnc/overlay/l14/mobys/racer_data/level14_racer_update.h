@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L14_MOBYS_RACER_DATA_UPDATE_LEVEL14_RACER_H
-#define LOMBYTE_RNC_OVERLAY_L14_MOBYS_RACER_DATA_UPDATE_LEVEL14_RACER_H
+#ifndef RCP2P_RNC_OVERLAY_L14_MOBYS_RACER_DATA_UPDATE_LEVEL14_RACER_H
+#define RCP2P_RNC_OVERLAY_L14_MOBYS_RACER_DATA_UPDATE_LEVEL14_RACER_H
 
 #include "types.h"
 
@@ -10,4 +10,4 @@ extern s32 level14_racer_path_follow_initial_timer_frames_gp __asm__("D_L14_0016
 extern s32 level14_racer_exit_debris_path_initialization_scale_gp __asm__("D_L14_00161A5C")
     __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_L14_MOBYS_RACER_DATA_UPDATE_LEVEL14_RACER_H */
+#endif /* RCP2P_RNC_OVERLAY_L14_MOBYS_RACER_DATA_UPDATE_LEVEL14_RACER_H */

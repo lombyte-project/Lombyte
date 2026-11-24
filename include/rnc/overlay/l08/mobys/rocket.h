@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L08_MOBYS_ROCKET_H
-#define LOMBYTE_RNC_OVERLAY_L08_MOBYS_ROCKET_H
+#ifndef RCP2P_RNC_OVERLAY_L08_MOBYS_ROCKET_H
+#define RCP2P_RNC_OVERLAY_L08_MOBYS_ROCKET_H
 
 struct Moby;
 
@@ -12,4 +12,4 @@ struct Moby *spawn_rocket(void        *pos,
 
 void rocket_update() __asm__("FUN_L08_002dd3c0");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L08_MOBYS_ROCKET_H */
+#endif /* RCP2P_RNC_OVERLAY_L08_MOBYS_ROCKET_H */

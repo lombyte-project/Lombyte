@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L00_MOBYS_H
-#define LOMBYTE_RNC_OVERLAY_L00_MOBYS_H
+#ifndef RCP2P_RNC_OVERLAY_L00_MOBYS_H
+#define RCP2P_RNC_OVERLAY_L00_MOBYS_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ void phase_effect_controller_update() __asm__("FUN_L00_002e3800");
 void help_hints_update() __asm__("FUN_L00_002e0988");
 void veldin_robot_enemy_update() __asm__("FUN_L00_002e0b88");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L00_MOBYS_H */
+#endif /* RCP2P_RNC_OVERLAY_L00_MOBYS_H */

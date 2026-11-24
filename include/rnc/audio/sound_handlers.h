@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_AUDIO_SOUND_HANDLERS_H
-#define LOMBYTE_RNC_AUDIO_SOUND_HANDLERS_H
+#ifndef RCP2P_RNC_AUDIO_SOUND_HANDLERS_H
+#define RCP2P_RNC_AUDIO_SOUND_HANDLERS_H
 
 #include "types.h"
 
@@ -11,4 +11,4 @@ struct SoundHandler {
     void *handler;
 };
 
-#endif /* LOMBYTE_RNC_AUDIO_SOUND_HANDLERS_H */
+#endif /* RCP2P_RNC_AUDIO_SOUND_HANDLERS_H */

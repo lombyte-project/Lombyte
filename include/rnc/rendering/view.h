@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_RENDERING_VIEW_H
-#define LOMBYTE_RNC_RENDERING_VIEW_H
+#ifndef RCP2P_RNC_RENDERING_VIEW_H
+#define RCP2P_RNC_RENDERING_VIEW_H
 
 #include "types.h"
 #include "rnc/math/vector.h"
@@ -56,4 +56,4 @@ void configure_graphics_projection(s32, s32, f32, f32, f32, f32, f32) __asm__("F
 void project_graphics_bounds(u128 *, u128 *, s32 *, s32 *, s32 *, s32 *) __asm__("FUN_00237a78");
 void setup_view_context(void) __asm__("FUN_00239750");
 
-#endif /* LOMBYTE_RNC_RENDERING_VIEW_H */
+#endif /* RCP2P_RNC_RENDERING_VIEW_H */

@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L09_MOBYS_H
-#define LOMBYTE_RNC_OVERLAY_L09_MOBYS_H
+#ifndef RCP2P_RNC_OVERLAY_L09_MOBYS_H
+#define RCP2P_RNC_OVERLAY_L09_MOBYS_H
 
 #include "rnc/math/vector.h"
 #include "types.h"
@@ -27,4 +27,4 @@ void shuttle_update(struct Moby *) __asm__("FUN_L09_00309c08");
 void tumbling_debris_update(struct Moby *) __asm__("FUN_L09_002ef430");
 void turret_update(struct Moby *) __asm__("FUN_L09_00304c80");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L09_MOBYS_H */
+#endif /* RCP2P_RNC_OVERLAY_L09_MOBYS_H */
